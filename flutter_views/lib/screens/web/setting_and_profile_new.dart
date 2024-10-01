@@ -10,7 +10,6 @@ import 'package:flutter_view_controller/new_screens/home/components/profile/prof
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 class SettingPageNew extends BasePage {
@@ -73,7 +72,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   bool setPaneBodyPadding(bool firstPane) => false;
 
   @override
-  bool setMainPageSuggestionPadding() => false;
+  bool setMainPageSuggestionPadding() => true;
   // isLargeScreenFromCurrentScreenSize(context);
 
   @override
@@ -94,7 +93,6 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab,
       ActionOnToolbarItem? selectedItem}) {
-   
     if (_currentSettingPageMobile != null) {
       return getWidgetFromProfile(
           valueNotifier: ValueNotifier<ActionOnToolbarItem?>(null),

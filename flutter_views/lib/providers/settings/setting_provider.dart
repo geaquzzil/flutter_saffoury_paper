@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/prints/printer_default_setting.dart';
 import 'package:provider/provider.dart';
 
 import '../../interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import '../auth_provider.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+
+@Deprecated("not in use anymore")
 class SettingProvider with ChangeNotifier {
   ModifiableInterface? _selectedObject;
   ModifiableInterface? get getSelectedObject => _selectedObject;
@@ -18,7 +21,7 @@ class SettingProvider with ChangeNotifier {
         .getDrawerItemsPermissions
         .whereType<ModifiableInterface>()
         .toList();
-
+    printableSettingsObjects.add(PrinterDefaultSetting());
     return printableSettingsObjects;
   }
 }

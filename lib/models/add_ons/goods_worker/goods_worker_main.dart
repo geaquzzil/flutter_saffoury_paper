@@ -638,7 +638,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
   bool setMainPageSuggestionPadding() => false;
 
   @override
-  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool setPaneBodyPadding(bool firstPane) => false;
 
   @override
   bool setPaneClipRect(bool firstPane) => false;

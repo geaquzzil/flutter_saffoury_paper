@@ -119,24 +119,24 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   void didUpdateWidget(covariant T oldWidget) {
     super.didUpdateWidget(oldWidget);
     debugPrint("didUpdateWidget tabController");
-    if (mounted) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (timeStamp) {
-          if (mounted) {
-            setState(() {
-              extras = widget.viewAbstract;
-              iD = widget.viewAbstract.iD;
-              tableName = widget.viewAbstract.getTableNameApi();
-              _tabs.clear();
-              _tabs.addAll(getExtras()
-                  .getTabs(context, action: widget.getServerAction()));
-              _listCardItemEditableState.clear();
-              _tabController.animateTo(0);
-            });
-          }
-        },
-      );
-    }
+    
+    extras = widget.viewAbstract;
+    iD = widget.viewAbstract.iD;
+    tableName = widget.viewAbstract.getTableNameApi();
+    _tabs.clear();
+    _tabs
+        .addAll(getExtras().getTabs(context, action: widget.getServerAction()));
+    _listCardItemEditableState.clear();
+    _tabController.animateTo(0);
+    // if (mounted) {
+    //   WidgetsBinding.instance.addPostFrameCallback(
+    //     (timeStamp) {
+    //       if (mounted) {
+    //         setState(() {});
+    //       }
+    //     },
+    //   );
+    // }
   }
 
   GlobalKey<ListCardItemEditableState> getListCardItemEditableKey(
@@ -179,8 +179,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   @override
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context) {
-    return (getExtras()).viewCallGetFirstFromList((getExtras()).iD,context: context)
-        as Future<ViewAbstract?>;
+    return (getExtras()).viewCallGetFirstFromList((getExtras()).iD,
+        context: context) as Future<ViewAbstract?>;
   }
 
   @override
@@ -374,8 +374,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         getBody(context),
         ...getBottomWidget(),
         if (extras is ListableInterface)
-           ListTile(
-            leading: Icon(Icons.list),
+          ListTile(
+            leading: const Icon(Icons.list),
             title: Text(AppLocalizations.of(context)!.details),
           ),
         if (extras is ListableInterface)

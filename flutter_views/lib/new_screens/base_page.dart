@@ -389,10 +389,59 @@ mixin BasePageWithThirdPaneMixin<T extends BasePage,
     // return AnimatedContainer(duration: const Duration(milliseconds: 800),child: SizedBox(width: ,),);
   }
 }
+mixin BasePageSecoundPaneNotifier<T extends BasePage, E> on BasePageState<T> {
+  final ValueNotifier<E?> _onSecoundPaneChanged = ValueNotifier<E?>(null);
+
+  E? _lastItem;
+  get lastItem => this._lastItem;
+  void notify(E? item) {
+    _onSecoundPaneChanged.value = item;
+  }
+
+  List<Widget>? getPaneNotifier(
+      {required bool firstPane,
+      ScrollController? controler,
+      TabControllerHelper? tab,
+      E? valueNotifier});
+  @override
+  void initState() {
+    _onSecoundPaneChanged.addListener(onPaneChanged);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _onSecoundPaneChanged.removeListener(onPaneChanged);
+    super.dispose();
+  }
+
+  void onPaneChanged() {
+    setState(() {
+      _lastItem = _onSecoundPaneChanged.value;
+    });
+  }
+
+  @override
+  List<Widget>? getPane(
+      {required bool firstPane,
+      ScrollController? controler,
+      TabControllerHelper? tab}) {
+    if (firstPane) {
+      return getPaneNotifier(
+          firstPane: firstPane, controler: controler, tab: tab);
+    }
+    return getPaneNotifier(
+        firstPane: firstPane,
+        controler: controler,
+        tab: tab,
+        valueNotifier: _lastItem);
+  }
+}
 
 abstract class BasePage extends StatefulWidget {
   final bool buildDrawer;
   final bool buildSecondPane;
+
   final bool isFirstToSecOrThirdPane;
   const BasePage({
     super.key,
@@ -428,14 +477,16 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   dynamic _width;
   dynamic _height;
   bool _isInitialization = true;
-  final ScrollController _scrollFirstPaneController = ScrollController();
-  final ScrollController _scrollSecoundPaneController = ScrollController();
   bool pinToolbar = false;
   late DrawerMenuControllerProvider _drawerMenuControllerProvider;
+
   Widget? _drawerWidget;
   late bool buildDrawer;
   late bool _buildSecoundPane;
   bool isSelectedMode = false;
+
+  DrawerMenuControllerProvider get drawerMenuControllerProvider =>
+      _drawerMenuControllerProvider;
 
   @override
   void didUpdateWidget(covariant T oldWidget) {
@@ -473,14 +524,8 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       ValueNotifier<int>(0);
   late CurrentScreenSize _currentScreenSize;
   TabController? _tabBaseController;
-  TabController? _tabControllerFirstPane;
-  TabController? _tabControllerSecondPane;
   int currentBaseTabIndex = 0;
-  int currentPaneIndexFirstPane = 0;
-  int currentPaneIndexSecondPane = 0;
   List<TabControllerHelper>? _tabList;
-  List<TabControllerHelper>? _tabListFirstPane;
-  List<TabControllerHelper>? _tabListSecondPane;
   ValueNotifier<int> onTabSelectedSecondPane = ValueNotifier<int>(0);
 
   List<Widget>? getPane({
@@ -514,37 +559,26 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   bool isDesktopPlatform() => isDesktop(context);
 
-  List<TabControllerHelper>? _getTabBarList({bool? firstPane}) {
-    if (firstPane == null) return _tabList;
-    return firstPane ? _tabListFirstPane : _tabListSecondPane;
-  }
-
   List<TabControllerHelper>? initTabBarList(
       {bool? firstPane, TabControllerHelper? tab}) {
     return null;
   }
 
-  bool _hasTabBarList({bool? firstPane}) {
-    return _getTabBarList(firstPane: firstPane) != null;
+  List<TabControllerHelper> _getTabBarList() {
+    return _tabList!;
   }
 
-  TabController getTabController({bool? firstPane}) {
-    if (firstPane == null) return _tabBaseController!;
-    return firstPane ? _tabControllerFirstPane! : _tabControllerSecondPane!;
+  bool _hasTabBarList() {
+    return _tabList != null;
   }
 
-  List<Widget> getTabsForTabController({bool? firstPane}) {
-    if (firstPane == null) return _tabList!;
-    return firstPane ? _tabListFirstPane! : _tabListSecondPane!;
-  }
-
-  PreferredSizeWidget? getTabBarWidget({bool? firstPane}) {
-    if (!_hasTabBarList(firstPane: firstPane)) {
-      debugPrint("getTabBarWidget !has tabBarList pane $firstPane");
+  PreferredSizeWidget? getTabBarWidget() {
+    if (!_hasTabBarList()) {
+      debugPrint("getTabBarWidget !has tabBarList pane ");
       return null;
     }
     return TabBar(
-        controller: getTabController(firstPane: firstPane),
+        controller: _tabBaseController,
         dividerColor: Colors.transparent,
         indicatorSize: TabBarIndicatorSize.tab,
         indicator: BoxDecoration(
@@ -554,7 +588,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
         // labelPadding: EdgeInsets.symmetric(horizontal: 5.0),
         isScrollable: true,
         //  firstPane != null,
-        tabs: getTabsForTabController(firstPane: firstPane));
+        tabs: _getTabBarList());
   }
 
   ///set padding to content view pased on the screen size
@@ -635,16 +669,17 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     if (actions == null && title == null) return null;
     return AppBar(
         surfaceTintColor: Colors.transparent,
-        elevation: 10,
+        // elevation: 10,
         // toolbarHeight: 100,
-        forceMaterialTransparency: false,
-        actions: isEmpty
+        forceMaterialTransparency: true,
+        actions: isEmpty || widget.isFirstToSecOrThirdPane
             ? [Container()]
             : !isBaseAppBar
                 ? actions
                 : [...actions ?? [], ...getSharedAppBarActions],
         automaticallyImplyLeading: false,
-        backgroundColor: ElevationOverlay.overlayColor(context, 1),
+
+        // backgroundColor: ElevationOverlay.overlayColor(context, 1),
         title: Padding(
           padding: const EdgeInsets.all(kDefaultPadding),
           child: title,
@@ -657,7 +692,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
                   _drawerMenuControllerProvider.controlStartDrawerMenu();
                 },
               ),
-        bottom: getTabBarWidget(firstPane: firstPane));
+        bottom: getTabBarWidget());
   }
 
   List<Widget> get getSharedAppBarActions {
@@ -853,16 +888,6 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       _tabBaseController!.removeListener(_tabControllerChangeListener);
       _tabBaseController!.dispose();
     }
-    if (_hasTabBarList(firstPane: true)) {
-      _tabControllerFirstPane!
-          .removeListener(_tabControllerChangeListenerFirstPane);
-      _tabControllerFirstPane!.dispose();
-    }
-    if (_hasTabBarList(firstPane: false)) {
-      _tabControllerSecondPane!
-          .removeListener(_tabControllerChangeListenerSecondPane);
-      _tabControllerSecondPane!.dispose();
-    }
     super.dispose();
   }
 
@@ -898,7 +923,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     _initBaseTab();
 
     return ScreenHelperSliver(
-        forceSmallView: !_buildSecoundPane || widget.isFirstToSecOrThirdPane,
+        forceSmallView: !_buildSecoundPane,
         requireAutoPadding: setMainPageSuggestionPadding(),
         onChangeLayout: (w, h, c) {
           debugPrint("ScreenHelperSliver build width:$w");
@@ -1139,6 +1164,10 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     return null;
   }
 
+  String? getScrollKey({required bool firstPane}) {
+    return null;
+  }
+
   bool canBuildDrawer() {
     //this overrides if small screen then set the default drawer
     if (!isLargeScreenFromCurrentScreenSize(context, width: getWidth)) {
@@ -1149,6 +1178,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   Widget getScaffoldBodyForPane({required bool firstPane}) {
     return SliverCustomScrollViewDraggable(
+      scrollKey: getScrollKey(firstPane: firstPane),
       tabs: getPaneTabControllerHelper(firstPane: firstPane),
       actions: getAppbarActions(firstPane: firstPane),
       title: getAppbarTitle(firstPane: firstPane),
@@ -1195,6 +1225,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     bool isLarge = isDesktop(context, maxWidth: getWidth) ||
         isTablet(context, maxWidth: getWidth);
     bool isCustomDrawer = getCustomDrawer() != null;
+
     Widget body = Scaffold(
         endDrawer: getEndDrawer(),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -1204,7 +1235,9 @@ abstract class BasePageState<T extends BasePage> extends State<T>
           firstPane: null,
           tab: null,
         ),
-        key: _drawerMenuControllerProvider.getStartDrawableKey,
+        key: widget.isFirstToSecOrThirdPane
+            ? null
+            : _drawerMenuControllerProvider.getStartDrawableKey,
         drawer: canBuildDrawer() ? _drawerWidget : null,
         appBar: generateToolbar(),
         body: (isCustomDrawer)
@@ -1275,38 +1308,12 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     debugPrint("_tabController $currentBaseTabIndex");
   }
 
-  void _tabControllerChangeListenerFirstPane() {
-    currentPaneIndexFirstPane = _tabControllerFirstPane!.index;
-    debugPrint("_tabController $currentBaseTabIndex");
-  }
-
-  void _tabControllerChangeListenerSecondPane() {
-    currentPaneIndexSecondPane = _tabControllerSecondPane!.index;
-    debugPrint("_tabControllerChangeListenerSecondPane $currentBaseTabIndex");
-  }
-
   void changeTabIndex(int index) {
     debugPrint("_tabController $index");
     if (!_hasTabBarList()) return;
     debugPrint("_tabController $index");
     currentBaseTabIndex = index;
     _tabBaseController!.index = index;
-  }
-
-  void changeTabIndexFirstPane(int index) {
-    debugPrint("_tabControllerChangeListenerSecondPane $index");
-    if (!_hasTabBarList(firstPane: true)) return;
-    debugPrint("_tabControllerChangeListenerSecondPane $index");
-    currentPaneIndexFirstPane = index;
-    _tabControllerFirstPane!.index = index;
-  }
-
-  void changeTabIndexSecondPane(int index) {
-    debugPrint("_tabControllerChangeListenerSecondPane $index");
-    if (!_hasTabBarList(firstPane: false)) return;
-    debugPrint("_tabControllerChangeListenerSecondPane $index");
-    currentPaneIndexSecondPane = index;
-    _tabControllerSecondPane!.index = index;
   }
 }
 
@@ -1350,14 +1357,14 @@ abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
   dynamic getExtras({TabControllerHelper? tab}) {
     if (_hasTabBarList()) {
       if (tab != null) {
-        dynamic result = _getTabBarList()!.firstWhere(
+        dynamic result = _getTabBarList().firstWhere(
             (element) => element.extras.runtimeType == tab.extras.runtimeType);
         if (result == null) {
           throw Exception("Could not find tab");
         }
         return result.extras;
       }
-      return _getTabBarList()![currentBaseTabIndex].extras;
+      return _getTabBarList()[currentBaseTabIndex].extras;
     }
     return _extras;
   }
@@ -1424,15 +1431,15 @@ abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
       {int? iD, String? tableName, dynamic ex, TabControllerHelper? tabH}) {
     _isLoading = false;
     if (_hasTabBarList()) {
-      TabControllerHelper tab = tabH ?? _getTabBarList()![currentBaseTabIndex];
+      TabControllerHelper tab = tabH ?? _getTabBarList()[currentBaseTabIndex];
       tab.extras = ex;
       tab.iD = iD;
       tab.tableName = tableName;
       if (tabH != null) {
-        _getTabBarList()![_getTabBarList()!.indexWhere((element) =>
+        _getTabBarList()[_getTabBarList().indexWhere((element) =>
             element.extras.runtimeType == tabH.extras.runtimeType)] = tab;
       } else {
-        _getTabBarList()![currentBaseTabIndex] = tab;
+        _getTabBarList()[currentBaseTabIndex] = tab;
       }
     } else {
       this._extras = ex;

@@ -10,12 +10,12 @@ class SliverCustomScrollViewDraggableHelper {
   Widget? expandHeaderWidget;
   Widget? headerWidget;
   Widget? expandBottomWidget;
-  SliverCustomScrollViewDraggableHelper({
-    required this.widget,
-    this.expandHeaderWidget,
-    this.headerWidget,
-    this.expandBottomWidget,
-  });
+  SliverCustomScrollViewDraggableHelper(
+      {required this.widget,
+      this.expandHeaderWidget,
+      this.headerWidget,
+      this.expandBottomWidget,
+      });
 }
 
 class SliverCustomScrollViewDraggable extends StatefulWidget {

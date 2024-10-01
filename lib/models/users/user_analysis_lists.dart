@@ -548,7 +548,8 @@ class UserLists<T> extends AuthUser<T> {
               onTap: () {
                 int idx = getTabBarIndex(context, credits ?? []);
                 if (idx == -1) return;
-                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+                //TODO
+                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
               },
               list: credits,
               listGrowthRate: creditsAnalysis,
@@ -566,7 +567,8 @@ class UserLists<T> extends AuthUser<T> {
               onTap: () {
                 int idx = getTabBarIndex(context, debits ?? []);
                 if (idx == -1) return;
-                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+                //TODO
+                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
               },
               color: Debits().getMainColor(),
               icon: Icons.arrow_forward_rounded,
@@ -585,7 +587,8 @@ class UserLists<T> extends AuthUser<T> {
               onTap: () {
                 int idx = getTabBarIndex(context, spendings ?? []);
                 if (idx == -1) return;
-                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+                //TODO
+                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
               },
               color: Spendings().getMainColor(),
               icon: Icons.arrow_forward_rounded,
@@ -604,7 +607,8 @@ class UserLists<T> extends AuthUser<T> {
               onTap: () {
                 int idx = getTabBarIndex(context, incomes ?? []);
                 if (idx == -1) return;
-                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+                //TODO
+                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
               },
               icon: Icons.arrow_back_sharp,
               listGrowthRate: incomesAnalysis,
@@ -651,7 +655,8 @@ class UserLists<T> extends AuthUser<T> {
               onTap: () {
                 int idx = getTabBarIndex(context, orders ?? []);
                 if (idx == -1) return;
-                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+                //TODO
+                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
               },
               // color: Colors.green.withOpacity(0.2),
               icon: Order().getMainIconData(),
@@ -670,7 +675,8 @@ class UserLists<T> extends AuthUser<T> {
               onTap: () {
                 int idx = getTabBarIndex(context, purchases ?? []);
                 if (idx == -1) return;
-                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+                //TODO
+                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
               },
               listGrowthRate: purchasesAnalysis,
               icon: Purchases().getMainIconData(),
@@ -688,7 +694,8 @@ class UserLists<T> extends AuthUser<T> {
               onTap: () {
                 int idx = getTabBarIndex(context, cut_requests ?? []);
                 if (idx == -1) return;
-                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+                //TODO
+                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
               },
               icon: CutRequest().getMainIconData(),
               listGrowthRate: cut_requestsAnalysis,
@@ -706,7 +713,8 @@ class UserLists<T> extends AuthUser<T> {
               onTap: () {
                 int idx = getTabBarIndex(context, transfers ?? []);
                 if (idx == -1) return;
-                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+                //TODO
+                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
               },
               icon: Transfers().getMainIconData(),
               title: Transfers().getMainHeaderLabelTextOnly(context),
@@ -725,7 +733,8 @@ class UserLists<T> extends AuthUser<T> {
               onTap: () {
                 int idx = getTabBarIndex(context, products_inputs ?? []);
                 if (idx == -1) return;
-                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+                //TODO
+                // globalKey?.currentState?.changeTabIndexSecondPane(idx);
               },
               icon: ProductInput().getMainIconData(),
               title: ProductInput().getMainHeaderLabelTextOnly(context),
@@ -744,7 +753,8 @@ class UserLists<T> extends AuthUser<T> {
               onTap: () {
                 int idx = getTabBarIndex(context, products_outputs ?? []);
                 if (idx == -1) return;
-                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+                //TODO
+                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
               },
               icon: ProductOutput().getMainIconData(),
               title: ProductOutput().getMainHeaderLabelTextOnly(context),
@@ -762,7 +772,8 @@ class UserLists<T> extends AuthUser<T> {
               onTap: () {
                 int idx = getTabBarIndex(context, reservation_invoice ?? []);
                 if (idx == -1) return;
-                globalKey?.currentState?.changeTabIndexSecondPane(idx);
+                //TODO
+                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
               },
               icon: ReservationInvoice().getMainIconData(),
               title: ReservationInvoice().getMainHeaderLabelTextOnly(context),

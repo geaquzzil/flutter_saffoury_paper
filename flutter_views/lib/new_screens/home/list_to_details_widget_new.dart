@@ -68,7 +68,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
   bool isPaneScaffoldOverlayColord(bool firstPane) => !firstPane;
 
   @override
-  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) =>
+  bool setPaneBodyPadding(bool firstPane) =>
       firstPane;
 
   @override

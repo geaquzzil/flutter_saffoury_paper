@@ -3,14 +3,13 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_menu_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_custom_scroll_draggable.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_custom_scroll_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_list_grouped.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/settings/setting_provider.dart';
@@ -20,7 +19,6 @@ import 'package:flutter_view_controller/screens/web/components/list_web_api.dart
 import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/util.dart';
 import 'package:provider/provider.dart';
 import 'package:supercharged/supercharged.dart';
@@ -200,13 +198,15 @@ class Logout extends StatelessWidget {
 }
 
 class PrintSetting extends BasePage {
-  const PrintSetting({super.key, super.buildSecondPane});
+  const PrintSetting(
+      {super.key, super.buildSecondPane, super.isFirstToSecOrThirdPane = true});
 
   @override
   State<PrintSetting> createState() => _PrintSettingState();
 }
 
-class _PrintSettingState extends BasePageState<PrintSetting> {
+class _PrintSettingState extends BasePageState<PrintSetting>
+    with BasePageSecoundPaneNotifier<PrintSetting, ModifiableInterface> {
   late Map<String, List<dynamic>> _list;
   Widget popMenuItem(BuildContext context, ActionOnToolbarItem item) {
     return Container(
@@ -234,16 +234,28 @@ class _PrintSettingState extends BasePageState<PrintSetting> {
     );
   }
 
+  @override
+  String? getScrollKey({required bool firstPane}) {
+    if (firstPane) {
+      return "printer_list";
+    }
+    return ((lastItem as ViewAbstract?)?.getScrollKey(ServerActions.print) ??
+            "") +
+        "printerDetails";
+  }
+
   Widget _getItem(BuildContext ctx, ModifiableInterface element) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       height: 40,
       child: ListTile(
+        // selectedTileColor: lastItem?.hashCode == element.hashCode
+        //     ? Theme.of(context).highlightColor
+        //     : null,
         // selectedTileColor: Colors.white,
-        selected: ctx.watch<SettingProvider>().getSelectedObject?.hashCode ==
-            element.hashCode,
+        selected: lastItem?.hashCode == element.hashCode,
         onTap: () {
-          ctx.read<SettingProvider>().change(element);
+          notify(element);
         },
         // contentPadding:
         //     const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -261,83 +273,17 @@ class _PrintSettingState extends BasePageState<PrintSetting> {
 
   @override
   Widget build(BuildContext context) {
-    // return super.build(context);
     List<ModifiableInterface> modifieableList =
         context.read<SettingProvider>().getModifiableListSetting(context);
     _list = modifieableList.groupBy(
       (element) => element.getModifiableMainGroupName(context),
     );
-    return ScreenHelperSliver(
-        forceSmallView: false,
-        requireAutoPadding: setMainPageSuggestionPadding(),
-        onChangeLayout: (w, h, c) {},
-        mobile: (w, h) {
-          return newMethod(context);
-        },
-        smallTablet: (w, h) {
-          return newMethod(context);
-        },
-        largeTablet: (w, h) {
-          return newMethod(context);
-        },
-        desktop: (w, h) {
-          return newMethod(context);
-        });
-    return Scaffold(
-      body: Row(
-        children: [
-          Expanded(
-              flex: 1,
-              child: SliverCustomScrollView(
-                slivers: getListStickyWidget(
-                    context,
-                    _list.entries
-                        .map(
-                          (e) => StickyItem(
-                              title: e.key,
-                              widgets: e.value
-                                  .map(
-                                    (c) => _getItem(context, c),
-                                  )
-                                  .toList()),
-                        )
-                        .toList()),
-              )),
-          const Expanded(flex: 3, child: Text("Dsada")),
-        ],
-      ),
-    );
+    return super.build(context);
   }
 
-  Scaffold newMethod(BuildContext context) {
-    return Scaffold(
-      body: TowPaneExt(
-        customPaneProportion: .5,
-        startPane: Scaffold(
-          body: SliverCustomScrollViewDraggable(
-            slivers: getListStickyWidget(
-                context,
-                _list.entries
-                    .map(
-                      (e) => StickyItem(
-                          title: e.key,
-                          widgets: e.value
-                              .map(
-                                (c) => _getItem(context, c),
-                              )
-                              .toList()),
-                    )
-                    .toList()),
-          ),
-        ),
-        endPane: const Scaffold(
-            body: SliverCustomScrollViewDraggable(slivers: [
-          SliverToBoxAdapter(
-            child: Text("sdkkjjk"),
-          )
-        ])),
-      ),
-    );
+  @override
+  double getCustomPaneProportion() {
+    return .3;
   }
 
   @override
@@ -345,7 +291,9 @@ class _PrintSettingState extends BasePageState<PrintSetting> {
       {bool? firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
-    return null;
+    return firstPane == null
+        ? Text(AppLocalizations.of(context)!.printerSetting)
+        : null;
   }
 
   @override
@@ -369,12 +317,11 @@ class _PrintSettingState extends BasePageState<PrintSetting> {
   }
 
   @override
-  List<Widget> getPane({
-    required bool firstPane,
-    ScrollController? controler,
-    TabControllerHelper? tab,
-  }) {
-    // debugPrint("PrintSetting $f");
+  List<Widget>? getPaneNotifier(
+      {required bool firstPane,
+      ScrollController? controler,
+      TabControllerHelper? tab,
+      ModifiableInterface? valueNotifier}) {
     if (firstPane) {
       return getListStickyWidget(
           context,
@@ -391,15 +338,21 @@ class _PrintSettingState extends BasePageState<PrintSetting> {
               .toList());
     } else {
       return [
-        const SliverToBoxAdapter(
-          child: Text("dsa"),
+        SliverFillRemaining(
+          child: valueNotifier == null
+              ? const Text("NON")
+              : BaseEditNewPage(
+                  viewAbstract: valueNotifier.getModifibleSettingObject(context)
+                      as ViewAbstract,
+                  onFabClickedConfirm: (validateObj) {},
+                ),
         )
       ];
     }
   }
 
   @override
-  bool isPaneScaffoldOverlayColord(bool firstPane) => false;
+  bool isPaneScaffoldOverlayColord(bool firstPane) => firstPane;
 
   @override
   bool setHorizontalDividerWhenTowPanes() => false;
@@ -408,10 +361,10 @@ class _PrintSettingState extends BasePageState<PrintSetting> {
   bool setMainPageSuggestionPadding() => false;
 
   @override
-  bool setPaneBodyPadding(bool firstPane, {TabControllerHelper? tab}) => false;
+  bool setPaneBodyPadding(bool firstPane) => true;
 
   @override
-  bool setPaneClipRect(bool firstPane) => false;
+  bool setPaneClipRect(bool firstPane) => true;
 }
 
 class AdminSetting extends StatelessWidget {
