@@ -151,6 +151,8 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   }
 
   @override
+  bool getPrintableSupportsLabelPrinting() => false;
+  @override
   getDashboardSectionsSecoundPane(BuildContext context, int crossAxisCount,
       {GlobalKey<BasePageWithApi>? globalKey,
       TabControllerHelper? tab,

@@ -23,6 +23,10 @@ abstract class PrintableMaster<T extends PrintLocalSetting>
 
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
       BuildContext context, PrintLocalSetting? dashboardSetting);
+
+  bool getPrintableSupportsLabelPrinting();
+
+  
 }
 
 class PrintableMasterEmpty<T extends PrintLocalSetting> {}

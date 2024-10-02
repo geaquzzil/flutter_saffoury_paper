@@ -256,6 +256,9 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
   bool isIncomes() {
     return runtimeType == Incomes || runtimeType == Credits;
   }
+  
+  @override
+  bool getPrintableSupportsLabelPrinting() => false;
 
   @override
   Color? getMainColor() {

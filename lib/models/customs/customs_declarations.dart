@@ -66,6 +66,9 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   CustomsDeclaration getSelfNewInstance() {
     return CustomsDeclaration();
   }
+  
+  @override
+  bool getPrintableSupportsLabelPrinting() => false;
 
   @override
   String getForeignKeyName() {

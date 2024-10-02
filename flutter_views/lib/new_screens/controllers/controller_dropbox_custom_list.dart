@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/edit_controllers_utils.dart';
 import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
@@ -60,11 +61,15 @@ class _DropdownCustomListWithFormListenerState
   Widget build(BuildContext context) {
     list = widget.viewAbstract
         .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
+
     return wrapController(
         FormBuilderDropdown<dynamic>(
+          // iconSize: 15,
+          // selectedItemBuilder: (context) => [const Text("das")],
+
           autovalidateMode: AutovalidateMode.onUserInteraction,
           // itemHeight: 48,
-          
+
           onChanged: (obj) {
             widget.viewAbstract.onDropdownChanged(context, _field, obj,
                 formKey: widget.formKey);
@@ -91,17 +96,44 @@ class _DropdownCustomListWithFormListenerState
           //     p0),
           initialValue:
               widget.viewAbstract.getFieldValue(_field, context: context),
-          decoration: getDecorationIconLabel(context,
-              label: widget.viewAbstract.getFieldLabel(context, _field),
-              icon: widget.viewAbstract.getFieldIconDataNullAccepted(_field)),
+          decoration: getDecorationIconLabel(
+            context,
+            label: widget.viewAbstract.getFieldLabel(context, _field),
+            // icon: widget.viewAbstract.getFieldIconDataNullAccepted(_field)
+          ),
           items: list
               .map((item) => DropdownMenuItem<dynamic>(
                     value: item,
-                    child: Text(
-                      item == null
-                          ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
-                          : item.toString(),
-                      style: Theme.of(context).textTheme.bodySmall,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.print,
+                          size: 20,
+                        ),
+                        const SizedBox(
+                          width: kDefaultPadding / 2,
+                        ),
+                        Text(
+                          item == null
+                              ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
+                              : item.toString(),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        )
+                      ],
+
+                      // contentPadding: EdgeInsets.zero,
+                      // leading: const Icon(
+                      //   Icons.print,
+                      //   // size: 15,
+                      // ),
+                      // title: Text(
+                      //   item == null
+                      //       ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
+                      //       : item.toString(),
+                      //   style: Theme.of(context).textTheme.bodySmall,
+                      // ),
                     ),
                   ))
               .toList(),

@@ -9,7 +9,7 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
-import 'package:flutter_view_controller/new_screens/controllers/wrap_controller.dart';
+import 'package:flutter_view_controller/new_screens/controllers/adaptives.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 
@@ -78,8 +78,9 @@ Widget getContollerCheckBox(BuildContext context,
     CurrentScreenSize? currentScreenSize}) {
   Type? fieldType = viewAbstract.getMirrorFieldType(field);
 
-  return wrapController(
-      FormBuilderCheckbox(
+  return WrapController(
+      size: currentScreenSize,
+      child: FormBuilderCheckbox(
         autovalidateMode: AutovalidateMode.always,
         name: viewAbstract.getTag(field),
         // contentPadding: !isDecorationFilled(currentScreenSize)
@@ -106,8 +107,7 @@ Widget getContollerCheckBox(BuildContext context,
                 viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
           }
         },
-      ),
-      currentScreenSize: currentScreenSize);
+      ));
 }
 
 Widget getContolerColorPicker(BuildContext context,

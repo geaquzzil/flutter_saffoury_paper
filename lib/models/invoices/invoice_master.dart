@@ -333,6 +333,9 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       return 0;
     }
   }
+  
+  @override
+  bool getPrintableSupportsLabelPrinting() => true;
 
   double? getTotalPriceFromList() {
     try {

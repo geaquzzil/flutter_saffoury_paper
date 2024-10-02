@@ -46,6 +46,8 @@ class CustomerBalanceList
   }
 
   @override
+  bool getPrintableSupportsLabelPrinting() => false;
+  @override
   bool getCustomStandAloneWidgetIsPadding() {
     return false;
   }

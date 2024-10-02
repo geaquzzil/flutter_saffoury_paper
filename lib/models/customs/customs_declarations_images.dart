@@ -184,4 +184,7 @@ class CustomsDeclarationImages extends ViewAbstract<CustomsDeclarationImages>
 
   @override
   Widget? getPrintableWatermark() => null;
+
+  @override
+  bool getPrintableSupportsLabelPrinting() => false;
 }

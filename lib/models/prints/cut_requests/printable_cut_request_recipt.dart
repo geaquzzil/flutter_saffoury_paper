@@ -118,6 +118,8 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
   String getPrintableQrCodeID() => cutRequest.getPrintableQrCodeID();
 
   @override
+  bool getPrintableSupportsLabelPrinting() => false;
+  @override
   Map<int, List<RecieptHeaderTitleAndDescriptionInfo>>
       getPrintableRecieptFooterTitleAndDescription(
               material.BuildContext context, PrintCutRequest? pca) =>

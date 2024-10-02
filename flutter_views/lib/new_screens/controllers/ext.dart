@@ -78,10 +78,20 @@ InputDecoration getDecorationDropdownNewWithLabelAndValue(BuildContext context,
 InputDecoration getDecorationIconLabel(BuildContext context,
     {IconData? icon, required String label}) {
   return InputDecoration(
+      // contentPadding: EdgeInsets.zero,
       // filled: true,
       border: const OutlineInputBorder(
-          gapPadding: 0, borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      icon: icon == null ? null : Icon(icon),
+
+        // borderSide: BorderSide(strokeAlign: ),
+          // borderSide: BorderSide.none,
+          // gapPadding: 0,
+          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      icon: icon == null
+          ? null
+          : Icon(
+              icon,
+              // size: 15,
+            ),
       labelText: label);
   // hintText: parent.getTextInputHint(context, field));
 }

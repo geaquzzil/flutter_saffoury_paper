@@ -34,6 +34,8 @@ class CustomerClinetGuide
   }
 
   @override
+  bool getPrintableSupportsLabelPrinting() => false;
+  @override
   Map<String, mt.IconData> getFieldIconDataMap() {
     // TODO: implement getFieldIconDataMap
     throw UnimplementedError();

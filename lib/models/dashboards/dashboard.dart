@@ -118,6 +118,8 @@ class Dashboard extends UserLists<Dashboard>
   }
 
   @override
+  bool getPrintableSupportsLabelPrinting() => false;
+  @override
   String? getCustomAction() => "list_dashboard";
 
   @override

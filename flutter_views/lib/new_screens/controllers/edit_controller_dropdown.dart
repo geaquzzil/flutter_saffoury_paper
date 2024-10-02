@@ -19,7 +19,11 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
   Widget build(BuildContext context) {
     // return FormBuilderChoiceChip();
     return FormBuilderChoiceChip(
-      decoration: const InputDecoration.collapsed(hintText: ""),
+      decoration: getDecorationIconLabel(
+        context,
+        label: parent.getFieldLabel(context, field),
+        // icon: widget.viewAbstract.getFieldIconDataNullAccepted(_field)
+      ),
       enabled: parent.isFieldEnabled(field),
       // style: TextStyle(fontSize: 8),
       onChanged: (obj) => parent.onDropdownChanged(context, field, obj),
@@ -38,13 +42,16 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
       options: dropdownGetValues(enumViewAbstract)
           .map((v) => FormBuilderChipOption(
                 value: v,
-                avatar: v == null
-                    ? null
-                    : CircleAvatar(
-                        child: Icon((v as ViewAbstractEnum).getMainIconData())),
-                child: Text(v == null
-                    ? dropdownGetEnterText(context, enumViewAbstract)
-                    : enumViewAbstract.getFieldLabelString(context, v)),
+                // avatar: v == null
+                //     ? null
+                //     : CircleAvatar(
+                //         child: Icon((v as ViewAbstractEnum).getMainIconData())),
+                child: Text(
+                  v == null
+                      ? dropdownGetEnterText(context, enumViewAbstract)
+                      : enumViewAbstract.getFieldLabelString(context, v),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
               ))
           .toList(),
       // decoration:

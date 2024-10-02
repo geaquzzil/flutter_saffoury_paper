@@ -19,9 +19,27 @@ Widget buildTitle<T extends PrintLocalSetting>(
                   printObj.getPrintablePrimaryColor(printCommandAbstract))),
         ));
 
+Widget buildBarcode(mt.BuildContext context, String barcode,
+    {double size = 20}) {
+  return Column(children: [
+    SizedBox(
+        width: double.maxFinite,
+        height: size,
+        child: BarcodeWidget(
+          height: size,
+          width: double.maxFinite,
+          barcode: Barcode.code128(),
+          data: barcode,
+        )),
+  ]);
+}
+
 Widget buildQrCode<T extends PrintLocalSetting>(
     mt.BuildContext context, PrintableMaster printObj,
-    {T? printCommandAbstract, bool withPaddingTop = true, double size = 80}) {
+    {T? printCommandAbstract,
+    bool withPaddingTop = true,
+    double size = 80,
+    double fontSize = 10}) {
   if ((printCommandAbstract?.hideQrCode ?? false)) {
     return Column(children: [SizedBox(width: size, height: size)]);
   }
@@ -38,6 +56,7 @@ Widget buildQrCode<T extends PrintLocalSetting>(
     SizedBox(height: .1 * (PdfPageFormat.cm)),
     Text(
       printObj.getPrintableQrCodeID(),
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize),
     ),
   ]);
 }

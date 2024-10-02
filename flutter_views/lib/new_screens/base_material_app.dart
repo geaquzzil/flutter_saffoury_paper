@@ -150,9 +150,10 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                     context,
                     MediaQuery(
                       data: MediaQuery.of(context).copyWith(
+                        // boldText: true,
                         textScaler: MediaQuery.of(context)
                             .textScaler
-                            .clamp(minScaleFactor: .5, maxScaleFactor: 1.6),
+                            .clamp(minScaleFactor: .5, maxScaleFactor: .9),
                       ),
                       child: widget!,
                     ),

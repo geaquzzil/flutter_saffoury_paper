@@ -169,8 +169,16 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
                     } else if (object.label ==
                         AppLocalizations.of(context)!.a4ProductLabel) {
                       chosedPageFormat = PdfPageFormat.a4;
-                    } else {
+                    } else if (object.label ==
+                        AppLocalizations.of(context)!.a5ProductLabel) {
                       chosedPageFormat = PdfPageFormat.a5;
+                    } else {
+                      //todo translate
+                      if (supportsLabelPrinting()) {
+                        chosedPageFormat = PdfPageFormat.roll80;
+                      } else {
+                        chosedPageFormat = PdfPageFormat.a4;
+                      }
                     }
                     if (chosedPageFormat ==
                         printSettingListener.getSelectedFormat) return;
@@ -180,6 +188,11 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
                 //todo translate
                 hint: "Select size",
                 list: [
+                  if (supportsLabelPrinting())
+                    DropdownStringListItem(
+                        icon: null,
+                        //todo translate
+                        label: AppLocalizations.of(context)!.productLabel),
                   DropdownStringListItem(
                       icon: null,
                       label: AppLocalizations.of(context)!.a3ProductLabel),
@@ -324,6 +337,10 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
       },
       selector: (ctx, provider) => provider.getFloatActionIsExpanded,
     );
+  }
+
+  bool supportsLabelPrinting() {
+    return (getExtras() as PrintableMaster).getPrintableSupportsLabelPrinting();
   }
 
   Widget getPdfPreview(PdfPageFormat fomat) {

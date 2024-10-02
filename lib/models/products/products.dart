@@ -1157,22 +1157,27 @@ class Product extends ViewAbstract<Product>
   @override
   Future<List<pdfWidget.Widget>> getPrintableCustomPage(BuildContext context,
       {pdf.PdfPageFormat? format, PrintProduct? setting}) async {
-    pdfWidget.Widget header = await buildHeader(setting: setting);
+    pdfWidget.Widget? header;
+    if (format != pdf.PdfPageFormat.roll80) {
+      header = await buildHeader(setting: setting);
+    }
     debugPrint("getPrintableCustomPage generating");
     return [
-      pdfWidget.Stack(
-        alignment: pdfWidget.Alignment.bottomRight,
-        fit: pdfWidget.StackFit.loose,
-        // alignment: ,
-        children: [
-          header,
-          // pdfWidget.Watermark.text("tessssssssssssssssssssssssst",
-          //     fit: pdfWidget.BoxFit.fill),
-          buildTitle(context, this),
-        ],
-      ),
+      if (format != pdf.PdfPageFormat.roll80)
+        pdfWidget.Stack(
+          alignment: pdfWidget.Alignment.bottomRight,
+          fit: pdfWidget.StackFit.loose,
+          // alignment: ,
+          children: [
+            header!,
+            // pdfWidget.Watermark.text("tessssssssssssssssssssssssst",
+            //     fit: pdfWidget.BoxFit.fill),
+            buildTitle(context, this),
+          ],
+        ),
       // pdfWidget.Watermark.text("tessssssssssssssssssssssssst"),
-      ProductLabelPDF(context, this, setting: setting).generate(),
+      ProductLabelPDF(context, this, setting: setting, format: format)
+          .generate()
 
       //  Row(
       // crossAxisAlignment: CrossAxisAlignment.start,
@@ -1966,6 +1971,9 @@ class Product extends ViewAbstract<Product>
   List? getComparableList() {
     return _comparedList;
   }
+
+  @override
+  bool getPrintableSupportsLabelPrinting() => true;
 
   // @override
   // String getUri(BuildContext context) {
