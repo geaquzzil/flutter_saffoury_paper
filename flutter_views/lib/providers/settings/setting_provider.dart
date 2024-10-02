@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/barcode_setting.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/printer_default_setting.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
 import '../../interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
@@ -22,6 +24,9 @@ class SettingProvider with ChangeNotifier {
         .whereType<ModifiableInterface>()
         .toList();
     printableSettingsObjects.add(PrinterDefaultSetting());
+    if (supportsSerialPort()) {
+      printableSettingsObjects.add(BarcodeSetting());
+    }
     return printableSettingsObjects;
   }
 }

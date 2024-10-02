@@ -46,8 +46,9 @@ bool showHamburger(CurrentScreenSize? screenSize) {
       screenSize == CurrentScreenSize.SMALL_TABLET;
 }
 
-bool isLargeScreenFromCurrentScreenSize(BuildContext context,{double?width}) {
-  CurrentScreenSize currentScreenSize = findCurrentScreenSize(context,width: width);
+bool isLargeScreenFromCurrentScreenSize(BuildContext context, {double? width}) {
+  CurrentScreenSize currentScreenSize =
+      findCurrentScreenSize(context, width: width);
   return currentScreenSize == CurrentScreenSize.DESKTOP ||
       currentScreenSize == CurrentScreenSize.LARGE_TABLET;
 }
@@ -78,6 +79,13 @@ bool isTabletFromWidth(double maxWidth) {
 
 bool isMobilePlatform() {
   return Platform.isAndroid || Platform.isIOS;
+}
+
+bool supportsSerialPort() {
+  return Platform.isAndroid ||
+      Platform.isLinux ||
+      Platform.isMacOS ||
+      Platform.isWindows;
 }
 
 bool isDesktopPlatform() {
