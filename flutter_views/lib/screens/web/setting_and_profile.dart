@@ -5,7 +5,9 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/models/barcode_setting.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/prints/printer_default_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -200,9 +202,12 @@ class Logout extends StatelessWidget {
   }
 }
 
-class PrintSetting extends BasePage {
-  const PrintSetting(
-      {super.key, super.buildSecondPane, super.isFirstToSecOrThirdPane = true});
+class PrintSetting extends BasePageToSecPageIfMobile<ModifiableInterface> {
+  PrintSetting(
+      {super.key,
+      super.buildSecondPane,
+      super.isFirstToSecOrThirdPane = true,
+      super.selectedItem});
 
   @override
   State<PrintSetting> createState() => _PrintSettingState();
@@ -296,7 +301,14 @@ class _PrintSettingState extends BasePageState<PrintSetting>
       TabControllerHelper? secoundTab}) {
     return firstPane == null
         ? Text(AppLocalizations.of(context)!.printerSetting)
-        : null;
+        : firstPane
+            ? Text(AppLocalizations.of(context)!.details)
+            : Text(getSecPaneText() ?? "");
+  }
+
+  String? getSecPaneText() {
+    ModifiableInterface? last = selectedItem ?? lastItem;
+    return last?.getModifibleTitleName(context);
   }
 
   @override
@@ -304,6 +316,20 @@ class _PrintSettingState extends BasePageState<PrintSetting>
       {bool? firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
+    if (isSecPane(firstPane: firstPane) && hasNotifierValue()) {
+      if (getAnySelectValue() is BarcodeSetting ||
+          (getAnySelectValue() is PrinterDefaultSetting)) {
+        return FloatingActionButton.small(
+          //todo translate
+          child: const Tooltip(
+              message: "AppLocalizations.of(context)!.refresh",
+              child: Icon(Icons.refresh)),
+          onPressed: () {
+            setState(() {});
+          },
+        );
+      }
+    }
     return null;
   }
 

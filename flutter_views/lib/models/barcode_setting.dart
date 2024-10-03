@@ -66,10 +66,14 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
         "stopBits": Icons.list,
         "ports": Icons.list,
       };
+  bool isEmptyPorts() {
+    return ports == null || (ports != null && ports?.isEmpty == true);
+  }
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "ports": "COM port number",
+        "ports":
+            isEmptyPorts() ? "No available usb devices" : "COM port number",
         "baudRate": "Bits per second",
         "bits": "Data bits",
         "parity": "Parity",
@@ -113,6 +117,14 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
+
+  @override
+  Map<String, List<String>>? getHasControlersAfterInputtMap(
+      BuildContext context) {
+    List<String> l = List.from(getMainFields());
+    l.removeWhere((o) => o == "ports");
+    return {"ports": l};
+  }
 
   @override
   Map<String, List> getTextInputIsAutoCompleteCustomListMap(

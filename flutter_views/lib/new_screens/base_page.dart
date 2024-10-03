@@ -389,13 +389,25 @@ mixin BasePageWithThirdPaneMixin<T extends BasePage,
     // return AnimatedContainer(duration: const Duration(milliseconds: 800),child: SizedBox(width: ,),);
   }
 }
-mixin BasePageSecoundPaneNotifier<T extends BasePage, E> on BasePageState<T> {
+mixin BasePageSecoundPaneNotifier<T extends BasePageToSecPageIfMobile, E>
+    on BasePageState<T> {
   final ValueNotifier<E?> _onSecoundPaneChanged = ValueNotifier<E?>(null);
 
   E? _lastItem;
-  get lastItem => this._lastItem;
+  E? _selectedItem;
+  E? get lastItem => this._lastItem;
+  E? get selectedItem => this._selectedItem;
+
   void notify(E? item) {
     _onSecoundPaneChanged.value = item;
+  }
+
+  bool hasNotifierValue() {
+    return _lastItem != null || _selectedItem != null;
+  }
+
+  E? getAnySelectValue() {
+    return selectedItem ?? lastItem;
   }
 
   List<Widget>? getPaneNotifier(
@@ -406,7 +418,14 @@ mixin BasePageSecoundPaneNotifier<T extends BasePage, E> on BasePageState<T> {
   @override
   void initState() {
     _onSecoundPaneChanged.addListener(onPaneChanged);
+    _selectedItem = widget.selectedItem;
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant oldWidget) {
+    _selectedItem = widget.selectedItem;
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -415,7 +434,81 @@ mixin BasePageSecoundPaneNotifier<T extends BasePage, E> on BasePageState<T> {
     super.dispose();
   }
 
+  // Widget getAppBarLeading() {
+  //   return BackButton(
+  //     onPressed: () {
+  //       setState(() {
+  //         _selectedItem = null;
+  //       });
+  //     },
+  //   );
+  // }
+
+  // @override
+  // Widget getScaffoldBodyForPane({required bool firstPane}) {
+  //   if (firstPane && _selectedItem != null) {
+  //     return SliverCustomScrollViewDraggable(
+  //       scrollKey: getScrollKey(firstPane: firstPane),
+  //       tabs: getPaneTabControllerHelper(firstPane: firstPane),
+  //       actions: getAppbarActions(firstPane: firstPane),
+  //       title: getAppbarTitle(firstPane: firstPane),
+  //       slivers: const [],
+  //       builder: (scrollController, tab) {
+  //         return SliverCustomScrollViewDraggableHelper(
+  //             widget: getPane(firstPane: firstPane, tab: tab)!,
+  //             headerWidget:
+  //                 getPaneDraggableHeader(firstPane: firstPane, tab: tab),
+  //             expandHeaderWidget: getPaneDraggableExpandedHeader(
+  //                 firstPane: firstPane, tab: tab));
+  //       },
+  //     );
+  //   }
+  //   return super.getScaffoldBodyForPane(firstPane: firstPane);
+  // }
+
+  // AppBar getAppBarForSecPane() {
+  //   return AppBar(
+  //     leading: getAppBarLeading(),
+  //     title: Text("Implement Selected PAne Action"),
+  //   );
+  // }
+
+  // Widget wrapScaffoldInThirdPane() {
+  //   Widget widget = Text("");
+
+  //   return Scaffold(appBar: getAppBarForSecPane(), body: widget);
+  // }
+
+  @override
+  Widget? getAppbarLeading({bool? firstPane}) {
+    debugPrint("getAppbarLeading $firstPane selected: $_selectedItem");
+
+    if (_selectedItem != null) {
+      if (firstPane == true) {
+        return BackButton(
+          onPressed: () {
+            setState(() {
+              _selectedItem = null;
+              forceBuildAppBar = false;
+              pinToolbar = false;
+            });
+          },
+        );
+      }
+    }
+    return super.getAppbarLeading(firstPane: firstPane);
+  }
+
   void onPaneChanged() {
+    if (isMobile(context, maxWidth: getWidth)) {
+      debugPrint("onPaneChanged");
+      setState(() {
+        forceBuildAppBar = true;
+        pinToolbar = false;
+        _selectedItem = _onSecoundPaneChanged.value;
+      });
+      return;
+    }
     setState(() {
       _lastItem = _onSecoundPaneChanged.value;
     });
@@ -426,6 +519,13 @@ mixin BasePageSecoundPaneNotifier<T extends BasePage, E> on BasePageState<T> {
       {required bool firstPane,
       ScrollController? controler,
       TabControllerHelper? tab}) {
+    if (_selectedItem != null) {
+      return getPaneNotifier(
+          firstPane: false,
+          controler: controler,
+          tab: tab,
+          valueNotifier: _selectedItem);
+    }
     if (firstPane) {
       return getPaneNotifier(
           firstPane: firstPane, controler: controler, tab: tab);
@@ -436,6 +536,16 @@ mixin BasePageSecoundPaneNotifier<T extends BasePage, E> on BasePageState<T> {
         tab: tab,
         valueNotifier: _lastItem);
   }
+}
+
+abstract class BasePageToSecPageIfMobile<T> extends BasePage {
+  T? selectedItem;
+  BasePageToSecPageIfMobile(
+      {this.selectedItem,
+      super.buildDrawer,
+      super.buildSecondPane,
+      super.isFirstToSecOrThirdPane,
+      super.key});
 }
 
 abstract class BasePage extends StatefulWidget {
@@ -478,6 +588,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   dynamic _height;
   bool _isInitialization = true;
   bool pinToolbar = false;
+  bool forceBuildAppBar = false;
   late DrawerMenuControllerProvider _drawerMenuControllerProvider;
 
   Widget? _drawerWidget;
@@ -545,6 +656,9 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   });
 
   Widget? getAppbarTitle({bool? firstPane, TabControllerHelper? tab});
+  Widget? getAppbarLeading({bool? firstPane}) {
+    return null;
+  }
 
   bool isPaneScaffoldOverlayColord(bool firstPane);
   bool setPaneBodyPadding(bool firstPane);
@@ -722,6 +836,14 @@ abstract class BasePageState<T extends BasePage> extends State<T>
         },
       )
     ];
+  }
+
+  bool isFirstPane({bool? firstPane}) {
+    return firstPane != null && firstPane == true;
+  }
+
+  bool isSecPane({bool? firstPane}) {
+    return !isFirstPane(firstPane: firstPane);
   }
 
   ///by default this is hidden when scrolling
@@ -1181,7 +1303,10 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       scrollKey: getScrollKey(firstPane: firstPane),
       tabs: getPaneTabControllerHelper(firstPane: firstPane),
       actions: getAppbarActions(firstPane: firstPane),
+      appBarLeading: getAppbarLeading(firstPane: firstPane),
       title: getAppbarTitle(firstPane: firstPane),
+      forceBuildAppBar: forceBuildAppBar,
+      pinToolbar: pinToolbar,
       slivers: const [],
       builder: (scrollController, tab) {
         return SliverCustomScrollViewDraggableHelper(

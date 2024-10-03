@@ -16,7 +16,8 @@ class SliverCustomScrollView extends StatefulWidget {
   ScrollPhysics? physics;
 
   //this works with one object only todo cant retrun full List
-  Widget Function(bool fullyCol, bool fullyExp,TabControllerHelper?tab)? builderAppbar;
+  Widget Function(bool fullyCol, bool fullyExp, TabControllerHelper? tab)?
+      builderAppbar;
   SliverCustomScrollView(
       {super.key,
       required this.slivers,
@@ -65,25 +66,20 @@ class _SliverCustomScrollViewDraggableState
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   void didUpdateWidget(covariant SliverCustomScrollView oldWidget) {
     bucketOffsetKey = widget.scrollKey ?? "scrollKey";
     debugPrint("didUpdateWidget draggable $bucketOffsetKey");
-    // WidgetsBinding.instance.addPostFrameCallback((c) {
-    //   if (mounted) {
-    //     double lastSavedScroll =
-    //         Configurations.currentPageScrollOffset(context, bucketOffsetKey);
-    //     if (lastSavedScroll != 0) {
-    //       _scrollTo(lastSavedScroll);
-    //     } else {
-    //       _scrollTop();
-    //     }
-    //   }
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((c) {
+      if (mounted) {
+        double lastSavedScroll =
+            Configurations.currentPageScrollOffset(context, bucketOffsetKey);
+        if (lastSavedScroll != 0) {
+          _scrollTo(lastSavedScroll);
+        } else {
+          _scrollTop();
+        }
+      }
+    });
     if (widget.tabs != null) {
       _tabs = <TabControllerHelper>[];
       _tabs!.clear();
@@ -172,7 +168,7 @@ class _SliverCustomScrollViewDraggableState
                     final bool fullyCollapsed = streams[0];
                     final bool fullyExpanded = streams[1];
                     return widget.builderAppbar!
-                        .call(fullyCollapsed, fullyExpanded,tab);
+                        .call(fullyCollapsed, fullyExpanded, tab);
                   },
                 ),
               if (hasTabbar()) getTabbarSliver(),

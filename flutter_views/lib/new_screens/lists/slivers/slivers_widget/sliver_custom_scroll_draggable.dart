@@ -10,12 +10,13 @@ class SliverCustomScrollViewDraggableHelper {
   Widget? expandHeaderWidget;
   Widget? headerWidget;
   Widget? expandBottomWidget;
-  SliverCustomScrollViewDraggableHelper(
-      {required this.widget,
-      this.expandHeaderWidget,
-      this.headerWidget,
-      this.expandBottomWidget,
-      });
+
+  SliverCustomScrollViewDraggableHelper({
+    required this.widget,
+    this.expandHeaderWidget,
+    this.headerWidget,
+    this.expandBottomWidget,
+  });
 }
 
 class SliverCustomScrollViewDraggable extends StatefulWidget {
@@ -28,8 +29,10 @@ class SliverCustomScrollViewDraggable extends StatefulWidget {
   final ScrollPhysics? physics;
   final Widget? title;
   final bool pinToolbar;
+  final Widget? appBarLeading;
   final List<Widget>? actions;
   final Widget? expandHeaderWidget;
+  final bool forceBuildAppBar;
   final Widget? headerWidget;
   final Widget? expandBottomWidget;
   const SliverCustomScrollViewDraggable(
@@ -42,9 +45,11 @@ class SliverCustomScrollViewDraggable extends StatefulWidget {
       this.expandHeaderWidget,
       this.tabs,
       this.expandBottomWidget,
+      this.appBarLeading,
       this.headerWidget,
       this.actions,
       this.physics,
+      this.forceBuildAppBar = false,
       this.scrollKey});
 
   @override
@@ -116,17 +121,15 @@ class _SliverCustomScrollViewDraggableState
             },
       scrollController: _scrollController,
       scrollKey: widget.scrollKey,
-      builderAppbar: widget.title == null
-          ? null
-          : (fullyCol, fullyExp, tab) {
-              return getSliverAppbar(context, fullyCol, appBarHeight, fullyExp,
-                  fullyExpandedHeight, expandedHeight,
-                  customTabHeader:
-                      widget.builder?.call(_scrollController, tab).headerWidget,
-                  customTabExpandedHeader: widget.builder
-                      ?.call(_scrollController, tab)
-                      .expandHeaderWidget);
-            },
+      builderAppbar: buildAppbar()
+          ? (fullyCol, fullyExp, tab) => getSliverAppbar(context, fullyCol,
+              appBarHeight, fullyExp, fullyExpandedHeight, expandedHeight,
+              customTabHeader:
+                  widget.builder?.call(_scrollController, tab).headerWidget,
+              customTabExpandedHeader: widget.builder
+                  ?.call(_scrollController, tab)
+                  .expandHeaderWidget)
+          : null,
       slivers: [
         SliverToBoxAdapter(
           child: expandedUpArrow(),
@@ -134,6 +137,13 @@ class _SliverCustomScrollViewDraggableState
         ...widget.slivers,
       ],
     );
+  }
+
+  bool buildAppbar() {
+    if (widget.forceBuildAppBar) {
+      return true;
+    }
+    return widget.title != null;
   }
 
   StreamBuilder<bool> expandedUpArrow() {
@@ -166,7 +176,7 @@ class _SliverCustomScrollViewDraggableState
   }
 
   Widget? getSliverAppbarLeading() {
-    return null;
+    return widget.appBarLeading;
   }
 
   List<Widget>? getSliverAppbarActions() {
@@ -275,11 +285,13 @@ class _SliverCustomScrollViewDraggableState
       Widget? customTabExpandedHeader}) {
     return SliverAppBar(
       automaticallyImplyLeading: canExpandBody(),
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: widget.forceBuildAppBar
+          ? Colors.transparent
+          : Theme.of(context).colorScheme.surface,
       leading: getSliverAppbarLeading(),
       actions: getSliverAppbarActions(),
       elevation: 10,
-      pinned: false,
+      pinned: widget.pinToolbar,
       stretch: canExpandBody(),
       title: getSliverTitle(fullyCollapsed),
       collapsedHeight: canExpandBody() ? appBarHeight : null,

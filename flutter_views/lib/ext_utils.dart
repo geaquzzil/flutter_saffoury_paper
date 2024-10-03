@@ -19,9 +19,9 @@ extension toStringKeyValue on Map<dynamic, dynamic> {
     String result = "";
     forEach((k, v) {
       if (k is int && v is List<RecieptHeaderTitleAndDescriptionInfo>) {
-        v.forEach((a) {
+        for (var a in v) {
           result = "$result${a.title}: ${a.description}\n";
-        });
+        }
       } else {
         String value = v.toString();
         result =
@@ -32,7 +32,25 @@ extension toStringKeyValue on Map<dynamic, dynamic> {
   }
 }
 
+extension Lists<T> on Map<dynamic, List<T>> {
+  List<T> getSumsFromList() {
+    List<T> l = List.empty(growable: true);
+    for (var o in entries) {
+      l.addAll(o.value);
+    }
+    return l;
+  }
+}
+
 extension toStringList on List {
+  List getNotContainsList(List o) {
+    bool startWithCompared = o.length > length;
+    // final subList = list.toSet().difference(comparedList.toSet()).toList();
+    return startWithCompared
+        ? o.where((element) => !contains(element)).toList()
+        : where((element) => !o.contains(element)).toList();
+  }
+
   double sumCustom<T>(double Function(T t) toElement) {
     return isEmpty
         ? 0
@@ -42,9 +60,7 @@ extension toStringList on List {
 
   String sumToCurrencyFormat<T>(double Function(T t) toElement,
       {String symbol = ""}) {
-    return sumCustom(
-      toElement
-    ).toCurrencyFormat(symbol:symbol );
+    return sumCustom(toElement).toCurrencyFormat(symbol: symbol);
   }
 
   String getString(

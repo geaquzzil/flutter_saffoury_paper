@@ -25,6 +25,7 @@ abstract class ViewAbstractInputAndValidater<T>
   Map<String, TextInputType?> getTextInputTypeMap();
   Map<String, bool> getTextInputIsAutoCompleteMap();
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap();
+
   Map<String, int> getTextInputMaxLengthMap();
   Map<String, List<dynamic>> getTextInputIsAutoCompleteCustomListMap(
           BuildContext context) =>
@@ -40,6 +41,10 @@ abstract class ViewAbstractInputAndValidater<T>
 
   TextInputType? getTextInputType(String field) {
     return getTextInputTypeMap()[field];
+  }
+
+  Map<String, List<String>>? getHasControlersAfterInputtMap(BuildContext context) {
+    return null;
   }
 
   ViewAbstractControllerInputType getInputType(String field) {

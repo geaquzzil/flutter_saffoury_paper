@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/components/expansion_tile_custom.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -61,6 +62,8 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
 
   late Map<int, List<String>> groupedHorizontalFields;
 
+  Map<String, List<String>>? groupedControllerAfterInput;
+
   Map<String, TextEditingController> controllers = {};
 
   final Map<String, GlobalKey<FormBuilderState>> _subformKeys = {};
@@ -68,6 +71,8 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
   late GlobalKey<EditSubViewAbstractHeaderState> keyExpansionTile;
 
   late ViewAbstract _viewAbstract;
+
+  ValueNotifier groupedControllerNotifier = ValueNotifier(null);
 
   @override
   void initState() {
@@ -107,8 +112,16 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
     } else {
       fields = _viewAbstract.getMainFields(context: context);
       groupedFields = _viewAbstract.getMainFieldsGroups(context);
+
       groupedHorizontalFields =
           _viewAbstract.getMainFieldsHorizontalGroups(context);
+      groupedControllerAfterInput =
+          _viewAbstract.getHasControlersAfterInputtMap(context);
+      if (groupedControllerAfterInput != null) {
+        fields = fields
+            .getNotContainsList(groupedControllerAfterInput!.getSumsFromList())
+            .cast();
+      }
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -422,6 +435,8 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
         formKey?.currentState!.save();
         ViewAbstract? objcet = _viewAbstract.onAfterValidate(context);
         widget.onValidate!(objcet);
+
+        groupedControllerNotifier.value = objcet;
         debugPrint("BaseEdit main form onValidate => ${objcet?.toJsonString()}",
             wrapWidth: 1024);
         if (_viewAbstract.parent != null) {
@@ -431,6 +446,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
         }
       } else {
         widget.onValidate!(null);
+        groupedControllerNotifier.value = null;
         if (_viewAbstract.parent != null) {
           debugPrint(
               "BaseEdit main form onValidate =>  has parent and has error=> true");
@@ -440,6 +456,29 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
     }
   }
 
+  Widget checkToGetControllerWidget(BuildContext context, String field) {
+    if (groupedControllerAfterInput?.containsKey(field) == true) {
+      return ValueListenableBuilder(
+        builder: (c, v, s) {
+          if (v != null) {
+            if ((v as ViewAbstract).toJsonViewAbstract().containsKey(field)) {
+              List<String> fields = groupedControllerAfterInput![field]!;
+              return Column(
+                children:
+                    fields.map((e) => getControllerWidget(context, e)).toList(),
+              );
+            }
+            return getControllerWidget(context, field);
+          } else {
+            return getControllerWidget(context, field);
+          }
+        },
+        valueListenable: groupedControllerNotifier,
+      );
+    }
+    return getControllerWidget(context, field);
+  }
+
   Widget getFormContent(BuildContext context) {
     // return SliverList(
     //     delegate: SliverChildBuilderDelegate((context, index) {
@@ -447,7 +486,8 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
     // }, childCount: fields.length));
     var child = <Widget>[
       // const SizedBox(height: kDefaultPadding),
-      ...fields.map((e) => getControllerWidget(context, e)),
+      ...fields.map((e) => checkToGetControllerWidget(context, e)),
+
       ...groupedFields.entries.map((e) => ExpansionTileCustom(
           canExpand: () => true,
           hasError: hasErrorGroupWidget(context, e.value),
