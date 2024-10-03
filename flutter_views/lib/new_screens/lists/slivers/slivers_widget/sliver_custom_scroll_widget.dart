@@ -69,17 +69,17 @@ class _SliverCustomScrollViewDraggableState
   void didUpdateWidget(covariant SliverCustomScrollView oldWidget) {
     bucketOffsetKey = widget.scrollKey ?? "scrollKey";
     debugPrint("didUpdateWidget draggable $bucketOffsetKey");
-    WidgetsBinding.instance.addPostFrameCallback((c) {
-      if (mounted) {
-        double lastSavedScroll =
-            Configurations.currentPageScrollOffset(context, bucketOffsetKey);
-        if (lastSavedScroll != 0) {
-          _scrollTo(lastSavedScroll);
-        } else {
-          _scrollTop();
-        }
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((c) {
+    //   if (mounted) {
+    //     double lastSavedScroll =
+    //         Configurations.currentPageScrollOffset(context, bucketOffsetKey);
+    //     if (lastSavedScroll != 0) {
+    //       _scrollTo(lastSavedScroll);
+    //     } else {
+    //       _scrollTop();
+    //     }
+    //   }
+    // });
     if (widget.tabs != null) {
       _tabs = <TabControllerHelper>[];
       _tabs!.clear();

@@ -70,7 +70,7 @@ enum GoodsType implements ViewAbstractEnum<GoodsType> {
 }
 
 class GoodsInventoryPage extends BasePage {
-  const GoodsInventoryPage({super.key, super.buildDrawer});
+   GoodsInventoryPage({super.key, super.buildDrawer});
 
   @override
   State<GoodsInventoryPage> createState() => _GoodsInventoryPageState();

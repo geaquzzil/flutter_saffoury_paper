@@ -22,7 +22,7 @@ class CutRequestWorker extends CutRequest {
 }
 
 class CutWorkerPage extends BasePage {
-  const CutWorkerPage({super.key});
+   CutWorkerPage({super.key});
 
   @override
   State<CutWorkerPage> createState() => _CutWorkerPageState();

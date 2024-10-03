@@ -6,7 +6,7 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
+abstract class ViewAbstract<T> extends ViewAbstractFilterable<T>  {
   @JsonKey(includeToJson: true, includeFromJson: false)
   bool? delete;
   @JsonKey(includeToJson: false, includeFromJson: false)

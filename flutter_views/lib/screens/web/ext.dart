@@ -56,6 +56,7 @@ Widget getWidgetFromProfile(
     return const AdminSetting();
   } else if (value.icon == Icons.local_print_shop) {
     return PrintSetting(
+      
       buildSecondPane: true,
     );
   } else if (value.icon == Icons.account_box_outlined) {

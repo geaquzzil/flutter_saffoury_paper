@@ -3,6 +3,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/screens/on_hover_button.dart';
+
+class SelectedClippedCard extends StatelessWidget{
+
+}
+class OnHoverCardWithListTile extends StatelessWidget {
+  
+
+  final ListTile child;
+
+  const OnHoverCardWithListTile({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return OnHoverWidget(
+      builder: (isHover) {
+        if (isHover) {
+          return Card(
+            margin: EdgeInsets.zero,
+            child: child,
+          );
+        }
+        return child;
+      },
+      scale: true,
+      scaleDown: true,
+    );
+  }
+}
 
 class ClippedCard extends StatelessWidget {
   Widget child;

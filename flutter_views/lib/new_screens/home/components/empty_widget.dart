@@ -77,7 +77,7 @@ class EmptyWidget extends StatelessWidget {
         lottieJson = null,
         title = AppLocalizations.of(context)!.cantConnect;
 
-  EmptyWidget.empty(
+  EmptyWidget.emptyList(
     BuildContext context, {
     super.key,
     this.lottiUrl =
@@ -86,6 +86,18 @@ class EmptyWidget extends StatelessWidget {
     this.onSubtitleClicked,
     this.lottieJson,
   })  : subtitle = AppLocalizations.of(context)!.noItems,
+        title = AppLocalizations.of(context)!.no_content;
+
+          EmptyWidget.emptyPage(
+    BuildContext context, {
+    super.key,
+    this.lottiUrl =
+        "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+    this.expand = true,
+    this.onSubtitleClicked,
+    this.lottieJson,
+    //todo translate
+  })  : subtitle = AppLocalizations.of(context)!.no_content,
         title = AppLocalizations.of(context)!.no_content;
 
   @override

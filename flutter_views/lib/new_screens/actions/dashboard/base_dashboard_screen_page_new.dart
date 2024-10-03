@@ -18,7 +18,7 @@ const mediumPane = 0.62;
 const largePane = 0.7;
 
 class BaseDashboardMainPage extends BasePageApi {
-  const BaseDashboardMainPage(
+   BaseDashboardMainPage(
       {super.key,
       super.buildDrawer,
       super.buildSecondPane,

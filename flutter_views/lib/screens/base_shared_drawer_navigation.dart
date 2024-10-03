@@ -56,8 +56,7 @@ mixin ActionOnToolbarSubPaneMixin<T extends StatefulWidget,
 }
 mixin BasePageActionOnToolbarMixin<T extends BasePage,
     E extends ActionOnToolbarItem> on BasePageState<T> {
-  GlobalKey<_ActionOnToolbarsasState> key =
-      GlobalKey<_ActionOnToolbarsasState>();
+  GlobalKey<ActionOnToolbarsasState> key = GlobalKey<ActionOnToolbarsasState>();
   ValueNotifier<E?>? _onActionAdd;
 
   ValueNotifier<E?>? get getOnActionAdd => _onActionAdd;
@@ -124,42 +123,38 @@ mixin BasePageActionOnToolbarMixin<T extends BasePage,
   }) {
     return [
       SliverFillRemaining(
-        child: getWidgetFromBase(
-            firstPane,
-            tab: tab),
+        child: getWidgetFromBase(firstPane, tab: tab),
       )
     ];
   }
 
-  Widget getWidgetFromBase(bool firstPane,
-      {TabControllerHelper? tab}) {
+  Widget getWidgetFromBase(bool firstPane, {TabControllerHelper? tab}) {
     debugPrint("BasePageActionOnToolbarMixin getWidgetFromBase");
     ValueNotifierPane pane = getValueNotifierPane();
     if (pane == ValueNotifierPane.NONE) {
-      return getWidget(firstPane,tab: tab, item: null);
+      return getWidget(firstPane, tab: tab, item: null);
     }
     if (pane == ValueNotifierPane.BOTH) {
       return getValueListenableBuilder(firstPane, tab);
     }
     if (firstPane) {
       if (pane == ValueNotifierPane.FIRST) {
-        return getValueListenableBuilder(firstPane,  tab);
+        return getValueListenableBuilder(firstPane, tab);
       } else {
-        return getWidget(firstPane,tab: tab, item: null);
+        return getWidget(firstPane, tab: tab, item: null);
       }
     } else {
       if (pane == ValueNotifierPane.SECOND) {
-        return getValueListenableBuilder(firstPane,tab);
+        return getValueListenableBuilder(firstPane, tab);
       } else {
-        return getWidget(firstPane,  tab: tab, item: null);
+        return getWidget(firstPane, tab: tab, item: null);
       }
     }
   }
 
-  Widget getValueListenableBuilder(
-      bool firstPane, TabControllerHelper? tab) {
+  Widget getValueListenableBuilder(bool firstPane, TabControllerHelper? tab) {
     if (_onActionAdd == null) {
-      return getWidget(firstPane,  tab: tab, item: null);
+      return getWidget(firstPane, tab: tab, item: null);
     }
     return ValueListenableBuilder(
         valueListenable: _onActionAdd!,
@@ -176,10 +171,8 @@ mixin BasePageActionOnToolbarMixin<T extends BasePage,
         });
   }
 
-  Widget getWidget(bool firstPane,
-      {TabControllerHelper? tab, E? item}) {
-    return getActionPane(
-        firstPane: firstPane, tab: tab, selectedItem: item);
+  Widget getWidget(bool firstPane, {TabControllerHelper? tab, E? item}) {
+    return getActionPane(firstPane: firstPane, tab: tab, selectedItem: item);
   }
 
   void initAction() {
@@ -211,10 +204,10 @@ class ActionOnToolbarsas<T extends BasePageActionOnToolbarMixin,
 
   @override
   State<ActionOnToolbarsas<T, E>> createState() =>
-      _ActionOnToolbarsasState<T, E>();
+      ActionOnToolbarsasState<T, E>();
 }
 
-class _ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin,
+class ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin,
     E extends ActionOnToolbarItem> extends State<ActionOnToolbarsas<T, E>> {
   late List<E> _actions;
 
@@ -400,6 +393,123 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
                   : Theme.of(context).colorScheme.secondary),
         ),
       ],
+    );
+  }
+}
+
+class SecondPaneHelper {
+  String title;
+  dynamic value;
+  SecondPaneHelper({required this.title, this.value});
+}
+
+class ActionOnToolbar<T extends BasePageSecoundPaneNotifier>
+    extends StatefulWidget {
+  List<SecondPaneHelper> actions;
+  SecondPaneHelper? selectedItem;
+  T widget;
+  ActionOnToolbar(
+      {required this.widget,
+      required this.actions,
+      super.key,
+      this.selectedItem});
+
+  @override
+  State<ActionOnToolbar<T>> createState() => ActionOnToolbarState<T>();
+}
+
+class ActionOnToolbarState<T extends BasePageSecoundPaneNotifier>
+    extends State<ActionOnToolbar<T>> {
+  late List<SecondPaneHelper> _actions;
+  SecondPaneHelper? _selectedItem;
+  @override
+  void initState() {
+    debugPrint("_ActionOnToolbarsasState init");
+    _actions = widget.actions;
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant ActionOnToolbar<T> oldWidget) {
+    if (widget.actions[0].title != _actions[0].title) {
+      _actions = widget.actions;
+    }
+    if (_selectedItem != widget.selectedItem) {
+      _selectedItem = widget.selectedItem;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void removeBeforeAdd() {}
+  void add(SecondPaneHelper? item) {
+    if (item == null) {
+      return;
+    }
+    // if (item.subObject != null) {
+    //   _actions.add(item);
+    // } else {
+    SecondPaneHelper i = _actions[0];
+    _actions.clear();
+    _actions = [i, item];
+    // }
+    if (mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((s) {
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: kToolbarHeight,
+      child: ListView.separated(
+        separatorBuilder: (context, index) => const Center(
+          child: Icon(
+            Icons.arrow_right_outlined,
+          ),
+        ),
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        itemCount: _actions.length,
+        itemBuilder: (context, index) =>
+            getIconWithText(context, _actions[index]),
+      ),
+    );
+  }
+
+  Widget getIconWithText(BuildContext context, SecondPaneHelper item) {
+    return InkWell(
+        onTap: () {
+          int idx = _actions.indexWhere((s) => s.title == item.title);
+
+          debugPrint("_ActionOnToolbarsasState  idx = $idx ");
+          if (idx == _actions.length - 1 ||
+              (idx == 0 && _actions.length == 1)) {
+            debugPrint("_ActionOnToolbarsasState return ");
+            return;
+          }
+          widget.widget.notify(_actions[idx]);
+          setState(() {
+            _actions = _actions.sublist(0, idx + 1);
+            debugPrint("_ActionOnToolbarsasState  subList = $_actions ");
+          });
+        },
+        child: OnHoverWidget(
+            scale: false, builder: (isHovered) => getB(isHovered, item.title)));
+  }
+
+  Widget getB(bool isHovered, String title) {
+    return Center(
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            color: isHovered
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.secondary),
+      ),
     );
   }
 }

@@ -33,6 +33,8 @@ class SliverCustomScrollViewDraggable extends StatefulWidget {
   final List<Widget>? actions;
   final Widget? expandHeaderWidget;
   final bool forceBuildAppBar;
+  //TODO
+  final bool backgroundIsTransperant;
   final Widget? headerWidget;
   final Widget? expandBottomWidget;
   const SliverCustomScrollViewDraggable(
@@ -48,6 +50,7 @@ class SliverCustomScrollViewDraggable extends StatefulWidget {
       this.appBarLeading,
       this.headerWidget,
       this.actions,
+      this.backgroundIsTransperant = false,
       this.physics,
       this.forceBuildAppBar = false,
       this.scrollKey});
@@ -285,12 +288,16 @@ class _SliverCustomScrollViewDraggableState
       Widget? customTabExpandedHeader}) {
     return SliverAppBar(
       automaticallyImplyLeading: canExpandBody(),
-      backgroundColor: widget.forceBuildAppBar
+
+      ///When cant expand we do not want to set toolbar color
+      backgroundColor: widget.forceBuildAppBar || !canExpandBody()
           ? Colors.transparent
           : Theme.of(context).colorScheme.surface,
+      // backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       leading: getSliverAppbarLeading(),
       actions: getSliverAppbarActions(),
-      elevation: 10,
+      elevation: Theme.of(context).appBarTheme.elevation,
+      // forceElevated: true,
       pinned: widget.pinToolbar,
       stretch: canExpandBody(),
       title: getSliverTitle(fullyCollapsed),

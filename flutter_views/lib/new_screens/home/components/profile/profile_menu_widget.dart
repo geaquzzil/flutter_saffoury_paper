@@ -1,6 +1,5 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_header_list_tile_widget.dart';
@@ -78,9 +77,10 @@ class ProfileMenuWidget extends StatelessWidget {
   OnHoverWidget getDesktopChild(
       BuildContext context, ActionOnToolbarItem item) {
     return OnHoverWidget(
-        scale: false,
+        scale: true,
+        scaleDown: true,
         builder: (isHovered) {
-          Widget child = popMenuItem(context, item);
+          Widget child = popMenuItem(context, item, selectedValue?.value);
 
           if (selectedValue != null) {
             return ValueListenableBuilder<ActionOnToolbarItem?>(
@@ -88,6 +88,7 @@ class ProfileMenuWidget extends StatelessWidget {
                 if (value == null) {
                   child = isHovered
                       ? Card(
+                          margin: EdgeInsets.zero,
                           child: child,
                         )
                       : child;
@@ -95,6 +96,7 @@ class ProfileMenuWidget extends StatelessWidget {
                 }
                 child = isHovered && value.actionTitle != item.actionTitle
                     ? Card(
+                        margin: EdgeInsets.zero,
                         child: child,
                       )
                     : child;
@@ -104,7 +106,7 @@ class ProfileMenuWidget extends StatelessWidget {
                       // customCardColor:
                       //     Theme.of(context).highlightColor,
                       // .withOpacity(.5),
-                      color: kPrimaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                       child: child);
                 } else {
                   return child;
@@ -122,30 +124,48 @@ class ProfileMenuWidget extends StatelessWidget {
         });
   }
 
-  Widget popMenuItem(BuildContext context, ActionOnToolbarItem item) {
+  Widget popMenuItem(BuildContext context, ActionOnToolbarItem item,
+      ActionOnToolbarItem? value) {
     return Container(
-      height: 40,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      width: double.infinity,
-      child: Row(
-        children: <Widget>[
-          Icon(
+        height: 40,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        width: double.infinity,
+        child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          selected: value?.hashCode == item.hashCode,
+          leading: Icon(
             item.icon,
             size: 15,
           ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.only(left: 10),
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                item.actionTitle,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
+          title: Container(
+            // margin: const EdgeInsets.only(left: 10),
+            // padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              item.actionTitle,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ),
-        ],
-      ),
-    );
+        )
+
+        // Row(
+        //   children: <Widget>[
+        //     Icon(
+        //       item.icon,
+        //       size: 15,
+        //     ),
+        //     Expanded(
+        //       child: Container(
+        //         margin: const EdgeInsets.only(left: 10),
+        //         padding: const EdgeInsets.symmetric(vertical: 10),
+        //         child: Text(
+        //           item.actionTitle,
+        //           style: Theme.of(context).textTheme.bodySmall,
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        );
   }
 
   ClipRRect popMenuBuilder() {

@@ -389,42 +389,77 @@ mixin BasePageWithThirdPaneMixin<T extends BasePage,
     // return AnimatedContainer(duration: const Duration(milliseconds: 800),child: SizedBox(width: ,),);
   }
 }
-mixin BasePageSecoundPaneNotifier<T extends BasePageToSecPageIfMobile, E>
+mixin BasePageSecoundPaneNotifier<T extends BasePageToSecPageIfMobile>
     on BasePageState<T> {
-  final ValueNotifier<E?> _onSecoundPaneChanged = ValueNotifier<E?>(null);
+  final ValueNotifier<SecondPaneHelper?> _onSecoundPaneChanged =
+      ValueNotifier<SecondPaneHelper?>(null);
+  GlobalKey<ActionOnToolbarState> key = GlobalKey<ActionOnToolbarState>();
+  SecondPaneHelper? _lastItem;
+  SecondPaneHelper? get lastItem => this._lastItem;
 
-  E? _lastItem;
-  E? _selectedItem;
-  E? get lastItem => this._lastItem;
-  E? get selectedItem => this._selectedItem;
-
-  void notify(E? item) {
+  void notify(SecondPaneHelper? item) {
     _onSecoundPaneChanged.value = item;
   }
 
   bool hasNotifierValue() {
-    return _lastItem != null || _selectedItem != null;
+    return _lastItem != null;
   }
 
-  E? getAnySelectValue() {
-    return selectedItem ?? lastItem;
+  SecondPaneHelper? getAnySelectValue() {
+    return lastItem;
+  }
+
+  @override
+  Widget? getBaseAppbarTitle() {
+    return ActionOnToolbar(
+      widget: this,
+      actions: [SecondPaneHelper(title: "PASE")],
+      key: key,
+    );
+  }
+
+  @override
+  Widget getOnlyFirstPage() {
+    _firstWidget = FadeInUp(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.fastOutSlowIn,
+      key: Key(_lastItem.hashCode.toString()),
+      child: super.getOnlyFirstPage(),
+    );
+    return _firstWidget;
+  }
+
+  @override
+  Widget getPaneExt() {
+    return TowPaneExt(
+      startPane: _firstWidget!,
+      endPane: FadeInUp(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.fastOutSlowIn,
+        key: Key(_lastItem.hashCode.toString()),
+        child: _secondWidget,
+      ),
+      customPaneProportion: reverseCustomPane()
+          ? 1 - getCustomPaneProportion()
+          : getCustomPaneProportion(),
+    );
   }
 
   List<Widget>? getPaneNotifier(
       {required bool firstPane,
       ScrollController? controler,
       TabControllerHelper? tab,
-      E? valueNotifier});
+      SecondPaneHelper? valueNotifier});
   @override
   void initState() {
     _onSecoundPaneChanged.addListener(onPaneChanged);
-    _selectedItem = widget.selectedItem;
+    _lastItem = widget.selectedItem;
     super.initState();
   }
 
   @override
   void didUpdateWidget(covariant oldWidget) {
-    _selectedItem = widget.selectedItem;
+    // _lastItem = widget.selectedItem;
     super.didUpdateWidget(oldWidget);
   }
 
@@ -481,36 +516,34 @@ mixin BasePageSecoundPaneNotifier<T extends BasePageToSecPageIfMobile, E>
 
   @override
   Widget? getAppbarLeading({bool? firstPane}) {
-    debugPrint("getAppbarLeading $firstPane selected: $_selectedItem");
-
-    if (_selectedItem != null) {
-      if (firstPane == true) {
-        return BackButton(
-          onPressed: () {
-            setState(() {
-              _selectedItem = null;
-              forceBuildAppBar = false;
-              pinToolbar = false;
-            });
-          },
-        );
+    debugPrint("getAppbarLeading $firstPane selected: $_lastItem");
+    if (isMobile(context, maxWidth: getWidth)) {
+      if (_lastItem != null) {
+        if (firstPane == true) {
+          return BackButton(
+            onPressed: () {
+              setState(() {
+                _lastItem = null;
+                forceBuildAppBar = false;
+                pinToolbar = false;
+              });
+            },
+          );
+        }
       }
     }
     return super.getAppbarLeading(firstPane: firstPane);
   }
 
   void onPaneChanged() {
-    if (isMobile(context, maxWidth: getWidth)) {
-      debugPrint("onPaneChanged");
-      setState(() {
-        forceBuildAppBar = true;
-        pinToolbar = false;
-        _selectedItem = _onSecoundPaneChanged.value;
-      });
-      return;
-    }
     setState(() {
       _lastItem = _onSecoundPaneChanged.value;
+      key.currentState?.add(_lastItem);
+
+      if (isMobile(context, maxWidth: getWidth)) {
+        forceBuildAppBar = true;
+        pinToolbar = false;
+      }
     });
   }
 
@@ -519,12 +552,15 @@ mixin BasePageSecoundPaneNotifier<T extends BasePageToSecPageIfMobile, E>
       {required bool firstPane,
       ScrollController? controler,
       TabControllerHelper? tab}) {
-    if (_selectedItem != null) {
+    if (isSecPane(firstPane: firstPane) && !hasNotifierValue()) {
+      return [SliverFillRemaining(child: EmptyWidget.emptyPage(context))];
+    }
+    if (isMobileFromWidth(getWidth) && hasNotifierValue()) {
       return getPaneNotifier(
           firstPane: false,
           controler: controler,
           tab: tab,
-          valueNotifier: _selectedItem);
+          valueNotifier: _lastItem);
     }
     if (firstPane) {
       return getPaneNotifier(
@@ -545,27 +581,33 @@ abstract class BasePageToSecPageIfMobile<T> extends BasePage {
       super.buildDrawer,
       super.buildSecondPane,
       super.isFirstToSecOrThirdPane,
+      super.customKey,
       super.key});
 }
 
 abstract class BasePage extends StatefulWidget {
   final bool buildDrawer;
   final bool buildSecondPane;
+  Key? customKey;
 
   final bool isFirstToSecOrThirdPane;
-  const BasePage({
-    super.key,
+  BasePage({
+    Key? key,
     this.buildDrawer = false,
     this.buildSecondPane = true,
+    this.customKey,
     this.isFirstToSecOrThirdPane = false,
-  });
+  }) : super(key: customKey);
+  get getCustomKey => customKey;
+
+  set setCustomKey(final customKey) => this.customKey = customKey;
 }
 
 abstract class BasePageApi extends BasePage {
   final int? iD;
   final String? tableName;
   final dynamic extras;
-  const BasePageApi(
+  BasePageApi(
       {super.key,
       this.iD,
       this.tableName,
@@ -770,16 +812,17 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     return null;
   }
 
+  Widget? getBaseAppbarTitle() {
+    return getAppbarTitle(firstPane: null);
+  }
+
   ///generate all toolbars for the base and first pane and second pane
   ///if [customAppBar] is null then generates the base toolbar
   ///else if [customAppBar] is not null then generates the app bar based on the panes
-  generateToolbar(
-      {bool? firstPane, TabControllerHelper? tab, TabControllerHelper? sec}) {
-    bool isBaseAppBar = firstPane == null;
-    List<Widget>? actions =
-        getAppbarActions(firstPane: firstPane, sec: sec, tab: tab);
-    Widget? title = getAppbarTitle(firstPane: firstPane, tab: tab);
-    bool isEmpty = !isBaseAppBar && actions?.isEmpty == true;
+  generateBaseAppbar() {
+    List<Widget>? actions = getAppbarActions(firstPane: null);
+    Widget? title = getBaseAppbarTitle();
+    bool isEmpty = actions?.isEmpty == true;
     if (actions == null && title == null) return null;
     return AppBar(
         surfaceTintColor: Colors.transparent,
@@ -788,9 +831,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
         forceMaterialTransparency: true,
         actions: isEmpty || widget.isFirstToSecOrThirdPane
             ? [Container()]
-            : !isBaseAppBar
-                ? actions
-                : [...actions ?? [], ...getSharedAppBarActions],
+            : [...actions ?? [], ...getSharedAppBarActions],
         automaticallyImplyLeading: false,
 
         // backgroundColor: ElevationOverlay.overlayColor(context, 1),
@@ -798,14 +839,16 @@ abstract class BasePageState<T extends BasePage> extends State<T>
           padding: const EdgeInsets.all(kDefaultPadding),
           child: title,
         ),
-        leading: hideHamburger(getCurrentScreenSize())
+        leading: widget.isFirstToSecOrThirdPane
             ? null
-            : IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () {
-                  _drawerMenuControllerProvider.controlStartDrawerMenu();
-                },
-              ),
+            : hideHamburger(getCurrentScreenSize())
+                ? null
+                : IconButton(
+                    icon: const Icon(Icons.menu),
+                    onPressed: () {
+                      _drawerMenuControllerProvider.controlStartDrawerMenu();
+                    },
+                  ),
         bottom: getTabBarWidget());
   }
 
@@ -1061,8 +1104,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
           }
         },
         mobile: (w, h) {
-          _firstWidget = getScaffoldForPane(firstPane: true);
-          return _firstWidget;
+          return getOnlyFirstPage();
         },
         smallTablet: (w, h) {
           return _getMainWidget();
@@ -1073,6 +1115,11 @@ abstract class BasePageState<T extends BasePage> extends State<T>
         desktop: (w, h) {
           return _getMainWidget();
         });
+  }
+
+  Widget getOnlyFirstPage() {
+    _firstWidget = getScaffoldForPane(firstPane: true);
+    return _firstWidget;
   }
 
   Widget getWidgetFromListToDetailsSecoundPaneHelper(
@@ -1159,7 +1206,16 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     ScrollController? controler,
     TabControllerHelper? tab,
   }) {
-    return getPane(firstPane: firstPane, controler: controler, tab: tab);
+    List<Widget>? list =
+        getPane(firstPane: firstPane, controler: controler, tab: tab);
+    list?.whereType<SliverFillRemaining>().forEach((l) {
+      debugPrint("SliverFillRemaining debug ${l.child.runtimeType}");
+      if (l.child is BasePage) {
+        debugPrint("SliverFillRemaining  founded basePage child debug");
+        (l.child as BasePage).setCustomKey = GlobalKey<BasePageState>();
+      }
+    });
+    return list;
   }
 
   // void _setupPaneTabBar(bool firstPane, {TabControllerHelper? tab}) {
@@ -1310,7 +1366,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       slivers: const [],
       builder: (scrollController, tab) {
         return SliverCustomScrollViewDraggableHelper(
-            widget: getPane(firstPane: firstPane, tab: tab)!,
+            widget: beforeGetPaneWidget(firstPane: firstPane, tab: tab)!,
             headerWidget:
                 getPaneDraggableHeader(firstPane: firstPane, tab: tab),
             expandHeaderWidget:
@@ -1364,7 +1420,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
             ? null
             : _drawerMenuControllerProvider.getStartDrawableKey,
         drawer: canBuildDrawer() ? _drawerWidget : null,
-        appBar: generateToolbar(),
+        appBar: generateBaseAppbar(),
         body: (isCustomDrawer)
             ? Selector<DrawerMenuControllerProvider, DrawerMenuItem?>(
                 builder: (__, v, ___) {

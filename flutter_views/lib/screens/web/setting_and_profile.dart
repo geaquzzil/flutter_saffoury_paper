@@ -210,11 +210,14 @@ class PrintSetting extends BasePageToSecPageIfMobile<ModifiableInterface> {
       super.selectedItem});
 
   @override
-  State<PrintSetting> createState() => _PrintSettingState();
+  State<PrintSetting> createState() {
+    debugPrint("SliverFillRemaining key from PrintSetting ${super.key}");
+    return _PrintSettingState();
+  }
 }
 
 class _PrintSettingState extends BasePageState<PrintSetting>
-    with BasePageSecoundPaneNotifier<PrintSetting, ModifiableInterface> {
+    with BasePageSecoundPaneNotifier<PrintSetting> {
   late Map<String, List<dynamic>> _list;
   Widget popMenuItem(BuildContext context, ActionOnToolbarItem item) {
     return Container(
@@ -247,7 +250,8 @@ class _PrintSettingState extends BasePageState<PrintSetting>
     if (firstPane) {
       return "printer_list";
     }
-    return ((lastItem as ViewAbstract?)?.getScrollKey(ServerActions.print) ??
+    return ((lastItem?.value as ViewAbstract?)
+                ?.getScrollKey(ServerActions.print) ??
             "") +
         "printerDetails";
   }
@@ -261,9 +265,10 @@ class _PrintSettingState extends BasePageState<PrintSetting>
         //     ? Theme.of(context).highlightColor
         //     : null,
         // selectedTileColor: Colors.white,
-        selected: lastItem?.hashCode == element.hashCode,
+        selected: lastItem?.value.hashCode == element.hashCode,
         onTap: () {
-          notify(element);
+          notify(SecondPaneHelper(
+              title: element.getModifibleTitleName(context), value: element));
         },
         // contentPadding:
         //     const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -307,7 +312,7 @@ class _PrintSettingState extends BasePageState<PrintSetting>
   }
 
   String? getSecPaneText() {
-    ModifiableInterface? last = selectedItem ?? lastItem;
+    ModifiableInterface? last = lastItem?.value;
     return last?.getModifibleTitleName(context);
   }
 
@@ -350,7 +355,7 @@ class _PrintSettingState extends BasePageState<PrintSetting>
       {required bool firstPane,
       ScrollController? controler,
       TabControllerHelper? tab,
-      ModifiableInterface? valueNotifier}) {
+      SecondPaneHelper? valueNotifier}) {
     if (firstPane) {
       return getListStickyWidget(
           context,
@@ -366,12 +371,14 @@ class _PrintSettingState extends BasePageState<PrintSetting>
               )
               .toList());
     } else {
+      return [const SliverToBoxAdapter(child: Text("S"))];
       return [
         SliverFillRemaining(
+          hasScrollBody: true,
           child: valueNotifier == null
               ? const Text("NON")
               : FutureOrBuilder<ViewAbstract>(
-                  future: valueNotifier
+                  future: valueNotifier.value!
                       .getModifibleSettingObjcetSavedValue(context),
                   builder: (c, snapshot) {
                     if (snapshot.hasData) {
@@ -386,7 +393,7 @@ class _PrintSettingState extends BasePageState<PrintSetting>
                         },
                       );
                     }
-                    return EmptyWidget.empty(context);
+                    return EmptyWidget.emptyList(context);
                   },
                 ),
         )

@@ -1479,7 +1479,7 @@ class Product extends ViewAbstract<Product>
       required List<Product> productList,
       String customKey = ""}) {
     if (productList.isEmpty) {
-      return EmptyWidget.empty(context);
+      return EmptyWidget.emptyList(context);
     }
     double getTotalImportQuanity = productList.isEmpty
         ? 0

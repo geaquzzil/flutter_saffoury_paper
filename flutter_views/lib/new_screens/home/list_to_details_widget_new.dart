@@ -39,7 +39,7 @@ class ListToDetailsSecoundPaneHelper extends ActionOnToolbarItem {
 }
 
 class ListToDetailsPageNew extends BasePage {
-  const ListToDetailsPageNew(
+   ListToDetailsPageNew(
       {super.key, super.buildDrawer = true, super.buildSecondPane});
 
   @override

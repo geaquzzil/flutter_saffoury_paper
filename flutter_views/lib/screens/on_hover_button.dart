@@ -5,6 +5,7 @@ import 'package:sprung/sprung.dart';
 class OnHoverWidget extends StatefulWidget {
   bool scale;
   ValueNotifier<bool>? onHover;
+  bool scaleDown;
   MouseCursor mouseCursor;
   Widget Function(bool isHovered) builder;
 
@@ -12,6 +13,7 @@ class OnHoverWidget extends StatefulWidget {
       {super.key,
       required this.builder,
       this.onHover,
+      this.scaleDown = false,
       this.mouseCursor = SystemMouseCursors.click,
       this.scale = true});
 
@@ -31,6 +33,17 @@ class _OnHoverWidgetState extends State<OnHoverWidget> {
     });
   }
 
+  double getScaleInfo() {
+    if (widget.scale) {
+      if (widget.scaleDown) {
+        return .98;
+      }
+      return 1.02;
+    } else {
+      return 1;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final hoveredTransform = Matrix4.identity()
@@ -39,17 +52,28 @@ class _OnHoverWidgetState extends State<OnHoverWidget> {
     final transform = isHover ? hoveredTransform : Matrix4.identity();
     GlobalKey key = GlobalKey();
     return MouseRegion(
-      key: key,
-      cursor: widget.mouseCursor,
-      onEnter: (event) => onEntered(true),
-      onExit: (event) => onEntered(false),
-      child: AnimatedContainer(
-        curve: Sprung.overDamped,
-        duration: const Duration(milliseconds: 200),
-        transform: widget.scale ? transform : null,
-        child: widget.builder(isHover),
-      ),
-    );
+        key: key,
+        cursor: widget.mouseCursor,
+        onEnter: (event) => onEntered(true),
+        onExit: (event) => onEntered(false),
+        child: AnimatedScale(
+          curve: Sprung.overDamped,
+          duration: const Duration(milliseconds: 200),
+          scale: !isHover
+              ? 1
+              : widget.scale
+                  ? getScaleInfo()
+                  : 1,
+          child: widget.builder(isHover),
+        )
+
+        // AnimatedContainer(
+        //   curve: Sprung.overDamped,
+        //   duration: const Duration(milliseconds: 200),
+        //   transform: widget.scale ? transform : null,
+        //   child: widget.builder(isHover),
+        // ),
+        );
   }
 }
 
