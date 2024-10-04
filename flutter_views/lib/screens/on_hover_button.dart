@@ -46,13 +46,8 @@ class _OnHoverWidgetState extends State<OnHoverWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final hoveredTransform = Matrix4.identity()
-      ..translate(-4.0, -8.0, 0.0)
-      ..scale(1.2);
-    final transform = isHover ? hoveredTransform : Matrix4.identity();
-    GlobalKey key = GlobalKey();
     return MouseRegion(
-        key: key,
+      
         cursor: widget.mouseCursor,
         onEnter: (event) => onEntered(true),
         onExit: (event) => onEntered(false),

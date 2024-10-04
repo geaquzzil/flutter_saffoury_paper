@@ -18,7 +18,7 @@ const mediumPane = 0.62;
 const largePane = 0.7;
 
 class BaseDashboardMainPage extends BasePageApi {
-   BaseDashboardMainPage(
+  BaseDashboardMainPage(
       {super.key,
       super.buildDrawer,
       super.buildSecondPane,
@@ -314,7 +314,7 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  bool setPaneClipRect(bool firstPane) {
+  bool setClipRect(bool? firstPane) {
     return false;
   }
 

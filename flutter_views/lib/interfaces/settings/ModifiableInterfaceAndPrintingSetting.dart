@@ -9,7 +9,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:pdf/pdf.dart';
 
-mixin ModifiableInterface<T extends ViewAbstract>  {
+mixin ModifiableInterface<T extends ViewAbstract> {
   String getModifiableMainGroupName(BuildContext context);
   String getModifibleTitleName(BuildContext context);
   IconData getModifibleIconData();
@@ -20,11 +20,8 @@ mixin ModifiableInterface<T extends ViewAbstract>  {
   }
 
   Future<T> onModifibleSettingLoaded(T loaded) async {
-    return   loaded;
+    return loaded;
   }
-
-
-
 }
 
 class PrintPageSetting {

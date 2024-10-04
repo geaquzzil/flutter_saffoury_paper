@@ -22,7 +22,7 @@ class CutRequestWorker extends CutRequest {
 }
 
 class CutWorkerPage extends BasePage {
-   CutWorkerPage({super.key});
+  CutWorkerPage({super.key});
 
   @override
   State<CutWorkerPage> createState() => _CutWorkerPageState();
@@ -157,7 +157,7 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
   bool setPaneBodyPadding(bool firstPane) => false;
 
   @override
-  bool setPaneClipRect(bool firstPane) => false;
+  bool setClipRect(bool? firstPane) => false;
 
   @override
   Widget? getFloatingActionButton(

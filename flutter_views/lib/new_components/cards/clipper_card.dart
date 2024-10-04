@@ -5,30 +5,106 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 
-class SelectedClippedCard extends StatelessWidget{
+// class SelectedClippedCard extends StatelessWidget{
 
+// }
+
+class ListTileAdaptive extends ListTile {
+  final bool isLargeScreen;
+  const ListTileAdaptive({
+    required this.isLargeScreen,
+    super.key,
+    super.leading,
+    super.title,
+    super.subtitle,
+    super.trailing,
+    super.isThreeLine = false,
+    super.dense,
+    super.visualDensity,
+    super.shape,
+    super.style,
+    super.selectedColor,
+    super.iconColor,
+    super.textColor,
+    super.titleTextStyle,
+    super.subtitleTextStyle,
+    super.leadingAndTrailingTextStyle,
+    super.enabled = true,
+    super.onTap,
+    super.onLongPress,
+    super.onFocusChange,
+    super.mouseCursor,
+    super.selected = false,
+    super.focusColor,
+    super.hoverColor,
+    super.splashColor,
+    super.focusNode,
+    super.autofocus = false,
+    super.tileColor,
+    super.selectedTileColor,
+    super.enableFeedback,
+    super.horizontalTitleGap,
+    super.minVerticalPadding,
+    super.minLeadingWidth,
+    super.minTileHeight,
+    super.titleAlignment,
+  }) : super(contentPadding: isLargeScreen ? EdgeInsets.zero : null);
+  @override
+  Widget build(BuildContext context) {
+    if (isLargeScreen) {
+      return Container(
+        height: 40,
+        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+        child: super.build(context),
+      );
+    }
+    return super.build(context);
+  }
 }
-class OnHoverCardWithListTile extends StatelessWidget {
-  
 
+class OnHoverCardWithListTile extends StatelessWidget {
+  final bool isSelected;
+  final Function()? onTap;
+  final bool selectedIsClipped;
   final ListTile child;
 
-  const OnHoverCardWithListTile({super.key, required this.child});
+  const OnHoverCardWithListTile(
+      {super.key,
+      required this.child,
+      required this.isSelected,
+      this.onTap,
+      this.selectedIsClipped = true});
 
   @override
   Widget build(BuildContext context) {
-    return OnHoverWidget(
-      builder: (isHover) {
-        if (isHover) {
-          return Card(
-            margin: EdgeInsets.zero,
-            child: child,
-          );
-        }
-        return child;
-      },
-      scale: true,
-      scaleDown: true,
+    if (isSelected) {
+      return selectedIsClipped
+          ? ClippedCard(
+              elevation: 0,
+              color: Theme.of(context).colorScheme.primary,
+              child: child)
+          : Card(
+              margin: EdgeInsets.zero,
+              child: child,
+            );
+    }
+
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: onTap,
+      child: OnHoverWidget(
+        builder: (isHover) {
+          if (isHover) {
+            return Card(
+              margin: EdgeInsets.zero,
+              child: child,
+            );
+          }
+          return child;
+        },
+        scale: true,
+        scaleDown: true,
+      ),
     );
   }
 }

@@ -11,6 +11,7 @@ import 'package:flutter_view_controller/models/prints/printer_default_setting.da
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -24,6 +25,7 @@ import 'package:flutter_view_controller/screens/web/components/list_web_api.dart
 import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/screens/web/views/web_product_view.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/util.dart';
 import 'package:provider/provider.dart';
 import 'package:supercharged/supercharged.dart';
@@ -54,7 +56,7 @@ class SettingAndProfileWeb extends BaseWebPageSlivers {
           constraints,
           SliverToBoxAdapter(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(kBorderRadius / 2),
+              borderRadius: BorderRadius.circular(50),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,10 +204,11 @@ class Logout extends StatelessWidget {
   }
 }
 
-class PrintSetting extends BasePageToSecPageIfMobile<ModifiableInterface> {
+class PrintSetting extends BasePageSecoundPaneNotifier<ModifiableInterface> {
   PrintSetting(
       {super.key,
       super.buildSecondPane,
+      super.valueNotifierIfThirdPane,
       super.isFirstToSecOrThirdPane = true,
       super.selectedItem});
 
@@ -217,7 +220,7 @@ class PrintSetting extends BasePageToSecPageIfMobile<ModifiableInterface> {
 }
 
 class _PrintSettingState extends BasePageState<PrintSetting>
-    with BasePageSecoundPaneNotifier<PrintSetting> {
+    with BasePageSecoundPaneNotifierState<PrintSetting> {
   late Map<String, List<dynamic>> _list;
   Widget popMenuItem(BuildContext context, ActionOnToolbarItem item) {
     return Container(
@@ -265,7 +268,7 @@ class _PrintSettingState extends BasePageState<PrintSetting>
         //     ? Theme.of(context).highlightColor
         //     : null,
         // selectedTileColor: Colors.white,
-        selected: lastItem?.value.hashCode == element.hashCode,
+
         onTap: () {
           notify(SecondPaneHelper(
               title: element.getModifibleTitleName(context), value: element));
@@ -280,6 +283,7 @@ class _PrintSettingState extends BasePageState<PrintSetting>
           element.getModifibleTitleName(ctx),
           style: Theme.of(ctx).textTheme.bodySmall,
         ),
+        selected: lastItem?.value.hashCode == element.hashCode,
       ),
     );
   }
@@ -363,11 +367,35 @@ class _PrintSettingState extends BasePageState<PrintSetting>
               .map(
                 (e) => StickyItem(
                     title: e.key,
-                    widgets: e.value
-                        .map(
-                          (c) => _getItem(context, c),
-                        )
-                        .toList()),
+                    widgets: e.value.map(
+                      (c) {
+                        bool isLarge =
+                            isLargeScreenFromScreenSize(getCurrentScreenSize());
+                        return OnHoverCardWithListTile(
+                          onTap: () {
+                            notify(SecondPaneHelper(
+                                title: c.getModifibleTitleName(context),
+                                value: c));
+                          },
+                          isSelected: c.hashCode == lastItem?.value.hashCode,
+                          selectedIsClipped: false,
+                          child: ListTileAdaptive(
+                            isLargeScreen: isLarge,
+                            leading: Icon(
+                              c.getModifibleIconData(),
+                              size: isLarge ? 15 : null,
+                            ),
+                            title: Text(
+                              c.getModifibleTitleName(context),
+                              style: isLarge
+                                  ? Theme.of(context).textTheme.bodySmall
+                                  : null,
+                            ),
+                            selected: lastItem?.value.hashCode == c.hashCode,
+                          ),
+                        );
+                      },
+                    ).toList()),
               )
               .toList());
     } else {
@@ -414,7 +442,7 @@ class _PrintSettingState extends BasePageState<PrintSetting>
   bool setPaneBodyPadding(bool firstPane) => true;
 
   @override
-  bool setPaneClipRect(bool firstPane) => true;
+  bool setClipRect(bool? firstPane) => true;
 }
 
 class AdminSetting extends StatelessWidget {

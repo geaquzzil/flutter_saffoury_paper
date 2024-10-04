@@ -1,11 +1,7 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
-import 'package:flutter_view_controller/new_screens/home/components/profile/profile_menu_widget.dart';
-import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
-import 'package:flutter_view_controller/size_config.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_view_controller/screens/web/setting_and_profile_new.dart';
 
 class ItemModel {
   String title;
@@ -28,17 +24,17 @@ class _ProfilePicturePopupMenuState extends State<ProfilePicturePopupMenu> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLargeScreen = isLargeScreenFromCurrentScreenSize(context);
-    AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
     return CustomPopupMenu(
-      barrierColor: isLargeScreen ? Colors.black54 : Colors.black26,
-      menuBuilder: () => isLargeScreen
-          ? SizedBox(width: 700, height: 600, child: SettingAndProfileWeb())
-          : ProfileMenuWidget(controller: _controller),
+      barrierColor: Colors.black26,
+      menuBuilder: () => SizedBox(
+          width: 700,
+          height: 600,
+          child: SettingPageNew(
+            isFromMenu: true,
+              isFirstToSecOrThirdPane: true,
+              )),
       pressType: PressType.singleClick,
-      arrowColor: isLargeScreen
-          ? Theme.of(context).scaffoldBackgroundColor
-          : const Color(0xFF4C4C4C),
+      arrowColor: Theme.of(context).scaffoldBackgroundColor,
       controller: _controller,
       child: const Icon(Icons.person),
     );

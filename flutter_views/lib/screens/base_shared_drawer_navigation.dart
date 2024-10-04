@@ -403,7 +403,7 @@ class SecondPaneHelper {
   SecondPaneHelper({required this.title, this.value});
 }
 
-class ActionOnToolbar<T extends BasePageSecoundPaneNotifier>
+class ActionOnToolbar<T extends BasePageSecoundPaneNotifierState>
     extends StatefulWidget {
   List<SecondPaneHelper> actions;
   SecondPaneHelper? selectedItem;
@@ -418,7 +418,7 @@ class ActionOnToolbar<T extends BasePageSecoundPaneNotifier>
   State<ActionOnToolbar<T>> createState() => ActionOnToolbarState<T>();
 }
 
-class ActionOnToolbarState<T extends BasePageSecoundPaneNotifier>
+class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
     extends State<ActionOnToolbar<T>> {
   late List<SecondPaneHelper> _actions;
   SecondPaneHelper? _selectedItem;
@@ -426,7 +426,24 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifier>
   void initState() {
     debugPrint("_ActionOnToolbarsasState init");
     _actions = widget.actions;
+    widget.widget.getSecondPaneNotifier.addListener(onPaneChange);
+    widget.widget.test?.addListener(onSubPaneChanged);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.widget.getSecondPaneNotifier.removeListener(onPaneChange);
+    widget.widget.test?.removeListener(onSubPaneChanged);
+    super.dispose();
+  }
+
+  void onPaneChange() {
+    add(widget.widget.getSecondPaneNotifier.value);
+  }
+
+  void onSubPaneChanged() {
+    _addSubPane(widget.widget.test?.value);
   }
 
   @override
@@ -438,6 +455,25 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifier>
       _selectedItem = widget.selectedItem;
     }
     super.didUpdateWidget(oldWidget);
+  }
+
+  void _addSubPane(SecondPaneHelper? item) {
+    if (item == null) {
+      return;
+    }
+    // if (item.subObject != null) {
+    //   _actions.add(item);
+    // } else {
+
+    _actions.add(item);
+    // }
+    if (mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((s) {
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    }
   }
 
   void removeBeforeAdd() {}

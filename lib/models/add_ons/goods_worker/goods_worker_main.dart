@@ -70,7 +70,7 @@ enum GoodsType implements ViewAbstractEnum<GoodsType> {
 }
 
 class GoodsInventoryPage extends BasePage {
-   GoodsInventoryPage({super.key, super.buildDrawer});
+  GoodsInventoryPage({super.key, super.buildDrawer});
 
   @override
   State<GoodsInventoryPage> createState() => _GoodsInventoryPageState();
@@ -641,7 +641,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
   bool setPaneBodyPadding(bool firstPane) => false;
 
   @override
-  bool setPaneClipRect(bool firstPane) => false;
+  bool setClipRect(bool? firstPane) => false;
 
   @override
   ValueNotifier<QrCodeNotifierState?>? getValueNotifierQrState(bool firstPane) {

@@ -389,20 +389,28 @@ mixin BasePageWithThirdPaneMixin<T extends BasePage,
     // return AnimatedContainer(duration: const Duration(milliseconds: 800),child: SizedBox(width: ,),);
   }
 }
-mixin BasePageSecoundPaneNotifier<T extends BasePageToSecPageIfMobile>
+mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
     on BasePageState<T> {
   final ValueNotifier<SecondPaneHelper?> _onSecoundPaneChanged =
       ValueNotifier<SecondPaneHelper?>(null);
-  GlobalKey<ActionOnToolbarState> key = GlobalKey<ActionOnToolbarState>();
+
+  ValueNotifier<SecondPaneHelper?>? test;
+
+  ValueNotifier<SecondPaneHelper?> get getSecondPaneNotifier =>
+      _onSecoundPaneChanged;
+  // GlobalKey<ActionOnToolbarState> key = GlobalKey<ActionOnToolbarState>();
   SecondPaneHelper? _lastItem;
   SecondPaneHelper? get lastItem => this._lastItem;
 
   void notify(SecondPaneHelper? item) {
     _onSecoundPaneChanged.value = item;
+    // widget.valueNotifierIfThirdPane?.value = item;
   }
 
+  void initSecToThirdPaneNotifier() {}
+
   bool hasNotifierValue() {
-    return _lastItem != null;
+    return _lastItem?.value != null;
   }
 
   SecondPaneHelper? getAnySelectValue() {
@@ -414,7 +422,7 @@ mixin BasePageSecoundPaneNotifier<T extends BasePageToSecPageIfMobile>
     return ActionOnToolbar(
       widget: this,
       actions: [SecondPaneHelper(title: "PASE")],
-      key: key,
+      // key: key,
     );
   }
 
@@ -450,9 +458,15 @@ mixin BasePageSecoundPaneNotifier<T extends BasePageToSecPageIfMobile>
       ScrollController? controler,
       TabControllerHelper? tab,
       SecondPaneHelper? valueNotifier});
+
   @override
   void initState() {
+    if (widget.valueNotifierIfThirdPane != null) {
+      test = _onSecoundPaneChanged;
+    }
     _onSecoundPaneChanged.addListener(onPaneChanged);
+
+    // test = widget.valueNotifierIfThirdPane;
     _lastItem = widget.selectedItem;
     super.initState();
   }
@@ -466,6 +480,7 @@ mixin BasePageSecoundPaneNotifier<T extends BasePageToSecPageIfMobile>
   @override
   void dispose() {
     _onSecoundPaneChanged.removeListener(onPaneChanged);
+
     super.dispose();
   }
 
@@ -535,10 +550,12 @@ mixin BasePageSecoundPaneNotifier<T extends BasePageToSecPageIfMobile>
     return super.getAppbarLeading(firstPane: firstPane);
   }
 
+  void onSubPaneChanged() {}
+
   void onPaneChanged() {
     setState(() {
       _lastItem = _onSecoundPaneChanged.value;
-      key.currentState?.add(_lastItem);
+      // key.currentState?.add(_lastItem);
 
       if (isMobile(context, maxWidth: getWidth)) {
         forceBuildAppBar = true;
@@ -573,14 +590,200 @@ mixin BasePageSecoundPaneNotifier<T extends BasePageToSecPageIfMobile>
         valueNotifier: _lastItem);
   }
 }
+mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier> on BasePageSecoundPaneNotifierState {
+  List<Widget>? getThirdPane();
+final ValueNotifier<E?> _valueNotifierSecondToThird = ValueNotifier(null);
 
-abstract class BasePageToSecPageIfMobile<T> extends BasePage {
+  List<E> listOfStackedObject = [];
+  void setThirdPane(E? value) {
+    WidgetsBinding.instance.addPostFrameCallback((callback) {
+      _valueNotifierSecondToThird.value = value;
+    });
+  }
+
+  @override
+  TowPaneExt getPaneExt() {
+    return TowPaneExt(
+      startPane: _firstWidget!,
+      endPane: _getSecondPaneWidgetMixin(),
+      customPaneProportion: getCustomPaneProportion(),
+    );
+  }
+
+  E? getPreviousPane(E? lastPane) {
+    if (listOfStackedObject.length == 1 || listOfStackedObject.isEmpty) {
+      return null;
+    }
+    if (lastPane == null) return null;
+    int idx = listOfStackedObject.indexOf(lastPane);
+    debugPrint(
+        "BasePageWithThirdPaneMixin====> getPreviousPane total: ${listOfStackedObject.length} currentIndex: $idx previousIndex: ${idx - 1} ");
+    if (listOfStackedObject.length <= (idx - 1)) {
+      return listOfStackedObject[idx - 1];
+    }
+    return null;
+  }
+
+  Widget getAppBarLeading(E? item) {
+    E? previousPane = getPreviousPane(item);
+
+    if (previousPane == null) {
+      return IconButton(
+        icon: const Icon(Icons.close),
+        onPressed: () {
+          _valueNotifierSecondToThird.value = null;
+        },
+      );
+    } else {
+      return BackButton(
+        onPressed: () {
+          listOfStackedObject.remove(previousPane);
+          _valueNotifierSecondToThird.value = previousPane
+            ..shouldAddToThirdPaneList = false;
+        },
+      );
+    }
+  }
+
+  AppBar getAppBarForThirdPane(E? selectedItem, Widget widget) {
+    return AppBar(
+      leading: getAppBarLeading(selectedItem),
+      title: Text(selectedItem?.actionTitle ?? ""),
+      //todo this flow not working
+      actions:
+          selectedItem?.getKey?.currentState?.getAppbarActionsWhenThirdPane(),
+    );
+  }
+
+  Widget wrapScaffoldInThirdPane(
+      {TabControllerHelper? tab,
+      ListToDetailsSecoundPaneHelper? selectedItem}) {
+    Widget widget = getWidgetFromListToDetailsSecoundPaneHelper(
+        selectedItem: selectedItem, tab: tab);
+
+    return Scaffold(
+        appBar: getAppBarForThirdPane(selectedItem as E?, widget),
+        body: widget);
+  }
+
+  void checkValueToAddToList(E? value) {
+    if (value == null) {
+      listOfStackedObject.clear();
+    } else {
+      if (value.shouldAddToThirdPaneList) {
+        listOfStackedObject.add(value);
+      }
+    }
+  }
+
+  bool canDoThirdPane() {
+    return isLargeScreenFromCurrentScreenSize(context, width: getWidth);
+  }
+
+  Widget? _getSecondPaneWidgetMixin() {
+    if (!isLargeScreenFromScreenSize(getCurrentScreenSize())) {
+      return _secondWidget;
+    }
+    // return _secondWidget;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        debugPrint(
+            "BasePageWithThirdPaneMixin constraints width : ${constraints.maxWidth} height: ${constraints.maxHeight}");
+        return ValueListenableBuilder(
+          valueListenable: _valueNotifierSecondToThird,
+          builder: (context, value, child) {
+            bool showThirdPane = value != null;
+            checkValueToAddToList(value);
+
+            double width = showThirdPane
+                ? constraints.maxWidth * 0.5
+                : constraints.maxWidth;
+
+            double height = constraints.maxHeight;
+
+            return SizedBox(
+              height: constraints.maxHeight,
+              width: constraints.maxWidth,
+              child: Row(
+                children: [
+                  AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.linear,
+                      height: constraints.maxHeight,
+                      width: width,
+                      child: _secondWidget),
+                  !showThirdPane
+                      ? const SizedBox.shrink()
+                      : FutureBuilder(
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState !=
+                                ConnectionState.done) {
+                              return const SizedBox.shrink();
+                            }
+                            return AnimatedOpacity(
+                              duration: const Duration(milliseconds: 500),
+                              opacity: showThirdPane ? 1 : 0,
+                              key: UniqueKey(),
+                              child: const VerticalDivider(
+                                width: 1,
+                              ),
+                            );
+                          },
+                          future:
+                              Future.delayed(const Duration(milliseconds: 300)),
+                        ),
+                  !showThirdPane
+                      ? const SizedBox.shrink()
+                      : FutureBuilder(
+                          future:
+                              Future.delayed(const Duration(milliseconds: 300)),
+                          builder: (c, d) {
+                            if (d.connectionState != ConnectionState.done) {
+                              return const SizedBox.shrink();
+                            }
+                            return SizedBox(
+                              width: width - 1,
+                              height: height,
+                              child: AnimatedOpacity(
+                                key: UniqueKey(),
+                                duration: const Duration(milliseconds: 500),
+                                opacity: showThirdPane ? 1 : 0,
+                                curve: Curves.linear,
+                                child: SlideInRight(
+                                  duration: const Duration(milliseconds: 200),
+                                  key: Key(value.actionTitle.toString()),
+                                  // delay: Duration(milliseconds: 1000),
+                                  curve: Curves.fastLinearToSlowEaseIn,
+                                  child: wrapScaffoldInThirdPane(
+                                      // tab:tab,
+                                      selectedItem: value),
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+    // return AnimatedContainer(duration: const Duration(milliseconds: 800),child: SizedBox(width: ,),);
+  }
+
+  
+}
+
+abstract class BasePageSecoundPaneNotifier<T> extends BasePage {
   T? selectedItem;
-  BasePageToSecPageIfMobile(
+  ValueNotifier<SecondPaneHelper?>? valueNotifierIfThirdPane;
+  BasePageSecoundPaneNotifier(
       {this.selectedItem,
       super.buildDrawer,
       super.buildSecondPane,
       super.isFirstToSecOrThirdPane,
+      this.valueNotifierIfThirdPane,
       super.customKey,
       super.key});
 }
@@ -588,6 +791,7 @@ abstract class BasePageToSecPageIfMobile<T> extends BasePage {
 abstract class BasePage extends StatefulWidget {
   final bool buildDrawer;
   final bool buildSecondPane;
+
   Key? customKey;
 
   final bool isFirstToSecOrThirdPane;
@@ -705,7 +909,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   bool isPaneScaffoldOverlayColord(bool firstPane);
   bool setPaneBodyPadding(bool firstPane);
 
-  bool setPaneClipRect(bool firstPane);
+  bool setClipRect(bool? firstPane);
 
   get getWidth => this._width;
 
@@ -1208,13 +1412,13 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   }) {
     List<Widget>? list =
         getPane(firstPane: firstPane, controler: controler, tab: tab);
-    list?.whereType<SliverFillRemaining>().forEach((l) {
-      debugPrint("SliverFillRemaining debug ${l.child.runtimeType}");
-      if (l.child is BasePage) {
-        debugPrint("SliverFillRemaining  founded basePage child debug");
-        (l.child as BasePage).setCustomKey = GlobalKey<BasePageState>();
-      }
-    });
+    // list?.whereType<SliverFillRemaining>().forEach((l) {
+    //   debugPrint("SliverFillRemaining debug ${l.child.runtimeType}");
+    //   if (l.child is BasePage) {
+    //     debugPrint("SliverFillRemaining  founded basePage child debug");
+    //     (l.child as BasePage).setCustomKey = GlobalKey<BasePageState>();
+    //   }
+    // });
     return list;
   }
 
@@ -1393,9 +1597,9 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       ),
     );
 
-    if (setPaneClipRect(firstPane)) {
+    if (setClipRect(firstPane)) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(kBorderRadius),
+        borderRadius: BorderRadius.circular(kDefualtClipRect),
         child: scaffold,
       );
     }
@@ -1440,6 +1644,13 @@ abstract class BasePageState<T extends BasePage> extends State<T>
         // ),
         Expanded(child: body)
       ]);
+    }
+
+    if (setClipRect(null)) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(kDefualtClipRect),
+        child: body,
+      );
     }
     return body;
   }

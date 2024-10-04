@@ -491,7 +491,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   bool setHorizontalDividerWhenTowPanes() => false;
 
   @override
-  bool setPaneClipRect(bool firstPane) => false;
+  bool setClipRect(bool? firstPane) => false;
 
   @override
   Future getCallApiFunctionIfNull(BuildContext context,
