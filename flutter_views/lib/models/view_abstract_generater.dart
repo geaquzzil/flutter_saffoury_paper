@@ -223,14 +223,20 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     bool canSecondPane =
         isSoLarge || currentScreenSize == CurrentScreenSize.SMALL_TABLET;
     bool canThirdPane = isSoLarge;
+
+    debugPrint(
+        "setPaneToSecondOrThird CurrentScreenSize $currentScreenSize canSecondPane $canSecondPane canThirdPane $canThirdPane");
     if (!canSecondPane) return false;
     if (canThirdPane && !tryToSetToSecoundPane) {
       if (Globals.keyForLargeScreenListable.currentState == null) {
+        debugPrint("setPaneToSecondOrThird keyForLargeScreenListable = null");
         return false;
       }
+
       Globals.keyForLargeScreenListable.currentState?.setThirdPane(l);
     } else {
       if (Globals.keyForLargeScreenListable.currentState == null) {
+        debugPrint("setPaneToSecondOrThird keyForLargeScreenListable = null");
         return false;
       }
       Globals.keyForLargeScreenListable.currentState?.setSecoundPane(l);
@@ -266,6 +272,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
             customWidget: _getMasterToListWidget(context));
     if (!setPaneToSecondOrThird(context, l,
         tryToSetToSecoundPane: !setToThirdPane)) {
+      debugPrint("sdsdsds");
       context.pushNamed(
           isMasterToList == null ? viewRouteName : indexWebMasterToList,
           pathParameters: getRoutePathParameters(),

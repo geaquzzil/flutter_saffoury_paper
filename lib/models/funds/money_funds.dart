@@ -31,6 +31,7 @@ import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:number_to_character/number_to_character.dart';
 import 'package:pdf/widgets.dart' as pdf;
+import 'package:pdf/pdf.dart' as d;
 import 'package:provider/provider.dart';
 
 import '../users/customers.dart';
@@ -256,7 +257,7 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
   bool isIncomes() {
     return runtimeType == Incomes || runtimeType == Credits;
   }
-  
+
   @override
   bool getPrintableSupportsLabelPrinting() => false;
 
@@ -340,7 +341,7 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
   }
 
   @override
-  pdf.Widget? getPrintableWatermark() => null;
+  pdf.Widget? getPrintableWatermark(d.PdfPageFormat? format) => null;
 
   String getIdWithLabelWithIsDollar(BuildContext context) {
     bool isD = isDollar();

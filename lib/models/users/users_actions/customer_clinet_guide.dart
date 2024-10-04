@@ -193,7 +193,7 @@ class CustomerClinetGuide
   }
 
   @override
-  pdW.Widget? getPrintableWatermark() => null;
+  pdW.Widget? getPrintableWatermark(pdf.PdfPageFormat? format) => null;
 
   @override
   mt.Widget? getCustomFloatingActionWidget(mt.BuildContext context) {

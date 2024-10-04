@@ -333,7 +333,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
       "${getIDFormat(context)} ${getMainHeaderLabelTextOnly(context)}";
 
   @override
-  Widget? getPrintableWatermark() => null;
+  Widget? getPrintableWatermark(PdfPageFormat? format) => null;
 
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(

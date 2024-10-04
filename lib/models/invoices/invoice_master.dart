@@ -51,7 +51,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:number_to_character/number_to_character.dart';
 import 'package:pdf/widgets.dart' as pdf;
 import 'package:provider/provider.dart';
-
+import 'package:pdf/pdf.dart' as d;
 import 'invoice_master_details.dart';
 import 'orders.dart';
 
@@ -1075,7 +1075,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  pdf.Widget? getPrintableWatermark() => null;
+  pdf.Widget? getPrintableWatermark(d.PdfPageFormat? format) => null;
 
   @override
   String? getWebCategoryGridableDescription(BuildContext context) {

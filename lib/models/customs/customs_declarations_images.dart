@@ -183,7 +183,7 @@ class CustomsDeclarationImages extends ViewAbstract<CustomsDeclarationImages>
   String getPrintableSecondaryColor(PrintLocalSetting? pca) => "";
 
   @override
-  Widget? getPrintableWatermark() => null;
+  Widget? getPrintableWatermark(PdfPageFormat? format) => null;
 
   @override
   bool getPrintableSupportsLabelPrinting() => false;

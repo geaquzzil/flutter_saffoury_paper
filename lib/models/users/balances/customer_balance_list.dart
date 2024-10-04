@@ -22,6 +22,7 @@ import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dar
 import 'package:flutter_view_controller/test_var.dart';
 import '../../prints/print_customer_balances.dart';
 import 'package:pdf/widgets.dart' as pdf;
+import 'package:pdf/pdf.dart' as d;
 
 class CustomerBalanceList
     extends ViewAbstractStandAloneCustomViewApi<CustomerBalanceList>
@@ -301,7 +302,7 @@ class CustomerBalanceList
   }
 
   @override
-  pdf.Widget? getPrintableWatermark() => null;
+  pdf.Widget? getPrintableWatermark(d.PdfPageFormat? format) => null;
   bool checkList(List? list) {
     if (list == null) return false;
     if (list.isEmpty) return false;

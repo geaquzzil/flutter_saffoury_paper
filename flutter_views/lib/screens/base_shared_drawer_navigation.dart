@@ -397,6 +397,14 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
   }
 }
 
+class ThirdToSecondPaneHelper extends SecondPaneHelper {
+  bool shouldAddToThirdPaneList;
+  ThirdToSecondPaneHelper(
+      {required this.shouldAddToThirdPaneList,
+      required super.title,
+      super.value});
+}
+
 class SecondPaneHelper {
   String title;
   dynamic value;

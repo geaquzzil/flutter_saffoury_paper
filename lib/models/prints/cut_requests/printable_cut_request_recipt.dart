@@ -14,7 +14,7 @@ import 'package:number_to_character/number_to_character.dart';
 import 'package:pdf/widgets.dart';
 import 'package:pdf/pdf.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-
+import 'package:pdf/pdf.dart' as d;
 class CutRequestRecieptPDF {
   material.BuildContext context;
   CutRequest cutRequest;
@@ -246,7 +246,7 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
   }
 
   @override
-  Widget? getPrintableWatermark() => null;
+  Widget? getPrintableWatermark(d.PdfPageFormat? format) => null;
 
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(

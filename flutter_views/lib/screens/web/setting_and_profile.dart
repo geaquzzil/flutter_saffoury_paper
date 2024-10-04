@@ -399,7 +399,7 @@ class _PrintSettingState extends BasePageState<PrintSetting>
               )
               .toList());
     } else {
-      return [const SliverToBoxAdapter(child: Text("S"))];
+      // return [const SliverToBoxAdapter(child: Text("S"))];
       return [
         SliverFillRemaining(
           hasScrollBody: true,

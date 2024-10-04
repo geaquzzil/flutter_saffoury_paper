@@ -50,7 +50,7 @@ import '../funds/debits.dart';
 import '../funds/incomes.dart';
 import '../funds/spendings.dart';
 import 'package:pdf/widgets.dart' as pdf;
-
+import 'package:pdf/pdf.dart' as d;
 part 'dashboard.g.dart';
 
 //TODO on publish do not forget that the iD gives error messages because the response of dashboard iD not found
@@ -730,7 +730,7 @@ class Dashboard extends UserLists<Dashboard>
           ];
 
   @override
-  pdf.Widget? getPrintableWatermark() => null;
+  pdf.Widget? getPrintableWatermark(d.PdfPageFormat? format) => null;
 
   @override
   List<String> getPrintableDashboardTableHeaders(

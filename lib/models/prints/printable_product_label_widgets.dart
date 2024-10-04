@@ -9,7 +9,7 @@ import 'package:pdf/widgets.dart';
 
 import '../products/products.dart';
 
-const double printerLabelFontSizePrimary = 10;
+const double printerLabelFontSizePrimary = 14;
 const double printerLabelFontSizeSecoundry = 8;
 
 const double printerFontSizePrimary = 32;
@@ -77,6 +77,7 @@ class ProductLabelPDF {
 
             borderContainer(build4th()),
             borderContainer(build5th()),
+            // borderContainer(build5th()),
             if (barcode != null)
               Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -312,16 +313,18 @@ class ProductLabelPDF {
           Align(
               child: Padding(
                   padding: isLabel
-                      ? const EdgeInsets.symmetric(horizontal: 2, vertical: 3)
+                      ? const EdgeInsets.symmetric(horizontal: 1, vertical: 4)
                       : const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                   child: Directionality(
                       textDirection: TextDirection.rtl,
                       child: Text(label,
                           textDirection: TextDirection.rtl,
                           style: TextStyle(
+                              fontWeight:
+                                  isLabel ? FontWeight.bold : FontWeight.normal,
                               fontSize: isLabel
-                                  ? printerFontSizeSecoundry
-                                  : printerLabelFontSizeSecoundry)))),
+                                  ? printerLabelFontSizeSecoundry
+                                  : printerFontSizeSecoundry)))),
               alignment: Globals.isArabic(context)
                   ? Alignment.topRight
                   : Alignment.topLeft),

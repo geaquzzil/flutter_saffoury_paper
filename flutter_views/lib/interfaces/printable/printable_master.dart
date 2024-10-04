@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:pdf/pdf.dart' as d;
 import 'package:pdf/widgets.dart' as pdf;
 
 abstract class PrintableMaster<T extends PrintLocalSetting>
@@ -19,7 +20,7 @@ abstract class PrintableMaster<T extends PrintLocalSetting>
 
   String getPrintableInvoiceTitle(BuildContext context, T? pca);
 
-  pdf.Widget? getPrintableWatermark();
+  pdf.Widget? getPrintableWatermark(d.PdfPageFormat? format);
 
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
       BuildContext context, PrintLocalSetting? dashboardSetting);

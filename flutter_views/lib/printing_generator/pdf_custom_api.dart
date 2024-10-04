@@ -58,7 +58,7 @@ class PdfCustom<T extends PrintableCustomInterface,
   Future<pw.Page> getPage(PdfPageFormat? format) async {
     List<Widget> body = await printObj.getPrintableCustomPage(context,
         format: format, setting: printCommand);
-    Widget? watermark = printObj.getPrintableWatermark();
+    Widget? watermark = printObj.getPrintableWatermark(format);
     PageTheme pageTheme = PageTheme(
       margin: EdgeInsets.zero,
       pageFormat: format,

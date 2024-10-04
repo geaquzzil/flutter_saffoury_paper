@@ -29,7 +29,7 @@ class PdfReceipt<T extends PrintableReceiptInterface,
   }
 
   Future<pw.Page> getPage(PdfPageFormat? format, Widget header) async {
-    Widget? watermark = printObj.getPrintableWatermark();
+    Widget? watermark = printObj.getPrintableWatermark(format);
     PageTheme pageTheme = PageTheme(
       margin: EdgeInsets.zero,
       pageFormat: format,

@@ -35,7 +35,7 @@ class PdfCustomFromPDF<T extends PrintableCustomFromPDFInterface,
 
   Future<pw.Document> getDocumentP(PdfPageFormat? format) async {
     var myTheme = await getThemeData();
-    Widget? watermark = printObj.getPrintableWatermark();
+    Widget? watermark = printObj.getPrintableWatermark(format);
     PageTheme pageTheme = PageTheme(
       margin: EdgeInsets.zero,
       pageFormat: format,

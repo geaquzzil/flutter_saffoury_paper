@@ -72,6 +72,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pdf/pdf.dart' as d;
 import 'package:pdf/pdf.dart' as pdf;
 import 'package:pdf/widgets.dart' as pdfWidget;
 import 'package:printing/printing.dart';
@@ -1136,7 +1137,10 @@ class Product extends ViewAbstract<Product>
   // null;
 
   @override
-  pdfWidget.Widget? getPrintableWatermark() {
+  pdfWidget.Widget? getPrintableWatermark(d.PdfPageFormat? format) {
+    if (format == d.PdfPageFormat.roll80) {
+      return null;
+    }
     return pdfWidget.FullPage(
         ignoreMargins: true,
         child: pdfWidget.Watermark.text('SAFFOURY\n',

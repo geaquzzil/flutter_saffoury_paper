@@ -590,12 +590,14 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
         valueNotifier: _lastItem);
   }
 }
-mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier> on BasePageSecoundPaneNotifierState {
+mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
+    on BasePageSecoundPaneNotifierState {
   List<Widget>? getThirdPane();
-final ValueNotifier<E?> _valueNotifierSecondToThird = ValueNotifier(null);
+  final ValueNotifier<ThirdToSecondPaneHelper?> _valueNotifierSecondToThird =
+      ValueNotifier(null);
 
-  List<E> listOfStackedObject = [];
-  void setThirdPane(E? value) {
+  List<ThirdToSecondPaneHelper> listOfStackedObject = [];
+  void setThirdPane(ThirdToSecondPaneHelper? value) {
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       _valueNotifierSecondToThird.value = value;
     });
@@ -610,7 +612,7 @@ final ValueNotifier<E?> _valueNotifierSecondToThird = ValueNotifier(null);
     );
   }
 
-  E? getPreviousPane(E? lastPane) {
+  ThirdToSecondPaneHelper? getPreviousPane(ThirdToSecondPaneHelper? lastPane) {
     if (listOfStackedObject.length == 1 || listOfStackedObject.isEmpty) {
       return null;
     }
@@ -624,8 +626,8 @@ final ValueNotifier<E?> _valueNotifierSecondToThird = ValueNotifier(null);
     return null;
   }
 
-  Widget getAppBarLeading(E? item) {
-    E? previousPane = getPreviousPane(item);
+  Widget getAppBarLeading(ThirdToSecondPaneHelper? item) {
+    ThirdToSecondPaneHelper? previousPane = getPreviousPane(item);
 
     if (previousPane == null) {
       return IconButton(
@@ -645,28 +647,27 @@ final ValueNotifier<E?> _valueNotifierSecondToThird = ValueNotifier(null);
     }
   }
 
-  AppBar getAppBarForThirdPane(E? selectedItem, Widget widget) {
+  AppBar getAppBarForThirdPane(
+      ThirdToSecondPaneHelper? selectedItem, Widget widget) {
     return AppBar(
       leading: getAppBarLeading(selectedItem),
-      title: Text(selectedItem?.actionTitle ?? ""),
+      title: Text(selectedItem?.title ?? ""),
       //todo this flow not working
-      actions:
-          selectedItem?.getKey?.currentState?.getAppbarActionsWhenThirdPane(),
+      // actions:
+      //     selectedItem?.getKey?.currentState?.getAppbarActionsWhenThirdPane(),
     );
   }
 
   Widget wrapScaffoldInThirdPane(
-      {TabControllerHelper? tab,
-      ListToDetailsSecoundPaneHelper? selectedItem}) {
-    Widget widget = getWidgetFromListToDetailsSecoundPaneHelper(
-        selectedItem: selectedItem, tab: tab);
+      {TabControllerHelper? tab, ThirdToSecondPaneHelper? selectedItem}) {
+    // Widget widget = getWidgetFromListToDetailsSecoundPaneHelper(
+    //     selectedItem: selectedItem, tab: tab);
 
     return Scaffold(
-        appBar: getAppBarForThirdPane(selectedItem as E?, widget),
-        body: widget);
+        appBar: getAppBarForThirdPane(selectedItem, widget), body: widget);
   }
 
-  void checkValueToAddToList(E? value) {
+  void checkValueToAddToList(ThirdToSecondPaneHelper? value) {
     if (value == null) {
       listOfStackedObject.clear();
     } else {
@@ -751,7 +752,7 @@ final ValueNotifier<E?> _valueNotifierSecondToThird = ValueNotifier(null);
                                 curve: Curves.linear,
                                 child: SlideInRight(
                                   duration: const Duration(milliseconds: 200),
-                                  key: Key(value.actionTitle.toString()),
+                                  key: Key(value.title.toString()),
                                   // delay: Duration(milliseconds: 1000),
                                   curve: Curves.fastLinearToSlowEaseIn,
                                   child: wrapScaffoldInThirdPane(
@@ -771,8 +772,6 @@ final ValueNotifier<E?> _valueNotifierSecondToThird = ValueNotifier(null);
     );
     // return AnimatedContainer(duration: const Duration(milliseconds: 800),child: SizedBox(width: ,),);
   }
-
-  
 }
 
 abstract class BasePageSecoundPaneNotifier<T> extends BasePage {
@@ -801,7 +800,7 @@ abstract class BasePage extends StatefulWidget {
     this.buildSecondPane = true,
     this.customKey,
     this.isFirstToSecOrThirdPane = false,
-  }) : super(key: customKey);
+  }) : super(key: customKey??key);
   get getCustomKey => customKey;
 
   set setCustomKey(final customKey) => this.customKey = customKey;

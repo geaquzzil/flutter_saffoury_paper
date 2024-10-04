@@ -1,7 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
+import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
+import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_customer_dashboard_setting.dart';
 import 'package:flutter_saffoury_paper/models/users/balances/customer_terms.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
@@ -13,6 +25,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_invoice_i
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
+import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
@@ -24,6 +37,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
@@ -36,27 +50,15 @@ import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dar
 import 'package:flutter_view_controller/screens/web/components/header_text.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
-import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
-import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
-import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
-import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
-import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
-import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
-import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
-import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
-import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
-import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
-import 'package:flutter_view_controller/models/apis/growth_rate.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:pdf/pdf.dart' as d;
 import 'package:pdf/src/widgets/widget.dart' as pdf;
+
 import '../funds/credits.dart';
 import '../funds/debits.dart';
-
 import '../funds/incomes.dart';
 import '../funds/spendings.dart';
 import '../users/customers.dart';
-import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+
 part 'customer_dashboard.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -560,7 +562,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   }
 
   @override
-  pdf.Widget? getPrintableWatermark() => null;
+  pdf.Widget? getPrintableWatermark(d.PdfPageFormat? format) => null;
 }
 
 @JsonSerializable(explicitToJson: true)
