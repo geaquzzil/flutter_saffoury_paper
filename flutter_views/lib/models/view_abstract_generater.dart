@@ -1,11 +1,15 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/configrations.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
+import 'package:flutter_view_controller/models/prints/printer_default_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
@@ -25,6 +29,7 @@ import 'package:go_router/go_router.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:pdf/pdf.dart' as pdf;
 
 import '../utils/dialogs.dart';
 import 'menu_item.dart';
@@ -325,6 +330,31 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
           pathParameters: getRoutePathParameters(),
           extra: (this as ViewAbstract).getCopyInstance());
     }
+  }
+
+  Future<bool> directPrint(
+      {required BuildContext context,
+      required FutureOr<Uint8List> Function(pdf.PdfPageFormat) onLayout,
+      required pdf.PdfPageFormat format}) async {
+    PrinterDefaultSetting? p =
+        await Configurations.get(PrinterDefaultSetting());
+    if (p != null) {
+      debugPrint("directPrint getting saved value => $p");
+      Printer? result =
+          await Printing.listPrinters().then((pr) => pr.firstWhereOrNull(
+                (p0) =>
+                    p0.name ==
+                    ((format == pdf.PdfPageFormat.roll80)
+                        ? p.defaultLabelPrinter
+                        : p.defaultPrinter),
+              ));
+      debugPrint("directPrint result printer $result");
+      if (result != null) {
+        return await Printing.directPrintPdf(
+            printer: result, onLayout: onLayout, format: format);
+      }
+    }
+    return false;
   }
 
   Future<void> printDialog(BuildContext context,

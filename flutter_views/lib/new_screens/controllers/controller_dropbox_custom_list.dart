@@ -73,10 +73,17 @@ class _DropdownCustomListWithFormListenerState
           // contentPadding: EdgeInsets.zero,
           leading: Text(widget.viewAbstract.getFieldLabel(context, _field)),
           title: FormBuilderDropdown<dynamic>(
+            borderRadius: BorderRadius.circular(kBorderRadius),
+            onSaved: (newValue) {
+              widget.viewAbstract.setFieldValue(_field, newValue);
+              debugPrint('FormBuilderDropdown onSave=   $newValue');
+            },
+
+            // dropdownColor: Colors.orange,
             // iconSize: 15,
             // selectedItemBuilder: (context) => [const Text("das")],
 
-            autovalidateMode: AutovalidateMode.onUserInteraction,
+            // autovalidateMode: AutovalidateMode.onUserInteraction,
             // itemHeight: 48,
 
             onChanged: (obj) {

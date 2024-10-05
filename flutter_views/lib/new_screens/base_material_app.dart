@@ -20,8 +20,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import '../theming/text_field_theming.dart';
-
 class BaseMaterialAppPage extends StatefulWidget {
   List<RouteBase>? addOnRoutes;
   BaseMaterialAppPage({super.key, this.addOnRoutes});
@@ -34,6 +32,13 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
   late LangaugeProvider langaugeProvider;
   late AuthProvider authProvider;
   late RouteGenerator routeGenerator;
+  // Fictitious brand color.
+  final _brandBlue = const Color.fromARGB(0, 0, 204, 255);
+
+  CustomColors lightCustomColors =
+      const CustomColors(danger: Color(0xFFE53935));
+  CustomColors darkCustomColors = const CustomColors(danger: Color(0xFFEF9A9A));
+
   @override
   void initState() {
     super.initState();
@@ -68,6 +73,7 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
     super.dispose();
   }
 
+// Fictitious brand color.
   @override
   Widget build(BuildContext context) {
     debugPrint("build_MaterialAppPage");
@@ -124,6 +130,35 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
               14 * scaleFactor; // Base font size multiplied by scaling factor
           return DynamicColorBuilder(
             builder: (lightDynamic, darkDynamic) {
+              ColorScheme lightColorScheme;
+              ColorScheme darkColorScheme;
+
+              if (lightDynamic != null && darkDynamic != null) {
+                // On Android S+ devices, use the provided dynamic color scheme.
+                // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
+                lightColorScheme = lightDynamic.harmonized();
+                // (Optional) Customize the scheme as desired. For example, one might
+                // want to use a brand color to override the dynamic [ColorScheme.secondary].
+                lightColorScheme = lightColorScheme;
+                // (Optional) If applicable, harmonize custom colors.
+                lightCustomColors =
+                    lightCustomColors.harmonized(lightColorScheme);
+
+                // Repeat for the dark color scheme.
+                darkColorScheme = darkDynamic.harmonized();
+                darkColorScheme = darkColorScheme;
+                darkCustomColors = darkCustomColors.harmonized(darkColorScheme);
+              } else {
+                // Otherwise, use fallback schemes.
+                lightColorScheme = ColorScheme.fromSeed(
+                  seedColor: _brandBlue,
+                );
+                darkColorScheme = ColorScheme.fromSeed(
+                  seedColor: _brandBlue,
+                  brightness: Brightness.dark,
+                );
+              }
+
               const ip = InputDecoration();
               notifyLogoColor(context, lightDynamic, darkDynamic);
               return MaterialApp.router(
@@ -205,7 +240,8 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                   // scaffoldBackgroundColor: lightDynamic?.background,
                   // shadowColor: lightDynamic?.shadow,
                   // cardColor: lightDynamic?.surfaceVariant,
-                  colorScheme: lightDynamic ?? defaultLightColorScheme,
+                  colorScheme: lightColorScheme,
+                  extensions: [lightCustomColors],
                   useMaterial3: true,
                   pageTransitionsTheme: const PageTransitionsTheme(
                     builders: {
@@ -217,9 +253,24 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                     },
                   ),
                 ),
+
                 darkTheme: ThemeData(
+                  canvasColor: darkColorScheme.surfaceContainer,
+                  // floatingActionButtonTheme: FloatingActionButtonThemeData(highlightElevation: ),
+
+                  textButtonTheme: TextButtonThemeData(
+                      style: getButtonStyleIfIcon(darkColorScheme)),
+                  iconButtonTheme: getIconDataTheme(darkColorScheme),
+                  elevatedButtonTheme: getElevatedTheme(darkColorScheme),
+                  menuTheme: MenuThemeData(
+                      style: MenuStyle(
+                          backgroundColor:
+                              WidgetStateProperty.all(Colors.black))),
+                  menuButtonTheme: MenuButtonThemeData(
+                      style: ButtonStyle(
+                          iconColor: WidgetStateProperty.all(Colors.orange))),
                   popupMenuTheme: Theme.of(context).popupMenuTheme.copyWith(
-                        // color: Colors.amber,
+                        color: darkColorScheme.surfaceContainer,
 
                         // elevation: Theme.of(context).ele,
                         elevation: 10,
@@ -227,13 +278,16 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                             borderRadius: BorderRadius.all(
                                 Radius.circular(kBorderRadius))),
                       ),
-                      buttonTheme: ButtonThemeData(),
+                  buttonTheme: const ButtonThemeData(),
+
                   dropdownMenuTheme: Theme.of(context)
                       .dropdownMenuTheme
                       .copyWith(
+                        menuStyle: const MenuStyle(
+                            visualDensity: VisualDensity.compact),
                         // menuStyle: Theme.of(context).menuTheme.style?.copyWith(
                         //     padding: ),
-                        textStyle: Theme.of(context).textTheme.bodySmall,
+                        textStyle: Theme.of(context).textTheme.titleLarge,
                         inputDecorationTheme: Theme.of(context)
                             .inputDecorationTheme
                             .copyWith(
@@ -246,6 +300,7 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                   visualDensity: isDesktopPlatform()
                       ? const VisualDensity(horizontal: -4.0, vertical: -4.0)
                       : VisualDensity.compact,
+
                   // fontFamily: GoogleFonts.roboto(height: 1.2).fontFamily,
                   inputDecorationTheme: Theme.of(context)
                       .inputDecorationTheme
@@ -255,6 +310,8 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                             ? BoxConstraints.tight(const Size.fromHeight(40))
                             : null,
                         filled: true,
+                        fillColor: darkColorScheme.surfaceContainer,
+                        hoverColor: Colors.transparent,
                         // fillColor: darkDynamic?.onPrimaryContainer,
                         border: const OutlineInputBorder(
                             gapPadding: 0,
@@ -262,6 +319,7 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                             // borderSide: BorderSide(strokeAlign: ),
                             // borderSide: BorderSide.none,
                             // gapPadding: 0,
+
                             borderRadius: BorderRadius.all(
                                 Radius.circular(kBorderRadius))),
                       ),
@@ -274,7 +332,9 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                   // scaffoldBackgroundColor: darkDynamic?.background,
                   // shadowColor: darkDynamic?.shadow,
                   // cardColor: darkDynamic?.surfaceVariant,
-                  colorScheme: darkDynamic ?? defaultDarkColorScheme,
+                  colorScheme: darkColorScheme,
+                  extensions: [darkCustomColors],
+
                   useMaterial3: true,
                   pageTransitionsTheme: const PageTransitionsTheme(
                     builders: {
@@ -293,6 +353,55 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
         }));
 
     return widget;
+  }
+
+  IconButtonThemeData getIconDataTheme(ColorScheme colorSheme) {
+    return IconButtonThemeData(style: getButtonStyleIfIcon(colorSheme));
+  }
+
+  ElevatedButtonThemeData getElevatedTheme(ColorScheme colorSheme) {
+    return ElevatedButtonThemeData(style: getButtonStyleIfIcon(colorSheme));
+  }
+
+  ButtonStyle getButtonStyleIfIcon(ColorScheme colorSheme) {
+    return ButtonStyle(
+      elevation: WidgetStateProperty.all(0),
+      padding: WidgetStateProperty.all(EdgeInsets.zero),
+      overlayColor: WidgetStateProperty.all(Colors.transparent),
+      // surfaceTintColor:
+      //     WidgetStateProperty.all(const Color.fromRGBO(0, 0, 0, 0)),
+      shape: WidgetStateProperty.all(const CircleBorder()),
+      //  side: ,
+      // shape:  WidgetStateProperty.all(),
+      iconSize: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.pressed)) {
+          return 19;
+        }
+        if (states.contains(WidgetState.hovered)) {
+          return 20;
+        }
+        return null;
+      }),
+
+      textStyle: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.pressed)) {
+          return Theme.of(context).textTheme.bodySmall;
+        }
+        if (states.contains(WidgetState.hovered)) {
+          return Theme.of(context).textTheme.bodyMedium;
+        }
+        return null;
+      }),
+      iconColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.pressed)) {
+          return colorSheme.primaryContainer;
+        }
+        if (states.contains(WidgetState.hovered)) {
+          return colorSheme.primary;
+        }
+        return null;
+      }),
+    );
   }
 
   void notifyLogoColor(
@@ -336,5 +445,35 @@ class HexColor extends Color {
       hexColor = 'FF$hexColor';
     }
     return int.parse(hexColor, radix: 16);
+  }
+}
+
+@immutable
+class CustomColors extends ThemeExtension<CustomColors> {
+  const CustomColors({
+    required this.danger,
+  });
+
+  final Color? danger;
+
+  @override
+  CustomColors copyWith({Color? danger}) {
+    return CustomColors(
+      danger: danger ?? this.danger,
+    );
+  }
+
+  @override
+  CustomColors lerp(ThemeExtension<CustomColors>? other, double t) {
+    if (other is! CustomColors) {
+      return this;
+    }
+    return CustomColors(
+      danger: Color.lerp(danger, other.danger, t),
+    );
+  }
+
+  CustomColors harmonized(ColorScheme dynamic) {
+    return copyWith(danger: danger!.harmonizeWith(dynamic.primary));
   }
 }

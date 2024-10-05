@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
 import 'package:flutter_view_controller/new_screens/controllers/adaptives.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -19,7 +20,7 @@ Widget wrapController(Widget controller,
     {bool? requiredSpace,
     bool? isExpansionTile,
     CurrentScreenSize? currentScreenSize}) {
-  return WrapController(size: currentScreenSize, child: controller);
+  return controller;
   return Column(
     children: [
       Padding(

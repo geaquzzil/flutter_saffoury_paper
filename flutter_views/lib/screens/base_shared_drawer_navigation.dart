@@ -569,9 +569,46 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
     }) as GlobalKey<BasePageSecoundPaneNotifierState>;
   }
 
+  ButtonStyle getStyle() {
+    return ButtonStyle(
+      elevation: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.pressed)) {
+          return 10;
+        }
+        if (states.contains(WidgetState.hovered)) {
+          return 5;
+        }
+        return 0;
+      }),
+      // padding: WidgetStateProperty.all(EdgeInsets.zero),
+      overlayColor: WidgetStateProperty.all(Colors.transparent),
+      // surfaceTintColor:
+      //     WidgetStateProperty.all(const Color.fromRGBO(0, 0, 0, 0)),
+      shape: WidgetStateProperty.all(const CircleBorder()),
+      //  side: ,
+      // shape:  WidgetStateProperty.all(),
+      iconColor: WidgetStateProperty.all(Colors.orange),
+      textStyle: WidgetStateProperty.resolveWith((states) {
+        TextStyle? style = Theme.of(context)
+            .textTheme
+            .titleLarge
+            ?.copyWith(color: Theme.of(context).colorScheme.surface);
+        double? large = Theme.of(context).textTheme.titleLarge?.fontSize;
+        if (states.contains(WidgetState.pressed)) {
+          return style?.copyWith(fontSize: large == null ? 12 : large - 3);
+        }
+        if (states.contains(WidgetState.hovered)) {
+          return style?.copyWith(fontSize: large == null ? 12 : large - 2);
+        }
+        return style;
+      }),
+    );
+  }
+
   Widget getIconWithText(BuildContext context, SecondPaneHelper item) {
-    return InkWell(
-        onTap: () {
+    return TextButton(
+        style: getStyle(),
+        onPressed: () {
           int idx = _actions.indexWhere((s) => s.title == item.title);
 
           debugPrint("_ActionOnToolbarsasState  idx = $idx ");
@@ -607,19 +644,6 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
             debugPrint("_ActionOnToolbarsasState  subList = $_actions ");
           });
         },
-        child: OnHoverWidget(
-            scale: false, builder: (isHovered) => getB(isHovered, item.title)));
-  }
-
-  Widget getB(bool isHovered, String title) {
-    return Center(
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-            color: isHovered
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.secondary),
-      ),
-    );
+        child: Text(item.title));
   }
 }

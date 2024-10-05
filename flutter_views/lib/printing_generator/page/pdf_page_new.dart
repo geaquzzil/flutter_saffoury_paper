@@ -70,8 +70,18 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
     return FloatingActionButton(
         heroTag: UniqueKey(),
         child: const Icon(Icons.print),
-        onPressed: () async => await Printing.layoutPdf(
-            onLayout: (PdfPageFormat format) async => loadedFile));
+        onPressed: () async {
+          if (await getExtrasCast().directPrint(
+                  format: context
+                      .read<PrintSettingLargeScreenProvider>()
+                      .getSelectedFormat,
+                  context: context,
+                  onLayout: (PdfPageFormat format) async => loadedFile) ==
+              false) {
+            await Printing.layoutPdf(
+                onLayout: (PdfPageFormat format) async => loadedFile);
+          }
+        });
   }
 
   Widget getPrintAdvancedFloating() {

@@ -102,7 +102,6 @@ InputDecoration getDecorationIconLabel(BuildContext context,
 InputDecoration getDecorationDropdown(BuildContext context, ViewAbstract parent,
     ViewAbstractEnum viewAbstractEnum, String field) {
   return InputDecoration(
-    
     // filled: true,
     border: const OutlineInputBorder(),
 
@@ -162,22 +161,7 @@ InputDecoration getDecorationIconHintPrefix(
     IconData? icon,
     CurrentScreenSize? currentScreenSize}) {
   return InputDecoration(
-      border: const OutlineInputBorder(),
-      // filled: isDecorationFilled(currentScreenSize),
-
-      // border: !isDecorationFilled(currentScreenSize)
-      //     ? OutlineInputBorder(
-      //         borderRadius: BorderRadius.circular(25),
-      //       )
-      //     : null,
-      contentPadding: !isDecorationFilled(currentScreenSize)
-          ? (const EdgeInsets.all(16))
-          : null,
-      // iconColor: context
-      //         .watch<ErrorFieldsProvider>()
-      //         .hasErrorField(viewAbstract, field)
-      //     ? Theme.of(context).colorScheme.error
-      //     : null,
+    
       icon: icon == null ? null : Icon(icon),
       hintText: hint,
       labelText: label,

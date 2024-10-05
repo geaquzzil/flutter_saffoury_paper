@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 // ..baudRate = 9600
 //     // ..xonXoff = 1
@@ -176,7 +177,7 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
       if (baudRate != null) "baundRate": baudRate,
       if (bits != null) "bits": bits,
       if (defualtBarcodePort != null) "defualtBarcodePort": defualtBarcodePort,
-      if (parity != null) "parity": parity,
+      if (parity != null) "parity": _$ParityEnumMap[parity],
       if (stopBits != null) "stopBits": stopBits
     };
 
@@ -188,7 +189,7 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
         baudRate: map["baudRate"],
         bits: map["bits"],
         defualtBarcodePort: map["defualtBarcodePort"],
-        parity: map["parity"],
+        parity: $enumDecodeNullable(_$ParityEnumMap, map['parity']),
         stopBits: map["stopBits"]);
   }
 
@@ -247,6 +248,13 @@ const bitsList = [
 ];
 const databitsList = [4, 5, 6, 7, 8];
 const stopBitsList = [1, 1.5, 2];
+const _$ParityEnumMap = {
+  Parity.none: 0,
+  Parity.even: 2,
+  Parity.mark: 3,
+  Parity.odd: 1,
+  Parity.space: 4,
+};
 
 enum Parity implements ViewAbstractEnum<Parity> {
   even(2),

@@ -1073,6 +1073,11 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       const SizedBox(
         width: kDefaultPadding / 2,
       ),
+      ElevatedButton.icon(
+        // statesController: WidgetStatesController(),
+        label: const Icon(Icons.settings),
+        onPressed: () {},
+      ),
       IconButton(
         icon: const Icon(Icons.settings),
         onPressed: () {

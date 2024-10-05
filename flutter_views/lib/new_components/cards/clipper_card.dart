@@ -17,13 +17,14 @@ class ListTileSameSizeOnTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (context, constraints) => ListTile(
+              // visualDensity: VisualDensity.compact,
               leading: SizedBox(
-                width: constraints.maxWidth * .4,
+                width: constraints.maxWidth * .3,
                 child: leading,
               ),
-              dense: true,
+              // dense: true,
               title: SizedBox(
-                width: constraints.maxWidth * .6,
+                width: constraints.maxWidth * .7,
                 child: title,
               ),
             ));
