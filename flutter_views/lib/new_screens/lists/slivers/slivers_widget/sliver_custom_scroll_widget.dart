@@ -153,6 +153,7 @@ class _SliverCustomScrollViewDraggableState
             controller: _scrollController,
             physics: widget.physics ??
                 const BouncingScrollPhysics(
+                  // decelerationRate:ScrollDecelerationRate.fast ,
                     parent: AlwaysScrollableScrollPhysics()),
             slivers: [
               if (widget.builderAppbar != null)

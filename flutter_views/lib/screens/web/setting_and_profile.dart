@@ -208,13 +208,15 @@ class PrintSetting extends BasePageSecoundPaneNotifier<ModifiableInterface> {
   PrintSetting(
       {super.key,
       super.buildSecondPane,
+      super.parent,
       super.valueNotifierIfThirdPane,
+      super.forceHeaderToCollapse = true,
       super.isFirstToSecOrThirdPane = true,
+      super.onBuild,
       super.selectedItem});
 
   @override
   State<PrintSetting> createState() {
-    debugPrint("SliverFillRemaining key from PrintSetting ${super.key}");
     return _PrintSettingState();
   }
 }
@@ -253,7 +255,7 @@ class _PrintSettingState extends BasePageState<PrintSetting>
     if (firstPane) {
       return "printer_list";
     }
-    return ((lastItem?.value as ViewAbstract?)
+    return ((lastSecondPaneItem?.value as ViewAbstract?)
                 ?.getScrollKey(ServerActions.print) ??
             "") +
         "printerDetails";
@@ -283,7 +285,7 @@ class _PrintSettingState extends BasePageState<PrintSetting>
           element.getModifibleTitleName(ctx),
           style: Theme.of(ctx).textTheme.bodySmall,
         ),
-        selected: lastItem?.value.hashCode == element.hashCode,
+        selected: lastSecondPaneItem?.value.hashCode == element.hashCode,
       ),
     );
   }
@@ -310,13 +312,13 @@ class _PrintSettingState extends BasePageState<PrintSetting>
       TabControllerHelper? secoundTab}) {
     return firstPane == null
         ? Text(AppLocalizations.of(context)!.printerSetting)
-        : firstPane
+        : isFirstPane(firstPane: firstPane)
             ? Text(AppLocalizations.of(context)!.details)
             : Text(getSecPaneText() ?? "");
   }
 
   String? getSecPaneText() {
-    ModifiableInterface? last = lastItem?.value;
+    ModifiableInterface? last = lastSecondPaneItem?.value;
     return last?.getModifibleTitleName(context);
   }
 
@@ -325,9 +327,9 @@ class _PrintSettingState extends BasePageState<PrintSetting>
       {bool? firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
-    if (isSecPane(firstPane: firstPane) && hasNotifierValue()) {
-      if (getAnySelectValue() is BarcodeSetting ||
-          (getAnySelectValue() is PrinterDefaultSetting)) {
+    if (isSecPane(firstPane: firstPane)) {
+      if (geSelectedValue() is BarcodeSetting ||
+          (geSelectedValue() is PrinterDefaultSetting)) {
         return FloatingActionButton.small(
           //todo translate
           child: const Tooltip(
@@ -370,14 +372,15 @@ class _PrintSettingState extends BasePageState<PrintSetting>
                     widgets: e.value.map(
                       (c) {
                         bool isLarge =
-                            isLargeScreenFromScreenSize(getCurrentScreenSize());
+                            isLargeScreenFromCurrentScreenSize(context);
                         return OnHoverCardWithListTile(
                           onTap: () {
                             notify(SecondPaneHelper(
                                 title: c.getModifibleTitleName(context),
                                 value: c));
                           },
-                          isSelected: c.hashCode == lastItem?.value.hashCode,
+                          isSelected:
+                              c.hashCode == lastSecondPaneItem?.value.hashCode,
                           selectedIsClipped: false,
                           child: ListTileAdaptive(
                             isLargeScreen: isLarge,
@@ -391,7 +394,8 @@ class _PrintSettingState extends BasePageState<PrintSetting>
                                   ? Theme.of(context).textTheme.bodySmall
                                   : null,
                             ),
-                            selected: lastItem?.value.hashCode == c.hashCode,
+                            selected: lastSecondPaneItem?.value.hashCode ==
+                                c.hashCode,
                           ),
                         );
                       },
@@ -443,6 +447,11 @@ class _PrintSettingState extends BasePageState<PrintSetting>
 
   @override
   bool setClipRect(bool? firstPane) => true;
+
+  @override
+  String onActionInitial() {
+    return AppLocalizations.of(context)!.printerSetting;
+  }
 }
 
 class AdminSetting extends StatelessWidget {
@@ -650,7 +659,7 @@ class Help extends StatelessWidget {
         ),
         const Divider(),
         ListTile(subtitle: Text(AppLocalizations.of(context)!.copyRight)),
-        const Spacer(),
+        // const Spacer(),
         Padding(
           padding: const EdgeInsets.only(left: 8.0, top: kDefaultPadding),
           child: TextButton(

@@ -399,31 +399,55 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
   ValueNotifier<SecondPaneHelper?> get getSecondPaneNotifier =>
       _onSecoundPaneChanged;
   // GlobalKey<ActionOnToolbarState> key = GlobalKey<ActionOnToolbarState>();
-  SecondPaneHelper? _lastItem;
-  SecondPaneHelper? get lastItem => this._lastItem;
+  SecondPaneHelper? _lastSecondPaneItem;
+  SecondPaneHelper? get lastSecondPaneItem => this._lastSecondPaneItem;
 
   void notify(SecondPaneHelper? item) {
+    debugPrint("notify");
     _onSecoundPaneChanged.value = item;
-    // widget.valueNotifierIfThirdPane?.value = item;
   }
 
   void initSecToThirdPaneNotifier() {}
 
   bool hasNotifierValue() {
-    return _lastItem?.value != null;
+    return _lastSecondPaneItem?.value != null;
   }
 
-  SecondPaneHelper? getAnySelectValue() {
-    return lastItem;
+  dynamic geSelectedValue() {
+    return lastSecondPaneItem?.value;
+  }
+
+  SecondPaneHelper getInitialAction() {
+    return SecondPaneHelper(title: onActionInitial());
+  }
+
+  String onActionInitial();
+  @override
+  bool isFirstPane({bool? firstPane}) {
+    if (isMobile(context, maxWidth: getWidth)) {
+      return _lastSecondPaneItem == null;
+    }
+    return super.isFirstPane(firstPane: firstPane);
+  }
+
+  @override
+  bool isSecPane({bool? firstPane}) {
+    if (isMobile(context, maxWidth: getWidth)) {
+      return _lastSecondPaneItem != null;
+    }
+    return super.isSecPane(firstPane: firstPane);
   }
 
   @override
   Widget? getBaseAppbarTitle() {
-    return ActionOnToolbar(
-      widget: this,
-      actions: [SecondPaneHelper(title: "PASE")],
-      // key: key,
-    );
+    if (widget.parent == null) {
+      return ActionOnToolbar(
+        widget: this,
+        actions: [getInitialAction()],
+        // key: key,
+      );
+    }
+    return null;
   }
 
   @override
@@ -431,7 +455,7 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
     _firstWidget = FadeInUp(
       duration: const Duration(milliseconds: 200),
       curve: Curves.fastOutSlowIn,
-      key: Key(_lastItem.hashCode.toString()),
+      key: Key(_lastSecondPaneItem.hashCode.toString()),
       child: super.getOnlyFirstPage(),
     );
     return _firstWidget;
@@ -444,7 +468,7 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
       endPane: FadeInUp(
         duration: const Duration(milliseconds: 200),
         curve: Curves.fastOutSlowIn,
-        key: Key(_lastItem.hashCode.toString()),
+        key: Key(_lastSecondPaneItem.hashCode.toString()),
         child: _secondWidget,
       ),
       customPaneProportion: reverseCustomPane()
@@ -467,7 +491,7 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
     _onSecoundPaneChanged.addListener(onPaneChanged);
 
     // test = widget.valueNotifierIfThirdPane;
-    _lastItem = widget.selectedItem;
+    _lastSecondPaneItem = widget.selectedItem;
     super.initState();
   }
 
@@ -484,61 +508,18 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
     super.dispose();
   }
 
-  // Widget getAppBarLeading() {
-  //   return BackButton(
-  //     onPressed: () {
-  //       setState(() {
-  //         _selectedItem = null;
-  //       });
-  //     },
-  //   );
-  // }
-
-  // @override
-  // Widget getScaffoldBodyForPane({required bool firstPane}) {
-  //   if (firstPane && _selectedItem != null) {
-  //     return SliverCustomScrollViewDraggable(
-  //       scrollKey: getScrollKey(firstPane: firstPane),
-  //       tabs: getPaneTabControllerHelper(firstPane: firstPane),
-  //       actions: getAppbarActions(firstPane: firstPane),
-  //       title: getAppbarTitle(firstPane: firstPane),
-  //       slivers: const [],
-  //       builder: (scrollController, tab) {
-  //         return SliverCustomScrollViewDraggableHelper(
-  //             widget: getPane(firstPane: firstPane, tab: tab)!,
-  //             headerWidget:
-  //                 getPaneDraggableHeader(firstPane: firstPane, tab: tab),
-  //             expandHeaderWidget: getPaneDraggableExpandedHeader(
-  //                 firstPane: firstPane, tab: tab));
-  //       },
-  //     );
-  //   }
-  //   return super.getScaffoldBodyForPane(firstPane: firstPane);
-  // }
-
-  // AppBar getAppBarForSecPane() {
-  //   return AppBar(
-  //     leading: getAppBarLeading(),
-  //     title: Text("Implement Selected PAne Action"),
-  //   );
-  // }
-
-  // Widget wrapScaffoldInThirdPane() {
-  //   Widget widget = Text("");
-
-  //   return Scaffold(appBar: getAppBarForSecPane(), body: widget);
-  // }
-
   @override
   Widget? getAppbarLeading({bool? firstPane}) {
-    debugPrint("getAppbarLeading $firstPane selected: $_lastItem");
+    debugPrint("getAppbarLeading $firstPane selected: $_lastSecondPaneItem");
     if (isMobile(context, maxWidth: getWidth)) {
-      if (_lastItem != null) {
+      if (_lastSecondPaneItem != null) {
         if (firstPane == true) {
           return BackButton(
             onPressed: () {
               setState(() {
-                _lastItem = null;
+                _onSecoundPaneChanged.value = null;
+                // _lastItem = null;
+
                 forceBuildAppBar = false;
                 pinToolbar = false;
               });
@@ -554,7 +535,7 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
 
   void onPaneChanged() {
     setState(() {
-      _lastItem = _onSecoundPaneChanged.value;
+      _lastSecondPaneItem = _onSecoundPaneChanged.value;
       // key.currentState?.add(_lastItem);
 
       if (isMobile(context, maxWidth: getWidth)) {
@@ -572,12 +553,13 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
     if (isSecPane(firstPane: firstPane) && !hasNotifierValue()) {
       return [SliverFillRemaining(child: EmptyWidget.emptyPage(context))];
     }
+
     if (isMobileFromWidth(getWidth) && hasNotifierValue()) {
       return getPaneNotifier(
           firstPane: false,
           controler: controler,
           tab: tab,
-          valueNotifier: _lastItem);
+          valueNotifier: _lastSecondPaneItem);
     }
     if (firstPane) {
       return getPaneNotifier(
@@ -587,7 +569,7 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
         firstPane: firstPane,
         controler: controler,
         tab: tab,
-        valueNotifier: _lastItem);
+        valueNotifier: _lastSecondPaneItem);
   }
 }
 mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
@@ -776,34 +758,45 @@ mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
 
 abstract class BasePageSecoundPaneNotifier<T> extends BasePage {
   T? selectedItem;
+
+  bool setToShowThirdPaneIfCan;
+
+  @Deprecated("")
   ValueNotifier<SecondPaneHelper?>? valueNotifierIfThirdPane;
+
   BasePageSecoundPaneNotifier(
       {this.selectedItem,
       super.buildDrawer,
       super.buildSecondPane,
       super.isFirstToSecOrThirdPane,
+      this.setToShowThirdPaneIfCan = false,
+      super.parent,
+      super.forceHeaderToCollapse,
       this.valueNotifierIfThirdPane,
-      super.customKey,
+      super.onBuild,
       super.key});
 }
 
 abstract class BasePage extends StatefulWidget {
   final bool buildDrawer;
   final bool buildSecondPane;
-
-  Key? customKey;
+  final bool forceHeaderToCollapse;
+  BasePageState? parent;
+  ValueNotifier? onBuild;
 
   final bool isFirstToSecOrThirdPane;
   BasePage({
-    Key? key,
+    super.key,
     this.buildDrawer = false,
     this.buildSecondPane = true,
-    this.customKey,
+    this.forceHeaderToCollapse = false,
+    this.parent,
+    this.onBuild,
     this.isFirstToSecOrThirdPane = false,
-  }) : super(key: customKey??key);
-  get getCustomKey => customKey;
+  });
 
-  set setCustomKey(final customKey) => this.customKey = customKey;
+  set setParent(final parent) => this.parent = parent;
+  Key? get getKey => key;
 }
 
 abstract class BasePageApi extends BasePage {
@@ -829,12 +822,17 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     with TickerProviderStateMixin {
   dynamic _firstWidget;
   dynamic _secondWidget;
-  dynamic _width;
-  dynamic _height;
+  late double _width;
+  late double _height;
   bool _isInitialization = true;
   bool pinToolbar = false;
   bool forceBuildAppBar = false;
   late DrawerMenuControllerProvider _drawerMenuControllerProvider;
+  List<GlobalKey<BasePageState>?>? childs;
+
+  ValueNotifier onBuild = ValueNotifier(null);
+
+  List<Widget>? secondPaneWidgets;
 
   Widget? _drawerWidget;
   late bool buildDrawer;
@@ -865,6 +863,10 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       onReconnected: () => debugPrint("BasePage RECONNECTED"),
       onDisconnected: () => debugPrint("BasePage  DISCONNECTED"),
     );
+    WidgetsBinding.instance.endOfFrame.then((_) {
+      debugPrint("onBuildCalled $runtimeType");
+      widget.onBuild?.value = Random()..nextInt(10000);
+    });
     super.initState();
   }
 
@@ -1044,7 +1046,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
         ),
         leading: widget.isFirstToSecOrThirdPane
             ? null
-            : hideHamburger(getCurrentScreenSize())
+            : hideHamburger(context)
                 ? null
                 : IconButton(
                     icon: const Icon(Icons.menu),
@@ -1404,21 +1406,53 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     return currentWidget;
   }
 
+  void setChilds(List<Widget>? list) {
+    childs ??= list
+        ?.whereType<SliverFillRemaining>()
+        .map((l) {
+          debugPrint(
+              "BasePage setChilds =>where type is SliverFillRemaining child=> runtimeType ${l.child.runtimeType}");
+          if (l.child is BasePage) {
+            debugPrint("BasePage setChilds => setting custom and parent");
+            if ((l.child as BasePage).getKey != null) {
+              return (l.child as BasePage).getKey as GlobalKey<BasePageState>?;
+            }
+
+            return null;
+          }
+        })
+        .where((c) => c != null)
+        .toList();
+
+    if (childs?.isEmpty == true) {
+      childs = null;
+    }
+
+    debugPrint("BasePage setChilds results = $childs");
+  }
+
+  GlobalKey<BasePageState> getKeyForChild() {
+    if (childs != null) {
+      return childs![0]!;
+    }
+    GlobalKey<BasePageState> child = GlobalKey<BasePageState>();
+    childs = [child];
+
+    debugPrint("getKeyForChilds $childs");
+    return child;
+  }
+
   beforeGetPaneWidget({
     required bool firstPane,
     ScrollController? controler,
     TabControllerHelper? tab,
   }) {
-    List<Widget>? list =
-        getPane(firstPane: firstPane, controler: controler, tab: tab);
-    // list?.whereType<SliverFillRemaining>().forEach((l) {
-    //   debugPrint("SliverFillRemaining debug ${l.child.runtimeType}");
-    //   if (l.child is BasePage) {
-    //     debugPrint("SliverFillRemaining  founded basePage child debug");
-    //     (l.child as BasePage).setCustomKey = GlobalKey<BasePageState>();
-    //   }
-    // });
-    return list;
+    if (!firstPane) {
+      secondPaneWidgets = getPane(firstPane: false);
+      setChilds(secondPaneWidgets);
+      return secondPaneWidgets;
+    }
+    return getPane(firstPane: firstPane, controler: controler, tab: tab);
   }
 
   // void _setupPaneTabBar(bool firstPane, {TabControllerHelper? tab}) {
@@ -1559,6 +1593,8 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   Widget getScaffoldBodyForPane({required bool firstPane}) {
     return SliverCustomScrollViewDraggable(
+      physics: const AlwaysScrollableScrollPhysics(),
+      forceHeaderToCollapse: widget.forceHeaderToCollapse,
       scrollKey: getScrollKey(firstPane: firstPane),
       tabs: getPaneTabControllerHelper(firstPane: firstPane),
       actions: getAppbarActions(firstPane: firstPane),
@@ -1683,7 +1719,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
         return AnimatedContainer(
             key: UniqueKey(),
             height: _height,
-            width: (_width! -
+            width: (_width -
                     (isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer)
                         .toNonNullable()) -
                 0,

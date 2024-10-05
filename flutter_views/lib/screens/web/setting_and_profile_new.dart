@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
@@ -7,12 +9,14 @@ import 'package:flutter_view_controller/new_screens/home/components/profile/prof
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:flutter_view_controller/utils/util.dart';
 
 class SettingPageNew extends BasePageSecoundPaneNotifier {
   bool isFromMenu;
   String? currentSettingPage;
   SettingPageNew(
       {super.key,
+      super.forceHeaderToCollapse = true,
       super.buildDrawer = false,
       this.currentSettingPage,
       this.isFromMenu = false,
@@ -64,7 +68,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   //   return ActionOnToolbarItem(
   //       actionTitle: AppLocalizations.of(context)!.action_settings);
   // }
-
+  final kk = GlobalKey<BasePageSecoundPaneNotifierState>();
   @override
   List<Widget>? getPaneNotifier(
       {required bool firstPane,
@@ -84,7 +88,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
                 debugPrint("ListTileAdaptive");
                 notify(SecondPaneHelper(title: item.actionTitle, value: item));
               },
-              isSelected: lastItem?.value.hashCode == item.hashCode,
+              isSelected: lastSecondPaneItem?.value.hashCode == item.hashCode,
               child: ListTileAdaptive(
                   isLargeScreen: isLarge,
                   leading: Icon(
@@ -102,30 +106,92 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
         }, childCount: menuItems!.length))
       ];
     }
-    return [
-      if (valueNotifier!.value.icon == Icons.logout)
-        const Logout()
-      else if (valueNotifier.value.icon == Icons.help_outline_rounded)
-        const Help()
-      else if (valueNotifier.value.icon == Icons.admin_panel_settings)
-        const AdminSetting()
-      else if (valueNotifier.value.icon == Icons.local_print_shop)
-        PrintSetting(
-          buildSecondPane: true,
-          valueNotifierIfThirdPane: ValueNotifier(null),
+    if (valueNotifier == null) {
+      return [
+        const SliverFillRemaining(
+          child: Text("valueNotifer==null"),
         )
-      else if (valueNotifier.value.icon == Icons.account_box_outlined)
-        const ProfileEdit()
-      else if (valueNotifier.value.icon == Icons.shopping_basket_rounded)
-        MasterToListFromProfile(
-          pinToolbar: pinToolbar,
-        ),
-    ]
-        .map(
-          (e) => SliverFillRemaining(
-            child: e,
+      ];
+    }
+    return [
+      if (valueNotifier.value.icon == Icons.logout)
+        const SliverFillRemaining(child: Logout())
+      else if (valueNotifier.value.icon == Icons.help_outline_rounded)
+        const SliverFillRemaining(hasScrollBody: true, child: Help())
+      else if (valueNotifier.value.icon == Icons.admin_panel_settings)
+        const SliverFillRemaining(child: AdminSetting())
+      else if (valueNotifier.value.icon == Icons.local_print_shop)
+        SliverFillRemaining(
+          child: PrintSetting(
+            onBuild: onBuild,
+            key: kk,
+            parent: this,
+            buildSecondPane: true,
+            // valueNotifierIfThirdPane: ValueNotifier(null),
           ),
         )
+      else if (valueNotifier.value.icon == Icons.account_box_outlined)
+        const SliverFillRemaining(child: ProfileEdit())
+      else if (valueNotifier.value.icon == Icons.shopping_basket_rounded)
+        SliverFillRemaining(
+            child: MasterToListFromProfile(
+          pinToolbar: pinToolbar,
+        )),
+    ];
+  }
+
+  List<Widget> getHelp() {
+    return [
+      ListTile(
+        title: Text(AppLocalizations.of(context)!.help),
+      ),
+      ListTile(
+        title: Text(AppLocalizations.of(context)!.saffouryPaperLTD),
+        subtitle: Text(Utils.version),
+      ),
+      const Divider(),
+      Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: TextButton(
+            onPressed: () {},
+            child: Text(AppLocalizations.of(context)!.helpCenter)),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: TextButton(
+            onPressed: () {},
+            child: Text(
+              AppLocalizations.of(context)!.contactUs,
+              textAlign: TextAlign.start,
+            )),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: TextButton(
+            onPressed: () {},
+            child: Text(AppLocalizations.of(context)!.license)),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: TextButton(
+            onPressed: () {},
+            child: Text(AppLocalizations.of(context)!.termsAndConitions)),
+      ),
+      const Divider(),
+      ListTile(subtitle: Text(AppLocalizations.of(context)!.copyRight)),
+      const Spacer(),
+      Padding(
+        padding: const EdgeInsets.only(left: 8.0, top: kDefaultPadding),
+        child: TextButton(
+            style: ButtonStyle(
+                foregroundColor: WidgetStateProperty.all<Color>(Colors.orange)),
+            onPressed: () {},
+            child: Text(AppLocalizations.of(context)!.developmentBy)),
+      ),
+    ]
+        .map((p) => SliverToBoxAdapter(
+              child: p,
+            ))
         .toList();
   }
 
@@ -152,5 +218,10 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   @override
   Widget? getAppbarTitle({bool? firstPane, TabControllerHelper? tab}) {
     return null;
+  }
+
+  @override
+  String onActionInitial() {
+    return AppLocalizations.of(context)!.action_settings;
   }
 }

@@ -18,7 +18,7 @@ const double kMobileWidth = 599;
 const double kFoldableSmallTablet = 600;
 const double kLargeTablet = 840;
 const double kDesktopWidth = 1200;
-const double kDrawerOpenWidth = 200;
+const double kDrawerOpenWidth = 400;
 
 const double kDefaultClosedDrawer = 80;
 
@@ -37,8 +37,10 @@ bool isLargeScreenFromScreenSize(CurrentScreenSize? screenSize) {
       screenSize == CurrentScreenSize.LARGE_TABLET;
 }
 
-bool hideHamburger(CurrentScreenSize? screenSize) {
-  return isLargeScreenFromScreenSize(screenSize);
+bool hideHamburger(BuildContext context, {CurrentScreenSize? screenSize}) {
+  return screenSize == null
+      ? isLargeScreenFromCurrentScreenSize(context)
+      : isLargeScreenFromScreenSize(screenSize);
 }
 
 bool showHamburger(CurrentScreenSize? screenSize) {

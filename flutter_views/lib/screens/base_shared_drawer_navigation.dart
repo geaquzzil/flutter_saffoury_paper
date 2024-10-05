@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
@@ -408,7 +409,17 @@ class ThirdToSecondPaneHelper extends SecondPaneHelper {
 class SecondPaneHelper {
   String title;
   dynamic value;
-  SecondPaneHelper({required this.title, this.value});
+  GlobalKey<BasePageSecoundPaneNotifierState>? state;
+  SecondPaneHelper({required this.title, this.value, this.state});
+}
+
+class SecoundPaneHelperWithParent {
+  GlobalKey<BasePageSecoundPaneNotifierState> state;
+  SecondPaneHelper? value;
+  SecoundPaneHelperWithParent({
+    required this.state,
+    this.value,
+  });
 }
 
 class ActionOnToolbar<T extends BasePageSecoundPaneNotifierState>
@@ -416,6 +427,7 @@ class ActionOnToolbar<T extends BasePageSecoundPaneNotifierState>
   List<SecondPaneHelper> actions;
   SecondPaneHelper? selectedItem;
   T widget;
+
   ActionOnToolbar(
       {required this.widget,
       required this.actions,
@@ -435,23 +447,20 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
     debugPrint("_ActionOnToolbarsasState init");
     _actions = widget.actions;
     widget.widget.getSecondPaneNotifier.addListener(onPaneChange);
-    widget.widget.test?.addListener(onSubPaneChanged);
+    widget.widget.onBuild.addListener(onBuild);
     super.initState();
   }
 
   @override
   void dispose() {
     widget.widget.getSecondPaneNotifier.removeListener(onPaneChange);
-    widget.widget.test?.removeListener(onSubPaneChanged);
+
+    // widget.widget.test?.removeListener(onSubPaneChanged);
     super.dispose();
   }
 
   void onPaneChange() {
     add(widget.widget.getSecondPaneNotifier.value);
-  }
-
-  void onSubPaneChanged() {
-    _addSubPane(widget.widget.test?.value);
   }
 
   @override
@@ -465,15 +474,26 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
     super.didUpdateWidget(oldWidget);
   }
 
-  void _addSubPane(SecondPaneHelper? item) {
-    if (item == null) {
-      return;
+  void _addSubPane(SecoundPaneHelperWithParent item) {
+    if (item.value == null) {
+      SecondPaneHelper i = _actions[0];
+      SecondPaneHelper i2 = _actions[1];
+      _actions.clear();
+      _actions = [i, i2];
+    } else {
+      SecondPaneHelper itemToAdd = item.value!..state = item.state;
+      // if (item.subObject != null) {
+      //   _actions.add(item);
+      // } else {
+      if (_actions.length == 2) {
+        _actions.add(itemToAdd);
+      } else {
+        SecondPaneHelper i = _actions[0];
+        SecondPaneHelper i2 = _actions[1];
+        _actions.clear();
+        _actions = [i, i2, itemToAdd];
+      }
     }
-    // if (item.subObject != null) {
-    //   _actions.add(item);
-    // } else {
-
-    _actions.add(item);
     // }
     if (mounted) {
       WidgetsBinding.instance.addPostFrameCallback((s) {
@@ -505,6 +525,21 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
     }
   }
 
+  void onBuild() {
+    // setState(() {});
+    debugPrint("_ActionOnToolbarsasState onBuildCalled");
+    widget.widget.childs?.forEach((o) {
+      debugPrint("_ActionOnToolbarsasState currentState ${o?.currentState}");
+      debugPrint(
+          "_ActionOnToolbarsasState curentState ${(o as GlobalKey<BasePageSecoundPaneNotifierState>).currentState?.getSecondPaneNotifier}");
+      (o).currentState!.getSecondPaneNotifier.addListener(() {
+        debugPrint("_ActionOnToolbarsasState addListinerer");
+        _addSubPane(SecoundPaneHelperWithParent(
+            state: o, value: o.currentState!.getSecondPaneNotifier.value));
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -524,6 +559,16 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
     );
   }
 
+  GlobalKey<BasePageSecoundPaneNotifierState>? getKey(String? title) {
+    if (title == null) return null;
+    return widget.widget.childs?.firstWhereOrNull((i) {
+      if (i is GlobalKey<BasePageSecoundPaneNotifierState>) {
+        return i.currentState?.onActionInitial() == title;
+      }
+      return false;
+    }) as GlobalKey<BasePageSecoundPaneNotifierState>;
+  }
+
   Widget getIconWithText(BuildContext context, SecondPaneHelper item) {
     return InkWell(
         onTap: () {
@@ -532,10 +577,31 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
           debugPrint("_ActionOnToolbarsasState  idx = $idx ");
           if (idx == _actions.length - 1 ||
               (idx == 0 && _actions.length == 1)) {
+            if (idx == _actions.length - 1) {
+              getKey(_actions[idx].title)?.currentState?.notify(null);
+              setState(() {
+                _actions = _actions.sublist(0, idx + 1);
+                debugPrint("_ActionOnToolbarsasState  subList = $_actions ");
+              });
+            }
+
             debugPrint("_ActionOnToolbarsasState return ");
             return;
           }
-          widget.widget.notify(_actions[idx]);
+
+          if (item.state != null) {
+            debugPrint("_ActionOnToolbarsasState item.state != null");
+            item.state?.currentState?.notify(_actions[idx]);
+          } else {
+            if (idx != 0) {}
+            widget.widget.notify(_actions[idx]);
+          }
+          final key = getKey(_actions[idx].title);
+          if (key != null) {
+            key.currentState?.notify(null);
+            // return;
+          }
+
           setState(() {
             _actions = _actions.sublist(0, idx + 1);
             debugPrint("_ActionOnToolbarsasState  subList = $_actions ");

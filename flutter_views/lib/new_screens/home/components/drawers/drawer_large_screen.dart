@@ -39,7 +39,7 @@ class DrawerMenuItem {
     required this.icon,
   });
   String getTooltip() {
-    return this.title;
+    return title;
   }
 }
 
@@ -128,21 +128,24 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
     bool isLarge = isLargeScreenFromCurrentScreenSize(context);
     return Scaffold(
       bottomNavigationBar: !isLarge ? buildDrawerFooter(context, isOpen) : null,
-      body: Card(
-          margin: EdgeInsets.zero,
-          child: SliverCustomScrollView(
-            scrollKey: "drawerScroll",
-            slivers: [
-              SliverPersistentHeader(
-                  pinned: true,
-                  delegate: SliverAppBarDelegatePreferedSize(
-                      shouldRebuildWidget: true,
-                      child: PreferredSize(
-                          preferredSize: const Size.fromHeight(60),
-                          child: buildHeader(context, isOpen)))),
-              ...buildListSlivers(context, isOpen)
-            ],
-          )),
+      body: Padding(
+        padding: const EdgeInsets.all(kDefaultPadding / 2),
+        child: Card(
+            margin: EdgeInsets.zero,
+            child: SliverCustomScrollView(
+              scrollKey: "drawerScroll",
+              slivers: [
+                SliverPersistentHeader(
+                    pinned: true,
+                    delegate: SliverAppBarDelegatePreferedSize(
+                        shouldRebuildWidget: true,
+                        child: PreferredSize(
+                            preferredSize: const Size.fromHeight(60),
+                            child: buildHeader(context, isOpen)))),
+                ...buildListSlivers(context, isOpen)
+              ],
+            )),
+      ),
     );
   }
 

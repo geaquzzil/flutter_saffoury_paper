@@ -35,6 +35,7 @@ class SliverCustomScrollViewDraggable extends StatefulWidget {
   final bool forceBuildAppBar;
   //TODO
   final bool backgroundIsTransperant;
+  final bool forceHeaderToCollapse;
   final Widget? headerWidget;
   final Widget? expandBottomWidget;
   const SliverCustomScrollViewDraggable(
@@ -44,6 +45,7 @@ class SliverCustomScrollViewDraggable extends StatefulWidget {
       this.scrollController,
       this.builder,
       this.pinToolbar = false,
+      this.forceHeaderToCollapse = false,
       this.expandHeaderWidget,
       this.tabs,
       this.expandBottomWidget,
@@ -187,6 +189,7 @@ class _SliverCustomScrollViewDraggableState
   }
 
   bool canExpandBody() {
+    if (widget.forceHeaderToCollapse) return false;
     return isMobile(context);
   }
 
@@ -302,7 +305,11 @@ class _SliverCustomScrollViewDraggableState
       stretch: canExpandBody(),
       title: getSliverTitle(fullyCollapsed),
       collapsedHeight: canExpandBody() ? appBarHeight : null,
-      expandedHeight: fullyExpanded ? fullyExpandedHeight : expandedHeight,
+      expandedHeight: widget.forceHeaderToCollapse
+          ? null
+          : fullyExpanded
+              ? fullyExpandedHeight
+              : expandedHeight,
       flexibleSpace: getFlexibleSpace(
         fullyExpanded,
         fullyCollapsed,
