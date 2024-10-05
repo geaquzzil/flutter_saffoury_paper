@@ -15,7 +15,6 @@ class CardCorner extends Card {
       super.surfaceTintColor,
       this.cornerRedius = 80})
       : super(
-        
             margin: EdgeInsets.all(margin ?? 0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(cornerRedius)),

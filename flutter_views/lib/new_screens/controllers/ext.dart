@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -78,27 +79,30 @@ InputDecoration getDecorationDropdownNewWithLabelAndValue(BuildContext context,
 InputDecoration getDecorationIconLabel(BuildContext context,
     {IconData? icon, required String label}) {
   return InputDecoration(
-      // contentPadding: EdgeInsets.zero,
-      // filled: true,
-      border: const OutlineInputBorder(
+    isDense: true,
+    // contentPadding: EdgeInsets.zero,
+    // filled: true,
+    border: const OutlineInputBorder(
 
         // borderSide: BorderSide(strokeAlign: ),
-          // borderSide: BorderSide.none,
-          // gapPadding: 0,
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      icon: icon == null
-          ? null
-          : Icon(
-              icon,
-              // size: 15,
-            ),
-      labelText: label);
+        // borderSide: BorderSide.none,
+        // gapPadding: 0,
+        borderRadius: BorderRadius.all(Radius.circular(kBorderRadius))),
+    icon: icon == null
+        ? null
+        : Icon(
+            icon,
+            // size: 15,
+          ),
+    // labelText: label
+  );
   // hintText: parent.getTextInputHint(context, field));
 }
 
 InputDecoration getDecorationDropdown(BuildContext context, ViewAbstract parent,
     ViewAbstractEnum viewAbstractEnum, String field) {
   return InputDecoration(
+    
     // filled: true,
     border: const OutlineInputBorder(),
 

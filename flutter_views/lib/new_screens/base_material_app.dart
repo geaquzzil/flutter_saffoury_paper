@@ -124,6 +124,7 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
               14 * scaleFactor; // Base font size multiplied by scaling factor
           return DynamicColorBuilder(
             builder: (lightDynamic, darkDynamic) {
+              const ip = InputDecoration();
               notifyLogoColor(context, lightDynamic, darkDynamic);
               return MaterialApp.router(
                 // scrollBehavior: SizeConfig.isDesktop(context)
@@ -182,12 +183,23 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                     routeGenerator.router.routeInformationProvider,
 
                 theme: ThemeData(
+                  inputDecorationTheme:
+                      Theme.of(context).inputDecorationTheme.copyWith(
+                            isDense: !isDesktopPlatform(),
+                            border: const OutlineInputBorder(
+
+                                // borderSide: BorderSide(strokeAlign: ),
+                                // borderSide: BorderSide.none,
+                                // gapPadding: 0,
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(kBorderRadius))),
+                          ),
                   // textTheme: kIsWeb
                   //     ? GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
                   //         .apply()
                   //     : GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
                   //         .apply(fontSizeDelta: .9, fontSizeFactor: .5),
-                  visualDensity: SizeConfig.isDesktopOrWebPlatform(context)
+                  visualDensity: isDesktopPlatform()
                       ? VisualDensity.comfortable
                       : VisualDensity.compact,
                   // scaffoldBackgroundColor: lightDynamic?.background,
@@ -206,7 +218,53 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                   ),
                 ),
                 darkTheme: ThemeData(
+                  popupMenuTheme: Theme.of(context).popupMenuTheme.copyWith(
+                        // color: Colors.amber,
+
+                        // elevation: Theme.of(context).ele,
+                        elevation: 10,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(kBorderRadius))),
+                      ),
+                      buttonTheme: ButtonThemeData(),
+                  dropdownMenuTheme: Theme.of(context)
+                      .dropdownMenuTheme
+                      .copyWith(
+                        // menuStyle: Theme.of(context).menuTheme.style?.copyWith(
+                        //     padding: ),
+                        textStyle: Theme.of(context).textTheme.bodySmall,
+                        inputDecorationTheme: Theme.of(context)
+                            .inputDecorationTheme
+                            .copyWith(
+                                filled: true,
+                                // fillColor: darkDynamic?.onPrimary,
+                                isDense: isDesktopPlatform(),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8))),
+                      ),
+                  visualDensity: isDesktopPlatform()
+                      ? const VisualDensity(horizontal: -4.0, vertical: -4.0)
+                      : VisualDensity.compact,
                   // fontFamily: GoogleFonts.roboto(height: 1.2).fontFamily,
+                  inputDecorationTheme: Theme.of(context)
+                      .inputDecorationTheme
+                      .copyWith(
+                        isDense: !isDesktopPlatform(),
+                        constraints: isDesktopPlatform()
+                            ? BoxConstraints.tight(const Size.fromHeight(40))
+                            : null,
+                        filled: true,
+                        // fillColor: darkDynamic?.onPrimaryContainer,
+                        border: const OutlineInputBorder(
+                            gapPadding: 0,
+                            borderSide: BorderSide.none,
+                            // borderSide: BorderSide(strokeAlign: ),
+                            // borderSide: BorderSide.none,
+                            // gapPadding: 0,
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(kBorderRadius))),
+                      ),
                   textTheme: kIsWeb
                       ? GoogleFonts.robotoTextTheme(ThemeData.dark().textTheme)
                       : null,

@@ -175,6 +175,14 @@ extension BoolUtils on bool? {
 }
 
 extension StringsUtils on String? {
+  String capitalizeFirstLetter() {
+    if (this == null) return "";
+    if (this!.isEmpty) {
+      return this!; // Return empty string if input is empty
+    }
+    return this![0].toUpperCase() + this!.substring(1);
+  }
+
   bool isNumeric() {
     return double.tryParse(this ?? "") != null;
   }

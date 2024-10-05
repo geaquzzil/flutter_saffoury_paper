@@ -336,9 +336,9 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         ? getPopupMenuActionsEdit(c)
         : getPopupMenuActionsList(c);
     return PopupMenuButton<MenuItemBuild>(
-      elevation: 10,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10))),
+      // elevation: 10,
+      // shape: const RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.all(Radius.circular(10))),
       onSelected: (MenuItemBuild result) {
         onPopupMenuActionSelected(c, result, state: state);
       },

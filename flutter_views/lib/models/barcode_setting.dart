@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 
 // ..baudRate = 9600
@@ -21,7 +23,7 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
   String? defualtBarcodePort;
 
   int? baudRate;
-  int? parity;
+  Parity? parity;
   int? bits;
   int? stopBits;
   List<String>? ports;
@@ -42,7 +44,8 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
   void onDropdownChanged(BuildContext context, String field, value,
       {GlobalKey<FormBuilderState>? formKey}) {
     if (field == "defualtBarcodePort") {
-      defualtBarcodePort = value.toString();
+      defualtBarcodePort = value?.toString();
+      notifyOtherControllers(context: context, formKey: formKey);
     }
     super.onDropdownChanged(context, field, value, formKey: formKey);
   }
@@ -51,7 +54,7 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "defualtBarcodePort": "",
         "baudRate": 9600,
-        "parity": 0,
+        "parity": Parity.none,
         "bits": 8,
         "stopBits": 1,
         "ports": [],
@@ -59,12 +62,12 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {
-        "defualtBarcodePort": Icons.list,
-        "baudRate": Icons.list,
-        "bits": Icons.list,
-        "parity": Icons.list,
-        "stopBits": Icons.list,
-        "ports": Icons.list,
+        "defualtBarcodePort": Icons.usb_rounded,
+        "baudRate": Icons.commit_sharp,
+        "bits": Icons.commit_sharp,
+        "parity": Icons.commit_sharp,
+        "stopBits": Icons.commit_sharp,
+        "ports": Icons.commit_sharp,
       };
   bool isEmptyPorts() {
     return ports == null || (ports != null && ports?.isEmpty == true);
@@ -72,7 +75,7 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "ports":
+        "defualtBarcodePort":
             isEmptyPorts() ? "No available usb devices" : "COM port number",
         "baudRate": "Bits per second",
         "bits": "Data bits",
@@ -85,7 +88,7 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
 
   @override
   List<String> getMainFields({BuildContext? context}) => [
-        "ports",
+        "defualtBarcodePort",
         "baudRate",
         "bits",
         "parity",
@@ -118,18 +121,31 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
   @override
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
 
+  // @override
+  // Map<String, List<String>>? getHasControlersAfterInputtMap(
+  //     BuildContext context) {
+  //   List<String> l = List.from(getMainFields());
+  //   // l.removeWhere((o) => o == "defualtBarcodePort");
+  //   return {"defualtBarcodePort": l};
+  // }
   @override
-  Map<String, List<String>>? getHasControlersAfterInputtMap(
-      BuildContext context) {
-    List<String> l = List.from(getMainFields());
-    l.removeWhere((o) => o == "ports");
-    return {"ports": l};
+  bool isFieldEnabled(String field) {
+    bool res =
+        defualtBarcodePort != null ? true : field == "defualtBarcodePort";
+    debugPrint(
+        "isFieldEnabled defualtBarcodePort => $defualtBarcodePort field=>$field, res=>$res");
+    return res;
   }
 
   @override
   Map<String, List> getTextInputIsAutoCompleteCustomListMap(
       BuildContext context) {
-    return {"ports": ports ?? []};
+    return {
+      "defualtBarcodePort": ports ?? [],
+      "baudRate": bitsList,
+      "bits": databitsList,
+      "stopBits": stopBitsList
+    };
   }
 
   @override
@@ -192,10 +208,90 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
 
   @override
   BarcodeSetting getModifibleSettingObject(BuildContext context) {
-    return BarcodeSetting(ports: SerialPort.availablePorts);
+    BarcodeSetting bs = BarcodeSetting(ports: SerialPort.availablePorts);
+    debugPrint("getModifibleSettingObject ports ${bs.ports}");
+    return bs;
+  }
+
+  @override
+  Future<BarcodeSetting> onModifibleSettingLoaded(BarcodeSetting loaded) async {
+    await Future.delayed(Duration.zero);
+    loaded.ports = SerialPort.availablePorts;
+    return loaded;
   }
 
   @override
   String getModifibleTitleName(BuildContext context) =>
       getMainHeaderLabelTextOnly(context);
 }
+
+const bitsList = [
+  75,
+  110,
+  134,
+  150,
+  300,
+  600,
+  1200,
+  1800,
+  2400,
+  4800,
+  7200,
+  9600,
+  14400,
+  19200,
+  38400,
+  57600,
+  115200,
+  12800
+];
+const databitsList = [4, 5, 6, 7, 8];
+const stopBitsList = [1, 1.5, 2];
+
+enum Parity implements ViewAbstractEnum<Parity> {
+  even(2),
+  mark(3),
+  none(0),
+  odd(1),
+  space(4);
+
+  const Parity(this.value);
+  final int value;
+  @override
+  IconData getMainIconData() {
+    return Icons.commit_sharp;
+  }
+
+  @override
+  IconData getFieldLabelIconData(BuildContext context, Parity field) {
+    return Icons.commit_sharp;
+  }
+
+  @override
+  String getMainLabelText(BuildContext context) {
+    //todo translate
+    return "Parity";
+  }
+
+  @override
+  String getFieldLabelString(BuildContext context, Parity field) {
+    return field.name.toString().capitalizeFirstLetter();
+  }
+
+  @override
+  List<Parity> getValues() => values;
+}
+// Even	2	
+// Sets the parity bit so that the count of bits set is an even number.
+
+// Mark	3	
+// Leaves the parity bit set to 1.
+
+// None	0	
+// No parity check occurs.
+
+// Odd	1	
+// Sets the parity bit so that the count of bits set is an odd number.
+
+// Space	4	
+// Leaves the parity bit set to 0.

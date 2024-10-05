@@ -414,6 +414,10 @@ class _PrintSettingState extends BasePageState<PrintSetting>
                       .getModifibleSettingObjcetSavedValue(context),
                   builder: (c, snapshot) {
                     if (snapshot.hasData) {
+                      if (snapshot.data is BarcodeSetting) {
+                        debugPrint(
+                            "validateObj is BarcodeSetting ${(snapshot.data as BarcodeSetting).ports}");
+                      }
                       return BaseEditWidget(
                         viewAbstract: (snapshot.data!),
                         isTheFirst: true,

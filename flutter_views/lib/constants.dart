@@ -32,7 +32,7 @@ const double kTabletMaxWidth = 760.0;
 double getMobileMaxWidth(BuildContext context) =>
     MediaQuery.of(context).size.width * .8;
 
-const kBorderRadius = 20.0;
+const kBorderRadius = 10.0;
 const kSpacing = 20.0;
 
 const kFontColorPallets = [

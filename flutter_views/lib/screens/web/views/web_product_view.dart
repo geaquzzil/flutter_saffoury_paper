@@ -158,7 +158,7 @@ class WebProductView extends BaseWebPageSliversApi {
           Expanded(
               flex: constraints.maxWidth > 720.0 ? 1 : 0,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(kBorderRadius / 2),
+                borderRadius: BorderRadius.circular(kBorderRadius),
                 child: WebProductImages(
                   item: extras!,
                 ),
