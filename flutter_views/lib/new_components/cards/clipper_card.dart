@@ -45,6 +45,7 @@ class ListTileAdaptive extends ListTile {
     super.visualDensity,
     super.shape,
     super.style,
+    super.contentPadding,
     super.selectedColor,
     super.iconColor,
     super.textColor,
@@ -70,13 +71,13 @@ class ListTileAdaptive extends ListTile {
     super.minLeadingWidth,
     super.minTileHeight,
     super.titleAlignment,
-  }) : super(contentPadding: isLargeScreen ? EdgeInsets.zero : null);
+  }) : super();
   @override
   Widget build(BuildContext context) {
     if (isLargeScreen) {
-      return Container(
-        height: 40,
-        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+      return SizedBox(
+        // height: 40,
+        // padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
         child: super.build(context),
       );
     }

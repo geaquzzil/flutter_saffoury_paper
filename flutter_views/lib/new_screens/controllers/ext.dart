@@ -82,12 +82,12 @@ InputDecoration getDecorationIconLabel(BuildContext context,
     isDense: true,
     // contentPadding: EdgeInsets.zero,
     // filled: true,
-    border: const OutlineInputBorder(
+    // border: const OutlineInputBorder(
 
-        // borderSide: BorderSide(strokeAlign: ),
-        // borderSide: BorderSide.none,
-        // gapPadding: 0,
-        borderRadius: BorderRadius.all(Radius.circular(kBorderRadius))),
+    //     // borderSide: BorderSide(strokeAlign: ),
+    //     // borderSide: BorderSide.none,
+    //     // gapPadding: 0,
+    //     borderRadius: BorderRadius.all(Radius.circular(kBorderRadius))),
     icon: icon == null
         ? null
         : Icon(
@@ -103,7 +103,7 @@ InputDecoration getDecorationDropdown(BuildContext context, ViewAbstract parent,
     ViewAbstractEnum viewAbstractEnum, String field) {
   return InputDecoration(
     // filled: true,
-    border: const OutlineInputBorder(),
+    // border: const OutlineInputBorder(),
 
     icon: Icon(viewAbstractEnum.getMainIconData()),
     // labelText: viewAbstractEnum.getMainLabelText(context)
@@ -161,7 +161,6 @@ InputDecoration getDecorationIconHintPrefix(
     IconData? icon,
     CurrentScreenSize? currentScreenSize}) {
   return InputDecoration(
-    
       icon: icon == null ? null : Icon(icon),
       hintText: hint,
       labelText: label,
@@ -238,7 +237,7 @@ Widget getTextInputController(
     TextInputType? keyboardType}) {
   return TextFormField(
       //  cursorColor: Theme.of(context).cursorColor,
-      decoration: getDecorationTheming(context, theme),
+      // decoration: getDecorationTheming(context, theme),
       initialValue: initialValue,
       onSaved: (newValue) => debugPrint("getTextInputController onSaved"),
       maxLength: 20,

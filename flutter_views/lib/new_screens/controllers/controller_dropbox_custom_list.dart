@@ -73,6 +73,18 @@ class _DropdownCustomListWithFormListenerState
           // contentPadding: EdgeInsets.zero,
           leading: Text(widget.viewAbstract.getFieldLabel(context, _field)),
           title: FormBuilderDropdown<dynamic>(
+            autofocus: false,
+            isExpanded: true,
+            menuMaxHeight: 400, //TODO set dynamic
+            // focusColor: Colors.transparent,
+
+            // style: const TextStyle(fontSize: 10),
+            // selectedItemBuilder: (context) =>
+            //     list.map((o) => Text(o.toString())).toList(),
+            // isDense: true,
+            // itemHeight: ,
+
+            // ,
             borderRadius: BorderRadius.circular(kBorderRadius),
             onSaved: (newValue) {
               widget.viewAbstract.setFieldValue(_field, newValue);

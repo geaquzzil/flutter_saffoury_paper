@@ -17,7 +17,7 @@ class EditControllerCheckBox extends StatelessWidget {
     return Column(
       children: [
         FormBuilderCheckbox(
-        
+          // activeColor: Colors.amber,
           name: viewAbstract.getTag(field),
           title: Text(viewAbstract.getTextCheckBoxTitle(context, field)),
           subtitle:

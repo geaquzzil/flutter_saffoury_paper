@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/size_config.dart';
 
+
+
 extension S on Text {
   // Text adaptive(BuildContext context){
   //   Theme.of(context).

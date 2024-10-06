@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
+import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/settings/language_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -159,7 +160,6 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                 );
               }
 
-              const ip = InputDecoration();
               notifyLogoColor(context, lightDynamic, darkDynamic);
               return MaterialApp.router(
                 // scrollBehavior: SizeConfig.isDesktop(context)
@@ -255,6 +255,17 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                 ),
 
                 darkTheme: ThemeData(
+                  dividerColor: darkColorScheme.outlineVariant,
+                  dividerTheme: DividerThemeData(
+                    endIndent: 4,
+                    indent: 4,
+                    thickness: 1,
+                    color: darkColorScheme.outlineVariant,
+                  ),
+
+                  highlightColor: darkColorScheme.onSurface.withOpacity(.2),
+                  focusColor: darkColorScheme.secondaryContainer,
+                  // bor: ,
                   canvasColor: darkColorScheme.surfaceContainer,
                   // floatingActionButtonTheme: FloatingActionButtonThemeData(highlightElevation: ),
 
@@ -297,32 +308,34 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8))),
                       ),
+
                   visualDensity: isDesktopPlatform()
                       ? const VisualDensity(horizontal: -4.0, vertical: -4.0)
                       : VisualDensity.compact,
+                  listTileTheme: getListTileThemeData(context,
+                      colorScheme: darkColorScheme),
+
+                  //  ListTileThemeData(
+
+                  //     // contentPadding: EdgeInsets.zero,
+                  //     dense: isDesktopPlatform()),
+                  checkboxTheme: const CheckboxThemeData(
+                    // side: BorderSide.none,
+
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    // checkColor: WidgetStateProperty.all(
+                    //     darkColorScheme.onPrimaryContainer),
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(kBorderRadius))
+                        // fillColor: WidgetStateProperty.all(Colors.amberAccent)
+
+                        ),
+                  ),
 
                   // fontFamily: GoogleFonts.roboto(height: 1.2).fontFamily,
-                  inputDecorationTheme: Theme.of(context)
-                      .inputDecorationTheme
-                      .copyWith(
-                        isDense: !isDesktopPlatform(),
-                        constraints: isDesktopPlatform()
-                            ? BoxConstraints.tight(const Size.fromHeight(40))
-                            : null,
-                        filled: true,
-                        fillColor: darkColorScheme.surfaceContainer,
-                        hoverColor: Colors.transparent,
-                        // fillColor: darkDynamic?.onPrimaryContainer,
-                        border: const OutlineInputBorder(
-                            gapPadding: 0,
-                            borderSide: BorderSide.none,
-                            // borderSide: BorderSide(strokeAlign: ),
-                            // borderSide: BorderSide.none,
-                            // gapPadding: 0,
-
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(kBorderRadius))),
-                      ),
+                  inputDecorationTheme:
+                      getMainTheme(context, colorScheme: darkColorScheme),
                   textTheme: kIsWeb
                       ? GoogleFonts.robotoTextTheme(ThemeData.dark().textTheme)
                       : null,

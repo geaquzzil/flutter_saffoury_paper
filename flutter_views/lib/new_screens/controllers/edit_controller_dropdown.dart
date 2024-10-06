@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
@@ -31,7 +32,7 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
       validator: parent.getTextInputValidatorCompose(context, field),
       name: parent.getTag(field),
       initialValue: parent.getFieldValue(field, context: context),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(kBorderRadius)),
       onSaved: (newValue) {
         parent.setFieldValue(field, newValue);
         debugPrint('FormBuilderDropdown onSave=   $newValue');
@@ -39,7 +40,7 @@ class EditControllerDropdown<T extends ViewAbstractEnum>
       runSpacing: 10,
       spacing: 10,
 
-      labelPadding: const EdgeInsets.all(5),
+      // labelPadding: const EdgeInsets.all(5),
       options: dropdownGetValues(enumViewAbstract)
           .map((v) => FormBuilderChipOption(
                 value: v,

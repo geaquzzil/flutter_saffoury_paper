@@ -8,7 +8,6 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
 import 'package:flutter_view_controller/new_screens/controllers/adaptives.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -82,15 +81,24 @@ Widget getContollerCheckBox(BuildContext context,
   return WrapController(
       size: currentScreenSize,
       child: FormBuilderCheckbox(
+        // decoration: const InputDecoration.collapsed(
+        //   hintText: "",
+        // ),
+
+        // shape: ,
+        // activeColor: Colors.amber,
         autovalidateMode: AutovalidateMode.always,
         name: viewAbstract.getTag(field),
+        // decoration: const InputDecoration(
+        //   filled: false,
+        // ),
         // contentPadding: !isDecorationFilled(currentScreenSize)
         //     ? (const EdgeInsets.all(16))
         //     : EdgeInsets.zero,
 
-        shape: currentScreenSize == CurrentScreenSize.DESKTOP
-            ? const CircleBorder()
-            : null,
+        // shape: currentScreenSize == CurrentScreenSize.DESKTOP
+        //     ? const CircleBorder()
+        //     : null,
         initialValue:
             fieldType == int ? (value == true ? 1 : 0) : value ?? false,
         title: Text(viewAbstract.getTextCheckBoxTitle(context, field)),
@@ -226,6 +234,7 @@ Widget getControllerDropdownViewAbstractEnum(BuildContext context,
           debugPrint('getControllerDropdownViewAbstractEnum onChanged=   $obj');
           onSelected(obj);
         },
+        dropdownColor: Colors.deepOrange,
         validator: viewAbstract.getTextInputValidatorCompose(context, field),
         name: viewAbstract.getTag(field),
         initialValue: viewAbstract.getFieldValue(field, context: context),

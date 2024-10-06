@@ -595,11 +595,11 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
             ?.copyWith(color: Theme.of(context).colorScheme.surface);
         double? large = Theme.of(context).textTheme.titleLarge?.fontSize;
         if (states.contains(WidgetState.pressed)) {
-          return style?.copyWith(fontSize: large == null ? 12 : large - 3);
+          return style?.copyWith(fontSize: large == null ? 12 : large - 1);
         }
-        if (states.contains(WidgetState.hovered)) {
-          return style?.copyWith(fontSize: large == null ? 12 : large - 2);
-        }
+        // if (states.contains(WidgetState.hovered)) {
+        //   return style?.copyWith(fontSize: large == null ? 12 : large - 2);
+        // }
         return style;
       }),
     );
