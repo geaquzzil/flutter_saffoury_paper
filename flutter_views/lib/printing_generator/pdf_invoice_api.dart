@@ -1,22 +1,29 @@
 import 'dart:typed_data';
+
+import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart' as mt;
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/printing_generator/print_master.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
-import 'package:flutter/material.dart' as material;
-import 'package:flutter/material.dart' as mt;
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
 import '../models/prints/print_local_setting.dart';
 
 class PdfInvoiceApi<T extends PrintableInvoiceInterface,
     E extends PrintLocalSetting> extends PrintMasterPDF<T, E> {
+  late bool isLabel;
   PdfInvoiceApi(material.BuildContext context, T printObj, {E? printCommand})
       : super(context: context, printObj: printObj, setting: printCommand);
 
   Future<pw.Document> getDocumentP(PdfPageFormat? format) async {
+    this.format = format;
+    isLabel = format == roll80;
     var pdf = await getDocument();
+
     pdf.addPage(getMultiPage(format, header));
 
     return pdf;
@@ -24,10 +31,54 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
     this.format = format;
+    isLabel = format == roll80;
     return (await getDocumentP(format)).save();
   }
 
-  pw.MultiPage getMultiPage(PdfPageFormat? format, pw.Widget header) {
+  List<Page> getPageIfLabel(
+    Document pdf,
+    PdfPageFormat? format,
+  ) {
+    List<PrintableInvoiceInterfaceDetails> details =
+        printObj.getPrintableInvoiceDetailsList();
+    return [
+      // Page(
+      //   pageFormat: format,
+      //   build: (context) {
+      //     return wrapeborderContainer();
+      //   },
+      // ),
+      ...details
+          .map((d) => Page(
+                pageFormat: format,
+                build: (context) {
+                  return wrapeborderContainer(
+                    
+                  );
+                },
+              ))
+          .toList()
+    ];
+  }
+
+  getMultiPage(PdfPageFormat? format, pw.Widget header) {
+    this.format = format;
+    isLabel = format == roll80;
+    if (isLabel) {
+      return MultiPage(
+        pageFormat: format,
+        margin: EdgeInsets.zero,
+        build: (context) {
+          contextPDF = context;
+          return [
+            buildInvoiceMainInfoHeader(),
+            buildSpaceOnInvoice(cm: .5),
+            buildInvoiceMainTable(),
+            buildMainTotal(),
+          ];
+        },
+      );
+    }
     return MultiPage(
       pageFormat: format,
       margin: EdgeInsets.zero,
@@ -318,24 +369,19 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ...totals
-                    .map(
-                      (e) => buildTotalText(
-                          title: e.title,
-                          value: e.description,
-                          color: e.getColor(),
-                          withDivider: totals.indexOf(e) != totals.length - 1),
-                    )
-                    ,
-                ...totalDes
-                    .map((e) => buildTotalText(
-                        size: e.size,
-                        title: e.title,
-                        value: e.description,
-                        color: e.getColor(),
-                        withDivider:
-                            totalDes.indexOf(e) == totalDes.length - 1))
-
+                ...totals.map(
+                  (e) => buildTotalText(
+                      title: e.title,
+                      value: e.description,
+                      color: e.getColor(),
+                      withDivider: totals.indexOf(e) != totals.length - 1),
+                ),
+                ...totalDes.map((e) => buildTotalText(
+                    size: e.size,
+                    title: e.title,
+                    value: e.description,
+                    color: e.getColor(),
+                    withDivider: totalDes.indexOf(e) == totalDes.length - 1))
               ],
             ),
           )),

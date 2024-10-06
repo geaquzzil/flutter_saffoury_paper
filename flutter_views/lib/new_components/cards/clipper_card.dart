@@ -111,38 +111,6 @@ class OnHoverCardWithListTile extends StatelessWidget {
               child: child,
             );
     }
-    // return ValueListenableBuilder(
-    //     valueListenable: _controller,
-    //     builder: (context, states, _) {
-    //       return Card(
-    //         elevation: states.contains(WidgetState.hovered) ? 4 : 0,
-    //         child: TextButton(
-    //           statesController: _controller,
-    //           onPressed: onTap,
-    //           child: child,
-    //         ),
-    //       );
-    //     });
-
-// TextButton(
-//           statesController: _statesController,
-//           style: ButtonStyle(side: WidgetStateProperty.resolveWith((states) {
-//             if (states.contains(WidgetState.pressed)) {
-//               return const BorderSide(color: Colors.black);
-//             }
-//             if (states.contains(WidgetState.hovered)) {
-//               return const BorderSide(color: Colors.deepPurple);
-//             }
-//             return null;
-//           }), backgroundColor: WidgetStateProperty.resolveWith((states) {
-//             if (states.contains(WidgetState.hovered)) {
-//               return Colors.black12;
-//             }
-//             return Colors.transparent;
-//           })),
-//           onPressed: () {},
-//           child: const Text("ABC"),
-//         )
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: onTap,

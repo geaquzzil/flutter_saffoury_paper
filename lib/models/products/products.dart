@@ -66,6 +66,7 @@ import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_re
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_card_item_square.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -1138,7 +1139,7 @@ class Product extends ViewAbstract<Product>
 
   @override
   pdfWidget.Widget? getPrintableWatermark(d.PdfPageFormat? format) {
-    if (format == d.PdfPageFormat.roll80) {
+    if (format == roll80) {
       return null;
     }
     return pdfWidget.FullPage(
@@ -1162,12 +1163,12 @@ class Product extends ViewAbstract<Product>
   Future<List<pdfWidget.Widget>> getPrintableCustomPage(BuildContext context,
       {pdf.PdfPageFormat? format, PrintProduct? setting}) async {
     pdfWidget.Widget? header;
-    if (format != pdf.PdfPageFormat.roll80) {
+    if (format != roll80) {
       header = await buildHeader(setting: setting);
     }
     debugPrint("getPrintableCustomPage generating");
     return [
-      if (format != pdf.PdfPageFormat.roll80)
+      if (format != roll80)
         pdfWidget.Stack(
           alignment: pdfWidget.Alignment.bottomRight,
           fit: pdfWidget.StackFit.loose,
@@ -1754,7 +1755,7 @@ class Product extends ViewAbstract<Product>
     });
 
     return [
-      if (getLastFilterableMap!.isNotEmpty)
+      if (getLastFilterableMap?.isNotEmpty == true)
         InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.filter,
           description: results.join("\n"),

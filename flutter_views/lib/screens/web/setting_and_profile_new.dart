@@ -84,6 +84,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
           bool isLarge = isLargeScreenFromScreenSize(getCurrentScreenSize());
           final item = menuItems![i];
           return OnHoverCardWithListTile(
+              selectedIsClipped: false,
               onTap: () {
                 debugPrint("ListTileAdaptive");
                 notify(SecondPaneHelper(title: item.actionTitle, value: item));
@@ -91,6 +92,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
               isSelected: lastSecondPaneItem?.value.hashCode == item.hashCode,
               child: ListTileAdaptive(
                   isLargeScreen: isLarge,
+                  selected: lastSecondPaneItem?.value.hashCode == item.hashCode,
                   leading: Icon(
                     item.icon,
                     size: isLarge ? 15 : null,

@@ -1,6 +1,5 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/components/expansion_tile_custom_expand_to_card.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
@@ -17,14 +16,20 @@ class MasterFilterableController extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: ExpansionTileCard(
-        context: context,
+      child: ExpansionTile(
         childrenPadding: const EdgeInsets.all(kDefaultPadding / 2),
         title: viewAbstract.getMainLabelText(context),
         leading: Selector<FilterableProvider, int>(
           selector: (p0, p1) =>
               p1.getCount(field: viewAbstract.getForeignKeyName()),
           builder: (context, value, child) {
+            // return Badge(
+
+            //     smallSize: 10,
+            //     largeSize: 15,
+            //     isLabelVisible: value > 0,
+            //     child: viewAbstract.getIcon());
+
             return badges.Badge(
               badgeStyle: badges.BadgeStyle(
                 shape: badges.BadgeShape.circle,

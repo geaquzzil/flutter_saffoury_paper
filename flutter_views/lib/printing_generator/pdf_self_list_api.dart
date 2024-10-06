@@ -91,6 +91,7 @@ class PdfSelfListApi<T extends PrintLocalSetting>
   }
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
+    material.debugPrint("generate self_list");
     await init();
     var pdf = await getDocument();
     if (hasGroupBy()) {
@@ -115,22 +116,6 @@ class PdfSelfListApi<T extends PrintLocalSetting>
         pdf.addPage(await getMultiPageGrouped(format, header,
             d.keys.elementAt(i), d.values.elementAt(i).cast(), i));
       }
-      // d.forEach((key, value) async {
-      //   pdf.addPage(
-      //       await getMultiPageGrouped(format, header, key, value.cast(), idx));
-      //   idx = idx + 1;
-      // });
-      // for (int i = 0; i < data.length - 1; i++) {
-      //   if (i == index) {
-      //     d =
-      //   } else {}
-      // }
-      // totalList =
-      //     await printObj.getPrintableSelfListTotal(context, list, setting);
-      // totalDescriptionList = await printObj.getPrintableSelfListTotalDescripton(
-      //     context, list, setting);
-      // accountInfoList = await printObj.getPrintableSelfListAccountInfoInBottom(
-      //     context, list, setting);
     } else {
       pdf.addPage(await getMultiPage(format, header));
     }

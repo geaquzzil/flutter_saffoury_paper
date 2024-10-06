@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
-import 'package:flutter_view_controller/components/expansion_tile_custom_expand_to_card.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 
 class GoodsInventoryListCard extends StatelessWidget {
@@ -84,8 +83,8 @@ class GoodsInventoryListCard extends StatelessWidget {
     return Card(
       elevation: 10,
       // color: getCardColor(context),
-      child: ExpansionTileCard(
-        context: context,
+      child: ExpansionTile(
+        // context: context,
         leading: product.getCardLeading(context),
         title: product.getMainHeaderText(context),
         trailing: getTrailing(context),

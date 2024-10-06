@@ -16,9 +16,7 @@ class PrintMasterPDF<T extends PrintableMasterEmpty,
   T printObj;
 
   PrintMasterPDF(
-      {required super.context,
-      required this.printObj,
-      super.setting});
+      {required super.context, required this.printObj, super.setting});
 
   @override
   Future<Widget> buildHeader() async {
@@ -159,6 +157,13 @@ class PrintMasterPDFUtils<T extends PrintLocalSetting> {
 
   bool isArabic() {
     return false;
+  }
+
+  Widget wrapeborderContainer(Widget child, {double padding = 0}) {
+    return Container(
+        padding: EdgeInsets.all(padding),
+        decoration: BoxDecoration(border: Border.all()),
+        child: child);
   }
 
   int compareDynamic(bool ascending, dynamic value1, dynamic value2) {

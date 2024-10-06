@@ -344,7 +344,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
           await Printing.listPrinters().then((pr) => pr.firstWhereOrNull(
                 (p0) =>
                     p0.name ==
-                    ((format == pdf.PdfPageFormat.roll80)
+                    ((format == roll80)
                         ? p.defaultLabelPrinter
                         : p.defaultPrinter),
               ));

@@ -4,6 +4,7 @@ import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
+import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 
@@ -38,7 +39,7 @@ class ProductLabelPDF {
   }
 
   Widget generate() {
-    isLabel = format == PdfPageFormat.roll80;
+    isLabel = format == roll80;
     Widget? barcode = buildBarCodeIfFounded();
 
     if (isLabel) {

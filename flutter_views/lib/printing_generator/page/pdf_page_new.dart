@@ -29,6 +29,13 @@ import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
+const double point = 1.0;
+const double inch = 72.0;
+const double cm = inch / 2.54;
+const double mm = inch / 25.4;
+const PdfPageFormat roll80 =
+    PdfPageFormat(80 * mm, 120 * mm, marginAll: 2 * mm);
+
 class PdfPageNew<T extends PrintLocalSetting> extends BasePageApi {
   bool buildBaseHeader;
   List<PrintableMaster>? asList;
@@ -169,6 +176,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
             SizedBox(
               width: getSizeOfController(),
               child: DropdownStringListControllerListener(
+                insetFirstIsSelect: false,
                 tag: "printOptions",
                 onSelected: (object) {
                   if (object != null) {
@@ -185,7 +193,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
                     } else {
                       //todo translate
                       if (supportsLabelPrinting()) {
-                        chosedPageFormat = PdfPageFormat.roll80;
+                        chosedPageFormat = roll80;
                       } else {
                         chosedPageFormat = PdfPageFormat.a4;
                       }
@@ -355,7 +363,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
 
   Widget getPdfPreview(PdfPageFormat fomat) {
     return PdfPreview(
-        pages: const [0, 1],
+        // pages: const [0, 1],///TODO
         pdfFileName: getExtras()!.getPrintableQrCodeID(),
         shareActionExtraEmails: const ["info@saffoury.com"],
         maxPageWidth: getWidth,

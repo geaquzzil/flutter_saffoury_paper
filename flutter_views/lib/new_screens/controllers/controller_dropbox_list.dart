@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
 import 'package:flutter_view_controller/size_config.dart';
 
 import '../../new_components/text_bold.dart';
@@ -8,6 +7,7 @@ import '../../new_components/text_bold.dart';
 class DropdownStringListControllerListener extends StatelessWidget {
   String tag;
   String hint;
+  bool insetFirstIsSelect;
   List<DropdownStringListItem?> list;
 
   IconData? icon;
@@ -19,10 +19,13 @@ class DropdownStringListControllerListener extends StatelessWidget {
       required this.tag,
       required this.hint,
       required this.list,
+      this.insetFirstIsSelect = true,
       this.icon,
       this.currentScreenSize,
       required this.onSelected}) {
-    list.insert(0, null);
+    if (insetFirstIsSelect) {
+      list.insert(0, null);
+    }
   }
 
   @override
@@ -30,8 +33,8 @@ class DropdownStringListControllerListener extends StatelessWidget {
     return FormBuilderDropdown(
       // itemHeight: 50,
       name: tag,
-      decoration: getDecorationIconHintPrefix(
-          hint: hint, icon: icon, currentScreenSize: currentScreenSize),
+      // decoration: getDecorationIconHintPrefix(
+      //     hint: hint, icon: icon, currentScreenSize: currentScreenSize),
       // decoration: getDecorationDropdownNewWithLabelAndValue(context),
       items: list
           .map((item) => DropdownMenuItem(

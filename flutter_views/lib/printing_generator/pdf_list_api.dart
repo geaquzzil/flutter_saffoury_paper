@@ -1,19 +1,20 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:flutter/material.dart' as material;
+import 'package:flutter/services.dart' show Uint8List, rootBundle;
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_custom_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
 import '../interfaces/printable/printable_bill_interface.dart';
 import '../interfaces/printable/printable_custom_interface.dart';
 import '../interfaces/printable/printable_invoice_interface.dart';
 import '../interfaces/printable/printable_master.dart';
 import '../models/prints/print_local_setting.dart';
-import 'package:flutter/material.dart' as material;
-import 'package:flutter/services.dart' show Uint8List, rootBundle;
 
 class PDFListApi<T extends PrintLocalSetting> {
   List<PrintableMaster<T>> list;
@@ -33,6 +34,7 @@ class PDFListApi<T extends PrintLocalSetting> {
   }
 
   Future<Uint8List> generate(PdfPageFormat? format) async {
+    material.debugPrint("generate listApi");
     final pdf = Document(
         title:
             "${(list[0] as ViewAbstract).getMainHeaderLabelTextOnly(context)} ${AppLocalizations.of(context)!.list}",
@@ -42,14 +44,14 @@ class PDFListApi<T extends PrintLocalSetting> {
         pageMode: PdfPageMode.fullscreen,
         theme: await getThemeData());
 
-    var header;
+    Widget? header;
     await Future.forEach<PrintableMaster<T>>(list, (obj) async {
       if (obj is PrintableInvoiceInterface) {
         final itemPdf = PdfInvoiceApi<PrintableInvoiceInterface, T>(
             context, obj as PrintableInvoiceInterface,
             printCommand: setting);
         header ??= await itemPdf.buildHeader();
-        pdf.addPage(itemPdf.getMultiPage(format, header));
+        pdf.addPage(itemPdf.getMultiPage(format, header!));
       } else if (obj is PrintableCustomInterface) {
         final itemPdf = PdfCustom<PrintableCustomInterface, T>(
             context, obj as PrintableCustomInterface,
@@ -69,7 +71,7 @@ class PDFListApi<T extends PrintLocalSetting> {
             context, obj as PrintableReceiptInterface,
             printCommand: setting);
         header ??= await itemPdf.buildHeader();
-        pdf.addPage(await itemPdf.getPage(format, header));
+        pdf.addPage(await itemPdf.getPage(format, header!));
       }
     });
     // list.forEach((obj) {});

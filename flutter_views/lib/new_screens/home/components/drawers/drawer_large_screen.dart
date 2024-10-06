@@ -460,7 +460,7 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
         shape: RoundedRectangleBorder(
           side: BorderSide(color: Theme.of(context).colorScheme.surface),
           borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(25), topLeft: Radius.circular(25)),
+              bottomLeft: Radius.circular(24), topLeft: Radius.circular(24)),
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -482,6 +482,7 @@ class DrawerListTileDesktopClosed extends StatelessWidget {
         child: Text(
           item.title,
           overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.bodySmall,
         ),
       )
     ]);
