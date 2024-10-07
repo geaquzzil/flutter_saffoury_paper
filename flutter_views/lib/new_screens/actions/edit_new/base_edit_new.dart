@@ -282,8 +282,6 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
           children: form);
     } else {
       return getExpansionTileCustom(context, form);
-      return wrapController(getExpansionTileCustom(context, form),
-          isExpansionTile: true, requiredSpace: true);
     }
   }
 
@@ -586,6 +584,9 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
       fieldValue.setParent(_viewAbstract);
       if (textFieldTypeVA == ViewAbstractControllerInputType.MULTI_CHIPS_API) {
         return wrapController(
+            context: context,
+            icon: fieldValue.getTextInputIconData(field),
+            title: fieldValue.getTextInputLabel(context, field) ?? "-",
             EditControllerChipsFromViewAbstract(
                 enabled: isFieldEnabled(field),
                 parent: _viewAbstract,
@@ -596,6 +597,9 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
       } else if (textFieldTypeVA ==
           ViewAbstractControllerInputType.DROP_DOWN_API) {
         return wrapController(
+            context: context,
+            icon: fieldValue.getTextInputIconData(field),
+            title: fieldValue.getTextInputLabel(context, field) ?? "-",
             EditControllerDropdownFromViewAbstract(
                 formKey: formKey,
                 enabled: isFieldEnabled(field),
@@ -662,6 +666,9 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
       );
     } else if (fieldValue is ViewAbstractEnum) {
       return wrapController(
+          context: context,
+          icon: fieldValue.getFieldLabelIconData(context, fieldValue),
+          title: fieldValue.getMainLabelText(context) ?? "-",
           EditControllerDropdown(
               parent: _viewAbstract,
               enumViewAbstract: fieldValue,
@@ -698,6 +705,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
               currentScreenSize: widget.currentScreenSize);
         } else {
           return getControllerEditText(context,
+              withDecoration: true,
               viewAbstract: _viewAbstract,
               field: field,
               controller:

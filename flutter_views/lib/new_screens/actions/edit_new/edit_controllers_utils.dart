@@ -8,8 +8,9 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
-import 'package:flutter_view_controller/new_screens/controllers/adaptives.dart';
+import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 
@@ -18,26 +19,27 @@ import '../../controllers/ext.dart';
 Widget wrapController(Widget controller,
     {bool? requiredSpace,
     bool? isExpansionTile,
-    CurrentScreenSize? currentScreenSize}) {
-  return controller;
+    CurrentScreenSize? currentScreenSize,
+    required String title,
+    required IconData? icon,
+    required BuildContext context}) {
+  // return controller;
+  bool isLarge = isLargeScreen(context);
+  if (isLarge) {
+    return ListTileSameSizeOnTitle(leading: Text(title), title: controller ,icon:icon);
+  }
   return Column(
     children: [
       Padding(
-        padding: (isExpansionTile ?? false)
-            ? EdgeInsets.zero
-            : EdgeInsets.symmetric(
-                // vertical: 0,
-                vertical: currentScreenSize == CurrentScreenSize.DESKTOP
-                    ? kDefaultPadding * .1
-                    : kDefaultPadding * .5,
-              ),
-        child:
-            //TODO Windows Controllers
-
-            SizedBox(height: 40, child: controller),
-      ),
-      // if (currentScreenSize != CurrentScreenSize.DESKTOP)
-      // if (requiredSpace ?? false) getSpace()
+          padding: (isExpansionTile ?? false)
+              ? EdgeInsets.zero
+              : EdgeInsets.symmetric(
+                  // vertical: 0,
+                  vertical: currentScreenSize == CurrentScreenSize.DESKTOP
+                      ? kDefaultPadding * .1
+                      : kDefaultPadding * .5,
+                ),
+          child: controller),
     ],
   );
 }
@@ -78,9 +80,11 @@ Widget getContollerCheckBox(BuildContext context,
     CurrentScreenSize? currentScreenSize}) {
   Type? fieldType = viewAbstract.getMirrorFieldType(field);
 
-  return WrapController(
-      size: currentScreenSize,
-      child: FormBuilderCheckbox(
+  return wrapController(
+      context: context,
+      icon: viewAbstract.getTextInputIconData(field),
+      title: viewAbstract.getTextInputLabel(context, field) ?? "-",
+      FormBuilderCheckbox(
         // decoration: const InputDecoration.collapsed(
         //   hintText: "",
         // ),
@@ -128,6 +132,9 @@ Widget getContolerColorPicker(BuildContext context,
   debugPrint("getContolerColorPicker field : $field value:$value");
 
   return wrapController(
+      context: context,
+      icon: viewAbstract.getTextInputIconData(field),
+      title: viewAbstract.getTextInputLabel(context, field) ?? "-",
       FormBuilderColorPickerField(
         enabled: enabled,
         initialValue: (value is String) ? value.fromHex() : value?.fromHex(),
@@ -156,6 +163,9 @@ Widget getControllerDateTime(BuildContext context,
     CurrentScreenSize? currentScreenSize}) {
   debugPrint("getControllerDateTime field : $field value:$value");
   return wrapController(
+      context: context,
+      icon: viewAbstract.getTextInputIconData(field),
+      title: viewAbstract.getTextInputLabel(context, field) ?? "-",
       FormBuilderDateTimePicker(
         enabled: enabled,
         initialValue: (value as String?).toDateTime(),
@@ -188,6 +198,9 @@ Widget getControllerDropdownCustomList(BuildContext context,
     CurrentScreenSize? currentScreenSize}) {
   debugPrint("getControllerDropdownCustomList field = $field  list=> $list");
   return wrapController(
+      context: context,
+      icon: viewAbstract.getTextInputIconData(field),
+      title: viewAbstract.getTextInputLabel(context, field) ?? "-",
       FormBuilderDropdown<dynamic>(
         autovalidateMode: AutovalidateMode.always,
         onChanged: (obj) {
@@ -226,6 +239,9 @@ Widget getControllerDropdownViewAbstractEnum(BuildContext context,
     required Function(ViewAbstractEnum? selectedEnum) onSelected,
     CurrentScreenSize? currentScreenSize}) {
   return wrapController(
+      context: context,
+      icon: viewAbstract.getTextInputIconData(field),
+      title: viewAbstract.getTextInputLabel(context, field) ?? "-",
       FormBuilderDropdown<ViewAbstractEnum?>(
         autovalidateMode: AutovalidateMode.always,
         onChanged: (obj) {
@@ -270,6 +286,9 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
   // );
 
   return wrapController(
+      context: context,
+      icon: viewAbstract.getTextInputIconData(field),
+      title: viewAbstract.getTextInputLabel(context, field) ?? "-",
       FormBuilderTypeAheadCustom<ViewAbstract>(
           hideOnEmpty: true,
           onTap: () => controller.selection = TextSelection(
@@ -394,6 +413,9 @@ Widget getControllerEditTextViewAbstractAutoCompleteNewIfNotFoundAsOneField(
 
   String oneFieldName = viewAbstract.getMainFields(context: context)[0];
   return wrapController(
+      context: context,
+      icon: viewAbstract.getTextInputIconData(field),
+      title: viewAbstract.getTextInputLabel(context, field) ?? "-",
       FormBuilderTypeAheadCustom<ViewAbstract>(
           onTap: () => controller.selection = TextSelection(
               baseOffset: 0, extentOffset: controller.value.text.length),
@@ -502,6 +524,9 @@ Widget getControllerEditTextAutoComplete(BuildContext context,
     bool enabled = true,
     CurrentScreenSize? currentScreenSize}) {
   return wrapController(
+      context: context,
+      icon: viewAbstract.getTextInputIconData(field),
+      title: viewAbstract.getTextInputLabel(context, field) ?? "-",
       FormBuilderTypeAheadCustom<String>(
           onTap: () => controller.selection = TextSelection(
               baseOffset: 0, extentOffset: controller.value.text.length),
@@ -563,6 +588,9 @@ Widget getControllerEditText(BuildContext context,
   debugPrint(
       "getControllerEditText field $field length ${viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0}  currentScreenSize $currentScreenSize");
   return wrapController(
+      context: context,
+      icon: viewAbstract.getTextInputIconData(field),
+      title: viewAbstract.getTextInputLabel(context, field) ?? "-",
       FormBuilderTextField(
         onTap: () => controller.selection = TextSelection(
             baseOffset: 0, extentOffset: controller.value.text.length),

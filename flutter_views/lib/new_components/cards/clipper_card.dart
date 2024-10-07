@@ -11,23 +11,43 @@ import 'package:flutter_view_controller/screens/on_hover_button.dart';
 
 class ListTileSameSizeOnTitle extends StatelessWidget {
   final Widget? leading;
+  final IconData? icon;
   final Widget? title;
-  const ListTileSameSizeOnTitle({super.key, this.leading, this.title});
+  const ListTileSameSizeOnTitle(
+      {super.key, this.leading, this.title, this.icon});
+
+  Widget? getLeading() {
+    if (leading == null) return null;
+    if (icon == null) {
+      return leading;
+    }
+    return Row(
+      children: [
+        Icon(icon!),
+        const SizedBox(
+          width: kDefaultPadding,
+        ),
+        leading!
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-        builder: (context, constraints) => ListTile(
-              // visualDensity: VisualDensity.compact,
-              leading: SizedBox(
-                width: constraints.maxWidth * .3,
-                child: leading,
-              ),
-              // dense: true,
-              title: SizedBox(
-                width: constraints.maxWidth * .7,
-                child: title,
-              ),
-            ));
+      builder: (width, constrants) {
+        return ListTile(
+          leading: Container(
+            constraints: const BoxConstraints(minWidth: 50, maxWidth: 150),
+            child: getLeading(),
+          ),
+          title: Container(
+            constraints: BoxConstraints(minWidth: constrants.maxWidth - 20),
+            child: title,
+          ),
+        );
+      },
+    );
   }
 }
 

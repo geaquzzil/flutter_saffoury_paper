@@ -69,187 +69,186 @@ class _DropdownCustomListWithFormListenerState
     ];
     debugPrint("DropdownCustomListWithFormListener list $list");
     return wrapController(
-        ListTileSameSizeOnTitle(
-          // contentPadding: EdgeInsets.zero,
-          leading: Text(widget.viewAbstract.getFieldLabel(context, _field)),
-          title: FormBuilderDropdown<dynamic>(
-            autofocus: false,
-            isExpanded: true,
-            menuMaxHeight: 400, //TODO set dynamic
-            // focusColor: Colors.transparent,
+      context: context,
+       icon: widget.viewAbstract.getTextInputIconData(_field),
+      title: widget.viewAbstract.getTextInputLabel(context, _field) ?? "-",
+      FormBuilderDropdown<dynamic>(
+        autofocus: false,
+        isExpanded: true,
+        menuMaxHeight: 400, //TODO set dynamic
+        // focusColor: Colors.transparent,
 
-            // style: const TextStyle(fontSize: 10),
-            // selectedItemBuilder: (context) =>
-            //     list.map((o) => Text(o.toString())).toList(),
-            // isDense: true,
-            // itemHeight: ,
+        // style: const TextStyle(fontSize: 10),
+        // selectedItemBuilder: (context) =>
+        //     list.map((o) => Text(o.toString())).toList(),
+        // isDense: true,
+        // itemHeight: ,
 
-            // ,
-            borderRadius: BorderRadius.circular(kBorderRadius),
-            onSaved: (newValue) {
-              widget.viewAbstract.setFieldValue(_field, newValue);
-              debugPrint('FormBuilderDropdown onSave=   $newValue');
-            },
+        // ,
+        borderRadius: BorderRadius.circular(kBorderRadius),
+        onSaved: (newValue) {
+          widget.viewAbstract.setFieldValue(_field, newValue);
+          debugPrint('FormBuilderDropdown onSave=   $newValue');
+        },
 
-            // dropdownColor: Colors.orange,
-            // iconSize: 15,
-            // selectedItemBuilder: (context) => [const Text("das")],
+        // dropdownColor: Colors.orange,
+        // iconSize: 15,
+        // selectedItemBuilder: (context) => [const Text("das")],
 
-            // autovalidateMode: AutovalidateMode.onUserInteraction,
-            // itemHeight: 48,
+        // autovalidateMode: AutovalidateMode.onUserInteraction,
+        // itemHeight: 48,
 
-            onChanged: (obj) {
-              widget.viewAbstract.onDropdownChanged(context, _field, obj,
-                  formKey: widget.formKey);
-              widget.viewAbstract.setFieldValue(_field, obj);
-              debugPrint(
-                  'getControllerDropdownCustomList onChanged= field= $_field value=   $obj');
-              widget.onSelected(obj);
-            },
-            onReset: () {
-              debugPrint("getControllerDropdownCustomList onReset");
-              debugPrint(
-                  "getControllerDropdownCustomList onReset list ${widget.viewAbstract.getTextInputIsAutoCompleteCustomListMap(context)[_field]!}");
-              setState(() {
-                list = widget.viewAbstract
-                    .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
-                //on reset list then updated initialValue not set this funcion to set the initalValue is selected
-              });
-            },
-            validator: widget.viewAbstract
-                .getTextInputValidatorCompose(context, _field),
-            name: widget.viewAbstract.getTag(_field),
-            // initialValue: list.firstWhereOrNull((p0) =>
-            //     widget.viewAbstract.getFieldValue(_field, context: context) ==
-            //     p0),
-            initialValue:
-                widget.viewAbstract.getFieldValue(_field, context: context),
+        onChanged: (obj) {
+          widget.viewAbstract
+              .onDropdownChanged(context, _field, obj, formKey: widget.formKey);
+          widget.viewAbstract.setFieldValue(_field, obj);
+          debugPrint(
+              'getControllerDropdownCustomList onChanged= field= $_field value=   $obj');
+          widget.onSelected(obj);
+        },
+        onReset: () {
+          debugPrint("getControllerDropdownCustomList onReset");
+          debugPrint(
+              "getControllerDropdownCustomList onReset list ${widget.viewAbstract.getTextInputIsAutoCompleteCustomListMap(context)[_field]!}");
+          setState(() {
+            list = widget.viewAbstract
+                .getTextInputIsAutoCompleteCustomListMap(context)[_field]!;
+            //on reset list then updated initialValue not set this funcion to set the initalValue is selected
+          });
+        },
+        validator:
+            widget.viewAbstract.getTextInputValidatorCompose(context, _field),
+        name: widget.viewAbstract.getTag(_field),
+        // initialValue: list.firstWhereOrNull((p0) =>
+        //     widget.viewAbstract.getFieldValue(_field, context: context) ==
+        //     p0),
+        initialValue:
+            widget.viewAbstract.getFieldValue(_field, context: context),
 // decoration: getDecorationIconLabel(
 //             context,
 //             label: widget.viewAbstract.getFieldLabel(context, _field),
 //             // icon: widget.viewAbstract.getFieldIconDataNullAccepted(_field)
 //           ),
-            // decoration: const InputDecoration.collapsed(hintText: ""),
-            items: list
-                .map((item) => DropdownMenuItem<dynamic>(
-                      value: item,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            widget.viewAbstract.getFieldIconData(_field),
-                            size: 15,
-                          ),
-                          const SizedBox(
-                            width: kDefaultPadding / 2,
-                          ),
-                          Text(
-                            item == null
-                                ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
-                                : item.toString(),
-                            style: Theme.of(context).textTheme.bodySmall,
-                          )
-                        ],
-
-                        // contentPadding: EdgeInsets.zero,
-                        // leading: const Icon(
-                        //   Icons.print,
-                        //   // size: 15,
-                        // ),
-                        // title: Text(
-                        //   item == null
-                        //       ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
-                        //       : item.toString(),
-                        //   style: Theme.of(context).textTheme.bodySmall,
-                        // ),
+        // decoration: const InputDecoration.collapsed(hintText: ""),
+        items: list
+            .map((item) => DropdownMenuItem<dynamic>(
+                  value: item,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        widget.viewAbstract.getFieldIconData(_field),
+                        size: 15,
                       ),
-                    ))
-                .toList(),
-          ),
+                      const SizedBox(
+                        width: kDefaultPadding / 2,
+                      ),
+                      Text(
+                        item == null
+                            ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
+                            : item.toString(),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      )
+                    ],
 
-          // children: [
-          //   Expanded(
-          //       child:
-          //           Text(widget.viewAbstract.getFieldLabel(context, _field))),
-          //   Expanded(
-          //     flex: 3,
-          //     child: FormBuilderDropdown<dynamic>(
-          //       // iconSize: 15,
-          //       // selectedItemBuilder: (context) => [const Text("das")],
+                    // contentPadding: EdgeInsets.zero,
+                    // leading: const Icon(
+                    //   Icons.print,
+                    //   // size: 15,
+                    // ),
+                    // title: Text(
+                    //   item == null
+                    //       ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
+                    //       : item.toString(),
+                    //   style: Theme.of(context).textTheme.bodySmall,
+                    // ),
+                  ),
+                ))
+            .toList(),
+      ),
 
-          //       autovalidateMode: AutovalidateMode.onUserInteraction,
-          //       // itemHeight: 48,
+      // children: [
+      //   Expanded(
+      //       child:
+      //           Text(widget.viewAbstract.getFieldLabel(context, _field))),
+      //   Expanded(
+      //     flex: 3,
+      //     child: FormBuilderDropdown<dynamic>(
+      //       // iconSize: 15,
+      //       // selectedItemBuilder: (context) => [const Text("das")],
 
-          //       onChanged: (obj) {
-          //         widget.viewAbstract.onDropdownChanged(context, _field, obj,
-          //             formKey: widget.formKey);
-          //         widget.viewAbstract.setFieldValue(_field, obj);
-          //         debugPrint(
-          //             'getControllerDropdownCustomList onChanged= field= $_field value=   $obj');
-          //         widget.onSelected(obj);
-          //       },
-          //       onReset: () {
-          //         debugPrint("getControllerDropdownCustomList onReset");
-          //         debugPrint(
-          //             "getControllerDropdownCustomList onReset list ${widget.viewAbstract.getTextInputIsAutoCompleteCustomListMap(context)[_field]!}");
-          //         setState(() {
-          //           list = widget.viewAbstract
-          //               .getTextInputIsAutoCompleteCustomListMap(
-          //                   context)[_field]!;
-          //           //on reset list then updated initialValue not set this funcion to set the initalValue is selected
-          //         });
-          //       },
-          //       validator: widget.viewAbstract
-          //           .getTextInputValidatorCompose(context, _field),
-          //       name: widget.viewAbstract.getTag(_field),
-          //       // initialValue: list.firstWhereOrNull((p0) =>
-          //       //     widget.viewAbstract.getFieldValue(_field, context: context) ==
-          //       //     p0),
-          //       initialValue:
-          //           widget.viewAbstract.getFieldValue(_field, context: context),
+      //       autovalidateMode: AutovalidateMode.onUserInteraction,
+      //       // itemHeight: 48,
 
-          //       decoration: const InputDecoration.collapsed(hintText: ""),
-          //       items: list
-          //           .map((item) => DropdownMenuItem<dynamic>(
-          //                 value: item,
-          //                 child: Row(
-          //                   crossAxisAlignment: CrossAxisAlignment.start,
-          //                   mainAxisAlignment: MainAxisAlignment.start,
-          //                   children: [
-          //                     Icon(
-          //                       widget.viewAbstract.getFieldIconData(_field),
-          //                       size: 15,
-          //                     ),
-          //                     const SizedBox(
-          //                       width: kDefaultPadding / 2,
-          //                     ),
-          //                     Text(
-          //                       item == null
-          //                           ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
-          //                           : item.toString(),
-          //                       style: Theme.of(context).textTheme.bodySmall,
-          //                     )
-          //                   ],
+      //       onChanged: (obj) {
+      //         widget.viewAbstract.onDropdownChanged(context, _field, obj,
+      //             formKey: widget.formKey);
+      //         widget.viewAbstract.setFieldValue(_field, obj);
+      //         debugPrint(
+      //             'getControllerDropdownCustomList onChanged= field= $_field value=   $obj');
+      //         widget.onSelected(obj);
+      //       },
+      //       onReset: () {
+      //         debugPrint("getControllerDropdownCustomList onReset");
+      //         debugPrint(
+      //             "getControllerDropdownCustomList onReset list ${widget.viewAbstract.getTextInputIsAutoCompleteCustomListMap(context)[_field]!}");
+      //         setState(() {
+      //           list = widget.viewAbstract
+      //               .getTextInputIsAutoCompleteCustomListMap(
+      //                   context)[_field]!;
+      //           //on reset list then updated initialValue not set this funcion to set the initalValue is selected
+      //         });
+      //       },
+      //       validator: widget.viewAbstract
+      //           .getTextInputValidatorCompose(context, _field),
+      //       name: widget.viewAbstract.getTag(_field),
+      //       // initialValue: list.firstWhereOrNull((p0) =>
+      //       //     widget.viewAbstract.getFieldValue(_field, context: context) ==
+      //       //     p0),
+      //       initialValue:
+      //           widget.viewAbstract.getFieldValue(_field, context: context),
 
-          //                   // contentPadding: EdgeInsets.zero,
-          //                   // leading: const Icon(
-          //                   //   Icons.print,
-          //                   //   // size: 15,
-          //                   // ),
-          //                   // title: Text(
-          //                   //   item == null
-          //                   //       ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
-          //                   //       : item.toString(),
-          //                   //   style: Theme.of(context).textTheme.bodySmall,
-          //                   // ),
-          //                 ),
-          //               ))
-          //           .toList(),
-          //     ),
-          //   ),
-          // ],
-        ),
-        requiredSpace: true);
+      //       decoration: const InputDecoration.collapsed(hintText: ""),
+      //       items: list
+      //           .map((item) => DropdownMenuItem<dynamic>(
+      //                 value: item,
+      //                 child: Row(
+      //                   crossAxisAlignment: CrossAxisAlignment.start,
+      //                   mainAxisAlignment: MainAxisAlignment.start,
+      //                   children: [
+      //                     Icon(
+      //                       widget.viewAbstract.getFieldIconData(_field),
+      //                       size: 15,
+      //                     ),
+      //                     const SizedBox(
+      //                       width: kDefaultPadding / 2,
+      //                     ),
+      //                     Text(
+      //                       item == null
+      //                           ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
+      //                           : item.toString(),
+      //                       style: Theme.of(context).textTheme.bodySmall,
+      //                     )
+      //                   ],
+
+      //                   // contentPadding: EdgeInsets.zero,
+      //                   // leading: const Icon(
+      //                   //   Icons.print,
+      //                   //   // size: 15,
+      //                   // ),
+      //                   // title: Text(
+      //                   //   item == null
+      //                   //       ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
+      //                   //       : item.toString(),
+      //                   //   style: Theme.of(context).textTheme.bodySmall,
+      //                   // ),
+      //                 ),
+      //               ))
+      //           .toList(),
+      //     ),
+      //   ),
+      // ],
+    );
   }
 }

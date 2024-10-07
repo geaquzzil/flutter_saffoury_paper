@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/theming/text_field_theming.dart';
 
@@ -171,18 +171,19 @@ InputDecoration getDecorationIconHintPrefix(
 InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
     {String? field, CurrentScreenSize? currentScreenSize}) {
   debugPrint("getDecoration currentScreenSize: $currentScreenSize");
+  bool isLarge = isLargeScreen(context);
   if (field != null) {
     return getDecorationIconHintPrefix(
         currentScreenSize: currentScreenSize,
         prefix: viewAbstract.getTextInputPrefix(context, field),
         suffix: viewAbstract.getTextInputSuffix(context, field),
         hint: viewAbstract.getTextInputHint(context, field: field),
-        // label: viewAbstract.getTextInputLabel(context, field),
-        icon: viewAbstract.getTextInputIconData(field));
+        label: isLarge ? null : viewAbstract.getTextInputLabel(context, field),
+        icon: isLarge ? null : viewAbstract.getTextInputIconData(field));
   } else {
     return getDecorationIconHintPrefix(
         currentScreenSize: currentScreenSize,
-        icon: viewAbstract.getMainIconData(),
+        icon: isLarge ? null : viewAbstract.getMainIconData(),
         hint: viewAbstract.getTextInputHint(context));
   }
 }

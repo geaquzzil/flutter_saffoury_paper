@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_screens/base_material_app.dart';
@@ -19,13 +18,13 @@ InputDecorationTheme getMainTheme(BuildContext context,
   colorScheme ??= theme.colorScheme;
   bool isLargeOrDesktop = isLargeScreen(context);
   return theme.inputDecorationTheme.copyWith(
-    // isDense: isLargeOrDesktop,
+    isDense: isLargeOrDesktop,
     filled: isLargeOrDesktop,
     fillColor: colorScheme.surfaceContainerHighest,
 
-    constraints: isLargeOrDesktop
-        ? BoxConstraints.tight(const Size.fromHeight(30))
-        : BoxConstraints.tight(const Size.fromHeight(56)),
+    // constraints: isLargeOrDesktop
+    //     ? BoxConstraints.tight(const Size.fromHeight(30))
+    //     : BoxConstraints.tight(const Size.fromHeight(50)),
     // hoverColor: Colors.transparent,
     border: _getBorder(isLargeOrDesktop),
     // focusedBorder: _getBorder(isLargeOrDesktop),
@@ -105,10 +104,8 @@ ThemeData getThemeData(BuildContext context, bool isDark,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8))),
           ),
-      textTheme: kIsWeb
-          ? GoogleFonts.robotoTextTheme(
-              isDark ? ThemeData.dark().textTheme : ThemeData.light().textTheme)
-          : null,
+      textTheme: GoogleFonts.robotoTextTheme(
+          isDark ? ThemeData.dark().textTheme : ThemeData.light().textTheme),
       listTileTheme: getListTileThemeData(context, colorScheme: colorScheme),
       iconTheme: getIconThemeData(context, colorScheme: colorScheme),
       //  ListTileThemeData(
