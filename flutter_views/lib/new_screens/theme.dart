@@ -39,6 +39,7 @@ ThemeData getThemeData(BuildContext context, bool isDark,
       badgeTheme: getBadgeTheme(context, colorScheme),
       expansionTileTheme: getExpansionTileTheme(context, colorScheme),
       colorScheme: colorScheme,
+      cardTheme: getCardTheme(context, colorScheme),
       visualDensity: isLargeScreen(context)
           ? const VisualDensity(horizontal: -4, vertical: -4)
           : VisualDensity.compact,
@@ -52,6 +53,9 @@ ThemeData getThemeData(BuildContext context, bool isDark,
       highlightColor: colorScheme.onSurface.withOpacity(.2),
       focusColor: colorScheme.secondaryContainer,
       canvasColor: colorScheme.surfaceContainer,
+      cardColor: colorScheme.surfaceContainerHighest,
+      shadowColor: colorScheme.shadow,
+
       // floatingActionButtonTheme: FloatingActionButtonThemeData(highlightElevation: ),
       // scaffoldBackgroundColor: lightDynamic?.background,
       // shadowColor: lightDynamic?.shadow,
@@ -137,6 +141,19 @@ ThemeData getThemeData(BuildContext context, bool isDark,
           TargetPlatform.linux: CustomTransitionBuilder(),
         },
       ));
+}
+
+getCardTheme(BuildContext context, ColorScheme colorScheme) {
+  return CardTheme(
+    margin: isLargeScreen(context)
+        ? const EdgeInsets.all(1)
+        : const EdgeInsets.all(4),
+    shape: const RoundedRectangleBorder(
+      // side: BorderSide(
+      //     width: 1, color: Theme.of(context).colorScheme.outlineVariant),
+      borderRadius: BorderRadius.all(Radius.circular(kBorderRadius)),
+    ),
+  );
 }
 
 getBadgeTheme(BuildContext context, ColorScheme colorScheme) {

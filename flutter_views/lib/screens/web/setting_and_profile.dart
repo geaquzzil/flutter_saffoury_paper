@@ -11,7 +11,7 @@ import 'package:flutter_view_controller/models/prints/printer_default_setting.da
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
+import 'package:flutter_view_controller/new_components/cards/normal_card.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -373,20 +373,15 @@ class _PrintSettingState extends BasePageState<PrintSetting>
                       (c) {
                         bool isLarge =
                             isLargeScreenFromCurrentScreenSize(context);
-                        return OnHoverCardWithListTile(
-                          onTap: () {
-                            notify(SecondPaneHelper(
-                                title: c.getModifibleTitleName(context),
-                                value: c));
-                          },
-                          isSelected:
-                              c.hashCode == lastSecondPaneItem?.value.hashCode,
-                          selectedIsClipped: false,
-                          child: ListTileAdaptive(
-                            isLargeScreen: isLarge,
+                        return CardNormal(
+                          child: (h) => ListTile(
+                            onTap: () {
+                              notify(SecondPaneHelper(
+                                  title: c.getModifibleTitleName(context),
+                                  value: c));
+                            },
                             leading: Icon(
                               c.getModifibleIconData(),
-                              size: isLarge ? 15 : null,
                             ),
                             title: Text(
                               c.getModifibleTitleName(context),

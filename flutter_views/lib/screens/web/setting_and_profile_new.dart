@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
+import 'package:flutter_view_controller/new_components/cards/normal_card.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_header_list_tile_widget.dart';
@@ -83,20 +83,20 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
             delegate: SliverChildBuilderDelegate((c, i) {
           bool isLarge = isLargeScreenFromScreenSize(getCurrentScreenSize());
           final item = menuItems![i];
-          return OnHoverCardWithListTile(
-              selectedIsClipped: false,
-              onTap: () {
-                debugPrint("ListTileAdaptive");
-                notify(SecondPaneHelper(title: item.actionTitle, value: item));
-              },
-              isSelected: lastSecondPaneItem?.value.hashCode == item.hashCode,
-              child: ListTileAdaptive(
-                  isLargeScreen: isLarge,
+          return CardNormal(
+              toScaleDown: true,
+
+              // isSelected: lastSecondPaneItem?.value.hashCode == item.hashCode,
+              child: (h) => ListTile(
                   selected: lastSecondPaneItem?.value.hashCode == item.hashCode,
                   leading: Icon(
                     item.icon,
-                    size: isLarge ? 15 : null,
                   ),
+                  onTap: () {
+                    debugPrint("ListTileAdaptive");
+                    notify(
+                        SecondPaneHelper(title: item.actionTitle, value: item));
+                  },
                   subtitle: isLarge
                       ? null
                       : Text("this is a description ${item.actionTitle}"),

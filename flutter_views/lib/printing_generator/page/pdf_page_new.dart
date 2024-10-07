@@ -17,6 +17,7 @@ import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/printing_generator/page/base_pdf_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/ext.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_list_api.dart';
@@ -28,8 +29,6 @@ import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
-
-
 
 class PdfPageNew<T extends PrintLocalSetting> extends BasePageApi {
   bool buildBaseHeader;

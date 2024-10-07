@@ -15,7 +15,9 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pdf/pdf.dart' as pdf2;
 import 'package:pdf/widgets.dart' as pdf;
 
 part 'sizes.g.dart';
@@ -248,39 +250,40 @@ class ProductSize extends ViewAbstract<ProductSize> {
   }
 
   pdf.Widget getSizeTextRichWidget(BuildContext context,
-      {String? fiberLines, bool isLabel = false}) {
-    if (Globals.isArabic(context)) {
-      return pdf.RichText(
-        text: pdf.TextSpan(
-          text: getWidth(fibrelines: fiberLines),
-          style: pdf.TextStyle(
-              fontWeight: pdf.FontWeight.bold, fontSize: isLabel ? 10 : 32),
-          children: <pdf.TextSpan>[
-            pdf.TextSpan(
-                text: "${getLength(fibrelines: fiberLines)} X ",
-                style: pdf.TextStyle(
-                    fontWeight: pdf.FontWeight.bold, fontSize: 42)),
-            // TextSpan(text: ' world!'),
-          ],
-        ),
-      );
-    } else {
-      return pdf.RichText(
-        text: pdf.TextSpan(
-          text: "${getWidth(fibrelines: fiberLines)} X ",
-          style: pdf.TextStyle(
-              fontWeight: pdf.FontWeight.bold, fontSize: isLabel ? 10 : 32),
-          children: <pdf.TextSpan>[
-            pdf.TextSpan(
-                text: getLength(fibrelines: fiberLines),
-                style: pdf.TextStyle(
-                    fontWeight: pdf.FontWeight.bold,
-                    fontSize: isLabel ? 12 : 42)),
-            // TextSpan(text: ' world!'),
-          ],
-        ),
-      );
-    }
+      {String? fiberLines, pdf2.PdfPageFormat? format}) {
+    bool isArabic = Globals.isArabic(context);
+    bool isLabel = printableIsLabel(format: format);
+    String? length = isRoll()
+        ? null
+        : isArabic
+            ? "${getLength(fibrelines: fiberLines)} X "
+            : getLength(fibrelines: fiberLines);
+
+    String width = isArabic
+        ? getWidth(fibrelines: fiberLines)
+        : isRoll()
+            ? getWidth(fibrelines: fiberLines)
+            : "${getWidth(fibrelines: fiberLines)} X ";
+
+    return pdf.RichText(
+      text: pdf.TextSpan(
+        text: width,
+        style: pdf.TextStyle(
+            fontWeight: pdf.FontWeight.bold,
+            fontSize: printableFindTextSize(format: format)),
+        children: length == null
+            ? null
+            : <pdf.TextSpan>[
+                pdf.TextSpan(
+                    text: length,
+                    style: pdf.TextStyle(
+                        fontWeight: pdf.FontWeight.bold,
+                        fontSize: printableFindTextSize(format: format) +
+                            (isLabel ? 5 : 10))),
+                // TextSpan(text: ' world!'),
+              ],
+      ),
+    );
   }
 
   String getSizeHtmlFormatString(BuildContext context, {String? fiberLines}) {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter/services.dart' show Uint8List, rootBundle;
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_custom_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_invoice_api.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
@@ -51,7 +52,11 @@ class PDFListApi<T extends PrintLocalSetting> {
             context, obj as PrintableInvoiceInterface,
             printCommand: setting);
         header ??= await itemPdf.buildHeader();
-        pdf.addPage(itemPdf.getMultiPage(format, header!));
+        if (printableIsLabel(format: format)) {
+          itemPdf.getPageIfLabel(pdf, format).forEach((p) => pdf.addPage(p));
+        } else {
+          pdf.addPage(itemPdf.getMultiPage(format, header!));
+        }
       } else if (obj is PrintableCustomInterface) {
         final itemPdf = PdfCustom<PrintableCustomInterface, T>(
             context, obj as PrintableCustomInterface,

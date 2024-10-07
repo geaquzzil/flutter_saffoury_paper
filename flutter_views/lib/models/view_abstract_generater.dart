@@ -19,6 +19,7 @@ import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_fi
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
+import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
@@ -26,10 +27,10 @@ import 'package:flutter_view_controller/screens/web/components/list_web_api.dart
 import 'package:flutter_view_controller/screens/web/views/web_master_to_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pdf/pdf.dart' as pdf;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:pdf/pdf.dart' as pdf;
 
 import '../utils/dialogs.dart';
 import 'menu_item.dart';

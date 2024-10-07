@@ -1,14 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter_view_controller/globals.dart';
 import 'dart:typed_data';
+
+import 'package:flutter/material.dart' as material;
+import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/printing_generator/print_master.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:printing/printing.dart';
 
 import 'ext.dart' as ext;
@@ -76,7 +77,7 @@ class PdfReceipt<T extends PrintableReceiptInterface,
       Expanded(flex: 4, child: buildInvoiceMainTable2()),
       Expanded(
           flex: 1,
-          child: ext.buildQrCode<E>(context, printObj,
+          child: ext.printableBuildQrCode<E>(context, printObj,
               printCommandAbstract: setting))
     ];
   }

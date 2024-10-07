@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
+import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
@@ -31,6 +32,7 @@ import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pdf/widgets.dart' as pdf;
+import 'package:pdf/pdf.dart' as pdf2;
 import 'package:provider/provider.dart';
 
 import '../prints/print_invoice.dart';
@@ -304,30 +306,17 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   @override
   pdf.Widget getPrintableDetailPageIfLabel(BuildContext context,
       PrintInvoice? pca, PrintableInvoiceInterface<PrintLocalSetting> parent) {
-    return borderContainer(pdf.Column(children: [
-      pdf.Row(children: [
-        wrapBorderContainerWithExpanded(
-            pdf.Icon(pdf.IconData(Icons.local_parking_rounded.codePoint))),
-        wrapBorderContainerWithExpanded(
-            pdf.Column(children: [
-              pdf.Text("ORDER ID: 213"),
-              pdf.Text("CUSTOMEER ID: 542"),
-              pdf.Text("CUSTOMEER: Samer B"),
-              pdf.Text("CUSTOMERR ADRESS: DAMASCUS,Syria"),
-              pdf.Text("TOTAL QUANTITY: 3,423 KG / 12 items"),
-            ]),
-            flex: 2),
-        wrapBorderContainerWithExpanded(buildQrCode(context, parent,
-            withPaddingTop: false, size: 50, printCommandAbstract: pca))
-      ]),
-      pdf.Row(children: [
-        wrapBorderContainerWithExpanded(buildQrCode(context, parent,
-            withPaddingTop: false, size: 50, printCommandAbstract: pca)),
-            wrapBorderContainerWithExpanded(buildQrCode(context, parent,
-            withPaddingTop: false, size: 50, printCommandAbstract: pca))
-
-      ])
-    ]));
+    return ProductLabelIfInvoiceDetailRoll80(
+            context: context,
+            invoiceMaster: parent as InvoiceMaster,
+            invoiceMasterDetail: this,
+            product: products!,
+            format: roll80,
+            setting: pca)
+        .generate(
+            qrObject: parent,
+            description: pca?.changeProductNameTo,
+            quantity: quantity);
   }
 
   @override

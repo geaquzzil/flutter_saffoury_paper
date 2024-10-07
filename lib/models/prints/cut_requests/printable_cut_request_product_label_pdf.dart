@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart' as material;
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_cut_request.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
 import 'package:flutter_saffoury_paper/models/prints/printable_product_label_widgets.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
+import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:printing/printing.dart';
+
 import '../../products/products.dart';
 
 class CutRequestProductLabelPDF {
@@ -14,10 +16,12 @@ class CutRequestProductLabelPDF {
   CutRequest cutRequest;
   ThemeData themeData;
   PageTheme pageTheme;
+  PdfPageFormat? format;
   PrintCutRequest? setting;
   CutRequestProductLabelPDF(this.context,
       {required this.cutRequest,
       required this.pageTheme,
+      this.format,
       required this.themeData,
       this.setting});
   Future<Widget> buildHeader() async => Image(await networkImage(
@@ -44,7 +48,11 @@ class CutRequestProductLabelPDF {
                       alignment: Alignment.bottomRight,
                       fit: StackFit.loose,
                       // alignment: ,
-                      children: [header, buildTitle(this.context, Product())]),
+                      children: [
+                        header,
+                        printableGetMainTitle(this.context, Product(),
+                            format: format)
+                      ]),
                   page
                 ])));
       });

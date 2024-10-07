@@ -5,6 +5,7 @@ import 'package:flutter/material.dart' as mt;
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/printing_generator/print_master.dart';
 import 'package:pdf/pdf.dart';
@@ -23,8 +24,11 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
     this.format = format;
     isLabel = format == roll80;
     var pdf = await getDocument();
-
-    pdf.addPage(getMultiPage(format, header));
+    if (printableIsLabel(format: format)) {
+      getPageIfLabel(pdf, format).forEach((p) => pdf.addPage(p));
+    } else {
+      pdf.addPage(getMultiPage(format, header));
+    }
 
     return pdf;
   }
@@ -42,21 +46,13 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
     List<PrintableInvoiceInterfaceDetails> details =
         printObj.getPrintableInvoiceDetailsList();
     return [
-      // Page(
-      //   pageFormat: format,
-      //   build: (context) {
-      //     return wrapeborderContainer();
-      //   },
-      // ),
-      ...details
-          .map((d) => Page(
-                pageFormat: format,
-                build: (c) {
-                  return d.getPrintableDetailPageIfLabel(
-                      context, setting, printObj);
-                },
-              ))
-          .toList()
+      ...details.map((d) => Page(
+            pageFormat: format,
+            build: (c) {
+              return d.getPrintableDetailPageIfLabel(
+                  context, setting, printObj);
+            },
+          ))
     ];
   }
 

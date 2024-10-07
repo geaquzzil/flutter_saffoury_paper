@@ -53,10 +53,13 @@ part 'cut_requests.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class CutRequest extends ViewAbstract<CutRequest>
-    with ModifiableInterface<PrintCutRequest>
+    with
+        ModifiableInterface<PrintCutRequest>
     implements
         ListableInterface<SizesCutRequest>,
         WebCategoryGridableInterface<CutRequest>,
+        PrintableCustomFromPDFInterface<PrintCutRequest>,
+        // PrintableCustomFromPDFInterface<PrintCutRequest>,
         SharableInterface {
   // int? ProductID;
   // int? CustomerID;
@@ -697,7 +700,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
-  pdf.Widget? getPrintableWatermark() {
+  pdf.Widget? getPrintableWatermark(pdf2.PdfPageFormat? format) {
     return pdf.FullPage(
         ignoreMargins: true,
         child: pdf.Watermark.text('SAFFOURY\n',
@@ -761,6 +764,9 @@ class CutRequest extends ViewAbstract<CutRequest>
         "$content ${crr.getPrintableRecieptHeaderTitleAndDescription(context, setting).getString()}";
     return content;
   }
+
+  @override
+  bool getPrintableSupportsLabelPrinting() => true;
 }
 
 // enum CutStatus {

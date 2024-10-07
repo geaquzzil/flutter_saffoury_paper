@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:sprung/sprung.dart';
 
+/// if Child is ExpansionTile or ListTile we should set the background to [Colors.transparent]
 class OnHoverWidget extends StatefulWidget {
   bool scale;
   ValueNotifier<bool>? onHover;
   bool scaleDown;
   MouseCursor mouseCursor;
+  double scaleValue;
   Widget Function(bool isHovered) builder;
 
   OnHoverWidget(
@@ -15,6 +17,7 @@ class OnHoverWidget extends StatefulWidget {
       this.onHover,
       this.scaleDown = false,
       this.mouseCursor = SystemMouseCursors.click,
+      this.scaleValue = 0.02,
       this.scale = true});
 
   @override
@@ -36,9 +39,9 @@ class _OnHoverWidgetState extends State<OnHoverWidget> {
   double getScaleInfo() {
     if (widget.scale) {
       if (widget.scaleDown) {
-        return .98;
+        return 1 - widget.scaleValue;
       }
-      return 1.02;
+      return 1 + widget.scaleValue;
     } else {
       return 1;
     }
@@ -47,7 +50,6 @@ class _OnHoverWidgetState extends State<OnHoverWidget> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      
         cursor: widget.mouseCursor,
         onEnter: (event) => onEntered(true),
         onExit: (event) => onEntered(false),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' as material;
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/prints/cut_requests/printable_cut_request_product_label_pdf.dart';
@@ -11,10 +12,10 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
 import 'package:number_to_character/number_to_character.dart';
-import 'package:pdf/widgets.dart';
-import 'package:pdf/pdf.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:pdf/pdf.dart' as d;
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart';
+
 class CutRequestRecieptPDF {
   material.BuildContext context;
   CutRequest cutRequest;
@@ -68,6 +69,7 @@ class CutRequestRecieptPDF {
     CutRequestProductLabelPDF cutRequestProductLabelPDF =
         CutRequestProductLabelPDF(context,
             cutRequest: cutRequest,
+            format: format,
             themeData: themeData,
             setting: setting,
             pageTheme: pageTheme);
@@ -197,8 +199,10 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
           child: Row(
               mainAxisAlignment: generator.getMainAxis(),
               children: generator.checkListToReverse([
-                buildQrCode(context, pid.products!,
-                    printCommandAbstract: setting, size: 40),
+                printableBuildQrCode(context, pid.products!,
+                    printCommandAbstract: setting,
+                    size: 40,
+                    format: d.PdfPageFormat.a5),
                 SizedBox(width: 1 * (PdfPageFormat.cm)),
                 generator.getDirections(
                     child: Text(
@@ -233,14 +237,11 @@ class CutRequestRecipt extends PrintableReceiptInterface<PrintCutRequest> {
                   Expanded(child: Divider(height: 1, color: PdfColors.grey200))
                 ])),
             if (e.products_inputs?.products_inputs_details != null)
-              ...e.products_inputs!.products_inputs_details!
-                  .map((e) =>
-                      getProductDetailsWidget(context, e, pca, generator))
-
+              ...e.products_inputs!.products_inputs_details!.map(
+                  (e) => getProductDetailsWidget(context, e, pca, generator))
           ]));
 
-      return Column(
-          children: [if (d != null) ...d.whereType<Column>()]);
+      return Column(children: [if (d != null) ...d.whereType<Column>()]);
     }
     return null;
   }

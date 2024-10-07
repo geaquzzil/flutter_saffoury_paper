@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart' as mt;
+import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 
-const double printerLabelFontSizePrimary = 14;
-const double printerLabelFontSizeSecoundry = 8;
+const double printerFontPrimaryRoll = 14;
+const double printerFontSecondryRoll = 8;
 
-const double printerFontSizePrimary = 32;
-const double printerFontSizeSecoundry = 10;
+const double printerFontPrimaryA4 = 32;
+const double printerFontSecondryA4 = 10;
+
+const double printerFontPrimaryA5 = 14;
+const double printerFontSecondryA5 = 8;
+
+const double printerFontPrimaryA3 = 42;
+const double printerFontSecondryA3 = 14;
+
+const double printerRectangleA4 = 80;
+const double printerRectangleA5 = 40;
+const double printerRectangleA3 = 100;
+const double printerRectangleRoll = 40;
+
 const double point = 1.0;
 const double inch = 72.0;
 const double cm = inch / 2.54;
@@ -16,45 +29,112 @@ const double mm = inch / 25.4;
 const PdfPageFormat roll80 =
     PdfPageFormat(80 * mm, 120 * mm, marginAll: 2 * mm);
 
-double findLabelTextSize({PdfPageFormat? format}) {
+double printableFindLabelSize({PdfPageFormat? format}) {
   switch (format) {
     case PdfPageFormat.a4:
-      break;
+      return printerFontSecondryA4;
     case PdfPageFormat.a5:
-      break;
+      return printerFontSecondryA5;
+
     case PdfPageFormat.a3:
-      break;
+      return printerFontSecondryA3;
     case roll80:
-      break;
+      return printerFontSecondryRoll;
+
     default:
-      break;
+      return printerFontSecondryA4;
   }
 }
 
-double findTextSize({
+double printableFindTitleSize({
   PdfPageFormat? format,
 }) {
   switch (format) {
     case PdfPageFormat.a4:
-      break;
+      return 20;
     case PdfPageFormat.a5:
-      break;
+      return 14;
+
     case PdfPageFormat.a3:
-      break;
+      return 30;
     case roll80:
-      break;
+      return 10;
+
     default:
-      break;
+      return 20;
   }
 }
 
-Widget buildLabelAndText(String label, String value,
-    {double size = 80,
-    Widget? isValueWidget,
-    PdfPageFormat? format,
-    double fontSize = printerFontSizePrimary}) {
-  fontSize = isLabel ? printerLabelFontSizePrimary : fontSize;
-  size = isLabel ? 40 : size;
+double printableFindTextSize({
+  PdfPageFormat? format,
+}) {
+  switch (format) {
+    case PdfPageFormat.a4:
+      return printerFontPrimaryA4;
+    case PdfPageFormat.a5:
+      return printerFontPrimaryA5;
+
+    case PdfPageFormat.a3:
+      return printerFontPrimaryA3;
+    case roll80:
+      return printerFontPrimaryRoll;
+
+    default:
+      return printerFontPrimaryA4;
+  }
+}
+
+double printableFindRectangleSize({
+  PdfPageFormat? format,
+}) {
+  switch (format) {
+    case PdfPageFormat.a4:
+      return printerRectangleA4;
+    case PdfPageFormat.a5:
+      return printerRectangleA5;
+
+    case PdfPageFormat.a3:
+      return printerRectangleA3;
+    case roll80:
+      return printerRectangleRoll;
+
+    default:
+      return printerRectangleA4;
+  }
+}
+
+bool printableIsLabel({PdfPageFormat? format}) {
+  return format == roll80;
+}
+
+EdgeInsetsGeometry printableFindPadding({
+  PdfPageFormat? format,
+}) {
+  switch (format) {
+    case PdfPageFormat.a4:
+      return const EdgeInsets.symmetric(horizontal: 5, vertical: 8);
+    case PdfPageFormat.a5:
+      return const EdgeInsets.symmetric(horizontal: 5, vertical: 8);
+
+    case PdfPageFormat.a3:
+      return const EdgeInsets.symmetric(horizontal: 5, vertical: 8);
+    case roll80:
+      return const EdgeInsets.symmetric(horizontal: 1, vertical: 4);
+
+    default:
+      return const EdgeInsets.symmetric(horizontal: 5, vertical: 8);
+  }
+}
+
+Widget printableGetLabelAndText(
+    mt.BuildContext context, String label, String value,
+    {Widget? isValueWidget, PdfPageFormat? format, double? customFontSize}) {
+  double fontSize = customFontSize ?? printableFindTextSize(format: format);
+  double labelSize = printableFindLabelSize(format: format);
+  double size = printableFindRectangleSize(format: format);
+  EdgeInsetsGeometry padding = printableFindPadding(format: format);
+  FontWeight fontWeight =
+      printableIsLabel(format: format) ? FontWeight.bold : FontWeight.normal;
   return Container(
       height: size,
       // padding: EdgeInsets.all(2),
@@ -65,19 +145,13 @@ Widget buildLabelAndText(String label, String value,
       child: Column(children: [
         Align(
             child: Padding(
-                padding: isLabel
-                    ? const EdgeInsets.symmetric(horizontal: 1, vertical: 4)
-                    : const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                padding: padding,
                 child: Directionality(
                     textDirection: TextDirection.rtl,
                     child: Text(label,
                         textDirection: TextDirection.rtl,
                         style: TextStyle(
-                            fontWeight:
-                                isLabel ? FontWeight.bold : FontWeight.normal,
-                            fontSize: isLabel
-                                ? printerLabelFontSizeSecoundry
-                                : printerFontSizeSecoundry)))),
+                            fontWeight: fontWeight, fontSize: labelSize)))),
             alignment: Globals.isArabic(context)
                 ? Alignment.topRight
                 : Alignment.topLeft),
@@ -95,21 +169,22 @@ Widget buildLabelAndText(String label, String value,
       ]));
 }
 
-Widget borderContainer(Widget child, {double padding = 0}) {
+Widget printableGetBorderContainer(Widget child, {double padding = 0}) {
   return Container(
       padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(border: Border.all()),
       child: child);
 }
 
-Widget wrapBorderContainerWithExpanded(Widget child,
+Widget printableWrapBorderContainerWithExpanded(Widget child,
     {double padding = 0, int flex = 1}) {
-  return Expanded(flex: flex, child: borderContainer(child, padding: padding));
+  return Expanded(
+      flex: flex, child: printableGetBorderContainer(child, padding: padding));
 }
 
-Widget buildTitle<T extends PrintLocalSetting>(
+Widget printableGetMainTitle<T extends PrintLocalSetting>(
         mt.BuildContext context, PrintableMaster printObj,
-        {T? printCommandAbstract}) =>
+        {T? printCommandAbstract, PdfPageFormat? format}) =>
     Padding(
         padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 5),
         child: Text(
@@ -117,18 +192,21 @@ Widget buildTitle<T extends PrintLocalSetting>(
               .getPrintableInvoiceTitle(context, printCommandAbstract)
               .toUpperCase(),
           style: TextStyle(
-              fontSize: 20,
+              fontSize: printableFindTextSize(format: format),
               color: PdfColor.fromHex(
                   printObj.getPrintablePrimaryColor(printCommandAbstract))),
         ));
 
-Widget buildBarcode(mt.BuildContext context, String barcode,
-    {double size = 20}) {
+Widget printableBuildBarcode(mt.BuildContext context, String barcode,
+    {double size = 20, PdfPageFormat? format}) {
   return Column(children: [
     SizedBox(
         width: double.maxFinite,
         height: size,
         child: BarcodeWidget(
+          textStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: printableFindLabelSize(format: format)),
           height: size,
           width: double.maxFinite,
           barcode: Barcode.code128(),
@@ -137,12 +215,14 @@ Widget buildBarcode(mt.BuildContext context, String barcode,
   ]);
 }
 
-Widget buildQrCode<T extends PrintLocalSetting>(
-    mt.BuildContext context, PrintableMaster printObj,
-    {T? printCommandAbstract,
-    bool withPaddingTop = true,
-    double size = 80,
-    double fontSize = 10}) {
+Widget printableBuildQrCode<T extends PrintLocalSetting>(
+  mt.BuildContext context,
+  PrintableMaster printObj, {
+  T? printCommandAbstract,
+  bool withPaddingTop = true,
+  double size = 80,
+  PdfPageFormat? format,
+}) {
   if ((printCommandAbstract?.hideQrCode ?? false)) {
     return Column(children: [SizedBox(width: size, height: size)]);
   }
@@ -159,7 +239,9 @@ Widget buildQrCode<T extends PrintLocalSetting>(
     SizedBox(height: .1 * (PdfPageFormat.cm)),
     Text(
       printObj.getPrintableQrCodeID(),
-      style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize),
+      style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: printableFindLabelSize(format: format)),
     ),
   ]);
 }

@@ -31,6 +31,8 @@ class ListTileSameSizeOnTitle extends StatelessWidget {
   }
 }
 
+@Deprecated('Use ListTile instead. '
+    'This feature was deprecated after v3.18.0-0.1.pre.')
 class ListTileAdaptive extends ListTile {
   final bool isLargeScreen;
   const ListTileAdaptive({

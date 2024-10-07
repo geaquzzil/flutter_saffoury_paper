@@ -66,7 +66,6 @@ import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_re
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_card_item_square.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
-import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -578,6 +577,10 @@ class Product extends ViewAbstract<Product>
   int getReams() {
     if (sheets.toNonNullable() == 0) return 0;
     return getQuantity().toInt();
+  }
+
+  bool isReams() {
+    return products_types?.unit == ProductTypeUnit.Ream;
   }
 
   bool isRoll() {
@@ -1109,6 +1112,7 @@ class Product extends ViewAbstract<Product>
 
   String getGrainOn() {
     if (fiberLines == null) return "-";
+    if (isRoll()) return "-";
     if (fiberLines == "Width") return getWidth().toString();
     if (fiberLines == "Length") return getLength().toString();
     return "-";
@@ -1177,12 +1181,20 @@ class Product extends ViewAbstract<Product>
             header!,
             // pdfWidget.Watermark.text("tessssssssssssssssssssssssst",
             //     fit: pdfWidget.BoxFit.fill),
-            buildTitle(context, this),
+            printableGetMainTitle(context, this, format: format),
           ],
         ),
-      // pdfWidget.Watermark.text("tessssssssssssssssssssssssst"),
-      ProductLabelPDF(context, this, setting: setting, format: format)
-          .generate()
+
+      if (!printableIsLabel(format: format))
+        ProductLabelPDF(context, this, setting: setting, format: format)
+            .generate()
+      else
+        ProductLabelIfLabelRoll80(
+                context: context,
+                product: this,
+                format: format,
+                setting: setting)
+            .generate(qrObject: this)
 
       //  Row(
       // crossAxisAlignment: CrossAxisAlignment.start,
