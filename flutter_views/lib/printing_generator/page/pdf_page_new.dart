@@ -29,12 +29,7 @@ import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-const double point = 1.0;
-const double inch = 72.0;
-const double cm = inch / 2.54;
-const double mm = inch / 25.4;
-const PdfPageFormat roll80 =
-    PdfPageFormat(80 * mm, 120 * mm, marginAll: 2 * mm);
+
 
 class PdfPageNew<T extends PrintLocalSetting> extends BasePageApi {
   bool buildBaseHeader;

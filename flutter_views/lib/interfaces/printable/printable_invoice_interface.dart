@@ -51,6 +51,8 @@ abstract class PrintableInvoiceInterfaceDetails<T extends PrintLocalSetting> {
       BuildContext context, T? pca);
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
       BuildContext context, PrintLocalSetting? dashboardSetting);
+
+  pdfW.Widget getPrintableDetailPageIfLabel(BuildContext context, T? pca,PrintableInvoiceInterface parent);
 }
 
 abstract class PrintableInvoiceInterface<T extends PrintLocalSetting>
@@ -65,6 +67,8 @@ abstract class PrintableInvoiceInterface<T extends PrintLocalSetting>
       BuildContext context, T? pca);
 
   List<PrintableInvoiceInterfaceDetails> getPrintableInvoiceDetailsList();
+
+  //TODO i dont know if i want this for know pdfW.Widget getPrintableMainPageIfLabel(BuildContext context, T? pca);
 
   List<InvoiceHeaderTitleAndDescriptionInfo>
       getPrintableInvoiceAccountInfoInBottom(BuildContext context, T? pca);

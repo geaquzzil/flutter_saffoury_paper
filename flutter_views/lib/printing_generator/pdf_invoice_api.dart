@@ -51,10 +51,9 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
       ...details
           .map((d) => Page(
                 pageFormat: format,
-                build: (context) {
-                  return wrapeborderContainer(
-                    
-                  );
+                build: (c) {
+                  return d.getPrintableDetailPageIfLabel(
+                      context, setting, printObj);
                 },
               ))
           .toList()

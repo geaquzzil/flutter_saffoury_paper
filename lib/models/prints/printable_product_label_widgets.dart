@@ -10,11 +10,7 @@ import 'package:pdf/widgets.dart';
 
 import '../products/products.dart';
 
-const double printerLabelFontSizePrimary = 14;
-const double printerLabelFontSizeSecoundry = 8;
 
-const double printerFontSizePrimary = 32;
-const double printerFontSizeSecoundry = 10;
 
 class ProductLabelPDF {
   material.BuildContext context;
@@ -23,12 +19,6 @@ class ProductLabelPDF {
   PdfPageFormat? format;
   ProductLabelPDF(this.context, this.product, {this.setting, this.format});
   late bool isLabel;
-  Widget borderContainer(Widget child, {double padding = 0}) {
-    return Container(
-        padding: EdgeInsets.all(padding),
-        decoration: BoxDecoration(border: Border.all()),
-        child: child);
-  }
 
   Widget labelText(String title) {
     return Text(title,
@@ -297,49 +287,4 @@ class ProductLabelPDF {
     ]);
   }
 
-  Widget buildLabelAndText(String label, String value,
-      {double size = 80,
-      Widget? isValueWidget,
-      double fontSize = printerFontSizePrimary}) {
-    fontSize = isLabel ? printerLabelFontSizePrimary : fontSize;
-    size = isLabel ? 40 : size;
-    return Container(
-        height: size,
-        // padding: EdgeInsets.all(2),
-        decoration: BoxDecoration(
-          border: Border.all(color: PdfColors.black, width: .5),
-          // borderRadius: BorderRadius.all(Radius.circular(20))
-        ),
-        child: Column(children: [
-          Align(
-              child: Padding(
-                  padding: isLabel
-                      ? const EdgeInsets.symmetric(horizontal: 1, vertical: 4)
-                      : const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-                  child: Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: Text(label,
-                          textDirection: TextDirection.rtl,
-                          style: TextStyle(
-                              fontWeight:
-                                  isLabel ? FontWeight.bold : FontWeight.normal,
-                              fontSize: isLabel
-                                  ? printerLabelFontSizeSecoundry
-                                  : printerFontSizeSecoundry)))),
-              alignment: Globals.isArabic(context)
-                  ? Alignment.topRight
-                  : Alignment.topLeft),
-          Expanded(
-              child: Align(
-                  alignment: Alignment.center,
-                  child: isValueWidget ??
-                      Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Text(value,
-                              textDirection: TextDirection.rtl,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: fontSize))))),
-        ]));
-  }
 }

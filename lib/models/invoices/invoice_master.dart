@@ -18,6 +18,7 @@ import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_invoice.dart';
+import 'package:flutter_saffoury_paper/models/prints/printable_product_label_widgets.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
@@ -333,7 +334,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       return 0;
     }
   }
-  
+
   @override
   bool getPrintableSupportsLabelPrinting() => true;
 
@@ -833,6 +834,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
           hexColor: getPrintablePrimaryColor(pca)),
     ];
   }
+
 
   @override
   String getModifibleTitleName(BuildContext context) =>

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
 import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
@@ -11,24 +12,27 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transf
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
+import 'package:flutter_saffoury_paper/models/prints/printable_product_label_widgets.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pdf/widgets.dart' as pdf;
 import 'package:provider/provider.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+
 import '../prints/print_invoice.dart';
 
 abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
@@ -195,7 +199,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   @override
   IconData getMainIconData() => Icons.list;
 
-   @override
+  @override
   SortFieldValue? getSortByInitialType() =>
       SortFieldValue(field: "iD", type: SortByType.DESC);
 
@@ -295,6 +299,35 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
       }
     }
     return super.getFieldValue(field, context: context);
+  }
+
+  @override
+  pdf.Widget getPrintableDetailPageIfLabel(BuildContext context,
+      PrintInvoice? pca, PrintableInvoiceInterface<PrintLocalSetting> parent) {
+    return borderContainer(pdf.Column(children: [
+      pdf.Row(children: [
+        wrapBorderContainerWithExpanded(
+            pdf.Icon(pdf.IconData(Icons.local_parking_rounded.codePoint))),
+        wrapBorderContainerWithExpanded(
+            pdf.Column(children: [
+              pdf.Text("ORDER ID: 213"),
+              pdf.Text("CUSTOMEER ID: 542"),
+              pdf.Text("CUSTOMEER: Samer B"),
+              pdf.Text("CUSTOMERR ADRESS: DAMASCUS,Syria"),
+              pdf.Text("TOTAL QUANTITY: 3,423 KG / 12 items"),
+            ]),
+            flex: 2),
+        wrapBorderContainerWithExpanded(buildQrCode(context, parent,
+            withPaddingTop: false, size: 50, printCommandAbstract: pca))
+      ]),
+      pdf.Row(children: [
+        wrapBorderContainerWithExpanded(buildQrCode(context, parent,
+            withPaddingTop: false, size: 50, printCommandAbstract: pca)),
+            wrapBorderContainerWithExpanded(buildQrCode(context, parent,
+            withPaddingTop: false, size: 50, printCommandAbstract: pca))
+
+      ])
+    ]));
   }
 
   @override
