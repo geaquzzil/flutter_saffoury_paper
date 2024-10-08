@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/components/expansion_tile_custom.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_custom_list.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_view_abstract_asonefield.dart';
 import 'package:flutter_view_controller/new_screens/controllers/edit_controller_chipds.dart';
+import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/size_config.dart';
 
 import '../../../models/view_abstract.dart';
@@ -291,6 +293,25 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
         false;
     debugPrint(
         "getExpansionTileCustom initiallyExpanded => $f field=>${_viewAbstract.getFieldNameFromParent} table= ${_viewAbstract.getParnet?.getTableNameApi()}");
+
+    if (isLargeScreen(context)) {
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(kDefaultPadding),
+            child: Row(
+              children: [
+                _viewAbstract.getMainLabelText(context),
+                const Expanded(
+                  child: Divider(),
+                )
+              ],
+            ),
+          ),
+          form,
+        ],
+      );
+    }
     return ExpansionTileCustom(
         key: keyExpansionTile,
         padding: false,

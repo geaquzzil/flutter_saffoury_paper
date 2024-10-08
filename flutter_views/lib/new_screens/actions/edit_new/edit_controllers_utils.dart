@@ -20,25 +20,37 @@ Widget wrapController(Widget controller,
     {bool? requiredSpace,
     bool? isExpansionTile,
     CurrentScreenSize? currentScreenSize,
+    bool overrideToNoneLargeScreen = false,
+    bool forceNoPadding = false,
     required String title,
     required IconData? icon,
     required BuildContext context}) {
   // return controller;
-  bool isLarge = isLargeScreen(context);
+  bool isLarge = isLargeScreen(context) && !overrideToNoneLargeScreen;
   if (isLarge) {
-    return ListTileSameSizeOnTitle(leading: Text(title), title: controller ,icon:icon);
+    return ListTileSameSizeOnTitle(
+        leading: Text(
+          softWrap: false,
+          title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        title: controller,
+        icon: icon);
   }
   return Column(
     children: [
       Padding(
-          padding: (isExpansionTile ?? false)
+          padding: forceNoPadding
               ? EdgeInsets.zero
-              : EdgeInsets.symmetric(
-                  // vertical: 0,
-                  vertical: currentScreenSize == CurrentScreenSize.DESKTOP
-                      ? kDefaultPadding * .1
-                      : kDefaultPadding * .5,
-                ),
+              : (isExpansionTile ?? false)
+                  ? EdgeInsets.zero
+                  : EdgeInsets.symmetric(
+                      // vertical: 0,
+                      vertical: currentScreenSize == CurrentScreenSize.DESKTOP
+                          ? kDefaultPadding * .1
+                          : kDefaultPadding * .5,
+                    ),
           child: controller),
     ],
   );
@@ -82,6 +94,8 @@ Widget getContollerCheckBox(BuildContext context,
 
   return wrapController(
       context: context,
+      overrideToNoneLargeScreen: true,
+      forceNoPadding: true,
       icon: viewAbstract.getTextInputIconData(field),
       title: viewAbstract.getTextInputLabel(context, field) ?? "-",
       FormBuilderCheckbox(
@@ -106,10 +120,12 @@ Widget getContollerCheckBox(BuildContext context,
         initialValue:
             fieldType == int ? (value == true ? 1 : 0) : value ?? false,
         title: Text(viewAbstract.getTextCheckBoxTitle(context, field)),
+
         subtitle: Text(viewAbstract.getTextCheckBoxDescription(context, field)),
         onChanged: (value) {
           viewAbstract.onCheckBoxChanged(context, field, value);
         },
+        decoration: const InputDecoration(filled: false),
         onSaved: (value) {
           dynamic valueToSave =
               fieldType == int ? (value == true ? 1 : 0) : value ?? false;

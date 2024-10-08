@@ -18,16 +18,24 @@ class ListTileSameSizeOnTitle extends StatelessWidget {
 
   Widget? getLeading() {
     if (leading == null) return null;
+    // leading !=
+    //     FittedBox(
+    //       clipBehavior: Clip.antiAlias,
+    //       fit: BoxFit.contain,
+    //       child: leading,
+    //     );
     if (icon == null) {
       return leading;
     }
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Icon(icon!),
         const SizedBox(
           width: kDefaultPadding,
         ),
-        leading!
+        Expanded(child: leading!)
       ],
     );
   }

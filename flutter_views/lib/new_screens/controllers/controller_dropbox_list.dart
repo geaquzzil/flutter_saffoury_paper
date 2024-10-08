@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/size_config.dart';
 
-import '../../new_components/text_bold.dart';
-
 class DropdownStringListControllerListener extends StatelessWidget {
   String tag;
   String hint;
@@ -40,11 +38,9 @@ class DropdownStringListControllerListener extends StatelessWidget {
           .map((item) => DropdownMenuItem(
                 value: item,
                 child: item != null
-                    ? TextBold(
-                        text: "$hint: ${item.label}",
-                        regex: item.label.toString(),
-                      )
-                    : Text(hint, style: Theme.of(context).textTheme.bodyLarge),
+                    ? Text(item.label,
+                        style: Theme.of(context).textTheme.bodySmall)
+                    : Text("dsa"),
               ))
           .toList(),
       onChanged: (obj) {

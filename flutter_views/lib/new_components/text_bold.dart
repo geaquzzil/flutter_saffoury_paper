@@ -23,10 +23,10 @@ class TextBold extends StatelessWidget {
     return RichText(
       text: TextSpan(
         text: text.replaceAll(regex, ""),
-        style: Theme.of(context).textTheme.bodyMedium,
+        style: Theme.of(context).textTheme.bodySmall,
         // style: TextStyle(color: Colors.black),
         children: <TextSpan>[
-          TextSpan(text: regex, style: Theme.of(context).textTheme.bodyLarge
+          TextSpan(text: regex, style: Theme.of(context).textTheme.bodySmall
               // recognizer: _longPressRecognizer,
               ),
           // TextSpan(text: 'secret?'),
@@ -39,9 +39,9 @@ class TextBold extends StatelessWidget {
                 text: e.text,
                 style: (e.isBold)
                     ? GoogleFonts.mulish(
-                        fontSize: 16, fontWeight: FontWeight.w800)
+                        fontSize: 10, fontWeight: FontWeight.w800)
                     : GoogleFonts.mulish(
-                        fontSize: 14, fontWeight: FontWeight.w400)))
+                        fontSize: 8, fontWeight: FontWeight.w400)))
             .toList()));
   }
 
