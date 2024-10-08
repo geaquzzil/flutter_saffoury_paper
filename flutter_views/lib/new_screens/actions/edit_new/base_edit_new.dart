@@ -293,7 +293,12 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
         false;
     debugPrint(
         "getExpansionTileCustom initiallyExpanded => $f field=>${_viewAbstract.getFieldNameFromParent} table= ${_viewAbstract.getParnet?.getTableNameApi()}");
-
+    return ExpansionTileEditable(
+      fieldNameFromParent: _viewAbstract.getFieldNameFromParent!,
+      parent: _viewAbstract.getParnet!,
+      viewAbstract: _viewAbstract,
+      initialValue: _viewAbstract,
+    );
     if (isLargeScreen(context)) {
       return Column(
         children: [

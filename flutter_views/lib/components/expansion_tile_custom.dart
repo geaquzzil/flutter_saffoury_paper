@@ -1,8 +1,169 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/constants.dart';
-
+import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/cards/elevated_card.dart';
 
 import '../new_components/cards/clipper_card.dart';
+
+class ExpansionTileEditable extends StatefulWidget {
+  ViewAbstract parent;
+  String fieldNameFromParent;
+  ViewAbstract viewAbstract;
+
+  ViewAbstract? initialValue;
+  ExpansionTileEditable(
+      {super.key,
+      required this.parent,
+      required this.fieldNameFromParent,
+      required this.viewAbstract,
+      this.initialValue});
+
+  @override
+  State<ExpansionTileEditable> createState() => ExpansionTileEditableState();
+}
+
+class ExpansionTileEditableState extends State<ExpansionTileEditable> {
+  // ExpansionTileController controller=ExpansionTileController();
+  TextEditingController controller = TextEditingController();
+   late ViewAbstract viewAbstract;
+  @override
+  void initState() {
+  viewAbstract= widget.viewAbstract;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    bool canBeNullable =
+        widget.parent.isFieldCanBeNullable(context, widget.fieldNameFromParent);
+    // Icons.
+    return ElevatedCard(
+      child: ExpansionTile(
+        // controller: controller,
+        collapsedBackgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+        leading: Icon(widget.viewAbstract.getMainIconData()),
+        // title: FormBuilderTextField(
+        //   name: widget.fieldNameFromParent,
+        //   decoration: InputDecoration(
+        //       isDense: true,
+        //       border: InputBorder.none,
+        //       hintText:
+        //           widget.viewAbstract.getMainHeaderLabelTextOnly(context)),
+        // ),
+
+        title: FormBuilderTypeAheadCustom<ViewAbstract>(
+            hideOnEmpty: true,
+            onTap: () => controller.selection = TextSelection(
+                baseOffset: 0, extentOffset: controller.value.text.length),
+            enabled: true,
+            controller: controller,
+            debounceDuration: const Duration(milliseconds: 750),
+            // onChangeGetObject: (text) => autoCompleteBySearchQuery
+            //     ? viewAbstract.getNewInstance(
+            //         searchByAutoCompleteTextInput: text)
+            //     : viewAbstract.getParnet == null
+            //         ? viewAbstract.getNewInstance()
+            //         : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
+            //             viewAbstract.fieldNameFromParent!)
+            //   ..setFieldValue(field, text),
+            selectionToTextTransformer: (suggestion) {
+              debugPrint(
+                  "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.searchByAutoCompleteTextInput}");
+              debugPrint(
+                  "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.isNew()}");
+              return autoCompleteBySearchQuery
+                  ? suggestion.isNew()
+                      ? suggestion.searchByAutoCompleteTextInput ?? ""
+                      : suggestion.getMainHeaderTextOnly(context)
+                  : getEditControllerText(suggestion.getFieldValue(field));
+            },
+            // name: viewAbstract.getTag(field),
+           
+                     decoration: InputDecoration(
+                isDense: true,
+                border: InputBorder.none,
+              hint:  
+                  widget.viewAbstract.getMainHeaderLabelTextOnly(context)),
+            maxLength: viewAbstract.getTextInputMaxLength(field),
+            textCapitalization: viewAbstract.getTextInputCapitalization(field),
+            keyboardType: viewAbstract.getTextInputType(field),
+            autovalidateMode: AutovalidateMode.always,
+            // onSuggestionSelected: (value) {
+            //   if (autoCompleteBySearchQuery) {
+            //     onSelected(value);
+            //   }
+            //   debugPrint(
+            //       "getControllerEditTextViewAbstractAutoComplete value=>$value");
+            //   onSelected(viewAbstract.copyWithNewSuggestion(value));
+            // },
+            // onSaved: (newValue) {
+            //   if (autoCompleteBySearchQuery) {}
+
+            //   if (viewAbstract.getParnet != null) {
+            //     viewAbstract.getParnet!.setFieldValue(
+            //         viewAbstract.getFieldNameFromParent!, newValue);
+            //   } else {
+            //     viewAbstract.setFieldValue(field, newValue);
+            //   }
+            //   debugPrint(
+            //       'getControllerEditTextViewAbstractAutoComplete onSave parent=> ${viewAbstract.parent.runtimeType} field = ${viewAbstract.getFieldNameFromParent}:value=> ${newValue.runtimeType}');
+            // },
+            hideOnLoading: true,
+            loadingBuilder: (context) => const SizedBox(
+                width: double.infinity,
+                height: 200,
+                child: Center(child: CircularProgressIndicator())),
+            itemBuilder: (context, continent) {
+              return ListTile(
+                leading: continent.getCardLeadingCircleAvatar(context),
+                title: Text(continent.getCardItemDropdownText(context)),
+                subtitle: Text(continent.getCardItemDropdownSubtitle(context)),
+              );
+            },
+            inputFormatters: viewAbstract.getTextInputFormatter(field),
+            validator: (value) {
+              if (autoCompleteBySearchQuery) {
+                if (value?.isNew() ?? true) {
+                  return AppLocalizations.of(context)!.errFieldNotSelected(
+                      viewAbstract.getMainHeaderLabelTextOnly(context));
+                } else {
+                  return viewAbstract
+                      .getTextInputValidatorOnAutocompleteSelected(
+                          context, field, value!);
+                }
+              }
+              return value?.getTextInputValidator(context, field,
+                  getEditControllerText(value.getFieldValue(field)));
+            },
+            suggestionsCallback: (query) {
+              if (query.isEmpty) return [];
+              if (query.trim().isEmpty) return [];
+              if (autoCompleteBySearchQuery) {
+                return viewAbstract.search(5, 0, query, context: context)
+                    as Future<List<ViewAbstract>>;
+                // field: field, searchQuery: query);
+              }
+              return viewAbstract.searchViewAbstractByTextInputViewAbstract(
+                  field: field, searchQuery: query, context: context);
+            }),
+        trailing: (canBeNullable)
+            ? IconButton(
+                icon: const Icon(Icons.minimize_rounded),
+                onPressed: () {},
+                color: Theme.of(context).colorScheme.error,
+              )
+            : null,
+        children: const [
+          Text("dsad"),
+          // Text("dsad"),
+          // Text("dsad"),
+        ],
+      ),
+    );
+  }
+}
 
 class ExpansionTileCustom extends StatefulWidget {
   Widget? title;

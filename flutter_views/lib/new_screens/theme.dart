@@ -32,8 +32,6 @@ InputDecorationTheme getMainTheme(BuildContext context,
   );
 }
 
-
-
 ThemeData getThemeData(BuildContext context, bool isDark,
     ColorScheme colorScheme, CustomColors customColor) {
   return ThemeData(
@@ -229,7 +227,7 @@ ButtonStyle getButtonStyleIfIcon(BuildContext context, ColorScheme colorSheme) {
 }
 
 bool isLargeScreen(BuildContext context) {
-  return true;
+  return false;
 }
 
 IconThemeData getIconThemeData(BuildContext context,
