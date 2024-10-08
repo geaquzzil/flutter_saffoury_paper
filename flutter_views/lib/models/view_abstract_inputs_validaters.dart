@@ -24,6 +24,8 @@ abstract class ViewAbstractInputAndValidater<T>
 
   Map<String, TextInputType?> getTextInputTypeMap();
   Map<String, bool> getTextInputIsAutoCompleteMap();
+  @Deprecated(
+      "I think to change this to search via field and if the field is null search for all fields")
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap();
 
   Map<String, int> getTextInputMaxLengthMap();
@@ -43,7 +45,8 @@ abstract class ViewAbstractInputAndValidater<T>
     return getTextInputTypeMap()[field];
   }
 
-  Map<String, List<String>>? getHasControlersAfterInputtMap(BuildContext context) {
+  Map<String, List<String>>? getHasControlersAfterInputtMap(
+      BuildContext context) {
     return null;
   }
 
