@@ -204,14 +204,6 @@ class _ExpansionEditState extends State<ExpansionEdit>
     }
   }
 
-  Widget? _buildLeadingIcon(BuildContext context) {
-    if (_effectiveAffinity(widget.controlAffinity) !=
-        ListTileControlAffinity.leading) {
-      return null;
-    }
-    return _buildIcon(context);
-  }
-
   Widget? _buildTrailingIcon(BuildContext context) {
     if (_effectiveAffinity(widget.controlAffinity) !=
         ListTileControlAffinity.trailing) {
@@ -352,8 +344,8 @@ class _ExpansionEditState extends State<ExpansionEdit>
       maxLines: 1,
       // controller: text,
       name: key,
-      // decoration:
-      //     const InputDecoration(border: InputBorder.none, hintText: "HINT"),
+      decoration:
+          const InputDecoration(border: InputBorder.none, hintText: "HINT"),
     );
   }
 
@@ -402,8 +394,6 @@ class _ExpansionEditState extends State<ExpansionEdit>
     // widget.onExpansionChanged?.call(_isExpanded);
 
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      // TODO(tahatesser): This is a workaround for VoiceOver interrupting
-      // semantic announcements on iOS. https://github.com/flutter/flutter/issues/122101.
       _timer?.cancel();
       _timer = Timer(const Duration(seconds: 1), () {
         SemanticsService.announce(stateHint, textDirection);
