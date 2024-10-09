@@ -35,10 +35,16 @@ Widget wrapController(Widget controller,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        title: controller,
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            controller,
+          ],
+        ),
         icon: icon);
   }
   return Column(
+    mainAxisSize: MainAxisSize.min,
     children: [
       Padding(
           padding: forceNoPadding
@@ -51,7 +57,7 @@ Widget wrapController(Widget controller,
                           ? kDefaultPadding * .1
                           : kDefaultPadding * .5,
                     ),
-          child: controller),
+          child: SizedBox(height: 40, child: controller)),
     ],
   );
 }

@@ -2,6 +2,78 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:sprung/sprung.dart';
 
+class OnHoverDecoratedBox extends StatefulWidget {
+  final Widget child;
+  const OnHoverDecoratedBox({super.key, required this.child});
+
+  @override
+  State<OnHoverDecoratedBox> createState() => _OnHoverDecoratedBoxState();
+}
+
+class _OnHoverDecoratedBoxState extends State<OnHoverDecoratedBox>
+    with TickerProviderStateMixin {
+  DecorationTween decorationTween() => DecorationTween(
+        end: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          border: Border.all(
+              style: BorderStyle.solid,
+              width: 1,
+              color: Theme.of(context).colorScheme.outlineVariant),
+          borderRadius: BorderRadius.circular(kBorderRadius),
+          // boxShadow: <BoxShadow>[
+          //   BoxShadow(
+          //     color: Theme.of(context).colorScheme.shadow.withOpacity(.9),
+          //     blurRadius: 3.0,
+          //     spreadRadius: 4.0,
+          //     offset: const Offset(0, 2.0),
+          //   ),
+          // ],
+        ),
+        begin: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          border: Border.all(
+            style: BorderStyle.none,
+          ),
+          borderRadius: BorderRadius.circular(kBorderRadius / 2),
+          // No shadow.
+        ),
+      );
+
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 200),
+  );
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  bool isHover = false;
+  void onEntered(bool isHover) {
+    if (isHover) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (event) => onEntered(true),
+      onExit: (event) => onEntered(false),
+      child: DecoratedBoxTransition(
+          decoration: decorationTween().animate(_controller),
+          child: Padding(
+            padding: const EdgeInsets.all(kDefaultPadding),
+            child: widget.child,
+          )),
+    );
+  }
+}
+
 /// if Child is ExpansionTile or ListTile we should set the background to [Colors.transparent]
 class OnHoverWidget extends StatefulWidget {
   bool scale;

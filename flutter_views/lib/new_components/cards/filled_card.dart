@@ -28,6 +28,7 @@ class FilledCard extends StatelessWidget {
       scaleValue: .01,
       builder: (isHovered) {
         return Card(
+          
           shadowColor: Theme.of(context).colorScheme.shadow,
           elevation: isHovered ? 4 : 0,
           color: Theme.of(context).colorScheme.surfaceContainerHighest,

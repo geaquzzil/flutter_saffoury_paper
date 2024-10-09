@@ -10,178 +10,180 @@ import '../new_components/cards/clipper_card.dart';
 /// if we found getTextInputIsAutoCompleteViewAbstractMap()
 /// then the title should be TypeAheadCustom to get The ViewAbstractFrom getTextInputIsAutoCompleteViewAbstractMap => field name
 /// if not then when we click we got the form
-class ExpansionTileEditable extends StatefulWidget {
-  ViewAbstract parent;
-  String fieldNameFromParent;
-  ViewAbstract viewAbstract;
-  ViewAbstract? initialValue;
-  Function(GlobalKey<FormBuilderState> subThatBuilded)? onBuildForm;
+// class ExpansionTileEditable extends StatefulWidget {
+//   ViewAbstract parent;
+//   String fieldNameFromParent;
+//   ViewAbstract viewAbstract;
+//   ViewAbstract? initialValue;
+//   // Function(GlobalKey<FormBuilderState> subThatBuilded)? onBuildForm;
 
-  ExpansionTileEditable(
-      {super.key,
-      required this.parent,
-      required this.onBuildForm,
-      required this.fieldNameFromParent,
-      required this.viewAbstract,
-      this.initialValue});
+//   ExpansionTileEditable(
+//       {super.key,
+//       required this.parent,
+//       // required this.onBuildForm,
+//       required this.fieldNameFromParent,
+//       required this.viewAbstract,
+//       this.initialValue});
 
-  @override
-  State<ExpansionTileEditable> createState() => ExpansionTileEditableState();
-}
+//   @override
+//   State<ExpansionTileEditable> createState() => ExpansionTileEditableState();
+// }
 
-class ExpansionTileEditableState extends State<ExpansionTileEditable> {
-  // ExpansionTileController controller=ExpansionTileController();
-  TextEditingController controller = TextEditingController();
+// class ExpansionTileEditableState extends State<ExpansionTileEditable> {
+//   // ExpansionTileController controller=ExpansionTileController();
+//   TextEditingController controller = TextEditingController();
+//   List<Widget> fields=[];
 
-  late bool hasAutoComplete;
-  late bool canBeNullable;
+//   late bool hasAutoComplete;
+//   late bool canBeNullable;
 
-  late ViewAbstract viewAbstract;
-  late GlobalKey<FormBuilderState> formKey;
-  @override
-  void initState() {
-    viewAbstract = widget.viewAbstract;
-    formKey = GlobalKey<FormBuilderState>();
-    canBeNullable =
-        widget.parent.isFieldCanBeNullable(context, widget.fieldNameFromParent);
-    hasAutoComplete = viewAbstract.getTextInputIsAutoCompleteViewAbstractMap();
-    super.initState();
-  }
+//   late ViewAbstract viewAbstract;
+//   late GlobalKey<FormBuilderState> formKey;
+//   @override
+//   void initState() {
+//     viewAbstract = widget.viewAbstract;
+//     formKey = GlobalKey<FormBuilderState>();
+//     canBeNullable =
+//         widget.parent.isFieldCanBeNullable(context, widget.fieldNameFromParent);
+//     hasAutoComplete = viewAbstract.getTextInputIsAutoCompleteViewAbstractMap();
+//     super.initState();
+//   }
 
-  @override
-  void didUpdateWidget(covariant ExpansionTileEditable oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-  }
+//   @override
+//   void didUpdateWidget(covariant ExpansionTileEditable oldWidget) {
+//     // TODO: implement didUpdateWidget
+//     super.didUpdateWidget(oldWidget);
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    // Icons.
-    return ElevatedCard(
-      child: ExpansionTile(
-        // controller: controller,
-        collapsedBackgroundColor: Colors.transparent,
-        backgroundColor: Colors.transparent,
-        leading: Icon(widget.viewAbstract.getMainIconData()),
-        // title: FormBuilderTextField(
-        //   name: widget.fieldNameFromParent,
-        //   decoration: InputDecoration(
-        //       isDense: true,
-        //       border: InputBorder.none,
-        //       hintText:
-        //           widget.viewAbstract.getMainHeaderLabelTextOnly(context)),
-        // ),
-        /// Take the object the autoComplete fields is within getTextInputIsAutoCompleteViewAbstractMap
-        title: FormBuilderTypeAheadCustom<ViewAbstract>(
-            hideOnEmpty: true,
-            onTap: () => controller.selection = TextSelection(
-                baseOffset: 0, extentOffset: controller.value.text.length),
-            enabled: true,
-            controller: controller,
-            debounceDuration: const Duration(milliseconds: 750),
-            // onChangeGetObject: (text) => autoCompleteBySearchQuery
-            //     ? viewAbstract.getNewInstance(
-            //         searchByAutoCompleteTextInput: text)
-            //     : viewAbstract.getParnet == null
-            //         ? viewAbstract.getNewInstance()
-            //         : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
-            //             viewAbstract.fieldNameFromParent!)
-            //   ..setFieldValue(field, text),
-            selectionToTextTransformer: (suggestion) {
-              debugPrint(
-                  "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.searchByAutoCompleteTextInput}");
-              debugPrint(
-                  "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.isNew()}");
-              return autoCompleteBySearchQuery
-                  ? suggestion.isNew()
-                      ? suggestion.searchByAutoCompleteTextInput ?? ""
-                      : suggestion.getMainHeaderTextOnly(context)
-                  : getEditControllerText(suggestion.getFieldValue(field));
-            },
-            // name: viewAbstract.getTag(field),
+//   @override
+//   Widget build(BuildContext context) {
+//     // Icons.
+//     return ElevatedCard(
+//       child: ExpansionTile(
+        
+//         // controller: controller,
+//         collapsedBackgroundColor: Colors.transparent,
+//         backgroundColor: Colors.transparent,
+//         leading: Icon(widget.viewAbstract.getMainIconData()),
+//         // title: FormBuilderTextField(
+//         //   name: widget.fieldNameFromParent,
+//         //   decoration: InputDecoration(
+//         //       isDense: true,
+//         //       border: InputBorder.none,
+//         //       hintText:
+//         //           widget.viewAbstract.getMainHeaderLabelTextOnly(context)),
+//         // ),
+//         /// Take the object the autoComplete fields is within getTextInputIsAutoCompleteViewAbstractMap
+//         title: FormBuilderTypeAheadCustom<ViewAbstract>(
+//             hideOnEmpty: true,
+//             onTap: () => controller.selection = TextSelection(
+//                 baseOffset: 0, extentOffset: controller.value.text.length),
+//             enabled: true,
+//             controller: controller,
+//             debounceDuration: const Duration(milliseconds: 750),
+//             // onChangeGetObject: (text) => autoCompleteBySearchQuery
+//             //     ? viewAbstract.getNewInstance(
+//             //         searchByAutoCompleteTextInput: text)
+//             //     : viewAbstract.getParnet == null
+//             //         ? viewAbstract.getNewInstance()
+//             //         : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
+//             //             viewAbstract.fieldNameFromParent!)
+//             //   ..setFieldValue(field, text),
+//             selectionToTextTransformer: (suggestion) {
+//               debugPrint(
+//                   "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.searchByAutoCompleteTextInput}");
+//               debugPrint(
+//                   "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.isNew()}");
+//               return autoCompleteBySearchQuery
+//                   ? suggestion.isNew()
+//                       ? suggestion.searchByAutoCompleteTextInput ?? ""
+//                       : suggestion.getMainHeaderTextOnly(context)
+//                   : getEditControllerText(suggestion.getFieldValue(field));
+//             },
+//             // name: viewAbstract.getTag(field),
 
-            decoration: InputDecoration(
-                isDense: true,
-                border: InputBorder.none,
-                hint: widget.viewAbstract.getMainHeaderLabelTextOnly(context)),
-            maxLength: viewAbstract.getTextInputMaxLength(field),
-            textCapitalization: viewAbstract.getTextInputCapitalization(field),
-            keyboardType: viewAbstract.getTextInputType(field),
-            autovalidateMode: AutovalidateMode.always,
-            // onSuggestionSelected: (value) {
-            //   if (autoCompleteBySearchQuery) {
-            //     onSelected(value);
-            //   }
-            //   debugPrint(
-            //       "getControllerEditTextViewAbstractAutoComplete value=>$value");
-            //   onSelected(viewAbstract.copyWithNewSuggestion(value));
-            // },
-            // onSaved: (newValue) {
-            //   if (autoCompleteBySearchQuery) {}
+//             decoration: InputDecoration(
+//                 isDense: true,
+//                 border: InputBorder.none,
+//                 hint: widget.viewAbstract.getMainHeaderLabelTextOnly(context)),
+//             maxLength: viewAbstract.getTextInputMaxLength(field),
+//             textCapitalization: viewAbstract.getTextInputCapitalization(field),
+//             keyboardType: viewAbstract.getTextInputType(field),
+//             autovalidateMode: AutovalidateMode.always,
+//             // onSuggestionSelected: (value) {
+//             //   if (autoCompleteBySearchQuery) {
+//             //     onSelected(value);
+//             //   }
+//             //   debugPrint(
+//             //       "getControllerEditTextViewAbstractAutoComplete value=>$value");
+//             //   onSelected(viewAbstract.copyWithNewSuggestion(value));
+//             // },
+//             // onSaved: (newValue) {
+//             //   if (autoCompleteBySearchQuery) {}
 
-            //   if (viewAbstract.getParnet != null) {
-            //     viewAbstract.getParnet!.setFieldValue(
-            //         viewAbstract.getFieldNameFromParent!, newValue);
-            //   } else {
-            //     viewAbstract.setFieldValue(field, newValue);
-            //   }
-            //   debugPrint(
-            //       'getControllerEditTextViewAbstractAutoComplete onSave parent=> ${viewAbstract.parent.runtimeType} field = ${viewAbstract.getFieldNameFromParent}:value=> ${newValue.runtimeType}');
-            // },
-            hideOnLoading: true,
-            loadingBuilder: (context) => const SizedBox(
-                width: double.infinity,
-                height: 200,
-                child: Center(child: CircularProgressIndicator())),
-            itemBuilder: (context, continent) {
-              return ListTile(
-                leading: continent.getCardLeadingCircleAvatar(context),
-                title: Text(continent.getCardItemDropdownText(context)),
-                subtitle: Text(continent.getCardItemDropdownSubtitle(context)),
-              );
-            },
-            inputFormatters: viewAbstract.getTextInputFormatter(field),
-            validator: (value) {
-              if (autoCompleteBySearchQuery) {
-                if (value?.isNew() ?? true) {
-                  return AppLocalizations.of(context)!.errFieldNotSelected(
-                      viewAbstract.getMainHeaderLabelTextOnly(context));
-                } else {
-                  return viewAbstract
-                      .getTextInputValidatorOnAutocompleteSelected(
-                          context, field, value!);
-                }
-              }
-              return value?.getTextInputValidator(context, field,
-                  getEditControllerText(value.getFieldValue(field)));
-            },
-            suggestionsCallback: (query) {
-              if (query.isEmpty) return [];
-              if (query.trim().isEmpty) return [];
-              if (autoCompleteBySearchQuery) {
-                return viewAbstract.search(5, 0, query, context: context)
-                    as Future<List<ViewAbstract>>;
-                // field: field, searchQuery: query);
-              }
-              return viewAbstract.searchViewAbstractByTextInputViewAbstract(
-                  field: field, searchQuery: query, context: context);
-            }),
-        trailing: (canBeNullable)
-            ? IconButton(
-                icon: const Icon(Icons.minimize_rounded),
-                onPressed: () {},
-                color: Theme.of(context).colorScheme.error,
-              )
-            : null,
-        children: const [
-          Text("dsad"),
-          // Text("dsad"),
-          // Text("dsad"),
-        ],
-      ),
-    );
-  }
-}
+//             //   if (viewAbstract.getParnet != null) {
+//             //     viewAbstract.getParnet!.setFieldValue(
+//             //         viewAbstract.getFieldNameFromParent!, newValue);
+//             //   } else {
+//             //     viewAbstract.setFieldValue(field, newValue);
+//             //   }
+//             //   debugPrint(
+//             //       'getControllerEditTextViewAbstractAutoComplete onSave parent=> ${viewAbstract.parent.runtimeType} field = ${viewAbstract.getFieldNameFromParent}:value=> ${newValue.runtimeType}');
+//             // },
+//             hideOnLoading: true,
+//             loadingBuilder: (context) => const SizedBox(
+//                 width: double.infinity,
+//                 height: 200,
+//                 child: Center(child: CircularProgressIndicator())),
+//             itemBuilder: (context, continent) {
+//               return ListTile(
+//                 leading: continent.getCardLeadingCircleAvatar(context),
+//                 title: Text(continent.getCardItemDropdownText(context)),
+//                 subtitle: Text(continent.getCardItemDropdownSubtitle(context)),
+//               );
+//             },
+//             inputFormatters: viewAbstract.getTextInputFormatter(field),
+//             validator: (value) {
+//               if (autoCompleteBySearchQuery) {
+//                 if (value?.isNew() ?? true) {
+//                   return AppLocalizations.of(context)!.errFieldNotSelected(
+//                       viewAbstract.getMainHeaderLabelTextOnly(context));
+//                 } else {
+//                   return viewAbstract
+//                       .getTextInputValidatorOnAutocompleteSelected(
+//                           context, field, value!);
+//                 }
+//               }
+//               return value?.getTextInputValidator(context, field,
+//                   getEditControllerText(value.getFieldValue(field)));
+//             },
+//             suggestionsCallback: (query) {
+//               if (query.isEmpty) return [];
+//               if (query.trim().isEmpty) return [];
+//               if (autoCompleteBySearchQuery) {
+//                 return viewAbstract.search(5, 0, query, context: context)
+//                     as Future<List<ViewAbstract>>;
+//                 // field: field, searchQuery: query);
+//               }
+//               return viewAbstract.searchViewAbstractByTextInputViewAbstract(
+//                   field: field, searchQuery: query, context: context);
+//             }),
+//         trailing: (canBeNullable)
+//             ? IconButton(
+//                 icon: const Icon(Icons.minimize_rounded),
+//                 onPressed: () {},
+//                 color: Theme.of(context).colorScheme.error,
+//               )
+//             : null,
+//         children: const [
+//           Text("dsad"),
+//           // Text("dsad"),
+//           // Text("dsad"),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class ExpansionTileCustom extends StatefulWidget {
   Widget? title;

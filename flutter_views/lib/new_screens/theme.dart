@@ -126,7 +126,7 @@ ThemeData getThemeData(BuildContext context, bool isDark,
       ),
 
       // fontFamily: GoogleFonts.roboto(height: 1.2).fontFamily,
-      inputDecorationTheme: getMainTheme(context, colorScheme: colorScheme),
+      // inputDecorationTheme: getMainTheme(context, colorScheme: colorScheme),
       extensions: [customColor],
       useMaterial3: true,
       pageTransitionsTheme: const PageTransitionsTheme(
@@ -236,7 +236,10 @@ IconThemeData getIconThemeData(BuildContext context,
   colorScheme ??= theme.colorScheme;
   bool isLargeOrDesktop = isLargeScreen(context);
   return theme.iconTheme.copyWith(
-      color: colorScheme.onSurfaceVariant, size: isLargeOrDesktop ? 15 : 20);
+      color: colorScheme.onSurfaceVariant,
+      size: isLargeOrDesktop
+          ? kDefaultLargeScreenIconSize
+          : kDefaultSmallScreenIconSize);
 }
 
 ListTileThemeData getListTileThemeData(BuildContext context,
