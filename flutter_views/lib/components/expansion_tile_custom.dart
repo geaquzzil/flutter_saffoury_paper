@@ -7,15 +7,20 @@ import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.d
 
 import '../new_components/cards/clipper_card.dart';
 
+/// if we found getTextInputIsAutoCompleteViewAbstractMap()
+/// then the title should be TypeAheadCustom to get The ViewAbstractFrom getTextInputIsAutoCompleteViewAbstractMap => field name
+/// if not then when we click we got the form
 class ExpansionTileEditable extends StatefulWidget {
   ViewAbstract parent;
   String fieldNameFromParent;
   ViewAbstract viewAbstract;
-
   ViewAbstract? initialValue;
+  Function(GlobalKey<FormBuilderState> subThatBuilded)? onBuildForm;
+
   ExpansionTileEditable(
       {super.key,
       required this.parent,
+      required this.onBuildForm,
       required this.fieldNameFromParent,
       required this.viewAbstract,
       this.initialValue});
@@ -27,17 +32,30 @@ class ExpansionTileEditable extends StatefulWidget {
 class ExpansionTileEditableState extends State<ExpansionTileEditable> {
   // ExpansionTileController controller=ExpansionTileController();
   TextEditingController controller = TextEditingController();
-   late ViewAbstract viewAbstract;
+
+  late bool hasAutoComplete;
+  late bool canBeNullable;
+
+  late ViewAbstract viewAbstract;
+  late GlobalKey<FormBuilderState> formKey;
   @override
   void initState() {
-  viewAbstract= widget.viewAbstract;
+    viewAbstract = widget.viewAbstract;
+    formKey = GlobalKey<FormBuilderState>();
+    canBeNullable =
+        widget.parent.isFieldCanBeNullable(context, widget.fieldNameFromParent);
+    hasAutoComplete = viewAbstract.getTextInputIsAutoCompleteViewAbstractMap();
     super.initState();
   }
 
   @override
+  void didUpdateWidget(covariant ExpansionTileEditable oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    bool canBeNullable =
-        widget.parent.isFieldCanBeNullable(context, widget.fieldNameFromParent);
     // Icons.
     return ElevatedCard(
       child: ExpansionTile(
@@ -81,12 +99,11 @@ class ExpansionTileEditableState extends State<ExpansionTileEditable> {
                   : getEditControllerText(suggestion.getFieldValue(field));
             },
             // name: viewAbstract.getTag(field),
-           
-                     decoration: InputDecoration(
+
+            decoration: InputDecoration(
                 isDense: true,
                 border: InputBorder.none,
-              hint:  
-                  widget.viewAbstract.getMainHeaderLabelTextOnly(context)),
+                hint: widget.viewAbstract.getMainHeaderLabelTextOnly(context)),
             maxLength: viewAbstract.getTextInputMaxLength(field),
             textCapitalization: viewAbstract.getTextInputCapitalization(field),
             keyboardType: viewAbstract.getTextInputType(field),
