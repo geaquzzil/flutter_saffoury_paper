@@ -126,7 +126,7 @@ ThemeData getThemeData(BuildContext context, bool isDark,
       ),
 
       // fontFamily: GoogleFonts.roboto(height: 1.2).fontFamily,
-      // inputDecorationTheme: getMainTheme(context, colorScheme: colorScheme),
+      inputDecorationTheme: getMainTheme(context, colorScheme: colorScheme),
       extensions: [customColor],
       useMaterial3: true,
       pageTransitionsTheme: const PageTransitionsTheme(
@@ -227,7 +227,7 @@ ButtonStyle getButtonStyleIfIcon(BuildContext context, ColorScheme colorSheme) {
 }
 
 bool isLargeScreen(BuildContext context) {
-  return false;
+  return true;
 }
 
 IconThemeData getIconThemeData(BuildContext context,
