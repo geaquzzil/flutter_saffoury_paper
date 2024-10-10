@@ -846,6 +846,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   @override
   void didUpdateWidget(covariant T oldWidget) {
     if (_tabList == null) {
+      
       _initBaseTab();
     }
     buildDrawer = widget.buildDrawer;
@@ -939,6 +940,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       debugPrint("getTabBarWidget !has tabBarList pane ");
       return null;
     }
+    
     return TabBar(
         controller: _tabBaseController,
         dividerColor: Colors.transparent,
@@ -1346,6 +1348,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
               leading: Icon(Icons.one_x_mobiledata_outlined),
             ),
             ExpansionEdit(
+              isNullable: true,
               title: Text("dsadassa"),
               leading: Icon(Icons.abc),
             ),

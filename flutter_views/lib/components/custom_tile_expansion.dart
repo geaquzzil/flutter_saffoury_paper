@@ -9,6 +9,9 @@ import 'package:flutter_view_controller/constants.dart';
 const Duration _kExpand = Duration(milliseconds: 200);
 
 class ExpansionEdit extends StatefulWidget {
+
+
+  
   final bool initiallyExpanded;
 
   /// Typically used to force the expansion arrow icon to the tile's leading or trailing edge.
@@ -23,7 +26,7 @@ class ExpansionEdit extends StatefulWidget {
   /// When false (default), the children are removed from the tree when the tile is
   /// collapsed and recreated upon expansion.
   final bool maintainState;
-
+  final bool isNullable;
   final Widget? leading;
   final Widget title;
   final Widget? subtitle;
@@ -33,7 +36,8 @@ class ExpansionEdit extends StatefulWidget {
     super.key,
     this.initiallyExpanded = false,
     this.controlAffinity,
-    this.maintainState = false,
+    this.isNullable = false,
+    this.maintainState = true,
     this.leading,
     required this.title,
     this.subtitle,
@@ -66,6 +70,9 @@ class _ExpansionEditState extends State<ExpansionEdit>
   late Animation<Color?> _headerColor;
   late Animation<Color?> _iconColor;
   late Animation<Color?> _backgroundColor;
+
+  bool canExpand = true;
+  bool _isNullPressed = false;
 
   bool _isExpanded = false;
   Timer? _timer;
@@ -153,11 +160,12 @@ class _ExpansionEditState extends State<ExpansionEdit>
     _borderTween
       ..begin = const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(kBorderRadius)))
-      ..end = RoundedRectangleBorder(
-          side: BorderSide(
-              width: 1,
-              color: _iconColor.value ?? Theme.of(context).colorScheme.outline),
-          borderRadius: const BorderRadius.all(Radius.circular(kBorderRadius)));
+      ..end = const RoundedRectangleBorder(
+
+          // side: BorderSide(
+          // width: 1,
+          // color: _iconColor.value ?? Theme.of(context).colorScheme.outline),
+          borderRadius: BorderRadius.all(Radius.circular(kBorderRadius)));
   }
 
   void _updateHeaderColor(ExpansionTileThemeData expansionTileTheme,
@@ -219,12 +227,12 @@ class _ExpansionEditState extends State<ExpansionEdit>
     final bool closed = !_isExpanded && _animationController.isDismissed;
     final bool shouldRemoveChildren = closed && !widget.maintainState;
 
-    final Widget result = Offstage(
+    Widget result = Offstage(
       offstage: closed,
       child: TickerMode(
         enabled: !closed,
         child: Padding(
-          padding: expansionTileTheme.childrenPadding ?? EdgeInsets.zero,
+          padding: EdgeInsets.zero,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: getChildrens(),
@@ -295,12 +303,36 @@ class _ExpansionEditState extends State<ExpansionEdit>
               iconColor: _iconColor.value ?? expansionTileTheme.iconColor,
               textColor: _headerColor.value,
               child: ListTile(
+                // leadingAndTrailingTextStyle: ,
                 onTap: _handleTap,
-                contentPadding: expansionTileTheme.tilePadding,
-                leading: widget.leading,
+                contentPadding: EdgeInsets.zero,
+                // leading: widget.leading,
                 title: getTitle(),
                 subtitle: widget.subtitle,
-                trailing: widget.trailing ?? _buildTrailingIcon(context),
+                trailing: widget.isNullable
+                    ? ElevatedButton(
+                        // style: ,
+
+                        // iconAlignment: IconAlignment.end,
+
+                        // padding: EdgeInsets.zero,
+                        onPressed: () {
+                          _toggleExpansion(expand: false);
+                          _isNullPressed = true;
+                        },
+                        child: Text(
+                          "—",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(
+                                  color: Theme.of(context).colorScheme.error),
+                        )
+                        // color: _isExpanded
+                        //     ? _iconColor.value
+                        //     : Theme.of(context).colorScheme.error,
+                        )
+                    : widget.trailing ?? _buildTrailingIcon(context),
                 // minTileHeight: widget.minTileHeight,
               ),
             ),
@@ -317,25 +349,29 @@ class _ExpansionEditState extends State<ExpansionEdit>
       ),
     );
 
-    final bool isShapeProvided =
-        //todo check this
-        //  widget.shape != null ||
-        //     expansionTileTheme.shape != null ||
-        //     widget.collapsedShape != null ||
-        expansionTileTheme.collapsedShape != null;
+    const bool isShapeProvided = false;
+    //todo check this
+    //  widget.shape != null ||
+    //     expansionTileTheme.shape != null ||
+    //     widget.collapsedShape != null ||
+    // expansionTileTheme.collapsedShape != null;
 
-    if (isShapeProvided) {
-      return Material(
-        clipBehavior: clipBehavior,
-        color: backgroundColor,
-        shape: expansionTileBorder,
-        child: tile,
-      );
-    }
+    //When we foucus this will hightlight color to the card
+    // if (isShapeProvided) {
+    //   return Material(
+    //     clipBehavior: clipBehavior,
+    //     color: backgroundColor,
+    //     shape: expansionTileBorder,
+    //     child: tile,
+    //   );
+    // }
 
     return DecoratedBox(
       decoration: decoration,
-      child: tile,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+        child: tile,
+      ),
     );
   }
 
@@ -344,8 +380,13 @@ class _ExpansionEditState extends State<ExpansionEdit>
       maxLines: 1,
       // controller: text,
       name: key,
-      decoration:
-          const InputDecoration(border: InputBorder.none, hintText: "HINT"),
+      decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: "HINT",
+          icon: Icon(
+            Icons.access_alarms_outlined,
+            color: _iconColor.value,
+          )),
     );
   }
 

@@ -187,6 +187,7 @@ ButtonStyle getButtonStyleIfIcon(BuildContext context, ColorScheme colorSheme) {
     elevation: WidgetStateProperty.all(0),
     padding: WidgetStateProperty.all(EdgeInsets.zero),
     overlayColor: WidgetStateProperty.all(Colors.transparent),
+
     // surfaceTintColor:
     //     WidgetStateProperty.all(const Color.fromRGBO(0, 0, 0, 0)),
     shape: WidgetStateProperty.all(const CircleBorder()),
@@ -206,6 +207,7 @@ ButtonStyle getButtonStyleIfIcon(BuildContext context, ColorScheme colorSheme) {
     }),
 
     textStyle: WidgetStateProperty.resolveWith((states) {
+      //todo
       // if (states.contains(WidgetState.pressed)) {
       //   return Theme.of(context).textTheme.bodySmall;
       // }
