@@ -4,7 +4,6 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
 import 'package:flutter_saffoury_paper/models/add_ons/add_ons_classes.dart';
 import 'package:flutter_saffoury_paper/models/custom_views/excel_to_product_converter.dart';
@@ -28,6 +27,7 @@ import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_saffoury_paper/models/notifications.dart';
+import 'package:flutter_saffoury_paper/models/products/gsms.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
@@ -165,6 +165,14 @@ void main() async {
     ProductType(),
   ]);
   try {
+    Product p = Product();
+    p.status = ProductStatus.PENDING;
+    p.barcode = "dfds";
+    p.gsms = GSM()..gsm = 100;
+    // runApp(BaseEditFinal(
+    //   viewAbstract: Product(),
+    // ));
+    // return;
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider(create: (context) => SVGData(svgCode)),
       ChangeNotifierProvider(create: (context) => PreviousColor('#7EB642')),
@@ -177,7 +185,7 @@ void main() async {
       //     create: (context) => DraggableHomeExpandProvider()),
       ChangeNotifierProvider(
           create: (context) =>
-              DrawerMenuControllerProvider(initViewAbstract: Product())),
+              DrawerMenuControllerProvider(initViewAbstract: p)),
       ChangeNotifierProvider(create: (context) => ListActionsProvider()),
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(

@@ -387,7 +387,6 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
     debugPrint("_BaseEdit buildForm ${_viewAbstract.runtimeType}");
 
     return FormBuilder(
-    
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: formKey,
         onChanged: () {

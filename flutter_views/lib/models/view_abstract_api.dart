@@ -436,26 +436,23 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       return null;
     }
   }
+
   String getErrorCodeMessage(BuildContext context, int code) {
     if (code == 500) {
       return AppLocalizations.of(context)!.error500;
       return "Server error access denied";
     } else if (code == 401) {
-      
       return AppLocalizations.of(context)!.error401;
       return "Authentication error access denied";
     } else if (code == 400) {
-      
       return AppLocalizations.of(context)!.error400;
       return "bad request access denied";
     } else if (code == 200) {
-      
       return AppLocalizations.of(context)!.success200;
       return "Success";
     } else {
-      
       return AppLocalizations.of(context)!.success200;
- 
+
       return "Success";
     }
   }
@@ -722,6 +719,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   String toJsonString() {
     return jsonEncode(toJsonViewAbstract());
   }
+
+
 
   T fromJsonViewAbstract(Map<String, dynamic> json);
   Map<String, dynamic> toJsonViewAbstract();

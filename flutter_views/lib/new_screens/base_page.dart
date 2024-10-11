@@ -7,7 +7,6 @@ import 'package:connectivity_listener/connectivity_listener.dart';
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/components/custom_tile_expansion.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -20,6 +19,7 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
+import 'package:flutter_view_controller/new_screens/forms/base_edit_final.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
@@ -846,7 +846,6 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   @override
   void didUpdateWidget(covariant T oldWidget) {
     if (_tabList == null) {
-      
       _initBaseTab();
     }
     buildDrawer = widget.buildDrawer;
@@ -940,7 +939,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       debugPrint("getTabBarWidget !has tabBarList pane ");
       return null;
     }
-    
+
     return TabBar(
         controller: _tabBaseController,
         dividerColor: Colors.transparent,
@@ -1339,26 +1338,33 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       {TabControllerHelper? tab,
       ListToDetailsSecoundPaneHelper? selectedItem}) {
     if (selectedItem == null) {
-      return const Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            ExpansionEdit(
-              title: Text("dsadassa"),
-              leading: Icon(Icons.one_x_mobiledata_outlined),
-            ),
-            ExpansionEdit(
-              isNullable: true,
-              title: Text("dsadassa"),
-              leading: Icon(Icons.abc),
-            ),
-            ExpansionEdit(
-              title: Text("dsadassa"),
-              leading: Icon(Icons.accessible_forward_sharp),
-            ),
-          ],
-        ),
-      );
+      return ListView(children: [
+        BaseEditFinal(
+          viewAbstract: context
+              .read<DrawerMenuControllerProvider>()
+              .getObjectCastViewAbstract,
+        )
+      ]);
+      // return const Padding(
+      //   padding: EdgeInsets.all(20),
+      //   child: Column(
+      //     children: [
+      //       ExpansionEdit(
+      //         title: Text("dsadassa"),
+      //         leading: Icon(Icons.one_x_mobiledata_outlined),
+      //       ),
+      //       ExpansionEdit(
+      //         isNullable: true,
+      //         title: Text("dsadassa"),
+      //         leading: Icon(Icons.abc),
+      //       ),
+      //       ExpansionEdit(
+      //         title: Text("dsadassa"),
+      //         leading: Icon(Icons.accessible_forward_sharp),
+      //       ),
+      //     ],
+      //   ),
+      // );
     }
     int iD = selectedItem.viewAbstract?.iD ?? -1;
     String tableName = selectedItem.viewAbstract?.getTableNameApi() ?? "";
