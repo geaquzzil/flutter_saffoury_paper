@@ -12,6 +12,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_generater.dart';
 import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
 import 'package:flutter_view_controller/new_screens/forms/nasted/custom_tile_expansion.dart';
+import 'package:flutter_view_controller/new_screens/forms/nasted/nasted_form_builder.dart';
 import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -438,36 +439,21 @@ abstract class ViewAbstractInputAndValidater<T>
         textCapitalization: getTextInputCapitalization(field),
         keyboardType: getTextInputType(field),
         inputFormatters: getTextInputFormatter(field),
-        suggestionsBoxDecoration: SuggestionsBoxDecoration(
-            scrollbarThumbAlwaysVisible: false,
-            scrollbarTrackAlwaysVisible: false,
-            hasScrollbar: false,
-            constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * .3,
-                minHeight: 100),
-            color: Theme.of(context).colorScheme.surfaceContainerHigh,
-            borderRadius:
-                const BorderRadius.all(Radius.circular(kBorderRadius))),
         direction: AxisDirection.up,
         validator: (s) {
           // debugPrint(
           //     "getControllerEditTextAutoComplete field=>$field result=> ${viewAbstract.getTextInputValidatorCompose(context, field).call(s)}");
           return getTextInputValidatorCompose<String?>(context, field).call(s);
         },
-        transitionBuilder: (context, suggestionsBox, animationController) {
-          return FadeTransition(
-            opacity: CurvedAnimation(
-                parent: animationController!.view, curve: Curves.fastOutSlowIn),
-            child: suggestionsBox,
-          );
-        },
+        suggestionsBoxDecoration:
+            _getDecorationAutoCompleteSuggestionBox(context),
+        transitionBuilder: _getAutoCompleteSuggestionBoxTransition,
         // suggestionsBoxDecoratio,
         itemBuilder: (context, continent) {
-          return ListTile(
-              leading: CircleAvatar(child: Icon(getFieldIconData(field))),
-              title: Text(continent ?? "-"));
+          return _getAutoCompleteItemBuilder(context, field, continent);
         },
         hideOnLoading: false,
+        hideOnEmpty: true,
         // errorBuilder: (context, error) => const CircularProgressIndicator(),
         onSaved: (newValue) {
           // viewAbstract.setFieldValue(field, newValue);
@@ -485,6 +471,44 @@ abstract class ViewAbstractInputAndValidater<T>
           return searchByFieldName(
               field: field, searchQuery: query, context: context);
         });
+  }
+
+  Widget _getAutoCompleteSuggestionBoxTransition(
+      context, suggestionsBox, animationController) {
+    return FadeTransition(
+      opacity: CurvedAnimation(
+          parent: animationController!.view, curve: Curves.fastOutSlowIn),
+      child: suggestionsBox,
+    );
+  }
+
+  Widget _getAutoCompleteItemBuilder(
+      BuildContext context, String field, dynamic continent) {
+    if (continent is String) {
+      return ListTile(
+          leading: CircleAvatar(child: Icon(getFieldIconData(field))),
+          title: Text(continent ?? "-"));
+    }
+    if (continent is ViewAbstract) {
+      return ListTile(
+        leading: continent.getCardLeadingCircleAvatar(context),
+        title: Text(continent.getCardItemDropdownText(context)),
+        subtitle: Text(continent.getCardItemDropdownSubtitle(context)),
+      );
+    }
+    return Text(continent.toString());
+  }
+
+  SuggestionsBoxDecoration _getDecorationAutoCompleteSuggestionBox(
+      BuildContext context) {
+    return SuggestionsBoxDecoration(
+        scrollbarThumbAlwaysVisible: false,
+        scrollbarTrackAlwaysVisible: false,
+        hasScrollbar: false,
+        constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * .3, minHeight: 100),
+        color: Theme.of(context).colorScheme.surfaceContainerHigh,
+        borderRadius: const BorderRadius.all(Radius.circular(kBorderRadius)));
   }
 
   Widget getFormFieldText(
@@ -618,6 +642,113 @@ abstract class ViewAbstractInputAndValidater<T>
     );
   }
 
+  Widget getFormFieldAutoCompleteViewAbstract(
+      {required BuildContext context,
+      required String field,
+      FormOptions? options}) {
+    options ??= getFormOptions(context, field);
+    return FormBuilderTypeAheadCustom<ViewAbstract>(
+        suggestionsBoxDecoration:
+            _getDecorationAutoCompleteSuggestionBox(context),
+        transitionBuilder: _getAutoCompleteSuggestionBoxTransition,
+        // suggestionsBoxDecoratio,
+        itemBuilder: (context, continent) {
+          return _getAutoCompleteItemBuilder(context, field, continent);
+        },
+        hideOnLoading: false,
+        hideOnEmpty: true,
+        // onTap: () => controller.selection = TextSelection(
+        //     baseOffset: 0, extentOffset: controller.value.text.length),
+        enabled: options.isEnabled,
+        // controller: controller,
+        debounceDuration: const Duration(milliseconds: 750),
+        onChangeGetObject: (text) {
+          return (options?.value as ViewAbstract)
+              .getNewInstance(searchByAutoCompleteTextInput: text);
+          // return autoCompleteBySearchQuery
+          //     ? viewAbstract.getNewInstance(searchByAutoCompleteTextInput: text)
+          //     : viewAbstract.getParnet == null
+          //         ? viewAbstract.getNewInstance()
+          //         : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
+          //             viewAbstract.fieldNameFromParent!)
+          //   ..setFieldValue(field, text);
+        },
+        selectionToTextTransformer: (suggestion) {
+          debugPrint(
+              "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.searchByAutoCompleteTextInput}");
+          debugPrint(
+              "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.isNew()}");
+          return suggestion.getMainHeaderTextOnly(context);
+          // return autoCompleteBySearchQuery
+          //     ? suggestion.isNew()
+          //         ? suggestion.searchByAutoCompleteTextInput ?? ""
+          //         : suggestion.getMainHeaderTextOnly(context)
+          //     : getEditControllerText(suggestion.getFieldValue(field));
+        },
+        name: getTag(field),
+        // initialValue: viewAbstract,
+        decoration: getDecoration(
+          context,
+          castViewAbstract(),
+          field: field,
+        ),
+        maxLength: getTextInputMaxLength(field),
+        inputFormatters: getTextInputFormatter(field),
+        textCapitalization: getTextInputCapitalization(field),
+        keyboardType: getTextInputType(field),
+        onSuggestionSelected: (value) {
+          // if (autoCompleteBySearchQuery) {
+          //   onSelected(value);
+          // }
+          // debugPrint(
+          //     "getControllerEditTextViewAbstractAutoComplete value=>$value");
+          // onSelected(viewAbstract.copyWithNewSuggestion(value));
+        },
+        onSaved: (newValue) {
+          // if (autoCompleteBySearchQuery) {}
+
+          // if (viewAbstract.getParnet != null) {
+          //   viewAbstract.getParnet!
+          //       .setFieldValue(viewAbstract.getFieldNameFromParent!, newValue);
+          // } else {
+          //   viewAbstract.setFieldValue(field, newValue);
+          // }
+          // debugPrint(
+          //     'getControllerEditTextViewAbstractAutoComplete onSave parent=> ${viewAbstract.parent.runtimeType} field = ${viewAbstract.getFieldNameFromParent}:value=> ${newValue.runtimeType}');
+        },
+        // loadingBuilder: (context) => const SizedBox(
+        //     width: double.infinity,
+        //     height: 200,
+        //     child: Center(child: CircularProgressIndicator())),
+
+        validator: (value) {
+          return null;
+          // if (autoCompleteBySearchQuery) {
+          //   if (value?.isNew() ?? true) {
+          //     return AppLocalizations.of(context)!
+          //         .errFieldNotSelected(getMainHeaderLabelTextOnly(context));
+          //   } else {
+          //     return getTextInputValidatorOnAutocompleteSelected(
+          //         context, field, value!);
+          //   }
+          // }
+          // return value?.getTextInputValidator(context, field,
+          //     getEditControllerText(value.getFieldValue(field)));
+        },
+        suggestionsCallback: (query) {
+          if (query.isEmpty) return [];
+          if (query.trim().isEmpty) return [];
+          return search(5, 0, query, context: context)
+              as Future<List<ViewAbstract>>;
+          // if (autoCompleteBySearchQuery) {
+          //   return search(5, 0, query, context: context)
+          //       as Future<List<ViewAbstract>>;
+          // }
+          // return searchViewAbstractByTextInputViewAbstract(
+          //     field: field, searchQuery: query, context: context);
+        });
+  }
+
   Widget getFormFieldDateTime(
       {required BuildContext context,
       required String field,
@@ -660,35 +791,39 @@ abstract class ViewAbstractInputAndValidater<T>
     bool shouldWrapWithTile = true;
     if (options.value is ViewAbstractEnum) {
       widget = const Text("ENUM");
-      return const Text("IS ENUM");
       //TODO could be ChoiceChip or Dropdown
-    }
-    if (options.value is ViewAbstract) {
-      return const Text("IS VIEW ABSTRACT");
-    }
-    FormFieldControllerType textFieldTypeVA = getInputType(field);
-    if (textFieldTypeVA == FormFieldControllerType.DATE_TIME) {
-      widget = getFormFieldDateTime(
-          context: context, field: field, options: options);
-    } else if (textFieldTypeVA == FormFieldControllerType.CHECKBOX) {
-      shouldWrapWithTile = false;
-      widget = getFormFieldCheckbox(
-          context: context, field: field, options: options);
-    } else if (textFieldTypeVA == FormFieldControllerType.EDIT_TEXT) {
-      widget =
-          getFormFieldText(context: context, field: field, options: options);
-    } else if (textFieldTypeVA == FormFieldControllerType.IMAGE) {
-      widget = const Text("IMAGE");
-    } else if (textFieldTypeVA == FormFieldControllerType.COLOR_PICKER) {
-      widget = getFormFieldColorPicker(
-          context: context, field: field, options: options);
-    } else if (textFieldTypeVA == FormFieldControllerType.FILE_PICKER) {
-      widget = const Text("FILE");
-    } else if (textFieldTypeVA == FormFieldControllerType.AUTO_COMPLETE) {
-      widget = getFormFieldAutoComplete(
-          context: context, field: field, options: options);
+    } else if (options.value is ViewAbstract) {
+      widget = NestedFormBuilder(
+        name: field,
+        parentFormKey: formKey,
+        child: getFormFieldAutoCompleteViewAbstract(
+            context: context, field: field, options: options),
+      );
     } else {
-      widget = const Text("OTHER");
+      FormFieldControllerType textFieldTypeVA = getInputType(field);
+      if (textFieldTypeVA == FormFieldControllerType.DATE_TIME) {
+        widget = getFormFieldDateTime(
+            context: context, field: field, options: options);
+      } else if (textFieldTypeVA == FormFieldControllerType.CHECKBOX) {
+        shouldWrapWithTile = false;
+        widget = getFormFieldCheckbox(
+            context: context, field: field, options: options);
+      } else if (textFieldTypeVA == FormFieldControllerType.EDIT_TEXT) {
+        widget =
+            getFormFieldText(context: context, field: field, options: options);
+      } else if (textFieldTypeVA == FormFieldControllerType.IMAGE) {
+        widget = const Text("IMAGE");
+      } else if (textFieldTypeVA == FormFieldControllerType.COLOR_PICKER) {
+        widget = getFormFieldColorPicker(
+            context: context, field: field, options: options);
+      } else if (textFieldTypeVA == FormFieldControllerType.FILE_PICKER) {
+        widget = const Text("FILE");
+      } else if (textFieldTypeVA == FormFieldControllerType.AUTO_COMPLETE) {
+        widget = getFormFieldAutoComplete(
+            context: context, field: field, options: options);
+      } else {
+        widget = const Text("OTHER");
+      }
     }
     if (hasParent() || !shouldWrapWithTile) {
       return widget;
