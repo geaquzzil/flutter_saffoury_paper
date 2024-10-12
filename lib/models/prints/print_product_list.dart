@@ -16,7 +16,7 @@ part 'print_product_list.g.dart';
 //todo disable some settings on inventory process
 ///Disable hidQuantiy
 ///Disable wareHouse
-///Disable 
+///Disable
 ///Disable Date
 @JsonSerializable(explicitToJson: true)
 @reflector
@@ -97,8 +97,8 @@ class PrintProductList extends PrintLocalSetting<PrintProductList> {
         ]);
 
   @override
-  Map<String, IconData> getFieldIconDataMap() =>
-      {"sortByField": Icons.sort, "groupedByField": Icons.group_work};
+  Map<String, IconData> getFieldIconDataMap() => super.getFieldIconDataMap()
+    ..addAll({"sortByField": Icons.sort, "groupedByField": Icons.group_work});
 
   @override
   Map<String, List> getTextInputIsAutoCompleteCustomListMap(

@@ -345,10 +345,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
               // color: Theme.of(context).colorScheme.surfaceVariant,
               child: TabBar(
                 // padding: EdgeInsets.all(kDefaultPadding),
-                labelStyle: Theme.of(context).textTheme.titleSmall,
-                indicatorColor:
-                    Theme.of(context).colorScheme.primary.withOpacity(.2),
-                labelColor: Theme.of(context).colorScheme.primary,
+             
                 tabs: _tabs,
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.circular(80.0),

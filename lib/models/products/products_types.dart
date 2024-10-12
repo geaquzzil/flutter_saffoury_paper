@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
@@ -9,8 +10,8 @@ import 'package:flutter_view_controller/interfaces/web/category_gridable_interfa
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
-import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
@@ -18,8 +19,8 @@ import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:provider/provider.dart';
+
 part 'products_types.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -297,9 +298,9 @@ class ProductType extends ViewAbstract<ProductType>
   }
 
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
+  FormFieldControllerType getInputType(String field) {
     return field == "grades"
-        ? ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API
+        ? FormFieldControllerType.DROP_DOWN_TEXT_SEARCH_API
         : super.getInputType(field);
   }
 }

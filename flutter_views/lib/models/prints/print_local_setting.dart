@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../view_abstract_inputs_validaters.dart';
 
@@ -35,6 +35,14 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
 
   T onSavedModiablePrintableLoaded(
       BuildContext context, ViewAbstract viewAbstractThatCalledPDF);
+
+  @override
+  Map<String, IconData> getFieldIconDataMap() {
+    return {
+      "primaryColor": Icons.color_lens,
+      "secondaryColor": Icons.color_lens
+    };
+  }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
@@ -78,14 +86,14 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
   }
 
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
+  FormFieldControllerType getInputType(String field) {
     if (field == "primaryColor") {
-      return ViewAbstractControllerInputType.COLOR_PICKER;
+      return FormFieldControllerType.COLOR_PICKER;
     }
     if (field == "secondaryColor") {
-      return ViewAbstractControllerInputType.COLOR_PICKER;
+      return FormFieldControllerType.COLOR_PICKER;
     }
-    return ViewAbstractControllerInputType.CHECKBOX;
+    return FormFieldControllerType.CHECKBOX;
   }
 
   @override

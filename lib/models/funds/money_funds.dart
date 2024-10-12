@@ -30,8 +30,8 @@ import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart'
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:number_to_character/number_to_character.dart';
-import 'package:pdf/widgets.dart' as pdf;
 import 'package:pdf/pdf.dart' as d;
+import 'package:pdf/widgets.dart' as pdf;
 import 'package:provider/provider.dart';
 
 import '../users/customers.dart';
@@ -168,11 +168,11 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
   String getPrintableInvoiceTitle(BuildContext context, PrintReceipt? pca) =>
       getMainHeaderLabelTextOnly(context);
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
+  FormFieldControllerType getInputType(String field) {
     if (field == "warehouse" || field == "employees" || field == "customers") {
-      return ViewAbstractControllerInputType.DROP_DOWN_API;
+      return FormFieldControllerType.DROP_DOWN_API;
     }
-    return ViewAbstractControllerInputType.EDIT_TEXT;
+    return FormFieldControllerType.EDIT_TEXT;
   }
 
   @override

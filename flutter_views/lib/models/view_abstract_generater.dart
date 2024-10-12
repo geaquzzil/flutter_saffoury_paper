@@ -513,6 +513,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   bool getIsSubViewAbstractIsExpanded(String field) {
     return false;
   }
+  
 
   // for adding drawer headers
   //  const DrawerHeader(

@@ -533,8 +533,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
     dynamic fieldValue = _viewAbstract.getFieldValue(field);
     fieldValue ??= _viewAbstract.getMirrorNewInstance(field);
     TextInputType? textInputType = _viewAbstract.getTextInputType(field);
-    ViewAbstractControllerInputType textFieldTypeVA =
-        _viewAbstract.getInputType(field);
+    FormFieldControllerType textFieldTypeVA = _viewAbstract.getInputType(field);
 
     bool isAutoComplete = _viewAbstract.getTextInputTypeIsAutoComplete(field);
     bool isAutoCompleteViewAbstract =
@@ -564,7 +563,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
     }
     if (isAutoCompleteViewAbstract) {
       if (textFieldTypeVA ==
-          ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API) {
+          FormFieldControllerType.DROP_DOWN_TEXT_SEARCH_API) {
         throw Exception(
             "Do not select isAutoCompleteViewAbstract and DROP_DOWN_TEXT_SEARCH_API");
       }
@@ -602,7 +601,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
     if (fieldValue is ViewAbstract) {
       fieldValue.setFieldNameFromParent(field);
       fieldValue.setParent(_viewAbstract);
-      if (textFieldTypeVA == ViewAbstractControllerInputType.MULTI_CHIPS_API) {
+      if (textFieldTypeVA == FormFieldControllerType.MULTI_CHIPS_API) {
         return wrapController(
             context: context,
             icon: fieldValue.getTextInputIconData(field),
@@ -614,8 +613,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
                 field: field),
             requiredSpace: true,
             currentScreenSize: widget.currentScreenSize);
-      } else if (textFieldTypeVA ==
-          ViewAbstractControllerInputType.DROP_DOWN_API) {
+      } else if (textFieldTypeVA == FormFieldControllerType.DROP_DOWN_API) {
         return wrapController(
             context: context,
             icon: fieldValue.getTextInputIconData(field),
@@ -629,7 +627,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
             requiredSpace: true,
             currentScreenSize: widget.currentScreenSize);
       } else if (textFieldTypeVA ==
-          ViewAbstractControllerInputType.VIEW_ABSTRACT_AS_ONE_FIELD) {
+          FormFieldControllerType.VIEW_ABSTRACT_AS_ONE_FIELD) {
         return BaseEditWidget(
           viewAbstract: fieldValue,
           isStandAloneField: true,
@@ -642,10 +640,10 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
           }),
         );
       } else if (textFieldTypeVA ==
-          ViewAbstractControllerInputType
+          FormFieldControllerType
               .DROP_DOWN_TEXT_SEARCH_API_AS_ONE_FIELD_NEW_IF_NOT_FOUND) {
       } else if (textFieldTypeVA ==
-          ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API) {
+          FormFieldControllerType.DROP_DOWN_TEXT_SEARCH_API) {
         return getControllerEditTextViewAbstractAutoComplete(
             autoCompleteBySearchQuery: true,
             context,
@@ -695,22 +693,21 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
               field: field),
           requiredSpace: true);
     } else {
-      if (textFieldTypeVA == ViewAbstractControllerInputType.CHECKBOX) {
+      if (textFieldTypeVA == FormFieldControllerType.CHECKBOX) {
         return getContollerCheckBox(context,
             viewAbstract: _viewAbstract,
             field: field,
             value: fieldValue,
             enabled: isFieldEnabled(field),
             currentScreenSize: widget.currentScreenSize);
-      } else if (textFieldTypeVA ==
-          ViewAbstractControllerInputType.COLOR_PICKER) {
+      } else if (textFieldTypeVA == FormFieldControllerType.COLOR_PICKER) {
         return getContolerColorPicker(context,
             viewAbstract: _viewAbstract,
             field: field,
             value: fieldValue,
             enabled: isFieldEnabled(field),
             currentScreenSize: widget.currentScreenSize);
-      } else if (textFieldTypeVA == ViewAbstractControllerInputType.IMAGE) {
+      } else if (textFieldTypeVA == FormFieldControllerType.IMAGE) {
         return EditControllerFilePicker(
           viewAbstract: _viewAbstract,
           field: field,

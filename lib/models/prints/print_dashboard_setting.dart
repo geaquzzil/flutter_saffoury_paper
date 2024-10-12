@@ -14,7 +14,6 @@ import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
-
 part 'print_dashboard_setting.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -30,13 +29,13 @@ class PrintDashboardSetting extends PrintLocalSetting<PrintDashboardSetting> {
 
   PrintDashboardSetting() : super() {
     hasMultiplePageFormats = false;
-    hideHeaderLogo=true;
+    hideHeaderLogo = true;
   }
 
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
+  FormFieldControllerType getInputType(String field) {
     if (field == "currency") {
-      return ViewAbstractControllerInputType.DROP_DOWN_API;
+      return FormFieldControllerType.DROP_DOWN_API;
     }
     return super.getInputType(field);
   }
@@ -67,7 +66,6 @@ class PrintDashboardSetting extends PrintLocalSetting<PrintDashboardSetting> {
           "includePreviousBalance": true,
           "dashboardPrintType": PrintDashboardType.ALL,
           "currency": Currency(),
-          
         });
 
   @override

@@ -65,7 +65,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
   }
 
   @override
-  bool isPaneScaffoldOverlayColord(bool firstPane) => !firstPane;
+  bool isPaneScaffoldOverlayColord(bool firstPane) => false;
 
   @override
   bool setPaneBodyPadding(bool firstPane) => firstPane;
@@ -77,7 +77,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
   bool setHorizontalDividerWhenTowPanes() => false;
 
   @override
-  bool setClipRect(bool? firstPane) => firstPane == false;
+  bool setClipRect(bool? firstPane) => false;
 
   void setSecoundPane(ListToDetailsSecoundPaneHelper? newState) {
     addAction(newState, notifyListener: true);

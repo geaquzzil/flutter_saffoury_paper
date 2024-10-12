@@ -18,8 +18,6 @@ class PrintCustomerBalances extends PrintLocalSetting<PrintCustomerBalances> {
   @override
   PrintCustomerBalances fromJsonViewAbstract(Map<String, dynamic> json) => this;
 
-  @override
-  Map<String, IconData> getFieldIconDataMap() => {};
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {};

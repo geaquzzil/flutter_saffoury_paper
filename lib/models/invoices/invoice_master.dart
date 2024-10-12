@@ -299,11 +299,11 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         "warehouse": false // if there are warehouse then it cant be null
       };
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
+  FormFieldControllerType getInputType(String field) {
     if (field == "warehouse") {
-      return ViewAbstractControllerInputType.DROP_DOWN_API;
+      return FormFieldControllerType.DROP_DOWN_API;
     }
-    return ViewAbstractControllerInputType.EDIT_TEXT;
+    return FormFieldControllerType.EDIT_TEXT;
   }
 
   @override
@@ -834,7 +834,6 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
           hexColor: getPrintablePrimaryColor(pca)),
     ];
   }
-
 
   @override
   String getModifibleTitleName(BuildContext context) =>

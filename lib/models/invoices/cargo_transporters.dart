@@ -98,9 +98,9 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
   @override
   Map<String, double> getTextInputMaxValidateMap() => {};
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
+  FormFieldControllerType getInputType(String field) {
     if (field == "governorates") {
-      return ViewAbstractControllerInputType.VIEW_ABSTRACT_AS_ONE_FIELD;
+      return FormFieldControllerType.VIEW_ABSTRACT_AS_ONE_FIELD;
     }
     return super.getInputType(field);
   }

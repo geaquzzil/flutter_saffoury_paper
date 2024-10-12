@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
@@ -7,7 +8,6 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../funds/money_funds.dart';
 
@@ -78,9 +78,6 @@ class PrintReceipt extends PrintLocalSetting<PrintReceipt> {
           "hideInvoiceDate": AppLocalizations.of(context)!.hideDate,
           "hideEmployeeName": AppLocalizations.of(context)!.hideEmployee,
         });
-
-  @override
-  Map<String, IconData> getFieldIconDataMap() => {};
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) => "";

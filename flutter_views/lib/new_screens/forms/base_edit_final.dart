@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
+import 'package:flutter_view_controller/new_screens/forms/nasted/custom_tile_expansion.dart';
 import 'package:flutter_view_controller/new_screens/forms/nasted/nasted_form_builder.dart';
 
 class BaseEditFinal extends StatefulWidget {
@@ -52,8 +53,9 @@ class _BaseEditFinalState extends State<BaseEditFinal> {
   Widget build(BuildContext context) {
     return FormBuilder(
         initialValue: getInitialData(),
-        autovalidateMode: AutovalidateMode.always,
+        // autovalidateMode: AutovalidateMode.always,
         key: formKey,
+        skipDisabled: true,
         onChanged: () {
           bool? res = formKey.currentState?.saveAndValidate(
               focusOnInvalid: false, autoScrollWhenFocusOnInvalid: false);
@@ -65,19 +67,26 @@ class _BaseEditFinalState extends State<BaseEditFinal> {
 
           // onValidateForm(context);
         },
-        child: getFormContent(_viewAbstract));
+        child: wrapWithColumn(getFormContent(_viewAbstract)));
   }
 
-  Widget getFormContent(ViewAbstract viewAbstract) {
+  List<Widget> getFormContent(ViewAbstract viewAbstract,
+      {ViewAbstract? parent, String? fieldNameFromParent}) {
+    viewAbstract.onBeforeGenerateView(context, action: ServerActions.edit);
+    viewAbstract.setParent(parent);
+    viewAbstract.setFieldNameFromParent(fieldNameFromParent);
     var child = <Widget>[
-      // const SizedBox(height: kDefaultPadding),
-      ...viewAbstract
-          .getMainFields()
-          .map((e) => checkToGetControllerWidget(context, viewAbstract, e)),
+      ...viewAbstract.getMainFields().map((e) {
+        return checkToGetControllerWidget(context, viewAbstract, e);
+      }),
     ];
+    return child;
+  }
+
+  Widget wrapWithColumn(List<Widget> childs) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: child,
+      children: childs,
     );
   }
 
@@ -88,62 +97,89 @@ class _BaseEditFinalState extends State<BaseEditFinal> {
         viewAbstract.getMirrorNewInstance(field);
 
     bool enabled = viewAbstract.isFieldEnabled(field);
-    
+
     if (viewAbstract.isViewAbstract(field)) {
-      return Padding(
-        padding: const EdgeInsets.all(30),
-        child: NestedFormBuilder(
+      bool shouldWrap = viewAbstract.shouldWrapWithExpansionCardWhenChild();
+
+      if (shouldWrap) {
+        return ExpansionEdit(
           name: field,
           parentFormKey: formKey,
-          child: getFormContent(fieldValue),
-        ),
-      );
+          viewAbstract: fieldValue,
+          valueFromParent: viewAbstract.getFieldValue(field),
+        );
+      } else {
+        List<Widget> childs = getFormContent(fieldValue,
+            parent: viewAbstract, fieldNameFromParent: field);
+        return NestedFormBuilder(
+          name: field,
+          parentFormKey: formKey,
+          enabled: enabled,
+          skipDisabled: !enabled,
+          child: wrapWithColumn(childs),
+        );
+      }
     }
-    return FormBuilderTextField(
-      // onTap: () => controller.selection = TextSelection(
-      //     baseOffset: 0, extentOffset: controller.value.text.length),
-      onSubmitted: (value) =>
-          debugPrint("getControllerEditText field $field value $value"),
-      // controller: controller,
-      enabled: enabled,
-      valueTransformer: (value) {
-        // viewAbstract.getFieldValueCheckTypeChangeToCurrencyFormat(context,field)
-        return value?.toString().trim();
-      },
-      onChanged: (value) {
-        debugPrint("onChange es $field:$value");
-        if (!isChanged) {
-          var d = formKey.currentState?.fields["comments"];
-          debugPrint("onChange es ddd $d");
-          // d?.didChange("300");
-          // d?.reset();
-          isChanged = true;
-        }
-      },
-
-      name: viewAbstract.getTag(field),
-      maxLength: viewAbstract.getTextInputMaxLength(field),
-      textCapitalization: viewAbstract.getTextInputCapitalization(field),
-      decoration: getDecoration(
-        context,
-        viewAbstract,
-        field: field,
-      ),
-      keyboardType: viewAbstract.getTextInputType(field),
-      inputFormatters: viewAbstract.getTextInputFormatter(field),
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (va) => viewAbstract
-          .getTextInputValidatorCompose<String?>(context, field)
-          .call(va),
-      onSaved: (String? value) {
-        // viewAbstract.setFieldValue(field, value);
-        // debugPrint(
-        //     'getControllerEditText onSave= $field:$value textController:${controller.text}');
-        // if (viewAbstract.getFieldNameFromParent != null) {
-        //   viewAbstract.getParnet?.setFieldValue(
-        //       viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
-        // }
-      },
-    );
+    return viewAbstract.getFormMainControllerWidget(
+        context: context, field: field, formKey: formKey);
   }
+
+  // TextEditingController getController(BuildContext context,
+  //     {required String field,
+  //     required dynamic value,
+  //     bool isAutoCompleteVA = false}) {
+  //   if (controllers.containsKey(field)) {
+  //     // value = getEditControllerText(value);
+  //     // controllers[field]!.text = value;
+  //     // FocusScope.of(context).unfocus();
+  //     // WidgetsBinding.instance
+  //     //     .addPostFrameCallback((_) => controllers[field]!.clear());
+  //     return controllers[field]!;
+  //   }
+  //   value = getEditControllerText(value);
+  //   controllers[field] = TextEditingController();
+  //   controllers[field]!.text = value;
+
+  //   controllers[field]!.addListener(() {
+  //     bool? validate = widget
+  //         .formKey?.currentState!.fields[_viewAbstract.getTag(field)]
+  //         ?.validate(focusOnInvalid: false);
+  //     // formKey?.currentState!.fields[viewAbstract.getTag(field)]?.save();
+  //     if (validate ?? false) {
+  //       formKey?.currentState!.fields[_viewAbstract.getTag(field)]?.save();
+  //     }
+  //     debugPrint("onTextChangeListener field=> $field validate=$validate");
+  //     _viewAbstract.setFieldValue(field, controllers[field]!.text);
+  //     _viewAbstract.onTextChangeListener(
+  //         context, field, controllers[field]!.text,
+  //         formKey: formKey);
+
+  //     if (_viewAbstract.getParnet != null) {
+  //       _viewAbstract.getParnet!.onTextChangeListenerOnSubViewAbstract(
+  //           context, _viewAbstract, _viewAbstract.getFieldNameFromParent!,
+  //           parentformKey: widget.parentFormKey);
+  //     }
+  //     if (isAutoCompleteVA) {
+  //       if (controllers[field]!.text ==
+  //           getEditControllerText(_viewAbstract.getFieldValue(field))) {
+  //         return;
+  //       }
+  //       _viewAbstract =
+  //           _viewAbstract.copyWithSetNew(field, controllers[field]!.text);
+  //       _viewAbstract.parent?.setFieldValue(field, _viewAbstract);
+  //       //  refreshControllers(context);
+  //       //removed
+  //       // viewAbstractChangeProvider.change(_viewAbstract);
+  //     }
+
+  //     // }
+  //     // modifieController(field);
+  //   });
+  //   // FocusScope.of(context).unfocus();
+  //   // WidgetsBinding.instance
+  //   //     .addPostFrameCallback((_) => controllers[field]!.clear());
+
+  //   _viewAbstract.addTextFieldController(field, controllers[field]!);
+  //   return controllers[field]!;
+  // }
 }

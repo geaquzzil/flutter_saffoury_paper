@@ -81,8 +81,6 @@ class PrintCutRequest extends PrintLocalSetting<PrintCutRequest> {
           "hideInvoiceDate": AppLocalizations.of(context)!.hideDate,
           "hideEmployeeName": AppLocalizations.of(context)!.hideEmployee,
         });
-  @override
-  Map<String, IconData> getFieldIconDataMap() => {};
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) => "";

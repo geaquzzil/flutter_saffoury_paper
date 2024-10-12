@@ -109,17 +109,10 @@ class _SliverCustomScrollViewDraggableState
             pinned: true,
             delegate: SliverAppBarDelegatePreferedSize(
                 wrapWithSafeArea: true,
-                child: ColoredTabBar(
-                  useCard: false,
-                  color: Theme.of(context).colorScheme.surface.withOpacity(.9),
-                  cornersIfCard: 80.0,
-                  // color: Theme.of(context).colorScheme.surfaceVariant,
-                  child: TabBar(
-                    dividerColor: const Color.fromARGB(0, 222, 86, 86),
-                    tabs: _tabs!,
-                    isScrollable: true,
-                    controller: _tabController,
-                  ),
+                child: TabBar(
+                  tabs: _tabs!,
+                  isScrollable: true,
+                  controller: _tabController,
                 ))),
       ),
     );
@@ -153,7 +146,7 @@ class _SliverCustomScrollViewDraggableState
             controller: _scrollController,
             physics: widget.physics ??
                 const BouncingScrollPhysics(
-                  // decelerationRate:ScrollDecelerationRate.fast ,
+                    // decelerationRate:ScrollDecelerationRate.fast ,
                     parent: AlwaysScrollableScrollPhysics()),
             slivers: [
               if (widget.builderAppbar != null)

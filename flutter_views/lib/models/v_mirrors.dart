@@ -209,7 +209,7 @@ abstract class VMirrors<T> {
   /// Get the type of the field based on its value
   /// if the field is null the type is null use [getMirrorFieldType] instead
   ///
-  @Deprecated("removed")
+  @Deprecated("removed Use getMirrorFieldType instad")
   Type getFieldType(String field) {
     return getInstanceMirror().invokeGetter(field).runtimeType;
   }

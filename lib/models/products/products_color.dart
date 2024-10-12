@@ -109,8 +109,8 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
-    return ViewAbstractControllerInputType.COLOR_PICKER;
+  FormFieldControllerType getInputType(String field) {
+    return FormFieldControllerType.COLOR_PICKER;
   }
 
   @override

@@ -687,9 +687,9 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
+  FormFieldControllerType getInputType(String field) {
     if (field == "grades") {
-      return ViewAbstractControllerInputType.VIEW_ABSTRACT_AS_ONE_FIELD;
+      return FormFieldControllerType.VIEW_ABSTRACT_AS_ONE_FIELD;
     }
     return super.getInputType(field);
   }

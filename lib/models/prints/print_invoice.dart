@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_cut_request.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 part 'print_invoice.g.dart';
 
@@ -71,9 +71,9 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
         });
 
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
+  FormFieldControllerType getInputType(String field) {
     if (field == "changeProductNameTo") {
-      return ViewAbstractControllerInputType.EDIT_TEXT;
+      return FormFieldControllerType.EDIT_TEXT;
     }
     return super.getInputType(field);
   }
@@ -155,9 +155,6 @@ class PrintInvoice extends PrintLocalSetting<PrintInvoice> {
               AppLocalizations.of(context)!.hideInvoiceUnitAndTotalPrice,
           "sortByField": AppLocalizations.of(context)!.sortBy,
         });
-
-  @override
-  Map<String, IconData> getFieldIconDataMap() => {};
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) => "";

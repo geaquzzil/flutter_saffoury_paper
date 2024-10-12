@@ -347,11 +347,11 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   Map<String, bool> isFieldCanBeNullableMap() => {};
 
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
+  FormFieldControllerType getInputType(String field) {
     return field == "products"
-        ? ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API
+        ? FormFieldControllerType.DROP_DOWN_TEXT_SEARCH_API
         : field == "warehouse"
-            ? ViewAbstractControllerInputType.DROP_DOWN_API
+            ? FormFieldControllerType.DROP_DOWN_API
             : super.getInputType(field);
   }
 

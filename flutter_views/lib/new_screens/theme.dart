@@ -54,6 +54,7 @@ ThemeData getThemeData(BuildContext context, bool isDark,
       canvasColor: colorScheme.surfaceContainer,
       cardColor: colorScheme.surfaceContainerHighest,
       shadowColor: colorScheme.shadow,
+      tabBarTheme: getTabBarTheme(context, colorScheme),
 
       // floatingActionButtonTheme: FloatingActionButtonThemeData(highlightElevation: ),
       // scaffoldBackgroundColor: lightDynamic?.background,
@@ -138,6 +139,19 @@ ThemeData getThemeData(BuildContext context, bool isDark,
           TargetPlatform.linux: CustomTransitionBuilder(),
         },
       ));
+}
+
+getTabBarTheme(BuildContext context, ColorScheme colorScheme) {
+  return TabBarTheme(
+    indicatorColor: colorScheme.primary,
+    dividerColor: colorScheme.surfaceContainerHighest,
+    labelStyle: Theme.of(context).textTheme.titleSmall,
+    labelColor: Theme.of(context).colorScheme.primary,
+    // indicator: BoxDecoration(
+    //   borderRadius: BorderRadius.circular(80.0),
+    //   color: Theme.of(context).colorScheme.onSecondary,
+    // ),
+  );
 }
 
 getCardTheme(BuildContext context, ColorScheme colorScheme) {

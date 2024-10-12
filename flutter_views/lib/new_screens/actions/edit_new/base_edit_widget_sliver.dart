@@ -286,8 +286,7 @@ class BaseEditWidgetSliver extends StatelessWidget {
     dynamic fieldValue = viewAbstract.getFieldValue(field);
     fieldValue ??= viewAbstract.getMirrorNewInstance(field);
     TextInputType? textInputType = viewAbstract.getTextInputType(field);
-    ViewAbstractControllerInputType textFieldTypeVA =
-        viewAbstract.getInputType(field);
+    FormFieldControllerType textFieldTypeVA = viewAbstract.getInputType(field);
 
     bool isAutoComplete = viewAbstract.getTextInputTypeIsAutoComplete(field);
     bool isAutoCompleteViewAbstract =
@@ -352,21 +351,20 @@ class BaseEditWidgetSliver extends StatelessWidget {
     if (fieldValue is ViewAbstract) {
       fieldValue.setFieldNameFromParent(field);
       fieldValue.setParent(viewAbstract);
-      if (textFieldTypeVA == ViewAbstractControllerInputType.MULTI_CHIPS_API) {
+      if (textFieldTypeVA == FormFieldControllerType.MULTI_CHIPS_API) {
         return EditControllerChipsFromViewAbstract(
             enabled: isFieldEnabled(field),
             parent: viewAbstract,
             viewAbstract: fieldValue,
             field: field);
-      } else if (textFieldTypeVA ==
-          ViewAbstractControllerInputType.DROP_DOWN_API) {
+      } else if (textFieldTypeVA == FormFieldControllerType.DROP_DOWN_API) {
         return EditControllerDropdownFromViewAbstract(
             enabled: isFieldEnabled(field),
             parent: viewAbstract,
             viewAbstract: fieldValue,
             field: field);
       } else if (textFieldTypeVA ==
-          ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API) {
+          FormFieldControllerType.DROP_DOWN_TEXT_SEARCH_API) {
         return getControllerEditTextViewAbstractAutoComplete(
           autoCompleteBySearchQuery: true,
           context,
@@ -400,20 +398,19 @@ class BaseEditWidgetSliver extends StatelessWidget {
       return EditControllerDropdown(
           parent: viewAbstract, enumViewAbstract: fieldValue, field: field);
     } else {
-      if (textFieldTypeVA == ViewAbstractControllerInputType.CHECKBOX) {
+      if (textFieldTypeVA == FormFieldControllerType.CHECKBOX) {
         return getContollerCheckBox(context,
             viewAbstract: viewAbstract,
             field: field,
             value: fieldValue,
             enabled: isFieldEnabled(field));
-      } else if (textFieldTypeVA ==
-          ViewAbstractControllerInputType.COLOR_PICKER) {
+      } else if (textFieldTypeVA == FormFieldControllerType.COLOR_PICKER) {
         return getContolerColorPicker(context,
             viewAbstract: viewAbstract,
             field: field,
             value: fieldValue,
             enabled: isFieldEnabled(field));
-      } else if (textFieldTypeVA == ViewAbstractControllerInputType.IMAGE) {
+      } else if (textFieldTypeVA == FormFieldControllerType.IMAGE) {
         return EditControllerFilePicker(
           viewAbstract: viewAbstract,
           field: field,

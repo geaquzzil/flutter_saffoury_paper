@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+@Deprecated("Use themData")
 class ColoredTabBar extends Container implements PreferredSizeWidget {
   ColoredTabBar(
       {super.key,

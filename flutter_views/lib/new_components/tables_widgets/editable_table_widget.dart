@@ -196,8 +196,7 @@ class _EditableTableWidget extends State<EditableTableWidget> {
     dynamic fieldValue = parent.getFieldValue(field, context: context);
     fieldValue ??= parent.getMirrorNewInstance(field);
     TextInputType? textInputType = parent.getTextInputType(field);
-    ViewAbstractControllerInputType textFieldTypeVA =
-        parent.getInputType(field);
+    FormFieldControllerType textFieldTypeVA = parent.getInputType(field);
 
     // bool isAutoComplete = parent.getTextInputTypeIsAutoComplete(field);
     // bool isAutoCompleteViewAbstract =
@@ -234,11 +233,10 @@ class _EditableTableWidget extends State<EditableTableWidget> {
       return EditControllerDropdown(
           parent: parent, enumViewAbstract: fieldValue, field: field);
     } else {
-      if (textFieldTypeVA == ViewAbstractControllerInputType.CHECKBOX) {
+      if (textFieldTypeVA == FormFieldControllerType.CHECKBOX) {
         return EditControllerCheckBox(viewAbstract: parent, field: field);
-      } else if (textFieldTypeVA ==
-          ViewAbstractControllerInputType.COLOR_PICKER) {
-      } else if (textFieldTypeVA == ViewAbstractControllerInputType.IMAGE) {
+      } else if (textFieldTypeVA == FormFieldControllerType.COLOR_PICKER) {
+      } else if (textFieldTypeVA == FormFieldControllerType.IMAGE) {
         return EditControllerFilePicker(
           viewAbstract: parent,
           field: field,

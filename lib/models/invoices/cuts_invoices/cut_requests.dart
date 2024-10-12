@@ -6,7 +6,6 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_request_results.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
-import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/prints/cut_requests/printable_cut_request_recipt.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_cut_request.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
@@ -347,10 +346,10 @@ class CutRequest extends ViewAbstract<CutRequest>
   String? getTableNameApi() => "cut_requests";
 
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
+  FormFieldControllerType getInputType(String field) {
     return field == "products"
-        ? ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API
-        : ViewAbstractControllerInputType.EDIT_TEXT;
+        ? FormFieldControllerType.DROP_DOWN_TEXT_SEARCH_API
+        : FormFieldControllerType.EDIT_TEXT;
   }
 
   @override

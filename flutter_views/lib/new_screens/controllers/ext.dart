@@ -154,7 +154,8 @@ bool isDecorationFilled(CurrentScreenSize? c) {
 }
 
 InputDecoration getDecorationIconHintPrefix(
-    {String? prefix,
+    {required BuildContext context,
+    String? prefix,
     String? suffix,
     String? hint,
     String? label,
@@ -163,7 +164,13 @@ InputDecoration getDecorationIconHintPrefix(
   return InputDecoration(
       icon: icon == null ? null : Icon(icon),
       hintText: hint,
+      border: InputBorder.none,
+      errorStyle: Theme.of(context)
+          .textTheme
+          .bodySmall
+          ?.copyWith(color: Theme.of(context).colorScheme.error),
       labelText: label,
+      counterText: '',
       prefixText: prefix,
       suffixText: suffix);
 }
@@ -174,6 +181,7 @@ InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
   bool isLarge = isLargeScreen(context);
   if (field != null) {
     return getDecorationIconHintPrefix(
+        context: context,
         currentScreenSize: currentScreenSize,
         prefix: viewAbstract.getTextInputPrefix(context, field),
         suffix: viewAbstract.getTextInputSuffix(context, field),
@@ -182,6 +190,7 @@ InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
         icon: isLarge ? null : viewAbstract.getTextInputIconData(field));
   } else {
     return getDecorationIconHintPrefix(
+        context: context,
         currentScreenSize: currentScreenSize,
         icon: isLarge ? null : viewAbstract.getMainIconData(),
         hint: viewAbstract.getTextInputHint(context));

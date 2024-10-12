@@ -68,7 +68,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   }
 
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
+  FormFieldControllerType getInputType(String field) {
     // if (field == "gsm") {
     //   return ViewAbstractControllerInputType.VIEW_ABSTRACT_AS_ONE_FIELD;
     // }

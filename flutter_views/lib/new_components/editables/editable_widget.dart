@@ -159,7 +159,7 @@ class _EditableWidget extends State<EditableWidget> {
               .where((element) =>
                   !widget.viewAbstract.isViewAbstract(element) &&
                   widget.viewAbstract.getInputType(element) ==
-                      v.ViewAbstractControllerInputType.EDIT_TEXT)
+                      v.FormFieldControllerType.EDIT_TEXT)
               .map((e) => buildTextField(e))
               .toList(),
         ));

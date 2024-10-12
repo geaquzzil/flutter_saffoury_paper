@@ -4,10 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_generater.dart';
 import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
+import 'package:flutter_view_controller/new_screens/forms/nasted/custom_tile_expansion.dart';
+import 'package:flutter_view_controller/new_screens/theme.dart';
+import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -23,15 +28,21 @@ abstract class ViewAbstractInputAndValidater<T>
   final Map<String, GlobalKey<FormBuilderState>> _subformKeys = {};
 
   Map<String, TextInputType?> getTextInputTypeMap();
+
+  // Map<String, FormAutoCompleteOptions>? getFormTextInputIsAutoCompleteMap();
+  @Deprecated(
+      "I think to change this to search via field and if the field is null search for all fields Use getFormTextInputIsAutoCompleteMap ")
   Map<String, bool> getTextInputIsAutoCompleteMap();
   @Deprecated(
-      "I think to change this to search via field and if the field is null search for all fields")
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap();
-
-  Map<String, int> getTextInputMaxLengthMap();
+      "I think to change this to search via field and if the field is null search for all fields Use getFormTextInputIsAutoCompleteMap ")
   Map<String, List<dynamic>> getTextInputIsAutoCompleteCustomListMap(
           BuildContext context) =>
       {};
+  @Deprecated(
+      "I think to change this to search via field and if the field is null search for all fields Use getFormTextInputIsAutoCompleteMap ")
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap();
+
+  Map<String, int> getTextInputMaxLengthMap();
 
   Map<String, bool> isFieldRequiredMap();
   Map<String, bool> isFieldCanBeNullableMap();
@@ -42,7 +53,8 @@ abstract class ViewAbstractInputAndValidater<T>
   Map<String, bool> isTextInputEnabledMap(BuildContext context) => {};
 
   TextInputType? getTextInputType(String field) {
-    return getTextInputTypeMap()[field];
+    //TODO I added TextInputType.none
+    return getTextInputTypeMap()[field] ?? TextInputType.none;
   }
 
   Map<String, List<String>>? getHasControlersAfterInputtMap(
@@ -50,9 +62,10 @@ abstract class ViewAbstractInputAndValidater<T>
     return null;
   }
 
-  ViewAbstractControllerInputType getInputType(String field) {
-    if (field == "image") return ViewAbstractControllerInputType.IMAGE;
-    return ViewAbstractControllerInputType.EDIT_TEXT;
+  FormFieldControllerType getInputType(String field) {
+    if (field == "image") return FormFieldControllerType.IMAGE;
+    if (field == "date") return FormFieldControllerType.DATE_TIME;
+    return FormFieldControllerType.EDIT_TEXT;
   }
 
   /// if the field is auto-complete view-abstract then enabled it by default
@@ -383,23 +396,580 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   void dispose() {
-    // textFieldController.forEach((key, value) {
-    //   textFieldController[key]?.removeListener(() {});
-    //   textFieldController[key]?.dispose();
-    // });
+    textFieldController.forEach((key, value) {
+      textFieldController[key]?.removeListener(() {});
+      textFieldController[key]?.dispose();
+    });
     textFieldController.clear();
+  }
+
+  ///should we wrap the edit view With ExpansionEditCard When its a child
+  bool shouldWrapWithExpansionCardWhenChild() {
+    return true;
+  }
+
+  FormOptions getFormOptions(BuildContext context, String field) {
+    return FormOptions(
+        type: getMirrorFieldType(field),
+        isEnabled: isFieldEnabled(field),
+        value: getFieldValue(field, context: context) ??
+            getMirrorNewInstance(field));
+  }
+
+  Widget getFormFieldAutoComplete(
+      {required BuildContext context,
+      required String field,
+      FormOptions? options}) {
+    FormOptions options = getFormOptions(context, field);
+    return FormBuilderTypeAheadCustom<String>(
+        // onTap: () => controller.selection = TextSelection(
+        //     baseOffset: 0, extentOffset: controller.value.text.length),
+        // controller: controller,
+        onChangeGetObject: (text) => text,
+        valueTransformer: (value) {
+          return value?.trim();
+        },
+        enabled: options.isEnabled,
+        name: getTag(field),
+        decoration: getDecoration(context, castViewAbstract(), field: field),
+        initialValue: getFieldValue(field, context: context).toString(),
+        maxLength: getTextInputMaxLength(field),
+        textCapitalization: getTextInputCapitalization(field),
+        keyboardType: getTextInputType(field),
+        inputFormatters: getTextInputFormatter(field),
+        validator: (s) {
+          // debugPrint(
+          //     "getControllerEditTextAutoComplete field=>$field result=> ${viewAbstract.getTextInputValidatorCompose(context, field).call(s)}");
+          return getTextInputValidatorCompose<String?>(context, field).call(s);
+        },
+        // suggestionsBoxDecoratio,
+        itemBuilder: (context, continent) {
+          return ListTile(title: Text(continent ?? "-"));
+        },
+        hideOnLoading: false,
+        // errorBuilder: (context, error) => const CircularProgressIndicator(),
+        onSaved: (newValue) {
+          // viewAbstract.setFieldValue(field, newValue);
+          // debugPrint(
+          //     'getControllerEditTextAutoComplete onSave= $field:$newValue');
+          // if (viewAbstract.getFieldNameFromParent != null) {
+          //   viewAbstract.getParnet?.setFieldValue(
+          //       viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
+          // }
+        },
+        suggestionsCallback: (query) {
+          if (query.isEmpty) return [];
+          if (query.trim().isEmpty) return [];
+
+          return searchByFieldName(
+              field: field, searchQuery: query, context: context);
+        });
+  }
+
+  Widget getFormFieldText(
+      {required BuildContext context,
+      required String field,
+      FormOptions? options}) {
+    FormOptions options = getFormOptions(context, field);
+
+    return FormBuilderTextField(
+      enabled: options.isEnabled,
+      // onTap: () => controller.selection = TextSelection(
+      //     baseOffset: 0, extentOffset: controller.value.text.length),
+      onSubmitted: (value) =>
+          debugPrint("getControllerEditText field $field value $value"),
+      // controller: controller,
+      // enabled: enabled,
+      valueTransformer: (value) {
+        // viewAbstract.getFieldValueCheckTypeChangeToCurrencyFormat(context,field)
+        return value?.toString().trim();
+      },
+      // onChanged: (value) {
+      //   debugPrint("onChange es $field:$value");
+      //   if (!isChanged) {
+      //     var d = formKey.currentState?.fields["comments"];
+      //     debugPrint("onChange es ddd $d");
+      //     // d?.didChange("300");
+      //     // d?.reset();
+      //     isChanged = true;
+      //   }
+      // },
+
+      name: getTag(field),
+      maxLength: getTextInputMaxLength(field),
+      textCapitalization: getTextInputCapitalization(field),
+      decoration: getDecoration(
+        context,
+        castViewAbstract(),
+        field: field,
+      ),
+      keyboardType: getTextInputType(field),
+      inputFormatters: getTextInputFormatter(field),
+      validator: (va) =>
+          getTextInputValidatorCompose<String?>(context, field).call(va),
+      onSaved: (String? value) {
+        // viewAbstract.setFieldValue(field, value);
+        // debugPrint(
+        //     'getControllerEditText onSave= $field:$value textController:${controller.text}');
+        // if (viewAbstract.getFieldNameFromParent != null) {
+        //   viewAbstract.getParnet?.setFieldValue(
+        //       viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
+        // }
+      },
+    );
+  }
+
+  Widget getFormFieldCheckbox(
+      {required BuildContext context,
+      required String field,
+      FormOptions? options}) {
+    options ??= getFormOptions(context, field);
+    return FormBuilderCheckbox(
+      enabled: options.isEnabled,
+      valueTransformer: (_) => _, //TODO
+
+      // autovalidateMode: AutovalidateMode.always,
+      name: getTag(field),
+      initialValue: options.type == int
+          ? (options.value == true ? 1 : 0)
+          : options.value ?? false,
+      title: Text(getTextCheckBoxTitle(context, field)),
+
+      subtitle: Text(getTextCheckBoxDescription(context, field)),
+      onChanged: (value) {
+        // viewAbstract.onCheckBoxChanged(context, field, value);
+      },
+      decoration: getDecorationCheckBox(),
+      onSaved: (value) {
+        // dynamic valueToSave =
+        //     fieldType == int ? (value == true ? 1 : 0) : value ?? false;
+        // viewAbstract.setFieldValue(field, valueToSave);
+
+        // if (viewAbstract.getFieldNameFromParent != null) {
+        //   viewAbstract.getParnet?.setFieldValue(
+        //       viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
+        // }
+      },
+    );
+  }
+
+  // Widget getFormFieldAutoComplete(
+  //     {required BuildContext context, required String field}) {
+  //   FormOptions options = getFormOptions(context, field);
+  // }
+
+  // Widget getFormFieldDropdownEnum(
+  //     {required BuildContext context, required String field}) {
+  //   FormOptions options = getFormOptions(context, field);
+  // }
+  // Widget getFormFieldChoiceChip(
+  //     {required BuildContext context, required String field}) {
+  //   FormOptions options = getFormOptions(context, field);
+  // }
+  Widget getFormFieldColorPicker(
+      {required BuildContext context,
+      required String field,
+      FormOptions? options}) {
+    options ??= getFormOptions(context, field);
+
+    return FormBuilderColorPickerField(
+      valueTransformer: (v) {
+        return v?.toHex2();
+      },
+      colorPickerType: ColorPickerType.materialPicker,
+      // expands: true,
+
+      enabled: options.isEnabled,
+      initialValue: (options.value is String)
+          ? (options.value as String).fromHex()
+          : null,
+      name: getTag(field),
+      // initialDate: (value as String?).toDateTime(),
+      decoration: getDecoration(context, castViewAbstract(), field: field),
+      onSaved: (newValue) {
+        // viewAbstract.setFieldValue(field, newValue?.toHex2());
+        // debugPrint('getContolerColorPicker onSave= $field:$newValue');
+        // if (viewAbstract.getFieldNameFromParent != null) {
+        //   viewAbstract.getParnet?.setFieldValue(
+        //       viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
+        // }
+      },
+    );
+  }
+
+  Widget getFormFieldDateTime(
+      {required BuildContext context,
+      required String field,
+      FormOptions? options}) {
+    options ??= getFormOptions(context, field);
+    return FormBuilderDateTimePicker(
+      enabled: options.isEnabled,
+      valueTransformer: (value) {
+        return getFieldDateTimeParseFromDateTime(value);
+      },
+      initialValue: (options.value as String?)?.toDateTime(),
+      name: getTag(field),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2025),
+      decoration: getDecoration(
+        context,
+        castViewAbstract(),
+        field: field,
+      ),
+      onSaved: (newValue) {
+        // viewAbstract.setFieldValue(
+        //     field, viewAbstract.getFieldDateTimeParseFromDateTime(newValue));
+        // debugPrint('EditControllerEditText onSave= $field:$newValue');
+        // if (viewAbstract.getFieldNameFromParent != null) {
+        //   viewAbstract.getParnet?.setFieldValue(
+        //       viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
+        // }
+      },
+    );
+  }
+
+  Widget getFormMainControllerWidget(
+      {required BuildContext context,
+      required String field,
+      required GlobalKey<FormBuilderState> formKey,
+      GlobalKey<FormBuilderState>? childFormKey,
+      ViewAbstract? parent}) {
+    FormOptions options = getFormOptions(context, field);
+    Widget widget;
+    bool shouldWrapWithTile = true;
+    if (options.value is ViewAbstractEnum) {
+      widget = const Text("ENUM");
+      //TODO could be ChoiceChip or Dropdown
+    }
+    FormFieldControllerType textFieldTypeVA = getInputType(field);
+    if (textFieldTypeVA == FormFieldControllerType.DATE_TIME) {
+      widget = getFormFieldDateTime(
+          context: context, field: field, options: options);
+    } else if (textFieldTypeVA == FormFieldControllerType.CHECKBOX) {
+      shouldWrapWithTile = false;
+      widget = getFormFieldCheckbox(
+          context: context, field: field, options: options);
+    } else if (textFieldTypeVA == FormFieldControllerType.EDIT_TEXT) {
+      widget =
+          getFormFieldText(context: context, field: field, options: options);
+    } else if (textFieldTypeVA == FormFieldControllerType.IMAGE) {
+      widget = const Text("IMAGE");
+    } else if (textFieldTypeVA == FormFieldControllerType.COLOR_PICKER) {
+      widget = getFormFieldColorPicker(
+          context: context, field: field, options: options);
+    } else if (textFieldTypeVA == FormFieldControllerType.FILE_PICKER) {
+      widget = const Text("FILE");
+    } else if (textFieldTypeVA == FormFieldControllerType.AUTO_COMPLETE) {
+      widget = getFormFieldAutoComplete(
+          context: context, field: field, options: options);
+    } else {
+      widget = const Text("OTHER");
+    }
+    if (hasParent() || !shouldWrapWithTile) {
+      return widget;
+    } else {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: kDefaultPadding * .25),
+        child: ListTileEdit(
+          title: widget,
+          context: context,
+        ),
+      );
+    }
+
+    // bool isAutoComplete = getTextInputTypeIsAutoComplete(field);
+    // bool isAutoCompleteViewAbstract =
+    //     getTextInputTypeIsAutoCompleteViewAbstract(field);
+    // bool isAutoCompleteByCustomList =
+    //     getTextInputIsAutoCompleteCustomList(context, field);
+    // debugPrint(
+    //     "getControllerWidget field => $field isAutoComplete=> $isAutoComplete isAutoCompleteViewAbstract=>$isAutoCompleteViewAbstract  isAutoCompleteByCustomList=>$isAutoCompleteByCustomList");
+    // if (isAutoComplete) {
+    //   return getControllerEditTextAutoComplete(context,
+    //       enabled: isFieldEnabled(field),
+    //       viewAbstract: _viewAbstract,
+    //       field: field,
+    //       controller: getController(context, field: field, value: fieldValue),
+    //       currentScreenSize: widget.currentScreenSize);
+    // }
+    // if (isAutoCompleteByCustomList) {
+    //   // return wrapController(Text("dsa"));
+    //   return DropdownCustomListWithFormListener(
+    //     viewAbstract: _viewAbstract,
+    //     field: field,
+    //     formKey: formKey,
+    //     onSelected: (selectedObj) {
+    //       _viewAbstract.setFieldValue(field, selectedObj);
+    //     },
+    //   );
+    // }
+    // if (isAutoCompleteViewAbstract) {
+    //   if (textFieldTypeVA ==
+    //       FormFieldControllerType.DROP_DOWN_TEXT_SEARCH_API) {
+    //     throw Exception(
+    //         "Do not select isAutoCompleteViewAbstract and DROP_DOWN_TEXT_SEARCH_API");
+    //   }
+    //   if (_viewAbstract.getParnet == null) {
+    //     return getControllerEditText(context,
+    //         viewAbstract: _viewAbstract,
+    //         field: field,
+    //         controller: getController(context, field: field, value: fieldValue),
+    //         enabled: isFieldEnabled(field),
+    //         currentScreenSize: widget.currentScreenSize);
+    //   }
+    //   return getControllerEditTextViewAbstractAutoComplete(
+    //     context,
+    //     viewAbstract: _viewAbstract,
+    //     withDecoration: !widget.isStandAloneField,
+    //     // enabled: isFieldEnabled(field),
+    //     field: field,
+    //     controller: getController(context,
+    //         field: field, value: fieldValue, isAutoCompleteVA: true),
+    //     onSelected: (selectedViewAbstract) {
+    //       _viewAbstract.parent?.setFieldValue(field, selectedViewAbstract);
+    //       _viewAbstract.parent
+    //           ?.onDropdownChanged(context, field, selectedViewAbstract);
+    //       //todo this should be setState
+    //       _viewAbstract = selectedViewAbstract;
+    //       refreshControllers(context, field);
+    //       //removed
+    //       // viewAbstractChangeProvider.change(_viewAbstract);
+    //       keyExpansionTile.currentState?.manualExpand(false);
+
+    //       // context.read<ViewAbstractChangeProvider>().change(viewAbstract);
+    //     },
+    //   );
+    // }
+    // if (fieldValue is ViewAbstract) {
+    //   fieldValue.setFieldNameFromParent(field);
+    //   fieldValue.setParent(_viewAbstract);
+    //   if (textFieldTypeVA == FormFieldControllerType.MULTI_CHIPS_API) {
+    //     return wrapController(
+    //         context: context,
+    //         icon: fieldValue.getTextInputIconData(field),
+    //         title: fieldValue.getTextInputLabel(context, field) ?? "-",
+    //         EditControllerChipsFromViewAbstract(
+    //             enabled: isFieldEnabled(field),
+    //             parent: _viewAbstract,
+    //             viewAbstract: fieldValue,
+    //             field: field),
+    //         requiredSpace: true,
+    //         currentScreenSize: widget.currentScreenSize);
+    //   } else if (textFieldTypeVA == FormFieldControllerType.DROP_DOWN_API) {
+    //     return wrapController(
+    //         context: context,
+    //         icon: fieldValue.getTextInputIconData(field),
+    //         title: fieldValue.getTextInputLabel(context, field) ?? "-",
+    //         EditControllerDropdownFromViewAbstract(
+    //             formKey: formKey,
+    //             enabled: isFieldEnabled(field),
+    //             parent: _viewAbstract,
+    //             viewAbstract: fieldValue,
+    //             field: field),
+    //         requiredSpace: true,
+    //         currentScreenSize: widget.currentScreenSize);
+    //   } else if (textFieldTypeVA ==
+    //       FormFieldControllerType.VIEW_ABSTRACT_AS_ONE_FIELD) {
+    //     return BaseEditWidget(
+    //       viewAbstract: fieldValue,
+    //       isStandAloneField: true,
+    //       currentScreenSize: widget.currentScreenSize,
+    //       isTheFirst: false,
+    //       onValidate: ((ob) {
+    //         // String? fieldName = ob?.getFieldNameFromParent()!;
+    //         debugPrint("editPageNew subViewAbstract field=>$field value=>$ob");
+    //         _viewAbstract.setFieldValue(field, ob);
+    //       }),
+    //     );
+    //   } else if (textFieldTypeVA ==
+    //       FormFieldControllerType
+    //           .DROP_DOWN_TEXT_SEARCH_API_AS_ONE_FIELD_NEW_IF_NOT_FOUND) {
+    //   } else if (textFieldTypeVA ==
+    //       FormFieldControllerType.DROP_DOWN_TEXT_SEARCH_API) {
+    //     return getControllerEditTextViewAbstractAutoComplete(
+    //         autoCompleteBySearchQuery: true,
+    //         context,
+    //         enabled: isFieldEnabled(field),
+    //         viewAbstract: fieldValue,
+    //         // enabled: isFieldEnabled(field),
+    //         field: field,
+    //         type: AutoCompleteFor.NORMAL,
+    //         controller: TextEditingController(
+    //             text: fieldValue.isEditing()
+    //                 ? fieldValue.getMainHeaderTextOnly(context)
+    //                 : ''), onSelected: (selectedViewAbstract) {
+    //       // viewAbstract = selectedViewAbstract;
+    //       fieldValue.parent?.setFieldValue(field, selectedViewAbstract);
+    //       fieldValue.parent
+    //           ?.onAutoComplete(context, field, selectedViewAbstract);
+
+    //       refreshControllers(context, field);
+    //       // //TODO viewAbstractChangeProvider.change(viewAbstract);
+    //       // // context.read<ViewAbstractChangeProvider>().change(viewAbstract);
+    //     }, currentScreenSize: widget.currentScreenSize);
+    //   }
+
+    //   return BaseEditWidget(
+    //     viewAbstract: fieldValue,
+    //     parentFormKey: formKey,
+    //     currentScreenSize: widget.currentScreenSize,
+    //     formKey: getSubFormState(context, field),
+    //     isTheFirst: false,
+    //     onValidate: ((ob) {
+    //       // String? fieldName = ob?.getFieldNameFromParent()!;
+    //       debugPrint("editPageNew subViewAbstract field=>$field value=>$ob");
+    //       _viewAbstract.setFieldValue(field, ob);
+    //       // if (ob != null) {
+    //       //   viewAbstractChangeProvider.change(viewAbstract);
+    //       // }
+    //     }),
+    //   );
+    // } else if (fieldValue is ViewAbstractEnum) {
+    //   return wrapController(
+    //       context: context,
+    //       icon: fieldValue.getFieldLabelIconData(context, fieldValue),
+    //       title: fieldValue.getMainLabelText(context) ?? "-",
+    //       EditControllerDropdown(
+    //           parent: _viewAbstract,
+    //           enumViewAbstract: fieldValue,
+    //           field: field),
+    //       requiredSpace: true);
+    // } else {
+    //   if (textFieldTypeVA == FormFieldControllerType.CHECKBOX) {
+    //     return getContollerCheckBox(context,
+    //         viewAbstract: _viewAbstract,
+    //         field: field,
+    //         value: fieldValue,
+    //         enabled: isFieldEnabled(field),
+    //         currentScreenSize: widget.currentScreenSize);
+    //   } else if (textFieldTypeVA == FormFieldControllerType.COLOR_PICKER) {
+    //     return getContolerColorPicker(context,
+    //         viewAbstract: _viewAbstract,
+    //         field: field,
+    //         value: fieldValue,
+    //         enabled: isFieldEnabled(field),
+    //         currentScreenSize: widget.currentScreenSize);
+    //   } else if (textFieldTypeVA == FormFieldControllerType.IMAGE) {
+    //     return EditControllerFilePicker(
+    //       viewAbstract: _viewAbstract,
+    //       field: field,
+    //     );
+    //   } else {
+    //     if (textInputType == TextInputType.datetime) {
+    //       return getControllerDateTime(context,
+    //           viewAbstract: _viewAbstract,
+    //           field: field,
+    //           value: fieldValue,
+    //           enabled: isFieldEnabled(field),
+    //           currentScreenSize: widget.currentScreenSize);
+    //     } else {
+    //       return getControllerEditText(context,
+    //           withDecoration: true,
+    //           viewAbstract: _viewAbstract,
+    //           field: field,
+    //           controller:
+    //               getController(context, field: field, value: fieldValue),
+    //           enabled: isFieldEnabled(field),
+    //           currentScreenSize: widget.currentScreenSize);
+    //     }
+    //   }
+    // }
+  }
+
+  InputDecoration getDecorationIconHintPrefix({
+    required BuildContext context,
+    String? prefix,
+    String? suffix,
+    String? hint,
+    String? label,
+    IconData? icon,
+  }) {
+    return InputDecoration(
+        icon: icon == null ? null : Icon(icon),
+        hintText: hint,
+        border: InputBorder.none,
+        errorStyle: Theme.of(context)
+            .textTheme
+            .bodySmall
+            ?.copyWith(color: Theme.of(context).colorScheme.error),
+        labelText: label,
+        counterText: '',
+        prefixText: prefix,
+        suffixText: suffix);
+  }
+
+  InputDecoration getDecorationCheckBox() {
+    return const InputDecoration(filled: false, border: InputBorder.none);
+  }
+
+  InputDecoration getDecoration(BuildContext context, ViewAbstract viewAbstract,
+      {String? field, bool requireIcon = true}) {
+    bool isLarge = isLargeScreen(context);
+    if (field != null) {
+      return getDecorationIconHintPrefix(
+          context: context,
+          prefix: viewAbstract.getTextInputPrefix(context, field),
+          suffix: viewAbstract.getTextInputSuffix(context, field),
+          hint: viewAbstract.getTextInputHint(context, field: field),
+          label:
+              isLarge ? null : viewAbstract.getTextInputLabel(context, field),
+          icon: requireIcon == false
+              ? null
+              : isLarge
+                  ? null
+                  : viewAbstract.getTextInputIconData(field));
+    } else {
+      return getDecorationIconHintPrefix(
+          context: context,
+          icon: requireIcon == false
+              ? null
+              : isLarge
+                  ? null
+                  : viewAbstract.getMainIconData(),
+          hint: viewAbstract.getTextInputHint(context));
+    }
   }
 }
 
-enum ViewAbstractControllerInputType {
+enum FormFieldControllerType {
   EDIT_TEXT,
+  DATE_TIME,
+  AUTO_COMPLETE,
   COLOR_PICKER,
   FILE_PICKER,
   CHECKBOX,
+
   MULTI_CHIPS_API,
   DROP_DOWN_API,
+
+  @Deprecated("")
   DROP_DOWN_TEXT_SEARCH_API,
+  @Deprecated("")
   DROP_DOWN_TEXT_SEARCH_API_AS_ONE_FIELD_NEW_IF_NOT_FOUND,
+
+  @Deprecated("")
   VIEW_ABSTRACT_AS_ONE_FIELD,
+
   IMAGE
+}
+
+enum FormAutoCompleteType {
+  DROP_DOWN_TEXT_SEARCH_API,
+  DROP_DOWN_TEXT_SEARCH_API_BY_FIELD,
+}
+
+class FormAutoCompleteOptions {
+  FormAutoCompleteType type;
+  List? values;
+  FormAutoCompleteOptions({
+    required this.type,
+    this.values,
+  });
+}
+
+class FormOptions {
+  bool isEnabled;
+  dynamic value;
+  Type? type;
+  FormOptions({required this.isEnabled, required this.value, this.type});
 }

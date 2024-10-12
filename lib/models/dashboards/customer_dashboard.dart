@@ -594,9 +594,9 @@ class CustomerDashboardSelector
       _$CustomerDashboardSelectorFromJson(data);
 
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
+  FormFieldControllerType getInputType(String field) {
     if (field == "customer") {
-      return ViewAbstractControllerInputType.DROP_DOWN_TEXT_SEARCH_API;
+      return FormFieldControllerType.DROP_DOWN_TEXT_SEARCH_API;
     }
     return super.getInputType(field);
   }

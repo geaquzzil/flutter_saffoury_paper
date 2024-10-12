@@ -148,9 +148,9 @@ class Employee extends User<Employee> {
   }
 
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
+  FormFieldControllerType getInputType(String field) {
     if (field == "warehouse") {
-      return ViewAbstractControllerInputType.MULTI_CHIPS_API;
+      return FormFieldControllerType.MULTI_CHIPS_API;
     }
     return super.getInputType(field);
   }

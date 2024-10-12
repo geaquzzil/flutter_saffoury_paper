@@ -38,11 +38,11 @@ class Equalities extends ViewAbstract<Equalities> {
   }
 
   @override
-  ViewAbstractControllerInputType getInputType(String field) {
+  FormFieldControllerType getInputType(String field) {
     if (field == "currency") {
-      return ViewAbstractControllerInputType.DROP_DOWN_API;
+      return FormFieldControllerType.DROP_DOWN_API;
     }
-    return ViewAbstractControllerInputType.EDIT_TEXT;
+    return FormFieldControllerType.EDIT_TEXT;
   }
 
   @override

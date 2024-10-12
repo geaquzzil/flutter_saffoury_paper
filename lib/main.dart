@@ -27,6 +27,7 @@ import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_saffoury_paper/models/notifications.dart';
+import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
 import 'package:flutter_saffoury_paper/models/products/gsms.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
@@ -167,7 +168,7 @@ void main() async {
   try {
     Product p = Product();
     p.status = ProductStatus.PENDING;
-    p.barcode = "dfds";
+    p.barcode = "dfsdssds";
     p.gsms = GSM()..gsm = 100;
     // runApp(BaseEditFinal(
     //   viewAbstract: Product(),
