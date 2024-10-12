@@ -146,7 +146,7 @@ getTabBarTheme(BuildContext context, ColorScheme colorScheme) {
     indicatorColor: colorScheme.primary,
     dividerColor: colorScheme.surfaceContainerHighest,
     labelStyle: Theme.of(context).textTheme.titleSmall,
-    labelColor: Theme.of(context).colorScheme.primary,
+    labelColor: colorScheme.primary,
     // indicator: BoxDecoration(
     //   borderRadius: BorderRadius.circular(80.0),
     //   color: Theme.of(context).colorScheme.onSecondary,

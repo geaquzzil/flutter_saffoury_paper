@@ -57,6 +57,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
       {ServerActions? action}) {
     super.onBeforeGenerateView(context);
     if (action == ServerActions.edit && isNew()) {
+      material.debugPrint("onBeforeGenerateView");
       employees =
           context.read<AuthProvider<AuthUser>>().getSimpleUser as Employee;
     }
@@ -66,7 +67,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   CustomsDeclaration getSelfNewInstance() {
     return CustomsDeclaration();
   }
-  
+
   @override
   bool getPrintableSupportsLabelPrinting() => false;
 

@@ -691,6 +691,9 @@ class Product extends ViewAbstract<Product>
     if (field == "grades") {
       return FormFieldControllerType.VIEW_ABSTRACT_AS_ONE_FIELD;
     }
+    if (field == "barcode") {
+      return FormFieldControllerType.AUTO_COMPLETE;
+    }
     return super.getInputType(field);
   }
 

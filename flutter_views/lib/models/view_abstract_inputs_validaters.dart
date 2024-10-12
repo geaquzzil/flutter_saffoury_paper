@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -437,14 +438,34 @@ abstract class ViewAbstractInputAndValidater<T>
         textCapitalization: getTextInputCapitalization(field),
         keyboardType: getTextInputType(field),
         inputFormatters: getTextInputFormatter(field),
+        suggestionsBoxDecoration: SuggestionsBoxDecoration(
+            scrollbarThumbAlwaysVisible: false,
+            scrollbarTrackAlwaysVisible: false,
+            hasScrollbar: false,
+            constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * .3,
+                minHeight: 100),
+            color: Theme.of(context).colorScheme.surfaceContainerHigh,
+            borderRadius:
+                const BorderRadius.all(Radius.circular(kBorderRadius))),
+        direction: AxisDirection.up,
         validator: (s) {
           // debugPrint(
           //     "getControllerEditTextAutoComplete field=>$field result=> ${viewAbstract.getTextInputValidatorCompose(context, field).call(s)}");
           return getTextInputValidatorCompose<String?>(context, field).call(s);
         },
+        transitionBuilder: (context, suggestionsBox, animationController) {
+          return FadeTransition(
+            opacity: CurvedAnimation(
+                parent: animationController!.view, curve: Curves.fastOutSlowIn),
+            child: suggestionsBox,
+          );
+        },
         // suggestionsBoxDecoratio,
         itemBuilder: (context, continent) {
-          return ListTile(title: Text(continent ?? "-"));
+          return ListTile(
+              leading: CircleAvatar(child: Icon(getFieldIconData(field))),
+              title: Text(continent ?? "-"));
         },
         hideOnLoading: false,
         // errorBuilder: (context, error) => const CircularProgressIndicator(),
@@ -639,7 +660,11 @@ abstract class ViewAbstractInputAndValidater<T>
     bool shouldWrapWithTile = true;
     if (options.value is ViewAbstractEnum) {
       widget = const Text("ENUM");
+      return const Text("IS ENUM");
       //TODO could be ChoiceChip or Dropdown
+    }
+    if (options.value is ViewAbstract) {
+      return const Text("IS VIEW ABSTRACT");
     }
     FormFieldControllerType textFieldTypeVA = getInputType(field);
     if (textFieldTypeVA == FormFieldControllerType.DATE_TIME) {

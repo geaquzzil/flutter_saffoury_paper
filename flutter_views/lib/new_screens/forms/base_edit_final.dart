@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/forms/nasted/custom_tile_expansion.dart';
@@ -102,11 +103,14 @@ class _BaseEditFinalState extends State<BaseEditFinal> {
       bool shouldWrap = viewAbstract.shouldWrapWithExpansionCardWhenChild();
 
       if (shouldWrap) {
-        return ExpansionEdit(
-          name: field,
-          parentFormKey: formKey,
-          viewAbstract: fieldValue,
-          valueFromParent: viewAbstract.getFieldValue(field),
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: kDefaultPadding * .25),
+          child: ExpansionEdit(
+            name: field,
+            parentFormKey: formKey,
+            viewAbstract: fieldValue,
+            valueFromParent: viewAbstract.getFieldValue(field),
+          ),
         );
       } else {
         List<Widget> childs = getFormContent(fieldValue,
