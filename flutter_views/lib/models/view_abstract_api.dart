@@ -39,6 +39,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   Map<String, String>? _customMapOnSearch;
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final List<SearchCache> _searchCache = [];
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Map<String, String> get getCustomMapOnSearch => _customMapOnSearch ?? {};
 
   Map<String, String> get getCustomMap => _customMap ?? {};
@@ -388,6 +392,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   Future<List<T>> search(int count, int pageIndex, String searchQuery,
       {OnResponseCallback? onResponse,
       Map<String, FilterableProviderHelper>? filter,
+      bool cache = false,
       required BuildContext context}) async {
     var response = await getRespones(
         onResponse: onResponse,
@@ -403,7 +408,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 // parser.parseInBackground();
       Iterable l = convert.jsonDecode(response.body);
       List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
-
+      //TODO if (cache) {
+      //   return SearchCache.getResultAndAdd(searchQuery, t, _searchCache).cast();
+      // }
       return t;
     } else {
       onCallCheckError(
@@ -720,8 +727,6 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return jsonEncode(toJsonViewAbstract());
   }
 
-
-
   T fromJsonViewAbstract(Map<String, dynamic> json);
   Map<String, dynamic> toJsonViewAbstract();
 }
@@ -759,5 +764,37 @@ class ResultsParser<T> {
     List<T> t = List<T>.from(
         l.map((model) => viewAbstract.fromJsonViewAbstract(model)));
     Isolate.exit(p, t);
+  }
+}
+
+//TODO dispose this
+class SearchCache {
+  String query;
+  List? response;
+  SearchCache({
+    required this.query,
+    this.response,
+  });
+  static List getResultAndAdd(
+      String query, List response, List<SearchCache> list) {
+    SearchCache? search = getResult(query, list);
+    if (search == null) {
+      list.add(SearchCache(query: query, response: response));
+      return response;
+    }
+    return search.response ?? [];
+  }
+
+  static void shouldAdd(String query, List response, List<SearchCache> list) {
+    SearchCache? search = getResult(query, list);
+    if (search == null) {
+      list.add(SearchCache(query: query, response: response));
+    }
+  }
+
+  static SearchCache? getResult(String query, List<SearchCache> list) {
+    return list.firstWhereOrNull((s) {
+      return query == s.query || query.contains(s.query);
+    });
   }
 }

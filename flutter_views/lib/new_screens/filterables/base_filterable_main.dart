@@ -136,7 +136,7 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
             : FutureBuilder(
                 future: context
                     .read<FilterableListApiProvider<FilterableData>>()
-                    .getServerData(widget.viewAbstract,context:context),
+                    .getServerData(widget.viewAbstract, context: context),
                 builder: ((context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasData) {
@@ -154,9 +154,7 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
                       );
                     }
                   }
-                  return 
-                  
-                  const EmptyWidget.loading();
+                  return const EmptyWidget.loading();
                 })),
       ),
     );
@@ -166,7 +164,7 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
     return RoundedCornerContainer(
       child: SliverCustomScrollView(
         scrollKey: 'bottomSheet',
-        builderAppbar: (fullyCol, fullyExp,tab) {
+        builderAppbar: (fullyCol, fullyExp, tab) {
           return SliverAppBar.medium(
               leading: const CloseButton(),
               // actions: [Container()],

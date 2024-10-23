@@ -1,6 +1,7 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
@@ -28,10 +29,8 @@ import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
 import 'package:flutter_view_controller/screens/web/components/header_text.dart';
-
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
@@ -366,7 +365,7 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
           if (isSelectedMode)
             IconButton(onPressed: () {}, icon: const Icon(Icons.delete))
         ],
-        headerWidget: getHeaderWidget(),
+        // headerWidget: getHeaderWidget(),
         expandedBody: isSelectedMode
             ? null
             : QrCodeReader(
@@ -376,8 +375,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
               ),
         slivers: [
           // if (isSelectedMode) getHeaderWidget()!,
-          if (!canShowHeaderWidget())
-            ...viewAbstract.getHomeListHeaderWidgetList(context) ?? [],
+          // if (!canShowHeaderWidget())
+          //   ...viewAbstract.getHomeListHeaderWidgetList(context) ?? [],
 
           if (widget.buildSearchWidget) getSearchWidget(),
           if (widget.buildFilterableView) getFilterableWidget(),
@@ -882,7 +881,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
   void _refresh() {
     listProvider.refresh(
-        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract,context:context);
+        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract,
+        context: context);
   }
 
   Widget getRefreshWidget() => IconButton(
@@ -924,10 +924,11 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
     if (listProvider.getCount(customKey) == 0) {
       if (_searchStringQuery == null) {
         listProvider.fetchList(customKey,
-            viewAbstract: scanedQr ?? viewAbstract,context:context);
+            viewAbstract: scanedQr ?? viewAbstract, context: context);
       } else {
         listProvider.fetchListSearch(
-            customKey, viewAbstract, _searchStringQuery!,context:context);
+            customKey, viewAbstract, _searchStringQuery!,
+            context: context);
       }
     }
   }

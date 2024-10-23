@@ -7,6 +7,13 @@ import 'package:flutter_view_controller/providers/filterables/filterable_provide
 import '../../models/auto_rest.dart';
 
 class ListMultiKeyProvider with ChangeNotifier {
+
+
+  //TODO dispose this 
+  @override
+  void dispose() {
+    super.dispose();
+  }
   // ListMultiKeyProvider list= ListMultiKeyProvider();
   final Map<String, MultiListProviderHelper> _listMap = {};
 

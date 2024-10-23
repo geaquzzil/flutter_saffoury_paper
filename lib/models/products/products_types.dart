@@ -299,6 +299,9 @@ class ProductType extends ViewAbstract<ProductType>
 
   @override
   FormFieldControllerType getInputType(String field) {
+    if ("name" == field) {
+      return FormFieldControllerType.AUTO_COMPLETE_VIEW_ABSTRACT_RESPONSE;
+    }
     return field == "grades"
         ? FormFieldControllerType.DROP_DOWN_TEXT_SEARCH_API
         : super.getInputType(field);

@@ -270,6 +270,7 @@ class _ExpansionEditState extends State<ExpansionEdit>
     return _buildIcon(context);
   }
 
+  final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   @override
   Widget build(BuildContext context) {
     final ExpansionTileThemeData expansionTileTheme =
@@ -298,6 +299,7 @@ class _ExpansionEditState extends State<ExpansionEdit>
     );
     return FormBuilderField<Map<String, dynamic>>(
       name: widget.name,
+      key: formKey,
       // autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (v) {
         debugPrint("BaseEditFinalSub validater $v");
@@ -525,20 +527,28 @@ class _ExpansionEditState extends State<ExpansionEdit>
               _toggleExpansion(expand: hasFocus);
             }
           },
-          child: widget.viewAbstract.getFormMainControllerWidget(
-              context: context,
-              field: fieldThatHasAutoComplete,
-              formKey: widget.formKey,
-              parent: widget.viewAbstract.getParnet));
+          child:
+              widget.viewAbstract.getFormFieldAutoCompleteViewAbstractResponse(
+            context: context,
+            field: fieldThatHasAutoComplete,
+            onSuggestionSelected: (p0) {
+              debugPrint("ExpansionTile $convertableMap");
+              setState(() {
+                convertableMap =
+                    toJsonViewAbstractForm(p0.toJsonViewAbstract());
+              });
+              formKey.currentState?.reset();
+            },
+          ));
     } else {
       return const Text("TITL");
     }
   }
 
   List<Widget>? getChildrens() {
+    List l = widget.viewAbstract.getMainFields()..add("iD");
     if (hasChildrens()) {
-      return widget.viewAbstract
-          .getMainFields()
+      return l
           .where((p) => p != fieldThatHasAutoComplete)
           .map((f) => widget.viewAbstract.getFormMainControllerWidget(
               context: context,
