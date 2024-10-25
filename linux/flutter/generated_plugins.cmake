@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   awesome_notifications
   desktop_window
   dynamic_color
+  flutter_libserialport
   printing
   screen_retriever
   url_launcher_linux
