@@ -174,10 +174,14 @@ class RouteGenerator {
       appService.isInitialized = true;
       AuthProvider authProvider = context.read<AuthProvider>();
       if (authProvider.isGoodsInventory(context)) {
+        // return posLocation;
+
+        // return reelCutterLocation;
+
         return homeLocation;
         return goodsInventoryLocation;
       } else if (authProvider.isPOS(context)) {
-        return posRouteName;
+        return posLocation;
       } else if (authProvider.isReelCutter(context) ||
           authProvider.isPalletCutter(context)) {
         return reelCutterLocation;

@@ -304,14 +304,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 }
 
 Widget getWidget() {
-  return MaterialApp(
-    title: 'Flutter Websocket',
-    theme: ThemeData(
-      primarySwatch: Colors.blue,
-    ),
-    home: const HomePage(),
-  );
-  return const HomePage();
+  // return MaterialApp(
+  //   title: 'Flutter Websocket',
+  //   theme: ThemeData(
+  //     primarySwatch: Colors.blue,
+  //   ),
+  //   home: const HomePage(),
+  // );
+
   // return Scaffold(
   //   body: (ListHorizontalApiAutoRestWidget(
   //       // valueNotifier: onHorizontalListItemClicked,
@@ -401,7 +401,8 @@ class MyHttpOverrides extends HttpOverrides {
 
 class MessageNotifierProvider with ChangeNotifier {
   final IOWebSocketChannel _channel = IOWebSocketChannel.connect(
-      Uri.parse("ws://localhost:8081/websocket/server/server.php?iD=232"),
+      Uri.parse(
+          "ws://localhost:8081/SaffouryPaper2/websocket/server.php?iD=232"),
       headers: {"iD": "232"});
   late final BehaviorSubject<dynamic> _notifyStream = BehaviorSubject()
     ..addStream(_channel.stream);

@@ -1,4 +1,4 @@
-package com.example.flutter_saffoury_paper
+package com.falcon.falconpaper
 
 import io.flutter.embedding.android.FlutterActivity
 

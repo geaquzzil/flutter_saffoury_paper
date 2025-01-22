@@ -1346,21 +1346,21 @@ class Product extends ViewAbstract<Product>
     ];
   }
 
-  @override
-  Future<List<Product>?> listCall(
-      {int? count,
-      int? page,
-      OnResponseCallback? onResponse,
-      Map<String, FilterableProviderHelper>? filter,
-      required BuildContext context}) async {
-    try {
-      Iterable l = jsonDecode(jsonEncode(productsJson));
-      return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
-    } catch (e) {
-      debugPrint("listCallFake ${e.toString()}");
-    }
-    return null;
-  }
+  // @override
+  // Future<List<Product>?> listCall(
+  //     {int? count,
+  //     int? page,
+  //     OnResponseCallback? onResponse,
+  //     Map<String, FilterableProviderHelper>? filter,
+  //     required BuildContext context}) async {
+  //   try {
+  //     Iterable l = jsonDecode(jsonEncode(productsJson));
+  //     return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
+  //   } catch (e) {
+  //     debugPrint("listCallFake ${e.toString()}");
+  //   }
+  //   return null;
+  // }
 
   @override
   Future getPosableInitObj(BuildContext context) {

@@ -142,8 +142,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     if (hasUser) {
       AuthUser? authUser = await Configurations.get(AuthUser());
       if (authUser != null) {
-        defaultHeaders['X-Authorization'] =
-            Encriptions.encypt(authUser.toJsonString());
+        // defaultHeaders['X-Authorization'] =
+        //     Encriptions.encypt(authUser.toJsonString());
       }
     }
 

@@ -75,6 +75,8 @@ mixin TickerWidget<T extends StatefulWidget> on State<T> {
     super.dispose();
   }
 }
+
+@Deprecated("To Develope ScrollController")
 mixin BasePageWithTicker<T extends BasePage> on BasePageState<T> {
   ValueNotifier valueFirstPane = ValueNotifier(null);
   ValueNotifier valueSecondPane = ValueNotifier(null);

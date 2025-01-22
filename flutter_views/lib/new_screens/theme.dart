@@ -243,7 +243,7 @@ ButtonStyle getButtonStyleIfIcon(BuildContext context, ColorScheme colorSheme) {
 }
 
 bool isLargeScreen(BuildContext context) {
-  return false;
+  return true;
 }
 
 IconThemeData getIconThemeData(BuildContext context,

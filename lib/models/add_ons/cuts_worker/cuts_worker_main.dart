@@ -28,8 +28,7 @@ class CutWorkerPage extends BasePage {
   State<CutWorkerPage> createState() => _CutWorkerPageState();
 }
 
-class _CutWorkerPageState extends BasePageState<CutWorkerPage>
-    with BasePageWithTicker {
+class _CutWorkerPageState extends BasePageState<CutWorkerPage> {
   String? _searchQuery;
 
   @override
@@ -77,72 +76,7 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
     return t;
   }
 
-  @override
-  getTickerPaneWidget(
-      {required bool firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
-    if (firstPane) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          getPrimaryText(
-              "PENDING CUT REQUEST\n SCAN WITH Code Scanner to begin progress "),
-          Expanded(
-            child: SliverApiMixinViewAbstractWidget(
-              isGridView: false,
-              scrollDirection: Axis.vertical,
-              enableSelection: false,
-              // hasCustomSeperater: Divider(),
-              isSliver: false,
-              searchString: _searchQuery,
-              hasCustomCardBuilder: (index, item) {
-                CutRequest cutRequest = item as CutRequest;
-                return CutRequestListCard(
-                  item: cutRequest,
-                );
-              },
-              toListObject: CutRequestWorker()
-                ..setCustomMapOnListAndSearch({"<cut_status>": "PENDING"}),
-            ),
-          ),
-        ],
-      );
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        getPrimaryText("ON PROGRESS"),
-        Expanded(
-          child: Card(
-            child: SliverApiMixinViewAbstractWidget(
-              searchString: _searchQuery,
-              isSliver: false,
-              scrollDirection: Axis.vertical,
-              toListObject: CutRequestWorker()
-                ..setCustomMapOnListAndSearch({"<cut_status>": "PROCESSING"}),
-            ),
-          ),
-        ),
-        getPrimaryText("COMPLETED WITH IN A WEEK"),
-        Expanded(
-          child: SliverApiMixinViewAbstractWidget(
-            searchString: _searchQuery,
-            isSliver: false,
-            scrollDirection: Axis.vertical,
-            toListObject: CutRequestWorker()
-              ..setCustomMapOnListAndSearch({"<cut_status>": "COMPLETED"}),
-          ),
-        ),
-      ],
-    );
-  }
 
-  @override
-  ValueNotifierPane getTickerPane() => ValueNotifierPane.BOTH;
-
-  @override
-  int getTickerSecond() => 1000;
 
   @override
   bool isPaneScaffoldOverlayColord(bool firstPane) => false;
@@ -177,5 +111,68 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage>
   Widget? getPaneDraggableHeader(
       {required bool firstPane, TabControllerHelper? tab}) {
     return null;
+  }
+
+  @override
+  List<Widget>? getPane(
+      {required bool firstPane,
+      ScrollController? controler,
+      TabControllerHelper? tab}) {
+    if (firstPane) {
+      return [
+        SliverToBoxAdapter(
+          child: getPrimaryText(
+              "PENDING CUT REQUEST\n SCAN WITH Code Scanner to begin progress "),
+        ),
+        SliverApiMixinViewAbstractWidget(
+          isGridView: false,
+          scrollDirection: Axis.vertical,
+          enableSelection: false,
+          // hasCustomSeperater: Divider(),
+          isSliver: true,
+          searchString: _searchQuery,
+          hasCustomCardBuilder: (index, item) {
+            CutRequest cutRequest = item as CutRequest;
+            return CutRequestListCard(
+              item: cutRequest,
+            );
+          },
+          toListObject: CutRequestWorker()
+            ..setCustomMapOnListAndSearch({"<cut_status>": "PENDING"}),
+        ),
+      ];
+    }
+    return [
+      SliverFillRemaining(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            getPrimaryText("ON PROGRESS"),
+            Expanded(
+              child: Card(
+                child: SliverApiMixinViewAbstractWidget(
+                  searchString: _searchQuery,
+                  isSliver: false,
+                  scrollDirection: Axis.vertical,
+                  toListObject: CutRequestWorker()
+                    ..setCustomMapOnListAndSearch(
+                        {"<cut_status>": "PROCESSING"}),
+                ),
+              ),
+            ),
+            getPrimaryText("COMPLETED WITH IN A WEEK"),
+            Expanded(
+              child: SliverApiMixinViewAbstractWidget(
+                searchString: _searchQuery,
+                isSliver: false,
+                scrollDirection: Axis.vertical,
+                toListObject: CutRequestWorker()
+                  ..setCustomMapOnListAndSearch({"<cut_status>": "COMPLETED"}),
+              ),
+            ),
+          ],
+        ),
+      )
+    ];
   }
 }
