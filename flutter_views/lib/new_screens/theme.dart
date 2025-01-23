@@ -243,7 +243,7 @@ ButtonStyle getButtonStyleIfIcon(BuildContext context, ColorScheme colorSheme) {
 }
 
 bool isLargeScreen(BuildContext context) {
-  return true;
+  return false;
 }
 
 IconThemeData getIconThemeData(BuildContext context,
@@ -278,7 +278,9 @@ ListTileThemeData getListTileThemeData(BuildContext context,
       selectedTileColor: colorScheme.secondaryContainer);
 }
 
-InputDecorationTheme getTextDropDownTheme(BuildContext context) {
+InputDecorationTheme getTextDropDownTheme(BuildContext context) {.
+
+bool hi = false;//todo this is a teest
   bool isLargeOrDesktop = isDesktopPlatform();
   return getMainTheme(context).copyWith(
     filled: true,
