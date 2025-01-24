@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/base_with_name_string.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'currency.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -43,13 +44,16 @@ class Currency extends BaseWithNameString<Currency> {
     return AppLocalizations.of(context)!.currency;
   }
 
+  String getModifiableMainGroupName(BuildContext context) =>
+      AppLocalizations.of(context)!.money_fund;
+
   @override
   IconData getMainIconData() => Icons.currency_exchange_outlined;
   @override
   String? getTableNameApi() => "currency";
 
   @override
-  Map<String, int> getTextInputMaxLengthMap() => {"name": 50, "nameAr": 50};
+  Map<String, int> getTextInputMaxLengthMap() => {"name": 10, "nameAr": 40};
 
   factory Currency.fromJson(Map<String, dynamic> data) =>
       _$CurrencyFromJson(data);

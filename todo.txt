@@ -18,3 +18,7 @@
 
 
     on search  => if error then no items is showing ?? 
+
+    on edit error show the error for some time then 
+
+    on edit => faild then we should not update the results

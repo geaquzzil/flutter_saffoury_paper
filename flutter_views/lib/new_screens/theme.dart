@@ -278,9 +278,8 @@ ListTileThemeData getListTileThemeData(BuildContext context,
       selectedTileColor: colorScheme.secondaryContainer);
 }
 
-InputDecorationTheme getTextDropDownTheme(BuildContext context) {.
-
-bool hi = false;//todo this is a teest
+InputDecorationTheme getTextDropDownTheme(BuildContext context) {
+  bool hi = false; //todo this is a teest
   bool isLargeOrDesktop = isDesktopPlatform();
   return getMainTheme(context).copyWith(
     filled: true,

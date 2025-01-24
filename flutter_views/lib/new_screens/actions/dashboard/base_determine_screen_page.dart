@@ -5,7 +5,6 @@ import 'package:flutter_view_controller/new_screens/actions/view/view_stand_alon
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
-import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -60,6 +59,7 @@ class BaseDeterminePageState extends StatelessWidget {
   }
 
   Widget _getTabletWidget(BuildContext context) {
+    // throw new Ex
     return Scaffold(
         // extendBodyBehindAppBar: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,

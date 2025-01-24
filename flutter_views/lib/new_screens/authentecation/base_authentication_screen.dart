@@ -22,8 +22,9 @@ class _BaseAuthenticatingScreenState extends State<BaseAuthenticatingScreen> {
 
   @override
   void initState() {
-    authProvider = Provider.of<AuthProvider<AuthUser>>(context,listen: false);
+    authProvider = Provider.of<AuthProvider<AuthUser>>(context, listen: false);
     onStartUp();
+
     super.initState();
   }
 

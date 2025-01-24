@@ -24,6 +24,30 @@
 @import file_picker;
 #endif
 
+#if __has_include(<firebase_analytics/FLTFirebaseAnalyticsPlugin.h>)
+#import <firebase_analytics/FLTFirebaseAnalyticsPlugin.h>
+#else
+@import firebase_analytics;
+#endif
+
+#if __has_include(<firebase_core/FLTFirebaseCorePlugin.h>)
+#import <firebase_core/FLTFirebaseCorePlugin.h>
+#else
+@import firebase_core;
+#endif
+
+#if __has_include(<firebase_crashlytics/FLTFirebaseCrashlyticsPlugin.h>)
+#import <firebase_crashlytics/FLTFirebaseCrashlyticsPlugin.h>
+#else
+@import firebase_crashlytics;
+#endif
+
+#if __has_include(<firebase_messaging/FLTFirebaseMessagingPlugin.h>)
+#import <firebase_messaging/FLTFirebaseMessagingPlugin.h>
+#else
+@import firebase_messaging;
+#endif
+
 #if __has_include(<flutter_custom_dialog/FlutterCustomDialogPlugin.h>)
 #import <flutter_custom_dialog/FlutterCustomDialogPlugin.h>
 #else
@@ -102,6 +126,10 @@
   [AwesomeNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"AwesomeNotificationsPlugin"]];
   [ConnectivityPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"ConnectivityPlusPlugin"]];
   [FilePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FilePickerPlugin"]];
+  [FLTFirebaseAnalyticsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAnalyticsPlugin"]];
+  [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
+  [FLTFirebaseCrashlyticsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCrashlyticsPlugin"]];
+  [FLTFirebaseMessagingPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseMessagingPlugin"]];
   [FlutterCustomDialogPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterCustomDialogPlugin"]];
   [FlutterKeyboardVisibilityPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterKeyboardVisibilityPlugin"]];
   [FlutterLocalNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterLocalNotificationsPlugin"]];

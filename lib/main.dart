@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_saffoury_paper/firebase_options.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
 import 'package:flutter_saffoury_paper/models/add_ons/add_ons_classes.dart';
 import 'package:flutter_saffoury_paper/models/custom_views/excel_to_product_converter.dart';
@@ -14,6 +17,7 @@ import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart'
 import 'package:flutter_saffoury_paper/models/dashboards/customer_dashboard.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/dashboard.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/sales_analysis_dashboard.dart';
+import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
 import 'package:flutter_saffoury_paper/models/funds/debits.dart';
 import 'package:flutter_saffoury_paper/models/funds/incomes.dart';
 import 'package:flutter_saffoury_paper/models/funds/spendings.dart';
@@ -32,10 +36,12 @@ import 'package:flutter_saffoury_paper/models/notifications.dart';
 import 'package:flutter_saffoury_paper/models/products/gsms.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
+import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_list.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
+import 'package:flutter_saffoury_paper/services/notification_service.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
@@ -44,7 +50,6 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_material_app.dart';
-import 'package:flutter_view_controller/new_screens/notification_controller.dart';
 import 'package:flutter_view_controller/printing_generator/page/base_pdf_page.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
@@ -92,10 +97,7 @@ class ErrorLogger {
 
 ValueNotifier<QRCodeID?> onQrCodeChanged = ValueNotifier<QRCodeID?>(null);
 
-void main() async {
-  initializeReflectable();
-  HttpOverrides.global = MyHttpOverrides();
-  NotificationService().initNotification();
+void initializeError() {
   // FlutterError.onError = (FlutterErrorDetails details) async {
   //   ErrorLogger().logError(details);
   // };
@@ -104,11 +106,32 @@ void main() async {
   //   if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
   //   return stack;
   // };
+}
+
+
+void main() async {
+  initializeReflectable();
 
   WidgetsFlutterBinding.ensureInitialized();
-  await NotificationController.initializeLocalNotifications();
-  await NotificationController.initializeIsolateReceivePort();
-  NotificationService().initNotification();
+  initializeError();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await NotificationService.instance.initialize();
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+  HttpOverrides.global = MyHttpOverrides();
+  // await NotificationController.initializeLocalNotifications();
+  // await NotificationController.initializeIsolateReceivePort();
+  // NotificationService().initNotification();
+
   await FastCachedImageConfig.init(clearCacheAfter: const Duration(days: 15));
   if (!kIsWeb) {
     if ((Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
@@ -150,6 +173,7 @@ void main() async {
     ExcelToProductConverter(),
     Product(),
     ProductSize(),
+    Currency(),
     Order(),
     Purchases(),
     ProductInput(),
@@ -169,6 +193,7 @@ void main() async {
     Incomes(),
     Spendings(),
     ProductType(),
+    Warehouse()
   ]);
   try {
     Product p = Product();
@@ -237,7 +262,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
-  NotificationService service = NotificationService();
+  // NotificationService service = NotificationService();
   late Sink<dynamic> myMessageSink;
   Map<String, String> joinMessagePayload = {
     "action": "join-room",
@@ -269,8 +294,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         debugPrint("sddsd $value");
         Map<String, dynamic> message = jsonDecode(value);
         context.read<MessageNotifierProvider>().addInbox(message);
-        service.showNotification(
-            title: "Chat-App Message", body: message['message']);
+        // service.showNotification(
+        //     title: "Chat-App Message", body: message['message']);
       });
     }
   }
@@ -424,40 +449,43 @@ class MessageNotifierProvider with ChangeNotifier {
   }
 }
 
-class NotificationService {
-  final FlutterLocalNotificationsPlugin notificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+// class NotificationService {
+//   final FlutterLocalNotificationsPlugin notificationsPlugin =
+//       FlutterLocalNotificationsPlugin();
 
-  Future<void> initNotification() async {
-/* initialise the plugin. chat_icon needs to be a added as a 
-       drawable resource to the Android head project */
-    AndroidInitializationSettings initializationSettingsAndroid =
-        const AndroidInitializationSettings('chat_icon');
+//   NotificationService._();
+//   static final NotificationService instance = NotificationService._();
 
-    var initializationSettingsIOS = DarwinInitializationSettings(
-        requestAlertPermission: true,
-        requestBadgePermission: true,
-        requestSoundPermission: true,
-        onDidReceiveLocalNotification:
-            (int id, String? title, String? body, String? payload) async {});
+//   Future<void> initNotification() async {
+// /* initialise the plugin. chat_icon needs to be a added as a 
+//        drawable resource to the Android head project */
+//     AndroidInitializationSettings initializationSettingsAndroid =
+//         const AndroidInitializationSettings('chat_icon');
 
-    var initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-    await notificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse:
-            (NotificationResponse notificationResponse) async {});
-  }
+//     var initializationSettingsIOS = DarwinInitializationSettings(
+//         requestAlertPermission: true,
+//         requestBadgePermission: true,
+//         requestSoundPermission: true,
+//         onDidReceiveLocalNotification:
+//             (int id, String? title, String? body, String? payload) async {});
 
-  notificationDetails() {
-    return const NotificationDetails(
-        android: AndroidNotificationDetails('abc123', 'Chat-APP',
-            importance: Importance.max, icon: 'chat_icon'),
-        iOS: DarwinNotificationDetails());
-  }
+//     var initializationSettings = InitializationSettings(
+//         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+//     await notificationsPlugin.initialize(initializationSettings,
+//         onDidReceiveNotificationResponse:
+//             (NotificationResponse notificationResponse) async {});
+//   }
 
-  Future showNotification(
-      {int id = 0, String? title, String? body, String? payLoad}) async {
-    return notificationsPlugin.show(
-        id, title, body, await notificationDetails());
-  }
-}
+//   notificationDetails() {
+//     return const NotificationDetails(
+//         android: AndroidNotificationDetails('abc123', 'Chat-APP',
+//             importance: Importance.max, icon: 'chat_icon'),
+//         iOS: DarwinNotificationDetails());
+//   }
+
+//   Future showNotification(
+//       {int id = 0, String? title, String? body, String? payLoad}) async {
+//     return notificationsPlugin.show(
+//         id, title, body, await notificationDetails());
+//   }
+// }

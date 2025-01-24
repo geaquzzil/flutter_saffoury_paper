@@ -30,6 +30,7 @@ class BaseMaterialAppPage extends StatefulWidget {
 }
 
 class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
+  // NotificationService notificationServices = NotificationService();
   late LangaugeProvider langaugeProvider;
   late AuthProvider authProvider;
   late RouteGenerator routeGenerator;

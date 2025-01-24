@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1052345970497",
+    "project_id": "falconpaper-c7f81",
+    "storage_bucket": "falconpaper-c7f81.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052345970497:android:1af5a9e31e446ea76ebbc0",
+        "android_client_info": {
+          "package_name": "com.falcon.falconpaper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFeRL-QjgTYgd3QqDMjLBjcURO-im7Jbo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
