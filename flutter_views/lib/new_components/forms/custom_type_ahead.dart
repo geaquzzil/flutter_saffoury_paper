@@ -239,7 +239,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
 
   /// The configuration of the [TextField](https://docs.flutter.io/flutter/material/TextField-class.html)
   /// that the TypeAhead widget displays
-  final TextFieldConfiguration textFieldConfiguration;
+  final TextField  textFieldConfiguration;
 
   /// How far below the text field should the suggestions box be
   ///
@@ -374,9 +374,9 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
     this.scrollController,
     this.selectionToTextTransformer,
     this.suggestionsBoxController,
-    this.suggestionsBoxDecoration = const SuggestionsBoxDecoration(),
+    this.suggestionsBoxDecoration = const SuggestionsBox(),
     this.suggestionsBoxVerticalOffset = 5.0,
-    this.textFieldConfiguration = const TextFieldConfiguration(),
+    this.textFieldConfiguration = const TextField(),
     this.transitionBuilder,
   })  : assert(T == String || selectionToTextTransformer != null),
         assert(maxLength == null || maxLength > 0),
@@ -386,7 +386,6 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
             final theme = Theme.of(state.context);
 
             return TypeAheadField<T>(
-              
               textFieldConfiguration: textFieldConfiguration.copyWith(
                 inputFormatters: inputFormatters,
                 maxLengthEnforcement: maxLengthEnforcement,
@@ -411,28 +410,33 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
               ),
               suggestionsCallback: suggestionsCallback,
               itemBuilder: itemBuilder,
-              transitionBuilder: (context, suggestionsBox, controller) =>
-                  suggestionsBox,
-              onSuggestionSelected: (T suggestion) {
-                state.didChange(suggestion);
-                onSuggestionSelected?.call(suggestion);
+              // transitionBuilder: (context, suggestionsBox, controller) =>
+              //     suggestionsBox,
+              // onSuggestionSelected: (T suggestion) {
+              //   state.didChange(suggestion);
+              //   onSuggestionSelected?.call(suggestion);
+              // },
+              onSelected: (value) {
+                state.didChange(value);
+                onSuggestionSelected?.call(value);
               },
+              
               minCharsForSuggestions: 2,
-              getImmediateSuggestions: getImmediateSuggestions,
+              // getImmediateSuggestions: getImmediateSuggestions,
               errorBuilder: errorBuilder,
-              noItemsFoundBuilder: noItemsFoundBuilder,
+              emptyBuilder: noItemsFoundBuilder,
               loadingBuilder: loadingBuilder,
               debounceDuration: debounceDuration,
               suggestionsBoxDecoration: suggestionsBoxDecoration,
               suggestionsBoxVerticalOffset: suggestionsBoxVerticalOffset,
               animationDuration: animationDuration,
-              animationStart: animationStart,
+              // animationStart: animationStart,
               direction: direction,
               hideOnLoading: hideOnLoading,
               hideOnEmpty: hideOnEmpty,
               hideOnError: hideOnError,
-              hideSuggestionsOnKeyboardHide: hideSuggestionsOnKeyboardHide,
-              keepSuggestionsOnLoading: keepSuggestionsOnLoading,
+              hideWithKeyboard: hideSuggestionsOnKeyboardHide,
+              retainOnLoading: keepSuggestionsOnLoading,
               autoFlipDirection: autoFlipDirection,
               suggestionsBoxController: suggestionsBoxController,
               keepSuggestionsOnSuggestionSelected:

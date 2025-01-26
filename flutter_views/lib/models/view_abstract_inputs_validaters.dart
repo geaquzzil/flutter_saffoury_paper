@@ -189,6 +189,7 @@ abstract class ViewAbstractInputAndValidater<T>
 
   String? Function(E? val) getTextInputValidatorCompose<E>(
       BuildContext context, String field) {
+    // RegExp()
     // return (d) => null;
     String passWordPattern =
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
@@ -204,19 +205,20 @@ abstract class ViewAbstractInputAndValidater<T>
       // if (getTextInputType(field) == TextInputType.emailAddress)
       //   FormBuilderValidators.email(),
       if (getTextInputType(field) == TextInputType.name && "" is E)
-        FormBuilderValidators.match(r'^\w+(\s\w+)+$',
+        FormBuilderValidators.match(RegExp(r'^\w+(\s\w+)+$'),
             errorText: "Enter a valid name") as String? Function(E?),
       if (getTextInputType(field) == TextInputType.phone)
         FormBuilderValidators.equalLength(10),
       if (getTextInputType(field) == TextInputType.emailAddress && "" is E)
         FormBuilderValidators.match(
-                r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$',
+                RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$'),
                 errorText:
                     "Email should contain upper,lower,digit and Special character")
             as String? Function(E?),
       if (getTextInputType(field) == TextInputType.visiblePassword && "" is E)
         FormBuilderValidators.match(
-                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$',
+                RegExp(
+                    r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$'),
                 errorText:
                     "Password should contain upper,lower,digit and Special character")
             as String? Function(E?),
@@ -500,9 +502,9 @@ abstract class ViewAbstractInputAndValidater<T>
     return Text(continent.toString());
   }
 
-  SuggestionsBoxDecoration _getDecorationAutoCompleteSuggestionBox(
+  SuggestionsBox  _getDecorationAutoCompleteSuggestionBox(
       BuildContext context) {
-    return SuggestionsBoxDecoration(
+    return SuggestionsBox (
         scrollbarThumbAlwaysVisible: false,
         scrollbarTrackAlwaysVisible: false,
         hasScrollbar: false,

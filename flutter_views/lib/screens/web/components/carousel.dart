@@ -6,7 +6,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class Carousel extends StatelessWidget {
-  final CarouselController carouselController = CarouselController();
+  final CarouselSliderController carouselController = CarouselSliderController();
 
   Carousel({super.key});
   @override

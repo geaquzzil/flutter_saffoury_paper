@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../../models/v_mirrors.dart';
 import '../../models/view_abstract_base.dart';
@@ -245,11 +245,12 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       dynamic dataValue = data?.value;
       debugPrint(
           "getDataFromExcelTable getObjectFromRow selectedKey=>$key rowName:$value index:$index  data:$dataValue type ${dataValue.runtimeType}");
-
+      //todo thiss was dataValue.value.isEmpty
       if (dataValue is TextCellValue) {
-        bool res = dataValue.value.isEmpty ||
-            dataValue.value == "null" ||
-            dataValue.value == "";
+        bool res = dataValue.value.text?.isEmpty ??
+            false ||
+                dataValue.value.text == "null" ||
+                dataValue.value.text == "";
         debugPrint(
             "getDataFromExcelTable key : $key dataValue is TextCellValue   dataValue isEmpty =>$res ");
         dataValue = res ? null : dataValue.value;

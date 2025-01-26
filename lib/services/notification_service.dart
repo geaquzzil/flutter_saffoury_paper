@@ -47,7 +47,7 @@ class NotificationService {
       criticalAlert: false,
     );
 
-    print('Permission status: ${settings.authorizationStatus}');
+    debugPrint('Permission status: ${settings.authorizationStatus}');
   }
 
   Future<void> setupFlutterNotifications() async {
@@ -71,16 +71,16 @@ class NotificationService {
     const initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    // ios setup
-    final initializationSettingsDarwin = DarwinInitializationSettings(
-      onDidReceiveLocalNotification: (id, title, body, payload) async {
-        // Handle iOS foreground notification
-      },
-    );
+    //TODO ios setup
+    // final initializationSettingsDarwin = DarwinInitializationSettings(
+    //   onDidReceiveLocalNotification: (id, title, body, payload) async {
+    //     // Handle iOS foreground notification
+    //   },
+    // );
 
-    final initializationSettings = InitializationSettings(
+    const initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
-      iOS: initializationSettingsDarwin,
+      //TODO iOS: initializationSettingsDarwin,
     );
 
     // flutter notification setup

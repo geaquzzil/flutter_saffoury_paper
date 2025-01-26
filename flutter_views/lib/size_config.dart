@@ -90,6 +90,10 @@ bool supportsSerialPort() {
       Platform.isWindows;
 }
 
+bool supportsFirebaseNotification() {
+  return Platform.isAndroid || Platform.isMacOS || Platform.isIOS || kIsWeb;
+}
+
 bool isDesktopPlatform() {
   return !isMobilePlatform();
 }

@@ -28,7 +28,7 @@ dependencies:
   responsive_framework: ^1.1.0
   flutter_icons_null_safety: ^1.1.0
   smooth_page_indicator: ^1.0.0+2
-  carousel_slider: ^4.1.1
+  carousel_slider: ^5.0.0
   palette_generator: ^0.3.3+1
   # intl_converter: ^1.0.0
   provider: ^6.0.3
@@ -52,8 +52,8 @@ dependencies:
   paginated_search_bar: ^1.1.2
   custom_pop_up_menu: ^1.2.4
   animate_icons: ^2.0.0
-  form_builder_validators: ^10.0.1
-  form_builder_extra_fields: ^10.0.0
+  form_builder_validators: ^11.0.0
+  form_builder_extra_fields: ^11.1.0
   file_picker: ^8.0.6
   path_provider: ^2.0.11
   badges: ^3.0.2
@@ -63,7 +63,7 @@ dependencies:
   printing: ^5.9.3
   # flutter_html_to_pdf: ^0.7.0
   # webcontent_converter: ^0.0.7+2
-  window_manager: ^0.3.1
+  window_manager: ^0.4.3
   path: ^1.8.2
   dashboard: ^0.0.2+4
   auto_size_text: ^3.0.0
@@ -75,18 +75,18 @@ dependencies:
   # get: ^4.3.8
   percent_indicator: ^4.2.2
   sticky_grouped_list: ^3.1.0
-  syncfusion_flutter_charts: ^26.1.40
+  syncfusion_flutter_charts: ^28.1.41
   data_table_2: ^2.3.7
   dynamic_color: ^1.6.2
   tab_indicator_styler: ^2.0.0
   stacked_services: ^1.2.0
   flutter_custom_dialog: ^1.3.0
   nil: ^1.1.1
-  getwidget: ^4.0.0
+  getwidget: ^5.0.0
   flutter_share: ^2.0.0
   skeletons: ^0.0.3
   introduction_screen: ^3.1.1
-  share_plus: ^9.0.0
+  share_plus: ^10.1.4
   dual_screen: ^1.0.4
   flutter_speed_dial: ^7.0.0
   qr_code_scanner: ^1.0.1
@@ -115,7 +115,7 @@ dependencies:
   dynamic_table: ^0.0.1-beta.2
   rxdart: ^0.27.7
   photo_view: ^0.15.0
-  awesome_notifications: ^0.9.3+1
+  awesome_notifications: ^0.10.0
   flutter_libserialport: ^0.4.0
   # bitmap: ^0.1.3
   # intl_converter: ^1.0.0
@@ -130,7 +130,7 @@ dev_dependencies:
   # mockito: ^5.0.16
   build_runner: ^2.0.5
   json_serializable: ^6.3.1
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter_native_splash:
   color: "#ffffff"
