@@ -3,7 +3,7 @@ import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page_new.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';
-import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
+import 'package:flutter_view_controller/new_screens/home/list_to_details_new.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -91,7 +91,9 @@ class BaseDeterminePageState extends StatelessWidget {
               case DrawerMenuControllerProviderAction.list:
               case DrawerMenuControllerProviderAction.list_to_details:
               case DrawerMenuControllerProviderAction.none:
-                widget = ListToDetailsPageNew(
+                debugPrint("BaseDetermine ${value.item1}");
+                widget = ListToDetailsSecoundPaneNotifier(
+                  viewAbstract: value.item1,
                   key: Globals.keyForLargeScreenListable,
                   buildDrawer: buildDrawer,
                 );

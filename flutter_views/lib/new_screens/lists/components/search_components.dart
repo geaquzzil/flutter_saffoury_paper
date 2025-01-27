@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/encyptions/compressions.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
+import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/debouncer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class SearchWidgetWebComponent extends StatelessWidget {
   final ValueNotifier<double> scrollvalueNofifier;
@@ -181,11 +181,12 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
   Widget build(BuildContext context) {
     return Hero(
       tag: widget.heroTag,
-      child: CardCorner(
+      child: Cards(
+        type: CardType.filled,
         // margin: 2,
         // elevation: 3,
         // color: Theme.of(context).colorScheme.primary,
-        child: ListTile(
+        child: (hoverd) => ListTile(
           leading:
               isEditText ? const Icon(Icons.search) : getLeadingWidget(context),
           onTap: isEditText
@@ -216,6 +217,7 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
 
   Widget getSearchTitleEditable() {
     return TextField(
+      onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
       controller: _textEditingController,
       textInputAction: TextInputAction.search,
       onSubmitted: (value) async {
@@ -223,12 +225,15 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
         callDebouncer(value);
       },
       decoration: InputDecoration.collapsed(
-          hintStyle: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
-          hintText: getSearchHint(widget.viewAbstract),
-          border: InputBorder.none),
+        border: InputBorder.none,
+
+        hintStyle: Theme.of(context)
+            .textTheme
+            .bodyLarge
+            ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+        hintText: getSearchHint(widget.viewAbstract),
+        // focusColor: Theme.of(context).colorScheme.surfaceContainerHigh,
+      ),
     );
   }
 

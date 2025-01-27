@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
+import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_view_controller/new_screens/home/components/drawers/comp
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_on_open_drawer.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_custom_scroll_widget.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
+import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/web/components/header.dart';
@@ -130,21 +132,23 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
       bottomNavigationBar: !isLarge ? buildDrawerFooter(context, isOpen) : null,
       body: Padding(
         padding: const EdgeInsets.all(kDefaultPadding / 2),
-        child: Card(
-            margin: EdgeInsets.zero,
-            child: SliverCustomScrollView(
-              scrollKey: "drawerScroll",
-              slivers: [
-                SliverPersistentHeader(
-                    pinned: true,
-                    delegate: SliverAppBarDelegatePreferedSize(
-                        shouldRebuildWidget: true,
-                        child: PreferredSize(
-                            preferredSize: const Size.fromHeight(60),
-                            child: buildHeader(context, isOpen)))),
-                ...buildListSlivers(context, isOpen)
-              ],
-            )),
+        child: Cards(
+            type: CardType.filled_outline,
+
+            // margin: EdgeInsets.zero,
+            child: (isHoverd) => SliverCustomScrollView(
+                  scrollKey: "drawerScroll",
+                  slivers: [
+                    SliverPersistentHeader(
+                        pinned: true,
+                        delegate: SliverAppBarDelegatePreferedSize(
+                            shouldRebuildWidget: true,
+                            child: PreferredSize(
+                                preferredSize: const Size.fromHeight(60),
+                                child: buildHeader(context, isOpen)))),
+                    ...buildListSlivers(context, isOpen)
+                  ],
+                )),
       ),
     );
   }
@@ -179,21 +183,24 @@ class _DrawerLargeScreensState extends State<DrawerLargeScreens>
   }
 
   Widget buildHeader(BuildContext context, bool isOpen) {
-    return IconButton(
-      onPressed: () {
-        if (showHamburger(_size)) {
-          drawerMenuControllerProvider.controlStartDrawerMenu();
-        } else {
-          drawerMenuControllerProvider.toggleIsOpen();
-          if (drawerMenuControllerProvider.getSideMenuIsOpen) {
-            _animationController.reverse();
+    return Container(
+      color: getBackgroundColorOnCard(context, CardType.filled_outline),
+      child: IconButton(
+        onPressed: () {
+          if (showHamburger(_size)) {
+            drawerMenuControllerProvider.controlStartDrawerMenu();
           } else {
-            _animationController.forward();
+            drawerMenuControllerProvider.toggleIsOpen();
+            if (drawerMenuControllerProvider.getSideMenuIsOpen) {
+              _animationController.reverse();
+            } else {
+              _animationController.forward();
+            }
           }
-        }
-      },
-      icon: AnimatedIcon(
-          icon: AnimatedIcons.arrow_menu, progress: _animationController),
+        },
+        icon: AnimatedIcon(
+            icon: AnimatedIcons.arrow_menu, progress: _animationController),
+      ),
     );
   }
 

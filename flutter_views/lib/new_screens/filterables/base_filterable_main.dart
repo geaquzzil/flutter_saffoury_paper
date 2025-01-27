@@ -162,15 +162,17 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
 
   Widget getSliverCustomScrollViewBody() {
     return RoundedCornerContainer(
-      child: SliverCustomScrollView(
-        scrollKey: 'bottomSheet',
-        builderAppbar: (fullyCol, fullyExp, tab) {
-          return SliverAppBar.medium(
-              leading: const CloseButton(),
-              // actions: [Container()],
-              title: getTitle(context));
-        },
-        slivers: getControllersSliver(),
+      child: SafeArea(
+        child: SliverCustomScrollView(
+          scrollKey: 'bottomSheet',
+          builderAppbar: (fullyCol, fullyExp, tab) {
+            return SliverAppBar.medium(
+                leading: const CloseButton(),
+                // actions: [Container()],
+                title: getTitle(context));
+          },
+          slivers: getControllersSliver(),
+        ),
       ),
     );
   }

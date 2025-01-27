@@ -8,11 +8,11 @@ import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_components/tow_icons_with_badge.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
-import 'package:skeletons/skeletons.dart';
 
 import '../providers/actions/action_viewabstract_provider.dart';
 
@@ -227,7 +227,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     if (iconOnButton != null) {
       return TowIconsWithTextBadge(
         largChild: image,
-         //TODO Translate
+        //TODO Translate
         text: "WASTED",
       );
     }

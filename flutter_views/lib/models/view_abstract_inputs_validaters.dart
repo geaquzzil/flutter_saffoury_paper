@@ -442,15 +442,15 @@ abstract class ViewAbstractInputAndValidater<T>
         textCapitalization: getTextInputCapitalization(field),
         keyboardType: getTextInputType(field),
         inputFormatters: getTextInputFormatter(field),
-        direction: AxisDirection.up,
+        direction: VerticalDirection.up,
         validator: (s) {
           // debugPrint(
           //     "getControllerEditTextAutoComplete field=>$field result=> ${viewAbstract.getTextInputValidatorCompose(context, field).call(s)}");
           return getTextInputValidatorCompose<String?>(context, field).call(s);
         },
-        suggestionsBoxDecoration:
-            _getDecorationAutoCompleteSuggestionBox(context),
-        transitionBuilder: _getAutoCompleteSuggestionBoxTransition,
+        // suggestionsBoxDecoration:
+        //     _getDecorationAutoCompleteSuggestionBox(context),
+        // transitionBuilder: _getAutoCompleteSuggestionBoxTransition,//TODO
         // suggestionsBoxDecoratio,
         itemBuilder: (context, continent) {
           return _getAutoCompleteItemBuilder(context, field, continent);
@@ -502,17 +502,16 @@ abstract class ViewAbstractInputAndValidater<T>
     return Text(continent.toString());
   }
 
-  SuggestionsBox  _getDecorationAutoCompleteSuggestionBox(
-      BuildContext context) {
-    return SuggestionsBox (
-        scrollbarThumbAlwaysVisible: false,
-        scrollbarTrackAlwaysVisible: false,
-        hasScrollbar: false,
-        constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * .3, minHeight: 100),
-        color: Theme.of(context).colorScheme.surfaceContainerHigh,
-        borderRadius: const BorderRadius.all(Radius.circular(kBorderRadius)));
-  }
+  // SuggestionsBox _getDecorationAutoCompleteSuggestionBox(BuildContext context) {
+  //   return SuggestionsBox(
+  //       scrollbarThumbAlwaysVisible: false,
+  //       scrollbarTrackAlwaysVisible: false,
+  //       hasScrollbar: false,
+  //       constraints: BoxConstraints(
+  //           maxHeight: MediaQuery.of(context).size.height * .3, minHeight: 100),
+  //       color: Theme.of(context).colorScheme.surfaceContainerHigh,
+  //       borderRadius: const BorderRadius.all(Radius.circular(kBorderRadius)));
+  // }
 
   Widget getFormFieldText(
       {required BuildContext context,
@@ -652,11 +651,8 @@ abstract class ViewAbstractInputAndValidater<T>
       void Function(ViewAbstract<dynamic>)? onSuggestionSelected}) {
     options ??= getFormOptions(context, field);
 
-    return FormBuilderTypeAheadTupple<ViewAbstract>(
-      selectionToTextCallback: (p0) => p0.getFieldValue(field).toString(),
-      // initialValue: getFieldValue(field).toString(),
-      onSuggestionSelected: onSuggestionSelected,
-      name: getTag(field),
+    return TypeAheadField<ViewAbstract>(
+      onSelected: onSuggestionSelected,
       itemBuilder: (context, containt) {
         return _getAutoCompleteItemBuilder(context, field, containt);
       },
@@ -668,102 +664,118 @@ abstract class ViewAbstractInputAndValidater<T>
             as Future<List<ViewAbstract>>);
       },
     );
-    return FormBuilderTypeAhead<ViewAbstract>(
-        suggestionsBoxDecoration:
-            _getDecorationAutoCompleteSuggestionBox(context),
-        transitionBuilder: _getAutoCompleteSuggestionBoxTransition,
-        // suggestionsBoxDecoratio,
-        itemBuilder: (context, continent) {
-          return _getAutoCompleteItemBuilder(context, field, continent);
-        },
-        hideOnLoading: false,
-        hideOnEmpty: true,
-        // onTap: () => controller.selection = TextSelection(
-        //     baseOffset: 0, extentOffset: controller.value.text.length),
-        enabled: options.isEnabled,
-        // controller: controller,
-        debounceDuration: const Duration(milliseconds: 750),
-        // onChangeGetObject: (text) {
-        //   debugPrint("getFormFieldAutoCompleteViewAbstractResponse soso $text");
-        //   return (options?.value as ViewAbstract)
-        //       .getNewInstance(searchByAutoCompleteTextInput: text);
-        //   // return autoCompleteBySearchQuery
-        //   //     ? viewAbstract.getNewInstance(searchByAutoCompleteTextInput: text)
-        //   //     : viewAbstract.getParnet == null
-        //   //         ? viewAbstract.getNewInstance()
-        //   //         : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
-        //   //             viewAbstract.fieldNameFromParent!)
-        //   //   ..setFieldValue(field, text);
-        // },
-        selectionToTextTransformer: (suggestion) {
-          return suggestion.getFieldValue(field).toString();
-          // debugPrint(
-          //     "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.searchByAutoCompleteTextInput}");
-          // debugPrint(
-          //     "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.isNew()}");
-          // return suggestion.getFieldValue(field, context: context);
-          // return autoCompleteBySearchQuery
-          //     ? suggestion.isNew()
-          //         ? suggestion.searchByAutoCompleteTextInput ?? ""
-          //         : suggestion.getMainHeaderTextOnly(context)
-          //     : getEditControllerText(suggestion.getFieldValue(field));
-        },
-        name: getTag(field),
-        initialValue: getFieldValue(field),
-        decoration: getDecoration(
-          context,
-          castViewAbstract(),
-          field: field,
-        ),
-        // maxLength: getTextInputMaxLength(field),
-        // inputFormatters: getTextInputFormatter(field),
-        // textCapitalization: getTextInputCapitalization(field),
-        // keyboardType: getTextInputType(field),
-        onSuggestionSelected: onSuggestionSelected,
-        onSaved: (newValue) {
-          // if (autoCompleteBySearchQuery) {}
+    // return FormBuilderTypeAheadTupple<ViewAbstract>(
+    //   selectionToTextCallback: (p0) => p0.getFieldValue(field).toString(),
+    //   // initialValue: getFieldValue(field).toString(),
+    //   onSuggestionSelected: onSuggestionSelected,
+    //   name: getTag(field),
+    //   itemBuilder: (context, containt) {
+    //     return _getAutoCompleteItemBuilder(context, field, containt);
+    //   },
+    //   suggestionsCallback: (query) {
+    //     if (query.isEmpty) return [];
+    //     if (query.trim().isEmpty) return [];
 
-          // if (viewAbstract.getParnet != null) {
-          //   viewAbstract.getParnet!
-          //       .setFieldValue(viewAbstract.getFieldNameFromParent!, newValue);
-          // } else {
-          //   viewAbstract.setFieldValue(field, newValue);
-          // }
-          // debugPrint(
-          //     'getControllerEditTextViewAbstractAutoComplete onSave parent=> ${viewAbstract.parent.runtimeType} field = ${viewAbstract.getFieldNameFromParent}:value=> ${newValue.runtimeType}');
-        },
-        // loadingBuilder: (context) => const SizedBox(
-        //     width: double.infinity,
-        //     height: 200,
-        //     child: Center(child: CircularProgressIndicator())),
+    //     return (search(5, 0, query, context: context, cache: true)
+    //         as Future<List<ViewAbstract>>);
+    //   },
+    // );
+    // return FormBuilderTypeAhead<ViewAbstract>(
+    //     suggestionsBoxDecoration:
+    //         _getDecorationAutoCompleteSuggestionBox(context),
+    //     transitionBuilder: _getAutoCompleteSuggestionBoxTransition,
+    //     // suggestionsBoxDecoratio,
+    //     itemBuilder: (context, continent) {
+    //       return _getAutoCompleteItemBuilder(context, field, continent);
+    //     },
+    //     hideOnLoading: false,
+    //     hideOnEmpty: true,
+    //     // onTap: () => controller.selection = TextSelection(
+    //     //     baseOffset: 0, extentOffset: controller.value.text.length),
+    //     enabled: options.isEnabled,
+    //     // controller: controller,
+    //     debounceDuration: const Duration(milliseconds: 750),
+    //     // onChangeGetObject: (text) {
+    //     //   debugPrint("getFormFieldAutoCompleteViewAbstractResponse soso $text");
+    //     //   return (options?.value as ViewAbstract)
+    //     //       .getNewInstance(searchByAutoCompleteTextInput: text);
+    //     //   // return autoCompleteBySearchQuery
+    //     //   //     ? viewAbstract.getNewInstance(searchByAutoCompleteTextInput: text)
+    //     //   //     : viewAbstract.getParnet == null
+    //     //   //         ? viewAbstract.getNewInstance()
+    //     //   //         : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
+    //     //   //             viewAbstract.fieldNameFromParent!)
+    //     //   //   ..setFieldValue(field, text);
+    //     // },
+    //     selectionToTextTransformer: (suggestion) {
+    //       return suggestion.getFieldValue(field).toString();
+    //       // debugPrint(
+    //       //     "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.searchByAutoCompleteTextInput}");
+    //       // debugPrint(
+    //       //     "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.isNew()}");
+    //       // return suggestion.getFieldValue(field, context: context);
+    //       // return autoCompleteBySearchQuery
+    //       //     ? suggestion.isNew()
+    //       //         ? suggestion.searchByAutoCompleteTextInput ?? ""
+    //       //         : suggestion.getMainHeaderTextOnly(context)
+    //       //     : getEditControllerText(suggestion.getFieldValue(field));
+    //     },
+    //     name: getTag(field),
+    //     initialValue: getFieldValue(field),
+    //     decoration: getDecoration(
+    //       context,
+    //       castViewAbstract(),
+    //       field: field,
+    //     ),
+    //     // maxLength: getTextInputMaxLength(field),
+    //     // inputFormatters: getTextInputFormatter(field),
+    //     // textCapitalization: getTextInputCapitalization(field),
+    //     // keyboardType: getTextInputType(field),
+    //     onSuggestionSelected: onSuggestionSelected,
+    //     onSaved: (newValue) {
+    //       // if (autoCompleteBySearchQuery) {}
 
-        validator: (value) {
-          return null;
-          // if (autoCompleteBySearchQuery) {
-          //   if (value?.isNew() ?? true) {
-          //     return AppLocalizations.of(context)!
-          //         .errFieldNotSelected(getMainHeaderLabelTextOnly(context));
-          //   } else {
-          //     return getTextInputValidatorOnAutocompleteSelected(
-          //         context, field, value!);
-          //   }
-          // }
-          // return value?.getTextInputValidator(context, field,
-          //     getEditControllerText(value.getFieldValue(field)));
-        },
-        suggestionsCallback: (query) {
-          if (query.isEmpty) return [];
-          if (query.trim().isEmpty) return [];
+    //       // if (viewAbstract.getParnet != null) {
+    //       //   viewAbstract.getParnet!
+    //       //       .setFieldValue(viewAbstract.getFieldNameFromParent!, newValue);
+    //       // } else {
+    //       //   viewAbstract.setFieldValue(field, newValue);
+    //       // }
+    //       // debugPrint(
+    //       //     'getControllerEditTextViewAbstractAutoComplete onSave parent=> ${viewAbstract.parent.runtimeType} field = ${viewAbstract.getFieldNameFromParent}:value=> ${newValue.runtimeType}');
+    //     },
+    //     // loadingBuilder: (context) => const SizedBox(
+    //     //     width: double.infinity,
+    //     //     height: 200,
+    //     //     child: Center(child: CircularProgressIndicator())),
 
-          return (search(5, 0, query, context: context, cache: true)
-              as Future<List<ViewAbstract>>);
-          // if (autoCompleteBySearchQuery) {
-          //   return search(5, 0, query, context: context)
-          //       as Future<List<ViewAbstract>>;
-          // }
-          // return searchViewAbstractByTextInputViewAbstract(
-          //     field: field, searchQuery: query, context: context);
-        });
+    //     validator: (value) {
+    //       return null;
+    //       // if (autoCompleteBySearchQuery) {
+    //       //   if (value?.isNew() ?? true) {
+    //       //     return AppLocalizations.of(context)!
+    //       //         .errFieldNotSelected(getMainHeaderLabelTextOnly(context));
+    //       //   } else {
+    //       //     return getTextInputValidatorOnAutocompleteSelected(
+    //       //         context, field, value!);
+    //       //   }
+    //       // }
+    //       // return value?.getTextInputValidator(context, field,
+    //       //     getEditControllerText(value.getFieldValue(field)));
+    //     },
+    //     suggestionsCallback: (query) {
+    //       if (query.isEmpty) return [];
+    //       if (query.trim().isEmpty) return [];
+
+    //       return (search(5, 0, query, context: context, cache: true)
+    //           as Future<List<ViewAbstract>>);
+    //       // if (autoCompleteBySearchQuery) {
+    //       //   return search(5, 0, query, context: context)
+    //       //       as Future<List<ViewAbstract>>;
+    //       // }
+    //       // return searchViewAbstractByTextInputViewAbstract(
+    //       //     field: field, searchQuery: query, context: context);
+    //     });
   }
 
   Widget getFormFieldAutoCompleteViewAbstract(
@@ -773,9 +785,9 @@ abstract class ViewAbstractInputAndValidater<T>
     options ??= getFormOptions(context, field);
 
     return FormBuilderTypeAheadCustom<ViewAbstract>(
-        suggestionsBoxDecoration:
-            _getDecorationAutoCompleteSuggestionBox(context),
-        transitionBuilder: _getAutoCompleteSuggestionBoxTransition,
+        // suggestionsBoxDecoration:
+        //     _getDecorationAutoCompleteSuggestionBox(context),
+        // transitionBuilder: _getAutoCompleteSuggestionBoxTransition,//TODO
         // suggestionsBoxDecoratio,
         itemBuilder: (context, continent) {
           return _getAutoCompleteItemBuilder(context, field, continent);

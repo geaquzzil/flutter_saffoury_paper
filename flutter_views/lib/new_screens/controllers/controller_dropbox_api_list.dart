@@ -3,10 +3,10 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
-import 'package:skeletons/skeletons.dart';
 
 class DropdownFromViewAbstractApi<T extends ViewAbstract>
     extends StatefulWidget {

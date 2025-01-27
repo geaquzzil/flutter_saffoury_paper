@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +19,7 @@ InputDecorationTheme getMainTheme(BuildContext context,
   colorScheme ??= theme.colorScheme;
   bool isLargeOrDesktop = isLargeScreen(context);
   return theme.inputDecorationTheme.copyWith(
+    focusedBorder: _getFocusBorder(isLargeOrDesktop, colorScheme),
     isDense: isLargeOrDesktop,
     filled: isLargeOrDesktop,
     fillColor: colorScheme.surfaceContainerHighest,
@@ -35,6 +37,7 @@ InputDecorationTheme getMainTheme(BuildContext context,
 ThemeData getThemeData(BuildContext context, bool isDark,
     ColorScheme colorScheme, CustomColors customColor) {
   return ThemeData(
+      scaffoldBackgroundColor: colorScheme.surface,
       badgeTheme: getBadgeTheme(context, colorScheme),
       expansionTileTheme: getExpansionTileTheme(context, colorScheme),
       colorScheme: colorScheme,
@@ -49,6 +52,7 @@ ThemeData getThemeData(BuildContext context, bool isDark,
         thickness: 1,
         color: colorScheme.outlineVariant,
       ),
+      // scaffoldBackgroundColor: colorScheme.,
       highlightColor: colorScheme.onSurface.withOpacity(.2),
       focusColor: colorScheme.secondaryContainer,
       canvasColor: colorScheme.surfaceContainer,
@@ -162,7 +166,8 @@ getCardTheme(BuildContext context, ColorScheme colorScheme) {
     shape: const RoundedRectangleBorder(
       // side: BorderSide(
       //     width: 1, color: Theme.of(context).colorScheme.outlineVariant),
-      borderRadius: BorderRadius.all(Radius.circular(kBorderRadius)),
+      //TODO it was 20 but 12 passed on material 3 guidline
+      borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
   );
 }
@@ -307,6 +312,17 @@ OutlineInputBorder _getBorder(bool isLargeOrDesktop) {
           Radius.circular(isLargeOrDesktop ? kBorderRadius : 4)));
 }
 
+OutlineInputBorder _getFocusBorder(
+    bool isLargeOrDesktop, ColorScheme colorScheme) {
+  return OutlineInputBorder(
+      gapPadding: isLargeOrDesktop ? 0 : 4,
+      borderSide: isLargeOrDesktop
+          ? BorderSide.none
+          : BorderSide(color: colorScheme.outline, width: 2.0),
+      borderRadius: BorderRadius.all(
+          Radius.circular(isLargeOrDesktop ? kBorderRadius : 4)));
+}
+
 InputDecorationTheme getTextPopMenuTheme(BuildContext context) {
   bool isLargeOrDesktop = isDesktopPlatform();
   return getMainTheme(context).copyWith(
@@ -325,5 +341,80 @@ InputDecorationTheme getCheckTileTheme(BuildContext context) {
     //     ? BoxConstraints.tight(const Size.fromHeight(40))
     //     : null,
   );
+}
+
+Color getBackgroundColorOnCard(BuildContext context, CardType type) {
+  switch (type) {
+    case CardType.normal:
+      return Theme.of(context).colorScheme.surfaceContainerLow;
+    case CardType.filled:
+      return Theme.of(context).colorScheme.surfaceContainerHighest;
+    case CardType.filled_outline:
+      return Theme.of(context).colorScheme.surfaceContainerHighest;
+    case CardType.outline:
+      return Theme.of(context).colorScheme.surface;
+  }
+}
+
+Widget getElevatedCard(BuildContext context, Widget child,
+    {bool isHoverd = false, Function()? onPress}) {
+  return Card(
+      shadowColor: Theme.of(context).colorScheme.shadow,
+      surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+      color: Theme.of(context).colorScheme.surfaceContainerLow,
+      elevation: isHoverd ? 4 : 1,
+      child: onPress == null
+          ? child
+          : InkWell(onTap: () => onPress(), child: child));
+}
+
+Widget getOutlineCard(BuildContext context, Widget child,
+    {bool isHoverd = false, Function()? onPress}) {
+  return Card(
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          width: 1,
+          color: Theme.of(context).colorScheme.outlineVariant,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(kBorderRadius)),
+      ),
+      shadowColor: Theme.of(context).colorScheme.shadow,
+      surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+      color: Theme.of(context).colorScheme.surface,
+      elevation: isHoverd ? 4 : 0,
+      child: onPress == null
+          ? child
+          : InkWell(onTap: () => onPress(), child: child));
+}
+
+Widget getFilledCardWithOutline(BuildContext context, Widget child,
+    {bool isHoverd = false, Function()? onPress}) {
+  return Card(
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          width: 1,
+          color: Theme.of(context).colorScheme.outlineVariant,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(kBorderRadius)),
+      ),
+      shadowColor: Theme.of(context).colorScheme.shadow,
+      surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      elevation: isHoverd ? 4 : 0,
+      child: onPress == null
+          ? child
+          : InkWell(onTap: () => onPress(), child: child));
+}
+
+Widget getFilledCard(BuildContext context, Widget child,
+    {bool isHoverd = false, Function()? onPress}) {
+  return Card(
+      shadowColor: Theme.of(context).colorScheme.shadow,
+      surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      elevation: isHoverd ? 4 : 0,
+      child: onPress == null
+          ? child
+          : InkWell(onTap: () => onPress(), child: child));
 }
 // ButtonStyle getButtonStyle(BuildContext context) {}

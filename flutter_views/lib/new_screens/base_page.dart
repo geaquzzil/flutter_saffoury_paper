@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:connectivity_listener/connectivity_listener.dart';
+// import 'package:connectivity_listener/connectivity_listener.dart';
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -49,7 +49,31 @@ const double kDefualtAppBar = 70;
 const double kDefualtClipRect = 25;
 GlobalKey<BasePageWithApi> globalKeyBasePageWithApi =
     GlobalKey<BasePageWithApi>();
-
+//TODO sliver_tools https://github.com/Kavantix/hn_state_example/blob/master/lib/ui/pages/news/components/news_section.dart
+//TODO
+// Widget build(BuildContext context) {
+//   return CustomScrollView(
+//     slivers: [
+//       SliverAppBar(),
+//       Consumer<CustomerController>(
+//         builder: (context, model, child) {
+//           if (model.loading) {
+//             return Loading();
+//           }
+//           else {
+//             return MultiSliver(
+//               children: [
+//                 Header(),
+//                 Saved(),
+//                 Recommendations(),
+//               ],
+//             };
+//           }
+//         },
+//       ),
+//     ],
+//   );
+// }
 mixin TickerWidget<T extends StatefulWidget> on State<T> {
   int getTickerSecond();
 
@@ -75,7 +99,7 @@ mixin TickerWidget<T extends StatefulWidget> on State<T> {
     super.dispose();
   }
 }
-
+//TODO CarouselView
 @Deprecated("To Develope ScrollController")
 mixin BasePageWithTicker<T extends BasePage> on BasePageState<T> {
   ValueNotifier valueFirstPane = ValueNotifier(null);
@@ -861,11 +885,11 @@ abstract class BasePageState<T extends BasePage> extends State<T>
         context.read<DrawerMenuControllerProvider>();
     buildDrawer = widget.buildDrawer;
     _buildSecoundPane = widget.buildSecondPane;
-    _connectionListener.init(
-      onConnected: () => debugPrint("BasePage CONNECTED"),
-      onReconnected: () => debugPrint("BasePage RECONNECTED"),
-      onDisconnected: () => debugPrint("BasePage  DISCONNECTED"),
-    );
+    // _connectionListener.init(
+    //   onConnected: () => debugPrint("BasePage CONNECTED"),
+    //   onReconnected: () => debugPrint("BasePage RECONNECTED"),
+    //   onDisconnected: () => debugPrint("BasePage  DISCONNECTED"),
+    // );
     WidgetsBinding.instance.endOfFrame.then((_) {
       debugPrint("onBuildCalled $runtimeType");
       widget.onBuild?.value = Random()..nextInt(10000);
@@ -874,7 +898,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   }
 
   // The listener
-  final _connectionListener = ConnectionListener();
+  // final _connectionListener = ConnectionListener();
 
   final firstPaneScaffold = GlobalKey<ScaffoldMessengerState>();
   final secondPaneScaffold = GlobalKey<ScaffoldMessengerState>();
@@ -1262,7 +1286,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   @override
   void dispose() {
-    _connectionListener.dispose();
+    // _connectionListener.dispose();
     if (_hasTabBarList()) {
       _tabBaseController!.removeListener(_tabControllerChangeListener);
       _tabBaseController!.dispose();
@@ -1640,7 +1664,8 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       slivers: const [],
       builder: (scrollController, tab) {
         return SliverCustomScrollViewDraggableHelper(
-            widget: beforeGetPaneWidget(firstPane: firstPane, tab: tab)!,
+            widget: beforeGetPaneWidget(
+                firstPane: firstPane, tab: tab, controler: scrollController)!,
             headerWidget:
                 getPaneDraggableHeader(firstPane: firstPane, tab: tab),
             expandHeaderWidget:
@@ -1654,8 +1679,10 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       backgroundColor: isPaneScaffoldOverlayColord(
         firstPane,
       )
-          ? ElevationOverlay.overlayColor(context, 0)
-          : null,
+          ? ElevationOverlay.overlayColor(context, 4)
+          : firstPane
+              ? Theme.of(context).colorScheme.surfaceBright
+              : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       floatingActionButton: getFloatingActionButton(firstPane: firstPane),

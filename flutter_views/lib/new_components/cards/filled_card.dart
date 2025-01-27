@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/screens/on_hover_button.dart';
 /// ListTile
 ///  collapsedBackgroundColor: Colors.transparent,
 // backgroundColor: Theme.of(context).focusColor,
+@Deprecated("Use Cards")
 class FilledCard extends StatelessWidget {
   Widget child;
   Function? onPress;
@@ -28,7 +29,6 @@ class FilledCard extends StatelessWidget {
       scaleValue: .01,
       builder: (isHovered) {
         return Card(
-          
           shadowColor: Theme.of(context).colorScheme.shadow,
           elevation: isHovered ? 4 : 0,
           color: Theme.of(context).colorScheme.surfaceContainerHighest,

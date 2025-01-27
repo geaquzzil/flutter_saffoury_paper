@@ -6,6 +6,7 @@ import 'package:palette_generator/palette_generator.dart';
 /// ListTile
 ///  collapsedBackgroundColor: Colors.transparent,
 // backgroundColor: Theme.of(context).focusColor,
+@Deprecated("Use Cards")
 class OutlinedCard extends StatelessWidget {
   Widget child;
   bool fillColor;

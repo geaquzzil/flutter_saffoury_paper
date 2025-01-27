@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/skeleton.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:skeletons/skeletons.dart';
 
 import '../../new_components/lists/list_card_item_selected.dart';
 
@@ -38,7 +39,8 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
     _scrollController.addListener(() => _onScroll());
     listProvider = Provider.of<ListMultiKeyProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      listProvider.fetchList(getCustomKey(), viewAbstract: widget.viewAbstract,context:context);
+      listProvider.fetchList(getCustomKey(),
+          viewAbstract: widget.viewAbstract, context: context);
     });
   }
 
@@ -86,7 +88,8 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
   }
 
   void _refresh() {
-    listProvider.refresh(findCustomKey(), widget.viewAbstract,context:context);
+    listProvider.refresh(findCustomKey(), widget.viewAbstract,
+        context: context);
   }
 
   Widget _buildSearchBox() {
@@ -243,12 +246,13 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
       debugPrint(" IS BOTTOM $_isBottom");
       if (controller.text.isEmpty) {
         listProvider.fetchList(getCustomKey(),
-            viewAbstract: widget.viewAbstract,context:context);
+            viewAbstract: widget.viewAbstract, context: context);
       } else {
         listProvider.fetchListSearch(
             getCustomKey(searchTextKey: controller.text),
             widget.viewAbstract,
-            controller.text,context:context);
+            controller.text,
+            context: context);
       }
     }
   }
@@ -260,7 +264,8 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
         listProvider.fetchListSearch(
             getCustomKey(searchTextKey: controller.text),
             widget.viewAbstract,
-            controller.text,context:context);
+            controller.text,
+            context: context);
         // setState(() {});
       },
     );

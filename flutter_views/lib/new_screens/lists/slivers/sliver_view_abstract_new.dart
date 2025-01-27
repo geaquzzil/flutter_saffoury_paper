@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 
 class SliverApiMixinViewAbstractWidget
@@ -29,7 +30,7 @@ class _SliverApiMixinAutoRestState
     with SliverApiWithStaticMixin {
   @override
   String getListProviderKey() {
-    String key = getToListObjectCastViewAbstract().getListableKey();
+    String key = (widget.toListObject as ViewAbstract).getListableKey();
     key = key + (getSearchString ?? "") + (getFilterData.toString());
     debugPrint("SliverApiWithStaticMixin===> getListProviderKey $key");
     return key;

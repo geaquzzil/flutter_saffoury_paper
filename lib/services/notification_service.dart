@@ -31,6 +31,7 @@ class NotificationService {
     final token = await _messaging.getToken();
     debugPrint('FCM Token: $token');
     _messaging.onTokenRefresh.listen((event) {
+      // Configrations.
       event.toString();
       debugPrint('TOken Refereshed $event');
     });

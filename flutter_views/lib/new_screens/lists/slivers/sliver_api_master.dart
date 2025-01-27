@@ -17,6 +17,7 @@ import 'package:flutter_view_controller/new_components/lists/horizontal_list_car
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item_selected.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -32,7 +33,6 @@ import 'package:flutter_view_controller/screens/web/components/header_text.dart'
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
-import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
 
 class SliverApiMaster extends StatefulWidget {

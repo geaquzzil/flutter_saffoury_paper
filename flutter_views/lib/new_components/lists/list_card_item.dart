@@ -49,11 +49,17 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
   SliverApiWithStaticMixin? state;
   @Deprecated("Use glbal key")
   ValueNotifier<ListToDetailsSecoundPaneHelper?>? onSelectedItem;
+
+  bool? isSelected;
+  Function(T object)? onClick;
+
   ListCardItem({
     Key? key,
     this.listState,
     this.onSelectedItem,
+    this.onClick,
     this.state,
+    this.isSelected,
     required this.object,
   }) : super(key: GlobalKey());
 
@@ -66,7 +72,11 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
         secondaryBackground: object.getDismissibleSecondaryBackground(context),
         onDismissed: (direction) =>
             object.onCardDismissedView(context, direction),
-        child: getCard());
+        child: _getCardNew(context));
+  }
+
+  Widget _getCardNew(BuildContext context) {
+    return getListTile(isSelected ?? false, context);
   }
 
   Widget getCard() {
@@ -119,6 +129,8 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
                 actionTitle: AppLocalizations.of(context)!.view,
                 action: ServerActions.view,
                 viewAbstract: object);
+          } else if (onClick != null) {
+            onClick!.call(object);
           } else {
             object.onCardClicked(context);
           }

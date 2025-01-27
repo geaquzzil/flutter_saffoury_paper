@@ -9,6 +9,8 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/theme.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -25,7 +27,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:responsive_grid_list/responsive_grid_list.dart';
-import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -200,6 +201,36 @@ class ListWebApiPage extends BaseWebPageSlivers {
     );
   }
 
+  Widget getSharedLoadingItem(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.all(kDefaultPadding / 2),
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  Widget getSliverList(BuildContext context, BoxConstraints constraints,
+      int count, bool isLoading) {
+    return getSliverPadding(
+      context,
+      constraints,
+      SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+        if (isLoading && index == count) {
+          return getSharedLoadingItem(context);
+        }
+        ViewAbstract va = listProvider.getList(findCustomKey())[index];
+        return ListCardItemWeb(
+          object: va,
+          onTap: () {
+            onCardTap?.value = va;
+          },
+        );
+      }, childCount: count + (isLoading ? 1 : 0))),
+    );
+  }
+  
   Widget getShimmerLoadingList() {
     return SliverFillRemaining(
       child: SkeletonTheme(
@@ -242,36 +273,6 @@ class ListWebApiPage extends BaseWebPageSlivers {
           itemCount: viewAbstract.getPageItemCount,
         ),
       ),
-    );
-  }
-
-  Widget getSharedLoadingItem(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(kDefaultPadding / 2),
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-  }
-
-  Widget getSliverList(BuildContext context, BoxConstraints constraints,
-      int count, bool isLoading) {
-    return getSliverPadding(
-      context,
-      constraints,
-      SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-        if (isLoading && index == count) {
-          return getSharedLoadingItem(context);
-        }
-        ViewAbstract va = listProvider.getList(findCustomKey())[index];
-        return ListCardItemWeb(
-          object: va,
-          onTap: () {
-            onCardTap?.value = va;
-          },
-        );
-      }, childCount: count + (isLoading ? 1 : 0))),
     );
   }
 

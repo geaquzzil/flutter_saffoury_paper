@@ -1,6 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_view_controller/new_screens/home/components/empty_widget
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:provider/provider.dart';
-import 'package:skeletons/skeletons.dart';
 
 class SliverMaster extends StatefulWidget {
   bool buildSearchWidget;
@@ -223,50 +221,6 @@ class SliverMasterState<T extends SliverMaster> extends State<T> {
             : AppLocalizations.of(context)!.no_content);
   }
 
-  Widget getShimmerLoading() {
-    return SliverFillRemaining(
-      child: SkeletonTheme(
-        shimmerGradient: const LinearGradient(
-          colors: [
-            Color(0xFFD8E3E7),
-            Color(0xFFC8D5DA),
-            Color(0xFFD8E3E7),
-          ],
-          stops: [
-            0.1,
-            0.5,
-            0.9,
-          ],
-        ),
-        darkShimmerGradient: const LinearGradient(
-          colors: [
-            Color(0xFF222222),
-            Color(0xFF242424),
-            Color(0xFF2B2B2B),
-            Color(0xFF242424),
-            Color(0xFF222222),
-            // Color(0xFF242424),
-            // Color(0xFF2B2B2B),
-            // Color(0xFF242424),
-            // Color(0xFF222222),
-          ],
-          stops: [
-            0.0,
-            0.2,
-            0.5,
-            0.8,
-            1,
-          ],
-          // begin: Alignment(-2.4, -0.2),
-          // end: Alignment(2.4, 0.2),
-          // tileMode: TileMode.clamp,
-        ),
-        child: SkeletonListView(
-          itemCount: Random().nextInt(10 - 5),
-        ),
-      ),
-    );
-  }
 }
 
 enum SliverListMood { NONE, SELECT }

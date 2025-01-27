@@ -3,6 +3,8 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/skeleton.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_master.dart';
 
@@ -72,6 +74,14 @@ class SliverListStaticState extends SliverMasterState<SliverListStatic> {
           },
         );
       },
+    );
+  }
+
+  Widget getShimmerLoading() {
+    return Skeleton(
+      isLoading: true,
+      skeleton: SkeletonListView(itemCount: 10),
+      child: Container(child: const Center(child: Text("Content"))),
     );
   }
 

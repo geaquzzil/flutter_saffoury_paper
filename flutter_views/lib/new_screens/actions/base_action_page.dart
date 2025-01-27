@@ -15,6 +15,8 @@ import 'package:flutter_view_controller/models/view_abstract_generater.dart';
 import 'package:flutter_view_controller/new_components/listable_draggable_header.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item_editable.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/stylings.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
@@ -36,7 +38,6 @@ import 'package:pretty_http_logger/pretty_http_logger.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:skeletons/skeletons.dart';
 
 import '../../screens/base_shared_actions_header.dart';
 import 'components/action_on_header_popup_widget.dart';
@@ -579,51 +580,6 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             }),
       ],
       AppLocalizations.of(context)!.adsImages,
-    );
-  }
-
-  Widget getShimmerLoadingQrCode() {
-    return SliverFillRemaining(
-      child: SkeletonTheme(
-        shimmerGradient: const LinearGradient(
-          colors: [
-            Color(0xFFD8E3E7),
-            Color(0xFFC8D5DA),
-            Color(0xFFD8E3E7),
-          ],
-          stops: [
-            0.1,
-            0.5,
-            0.9,
-          ],
-        ),
-        darkShimmerGradient: const LinearGradient(
-          colors: [
-            Color(0xFF222222),
-            Color(0xFF242424),
-            Color(0xFF2B2B2B),
-            Color(0xFF242424),
-            Color(0xFF222222),
-            // Color(0xFF242424),
-            // Color(0xFF2B2B2B),
-            // Color(0xFF242424),
-            // Color(0xFF222222),
-          ],
-          stops: [
-            0.0,
-            0.2,
-            0.5,
-            0.8,
-            1,
-          ],
-          // begin: Alignment(-2.4, -0.2),
-          // end: Alignment(2.4, 0.2),
-          // tileMode: TileMode.clamp,
-        ),
-        child: SkeletonListView(
-          itemCount: 1,
-        ),
-      ),
     );
   }
 

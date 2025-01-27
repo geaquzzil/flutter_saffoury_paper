@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:flutter_typeahead/src/common/base/types.dart';
 
 typedef SelectionToTextTransformer<T> = String Function(T suggestion);
+
+@Deprecated("use TypeAheadField directly")
 
 /// Text field that auto-completes user input from a list of items
 class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
@@ -123,16 +126,16 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
   ///   );
   /// }
   /// ```
-  final ItemBuilder<T> itemBuilder;
+  final SuggestionsItemBuilder<T> itemBuilder;
 
   /// The decoration of the material sheet that contains the suggestions.
   ///
   /// If null, default decoration with an elevation of 4.0 is used
-  final SuggestionsBoxDecoration suggestionsBoxDecoration;
+  // final SuggestionsBoxDecoration suggestionsBoxDecoration;
 
   /// Used to control the `_SuggestionsBox`. Allows manual control to
   /// open, close, toggle, or resize the `_SuggestionsBox`.
-  final SuggestionsBoxController? suggestionsBoxController;
+  final SuggestionsController<T>? suggestionsBoxController;
 
   /// The duration to wait after the user stops typing before calling
   /// [suggestionsCallback]
@@ -182,7 +185,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
   /// ```
   ///
   /// If not specified, the error is shown in [ThemeData.errorColor](https://docs.flutter.io/flutter/material/ThemeData/errorColor.html)
-  final ErrorBuilder? errorBuilder;
+  final SuggestionsErrorBuilder? errorBuilder;
 
   /// Called to display animations when [suggestionsCallback] returns suggestions
   ///
@@ -208,7 +211,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
   /// To fully remove the animation, just return `suggestionsBox`
   ///
   /// If not specified, a [SizeTransition](https://docs.flutter.io/flutter/widgets/SizeTransition-class.html) is shown.
-  final AnimationTransitionBuilder? transitionBuilder;
+  // final AnimationTransitionBuilder? transitionBuilder;
 
   /// The duration that [transitionBuilder] animation takes.
   ///
@@ -227,7 +230,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
   /// and the [_SuggestionsList] will grow **up**.
   ///
   /// [AxisDirection.left] and [AxisDirection.right] are not allowed.
-  final AxisDirection direction;
+  final VerticalDirection direction;
 
   /// The value at which the [transitionBuilder] animation starts.
   ///
@@ -239,7 +242,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
 
   /// The configuration of the [TextField](https://docs.flutter.io/flutter/material/TextField-class.html)
   /// that the TypeAhead widget displays
-  final TextField  textFieldConfiguration;
+  final TextField textFieldConfiguration;
 
   /// How far below the text field should the suggestions box be
   ///
@@ -353,7 +356,7 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
     this.autoFlipDirection = false,
     this.controller,
     this.debounceDuration = const Duration(milliseconds: 300),
-    this.direction = AxisDirection.down,
+    this.direction = VerticalDirection.up,
     this.errorBuilder,
     this.getImmediateSuggestions = false,
     this.keyboardType,
@@ -374,10 +377,10 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
     this.scrollController,
     this.selectionToTextTransformer,
     this.suggestionsBoxController,
-    this.suggestionsBoxDecoration = const SuggestionsBox(),
+    // this.suggestionsBoxDecoration = const SuggestionsBox(),
     this.suggestionsBoxVerticalOffset = 5.0,
     this.textFieldConfiguration = const TextField(),
-    this.transitionBuilder,
+    // this.transitionBuilder,
   })  : assert(T == String || selectionToTextTransformer != null),
         assert(maxLength == null || maxLength > 0),
         super(
@@ -386,14 +389,24 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
             final theme = Theme.of(state.context);
 
             return TypeAheadField<T>(
-              textFieldConfiguration: textFieldConfiguration.copyWith(
+              decorationBuilder: (context, child) {
+                return Material(
+                  type: MaterialType.card,
+                  elevation: 4,
+                  borderRadius: BorderRadius.circular(8),
+                  child: child,
+                );
+              },
+              // TextFieldConfiguration has been removed. You can now directly build your own custom TextField via the builder property. Note that you must use the provided controller and focusNode properties, as they are required for the suggestions box to function.
+              builder: (c, e, a) => TextField(
                 inputFormatters: inputFormatters,
                 maxLengthEnforcement: maxLengthEnforcement,
                 textCapitalization: textCapitalization,
                 maxLength: maxLength,
                 keyboardType: keyboardType,
                 enabled: state.enabled,
-                controller: state._typeAheadController,
+                // controller: state._typeAheadController,
+                controller: e,
                 // autofocus: true,//TODO i add this for auto select all text for AutComplete ViewAbstract
                 onTap: onTap,
                 style: state.enabled
@@ -404,7 +417,8 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
                 onChanged: (val) {
                   state.didChange(onChangeGetObject(val));
                 },
-                focusNode: state.effectiveFocusNode,
+                // focusNode: state.effectiveFocusNode,
+                focusNode: a,
 
                 decoration: decoration,
               ),
@@ -420,15 +434,15 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
                 state.didChange(value);
                 onSuggestionSelected?.call(value);
               },
-              
-              minCharsForSuggestions: 2,
+
+              // minCharsForSuggestions: 2,
               // getImmediateSuggestions: getImmediateSuggestions,
               errorBuilder: errorBuilder,
               emptyBuilder: noItemsFoundBuilder,
               loadingBuilder: loadingBuilder,
               debounceDuration: debounceDuration,
-              suggestionsBoxDecoration: suggestionsBoxDecoration,
-              suggestionsBoxVerticalOffset: suggestionsBoxVerticalOffset,
+              // suggestionsBoxDecoration: suggestionsBoxDecoration,
+              // suggestionsBoxVerticalOffset: suggestionsBoxVerticalOffset,
               animationDuration: animationDuration,
               // animationStart: animationStart,
               direction: direction,
@@ -438,10 +452,9 @@ class FormBuilderTypeAheadCustom<T> extends FormBuilderField<T> {
               hideWithKeyboard: hideSuggestionsOnKeyboardHide,
               retainOnLoading: keepSuggestionsOnLoading,
               autoFlipDirection: autoFlipDirection,
-              suggestionsBoxController: suggestionsBoxController,
-              keepSuggestionsOnSuggestionSelected:
-                  keepSuggestionsOnSuggestionSelected,
-              hideKeyboard: hideKeyboard,
+              suggestionsController: suggestionsBoxController,
+              hideOnSelect: keepSuggestionsOnSuggestionSelected,
+
               scrollController: scrollController,
             );
           },

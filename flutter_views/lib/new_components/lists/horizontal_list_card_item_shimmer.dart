@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:skeletons/skeletons.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/stylings.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 
 class ListHorizontalItemShimmer extends StatelessWidget {
   int lines;

@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/encyptions/compressions.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/theme.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
-import 'package:skeletons/skeletons.dart';
 import 'package:tuple/tuple.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -161,8 +162,7 @@ class ListWebApiMaster extends StatelessWidget {
           p1.getCount(findCustomKey()), p1.isHasError(findCustomKey())),
     );
   }
-
-  Widget getShimmerLoadingList() {
+ Widget getShimmerLoadingList() {
     return SkeletonTheme(
       shimmerGradient: const LinearGradient(
         colors: [

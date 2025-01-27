@@ -12,6 +12,7 @@ import 'package:flutter_view_controller/new_components/lists/horizontal_list_car
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item_api_request.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item_selected.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_components/lists/slivers/sliver_animated_card.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
@@ -21,7 +22,7 @@ import 'package:flutter_view_controller/screens/web/components/grid_view_api_cat
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
-import 'package:skeletons/skeletons.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tuple/tuple.dart';
 
 enum _ObjectType {
@@ -84,7 +85,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   Map<String, FilterableProviderHelper>? _filterData;
 
   late String _lastKey;
-  late final _scrollController;
+  late final ScrollController _scrollController;
   late ListMultiKeyProvider listProvider;
   late ValueNotifier<bool> valueNotifierGrid;
   late ValueNotifier<List<ViewAbstract>>? _onSeletedListItemsChanged;
@@ -406,6 +407,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
           : widget.hasCustomCardBuilder != null
               ? widget.hasCustomCardBuilder!.call(index, va)
               : ListCardItem(
+                  // onSelectedItem: ,
                   state: this,
                   object: va,
                 );
@@ -445,23 +447,21 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   Widget getSliverList(int count, bool isLoading, {List? customList}) {
     return SliverPadding(
         padding: defaultSliverListPadding,
-        sliver:
+        sliver: SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+          return getListItem(index, count, isLoading);
+        }, childCount: count + (isLoading ? 8 : 0))));
 
-            //  SliverList(
-            //     delegate: SliverChildBuilderDelegate((context, index) {
-            //   return getListItem(index, count, isLoading);
-            // }, childCount: count + (isLoading ? 8 : 0))),
-
-            LiveSliverList(
-                key: _listKey,
-                controller: _scrollController,
-                showItemInterval: Duration(milliseconds: isLoading ? 0 : 100),
-                itemBuilder: animationItemBuilder(
-                  (index) {
-                    return getListItem(index, count, isLoading);
-                  },
-                ),
-                itemCount: count + (isLoading ? 8 : 0)));
+    // LiveSliverList(
+    //     key: _listKey,
+    //     controller: _scrollController,
+    //     showItemInterval: Duration(milliseconds: isLoading ? 0 : 100),
+    //     itemBuilder: animationItemBuilder(
+    //       (index) {
+    //         return getListItem(index, count, isLoading);
+    //       },
+    //     ),
+    //     itemCount: count + (isLoading ? 8 : 0)));
   }
 
   bool _isSelectedItem(ViewAbstract va) {
@@ -673,10 +673,12 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         // }
 
         case ResponseType.LIST:
-          listProvider.fetchList(customKey, viewAbstract: c as ViewAbstract,context:context);
+          listProvider.fetchList(customKey,
+              viewAbstract: c as ViewAbstract, context: context);
           break;
         case ResponseType.SINGLE:
-          listProvider.fetchView(customKey, viewAbstract: c as ViewAbstract,context:context);
+          listProvider.fetchView(customKey,
+              viewAbstract: c as ViewAbstract, context: context);
           break;
 
         case ResponseType.NONE_RESPONSE_TYPE:
@@ -688,22 +690,22 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       }
       // if (listProvider.getCount(customKey) == 0) {
       if (_searchString == null) {
-        listProvider.fetchList(
-          customKey,
-          filter: _filterData,
-          autoRest: getToListObjectCastAutoRestNullIfNot(),
-          requiresFullFetsh: widget.requiresFullFetsh,
-          viewAbstract: getToListObjectCastAutoRestNullIfNot()?.obj ??
-              getToListObjectCastViewAbstractNullIfNot(),
-          customCount: widget.requiresFullFetsh == true ? 10000000 : null,
-          customPage: widget.requiresFullFetsh == true ? 0 : null,context:context
-        );
+        listProvider.fetchList(customKey,
+            filter: _filterData,
+            autoRest: getToListObjectCastAutoRestNullIfNot(),
+            requiresFullFetsh: widget.requiresFullFetsh,
+            viewAbstract: getToListObjectCastAutoRestNullIfNot()?.obj ??
+                getToListObjectCastViewAbstractNullIfNot(),
+            customCount: widget.requiresFullFetsh == true ? 10000000 : null,
+            customPage: widget.requiresFullFetsh == true ? 0 : null,
+            context: context);
       } else {
         listProvider.fetchListSearch(
             customKey, getToListObjectCastViewAbstract(), _searchString!,
             requiresFullFetsh: widget.requiresFullFetsh,
             filter: _filterData,
-            customCount: widget.requiresFullFetsh == true ? 10000000 : null,context:context);
+            customCount: widget.requiresFullFetsh == true ? 10000000 : null,
+            context: context);
         // }
       }
     }
@@ -712,7 +714,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   void refresh() {
     ViewAbstract? v = getToListObjectCastViewAbstractNullIfNot();
     if (v == null) return;
-    listProvider.refresh(getListProviderKey(), v,context:context);
+    listProvider.refresh(getListProviderKey(), v, context: context);
   }
 
   bool get _isBottom {

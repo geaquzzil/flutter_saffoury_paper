@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/screens/on_hover_button.dart';
 /// ListTile
 ///  collapsedBackgroundColor: Colors.transparent,
 // backgroundColor: Theme.of(context).focusColor,
+@Deprecated("Use Cards")
 class CardNormal extends StatelessWidget {
   Widget Function(bool isHovered) child;
   bool toScaleDown;
@@ -22,7 +23,6 @@ class CardNormal extends StatelessWidget {
         scaleValue: .02,
         builder: (isHoverd) {
           return Card(
-    
               shadowColor: Colors.transparent,
               color: Colors.transparent,
               elevation: isHoverd ? 4 : 0,

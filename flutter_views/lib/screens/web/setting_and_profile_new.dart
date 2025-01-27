@@ -124,6 +124,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
         const SliverFillRemaining(child: AdminSetting())
       else if (valueNotifier.value.icon == Icons.local_print_shop)
         SliverFillRemaining(
+          hasScrollBody: true,
           child: PrintSetting(
             onBuild: onBuild,
             key: kk,

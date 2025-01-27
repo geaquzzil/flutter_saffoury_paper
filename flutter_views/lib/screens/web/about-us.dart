@@ -1,14 +1,13 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_view_controller/screens/web/components/education_section.dart';
+import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/components/portfolio_stats.dart';
 import 'package:mailto/mailto.dart';
-import 'package:timelines/timelines.dart';
+// import 'package:timelines/timelines.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'components/title_and_image.dart';
 
 class AboutUsWebPage extends BaseWebPageSlivers {
@@ -30,31 +29,31 @@ class AboutUsWebPage extends BaseWebPageSlivers {
     return getSliverPadding(
         context,
         constraints,
-        SliverToBoxAdapter(
-          child: FixedTimeline.tileBuilder(
-            theme: TimelineTheme.of(context).copyWith(
-              connectorTheme: const ConnectorThemeData(color: kPrimaryColor),
-              color: kPrimaryColor,
-            ),
-            builder: TimelineTileBuilder.connectedFromStyle(
-              contentsAlign: ContentsAlign.alternating,
-              oppositeContentsBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(historyList[index].period),
-              ),
-              contentsBuilder: (context, index) => Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Text(historyList[index].description),
-                ),
-              ),
-              connectorStyleBuilder: (context, index) =>
-                  ConnectorStyle.solidLine,
-              indicatorStyleBuilder: (context, index) => IndicatorStyle.dot,
-              itemCount: historyList.length,
-            ),
-          ),
-        ));
+        SliverToBoxAdapter(child: Text("todo timeline")
+            // FixedTimeline.tileBuilder(
+            //   theme: TimelineTheme.of(context).copyWith(
+            //     connectorTheme: const ConnectorThemeData(color: kPrimaryColor),
+            //     color: kPrimaryColor,
+            //   ),
+            //   builder: TimelineTileBuilder.connectedFromStyle(
+            //     contentsAlign: ContentsAlign.alternating,
+            //     oppositeContentsBuilder: (context, index) => Padding(
+            //       padding: const EdgeInsets.all(20),
+            //       child: Text(historyList[index].period),
+            //     ),
+            //     contentsBuilder: (context, index) => Card(
+            //       child: Padding(
+            //         padding: const EdgeInsets.all(20),
+            //         child: Text(historyList[index].description),
+            //       ),
+            //     ),
+            //     connectorStyleBuilder: (context, index) =>
+            //         ConnectorStyle.solidLine,
+            //     indicatorStyleBuilder: (context, index) => IndicatorStyle.dot,
+            //     itemCount: historyList.length,
+            //   ),
+            // ),
+            ));
   }
 
   String getAboutusDescription(BuildContext context) =>
