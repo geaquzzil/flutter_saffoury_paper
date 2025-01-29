@@ -14,6 +14,7 @@ import 'package:flutter_view_controller/new_components/lists/list_card_item_sele
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_components/lists/slivers/sliver_animated_card.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
@@ -561,7 +562,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   Widget getGridViewWhenAxisIsHorizontalSizedBox(bool isLoading) {
     List list = getList();
     return SizedBox(
-      height: MediaQuery.of(context).size.height * .3,
+      height: getHeightOfHorizontalGridList(context),
       child: LayoutBuilder(
         builder: (co, constraints) {
           double size = constraints.maxHeight;
@@ -730,10 +731,11 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     }
   }
 
-  void refresh() {
+  Future<void> refresh() {
     ViewAbstract? v = getToListObjectCastViewAbstractNullIfNot();
-    if (v == null) return;
-    listProvider.refresh(getListProviderKey(), v, context: context);
+    if (v == null) return Future.delayed(Duration(milliseconds: 0));
+    return listProvider.refreshIndicater(getListProviderKey(), v,
+        context: context);
   }
 
   bool get _isBottom {

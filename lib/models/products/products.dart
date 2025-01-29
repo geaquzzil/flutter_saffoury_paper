@@ -1,8 +1,6 @@
 // import 'package:bitmap/bitmap.dart';
 // ignore_for_file: non_constant_identifier_names, constant_identifier_names, use_build_context_synchronously, library_prefixes
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -64,12 +62,13 @@ import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_hor
 import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_card_item_square.dart';
+import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:flutter_view_controller/test_var.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pdf/pdf.dart' as d;
@@ -117,10 +116,14 @@ class Product extends ViewAbstract<Product>
   ProductStatus? status;
   String? date;
   int? sheets;
+  @JsonKey(includeIfNull: false, includeToJson: false)
+  int? ParentID;
   @JsonKey(fromJson: intFromString)
   String? barcode;
   String? fiberLines;
   String? comments;
+
+  List<Product>? parents;
 
   double? pending_reservation_invoice;
   double? pending_cut_requests;
@@ -676,7 +679,8 @@ class Product extends ViewAbstract<Product>
 
   bool isRollCut() {
     //todo check type of value return  is cutrequest
-    return products != null;
+
+    return parents != null && (parents?.isNotEmpty ?? false);
   }
 
   String getCountryNameString() {
@@ -731,17 +735,27 @@ class Product extends ViewAbstract<Product>
   SortFieldValue? getSortByInitialType() =>
       SortFieldValue(field: "date", type: SortByType.DESC);
   @override
-  IconData? getCardLeadingBottomIcon() {
+  getCardLeadingBottomIcon(BuildContext context) {
     switch (status) {
       case ProductStatus.PENDING:
         return Icons.timer;
       case ProductStatus.WASTED:
-        return Icons.delete;
+        return Text(
+          status!.getFieldLabelString(context, status!).toUpperCase(),
+          style: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: Theme.of(context).colorScheme.error),
+        );
       case ProductStatus.RETURNED:
         return Icons.arrow_back;
       default:
         if (isRollCut()) {
-          return Icons.cut_sharp;
+          return Icon(
+            Icons.cut_sharp,
+            color: Theme.of(context).colorScheme.tertiary,
+            size: getIconSize(context) * .7,
+          );
         }
         return null;
     }
@@ -963,7 +977,22 @@ class Product extends ViewAbstract<Product>
       return null;
     }
     return [
+      SliverApiMixinViewAbstractWidget(
+          isGridView: true,
+          scrollDirection: Axis.horizontal,
+          toListObject: Product()
+            ..setCustomMap(getSimilarCustomParams(context))),
+      SliverApiMixinAutoRestWidget(
+          autoRest: AutoRest<Product>(
+              range: 5,
+              obj: Product()
+                ..setCustomMap(getSimilarWithSameSizeCustomParams(context)),
+              key:
+                  "productsWithSimilarSize${getSimilarWithSameSizeCustomParams(context)}")),
+    ];
+    return [
       ListHorizontalApiAutoRestWidget(
+        isSliver: true,
         // valueNotifier: onHorizontalListItemClicked,
         titleString: AppLocalizations.of(context)!.simialrProducts,
         autoRest: AutoRest<Product>(
@@ -972,6 +1001,7 @@ class Product extends ViewAbstract<Product>
             key: "similarProducts${getSimilarCustomParams(context)}"),
       ),
       ListHorizontalApiAutoRestWidget(
+        isSliver: true,
         // valueNotifier: onHorizontalListItemClicked,
         titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
         autoRest: AutoRest<Product>(
@@ -996,11 +1026,35 @@ class Product extends ViewAbstract<Product>
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action,
       ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+    Color primary = Theme.of(context).colorScheme.primary;
     return [
       if (action != ServerActions.edit)
         ProductTopWidget(
           product: this,
-        )
+        ),
+      // if (isRollCut())
+      //   FixedTimeline.tileBuilder(
+      //     theme: TimelineTheme.of(context).copyWith(
+      //       connectorTheme: ConnectorThemeData(color: primary),
+      //       color: primary,
+      //     ),
+      //     builder: TimelineTileBuilder.connectedFromStyle(
+      //       contentsAlign: ContentsAlign.alternating,
+      //       oppositeContentsBuilder: (context, index) => Padding(
+      //         padding: const EdgeInsets.all(20),
+      //         child: Text(parents![index].date!),
+      //       ),
+      //       contentsBuilder: (context, index) => Card(
+      //         child: Padding(
+      //           padding: const EdgeInsets.all(20),
+      //           child: Text(parents![index].getMainHeaderTextOnly(context)),
+      //         ),
+      //       ),
+      //       connectorStyleBuilder: (context, index) => ConnectorStyle.solidLine,
+      //       indicatorStyleBuilder: (context, index) => IndicatorStyle.dot,
+      //       itemCount: parents!.length,
+      //     ),
+      //   ),
     ];
     return super.getCustomTopWidget(context, action: action);
   }

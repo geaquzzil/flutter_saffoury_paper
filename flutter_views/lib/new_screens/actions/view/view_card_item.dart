@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 
 class ViewCardItem extends StatelessWidget {
   String title;
@@ -7,6 +8,7 @@ class ViewCardItem extends StatelessWidget {
   IconData icon;
   ViewAbstract? object;
   ValueNotifier<ViewAbstract>? valueNotifier;
+  ValueNotifier<SecondPaneHelper?>? secNotifier;
   bool overrideTrailingToNull;
   ViewCardItem(
       {super.key,
@@ -14,14 +16,22 @@ class ViewCardItem extends StatelessWidget {
       required this.title,
       required this.description,
       this.valueNotifier,
-      this.overrideTrailingToNull=false,
+      this.secNotifier,
+      this.overrideTrailingToNull = false,
       required this.icon});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () =>
-          object?.onCardClickedView(context, isSecoundSubPaneView: true),
+      onTap: () {
+        if (secNotifier != null) {
+          secNotifier?.value = SecondPaneHelper(
+              title: object!.getMainHeaderLabelTextOnly(context),
+              value: object);
+        } else {
+          object?.onCardClickedView(context, isSecoundSubPaneView: true);
+        }
+      },
       onLongPress: () => object?.onCardLongClickedView(context),
       title: getTextTitle(
           context, object?.getMainHeaderLabelTextOnly(context) ?? title),
@@ -30,14 +40,13 @@ class ViewCardItem extends StatelessWidget {
       leading: object != null
           ? Hero(tag: object!, child: Icon(object?.getMainIconData()))
           : Icon(icon),
-      trailing: overrideTrailingToNull?null:
-      
-      
-      object != null
-          ? InkWell(
-              onTap: () => object?.onCardTrailingClickedView(context),
-              child: const Icon(Icons.arrow_forward_ios))
-          : null,
+      trailing: overrideTrailingToNull
+          ? null
+          : object != null
+              ? InkWell(
+                  onTap: () => object?.onCardTrailingClickedView(context),
+                  child: const Icon(Icons.arrow_forward_ios))
+              : null,
     );
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
-import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -14,6 +13,7 @@ class SliverCustomScrollView extends StatefulWidget {
   List<Widget> Function(ScrollController, TabControllerHelper?)? builder;
   String? scrollKey;
   ScrollPhysics? physics;
+  final RefreshCallback? onRefresh;
 
   //this works with one object only todo cant retrun full List
   Widget Function(bool fullyCol, bool fullyExp, TabControllerHelper? tab)?
@@ -24,6 +24,7 @@ class SliverCustomScrollView extends StatefulWidget {
       this.scrollController,
       this.builder,
       this.builderAppbar,
+      this.onRefresh,
       this.physics,
       this.tabs,
       this.scrollKey});
@@ -139,40 +140,50 @@ class _SliverCustomScrollViewDraggableState
   }
 
   Widget sliver({TabControllerHelper? tab}) {
+    Widget scrollView = _getCustomScrollView(tab);
+    if (widget.onRefresh != null) {
+      scrollView = RefreshIndicator(
+        onRefresh: widget.onRefresh!,
+        child: scrollView,
+      );
+    }
     return SafeArea(
       child: ResponsiveScroll(
         controller: _scrollController,
-        child: CustomScrollView(
-            controller: _scrollController,
-            physics: widget.physics ??
-                const BouncingScrollPhysics(
-                    // decelerationRate:ScrollDecelerationRate.fast ,
-                    parent: AlwaysScrollableScrollPhysics()),
-            slivers: [
-              if (widget.builderAppbar != null)
-                StreamBuilder<List<bool>>(
-                  stream: CombineLatestStream.list<bool>([
-                    isFullyCollapsed.stream,
-                    isFullyExpanded.stream,
-                  ]),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<bool>> snapshot) {
-                    final List<bool> streams =
-                        (snapshot.data ?? [false, false]);
-                    final bool fullyCollapsed = streams[0];
-                    final bool fullyExpanded = streams[1];
-                    return widget.builderAppbar!
-                        .call(fullyCollapsed, fullyExpanded, tab);
-                  },
-                ),
-              if (hasTabbar()) getTabbarSliver(),
-              if (widget.builder != null)
-                ...widget.builder!.call(_scrollController, tab)
-              else
-                ...widget.slivers
-            ]),
+        child: scrollView,
       ),
     );
+  }
+
+  CustomScrollView _getCustomScrollView(TabControllerHelper? tab) {
+    return CustomScrollView(
+        controller: _scrollController,
+        physics: widget.physics ??
+            const BouncingScrollPhysics(
+                // decelerationRate:ScrollDecelerationRate.fast ,
+                parent: AlwaysScrollableScrollPhysics()),
+        slivers: [
+          if (widget.builderAppbar != null)
+            StreamBuilder<List<bool>>(
+              stream: CombineLatestStream.list<bool>([
+                isFullyCollapsed.stream,
+                isFullyExpanded.stream,
+              ]),
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
+                final List<bool> streams = (snapshot.data ?? [false, false]);
+                final bool fullyCollapsed = streams[0];
+                final bool fullyExpanded = streams[1];
+                return widget.builderAppbar!
+                    .call(fullyCollapsed, fullyExpanded, tab);
+              },
+            ),
+          if (hasTabbar()) getTabbarSliver(),
+          if (widget.builder != null)
+            ...widget.builder!.call(_scrollController, tab)
+          else
+            ...widget.slivers
+        ]);
   }
 
   String getKeyForSaving({TabControllerHelper? tab}) {

@@ -251,6 +251,11 @@ class _PrintSettingState extends BasePageState<PrintSetting>
   }
 
   @override
+  Future<void>? getPaneIsRefreshIndicator({required bool firstPane}) {
+    return null;
+  }
+
+  @override
   String? getScrollKey({required bool firstPane}) {
     if (firstPane) {
       return "printer_list";
@@ -442,7 +447,7 @@ class _PrintSettingState extends BasePageState<PrintSetting>
   bool setMainPageSuggestionPadding() => false;
 
   @override
-  bool setPaneBodyPadding(bool firstPane) => true;
+  bool setPaneBodyPaddingHorizontal(bool firstPane) => true;
 
   @override
   bool setClipRect(bool? firstPane) => true;

@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
+import 'package:flutter_view_controller/screens/on_hover_button.dart';
 
 class DropdownStringListControllerListenerByIcon extends StatefulWidget {
   final String hint;
@@ -213,14 +214,23 @@ class _DropdownStringListControllerListenerByIconState
           borderRadius: BorderRadius.all(Radius.circular(10))),
       position: PopupMenuPosition.under,
       tooltip: _initialValue == null ? widget.hint : _initialValue!.label,
-      icon: Icon(
-        _initialValue == null
-            ? widget.icon
-            : _initialValue?.icon ?? widget.icon,
-        color: _initialValue == null
-            ? Theme.of(context).indicatorColor
-            : Theme.of(context).colorScheme.primary,
+      icon: OnHoverWidget(
+        scale: true,
+        scaleValue: .1,
+        
+        builder: (isHovered) {
+          return Icon(
+            _initialValue == null
+                ? widget.icon
+                : _initialValue?.icon ?? widget.icon,
+            color: _initialValue == null
+                ? Theme.of(context).indicatorColor
+                : Theme.of(context).colorScheme.primary,
+          );
+        },
+        scaleDown: true,
       ),
+
       onSelected: (DropdownStringListItem? result) {
         widget.onSelected(getSelectedValue(result));
         // widget.viewAbstractEnum = result;

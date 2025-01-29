@@ -27,7 +27,7 @@ class _SliverApiMixinAutoRestState extends State<SliverApiMixinAutoRestWidget>
     with SliverApiWithStaticMixin {
   @override
   String getListProviderKey() {
-    return getToListObjectCastAutoRest().key;
+    return widget.autoRest.key;
   }
 
   @override

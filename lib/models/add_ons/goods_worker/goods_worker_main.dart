@@ -116,6 +116,11 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
   }
 
   @override
+  Future<void>? getPaneIsRefreshIndicator({required bool firstPane}) {
+    return null;
+  }
+
+  @override
   Widget? getCustomEndDrawer() {
     return BaseEditNewPage(
       onFabClickedConfirm: (v) {
@@ -638,7 +643,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
   bool setMainPageSuggestionPadding() => false;
 
   @override
-  bool setPaneBodyPadding(bool firstPane) => false;
+  bool setPaneBodyPaddingHorizontal(bool firstPane) => false;
 
   @override
   bool setClipRect(bool? firstPane) => false;

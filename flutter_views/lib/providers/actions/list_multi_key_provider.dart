@@ -118,7 +118,10 @@ class ListMultiKeyProvider with ChangeNotifier {
     clear(key);
     fetchList(key, viewAbstract: viewAbstract, context: context);
   }
-
+   refreshIndicater(String key,ViewAbstract v,{required BuildContext context}){
+    clear(key);
+     return fetchList(key, viewAbstract: v, context: context);
+  }
   void addCardToRequest(String key, ViewAbstract viewAbstract) {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
     multiListProviderHelper.hasError = false;
@@ -295,7 +298,7 @@ class ListMultiKeyProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future fetchList(String key,
+  Future<void> fetchList(String key,
       {AutoRest? autoRest,
       ViewAbstract? viewAbstract,
       AutoRestCustom? customAutoRest,

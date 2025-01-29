@@ -46,7 +46,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   bool isPaneScaffoldOverlayColord(bool firstPane) => false;
 
   @override
-  bool setPaneBodyPadding(bool firstPane) => false;
+  bool setPaneBodyPaddingHorizontal(bool firstPane) => false;
 
   @override
   bool setMainPageSuggestionPadding() => true;
@@ -54,6 +54,11 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
 
   @override
   bool setHorizontalDividerWhenTowPanes() => false;
+
+  @override
+  Future<void>? getPaneIsRefreshIndicator({required bool firstPane}) {
+    return null;
+  }
 
   @override
   bool setClipRect(bool? firstPane) {

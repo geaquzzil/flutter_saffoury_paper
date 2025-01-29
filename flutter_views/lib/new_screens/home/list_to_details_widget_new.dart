@@ -68,7 +68,7 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
   bool isPaneScaffoldOverlayColord(bool firstPane) => false;
 
   @override
-  bool setPaneBodyPadding(bool firstPane) => firstPane;
+  bool setPaneBodyPaddingHorizontal(bool firstPane) => firstPane;
 
   @override
   bool setMainPageSuggestionPadding() => false;
@@ -81,6 +81,11 @@ class ListToDetailsPageNewState extends BasePageState<ListToDetailsPageNew>
 
   void setSecoundPane(ListToDetailsSecoundPaneHelper? newState) {
     addAction(newState, notifyListener: true);
+  }
+
+  @override
+  Future<void>? getPaneIsRefreshIndicator({required bool firstPane}) {
+    return null;
   }
 
   @override

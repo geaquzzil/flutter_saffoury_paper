@@ -85,6 +85,11 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
         });
   }
 
+  @override
+  Future<void>? getPaneIsRefreshIndicator({required bool firstPane}) {
+    return null;
+  }
+
   Widget getPrintAdvancedFloating() {
     return FloatingActionButton(
         heroTag: UniqueKey(),
@@ -494,7 +499,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
   bool isPaneScaffoldOverlayColord(bool firstPane) => false;
 
   @override
-  bool setPaneBodyPadding(bool firstPane) => !firstPane;
+  bool setPaneBodyPaddingHorizontal(bool firstPane) => !firstPane;
 
   @override
   bool setMainPageSuggestionPadding() => false;

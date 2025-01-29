@@ -1,29 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_card_item.dart';
+import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:provider/provider.dart';
 
 import '../../../new_components/lists/search_card_item.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class MasterView extends StatelessWidget {
   ViewAbstract viewAbstract;
   bool isSliver;
   bool overrideTrailingToNull;
-  MasterView({super.key, required this.viewAbstract, this.isSliver = true,this.overrideTrailingToNull=false});
+  MasterView(
+      {super.key,
+      required this.viewAbstract,
+      this.isSliver = true,
+      this.overrideTrailingToNull = false});
   Widget buildItem(BuildContext context, String field) {
     debugPrint("MasterView buildItem $field");
     dynamic fieldValue = viewAbstract.getFieldValue(field);
     if (fieldValue == null) {
-      return ViewCardItem(title: field, description: "null", icon: Icons.abc,overrideTrailingToNull: overrideTrailingToNull);
+      return ViewCardItem(
+          title: field,
+          description: "null",
+          icon: Icons.abc,
+          overrideTrailingToNull: overrideTrailingToNull);
     } else if (fieldValue is ViewAbstract) {
       return ViewCardItem(
-          title: "", description: "", icon: Icons.abc, object: fieldValue,overrideTrailingToNull: overrideTrailingToNull);
+          title: "",
+          description: "",
+          icon: Icons.abc,
+          object: fieldValue,
+          overrideTrailingToNull: overrideTrailingToNull);
     } else if (fieldValue is ViewAbstractEnum) {
       return ViewCardItem(
           title: fieldValue.getMainLabelText(context),
@@ -33,7 +45,7 @@ class MasterView extends StatelessWidget {
           object: null);
     } else {
       return ViewCardItem(
-        overrideTrailingToNull: overrideTrailingToNull,
+          overrideTrailingToNull: overrideTrailingToNull,
           title: viewAbstract.getFieldLabel(context, field),
           description: fieldValue.toString(),
           icon: viewAbstract.getFieldIconData(field));

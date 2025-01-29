@@ -488,6 +488,102 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
     return _firstWidget;
   }
 
+  bool canDoThirdPane() {
+    return isLargeScreenFromCurrentScreenSize(context, width: getWidth);
+  }
+
+  // Widget? _getSecondPaneWidgetMixin() {
+  //   if (!isLargeScreenFromScreenSize(getCurrentScreenSize())) {
+  //     return _secondWidget;
+  //   }
+  //   // return _secondWidget;
+  //   return LayoutBuilder(
+  //     builder: (context, constraints) {
+  //       debugPrint(
+  //           "BasePageWithThirdPaneMixin constraints width : ${constraints.maxWidth} height: ${constraints.maxHeight}");
+  //       return ValueListenableBuilder(
+  //         valueListenable: _onSecoundPaneChanged,
+  //         builder: (context, value, child) {
+  //           bool showThirdPane = value != null;
+  //           // checkValueToAddToList(value);
+
+  //           double width = showThirdPane
+  //               ? constraints.maxWidth * 0.5
+  //               : constraints.maxWidth;
+
+  //           double height = constraints.maxHeight;
+
+  //           return SizedBox(
+  //             height: constraints.maxHeight,
+  //             width: constraints.maxWidth,
+  //             child: Row(
+  //               children: [
+  //                 AnimatedContainer(
+  //                     duration: const Duration(milliseconds: 200),
+  //                     curve: Curves.linear,
+  //                     height: constraints.maxHeight,
+  //                     width: width,
+  //                     child: _secondWidget),
+  //                 !showThirdPane
+  //                     ? const SizedBox.shrink()
+  //                     : FutureBuilder(
+  //                         builder: (context, snapshot) {
+  //                           if (snapshot.connectionState !=
+  //                               ConnectionState.done) {
+  //                             return const SizedBox.shrink();
+  //                           }
+  //                           return AnimatedOpacity(
+  //                             duration: const Duration(milliseconds: 500),
+  //                             opacity: showThirdPane ? 1 : 0,
+  //                             key: UniqueKey(),
+  //                             child: const VerticalDivider(
+  //                               width: 1,
+  //                             ),
+  //                           );
+  //                         },
+  //                         future:
+  //                             Future.delayed(const Duration(milliseconds: 300)),
+  //                       ),
+  //                 !showThirdPane
+  //                     ? const SizedBox.shrink()
+  //                     : FutureBuilder(
+  //                         future:
+  //                             Future.delayed(const Duration(milliseconds: 300)),
+  //                         builder: (c, d) {
+  //                           if (d.connectionState != ConnectionState.done) {
+  //                             return const SizedBox.shrink();
+  //                           }
+  //                           return SizedBox(
+  //                             width: width - 1,
+  //                             height: height,
+  //                             child: AnimatedOpacity(
+  //                               key: UniqueKey(),
+  //                               duration: const Duration(milliseconds: 500),
+  //                               opacity: showThirdPane ? 1 : 0,
+  //                               curve: Curves.linear,
+  //                               child: SlideInRight(
+  //                                 duration: const Duration(milliseconds: 200),
+  //                                 key: Key(value.title.toString()),
+  //                                 // delay: Duration(milliseconds: 1000),
+  //                                 curve: Curves.fastLinearToSlowEaseIn,
+  //                                 child: wrapScaffoldInThirdPane(
+  //                                     // tab:tab,
+  //                                     selectedItem: value),
+  //                               ),
+  //                             ),
+  //                           );
+  //                         },
+  //                       )
+  //               ],
+  //             ),
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  //   // return AnimatedContainer(duration: const Duration(milliseconds: 800),child: SizedBox(width: ,),);
+  // }
+
   @override
   Widget getPaneExt() {
     return TowPaneExt(
@@ -554,6 +650,20 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
           );
         }
       }
+    } else {
+      if (firstPane == false && _onSecoundPaneChanged.value != null) {
+        return CloseButton(
+          onPressed: () {
+            setState(() {
+              _onSecoundPaneChanged.value = null;
+              // _lastItem = null;
+
+              forceBuildAppBar = false;
+              pinToolbar = false;
+            });
+          },
+        );
+      }
     }
     return super.getAppbarLeading(firstPane: firstPane);
   }
@@ -572,13 +682,21 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
     });
   }
 
+  List<Widget>? getCustomViewWhenSecondPaneIsEmpty(
+      ScrollController? controler, TabControllerHelper? tab) {
+    return null;
+  }
+
   @override
   List<Widget>? getPane(
       {required bool firstPane,
       ScrollController? controler,
       TabControllerHelper? tab}) {
-    if (isSecPane(firstPane: firstPane) && !hasNotifierValue()) {
-      
+    if (isSecPane(firstPane: firstPane) && !hasNotifierValue() && tab == null) {
+      List<Widget>? widgets =
+          getCustomViewWhenSecondPaneIsEmpty(controler, tab);
+      if (widgets != null) return widgets;
+
       return [SliverFillRemaining(child: EmptyWidget.emptyPage(context))];
     }
 
@@ -590,6 +708,20 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
           valueNotifier: _lastSecondPaneItem);
     }
     if (firstPane) {
+      if (isMobileFromWidth(getWidth)) {
+        List<Widget>? widgets =
+            getCustomViewWhenSecondPaneIsEmpty(controler, tab);
+
+        return [
+          ...getPaneNotifier(
+                firstPane: firstPane,
+                controler: controler,
+                tab: tab,
+              ) ??
+              [],
+          if (widgets != null) ...widgets
+        ];
+      }
       return getPaneNotifier(
           firstPane: firstPane, controler: controler, tab: tab);
     }
@@ -687,6 +819,7 @@ mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
     }
   }
 
+  @override
   bool canDoThirdPane() {
     return isLargeScreenFromCurrentScreenSize(context, width: getWidth);
   }
@@ -809,6 +942,7 @@ abstract class BasePage extends StatefulWidget {
   final bool buildDrawer;
   final bool buildSecondPane;
   final bool forceHeaderToCollapse;
+  final bool fillFirstPaneToAnimateTheThirdPane;
   BasePageState? parent;
   ValueNotifier? onBuild;
 
@@ -818,6 +952,7 @@ abstract class BasePage extends StatefulWidget {
     this.buildDrawer = false,
     this.buildSecondPane = true,
     this.forceHeaderToCollapse = false,
+    this.fillFirstPaneToAnimateTheThirdPane = false,
     this.parent,
     this.onBuild,
     this.isFirstToSecOrThirdPane = false,
@@ -933,6 +1068,14 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     bool? firstPane,
     TabControllerHelper? tab,
   });
+  Widget? getBottomNavigationBar({
+    bool? firstPane,
+    TabControllerHelper? tab,
+  }) {
+    return null;
+  }
+
+  Future<void>? getPaneIsRefreshIndicator({required bool firstPane});
 
   Widget? getAppbarTitle({bool? firstPane, TabControllerHelper? tab});
   Widget? getAppbarLeading({bool? firstPane}) {
@@ -940,7 +1083,11 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   }
 
   bool isPaneScaffoldOverlayColord(bool firstPane);
-  bool setPaneBodyPadding(bool firstPane);
+  bool setPaneBodyPaddingHorizontal(bool firstPane);
+
+  bool setPaneBodyPaddingVertical(bool firstPane) {
+    return false;
+  }
 
   bool setClipRect(bool? firstPane);
 
@@ -1333,7 +1480,8 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     _initBaseTab();
 
     return ScreenHelperSliver(
-        forceSmallView: !_buildSecoundPane,
+        forceSmallView:
+            !_buildSecoundPane || widget.fillFirstPaneToAnimateTheThirdPane,
         requireAutoPadding: setMainPageSuggestionPadding(),
         onChangeLayout: (w, h, c) {
           debugPrint("ScreenHelperSliver build width:$w");
@@ -1352,7 +1500,10 @@ abstract class BasePageState<T extends BasePage> extends State<T>
                   : getCustomPaneProportion()) *
               _width;
 
-          _secPaneWidth = _firstPaneWidth - _width;
+          _secPaneWidth = _width - _firstPaneWidth;
+
+          debugPrint(
+              "BasePage firstPane is w=>$_firstPaneWidth  h=> $_secPaneWidth");
         },
         mobile: (w, h) {
           return getOnlyFirstPage();
@@ -1520,7 +1671,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     TabControllerHelper? tab,
   }) {
     if (!firstPane) {
-      secondPaneWidgets = getPane(firstPane: false);
+      secondPaneWidgets = getPane(firstPane: false, tab: tab);
       setChilds(secondPaneWidgets);
       return secondPaneWidgets;
     }
@@ -1665,6 +1816,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   Widget getScaffoldBodyForPane({required bool firstPane}) {
     return SliverCustomScrollViewDraggable(
+      onRefresh: getPaneIsRefreshIndicator(firstPane: firstPane),
       physics: const AlwaysScrollableScrollPhysics(),
       forceHeaderToCollapse: widget.forceHeaderToCollapse,
       scrollKey: getScrollKey(firstPane: firstPane),
@@ -1699,9 +1851,14 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       floatingActionButton: getFloatingActionButton(firstPane: firstPane),
+      bottomNavigationBar: getBottomNavigationBar(firstPane: firstPane),
       body: Padding(
-        padding: setPaneBodyPadding(firstPane)
-            ? const EdgeInsets.all(kDefaultPadding / 2)
+        padding: setPaneBodyPaddingHorizontal(firstPane)
+            ? EdgeInsets.symmetric(
+                horizontal: kDefaultPadding / 2,
+                vertical: setPaneBodyPaddingVertical(firstPane)
+                    ? kDefaultPadding / 2
+                    : 0)
             : EdgeInsets.zero,
         child: getScaffoldBodyForPane(firstPane: firstPane),
       ),

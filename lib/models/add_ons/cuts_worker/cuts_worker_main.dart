@@ -8,7 +8,6 @@ import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
-import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 
 class CutRequestWorker extends CutRequest {
   CutRequestWorker();
@@ -58,6 +57,11 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage> {
   }
 
   @override
+  Future<void>? getPaneIsRefreshIndicator({required bool firstPane}) {
+    return null;
+  }
+
+  @override
   bool reverseCustomPane() {
     return true;
   }
@@ -76,8 +80,6 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage> {
     return t;
   }
 
-
-
   @override
   bool isPaneScaffoldOverlayColord(bool firstPane) => false;
 
@@ -88,7 +90,7 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage> {
   bool setMainPageSuggestionPadding() => false;
 
   @override
-  bool setPaneBodyPadding(bool firstPane) => false;
+  bool setPaneBodyPaddingHorizontal(bool firstPane) => false;
 
   @override
   bool setClipRect(bool? firstPane) => false;

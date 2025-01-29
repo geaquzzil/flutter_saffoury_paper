@@ -8,6 +8,7 @@ part of 'products.dart';
 
 Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+  ..ParentID = json['ParentID']
   ..serverStatus = json['serverStatus'] as String?
   ..fb_edit = json['fb_edit'] as String?
   ..status = $enumDecodeNullable(_$ProductStatusEnumMap, json['status'])
@@ -48,6 +49,9 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
       : ProductsColor.fromJson(json['products_colors'] as Map<String, dynamic>)
   ..inStock = (json['inStock'] as List<dynamic>?)
       ?.map((e) => Stocks.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..parents = (json['parents'] as List<dynamic>?)
+      ?.map((e) => Product.fromJson(e as Map<String, dynamic>))
       .toList()
   ..products = json['products'] == null
       ? null
@@ -104,6 +108,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'iD': instance.iD,
+      'ParentID': instance.ParentID,
       'delete': instance.delete,
       'status': _$ProductStatusEnumMap[instance.status],
       'date': instance.date,
@@ -123,6 +128,7 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'grades': instance.grades?.toJson(),
       'products_colors': instance.products_colors?.toJson(),
       'inStock': instance.inStock?.map((e) => e.toJson()).toList(),
+      'parents': instance.parents?.map((e) => e.toJson()).toList(),
       'products': instance.products?.toJson(),
       'cut_requests': instance.cut_requests?.map((e) => e.toJson()).toList(),
       'cut_requests_count': instance.cut_requests_count,

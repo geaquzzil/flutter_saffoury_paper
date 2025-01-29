@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
@@ -12,7 +13,6 @@ import 'package:flutter_view_controller/new_screens/controllers/controller_dropb
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String? getTableNameApi();
@@ -96,7 +96,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return Text(getLabelWithText(label, text),
         style: color != null
             ? Theme.of(context).textTheme.bodySmall!.copyWith(color: color)
-            : Theme.of(context!).textTheme.bodySmall!);
+            : Theme.of(context).textTheme.bodySmall!);
   }
 
   ViewAbstract? getFieldValueCastViewAbstract(String field) {
@@ -243,11 +243,30 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   Color getColor(BuildContext context) => Colors.red;
 
+  Widget? generateCardLeadingBottomIcon(BuildContext context) {
+    dynamic iconOnButton =
+        (this as ViewAbstract).getCardLeadingBottomIcon(context);
+    if (iconOnButton == null) return null;
+    if (iconOnButton is IconData) {
+      return Icon(iconOnButton);
+    } else {
+      return iconOnButton as Widget;
+    }
+  }
+
   Widget? getCardTrailing(BuildContext context) {
     ViewAbstract viewAbstract = this as ViewAbstract;
+    Widget? iconOnButton = generateCardLeadingBottomIcon(context);
+
     if (isDesktopPlatform()) {
-      return viewAbstract.getFBIcon() ??
-          viewAbstract.getPopupMenuActionWidget(context, ServerActions.list);
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (iconOnButton != null) (iconOnButton),
+          viewAbstract.getFBIcon() ??
+              viewAbstract.getPopupMenuActionWidget(context, ServerActions.list)
+        ],
+      );
     }
     return viewAbstract.getFBIcon();
   }

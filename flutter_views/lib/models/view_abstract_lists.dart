@@ -3,13 +3,13 @@
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
-import 'package:flutter_view_controller/new_components/tow_icons_with_badge.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +24,8 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return null;
   }
 
-  IconData? getCardLeadingBottomIcon() {
+  ///This could be A [Widget] or [IconDate]
+  getCardLeadingBottomIcon(BuildContext context) {
     return null;
   }
 
@@ -112,17 +113,18 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     );
   }
 
-  Widget getCachedImage(BuildContext context, {String? url}) {
+  Widget getCachedImage(BuildContext context,
+      {String? url, double? size = 50}) {
     return Container(
-        width: 60,
-        height: 100,
+        width: size ?? 50,
+        height: size ?? 50,
         // width: 60,
         // height: 60,
         // width: 150,
         // height: 100,
         decoration: BoxDecoration(
           // color: Colors.blueAccent,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(kBorderRadius / 2),
 
           image: url == null
               ? null
@@ -197,17 +199,17 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     if (imageUrl == null) {
       return Icon(getMainIconData());
     }
-    IconData? iconOnButton =
-        addBottomWidget ? getCardLeadingBottomIcon() : null;
+    Widget? iconOnButton =
+        addBottomWidget ? generateCardLeadingBottomIcon(context) : null;
 
     Widget image = getCachedImage(context, url: imageUrl);
 
-    if (iconOnButton != null) {
-      return TowIcons(
-        largChild: image,
-        smallIcon: iconOnButton,
-      );
-    }
+    // if (iconOnButton != null) {
+    //   return TowIcons(
+    //     largChild: image,
+    //     smallIcon: iconOnButton,
+    //   );
+    // }
     return image;
   }
 
@@ -216,21 +218,25 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   Widget getCardLeadingImage(BuildContext context,
-      {bool? isSelected, bool addBottomWidget = true}) {
+      {bool? isSelected, bool addBottomWidget = true, double? size}) {
     String? imageUrl = getImageUrl(context);
     if (imageUrl == null) {
-      return Icon(getMainIconData());
-    }
-    IconData? iconOnButton =
-        addBottomWidget ? getCardLeadingBottomIcon() : null;
-    Widget image = getCachedImage(context, url: imageUrl);
-    if (iconOnButton != null) {
-      return TowIconsWithTextBadge(
-        largChild: image,
-        //TODO Translate
-        text: "WASTED",
+      return Icon(
+        getMainIconData(),
+        size: 30,
       );
     }
+    // IconData? iconOnButton =
+    //     addBottomWidget ? getCardLeadingBottomIcon(context) : null;
+    Widget image = getCachedImage(context, url: imageUrl, size: size);
+    return image;
+    // if (iconOnButton != null) {
+    //   return TowIconsWithTextBadge(
+    //     largChild: image,
+    //     //TODO Translate
+    //     text: "WASTED",
+    //   );
+    // }
     return image;
   }
 

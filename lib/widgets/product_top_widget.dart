@@ -27,6 +27,8 @@ class ProductTopWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+
+        
         // ProductHeaderToggle(product: product),
         HeaderDescription(
           iconData: Icons.announcement_rounded,

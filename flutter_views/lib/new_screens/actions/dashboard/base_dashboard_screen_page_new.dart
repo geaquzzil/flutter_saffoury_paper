@@ -285,7 +285,7 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  bool setPaneBodyPadding(bool firstPane) {
+  bool setPaneBodyPaddingHorizontal(bool firstPane) {
     return false;
   }
 
@@ -327,6 +327,11 @@ class _BaseDashboardMainPageState
   @override
   Widget? getPaneDraggableHeader(
       {required bool firstPane, TabControllerHelper? tab}) {
+    return null;
+  }
+
+  @override
+  Future<void>? getPaneIsRefreshIndicator({required bool firstPane}) {
     return null;
   }
 }

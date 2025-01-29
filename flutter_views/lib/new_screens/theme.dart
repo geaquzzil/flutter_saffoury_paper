@@ -34,6 +34,14 @@ InputDecorationTheme getMainTheme(BuildContext context,
   );
 }
 
+double getHeightOfHorizontalGridList(BuildContext context) {
+  if (isLargeScreen(context)) {
+    return MediaQuery.of(context).size.height * .18;
+  } else {
+    return MediaQuery.of(context).size.height * .3;
+  }
+}
+
 ThemeData getThemeData(BuildContext context, bool isDark,
     ColorScheme colorScheme, CustomColors customColor) {
   return ThemeData(
@@ -86,7 +94,7 @@ ThemeData getThemeData(BuildContext context, bool isDark,
       popupMenuTheme: Theme.of(context).popupMenuTheme.copyWith(
             color: colorScheme.surfaceContainer,
 
-            // surfaceTintColor: colorScheme.surfaceTint,
+            surfaceTintColor: colorScheme.surfaceTint,
 
             // elevation: Theme.of(context).ele,
             elevation: 10,
@@ -201,6 +209,17 @@ ElevatedButtonThemeData getElevatedTheme(
       style: getButtonStyleIfIcon(context, colorSheme));
 }
 
+double getSizeOfScalledIcon(BuildContext context, WidgetState state) {
+  double size = getIconSize(context);
+  if (state == (WidgetState.pressed)) {
+    return size - 2;
+  }
+  if (state == (WidgetState.hovered)) {
+    return size - 1;
+  }
+  return size;
+}
+
 ButtonStyle getButtonStyleIfIcon(BuildContext context, ColorScheme colorSheme) {
   return ButtonStyle(
     elevation: WidgetStateProperty.all(0),
@@ -213,9 +232,7 @@ ButtonStyle getButtonStyleIfIcon(BuildContext context, ColorScheme colorSheme) {
     //  side: ,
     // shape:  WidgetStateProperty.all(),
     iconSize: WidgetStateProperty.resolveWith((states) {
-      double size = isLargeScreen(context)
-          ? kDefaultLargeScreenIconSize
-          : kDefaultSmallScreenIconSize;
+      double size = getIconSize(context);
       if (states.contains(WidgetState.pressed)) {
         return size - 2;
       }
@@ -251,16 +268,19 @@ bool isLargeScreen(BuildContext context) {
   return true;
 }
 
+double getIconSize(BuildContext context) {
+  bool isLargeOrDesktop = isLargeScreen(context);
+  return isLargeOrDesktop
+      ? kDefaultLargeScreenIconSize
+      : kDefaultSmallScreenIconSize;
+}
+
 IconThemeData getIconThemeData(BuildContext context,
     {ColorScheme? colorScheme}) {
   ThemeData theme = Theme.of(context);
   colorScheme ??= theme.colorScheme;
-  bool isLargeOrDesktop = isLargeScreen(context);
   return theme.iconTheme.copyWith(
-      color: colorScheme.onSurfaceVariant,
-      size: isLargeOrDesktop
-          ? kDefaultLargeScreenIconSize
-          : kDefaultSmallScreenIconSize);
+      color: colorScheme.onSurfaceVariant, size: getIconSize(context));
 }
 
 ListTileThemeData getListTileThemeData(BuildContext context,

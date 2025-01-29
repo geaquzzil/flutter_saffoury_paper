@@ -24,7 +24,6 @@ import 'package:flutter_view_controller/providers/actions/action_viewabstract_pr
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:tuple/tuple.dart';
 
 class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
   final ViewAbstract viewAbstract;
@@ -56,50 +55,36 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
             key == null) {
           return SizedBox.shrink();
         }
-
-        Widget? printButton = kIsWeb
-            ? null
-            : (listLength > 2)
-                ? PrintIcon(viewAbstract: viewAbstract, list: list)
-                : null;
-
-        Widget? exportButton = kIsWeb
-            ? null
-            : (listLength > 2)
-                ? _getExportButton(context, listProvider, key)
-                : null;
-
-        // Widget? exportButton = kIsWeb
-        //     ? null
-        //     : (listLength > 2)
-        //         ? getExportButton(context)
-        //         : null;
-
         if (width != null) {
           bool canTakeUpToFour = width.toNonNullable() / iconSize > 6;
           debugPrint(
               "FiltersAndSelectionListHeaderValueNotifier canTakeUpToFour $canTakeUpToFour constraints.maxWidth = ${width.toNonNullable()} to /5 == ${width.toNonNullable() / iconSize} ");
-          return _getMainWidget(canTakeUpToFour, context, listProvider, key,
-              printButton, exportButton);
+          return _getMainWidget(
+            canTakeUpToFour,
+            context,
+            listProvider,
+            key,
+          );
         }
         return LayoutBuilder(builder: (context, cons) {
           bool canTakeUpToFour = cons.maxWidth / iconSize > 6;
           debugPrint(
               "FiltersAndSelectionListHeaderValueNotifier canTakeUpToFour $canTakeUpToFour constraints.maxWidth = ${cons.maxWidth} to /5 == ${cons.maxWidth / iconSize} ");
-          return _getMainWidget(canTakeUpToFour, context, listProvider, key,
-              printButton, exportButton);
+          return _getMainWidget(canTakeUpToFour, context, listProvider, key);
         });
       },
     );
   }
 
   Column _getMainWidget(
-      bool canTakeUpToFour,
-      BuildContext context,
-      ListMultiKeyProvider listProvider,
-      String key,
-      Widget? printButton,
-      Widget? exportButton) {
+    bool canTakeUpToFour,
+    BuildContext context,
+    ListMultiKeyProvider listProvider,
+    String key,
+  ) {
+    List list = listProvider.getList(key);
+    int? listLength = list.length;
+
     return Column(
       children: [
         Row(
@@ -116,8 +101,16 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
             Spacer(),
             if (canTakeUpToFour) _getAddButton(context),
             if (canTakeUpToFour) _getRefreshWidget(context, listProvider, key),
-            if (canTakeUpToFour && printButton != null) printButton,
-            if (canTakeUpToFour && exportButton != null) exportButton
+            if (canTakeUpToFour)
+              AnimatedScale(
+                  duration: Duration(milliseconds: 200),
+                  scale: listLength > 2 ? 1 : 0,
+                  child: PrintIcon(viewAbstract: viewAbstract, list: list)),
+            if (canTakeUpToFour)
+              AnimatedScale(
+                  duration: Duration(milliseconds: 200),
+                  scale: listLength > 2 ? 1 : 0,
+                  child: _getExportButton(context, listProvider, key)),
           ],
         )
       ],
@@ -147,20 +140,14 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
 
   Widget? _getExportButton(
       BuildContext context, ListMultiKeyProvider listProvider, String key) {
-    var first = _getFirstObject(listProvider, key);
+    var first = viewAbstract;
     if (first is! ExcelableReaderInterace && first is! PrintableMaster) {
       return null;
     }
     return ExportIcon(
-      viewAbstract: _getFirstObject(listProvider, key),
+      viewAbstract: viewAbstract,
       list: listProvider.getList(key).cast(),
     );
-  }
-
-  dynamic _getFirstObject(ListMultiKeyProvider listProvider, String key) {
-    List list = listProvider.getList(key);
-    dynamic first = list[0];
-    return first;
   }
 }
 

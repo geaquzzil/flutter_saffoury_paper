@@ -21,10 +21,7 @@ class SliverPersistantContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPersistentHeader(
-
       delegate: SliverPersistantContainerHeaderDelegate(
-        
-
         child: child,
         minExtent: minExtent,
         maxExtent: maxExtent,
@@ -53,9 +50,10 @@ class SliverPersistantContainerHeaderDelegate
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return SizedOverflowBox(
+      alignment: Alignment.topCenter,
       size: Size.fromHeight(
           (maxExtent - shrinkOffset).clamp(minExtent, maxExtent).toDouble()),
-      child: Center(child: child),
+      child: child,
     );
   }
 

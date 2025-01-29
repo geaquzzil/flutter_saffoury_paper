@@ -38,6 +38,7 @@ class SliverCustomScrollViewDraggable extends StatefulWidget {
   final bool forceHeaderToCollapse;
   final Widget? headerWidget;
   final Widget? expandBottomWidget;
+  final Future<void>? onRefresh;
   const SliverCustomScrollViewDraggable(
       {super.key,
       required this.slivers,
@@ -50,6 +51,7 @@ class SliverCustomScrollViewDraggable extends StatefulWidget {
       this.tabs,
       this.expandBottomWidget,
       this.appBarLeading,
+      this.onRefresh,
       this.headerWidget,
       this.actions,
       this.backgroundIsTransperant = false,
