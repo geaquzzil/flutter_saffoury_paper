@@ -68,6 +68,7 @@ class _ListToDetailsSecoundPaneNotifierState
       TabControllerHelper? tab,
       SecondPaneHelper? valueNotifier}) {
     if (firstPane) {
+      // asda
       debugPrint("getPaneNotifier firstPane $valueNotifier");
       return [
         SliverPersistantContainer(
