@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
@@ -243,7 +244,8 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
 
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+      ValueNotifier<SecondPaneHelper?>? onClick}) {
     return null;
   }
 

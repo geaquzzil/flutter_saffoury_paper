@@ -40,6 +40,7 @@ import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -286,7 +287,8 @@ class CutRequest extends ViewAbstract<CutRequest>
   @override
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+      ValueNotifier<SecondPaneHelper?>? onClick}) {
     if ((action == ServerActions.view || action == ServerActions.edit) &&
         products != null &&
         cut_status == CutStatus.COMPLETED) {

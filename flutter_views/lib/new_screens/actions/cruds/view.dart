@@ -98,13 +98,14 @@ class _ViewNewState extends BasePageState<ViewNew>
   List<Widget>? getCustomViewWhenSecondPaneIsEmpty(
       ScrollController? controler, TabControllerHelper? tab) {
     return [
-      if (widget.viewAbstract
-              .getCustomTopWidget(context, action: ServerActions.view) !=
+      if (widget.viewAbstract.getCustomTopWidget(context,
+              action: ServerActions.view, onClick: getSecondPaneNotifier) !=
           null)
         MultiSliver(
           children: [
             ...widget.viewAbstract
-                .getCustomTopWidget(context, action: ServerActions.view)!
+                .getCustomTopWidget(context,
+                    action: ServerActions.view, onClick: getSecondPaneNotifier)!
                 .map(
                   (e) => SliverToBoxAdapter(
                     child: e,
@@ -255,6 +256,9 @@ class _ViewNewState extends BasePageState<ViewNew>
       ];
     } else {
       // return [const SliverToBoxAdapter(child: Text("S"))];
+      if (valueNotifier?.value is List<Widget>) {
+        return valueNotifier!.value;
+      }
       return [
         if (valueNotifier?.value != null)
           SliverFillRemaining(

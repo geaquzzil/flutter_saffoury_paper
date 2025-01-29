@@ -68,6 +68,7 @@ import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -1025,13 +1026,12 @@ class Product extends ViewAbstract<Product>
   @override
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+      ValueNotifier<SecondPaneHelper?>? onClick}) {
     Color primary = Theme.of(context).colorScheme.primary;
     return [
       if (action != ServerActions.edit)
-        ProductTopWidget(
-          product: this,
-        ),
+        ProductTopWidget(product: this, valueNotifier: onClick),
       // if (isRollCut())
       //   FixedTimeline.tileBuilder(
       //     theme: TimelineTheme.of(context).copyWith(

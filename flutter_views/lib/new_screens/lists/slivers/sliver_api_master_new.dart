@@ -120,6 +120,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       const EdgeInsets.symmetric(vertical: 15, horizontal: 15);
   set setSearchString(String? value) => this._searchString = value;
 
+  //TODO be carefull the list should be taken from the newObject
   String getListProviderKey();
 
   ListMultiKeyProvider getListProvider() {

@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'sizes_cut_requests.g.dart';
@@ -133,7 +134,8 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
   @override
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+      ValueNotifier<SecondPaneHelper?>? onClick}) {
     if (isNew()) {
       if (parent is CutRequest) {
         if ((parent as CutRequest).products == null) {

@@ -1,17 +1,23 @@
 import 'package:animate_do/animate_do.dart' as animate;
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/widgets/cut_request_top_widget.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_rating.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class ProductTopWidget extends StatelessWidget {
   final Product product;
-  const ProductTopWidget({super.key, required this.product});
+  final ValueNotifier<SecondPaneHelper?>? valueNotifier;
+  const ProductTopWidget({
+    super.key,
+    required this.product,
+    this.valueNotifier,
+  });
 
   ///weight per on sheet
   ///prie per on sheet
@@ -27,8 +33,6 @@ class ProductTopWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-
-        
         // ProductHeaderToggle(product: product),
         HeaderDescription(
           iconData: Icons.announcement_rounded,
@@ -42,8 +46,14 @@ class ProductTopWidget extends StatelessWidget {
         HeaderDescription(
           iconData: Icons.info_outline,
           title: AppLocalizations.of(context)!.overview,
-          trailing:
-              IconButton(icon: const Icon(Icons.calculate), onPressed: () {}),
+          trailing: IconButton(
+              icon: const Icon(Icons.calculate),
+              onPressed: () {
+                valueNotifier?.value = SecondPaneHelper(title: "Calc", value: [
+                  SliverToBoxAdapter(child: Text("dsadas")),
+                  SliverToBoxAdapter(child: Text("dasdadsa"))
+                ]);
+              }),
         ),
         getRow(context, [
           TitleAndDescription(
