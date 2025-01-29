@@ -578,6 +578,7 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
       ScrollController? controler,
       TabControllerHelper? tab}) {
     if (isSecPane(firstPane: firstPane) && !hasNotifierValue()) {
+      
       return [SliverFillRemaining(child: EmptyWidget.emptyPage(context))];
     }
 
@@ -851,6 +852,10 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   dynamic _secondWidget;
   late double _width;
   late double _height;
+
+  late double _firstPaneWidth;
+  late double _secPaneWidth;
+
   bool _isInitialization = true;
   bool pinToolbar = false;
   bool forceBuildAppBar = false;
@@ -942,6 +947,8 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   get getWidth => this._width;
 
   get getHeight => this._height;
+  get firstPaneWidth => this._firstPaneWidth;
+  get secPaneWidth => this._secPaneWidth;
 
   DrawerMenuItem? lastDrawerItemSelected;
 
@@ -1340,6 +1347,12 @@ abstract class BasePageState<T extends BasePage> extends State<T>
                   size: _currentScreenSize,
                 );
           }
+          _firstPaneWidth = (reverseCustomPane()
+                  ? 1 - getCustomPaneProportion()
+                  : getCustomPaneProportion()) *
+              _width;
+
+          _secPaneWidth = _firstPaneWidth - _width;
         },
         mobile: (w, h) {
           return getOnlyFirstPage();
@@ -1681,7 +1694,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       )
           ? ElevationOverlay.overlayColor(context, 4)
           : firstPane
-              ? Theme.of(context).colorScheme.surfaceBright
+              ? Theme.of(context).colorScheme.surface
               : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,

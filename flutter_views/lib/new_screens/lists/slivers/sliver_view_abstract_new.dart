@@ -18,6 +18,7 @@ class SliverApiMixinViewAbstractWidget
       super.enableSelection,
       required super.toListObject,
       super.filterData,
+      super.valueListProviderNotifier,
       super.searchString});
 
   @override

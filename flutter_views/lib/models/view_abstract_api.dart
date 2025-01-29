@@ -82,7 +82,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   int get getPageItemCount => 20;
 
-  int get getPageItemCountSearch => 10;
+  int get getPageItemCountSearch => 20;
 
   String? getCustomAction() {
     return null;

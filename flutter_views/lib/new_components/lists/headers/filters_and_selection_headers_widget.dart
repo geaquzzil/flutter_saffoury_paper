@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
@@ -23,6 +24,145 @@ import 'package:flutter_view_controller/providers/actions/action_viewabstract_pr
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
+
+class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
+  final ViewAbstract viewAbstract;
+  final double? width;
+  final ValueNotifier<List?> valueNotifer;
+
+  final iconSize = 20;
+  final spacing = kDefaultPadding * .25;
+
+  const FiltersAndSelectionListHeaderValueNotifier(
+      {super.key,
+      required this.valueNotifer,
+      required this.viewAbstract,
+      this.width});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: valueNotifer,
+      builder: (context, value, child) {
+        ListMultiKeyProvider? listProvider = value?[0];
+        String? key = value?[1];
+        List? list = value?[0].getList(value[1]);
+        int? listLength = value?[0].getList(value[1]).length;
+
+        if (listLength == null ||
+            listProvider == null ||
+            list == null ||
+            key == null) {
+          return SizedBox.shrink();
+        }
+
+        Widget? printButton = kIsWeb
+            ? null
+            : (listLength > 2)
+                ? PrintIcon(viewAbstract: viewAbstract, list: list)
+                : null;
+
+        Widget? exportButton = kIsWeb
+            ? null
+            : (listLength > 2)
+                ? _getExportButton(context, listProvider, key)
+                : null;
+
+        // Widget? exportButton = kIsWeb
+        //     ? null
+        //     : (listLength > 2)
+        //         ? getExportButton(context)
+        //         : null;
+
+        if (width != null) {
+          bool canTakeUpToFour = width.toNonNullable() / iconSize > 6;
+          debugPrint(
+              "FiltersAndSelectionListHeaderValueNotifier canTakeUpToFour $canTakeUpToFour constraints.maxWidth = ${width.toNonNullable()} to /5 == ${width.toNonNullable() / iconSize} ");
+          return _getMainWidget(canTakeUpToFour, context, listProvider, key,
+              printButton, exportButton);
+        }
+        return LayoutBuilder(builder: (context, cons) {
+          bool canTakeUpToFour = cons.maxWidth / iconSize > 6;
+          debugPrint(
+              "FiltersAndSelectionListHeaderValueNotifier canTakeUpToFour $canTakeUpToFour constraints.maxWidth = ${cons.maxWidth} to /5 == ${cons.maxWidth / iconSize} ");
+          return _getMainWidget(canTakeUpToFour, context, listProvider, key,
+              printButton, exportButton);
+        });
+      },
+    );
+  }
+
+  Column _getMainWidget(
+      bool canTakeUpToFour,
+      BuildContext context,
+      ListMultiKeyProvider listProvider,
+      String key,
+      Widget? printButton,
+      Widget? exportButton) {
+    return Column(
+      children: [
+        Row(
+          // spacing: spacing,
+          children: [
+            FilterIcon(
+              viewAbstract: viewAbstract,
+              onDoneClickedPopResults: (value) {},
+            ),
+            SortIcon(
+              viewAbstract: viewAbstract,
+              onChange: (val) {},
+            ),
+            Spacer(),
+            if (canTakeUpToFour) _getAddButton(context),
+            if (canTakeUpToFour) _getRefreshWidget(context, listProvider, key),
+            if (canTakeUpToFour && printButton != null) printButton,
+            if (canTakeUpToFour && exportButton != null) exportButton
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _getAddButton(BuildContext context) {
+    return IconButton(
+        onPressed: () {
+          viewAbstract.onDrawerLeadingItemClicked(context);
+        },
+        icon: const Icon(Icons.add));
+  }
+
+  void _refresh(
+      BuildContext context, ListMultiKeyProvider listProvider, String key) {
+    listProvider.refresh(key, viewAbstract, context: context);
+  }
+
+  Widget _getRefreshWidget(BuildContext context,
+          ListMultiKeyProvider listProvider, String key) =>
+      IconButton(
+          onPressed: () {
+            _refresh(context, listProvider, key);
+          },
+          icon: const Icon(Icons.refresh));
+
+  Widget? _getExportButton(
+      BuildContext context, ListMultiKeyProvider listProvider, String key) {
+    var first = _getFirstObject(listProvider, key);
+    if (first is! ExcelableReaderInterace && first is! PrintableMaster) {
+      return null;
+    }
+    return ExportIcon(
+      viewAbstract: _getFirstObject(listProvider, key),
+      list: listProvider.getList(key).cast(),
+    );
+  }
+
+  dynamic _getFirstObject(ListMultiKeyProvider listProvider, String key) {
+    List list = listProvider.getList(key);
+    dynamic first = list[0];
+    return first;
+  }
+}
 
 class FiltersAndSelectionListHeader extends StatelessWidget {
   ViewAbstract viewAbstract;

@@ -8,7 +8,6 @@
 
 #include <desktop_window/desktop_window_plugin.h>
 #include <dynamic_color/dynamic_color_plugin_c_api.h>
-#include <firebase_core/firebase_core_plugin_c_api.h>
 #include <flutter_libserialport/flutter_libserialport_plugin.h>
 #include <printing/printing_plugin.h>
 #include <screen_retriever_windows/screen_retriever_windows_plugin_c_api.h>
@@ -21,8 +20,6 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("DesktopWindowPlugin"));
   DynamicColorPluginCApiRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("DynamicColorPluginCApi"));
-  FirebaseCorePluginCApiRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("FirebaseCorePluginCApi"));
   FlutterLibserialportPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("FlutterLibserialportPlugin"));
   PrintingPluginRegisterWithRegistrar(

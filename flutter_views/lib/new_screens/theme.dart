@@ -19,7 +19,7 @@ InputDecorationTheme getMainTheme(BuildContext context,
   colorScheme ??= theme.colorScheme;
   bool isLargeOrDesktop = isLargeScreen(context);
   return theme.inputDecorationTheme.copyWith(
-    focusedBorder: _getFocusBorder(isLargeOrDesktop, colorScheme),
+    // focusedBorder: _getFocusBorder(isLargeOrDesktop, colorScheme),//TODO
     isDense: isLargeOrDesktop,
     filled: isLargeOrDesktop,
     fillColor: colorScheme.surfaceContainerHighest,
@@ -248,7 +248,7 @@ ButtonStyle getButtonStyleIfIcon(BuildContext context, ColorScheme colorSheme) {
 }
 
 bool isLargeScreen(BuildContext context) {
-  return false;
+  return true;
 }
 
 IconThemeData getIconThemeData(BuildContext context,

@@ -1,4 +1,3 @@
-import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/components/scroll_snap_list.dart';
@@ -22,7 +21,6 @@ import 'package:flutter_view_controller/screens/web/components/grid_view_api_cat
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tuple/tuple.dart';
 
 enum _ObjectType {
@@ -53,6 +51,8 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   Widget? hasCustomSeperater;
   Widget? hasCustomLoadingItem;
 
+  final ValueNotifier<List?>? valueListProviderNotifier;
+
   ///when scrollDirection is horizontal grid view well build instaed  and override the [isGridView] even when its true
   Axis scrollDirection;
   bool isGridView;
@@ -73,6 +73,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
       this.enableSelection = true,
       this.isSliver = true,
       this.hasCustomSeperater,
+      this.valueListProviderNotifier,
       this.setParentForChildCardItem});
 }
 
@@ -96,6 +97,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   final int minItemsPerRow = 3;
   final int maxItemsPerRow = 8;
   bool _selectMood = false;
+  late bool _isScrollable;
   final double minGridItemSize = 100;
 
   final GlobalKey<SliverAnimatedListState> _listKey =
@@ -118,6 +120,10 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   set setSearchString(String? value) => this._searchString = value;
 
   String getListProviderKey();
+
+  ListMultiKeyProvider getListProvider() {
+    return listProvider;
+  }
 
   Widget? onResponseHasCustomWidget();
 
@@ -291,6 +297,15 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         int count = value.item2;
         bool isError = value.item3;
         String key = getListProviderKey();
+        debugPrint("ListToDet=>$count count");
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          widget.valueListProviderNotifier?.value =
+              widget.valueListProviderNotifier?.value != null
+                  ? List.from(widget.valueListProviderNotifier!.value!)
+                  : [getListProvider(), getListProviderKey(), count];
+        });
+
+        // .withItem1(getListProvider());
         Widget? customWidget = onResponseHasCustomWidget();
         Widget? customLoading = onLoadingHasCustomWidget();
         debugPrint(
@@ -305,6 +320,10 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         if (customWidget != null) {
           return customWidget;
         }
+        // if (!isLoading) {
+        //   _isScrollable = _scrollController.position.maxScrollExtent > 0;
+        //   debugPrint("_onScrollable $_isScrollable");
+        // }
         return widget.hasCustomWidgetBuilder != null
             ? widget.hasCustomWidgetBuilder!.call(getList())
             : getListValueListenableIsGrid(count: count, isLoading: isLoading);
@@ -750,6 +769,10 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   void _onScroll() {
     debugPrint("_onScroll");
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 100) {
+      debugPrint("_onScroll last is showing");
+    }
     // final direction = _scrollController.position.userScrollDirection;
     // if (direction == ScrollDirection.forward) {
     //   context.read<ListScrollProvider>().setScrollDirection = direction;
@@ -765,6 +788,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   void fetshListWidgetBinding() {
+    _isScrollable = false;
     if (!canFetshList()) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetshList();

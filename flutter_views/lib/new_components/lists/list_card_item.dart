@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
+import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -65,6 +66,9 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (isLargeScreen(context)) {
+      return _getCardNew(context);
+    }
     return Dismissible(
         key: UniqueKey(),
         direction: object.getDismissibleDirection(),

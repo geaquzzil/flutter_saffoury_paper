@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 
@@ -27,12 +29,18 @@ class _ListToDetailsSecoundPaneNotifierState
     with BasePageSecoundPaneNotifierState {
   late ViewAbstract _viewAbstract;
   String? _lastSearchQuery;
+  final keyList = GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'keyList');
+
+  final ValueNotifier<List?> _listNotifier = ValueNotifier(null);
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _viewAbstract = widget.viewAbstract;
+    _listNotifier.addListener(
+      () => debugPrint("ListToDet=> isNotifie"),
+    );
   }
 
   @override
@@ -72,18 +80,54 @@ class _ListToDetailsSecoundPaneNotifierState
       debugPrint("getPaneNotifier firstPane $valueNotifier");
       return [
         SliverPersistantContainer(
-          maxExtent: 60,
-          child: SearchWidgetComponent(
-            viewAbstract: _viewAbstract as ViewAbstract,
-            onSearchTextChanged: (p0) {
-             
-              setState(() {
-                 _lastSearchQuery = p0;
-              });
-            },
+          // floating: true,
+          pinned: true,
+          maxExtent: 100,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SearchWidgetComponent(
+                viewAbstract: _viewAbstract,
+                onSearchTextChanged: (p0) {
+                  setState(() {
+                    _lastSearchQuery = p0;
+                  });
+                },
+              ),
+              ValueListenableBuilder(
+                  valueListenable: _listNotifier,
+                  builder: (context, value, child) {
+                    debugPrint("ListToDet=> fff $value");
+                    return FiltersAndSelectionListHeaderValueNotifier(
+                      width: firstPaneWidth,
+                      viewAbstract: _viewAbstract,
+                      valueNotifer: _listNotifier,
+                    );
+                  })
+            ],
           ),
         ),
+        // ValueListenableBuilder(
+        //   valueListenable: _listNotifier,
+        //   builder: (context, value, child) {
+        //     debugPrint("ListToDet=> $value");
+        //     return SliverPersistentHeader(
+        //         pinned: true,
+        //         delegate: SliverAppBarDelegatePreferedSize(
+        //             shouldRebuildWidget: true,
+        //             child: PreferredSize(
+        //               preferredSize: Size.fromHeight(60),
+        //               child: FiltersAndSelectionListHeaderValueNotifier(
+        //                 width: firstPaneWidth,
+        //                 viewAbstract: _viewAbstract,
+        //                 valueNotifer: _listNotifier,
+        //               ),
+        //             )));
+        //   },
+        // ),
         SliverApiMixinViewAbstractWidget(
+          valueListProviderNotifier: _listNotifier,
+          key: keyList,
           hasCustomCardBuilder: (i, v) {
             debugPrint(
                 "getPaneNotifier  valueNotifier ==> $valueNotifier ${valueNotifier?.value.hashCode} == ${v.hashCode}");

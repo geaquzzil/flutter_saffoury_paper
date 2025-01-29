@@ -5,7 +5,6 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   desktop_window
   dynamic_color
-  firebase_core
   flutter_libserialport
   printing
   screen_retriever_windows

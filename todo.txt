@@ -22,7 +22,14 @@
     on edit error show the error for some time then 
 
     on edit => faild then we should not update the results
-
+https://airtable.com/appVHO4K2qFJwRpt7/shrGBcceazKIoz6pY
+for github
 
 
     //TODO sliver_tools https://github.com/Kavantix/hn_state_example/blob/master/lib/ui/pages/news/components/news_section.dart
+
+
+
+     FutterFire
+                My workaround for now is to add set(CMAKE_BUILD_TYPE "Release")
+                to my windows/CMakeLists.txt file before the include(flutter/generated_plugins.cmake), but this is a nasty hack.
