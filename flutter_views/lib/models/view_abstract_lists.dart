@@ -213,8 +213,30 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return image;
   }
 
+  BorderRadius getBorderRedius() =>
+      const BorderRadius.all(Radius.circular(kDefaultPadding));
   Widget getImageIfNoUrl() {
     return Icon(getMainIconData());
+  }
+
+  Widget getImageWithRoundedCorner(BuildContext context, {double size = 50}) {
+    return Container(
+        width: size,
+        height: size,
+        decoration: getBoxDecoration(context),
+        child: getImageUrl(context) == null ? getImageIfNoUrl() : null);
+  }
+
+  BoxDecoration getBoxDecoration(BuildContext context) {
+    return BoxDecoration(
+        image: getImageUrl(context) == null
+            ? null
+            : DecorationImage(
+                image: FastCachedImageProvider(getImageUrl(context)!),
+                fit: BoxFit.cover),
+        color: null,
+        border: Border.all(width: 2, color: Theme.of(context).highlightColor),
+        borderRadius: getBorderRedius());
   }
 
   Widget getCardLeadingImage(BuildContext context,

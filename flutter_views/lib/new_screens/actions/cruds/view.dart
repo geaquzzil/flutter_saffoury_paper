@@ -19,17 +19,17 @@ class ViewNew
   bool overrideTrailingToNull;
 
   ///[key] is required for navigation header
-  ViewNew(
-      {super.key,
-      super.buildSecondPane,
-      required this.viewAbstract,
-      this.overrideTrailingToNull = false,
-      super.parent,
-      super.valueNotifierIfThirdPane,
-      super.forceHeaderToCollapse = true,
-      super.isFirstToSecOrThirdPane = true,
-      super.onBuild,
-      });
+  ViewNew({
+    super.key,
+    super.buildSecondPane,
+    required this.viewAbstract,
+    this.overrideTrailingToNull = false,
+    super.parent,
+    super.valueNotifierIfThirdPane,
+    super.forceHeaderToCollapse = true,
+    super.isFirstToSecOrThirdPane = true,
+    super.onBuild,
+  });
 
   @override
   State<ViewNew> createState() {
@@ -234,11 +234,8 @@ class _ViewNewState extends BasePageState<ViewNew>
           .toList();
       return [
         SliverToBoxAdapter(
-          child: ClipRect(
-            // radius: 100,
-            child: widget.viewAbstract.getCardLeadingImage(context,
-                size: firstPaneWidth * .8, isSelected: true),
-          ),
+          child: widget.viewAbstract
+              .getImageWithRoundedCorner(context, size: firstPaneWidth * .9),
         ),
         SliverList(
             delegate: SliverChildBuilderDelegate(
