@@ -29,7 +29,7 @@ class ViewNew
       super.forceHeaderToCollapse = true,
       super.isFirstToSecOrThirdPane = true,
       super.onBuild,
-      super.selectedItem});
+      });
 
   @override
   State<ViewNew> createState() {

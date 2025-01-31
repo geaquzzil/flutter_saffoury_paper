@@ -46,14 +46,14 @@ class ProductTopWidget extends StatelessWidget {
         HeaderDescription(
           iconData: Icons.info_outline,
           title: AppLocalizations.of(context)!.overview,
-          trailing: IconButton(
-              icon: const Icon(Icons.calculate),
-              onPressed: () {
-                valueNotifier?.value = SecondPaneHelper(title: "Calc", value: [
-                  SliverToBoxAdapter(child: Text("dsadas")),
-                  SliverToBoxAdapter(child: Text("dasdadsa"))
-                ]);
-              }),
+          // trailing: IconButton(
+          //     icon: const Icon(Icons.calculate),
+          //     onPressed: () {
+          //       valueNotifier?.value = SecondPaneHelper(title: "Calc", value: [
+          //         SliverToBoxAdapter(child: Text("dsadas")),
+          //         SliverToBoxAdapter(child: Text("dasdadsa"))
+          //       ]);
+          //     }),
         ),
         getRow(context, [
           TitleAndDescription(

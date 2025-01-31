@@ -213,7 +213,7 @@ class PrintSetting extends BasePageSecoundPaneNotifier<ModifiableInterface> {
       super.forceHeaderToCollapse = true,
       super.isFirstToSecOrThirdPane = true,
       super.onBuild,
-      super.selectedItem});
+      });
 
   @override
   State<PrintSetting> createState() {

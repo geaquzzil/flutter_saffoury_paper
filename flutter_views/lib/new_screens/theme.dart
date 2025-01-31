@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:input_quantity/input_quantity.dart';
 
 const kDefaultLargeScreenIconSize = 20.0;
 const kDefaultSmallScreenIconSize = 25.0;
@@ -28,7 +30,7 @@ InputDecorationTheme getMainTheme(BuildContext context,
     //     ? BoxConstraints.tight(const Size.fromHeight(30))
     //     : BoxConstraints.tight(const Size.fromHeight(50)),
     // hoverColor: Colors.transparent,
-    border: _getBorder(isLargeOrDesktop),
+    border: getThemeBorder(isLargeOrDesktop),
     // focusedBorder: _getBorder(isLargeOrDesktop),
     // enabledBorder: _getBorder(isLargeOrDesktop)
   );
@@ -153,6 +155,10 @@ ThemeData getThemeData(BuildContext context, bool isDark,
       ));
 }
 
+AppLocalizations? getAppLocal(BuildContext context) {
+  return AppLocalizations.of(context);
+}
+
 getTabBarTheme(BuildContext context, ColorScheme colorScheme) {
   return TabBarTheme(
     indicatorColor: colorScheme.primary,
@@ -275,6 +281,13 @@ double getIconSize(BuildContext context) {
       : kDefaultSmallScreenIconSize;
 }
 
+double getIconSizeOnSub(BuildContext context) {
+  bool isLargeOrDesktop = isLargeScreen(context);
+  return isLargeOrDesktop
+      ? kDefaultLargeScreenIconSize - 5
+      : kDefaultSmallScreenIconSize - 5;
+}
+
 IconThemeData getIconThemeData(BuildContext context,
     {ColorScheme? colorScheme}) {
   ThemeData theme = Theme.of(context);
@@ -324,7 +337,35 @@ InputDecorationTheme getTextFieldTheme(BuildContext context) {
   );
 }
 
-OutlineInputBorder _getBorder(bool isLargeOrDesktop) {
+getQtyPlusDecoration(BuildContext context) {
+  return QtyDecorationProps(
+      contentPadding: EdgeInsets.all(kDefaultPadding * .75),
+      border: getThemeBorder(isLargeScreen(context)),
+      fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+      // border: getMainTheme(context),
+      isDense: isLargeScreen(context),
+      plusBtn: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Icon(
+            Icons.add,
+            color: Theme.of(context).colorScheme.tertiary,
+          )),
+      minusBtn: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Icon(
+          Icons.remove,
+          color: Theme.of(context).colorScheme.error,
+        ),
+      ));
+}
+
+getQtyFormProps(BuildContext context) {
+  return QtyFormProps(
+    style: Theme.of(context).textTheme.titleSmall,
+  );
+}
+
+OutlineInputBorder getThemeBorder(bool isLargeOrDesktop) {
   return OutlineInputBorder(
       gapPadding: isLargeOrDesktop ? 0 : 4,
       borderSide: isLargeOrDesktop ? BorderSide.none : const BorderSide(),

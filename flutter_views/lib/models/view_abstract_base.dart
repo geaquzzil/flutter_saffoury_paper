@@ -87,6 +87,13 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         style: Theme.of(context).textTheme.bodySmall!);
   }
 
+  String getLabelWithTextFromField(BuildContext context, String field) {
+    String label = getFieldLabelMap(context)[field] ??
+        getMirrorViewAbstractLabelText(context, field);
+    String value = getFieldValueCheckType(context, field);
+    return "$label: $value";
+  }
+
   String getLabelWithText(String label, String text) {
     return "$label: $text";
   }

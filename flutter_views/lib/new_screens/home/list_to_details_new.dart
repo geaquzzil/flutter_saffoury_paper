@@ -125,6 +125,7 @@ class _ListToDetailsSecoundPaneNotifierState
                         width: firstPaneWidth,
                         viewAbstract: _viewAbstract,
                         valueNotifer: _listNotifier,
+                        secPaneNotifer: getSecondPaneNotifier,
                       );
                     })
               ],
@@ -158,7 +159,7 @@ class _ListToDetailsSecoundPaneNotifierState
             return ListCardItem(
               // state: this,
               object: v,
-              isSelected: (lastSecondPaneItem?.value?.isEquals(v) ?? false),
+              // isSelected: (lastSecondPaneItem?.value?.isEquals(v) ?? false),//TODO what if the value of viewAbstract is Widget fix this
 
               //  valueNotifier?.value.hashCode == v.hashCode,
               onClick: (v) {
@@ -195,6 +196,20 @@ class _ListToDetailsSecoundPaneNotifierState
       ];
     }
     debugPrint("${valueNotifier.value}");
+
+    if (valueNotifier.value is BasePage) {
+      return [
+        // if (top != null)
+        //   ...top.map((p) => SliverToBoxAdapter(
+        //         child: p,
+        //       )),
+        SliverFillRemaining(
+          child: (valueNotifier.value as BasePage)
+            ..setParent = this
+            ..setParentOnBuild = onBuild,
+        )
+      ];
+    }
     List<Widget>? top = (valueNotifier.value as ViewAbstract)
         .getCustomTopWidget(context, action: ServerActions.view);
     return [

@@ -14,6 +14,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_components/dialog/bottom_sheet_viewabstract_options.dart';
+import 'package:flutter_view_controller/new_screens/actions/cruds/print.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
@@ -23,6 +24,7 @@ import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/web/components/list_web_api.dart';
 import 'package:flutter_view_controller/screens/web/views/web_master_to_list.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -181,7 +183,9 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
 
   ///routes if list is found then extras could be type of [List] and requires [tableName]
   ///routes if viewAbstract then extras is [ViewAbstract] and required [tableName] TODO [iD]
-  void exportPage(BuildContext context, {List<ViewAbstract>? asList}) {
+  void exportPage(BuildContext context,
+      {List<ViewAbstract>? asList,
+      ValueNotifier<SecondPaneHelper?>? secPaneNotifer}) {
     if (!setPaneToSecondOrThird(
         context,
         ListToDetailsSecoundPaneHelper(
@@ -207,7 +211,8 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     }
   }
 
-  void importPage(BuildContext context) {
+  void importPage(BuildContext context,
+      {ValueNotifier<SecondPaneHelper?>? secPaneNotifer}) {
     if (!setPaneToSecondOrThird(
         context,
         ListToDetailsSecoundPaneHelper(
@@ -255,7 +260,9 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
 
   //TODO isSecoundSubPaneView should i deprecate it ?
   void viewPage(BuildContext context,
-      {bool? isSecoundSubPaneView, bool disableMasterToListOverride = true}) {
+      {bool? isSecoundSubPaneView,
+      bool disableMasterToListOverride = true,
+      ValueNotifier<SecondPaneHelper?>? secPaneNotifer}) {
     bool setToThirdPane = isSecoundSubPaneView ?? false;
     bool isGridableItem = isGridable();
     ViewAbstract? isMasterToList = isGridableItem
@@ -319,7 +326,8 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     );
   }
 
-  void editPage(BuildContext context) {
+  void editPage(BuildContext context,
+      {ValueNotifier<SecondPaneHelper?>? secPaneNotifer}) {
     if (!setPaneToSecondOrThird(
       context,
       ListToDetailsSecoundPaneHelper(
@@ -399,7 +407,8 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void printPage(BuildContext context,
       {bool standAlone = false,
       List<ViewAbstract>? list,
-      bool? isSelfListPrint}) {
+      bool? isSelfListPrint,
+      ValueNotifier<SecondPaneHelper?>? secPaneNotifer}) {
     bool isListPrint = list != null;
     bool isSelfList = isSelfListPrint ?? false;
     PrintPageType type = !isListPrint
@@ -408,6 +417,21 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
             ? PrintPageType.self_list
             : PrintPageType.list;
     final typeString = type.toString();
+    if (secPaneNotifer != null) {
+      secPaneNotifer.value = SecondPaneHelper(
+        title: getIDWithLabel(context, action: ServerActions.print),
+        value: PrintNew(
+          // buildSecondPane: false,
+          isFirstToSecOrThirdPane: true,
+          asList: list?.cast(),
+          type: type,
+          iD: iD,
+          tableName: getTableNameApi(),
+          extras: this,
+        ),
+      );
+      return;
+    }
     if (!setPaneToSecondOrThird(
         context,
         ListToDetailsSecoundPaneHelper(
@@ -513,7 +537,6 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   bool getIsSubViewAbstractIsExpanded(String field) {
     return false;
   }
-  
 
   // for adding drawer headers
   //  const DrawerHeader(

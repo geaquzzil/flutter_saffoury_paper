@@ -124,6 +124,10 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
   }
 
   Widget getListTile(bool isSelected, BuildContext context) {
+    // if (!isDesktopPlatform()) {
+    //   return ExpansionTile();
+    // }
+    bool hasThreeLine = object.getMainSubtitleHeaderText(context) is Column;
     return ListTile(
         selected: isSelected,
         // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
@@ -145,6 +149,7 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
         },
         title: (object.getMainHeaderText(context)),
         subtitle: (object.getMainSubtitleHeaderText(context)),
+        // isThreeLine: hasThreeLine,
         leading: object.getCardLeading(context),
         trailing: object.getCardTrailing(context));
   }

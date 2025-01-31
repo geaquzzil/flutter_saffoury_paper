@@ -409,7 +409,7 @@ class ThirdToSecondPaneHelper extends SecondPaneHelper {
 class SecondPaneHelper {
   String title;
 
-  ///Value could be A dynamic object or [List<Widget>] please make sure to pass the currect values
+  ///Value could be A dynamic object or [List<Widget>] or [BasePage] please make sure to pass the currect values
   dynamic value;
   GlobalKey<BasePageSecoundPaneNotifierState>? state;
   SecondPaneHelper({required this.title, this.value, this.state});

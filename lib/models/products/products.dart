@@ -296,14 +296,22 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  Text? getMainSubtitleHeaderText(BuildContext context) {
+  Widget? getMainSubtitleHeaderText(BuildContext context) {
     double quantity = qrQuantity ?? getQuantity();
-    return Text(
-      getQuantityStringAndLabel(context),
-      style: TextStyle(
-          color: quantity > 0
-              ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.error),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(products_types?.getLabelWithTextFromField(context, 'sellPrice') ??
+            ""),
+        Text(
+          getQuantityStringAndLabel(context),
+          style: TextStyle(
+              color: quantity > 0
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.error),
+        ),
+      ],
     );
   }
 

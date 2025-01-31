@@ -3,8 +3,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/edit_controllers_utils.dart';
+import 'package:flutter_view_controller/new_screens/theme.dart';
 
 class DropdownCustomListWithFormListener extends StatefulWidget {
   ViewAbstract viewAbstract;
@@ -70,7 +70,7 @@ class _DropdownCustomListWithFormListenerState
     debugPrint("DropdownCustomListWithFormListener list $list");
     return wrapController(
       context: context,
-       icon: widget.viewAbstract.getTextInputIconData(_field),
+      icon: widget.viewAbstract.getTextInputIconData(_field),
       title: widget.viewAbstract.getTextInputLabel(context, _field) ?? "-",
       FormBuilderDropdown<dynamic>(
         autofocus: false,
@@ -130,40 +130,11 @@ class _DropdownCustomListWithFormListenerState
 //             // icon: widget.viewAbstract.getFieldIconDataNullAccepted(_field)
 //           ),
         // decoration: const InputDecoration.collapsed(hintText: ""),
+
         items: list
             .map((item) => DropdownMenuItem<dynamic>(
                   value: item,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(
-                        widget.viewAbstract.getFieldIconData(_field),
-                        size: 15,
-                      ),
-                      const SizedBox(
-                        width: kDefaultPadding / 2,
-                      ),
-                      Text(
-                        item == null
-                            ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
-                            : item.toString(),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      )
-                    ],
-
-                    // contentPadding: EdgeInsets.zero,
-                    // leading: const Icon(
-                    //   Icons.print,
-                    //   // size: 15,
-                    // ),
-                    // title: Text(
-                    //   item == null
-                    //       ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
-                    //       : item.toString(),
-                    //   style: Theme.of(context).textTheme.bodySmall,
-                    // ),
-                  ),
+                  child: buildItem(item, context),
                 ))
             .toList(),
       ),
@@ -249,6 +220,60 @@ class _DropdownCustomListWithFormListenerState
       //     ),
       //   ),
       // ],
+    );
+  }
+
+  //TODO this is a fix for overflow text on dropbox
+  Widget buildItem(item, BuildContext context) {
+    // return FittedBox(
+    //   fit: BoxFit.contain,
+    //   child: Text(
+    //     item == null
+    //         ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)} das dasdasdas"
+    //         : item.toString(),
+    //     style: Theme.of(context).textTheme.bodySmall,
+    //     overflow: TextOverflow.ellipsis,
+    //   ),
+    // );
+    return FittedBox(
+      fit: BoxFit.contain,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+
+        children: [
+          Icon(
+            widget.viewAbstract.getFieldIconData(_field),
+            size: getIconSizeOnSub(context),
+          ),
+          const SizedBox(
+            width: kDefaultPadding / 2,
+          ),
+          FittedBox(
+            fit: BoxFit.contain,
+            child: Text(
+              item == null
+                  ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
+                  : item.toString(),
+              style: Theme.of(context).textTheme.bodySmall,
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        ],
+
+        // contentPadding: EdgeInsets.zero,
+        // leading: const Icon(
+        //   Icons.print,
+        //   // size: 15,
+        // ),
+        // title: Text(
+        //   item == null
+        //       ? "${AppLocalizations.of(context)!.enter} ${widget.viewAbstract.getFieldLabel(context, _field)}"
+        //       : item.toString(),
+        //   style: Theme.of(context).textTheme.bodySmall,
+        // ),
+      ),
     );
   }
 }

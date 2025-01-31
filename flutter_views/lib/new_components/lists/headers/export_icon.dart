@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/new_screens/controllers/controller_dropb
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/printing_generator/page/ext.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_list_api.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 
@@ -14,7 +15,8 @@ class ExportIcon extends StatefulWidget {
   final ViewAbstract viewAbstract;
 
   final List<ViewAbstract>? list;
-  const ExportIcon({super.key, required this.viewAbstract, this.list});
+    final ValueNotifier<SecondPaneHelper?>? secPaneNotifer;
+  const ExportIcon({super.key, required this.viewAbstract, this.list,this.secPaneNotifer});
 
   @override
   State<ExportIcon> createState() => _ExportIconState();

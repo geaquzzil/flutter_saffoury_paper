@@ -15,7 +15,9 @@ class DropdownEnumControllerListener<T extends ViewAbstractEnum>
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("DropdownEnumControllerListener soso");
     return FormBuilderDropdown(
+      isExpanded: true,
       // dropdownColor: Colors.amber,
       name: viewAbstractEnum.getMainLabelText(context),
       initialValue: viewAbstractEnum,
@@ -35,9 +37,13 @@ class DropdownEnumControllerListener<T extends ViewAbstractEnum>
                         regex: (item as ViewAbstractEnum)
                             .getFieldLabelString(context, item),
                       )
-                    : Text(item == null
-                        ? dropdownGetEnterText(context, viewAbstractEnum)
-                        : viewAbstractEnum.getFieldLabelString(context, item)),
+                    : Text(
+                        item == null
+                            ? dropdownGetEnterText(context, viewAbstractEnum)
+                            : viewAbstractEnum.getFieldLabelString(
+                                context, item),
+                        overflow: TextOverflow.ellipsis,
+                      ),
               ))
           .toList(),
       onChanged: (obj) => onSelected(obj as T),

@@ -5,11 +5,14 @@ import 'package:flutter_view_controller/interfaces/printable/printable_master.da
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list_icon.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 
 class PrintIcon extends StatefulWidget {
   final ViewAbstract viewAbstract;
   final List? list;
-  const PrintIcon({super.key, required this.viewAbstract, this.list});
+  final ValueNotifier<SecondPaneHelper?>? secPaneNotifer;
+  const PrintIcon(
+      {super.key, required this.viewAbstract, this.list, this.secPaneNotifer});
 
   @override
   State<PrintIcon> createState() => _PrintIconState();
@@ -53,10 +56,14 @@ class _PrintIconState extends State<PrintIcon> {
               AppLocalizations.of(context)!
                   .printAllAs(AppLocalizations.of(context)!.list)) {
             widget.viewAbstract.printPage(context,
-                list: widget.list!.cast(), isSelfListPrint: false);
+                list: widget.list!.cast(),
+                isSelfListPrint: false,
+                secPaneNotifer: widget.secPaneNotifer);
           } else {
             widget.viewAbstract.printPage(context,
-                list: widget.list!.cast(), isSelfListPrint: true);
+                list: widget.list!.cast(),
+                isSelfListPrint: true,
+                secPaneNotifer: widget.secPaneNotifer);
           }
         },
       );
@@ -65,14 +72,18 @@ class _PrintIconState extends State<PrintIcon> {
       return IconButton(
           onPressed: () {
             widget.viewAbstract.printPage(context,
-                list: widget.list!.cast(), isSelfListPrint: false);
+                list: widget.list!.cast(),
+                isSelfListPrint: false,
+                secPaneNotifer: widget.secPaneNotifer);
           },
           icon: const Icon(Icons.print));
     } else if (widget.viewAbstract is PrintableSelfListInterface) {
       return IconButton(
           onPressed: () {
             widget.viewAbstract.printPage(context,
-                list: widget.list!.cast(), isSelfListPrint: true);
+                list: widget.list!.cast(),
+                isSelfListPrint: true,
+                secPaneNotifer: widget.secPaneNotifer);
           },
           icon: const Icon(Icons.print));
     } else {

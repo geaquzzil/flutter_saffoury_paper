@@ -22,6 +22,7 @@ class DropdownDateControllerListener extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormBuilderDropdown(
+      isExpanded: true,
       name: viewAbstractEnum.getMainLabelText(context),
       initialValue: viewAbstractEnum,
       // decoration: getDecoration(context, viewAbstract)
@@ -40,9 +41,13 @@ class DropdownDateControllerListener extends StatelessWidget {
                         regex: (item as ViewAbstractEnum)
                             .getFieldLabelString(context, item),
                       )
-                    : Text(item == null
-                        ? dropdownGetEnterText(context, viewAbstractEnum)
-                        : viewAbstractEnum.getFieldLabelString(context, item)),
+                    : Text(
+                        item == null
+                            ? dropdownGetEnterText(context, viewAbstractEnum)
+                            : viewAbstractEnum.getFieldLabelString(
+                                context, item),
+                        overflow: TextOverflow.ellipsis,
+                      ),
               ))
           .toList(),
       onChanged: (obj) {

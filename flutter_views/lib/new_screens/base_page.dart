@@ -416,12 +416,12 @@ mixin BasePageWithThirdPaneMixin<T extends BasePage,
     // return AnimatedContainer(duration: const Duration(milliseconds: 800),child: SizedBox(width: ,),);
   }
 }
-mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
-    on BasePageState<T> {
+
+mixin BasePageSecoundPaneNotifierStateApi<T extends BasePageApi>
+    on BasePageSecoundPaneNotifierState<T> {}
+mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
   final ValueNotifier<SecondPaneHelper?> _onSecoundPaneChanged =
       ValueNotifier<SecondPaneHelper?>(null);
-
-  ValueNotifier<SecondPaneHelper?>? test;
 
   ValueNotifier<SecondPaneHelper?> get getSecondPaneNotifier =>
       _onSecoundPaneChanged;
@@ -608,13 +608,10 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
 
   @override
   void initState() {
-    if (widget.valueNotifierIfThirdPane != null) {
-      test = _onSecoundPaneChanged;
-    }
     _onSecoundPaneChanged.addListener(onPaneChanged);
 
     // test = widget.valueNotifierIfThirdPane;
-    _lastSecondPaneItem = widget.selectedItem;
+    // _lastSecondPaneItem = widget.selectedItem;///TODO
     super.initState();
   }
 
@@ -687,12 +684,19 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePageSecoundPaneNotifier>
     return null;
   }
 
+  bool enableAutomaticFirstPaneNullDetector() {
+    return true;
+  }
+
   @override
   List<Widget>? getPane(
       {required bool firstPane,
       ScrollController? controler,
       TabControllerHelper? tab}) {
-    if (isSecPane(firstPane: firstPane) && !hasNotifierValue() && tab == null) {
+    if (enableAutomaticFirstPaneNullDetector() &&
+        isSecPane(firstPane: firstPane) &&
+        !hasNotifierValue() &&
+        tab == null) {
       List<Widget>? widgets =
           getCustomViewWhenSecondPaneIsEmpty(controler, tab);
       if (widgets != null) return widgets;
@@ -918,7 +922,7 @@ mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
 }
 
 abstract class BasePageSecoundPaneNotifier<T> extends BasePage {
-  T? selectedItem;
+  // T? selectedItem;
 
   bool setToShowThirdPaneIfCan;
 
@@ -926,8 +930,7 @@ abstract class BasePageSecoundPaneNotifier<T> extends BasePage {
   ValueNotifier<SecondPaneHelper?>? valueNotifierIfThirdPane;
 
   BasePageSecoundPaneNotifier(
-      {this.selectedItem,
-      super.buildDrawer,
+      {super.buildDrawer,
       super.buildSecondPane,
       super.isFirstToSecOrThirdPane,
       this.setToShowThirdPaneIfCan = false,
@@ -959,6 +962,7 @@ abstract class BasePage extends StatefulWidget {
   });
 
   set setParent(final parent) => this.parent = parent;
+  set setParentOnBuild(final onBuild) => this.onBuild = onBuild;
   Key? get getKey => key;
 }
 

@@ -30,7 +30,8 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
   Future<List<T?>?> getFuture() async {
     if (_list != null) return _list;
     _list = [null];
-    _list!.addAll(await widget.viewAbstract.listApiReduceSizes(context: context) as List<T?>);
+    _list!.addAll(await widget.viewAbstract.listApiReduceSizes(context: context)
+        as List<T?>);
     // if (mounted) {
     //   setState(() {});
     // }
@@ -74,6 +75,7 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
       BuildContext context, List<T?> list) {
     debugPrint("getDropdownController $list");
     return FormBuilderDropdown<T?>(
+      isExpanded: true,
       enabled: widget.enabled,
       // valueTransformer: ,
       autovalidateMode: AutovalidateMode.always,

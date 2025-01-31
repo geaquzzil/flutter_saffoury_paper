@@ -23,12 +23,14 @@ import 'package:flutter_view_controller/printing_generator/page/pdf_self_list_pa
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:provider/provider.dart';
 
 class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
   final ViewAbstract viewAbstract;
   final double? width;
   final ValueNotifier<List?> valueNotifer;
+  final ValueNotifier<SecondPaneHelper?>? secPaneNotifer;
 
   final iconSize = 20;
   final spacing = kDefaultPadding * .25;
@@ -37,6 +39,7 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
       {super.key,
       required this.valueNotifer,
       required this.viewAbstract,
+      this.secPaneNotifer,
       this.width});
 
   @override
@@ -105,7 +108,11 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
               AnimatedScale(
                   duration: Duration(milliseconds: 200),
                   scale: listLength > 2 ? 1 : 0,
-                  child: PrintIcon(viewAbstract: viewAbstract, list: list)),
+                  child: PrintIcon(
+                    viewAbstract: viewAbstract,
+                    list: list,
+                    secPaneNotifer: secPaneNotifer,
+                  )),
             if (canTakeUpToFour)
               AnimatedScale(
                   duration: Duration(milliseconds: 200),
@@ -151,6 +158,7 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
   }
 }
 
+@Deprecated("Use [FiltersAndSelectionListHeaderValueNotifier] instade")
 class FiltersAndSelectionListHeader extends StatelessWidget {
   ViewAbstract viewAbstract;
   String customKey;
