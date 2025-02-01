@@ -67,12 +67,12 @@ class _PdfPageState<T extends PrintLocalSetting>
     if (getExtras() == null) {
       ViewAbstract newViewAbstract =
           context.read<AuthProvider<AuthUser>>().getNewInstance(tableName!)!;
-      return newViewAbstract.viewCallGetFirstFromList(iD!,context: context)
+      return newViewAbstract.viewCallGetFirstFromList(iD!, context: context)
           as Future<PrintableMaster<T>?>;
     } else {
-      return (getExtras() as ViewAbstract)
-              .viewCallGetFirstFromList((getExtras() as ViewAbstract).iD,context: context)
-          as Future<PrintableMaster<T>?>;
+      return (getExtras() as ViewAbstract).viewCallGetFirstFromList(
+          (getExtras() as ViewAbstract).iD,
+          context: context) as Future<PrintableMaster<T>?>;
     }
   }
 
@@ -83,8 +83,9 @@ class _PdfPageState<T extends PrintLocalSetting>
       return getBody(context, formt);
     }
     return FutureBuilder(
-      future: (newObject as ViewAbstract)
-          .viewCallGetFirstFromList((newObject as ViewAbstract).iD,context:context),
+      future: (newObject as ViewAbstract).viewCallGetFirstFromList(
+          (newObject as ViewAbstract).iD,
+          context: context),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return EmptyWidget(
@@ -176,7 +177,7 @@ class _PdfPageState<T extends PrintLocalSetting>
               width: getSizeOfController(),
               child: DropdownStringListControllerListener(
                 tag: "printOptions",
-                onSelected: (object) {
+                onValueSelectedFunction: (object) {
                   if (object != null) {
                     PdfPageFormat chosedPageFormat;
                     if (object.label ==

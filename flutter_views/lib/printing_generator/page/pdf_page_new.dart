@@ -177,7 +177,7 @@ class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
               child: DropdownStringListControllerListener(
                 insetFirstIsSelect: false,
                 tag: "printOptions",
-                onSelected: (object) {
+                onValueSelectedFunction: (object) {
                   if (object != null) {
                     PdfPageFormat chosedPageFormat;
                     if (object.label ==

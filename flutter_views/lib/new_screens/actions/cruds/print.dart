@@ -3,6 +3,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/components/prints/paper_list_controller.dart';
+import 'package:flutter_view_controller/components/prints/paper_oriantation_controller.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -18,11 +20,9 @@ import 'package:flutter_view_controller/new_components/lists/skeletonizer/widget
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
-import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/theme.dart';
-import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/printing_generator/page/base_pdf_page.dart';
 import 'package:flutter_view_controller/printing_generator/page/ext.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_list_api.dart';
@@ -212,55 +212,14 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
               ),
             ),
             SizedBox(
-              width: getSizeOfController(),
-              child: DropdownStringListControllerListener(
-                insetFirstIsSelect: false,
-                tag: "printOptions",
-                onSelected: (object) {
-                  if (object != null) {
-                    PdfPageFormat chosedPageFormat;
-                    if (object.label ==
-                        AppLocalizations.of(context)!.a3ProductLabel) {
-                      chosedPageFormat = PdfPageFormat.a3;
-                    } else if (object.label ==
-                        AppLocalizations.of(context)!.a4ProductLabel) {
-                      chosedPageFormat = PdfPageFormat.a4;
-                    } else if (object.label ==
-                        AppLocalizations.of(context)!.a5ProductLabel) {
-                      chosedPageFormat = PdfPageFormat.a5;
-                    } else {
-                      //todo translate
-                      if (supportsLabelPrinting()) {
-                        chosedPageFormat = roll80;
-                      } else {
-                        chosedPageFormat = PdfPageFormat.a4;
-                      }
-                    }
-                    if (chosedPageFormat ==
-                        printSettingListener.getSelectedFormat) return;
-                    notifyNewSelectedFormat(context, chosedPageFormat);
-                  }
-                },
-                //todo translate
-                hint: "Select size",
-                list: [
-                  if (supportsLabelPrinting())
-                    DropdownStringListItem(
-                        icon: null,
-                        //todo translate
-                        label: AppLocalizations.of(context)!.productLabel),
-                  DropdownStringListItem(
-                      icon: null,
-                      label: AppLocalizations.of(context)!.a3ProductLabel),
-                  DropdownStringListItem(
-                      icon: null,
-                      label: AppLocalizations.of(context)!.a4ProductLabel),
-                  DropdownStringListItem(
-                      icon: null,
-                      label: AppLocalizations.of(context)!.a5ProductLabel),
-                ],
-              ),
-            ),
+                width: getSizeOfController(),
+                child: PaperListController(
+                  supportsLabelPrinting: supportsLabelPrinting(),
+                  initialValue: _lastLoaded?.format ?? PdfPageFormat.a4,
+                  onValueSelectedFunction: (value) {
+                    notifyNewSelectedFormat(context, value ?? PdfPageFormat.a4);
+                  },
+                )),
           ],
         ));
   }
@@ -771,8 +730,14 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
                   // debugPrint(val);
                 },
               ))),
+      // SliverToBoxAdapter(
+      //   child: PrinterListControllerDropdown(),
+      // ),
       SliverToBoxAdapter(
-        child: getPrintersWidget(),
+        child: ListTileSameSizeOnTitle(
+          leading: Text("Paper Oriantaion"),
+          title: PaperOriantaionController(),
+        ),
       ),
       if (hasFromTo())
         SliverToBoxAdapter(
@@ -841,61 +806,17 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
             ],
           ),
         ),
-      SliverToBoxAdapter(
-        child: ListTileSameSizeOnTitle(
-          leading: Text(getAppLocal(context)?.ok ?? ""),
-          title: DropdownStringListControllerListener(
-            initialValue: DropdownStringListItem(
-                label:
-                    getLabelFromPDF(_lastLoaded?.format ?? PdfPageFormat.a4)),
-            insetFirstIsSelect: false,
-            tag: "printOptions",
-            onSelected: (object) {
-              if (object != null) {
-                PdfPageFormat chosedPageFormat;
-                if (object.label ==
-                    AppLocalizations.of(context)!.a3ProductLabel) {
-                  chosedPageFormat = PdfPageFormat.a3;
-                } else if (object.label ==
-                    AppLocalizations.of(context)!.a4ProductLabel) {
-                  chosedPageFormat = PdfPageFormat.a4;
-                } else if (object.label ==
-                    AppLocalizations.of(context)!.a5ProductLabel) {
-                  chosedPageFormat = PdfPageFormat.a5;
-                } else {
-                  //todo translate
-                  if (supportsLabelPrinting()) {
-                    chosedPageFormat = roll80;
-                  } else {
-                    chosedPageFormat = PdfPageFormat.a4;
-                  }
-                }
-                if (chosedPageFormat == printSettingListener.getSelectedFormat)
-                  return;
-                notifyNewSelectedFormat(context, chosedPageFormat);
-              }
-            },
-            //todo translate
-            hint: "Select size",
-            list: [
-              if (supportsLabelPrinting())
-                DropdownStringListItem(
-                    icon: null,
-                    //todo translate
-                    label: AppLocalizations.of(context)!.productLabel),
-              DropdownStringListItem(
-                  icon: null,
-                  label: AppLocalizations.of(context)!.a3ProductLabel),
-              DropdownStringListItem(
-                  icon: null,
-                  label: AppLocalizations.of(context)!.a4ProductLabel),
-              DropdownStringListItem(
-                  icon: null,
-                  label: AppLocalizations.of(context)!.a5ProductLabel),
-            ],
-          ),
-        ),
-      ),
+      // SliverToBoxAdapter(
+      //   child: ListTileSameSizeOnTitle(
+      //       leading: Text(getAppLocal(context)?.ok ?? ""),
+      //       title: PaperListController(
+      //         supportsLabelPrinting: supportsLabelPrinting(),
+      //         initialValue: _lastLoaded?.format ?? PdfPageFormat.a4,
+      //         onValueSelectedFunction: (value) {
+      //           notifyNewSelectedFormat(context, value ?? PdfPageFormat.a4);
+      //         },
+      //       )),
+      // ),
       SliverFillRemaining(
         child: FutureBuilder(
           future: getSettingFuture(),
@@ -921,50 +842,6 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
         ),
       )
     ];
-  }
-
-  //TODO seperate to standalone widget
-  Widget getPrintersWidget() {
-    if (_loadedPrinters != null) {
-      return getPrintersWidgetController(context, _loadedPrinters);
-    }
-    return FutureBuilder<List<Printer>>(
-        future: Printing.listPrinters(),
-        builder: (context, as) {
-          if (as.connectionState == ConnectionState.waiting ||
-              as.data == null) {
-            return SkeletonListTile(
-              hasLeading: false,
-            );
-          }
-
-          _loadedPrinters = as.data!;
-          defaultPrinter = defaultPrinter ?? getDefaultPrinter(as.data!);
-          return getPrintersWidgetController(context, as.data);
-        });
-  }
-
-  ListTileSameSizeOnTitle getPrintersWidgetController(
-      BuildContext context, List<Printer>? as) {
-    return ListTileSameSizeOnTitle(
-      leading: Text(getAppLocal(context)?.printerName ?? ""),
-      title: DropdownStringListControllerListener(
-        initialValue: defaultPrinter == null
-            ? null
-            : DropdownStringListItem(
-                label: defaultPrinter!.name, value: defaultPrinter),
-        insetFirstIsSelect: false,
-        onSelected: (object) {
-          defaultPrinter = object?.value as Printer;
-        },
-        hint: "Hist",
-        list: as
-                ?.map((e) => DropdownStringListItem(value: e, label: e.name))
-                .toList() ??
-            [],
-        tag: 'dsa',
-      ),
-    );
   }
 
   Printer? getDefaultPrinter(List<Printer> printers) {

@@ -18,7 +18,7 @@ const double kMobileWidth = 599;
 const double kFoldableSmallTablet = 600;
 const double kLargeTablet = 840;
 const double kDesktopWidth = 1200;
-const double kDrawerOpenWidth = 400;
+const double kDrawerOpenWidth = 200;
 
 const double kDefaultClosedDrawer = 80;
 

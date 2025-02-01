@@ -534,7 +534,7 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
       debugPrint("_ActionOnToolbarsasState currentState ${o?.currentState}");
       debugPrint(
           "_ActionOnToolbarsasState curentState ${(o as GlobalKey<BasePageSecoundPaneNotifierState>).currentState?.getSecondPaneNotifier}");
-      (o).currentState!.getSecondPaneNotifier.addListener(() {
+      (o).currentState?.getSecondPaneNotifier.addListener(() {
         debugPrint("_ActionOnToolbarsasState addListinerer");
         _addSubPane(SecoundPaneHelperWithParent(
             state: o, value: o.currentState!.getSecondPaneNotifier.value));

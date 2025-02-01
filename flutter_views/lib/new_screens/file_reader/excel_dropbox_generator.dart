@@ -56,7 +56,7 @@ class _ExcelDropboxGeneratorState extends State<ExcelDropboxGenerator> {
           .map((e) =>
               DropdownStringListItem(icon: null, label: e.toString(), value: e))
           .toList(),
-      onSelected: (object) {},
+      onValueSelectedFunction: (object) {},
     );
 
     // for (var table in excel.tables.keys) {
