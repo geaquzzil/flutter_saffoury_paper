@@ -1,8 +1,8 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/components/base_controller_with_save_state.dart';
 import 'package:flutter_view_controller/new_components/cards/cards.dart';
-import 'dart:math' as math;
-
 import 'package:flutter_view_controller/new_screens/theme.dart';
 
 class PaperOriantaionController
@@ -20,6 +20,7 @@ class _PaperTypeControllerState extends State<PaperOriantaionController>
             PaperOriantaionController> {
   @override
   Widget build(BuildContext context) {
+    // return Text("dsa");
     Widget landscape = IconButton(
       onPressed: () {
         notifyValueSelected(PaperOriantation.landscape);
@@ -53,7 +54,11 @@ class _PaperTypeControllerState extends State<PaperOriantaionController>
         child: (isHovered) => portial,
       );
     }
-    return Row(mainAxisSize: MainAxisSize.min, children: [landscape, portial]);
+    return Column(
+      children: [
+        Row(mainAxisSize: MainAxisSize.min, children: [landscape, portial]),
+      ],
+    );
   }
 
   Color getColor(PaperOriantation forWho) {
