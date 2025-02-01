@@ -11,6 +11,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_invoice_i
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/printing_generator/pdf_list_api.dart';
 import 'package:flutter_view_controller/printing_generator/print_master.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -90,10 +91,12 @@ class PdfSelfListApi<T extends PrintLocalSetting>
     return accountInfoList != null && (accountInfoList?.isNotEmpty ?? false);
   }
 
-  Future<Uint8List> generate(PdfPageFormat? format) async {
+  Future<Uint8List> generate(PdfPageFormat? format,
+      {Function(int pagesAddedCount)? pagesAdded, PageRange? pageRange}) async {
     material.debugPrint("generate self_list");
     await init();
     var pdf = await getDocument();
+
     if (hasGroupBy()) {
       int index = list[0]
           .getPrintableSelfListTableHeaderAndContent(context, list[0], setting)
@@ -119,7 +122,7 @@ class PdfSelfListApi<T extends PrintLocalSetting>
     } else {
       pdf.addPage(await getMultiPage(format, header));
     }
-
+    pagesAdded?.call(pdf.document.pdfPageList.pages.length);
     return pdf.save();
   }
 
@@ -226,10 +229,10 @@ class PdfSelfListApi<T extends PrintLocalSetting>
         .toList()
         .indexOf(field);
     if (index != -1) {
-      material.debugPrint("checkToSort field => $field  indexOf =$index");
+      // material.debugPrint("checkToSort field => $field  indexOf =$index");
       data.sort((a, b) => compareDynamic(ascending, a[index], b[index]));
     } else {
-      material.debugPrint("checkToSort field => $field  indexOf =$index");
+      // material.debugPrint("checkToSort field => $field  indexOf =$index");
     }
   }
 
@@ -455,7 +458,7 @@ class PdfSelfListApi<T extends PrintLocalSetting>
         //     ? TableBorder.only(width: 2, color: PdfColors.black)
         //     : null,
         cellDecoration: (index, data, rowNum) {
-          mt.debugPrint("cellDecoration rownum $rowNum index= $index");
+          // mt.debugPrint("cellDecoration rownum $rowNum index= $index");
           return const BoxDecoration(
               color: PdfColors.white,
               border: Border(

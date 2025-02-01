@@ -344,12 +344,13 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   Future<bool> directPrint(
       {required BuildContext context,
       required FutureOr<Uint8List> Function(pdf.PdfPageFormat) onLayout,
-      required pdf.PdfPageFormat format}) async {
+      required pdf.PdfPageFormat format,
+      Printer? printer}) async {
     PrinterDefaultSetting? p =
         await Configurations.get(PrinterDefaultSetting());
     if (p != null) {
       debugPrint("directPrint getting saved value => $p");
-      Printer? result =
+      Printer? result = printer ??
           await Printing.listPrinters().then((pr) => pr.firstWhereOrNull(
                 (p0) =>
                     p0.name ==
@@ -360,7 +361,10 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       debugPrint("directPrint result printer $result");
       if (result != null) {
         return await Printing.directPrintPdf(
-            printer: result, onLayout: onLayout, format: format);
+            forceCustomPrintPaper: true,
+            printer: result,
+            onLayout: onLayout,
+            format: format);
       }
     }
     return false;
@@ -427,7 +431,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
           type: type,
           iD: iD,
           tableName: getTableNameApi(),
-          extras: this,
+          // extras: this,
         ),
       );
       return;

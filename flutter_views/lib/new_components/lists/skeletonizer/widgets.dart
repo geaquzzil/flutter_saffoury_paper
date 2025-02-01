@@ -1,6 +1,9 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/skeleton.dart';
+
 import 'shimmer.dart';
 import 'stylings.dart';
 
@@ -19,6 +22,37 @@ class SkeletonItem extends StatelessWidget {
     }
 
     return child;
+  }
+}
+
+class SkeletonPage extends StatelessWidget {
+  const SkeletonPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SkeletonItem(
+      child: Padding(
+        padding: EdgeInsets.all(kDefaultPadding),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Container(
+              width: constraints.maxWidth,
+              height: constraints.maxHeight,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceDim,
+                // color: null,
+                border: Border.all(
+                    width: 2, color: Theme.of(context).highlightColor),
+                // borderRadius: getBorderRedius()
+                // shape: style.shape,
+                // borderRadius:
+                //     style.shape != BoxShape.circle ? style.borderRadius : null,
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }
 

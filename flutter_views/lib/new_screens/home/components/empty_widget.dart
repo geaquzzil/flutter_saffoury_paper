@@ -87,8 +87,8 @@ class EmptyWidget extends StatelessWidget {
     this.lottieJson,
   })  : subtitle = AppLocalizations.of(context)!.noItems,
         title = AppLocalizations.of(context)!.no_content;
-
-          EmptyWidget.emptyPage(
+  
+  EmptyWidget.emptyPage(
     BuildContext context, {
     super.key,
     this.lottiUrl =

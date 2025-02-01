@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
@@ -51,6 +52,8 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
   @Deprecated("Use glbal key")
   ValueNotifier<ListToDetailsSecoundPaneHelper?>? onSelectedItem;
 
+  final ValueNotifier<SecondPaneHelper?>? secondPaneHelper;
+
   bool? isSelected;
   Function(T object)? onClick;
 
@@ -59,6 +62,7 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
     this.listState,
     this.onSelectedItem,
     this.onClick,
+    this.secondPaneHelper,
     this.state,
     this.isSelected,
     required this.object,
@@ -150,7 +154,7 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
         title: (object.getMainHeaderText(context)),
         subtitle: (object.getMainSubtitleHeaderText(context)),
         // isThreeLine: hasThreeLine,
-        leading: object.getCardLeading(context),
-        trailing: object.getCardTrailing(context));
+        leading: object.getCardLeading(context,),
+        trailing: object.getCardTrailing(context,secPaneHelper:secondPaneHelper));
   }
 }

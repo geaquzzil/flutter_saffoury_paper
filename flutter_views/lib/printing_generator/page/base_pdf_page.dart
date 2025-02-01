@@ -9,8 +9,6 @@ import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../configrations.dart';
-
 abstract class BasePdfPage extends StatefulWidget {
   const BasePdfPage({super.key});
 }
@@ -148,6 +146,61 @@ class PrintSettingLargeScreenProvider with ChangeNotifier {
   bool _floatActionIsExpanded = false;
 
   PdfPageFormat _selectedFormat = PdfPageFormat.a4;
+
+  int get hasho {
+    return Object.hash(
+      fromPage,
+      toPage,
+      _length,
+    );
+  }
+
+  int? fromPage;
+  int? toPage;
+
+  int? _length;
+
+  void init(int length) {
+    if (length == -1) {
+      _length = null;
+      fromPage = null;
+      toPage = null;
+      return;
+    }
+    _length = length;
+    fromPage = 0;
+    toPage = _length;
+  }
+
+  List<int> generateListOfPage() {
+    debugPrint("generateListOfPage from $fromPage to $toPage");
+    if (fromPage == toPage) {
+      return [fromPage!];
+    }
+    List<int> l = [];
+    for (var i = fromPage!; i < toPage!; i++) {
+      l.add(i);
+    }
+    debugPrint("generateListOfPage $l");
+    return l;
+  }
+
+  void setFromToPage({int? from, int? to}) {
+    if (from != null) {
+      fromPage = from;
+    }
+    if (to != null) {
+      toPage = to;
+    }
+    notifyListeners();
+  }
+//   List<int>? getPages(){
+//     if(fromPage==null) || toPage==null){
+//       return
+//     }
+//   }
+
+  // set setPages(List<int>? value) => _pages = value;
 
   set setSelectedFormat(PdfPageFormat selectedFormat) {
     _selectedFormat = selectedFormat;

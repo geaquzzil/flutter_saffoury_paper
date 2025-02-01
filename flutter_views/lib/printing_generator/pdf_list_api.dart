@@ -17,11 +17,28 @@ import '../interfaces/printable/printable_invoice_interface.dart';
 import '../interfaces/printable/printable_master.dart';
 import '../models/prints/print_local_setting.dart';
 
+class PageRange {
+  int from;
+  int to;
+  PageRange({
+    required this.from,
+    required this.to,
+  });
+}
+
 class PDFListApi<T extends PrintLocalSetting> {
   List<PrintableMaster<T>> list;
   material.BuildContext context;
   T? setting;
-  PDFListApi({required this.list, required this.context, this.setting});
+  PageRange? pageRange;
+
+  ///TODO we should update the header when setting is changed;
+  Widget? header;
+  PDFListApi(
+      {required this.list,
+      required this.context,
+      this.setting,
+      this.pageRange});
   Future<ThemeData> getThemeData() async {
     var pathToFile = await rootBundle.load("assets/fonts/materialIcons.ttf");
     final ttf = Font.ttf(pathToFile);
@@ -34,8 +51,9 @@ class PDFListApi<T extends PrintLocalSetting> {
     );
   }
 
-  Future<Uint8List> generate(PdfPageFormat? format) async {
-    material.debugPrint("generate listApi");
+  Future<Uint8List> generate(PdfPageFormat? format,
+      {PageRange? pageRange}) async {
+    material.debugPrint("generate listApi $format");
     final pdf = Document(
         title:
             "${(list[0] as ViewAbstract).getMainHeaderLabelTextOnly(context)} ${AppLocalizations.of(context)!.list}",
@@ -45,8 +63,17 @@ class PDFListApi<T extends PrintLocalSetting> {
         pageMode: PdfPageMode.fullscreen,
         theme: await getThemeData());
 
-    Widget? header;
-    await Future.forEach<PrintableMaster<T>>(list, (obj) async {
+    List<PrintableMaster<T>> l;
+    if (pageRange != null) {
+      material.debugPrint(
+          "generateListOfPage printable List from = ${pageRange.from} to = ${pageRange.to}");
+      l = [...list.sublist(pageRange.from, pageRange.to)];
+    } else {
+      l = [...list];
+    }
+    material.debugPrint("PDFListApi ${l.length} ");
+
+    await Future.forEach<PrintableMaster<T>>(l, (obj) async {
       if (obj is PrintableInvoiceInterface) {
         final itemPdf = PdfInvoiceApi<PrintableInvoiceInterface, T>(
             context, obj as PrintableInvoiceInterface,

@@ -1,15 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:flutter/material.dart' as material;
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:pdf/pdf.dart';
-import 'package:flutter/material.dart' as material;
-import 'package:pdf/widgets.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
-import 'package:flutter/services.dart' show rootBundle;
+
 import '../models/prints/print_local_setting.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class PrintMasterPDF<T extends PrintableMasterEmpty,
     E extends PrintLocalSetting> extends PrintMasterPDFUtils<E> {
@@ -167,8 +168,8 @@ class PrintMasterPDFUtils<T extends PrintLocalSetting> {
   }
 
   int compareDynamic(bool ascending, dynamic value1, dynamic value2) {
-    material.debugPrint(
-        "checkToSort compareDynamic value1 => ${value1.toString()} , value2 => $value2");
+    // material.debugPrint(
+    // "checkToSort compareDynamic value1 => ${value1.toString()} , value2 => $value2");
     if (value1 == null) {
       return 0;
     }

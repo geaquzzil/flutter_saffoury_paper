@@ -11,6 +11,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:palette_generator/palette_generator.dart';
 
@@ -261,21 +262,24 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     }
   }
 
-  Widget? getCardTrailing(BuildContext context) {
+  Widget? getCardTrailing(BuildContext context,
+      {ValueNotifier<SecondPaneHelper?>? secPaneHelper}) {
     ViewAbstract viewAbstract = this as ViewAbstract;
     Widget? iconOnButton = generateCardLeadingBottomIcon(context);
+    debugPrint("getCardTrailing sec ${secPaneHelper == null}");
 
     if (isDesktopPlatform()) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (iconOnButton != null) (iconOnButton),
-          viewAbstract.getFBIcon() ??
-              viewAbstract.getPopupMenuActionWidget(context, ServerActions.list)
+          viewAbstract.getFBIcon(secPaneHelper: secPaneHelper) ??
+              viewAbstract.getPopupMenuActionWidget(context, ServerActions.list,
+                  secPaneHelper: secPaneHelper)
         ],
       );
     }
-    return viewAbstract.getFBIcon();
+    return viewAbstract.getFBIcon(secPaneHelper: secPaneHelper);
   }
 
   bool hasImageLoadButton() {

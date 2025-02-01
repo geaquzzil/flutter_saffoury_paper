@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
+import 'package:flutter_view_controller/new_components/lists/skeletonizer/stylings.dart';
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
@@ -34,6 +35,7 @@ import 'package:input_quantity/input_quantity.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 import 'package:tuple/tuple.dart';
 
 class PrintNew<T extends PrintLocalSetting> extends BasePageApi {
@@ -59,19 +61,48 @@ class PrintNew<T extends PrintLocalSetting> extends BasePageApi {
   State<PrintNew> createState() => _PrintNewState();
 }
 
+class LoadedPrint {
+  String viewAbstract;
+  String setting;
+  PdfPageFormat format;
+  LoadedPrint(
+      {required this.viewAbstract,
+      required this.setting,
+      required this.format});
+  @override
+  bool operator ==(Object other) {
+    return other is LoadedPrint &&
+        other.setting == setting &&
+        other.viewAbstract == viewAbstract &&
+        other.format == format;
+  }
+
+  @override
+  String toString() {
+    return "LoadedPrint $viewAbstract\n$setting\n$format";
+  }
+
+  @override
+  int get hashCode => Object.hash(setting, viewAbstract, format);
+}
+
 class _PrintNewState extends BasePageWithApi<PrintNew>
     with BasePageSecoundPaneNotifierState<PrintNew> {
   late Future<Uint8List> loadedFile;
-  late Uint8List loadedFileBytes;
+  Uint8List? loadedFileBytes;
   late PrintSettingLargeScreenProvider printSettingListener;
   late List<Printer> localPrinters;
+  LoadedPrint? _lastLoaded;
+  List<Printer>? _loadedPrinters;
+
   Printer? defaultPrinter;
+
   Widget getPrintShareFloating(BuildContext context) {
     return FloatingActionButton.small(
         heroTag: UniqueKey(),
         child: const Icon(Icons.share),
         onPressed: () async {
-          await Printing.sharePdf(bytes: loadedFileBytes);
+          await Printing.sharePdf(bytes: loadedFileBytes!);
         });
   }
 
@@ -81,12 +112,12 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
         child: const Icon(Icons.print),
         onPressed: () async {
           if (await getExtrasCast().directPrint(
-                  format: context
-                      .read<PrintSettingLargeScreenProvider>()
-                      .getSelectedFormat,
-                  context: context,
-                  onLayout: (PdfPageFormat format) async => loadedFile) ==
-              false) {
+              format: context
+                  .read<PrintSettingLargeScreenProvider>()
+                  .getSelectedFormat,
+              context: context,
+              printer: defaultPrinter,
+              onLayout: (PdfPageFormat format) async => loadedFile)) {
             await Printing.layoutPdf(
                 onLayout: (PdfPageFormat format) async => loadedFile);
           }
@@ -238,8 +269,21 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
   void initState() {
     printSettingListener =
         Provider.of<PrintSettingLargeScreenProvider>(context, listen: false);
-
+    if (hasFromTo()) {
+      printSettingListener.init(widget.asList!.length);
+    }
+    // printSettingListener.addListener(() => debugPrint("isChanggggg"));
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant PrintNew<PrintLocalSetting> oldWidget) {
+    if (hasFromTo()) {
+      printSettingListener.init(widget.asList!.length);
+    } else {
+      printSettingListener.init(-1);
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -388,62 +432,123 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
   }
 
   bool hasFromTo() {
-    return widget.type != PrintPageType.single;
+    return widget.type == PrintPageType.list;
+  }
+
+  bool hasFromToSelfList() {
+    return widget.type == PrintPageType.self_list;
   }
 
   int getMinPage() {
-    return 0;
+    return 1;
   }
 
   int getMaxPage() {
     return widget.asList!.length;
   }
 
+  PageRange? getPageRange() {
+    int? from = printSettingListener.fromPage;
+    int? to = printSettingListener.toPage;
+    if (from != null && to != null) {
+      return PageRange(from: from, to: to - 1);
+    }
+    return null;
+  }
+
+  LoadedPrint? shouldSkipLoad(
+      {required PdfPageFormat format,
+      required String setting,
+      required String viewAbstract}) {
+    LoadedPrint newPrint = LoadedPrint(
+        format: format, setting: setting, viewAbstract: viewAbstract);
+    if (newPrint == _lastLoaded) {
+      return _lastLoaded;
+    } else {
+      return null;
+    }
+  }
+
   Widget getPdfPreview(PdfPageFormat fomat) {
     return PdfPreview(
-        // pages: const [0, 1],///TODO
+        // shouldRepaint: true,
+        // key: UniqueKey(),
+        // pages: hasFromTo() ? printSettingListener.generateListOfPage() : null,
         pdfFileName: getExtras()!.getPrintableQrCodeID(),
-        shareActionExtraEmails: const ["info@saffoury.com"],
+        shareActionExtraEmails: const [
+          "info@saffoury.com"
+        ], //TODO should rename
         maxPageWidth: getWidth,
         initialPageFormat: fomat,
+        canChangePageFormat: true,
         canDebug: false,
         scrollViewDecoration:
             BoxDecoration(color: Theme.of(context).colorScheme.surface),
         dynamicLayout: true,
-        loadingWidget: const CircularProgressIndicator(),
+        loadingWidget: SkeletonPage(
+            // style: SkeletonParagraphStyle(lines: 1),
+            ),
         useActions: false,
+        shareActionExtraBody: "Share",
         onError: (context, error) {
-          return EmptyWidget(
-              lottiUrl:
-                  "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-              onSubtitleClicked: () {
-                setState(() {});
-              },
-              title: AppLocalizations.of(context)!.cantConnect,
-              subtitle: error.toString());
+          getConnectionState.value = ConnectionStateExtension.error;
+          return EmptyWidget.error(
+            context,
+            onSubtitleClicked: () => setState(() {}),
+          );
         },
         // shouldRepaint: ,
         build: (format) async {
+          debugPrint("dsada $fomat");
           dynamic setting = await getSettingFuture();
           if (widget.type == PrintPageType.list) {
-            loadedFileBytes = await PDFListApi<PrintLocalSetting>(
+            if (loadedFileBytes != null) {
+              LoadedPrint? c = shouldSkipLoad(
+                  format: fomat,
+                  setting: setting.toString(),
+                  viewAbstract: widget.asList!.toString());
+              if (c != null) {
+                debugPrint("dsada LoadedPrint isLoadedBefore");
+                getConnectionState.value = ConnectionStateExtension.done;
+                return loadedFileBytes!;
+              }
+              debugPrint("dsada LoadedPrint  is not !!!!!!!isLoadedBefore");
+            }
+
+            loadedFile = PDFListApi<PrintLocalSetting>(
                     list: widget.asList!.cast(),
                     context: context,
                     setting: setting)
-                .generate(format);
-            return loadedFileBytes;
+                .generate(fomat, pageRange: getPageRange());
+
+            loadedFileBytes = await loadedFile;
+            getConnectionState.value = ConnectionStateExtension.done;
+            _lastLoaded = LoadedPrint(
+                format: format,
+                setting: setting.toString(),
+                viewAbstract: widget.asList!.toString());
+
+            return loadedFileBytes!;
           } else if (widget.type == PrintPageType.self_list) {
             // PrintLocalSetting? setting = await getSetting();
-            loadedFileBytes = await PdfSelfListApi<PrintLocalSetting>(
+            loadedFile = PdfSelfListApi<PrintLocalSetting>(
                     widget.asList!.cast(), context, getExtras(),
                     printCommand: setting)
-                .generate(format);
-            return loadedFileBytes;
+                .generate(fomat, pagesAdded: (pagesAddedCount) {
+              printSettingListener.init(pagesAddedCount);
+            }, pageRange: getPageRange());
+
+            loadedFileBytes = await loadedFile;
+
+            getConnectionState.value = ConnectionStateExtension.done;
+            return loadedFileBytes!;
           } else {
             loadedFile = getExcelFileUinit(context, getExtras()!, fomat,
                 hasCustomSetting: setting as PrintLocalSetting);
             loadedFileBytes = await loadedFile;
-            return loadedFileBytes;
+
+            getConnectionState.value = ConnectionStateExtension.done;
+            return loadedFileBytes!;
           }
         });
   }
@@ -523,13 +628,14 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
   Widget getPdfPreviewWidget() {
     return SliverFillRemaining(
       child: Selector<PrintSettingLargeScreenProvider,
-          Tuple2<ViewAbstract?, PdfPageFormat>>(
+          Tuple3<ViewAbstract?, PdfPageFormat, int>>(
         builder: (_, provider, __) {
-          debugPrint("BasePdfPageConsumer Selector =>  getPdfPageConsumer");
+          debugPrint(
+              "BasePdfPageConsumer Selector =>  getPdfPageConsumer format ${provider.item2}");
           return getPdfPreview(provider.item2);
         },
-        selector: (ctx, provider) =>
-            Tuple2(provider.getViewAbstract, provider.getSelectedFormat),
+        selector: (ctx, provider) => Tuple3(provider.getViewAbstract,
+            provider.getSelectedFormat, provider.hasho),
       ),
     );
   }
@@ -591,6 +697,18 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
   }
 
   @override
+  ConnectionStateExtension? overrideConnectionState(
+      BasePageWithApiConnection type) {
+    // if (type == BasePageWithApiConnection.build) {
+    if (_lastLoaded != null) {
+      return ConnectionStateExtension.done;
+    }
+    return ConnectionStateExtension.waiting;
+    // }
+    return super.overrideConnectionState(type);
+  }
+
+  @override
   List<Widget>? getPaneNotifier(
       {required bool firstPane,
       ScrollController? controler,
@@ -601,173 +719,252 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
     if (isLargeScreenFromScreenSize(getCurrentScreenSize())) {
       if (firstPane) {
         return [
-          SliverToBoxAdapter(
-              child: ListTile(
-                  leading: Text(getAppLocal(context)?.copies ?? ""),
-                  title: InputQty(
-                    qtyFormProps: getQtyFormProps(context),
-                    decoration: getQtyPlusDecoration(context),
-                    maxVal: 50,
-                    initVal: 1,
-                    minVal: 1,
-                    steps: 1,
-                    onQtyChanged: (val) {
-                      debugPrint(val);
-                    },
-                  ))),
-          SliverToBoxAdapter(
-            child: FutureBuilder<List<Printer>>(
-                future: Printing.listPrinters(),
-                builder: (context, as) {
-                  if (as.connectionState == ConnectionState.waiting ||
-                      as.data == null) {
-                    return SkeletonListTile();
-                  }
-                  defaultPrinter =
-                      defaultPrinter ?? getDefaultPrinter(as.data!);
-                  return ListTileSameSizeOnTitle(
-                    leading: Text(getAppLocal(context)?.printerName ?? ""),
-                    title: DropdownStringListControllerListener(
-                      initialValue: defaultPrinter == null
-                          ? null
-                          : DropdownStringListItem(
-                              label: defaultPrinter!.name,
-                              value: defaultPrinter),
-                      insetFirstIsSelect: false,
-                      onSelected: (object) {
-                        defaultPrinter = object?.value as Printer;
-                      },
-                      hint: "Hist",
-                      list: as.data
-                              ?.map((e) => DropdownStringListItem(
-                                  value: e, label: e.name))
-                              .toList() ??
-                          [],
-                      tag: 'dsa',
-                    ),
-                  );
-                }),
-          ),
-          SliverToBoxAdapter(
-            child: Row(
-              children: [
-                Expanded(
-                  child: ListTileSameSizeOnTitle(
-                    leading: Text(getAppLocal(context)?.startEndPage ?? ""),
-                    title: InputQty(
-                      qtyFormProps: getQtyFormProps(context),
-                      decoration: getQtyPlusDecoration(context),
-                      maxVal: 50,
-                      initVal: 0,
-                      minVal: 0,
-                      steps: 1,
-                      onQtyChanged: (val) {
-                        debugPrint(val);
-                      },
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: ListTileSameSizeOnTitle(
-                    leading: Text(getAppLocal(context)?.to ?? ""),
-                    title: InputQty(
-                      qtyFormProps: getQtyFormProps(context),
-                      decoration: getQtyPlusDecoration(context),
-                      maxVal: 50,
-                      initVal: 0,
-                      minVal: 0,
-                      steps: 1,
-                      onQtyChanged: (val) {
-                        debugPrint(val);
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: ListTileSameSizeOnTitle(
-              leading: Text(getAppLocal(context)?.ok ?? ""),
-              title: DropdownStringListControllerListener(
-                insetFirstIsSelect: false,
-                tag: "printOptions",
-                onSelected: (object) {
-                  if (object != null) {
-                    PdfPageFormat chosedPageFormat;
-                    if (object.label ==
-                        AppLocalizations.of(context)!.a3ProductLabel) {
-                      chosedPageFormat = PdfPageFormat.a3;
-                    } else if (object.label ==
-                        AppLocalizations.of(context)!.a4ProductLabel) {
-                      chosedPageFormat = PdfPageFormat.a4;
-                    } else if (object.label ==
-                        AppLocalizations.of(context)!.a5ProductLabel) {
-                      chosedPageFormat = PdfPageFormat.a5;
-                    } else {
-                      //todo translate
-                      if (supportsLabelPrinting()) {
-                        chosedPageFormat = roll80;
-                      } else {
-                        chosedPageFormat = PdfPageFormat.a4;
-                      }
-                    }
-                    if (chosedPageFormat ==
-                        printSettingListener.getSelectedFormat) return;
-                    notifyNewSelectedFormat(context, chosedPageFormat);
-                  }
-                },
-                //todo translate
-                hint: "Select size",
-                list: [
-                  if (supportsLabelPrinting())
-                    DropdownStringListItem(
-                        icon: null,
-                        //todo translate
-                        label: AppLocalizations.of(context)!.productLabel),
-                  DropdownStringListItem(
-                      icon: null,
-                      label: AppLocalizations.of(context)!.a3ProductLabel),
-                  DropdownStringListItem(
-                      icon: null,
-                      label: AppLocalizations.of(context)!.a4ProductLabel),
-                  DropdownStringListItem(
-                      icon: null,
-                      label: AppLocalizations.of(context)!.a5ProductLabel),
+          ValueListenableBuilder(
+            valueListenable: getConnectionState,
+            builder: (context, value, child) {
+              return MultiSliver(
+                children: [
+                  if (value == ConnectionStateExtension.error)
+                    EmptyWidget.error(context)
+                  else if (value != ConnectionStateExtension.done)
+                    SliverToBoxAdapter(
+                      child: SkeletonParagraph(
+                        style: SkeletonParagraphStyle(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: kDefaultPadding / 2,
+                                vertical: kDefaultPadding),
+                            lineStyle: SkeletonLineStyle(
+                                randomLength: true,
+                                maxLength: firstPaneWidth,
+                                minLength: firstPaneWidth * .7),
+                            lines: 10,
+                            spacing: kDefaultPadding),
+                      ),
+                    )
+                  else
+                    ..._getFirstPaneLargeScreen()
                 ],
-              ),
-            ),
+              );
+            },
           ),
-          SliverFillRemaining(
-            child: FutureBuilder(
-              future: getSettingFuture(),
-              builder: (c, a) {
-                if (a.data == null) {
-                  return EmptyWidget.loading();
-                }
-                return BaseEditWidget(
-                  isTheFirst: true,
-                  viewAbstract: a.data as ViewAbstract,
-                  onValidate: (viewAbstract) {
-                    if (viewAbstract != null) {
-                      debugPrint(
-                          "BasePdfPageConsumer newViewAbstract $viewAbstract");
-                      // notifyNewViewAbstract(viewAbstract.getCopyInstance());
-                      Configurations.saveViewAbstract(viewAbstract);
-                      printSettingListener.setViewAbstract = viewAbstract;
-                      // context.pop();
-                    }
-                  },
-                );
-              },
-            ),
-          )
         ];
       } else {
-        return [];
+        return [getPdfPreviewWidget()];
       }
     }
     return [getPdfPreviewWidget()];
+  }
+
+  List<Widget> _getFirstPaneLargeScreen() {
+    return [
+      SliverToBoxAdapter(
+          child: ListTile(
+              leading: Text(getAppLocal(context)?.copies ?? ""),
+              title: InputQty(
+                qtyFormProps: getQtyFormProps(context),
+                decoration: getQtyPlusDecoration(context),
+                maxVal: 50,
+                initVal: 1,
+                minVal: 1,
+                steps: 1,
+                onQtyChanged: (val) {
+                  // debugPrint(val);
+                },
+              ))),
+      SliverToBoxAdapter(
+        child: getPrintersWidget(),
+      ),
+      if (hasFromTo())
+        SliverToBoxAdapter(
+          child: Row(
+            children: [
+              Expanded(
+                child: ListTileSameSizeOnTitle(
+                  leading: Text(getAppLocal(context)?.startEndPage ?? ""),
+                  title: InputQty(
+                    validator: (value) {
+                      if (value == null) {
+                        return "";
+                      }
+
+                      num s = 2;
+                      debugPrint(
+                          "compareToValues ${s.compareIsBetweenTowValues(1, 3)}");
+
+                      return value.toNonNullable() <=
+                              printSettingListener.toPage.toNonNullable()
+                          ? null
+                          : "";
+                    },
+                    qtyFormProps: getQtyFormProps(context),
+                    decoration: getQtyPlusDecoration(context),
+                    maxVal: getMaxPage(),
+                    initVal: printSettingListener.fromPage.toNonNullable() == 0
+                        ? 1
+                        : printSettingListener.fromPage.toNonNullable(),
+                    minVal: getMinPage(),
+                    steps: 1,
+                    onQtyChanged: (val) {
+                      debugPrint("BBBB ${val.toInt()}");
+                      printSettingListener.setFromToPage(from: val.toInt() - 1);
+                    },
+                  ),
+                ),
+              ),
+              Expanded(
+                child: ListTileSameSizeOnTitle(
+                  leading: Text(getAppLocal(context)?.to ?? ""),
+                  title: InputQty(
+                    validator: (value) {
+                      if (value == null) {
+                        return "";
+                      }
+
+                      return value.toNonNullable() >=
+                              printSettingListener.fromPage.toNonNullable()
+                          ? null
+                          : "";
+                    },
+                    qtyFormProps: getQtyFormProps(context),
+                    decoration: getQtyPlusDecoration(context),
+                    maxVal: getMaxPage(),
+                    initVal: printSettingListener.toPage.toNonNullable(),
+                    minVal: getMinPage(),
+                    steps: 1,
+                    onQtyChanged: (val) {
+                      debugPrint("BBBB ${val.toInt()}");
+                      printSettingListener.setFromToPage(to: val.toInt());
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      SliverToBoxAdapter(
+        child: ListTileSameSizeOnTitle(
+          leading: Text(getAppLocal(context)?.ok ?? ""),
+          title: DropdownStringListControllerListener(
+            initialValue: DropdownStringListItem(
+                label:
+                    getLabelFromPDF(_lastLoaded?.format ?? PdfPageFormat.a4)),
+            insetFirstIsSelect: false,
+            tag: "printOptions",
+            onSelected: (object) {
+              if (object != null) {
+                PdfPageFormat chosedPageFormat;
+                if (object.label ==
+                    AppLocalizations.of(context)!.a3ProductLabel) {
+                  chosedPageFormat = PdfPageFormat.a3;
+                } else if (object.label ==
+                    AppLocalizations.of(context)!.a4ProductLabel) {
+                  chosedPageFormat = PdfPageFormat.a4;
+                } else if (object.label ==
+                    AppLocalizations.of(context)!.a5ProductLabel) {
+                  chosedPageFormat = PdfPageFormat.a5;
+                } else {
+                  //todo translate
+                  if (supportsLabelPrinting()) {
+                    chosedPageFormat = roll80;
+                  } else {
+                    chosedPageFormat = PdfPageFormat.a4;
+                  }
+                }
+                if (chosedPageFormat == printSettingListener.getSelectedFormat)
+                  return;
+                notifyNewSelectedFormat(context, chosedPageFormat);
+              }
+            },
+            //todo translate
+            hint: "Select size",
+            list: [
+              if (supportsLabelPrinting())
+                DropdownStringListItem(
+                    icon: null,
+                    //todo translate
+                    label: AppLocalizations.of(context)!.productLabel),
+              DropdownStringListItem(
+                  icon: null,
+                  label: AppLocalizations.of(context)!.a3ProductLabel),
+              DropdownStringListItem(
+                  icon: null,
+                  label: AppLocalizations.of(context)!.a4ProductLabel),
+              DropdownStringListItem(
+                  icon: null,
+                  label: AppLocalizations.of(context)!.a5ProductLabel),
+            ],
+          ),
+        ),
+      ),
+      SliverFillRemaining(
+        child: FutureBuilder(
+          future: getSettingFuture(),
+          builder: (c, a) {
+            if (a.data == null) {
+              return EmptyWidget.loading();
+            }
+            return BaseEditWidget(
+              isTheFirst: true,
+              viewAbstract: a.data as ViewAbstract,
+              onValidate: (viewAbstract) async {
+                if (viewAbstract != null) {
+                  debugPrint(
+                      "BasePdfPageConsumer newViewAbstract $viewAbstract");
+                  // notifyNewViewAbstract(viewAbstract.getCopyInstance());
+                  await Configurations.saveViewAbstract(viewAbstract);
+                  printSettingListener.setViewAbstract = viewAbstract;
+                  // context.pop();
+                }
+              },
+            );
+          },
+        ),
+      )
+    ];
+  }
+
+  //TODO seperate to standalone widget
+  Widget getPrintersWidget() {
+    if (_loadedPrinters != null) {
+      return getPrintersWidgetController(context, _loadedPrinters);
+    }
+    return FutureBuilder<List<Printer>>(
+        future: Printing.listPrinters(),
+        builder: (context, as) {
+          if (as.connectionState == ConnectionState.waiting ||
+              as.data == null) {
+            return SkeletonListTile(
+              hasLeading: false,
+            );
+          }
+
+          _loadedPrinters = as.data!;
+          defaultPrinter = defaultPrinter ?? getDefaultPrinter(as.data!);
+          return getPrintersWidgetController(context, as.data);
+        });
+  }
+
+  ListTileSameSizeOnTitle getPrintersWidgetController(
+      BuildContext context, List<Printer>? as) {
+    return ListTileSameSizeOnTitle(
+      leading: Text(getAppLocal(context)?.printerName ?? ""),
+      title: DropdownStringListControllerListener(
+        initialValue: defaultPrinter == null
+            ? null
+            : DropdownStringListItem(
+                label: defaultPrinter!.name, value: defaultPrinter),
+        insetFirstIsSelect: false,
+        onSelected: (object) {
+          defaultPrinter = object?.value as Printer;
+        },
+        hint: "Hist",
+        list: as
+                ?.map((e) => DropdownStringListItem(value: e, label: e.name))
+                .toList() ??
+            [],
+        tag: 'dsa',
+      ),
+    );
   }
 
   Printer? getDefaultPrinter(List<Printer> printers) {
@@ -781,5 +978,17 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
 
   Future<void> setPrinters() async {
     localPrinters = await Printing.listPrinters();
+  }
+
+  String getLabelFromPDF(PdfPageFormat format) {
+    if (format == PdfPageFormat.a4) {
+      return AppLocalizations.of(context)!.a4ProductLabel;
+    } else if (format == PdfPageFormat.a3) {
+      return AppLocalizations.of(context)!.a3ProductLabel;
+    } else if (format == PdfPageFormat.a5) {
+      return AppLocalizations.of(context)!.a5ProductLabel;
+    } else {
+      return AppLocalizations.of(context)!.productLabel;
+    }
   }
 }

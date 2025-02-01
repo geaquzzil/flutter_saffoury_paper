@@ -339,22 +339,31 @@ InputDecorationTheme getTextFieldTheme(BuildContext context) {
 
 getQtyPlusDecoration(BuildContext context) {
   return QtyDecorationProps(
+    
       contentPadding: EdgeInsets.all(kDefaultPadding * .75),
       border: getThemeBorder(isLargeScreen(context)),
+      errorBorder: getErrorBorder(context, isLargeScreen(context)),
+      
       fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
       // border: getMainTheme(context),
       isDense: isLargeScreen(context),
       plusBtn: MouseRegion(
           cursor: SystemMouseCursors.click,
-          child: Icon(
-            Icons.add,
-            color: Theme.of(context).colorScheme.tertiary,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(
+              Icons.add,
+              color: Theme.of(context).colorScheme.tertiary,
+            ),
           )),
       minusBtn: MouseRegion(
         cursor: SystemMouseCursors.click,
-        child: Icon(
-          Icons.remove,
-          color: Theme.of(context).colorScheme.error,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Icon(
+            Icons.remove,
+            color: Theme.of(context).colorScheme.error,
+          ),
         ),
       ));
 }
@@ -362,15 +371,34 @@ getQtyPlusDecoration(BuildContext context) {
 getQtyFormProps(BuildContext context) {
   return QtyFormProps(
     style: Theme.of(context).textTheme.titleSmall,
+    
+
   );
 }
 
-OutlineInputBorder getThemeBorder(bool isLargeOrDesktop) {
-  return OutlineInputBorder(
+OutlineInputBorder getThemeBorder(bool isLargeOrDesktop,
+    {Color? customColor, bool isErrorBuilder = false}) {
+  var outlineInputBorder = OutlineInputBorder(
       gapPadding: isLargeOrDesktop ? 0 : 4,
-      borderSide: isLargeOrDesktop ? BorderSide.none : const BorderSide(),
+      borderSide: getBorderSide(isLargeOrDesktop,
+          customColor: customColor, isErrorBuilder: isErrorBuilder),
       borderRadius: BorderRadius.all(
           Radius.circular(isLargeOrDesktop ? kBorderRadius : 4)));
+  return outlineInputBorder;
+}
+
+BorderSide getBorderSide(bool isLargeOrDesktop,
+    {Color? customColor, bool isErrorBuilder = false}) {
+  return isLargeOrDesktop && !isErrorBuilder
+      ? BorderSide.none
+      : BorderSide(color: customColor ?? Color(0xFF000000));
+}
+
+OutlineInputBorder getErrorBorder(BuildContext context, bool isLargeOrDesktop,
+    {Color? customColor}) {
+  return getThemeBorder(isLargeOrDesktop,
+      customColor: customColor ?? Theme.of(context).colorScheme.error,
+      isErrorBuilder: true);
 }
 
 OutlineInputBorder _getFocusBorder(

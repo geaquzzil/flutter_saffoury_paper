@@ -1,4 +1,7 @@
 import 'dart:typed_data';
+
+import 'package:flutter/material.dart' as material;
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_bill_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
@@ -9,9 +12,7 @@ import 'package:flutter_view_controller/printing_generator/print_master.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
-import 'package:flutter/material.dart' as material;
-import 'package:flutter/material.dart' as mt;
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
 import '../models/prints/print_local_setting.dart';
 
 class PdfDashnoardApi<T extends PrintableDashboardInterface,
@@ -89,10 +90,10 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
     bool ascending = setting!.getPrintableHasSortBy() == SortByType.ASC;
     int index = headers.indexOf(field);
     if (index != -1) {
-      material.debugPrint("checkToSort field => $field  indexOf =$index");
+      // material.debugPrint("checkToSort field => $field  indexOf =$index");
       data.sort((a, b) => compareDynamic(ascending, a[index], b[index]));
     } else {
-      material.debugPrint("checkToSort field => $field  indexOf =$index");
+      // material.debugPrint("checkToSort field => $field  indexOf =$index");
     }
   }
 
@@ -233,7 +234,7 @@ class PdfDashnoardApi<T extends PrintableDashboardInterface,
                 data: list,
                 border: null,
                 cellDecoration: (index, data, rowNum) {
-                  mt.debugPrint("cellDecoration rownum $rowNum index= $index");
+                  // mt.debugPrint("cellDecoration rownum $rowNum index= $index");
                   return const BoxDecoration(
                       color: PdfColors.white,
                       border: Border(

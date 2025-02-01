@@ -60,7 +60,7 @@ dependencies:
   # jsonize: ^1.5.0
   # easy_web_view: ^1.6.0
   flutter_html: ^3.0.0-alpha.5
-  printing: ^5.9.3
+  printing: ^5.14.0
   # flutter_html_to_pdf: ^0.7.0
   # webcontent_converter: ^0.0.7+2
   window_manager: ^0.4.3

@@ -11,6 +11,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
 
@@ -358,20 +359,16 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   Widget getPopupMenuActionWidget(BuildContext c, ServerActions action,
-      {SliverApiWithStaticMixin? state}) {
+      {SliverApiWithStaticMixin? state,
+      ValueNotifier<SecondPaneHelper?>? secPaneHelper}) {
     //TODO for divider use PopupMenuDivider()
     List<MenuItemBuild> items = action == ServerActions.edit
         ? getPopupMenuActionsEdit(c)
         : getPopupMenuActionsList(c);
     return PopupMenuButton<MenuItemBuild>(
-      // elevation: 10,
-      // shape: const RoundedRectangleBorder(
-      //     borderRadius: BorderRadius.all(Radius.circular(10))),
-      onSelected: (MenuItemBuild result) {
-        onPopupMenuActionSelected(c, result, state: state);
-      },
-      itemBuilder: (BuildContext context) =>
-          items.map((r) => buildMenuItem(c, r)).toList(),
+      itemBuilder: (BuildContext context) => items
+          .map((r) => buildMenuItem(c, r, secPaneHelper: secPaneHelper))
+          .toList(),
     );
   }
 
@@ -391,20 +388,26 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   ListTile buildMenuItemListTile(BuildContext context, MenuItemBuild e,
-      {SliverApiWithStaticMixin? state}) {
+      {SliverApiWithStaticMixin? state,
+      ValueNotifier<SecondPaneHelper?>? secPaneHelper}) {
     return ListTile(
       leading: Icon(e.icon),
       title: Text(e.title),
       onTap: () {
         Navigator.of(context).pop();
-        onPopupMenuActionSelected(context, e, state: state);
+        onPopupMenuActionSelected(context, e,
+            state: state, secPaneHelper: secPaneHelper);
       },
     );
   }
 
   PopupMenuItem<MenuItemBuild> buildMenuItem(
-          BuildContext context, MenuItemBuild e) =>
-      PopupMenuItem(value: e, child: buildMenuItemListTile(context, e));
+          BuildContext context, MenuItemBuild e,
+          {ValueNotifier<SecondPaneHelper?>? secPaneHelper}) =>
+      PopupMenuItem(
+          value: e,
+          child:
+              buildMenuItemListTile(context, e, secPaneHelper: secPaneHelper));
 
   void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e,
       {SliverApiWithStaticMixin? state}) {
@@ -412,17 +415,20 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result,
-      {ServerActions? action, SliverApiWithStaticMixin? state}) async {
-    debugPrint("onPopupMenuActionSelected $result");
+      {ServerActions? action,
+      SliverApiWithStaticMixin? state,
+      ValueNotifier<SecondPaneHelper?>? secPaneHelper}) async {
+    debugPrint(
+        "onPopupMenuActionSelected $result secPaneHelper is null ? ${secPaneHelper == null}");
 
     if (result.icon == Icons.share) {
       sharePage(context, action: action);
     } else if (result.icon == Icons.print) {
-      printPage(context);
+      printPage(context, secPaneNotifer: secPaneHelper);
     } else if (result.icon == Icons.edit) {
-      editPage(context);
+      editPage(context, secPaneNotifer: secPaneHelper);
     } else if (result.icon == Icons.view_agenda) {
-      viewPage(context);
+      viewPage(context, secPaneNotifer: secPaneHelper);
     } else if (result.icon == Icons.list) {
       state?.toggleSelectedMood();
     }

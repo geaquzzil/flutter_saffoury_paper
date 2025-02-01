@@ -130,10 +130,10 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
         .toList()
         .indexOf(field);
     if (index != -1) {
-      material.debugPrint("checkToSort field => $field  indexOf =$index");
+      // material.debugPrint("checkToSort field => $field  indexOf =$index");
       data.sort((a, b) => compareDynamic(ascending, a[index], b[index]));
     } else {
-      material.debugPrint("checkToSort field => $field  indexOf =$index");
+      // material.debugPrint("checkToSort field => $field  indexOf =$index");
     }
   }
 
@@ -242,7 +242,7 @@ class PdfInvoiceApi<T extends PrintableInvoiceInterface,
                 data: data,
                 border: null,
                 cellDecoration: (index, data, rowNum) {
-                  mt.debugPrint("cellDecoration rownum $rowNum index= $index");
+                  // mt.debugPrint("cellDecoration rownum $rowNum index= $index");
                   return const BoxDecoration(
                       color: PdfColors.white,
                       border: Border(

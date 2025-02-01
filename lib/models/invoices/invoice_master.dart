@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_saffoury_paper/models/cities/governorates.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
@@ -18,7 +17,6 @@ import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_invoice.dart';
-import 'package:flutter_saffoury_paper/models/prints/printable_product_label_widgets.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
@@ -46,13 +44,15 @@ import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.d
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:number_to_character/number_to_character.dart';
+import 'package:pdf/pdf.dart' as d;
 import 'package:pdf/widgets.dart' as pdf;
 import 'package:provider/provider.dart';
-import 'package:pdf/pdf.dart' as d;
+
 import 'invoice_master_details.dart';
 import 'orders.dart';
 
@@ -937,7 +937,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  Widget? getCardTrailing(BuildContext context) {
+  Widget? getCardTrailing(BuildContext context,
+      {ValueNotifier<SecondPaneHelper?>? secPaneHelper}) {
     // TODO: implement getCardTrailing
     return Text(
       "items: ${getDetailListFromMasterItemsCount()}",

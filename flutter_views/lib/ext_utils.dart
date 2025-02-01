@@ -377,6 +377,14 @@ extension NonNullableDouble1 on double {
 }
 
 extension NonNullableNum on num? {
+  bool compareIsBetweenTowValues(num first, num last) {
+    if (this == null) return false;
+    num curentValue = toNonNullable();
+    bool firstToValue = first <= curentValue;
+    bool valueToLast = curentValue <= last;
+    return firstToValue && valueToLast;
+  }
+
   String toCurrencyFormatWithoutDecimalReturnSpaceIfZero() {
     debugPrint("toCurrencyFormatWithoutDecimalReturnSpace $this");
     if (this == null) return "";

@@ -1980,8 +1980,44 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   }
 }
 
+enum ConnectionStateExtension {
+  /// Not currently connected to any asynchronous computation.
+  ///
+  /// For example, a [FutureBuilder] whose [FutureBuilder.future] is null.
+  none,
+
+  /// Connected to an asynchronous computation and awaiting interaction.
+  waiting,
+
+  /// Connected to an active asynchronous computation.
+  ///
+  /// For example, a [Stream] that has returned at least one value, but is not
+  /// yet done.
+  active,
+
+  /// Connected to a terminated asynchronous computation.
+  done,
+
+  error;
+
+  ConnectionStateExtension? getFromConnectionState(ConnectionState c) {
+    return ConnectionStateExtension.values
+        .firstWhereOrNull((n) => c.name == n.name);
+  }
+}
+
+extension Connection on ConnectionState {
+  ConnectionStateExtension? getFromConnectionState() {
+    return ConnectionStateExtension.values
+        .firstWhereOrNull((n) => name == n.name);
+  }
+}
+
 abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
   final refreshListener = ValueNotifier<bool>(true);
+
+  late ValueNotifier<ConnectionStateExtension> _connectionState;
+
   int? _iD;
   String? _tableName;
   dynamic _extras;
@@ -1993,6 +2029,14 @@ abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
 
   bool get getIsLoading => this._isLoading;
 
+  ValueNotifier<ConnectionStateExtension> get getConnectionState =>
+      _connectionState;
+
+  ConnectionStateExtension? overrideConnectionState(
+      BasePageWithApiConnection type) {
+    return null;
+  }
+
   @override
   void initState() {
     _iD = widget.iD;
@@ -2000,6 +2044,9 @@ abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
     _extras = widget.extras;
     _extras ??=
         context.read<AuthProvider<AuthUser>>().getNewInstance(_tableName ?? "");
+    _connectionState = ValueNotifier(
+        overrideConnectionState(BasePageWithApiConnection.init) ??
+            ConnectionStateExtension.none);
     super.initState();
   }
 
@@ -2010,6 +2057,9 @@ abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
     _extras = widget.extras;
     _extras ??=
         context.read<AuthProvider<AuthUser>>().getNewInstance(_tableName ?? "");
+    _connectionState = ValueNotifier(
+        overrideConnectionState(BasePageWithApiConnection.didUpdate) ??
+            ConnectionStateExtension.none);
     super.didUpdateWidget(oldWidget);
   }
 
@@ -2178,11 +2228,19 @@ abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
     dynamic ex = getExtras();
     _isLoading = !getBodyWithoutApi();
     if (ex != null && !_isLoading) {
+      _connectionState.value =
+          overrideConnectionState(BasePageWithApiConnection.build) ??
+              ConnectionStateExtension.none;
       return super.getMainPanes();
     }
     return FutureBuilder<dynamic>(
       future: getCallApiFunctionIfNull(context),
       builder: (context, snapshot) {
+        _connectionState.value =
+            overrideConnectionState(BasePageWithApiConnection.future) ??
+                (snapshot.connectionState.getFromConnectionState()) ??
+                ConnectionStateExtension.error;
+
         debugPrint("BasePageApi FutureBuilder started");
         if (snapshot.hasError) {
           debugPrint("BasePageApi FutureBuilder hasError");
@@ -2203,7 +2261,12 @@ abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
             return super.getMainPanes();
           } else {
             debugPrint("BasePageApi FutureBuilder !done");
-            return getErrorWidget();
+            return EmptyWidget.error(
+              context,
+              onSubtitleClicked: () {
+                setState(() {});
+              },
+            );
           }
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           debugPrint("BasePageApi FutureBuilder waiting");
@@ -2283,3 +2346,5 @@ abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
     );
   }
 }
+
+enum BasePageWithApiConnection { init, didUpdate, build, future }

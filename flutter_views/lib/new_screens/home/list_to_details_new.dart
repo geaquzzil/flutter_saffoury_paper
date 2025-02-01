@@ -154,9 +154,8 @@ class _ListToDetailsSecoundPaneNotifierState
           valueListProviderNotifier: _listNotifier,
           key: keyList,
           hasCustomCardBuilder: (i, v) {
-            debugPrint(
-                "getPaneNotifier  valueNotifier ==> $valueNotifier ${valueNotifier?.value.hashCode} == ${v.hashCode}");
             return ListCardItem(
+              secondPaneHelper: getSecondPaneNotifier,
               // state: this,
               object: v,
               // isSelected: (lastSecondPaneItem?.value?.isEquals(v) ?? false),//TODO what if the value of viewAbstract is Widget fix this

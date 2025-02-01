@@ -7,7 +7,6 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_saffoury_paper/firebase_options.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
 import 'package:flutter_saffoury_paper/models/add_ons/add_ons_classes.dart';
 import 'package:flutter_saffoury_paper/models/custom_views/excel_to_product_converter.dart';
@@ -96,14 +95,15 @@ class ErrorLogger {
 ValueNotifier<QRCodeID?> onQrCodeChanged = ValueNotifier<QRCodeID?>(null);
 
 void initializeError() {
-  // FlutterError.onError = (FlutterErrorDetails details) async {
-  //   ErrorLogger().logError(details);
-  // };
-  // FlutterError.demangleStackTrace = (StackTrace stack) {
-  //   if (stack is stack_trace.Trace) return stack.vmTrace;
-  //   if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
-  //   return stack;
-  // };
+  FlutterError.onError = (FlutterErrorDetails details) async {
+    ErrorLogger().logError(details);
+  };
+  FlutterError.demangleStackTrace = (StackTrace stack) {
+    // if (stack is stack_trace.Trace) return stack.vmTrace;
+    // if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
+
+    return stack;
+  };
 }
 
 void main() async {
