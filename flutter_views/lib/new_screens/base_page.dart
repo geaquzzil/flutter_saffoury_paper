@@ -1869,9 +1869,12 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     );
 
     if (setClipRect(firstPane)) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(kDefualtClipRect),
-        child: scaffold,
+      return Padding(
+        padding: EdgeInsets.only(bottom: kDefaultPadding),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(kDefualtClipRect),
+          child: scaffold,
+        ),
       );
     }
     return scaffold;

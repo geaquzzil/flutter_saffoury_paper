@@ -538,6 +538,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String getBaseMessage(BuildContext context, {ServerActions? serverAction}) {
     return "${AppLocalizations.of(context)!.areYouSure}${getBaseActionText(context, serverAction: serverAction)} ${getBaseLabelViewAbstract(context)} ";
   }
+  
 }
 
 class GroupItem {

@@ -76,6 +76,8 @@ class _DropdownStringListControllerListenerState
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(
+        "_DropdownStringListControllerListenerState initialValue ${initialValue.toString()}");
     return FormBuilderDropdown(
       isExpanded: true,
       // itemHeight: 50,
@@ -123,14 +125,15 @@ class DropdownStringListItem {
       this.isRadio = false});
 
   @override
+  String toString() => {'label': label}.toString();
+  
+  @override
   bool operator ==(other) {
-    // TODO: implement ==
     return other is DropdownStringListItem &&
         label == other.label &&
         isDivider == other.isDivider;
   }
 
   @override
-  // TODO: implement hashCode
   int get hashCode => Object.hash(label, isDivider);
 }

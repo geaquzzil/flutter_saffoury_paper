@@ -22,21 +22,17 @@ mixin BaseWidgetControllerWithSaveState<T,
     E extends BaseWidgetControllerWithSave<T>> on State<E> {
   T? _initialValue;
 
-  ValueNotifier<T?>? _onValueSelected;
-
-  Function(T? value)? _onValueSelectedFunction;
-
   T? get initialValue => this._initialValue;
 
   set initialValue(T? value) => this._initialValue = value;
 
   void notifyValueSelected(T? value) {
     if (value != null || (value == null && widget.notifyOnNull)) {
-      _onValueSelected?.value = value;
-      _onValueSelectedFunction?.call(value);
+      debugPrint(
+          "BaseWidgetControllerWithSaveStateState  called function changed to ${value.toString()}");
+      widget.onValueSelected?.value = value;
+      widget.onValueSelectedFunction?.call(value);
     }
-    _onValueSelected?.value = value;
-    _onValueSelectedFunction?.call(value);
     debugPrint(
         "BaseWidgetControllerWithSaveStateState changed to ${value.toString()}");
     setState(() {
@@ -46,25 +42,23 @@ mixin BaseWidgetControllerWithSaveState<T,
 
   @override
   void didUpdateWidget(covariant oldWidget) {
-    if (_initialValue != widget.initialValue) {
-      _initialValue = widget.initialValue;
+    debugPrint(
+        "BaseWidgetControllerWithSaveState didUpdateWidget $_initialValue");
+    if (widget.initialValue != null) {
+      debugPrint(
+          "BaseWidgetControllerWithSaveState didUpdateWidget widget.initialValue != null");
+      if (_initialValue != widget.initialValue) {
+        debugPrint(
+            "BaseWidgetControllerWithSaveState didUpdateWidget _initialValue $_initialValue widget ${widget.initialValue}");
+        _initialValue = widget.initialValue;
+      }
     }
     super.didUpdateWidget(oldWidget);
   }
 
   @override
-  void dispose() {
-    _onValueSelected?.dispose();
-
-    super.dispose();
-  }
-
-  @override
   void initState() {
     _initialValue = widget.initialValue;
-    // _onValueSelected = widget.onValueSelected as ValueNotifier<T?>?;
-    // _onValueSelectedFunction = widget.onValueSelectedFunction;
-
     super.initState();
   }
 }

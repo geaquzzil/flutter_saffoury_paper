@@ -339,12 +339,11 @@ InputDecorationTheme getTextFieldTheme(BuildContext context) {
 
 getQtyPlusDecoration(BuildContext context) {
   return QtyDecorationProps(
-    
-      contentPadding: EdgeInsets.all(kDefaultPadding * .75),
+      // contentPadding: EdgeInsets.all(kDefaultPadding * .2),
       border: getThemeBorder(isLargeScreen(context)),
       errorBorder: getErrorBorder(context, isLargeScreen(context)),
-      
       fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+
       // border: getMainTheme(context),
       isDense: isLargeScreen(context),
       plusBtn: MouseRegion(
@@ -353,7 +352,7 @@ getQtyPlusDecoration(BuildContext context) {
             padding: const EdgeInsets.all(8.0),
             child: Icon(
               Icons.add,
-              color: Theme.of(context).colorScheme.tertiary,
+              color: Theme.of(context).colorScheme.primary,
             ),
           )),
       minusBtn: MouseRegion(
@@ -371,8 +370,6 @@ getQtyPlusDecoration(BuildContext context) {
 getQtyFormProps(BuildContext context) {
   return QtyFormProps(
     style: Theme.of(context).textTheme.titleSmall,
-    
-
   );
 }
 

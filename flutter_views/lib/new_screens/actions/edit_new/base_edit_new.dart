@@ -84,14 +84,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
 
   @override
   void didUpdateWidget(covariant BaseEditWidget oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    // if (_viewAbstract != widget.viewAbstract) {
-    //   _viewAbstract = widget.viewAbstract;
-    //   init(context);
-    // }
-
-    debugPrint("didUpdateWidget baseEditNew");
   }
 
   void init(BuildContext context) {
@@ -271,7 +264,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("_BaseEdit build");
+    debugPrint("BaseEdit build");
     Widget form = buildForm(context);
     if (widget.isTheFirst) {
       if (widget.buildAsPrint) {}
@@ -384,13 +377,13 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
   }
 
   Widget buildForm(BuildContext context) {
-    debugPrint("_BaseEdit buildForm ${_viewAbstract.runtimeType}");
+    debugPrint("BaseEdit buildForm ${_viewAbstract.runtimeType}");
 
     return FormBuilder(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: formKey,
         onChanged: () {
-          debugPrint("_BaseEdit onChanged");
+          debugPrint("BaseEdit onChanged");
           onValidateForm(context);
         },
         child: getFormContent(context));
@@ -413,7 +406,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
   bool validateForm() {
     bool? validate = formKey?.currentState!
         .validate(focusOnInvalid: false, autoScrollWhenFocusOnInvalid: false);
-    debugPrint("_BaseEdit main checking formKey for => validation $validate");
+    debugPrint("BaseEdit main checking formKey for => validation $validate");
     if (validate == false) {
       return false;
     }
@@ -423,7 +416,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
           false;
 
       debugPrint(
-          "_BaseEdit main checking subViewAbstract for => ${entery.key} and validate value is = > $subValidate");
+          "BaseEdit main checking subViewAbstract for => ${entery.key} and validate value is = > $subValidate");
       if (subValidate == false) {
         return false;
       }
@@ -675,8 +668,11 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
         isTheFirst: false,
         onValidate: ((ob) {
           // String? fieldName = ob?.getFieldNameFromParent()!;
-          debugPrint("editPageNew subViewAbstract field=>$field value=>$ob");
+          debugPrint("BaseEdit subViewAbstract field=>$field value=>$ob");
           _viewAbstract.setFieldValue(field, ob);
+          onValidateForm(context);
+          debugPrint("BaseEdit main object after sub editing $_viewAbstract");
+
           // if (ob != null) {
           //   viewAbstractChangeProvider.change(viewAbstract);
           // }

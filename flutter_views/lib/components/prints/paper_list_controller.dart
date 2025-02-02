@@ -22,45 +22,32 @@ class _PaperListControllerState extends State<PaperListController>
   @override
   Widget build(BuildContext context) {
     return DropdownStringListControllerListener(
-      initialValue: DropdownStringListItem(
-          label: getLabelFromPDF(initialValue ?? PdfPageFormat.a4)),
+      initialValue: initialValue == null
+          ? null
+          : DropdownStringListItem(
+              label: getLabelFromPDF(initialValue!), value: initialValue!),
       insetFirstIsSelect: false,
       tag: "printOptions",
       onValueSelectedFunction: (object) {
-        if (object != null) {
-          PdfPageFormat chosedPageFormat;
-          if (object.label == getAppLocal(context)!.a3ProductLabel) {
-            chosedPageFormat = PdfPageFormat.a3;
-          } else if (object.label == getAppLocal(context)!.a4ProductLabel) {
-            chosedPageFormat = PdfPageFormat.a4;
-          } else if (object.label == getAppLocal(context)!.a5ProductLabel) {
-            chosedPageFormat = PdfPageFormat.a5;
-          } else {
-            //todo translate
-            if (widget.supportsLabelPrinting) {
-              chosedPageFormat = roll80;
-            } else {
-              chosedPageFormat = PdfPageFormat.a4;
-            }
-          }
-          if (chosedPageFormat == initialValue) return;
-          notifyValueSelected(chosedPageFormat);
-        }
+        notifyValueSelected(object?.value as PdfPageFormat?);
       },
       //todo translate
       hint: "Select size",
       list: [
         if (widget.supportsLabelPrinting)
           DropdownStringListItem(
-              icon: null,
               //todo translate
-              label: getAppLocal(context)!.productLabel),
+              label: getAppLocal(context)!.productLabel,
+              value: roll80),
         DropdownStringListItem(
-            icon: null, label: getAppLocal(context)!.a3ProductLabel),
+            label: getAppLocal(context)!.a3ProductLabel,
+            value: PdfPageFormat.a3),
         DropdownStringListItem(
-            icon: null, label: getAppLocal(context)!.a4ProductLabel),
+            label: getAppLocal(context)!.a4ProductLabel,
+            value: PdfPageFormat.a4),
         DropdownStringListItem(
-            icon: null, label: getAppLocal(context)!.a5ProductLabel),
+            label: getAppLocal(context)!.a5ProductLabel,
+            value: PdfPageFormat.a5),
       ],
     );
   }

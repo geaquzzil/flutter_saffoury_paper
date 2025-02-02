@@ -9,7 +9,8 @@ import 'package:printing/printing.dart';
 
 class PrinterListControllerDropdown
     extends BaseWidgetControllerWithSave<Printer> {
-  const PrinterListControllerDropdown({super.key, super.initialValue});
+  const PrinterListControllerDropdown(
+      {super.key, super.initialValue, super.onValueSelectedFunction});
 
   @override
   State<PrinterListControllerDropdown> createState() =>
@@ -57,14 +58,15 @@ class _PrinterListControllerDropdownState
                 label: initialValue!.name, value: initialValue),
         insetFirstIsSelect: false,
         onValueSelectedFunction: (object) {
-          initialValue = object?.value as Printer?;
+          // initialValue = object?.value as Printer?;
+          notifyValueSelected(object?.value as Printer?);
         },
         hint: "Hist",
         list: as
                 ?.map((e) => DropdownStringListItem(value: e, label: e.name))
                 .toList() ??
             [],
-        tag: 'dsa',
+        tag: 'printerList',
       ),
     );
   }

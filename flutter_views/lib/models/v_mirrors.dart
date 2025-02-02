@@ -30,6 +30,7 @@ abstract class VMirrors<T> {
     return getSelfNewInstance();
   }
 
+
   Type getMirrorFieldsType(String field) {
     return getMirrorFieldsMapNewInstance()[field].runtimeType;
   }

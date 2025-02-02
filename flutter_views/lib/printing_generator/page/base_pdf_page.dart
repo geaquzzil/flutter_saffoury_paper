@@ -213,6 +213,7 @@ class PrintSettingLargeScreenProvider with ChangeNotifier {
   }
 
   set setViewAbstract(ViewAbstract? viewAbstract) {
+    debugPrint("setViewAbstractsetViewAbstract $viewAbstract");
     if (viewAbstract == null) return;
     _viewAbstract = viewAbstract;
     notifyListeners();

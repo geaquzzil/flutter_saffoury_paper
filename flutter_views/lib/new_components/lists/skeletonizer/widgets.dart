@@ -39,15 +39,14 @@ class SkeletonPage extends StatelessWidget {
               width: constraints.maxWidth,
               height: constraints.maxHeight,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceDim,
-                // color: null,
-                border: Border.all(
-                    width: 2, color: Theme.of(context).highlightColor),
-                // borderRadius: getBorderRedius()
-                // shape: style.shape,
-                // borderRadius:
-                //     style.shape != BoxShape.circle ? style.borderRadius : null,
-              ),
+                  color: Theme.of(context).colorScheme.surfaceDim,
+                  // color: null,
+                  border: Border.all(
+                      width: 2, color: Theme.of(context).highlightColor),
+                  // borderRadius: getBorderRedius()
+                  // shape: style.shape,
+                  borderRadius:
+                      const BorderRadius.all(Radius.circular(kDefaultPadding))),
             );
           },
         ),

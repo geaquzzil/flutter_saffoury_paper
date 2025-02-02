@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/components/prints/paper_list_controller.dart';
 import 'package:flutter_view_controller/components/prints/paper_oriantation_controller.dart';
+import 'package:flutter_view_controller/components/prints/printer_list_controller.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -95,7 +96,7 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
   LoadedPrint? _lastLoaded;
   List<Printer>? _loadedPrinters;
 
-  Printer? defaultPrinter;
+  Printer? _selectedPrinter;
 
   Widget getPrintShareFloating(BuildContext context) {
     return FloatingActionButton.small(
@@ -116,7 +117,7 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
                   .read<PrintSettingLargeScreenProvider>()
                   .getSelectedFormat,
               context: context,
-              printer: defaultPrinter,
+              printer: _selectedPrinter,
               onLayout: (PdfPageFormat format) async => loadedFile)) {
             await Printing.layoutPdf(
                 onLayout: (PdfPageFormat format) async => loadedFile);
@@ -287,20 +288,25 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
       TabControllerHelper? secoundTab}) {
     if (getCurrentScreenSize() != CurrentScreenSize.MOBILE) {
       if (firstPane == true) {
-        return getFloatingActionButtonConsomer(context,
-            builder: (_, isExpanded) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              if (!isExpanded) getPrintShareFloating(context),
-              if (!isExpanded)
-                const SizedBox(
-                  width: kDefaultPadding,
-                ),
-              if (!isExpanded) getPrintFloating(context),
-            ],
-          );
-        });
+        return ValueListenableBuilder(
+            valueListenable: getConnectionState,
+            builder: (context, value, child) {
+              return Row(
+                spacing: kDefaultPadding,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (value == ConnectionStateExtension.done)
+                    getPrintShareFloating(context),
+                  if (value == ConnectionStateExtension.done)
+                    getPrintFloating(context),
+                ],
+              );
+            });
+
+        // return getFloatingActionButtonConsomer(context,
+        //     builder: (_, isExpanded) {
+        //   return
+        // });
       }
     }
     if (getCurrentScreenSize() == CurrentScreenSize.MOBILE &&
@@ -431,22 +437,23 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
   Widget getPdfPreview(PdfPageFormat fomat) {
     return PdfPreview(
         // shouldRepaint: true,
-        // key: UniqueKey(),
+        key: UniqueKey(),
         // pages: hasFromTo() ? printSettingListener.generateListOfPage() : null,
         pdfFileName: getExtras()!.getPrintableQrCodeID(),
         shareActionExtraEmails: const [
           "info@saffoury.com"
         ], //TODO should rename
-        maxPageWidth: getWidth,
+        maxPageWidth: getWidth * .5,
         initialPageFormat: fomat,
         canChangePageFormat: true,
         canDebug: false,
-        scrollViewDecoration:
-            BoxDecoration(color: Theme.of(context).colorScheme.surface),
+        
+        scrollViewDecoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius:
+                const BorderRadius.all(Radius.circular(kDefaultPadding))),
         dynamicLayout: true,
-        loadingWidget: SkeletonPage(
-            // style: SkeletonParagraphStyle(lines: 1),
-            ),
+        loadingWidget: SkeletonPage(),
         useActions: false,
         shareActionExtraBody: "Share",
         onError: (context, error) {
@@ -483,7 +490,7 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
             loadedFileBytes = await loadedFile;
             getConnectionState.value = ConnectionStateExtension.done;
             _lastLoaded = LoadedPrint(
-                format: format,
+                format: fomat,
                 setting: setting.toString(),
                 viewAbstract: widget.asList!.toString());
 
@@ -605,6 +612,8 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
   @override
   bool setPaneBodyPaddingHorizontal(bool firstPane) => true;
 
+  // @override
+  // bool setPaneBodyPaddingVertical(bool firstPane) => true;
   @override
   bool setMainPageSuggestionPadding() => false;
 
@@ -730,14 +739,30 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
                   // debugPrint(val);
                 },
               ))),
-      // SliverToBoxAdapter(
-      //   child: PrinterListControllerDropdown(),
-      // ),
+      SliverToBoxAdapter(
+        child: PrinterListControllerDropdown(
+          initialValue: _selectedPrinter,
+          onValueSelectedFunction: (value) {
+            _selectedPrinter = value;
+          },
+        ),
+      ),
       SliverToBoxAdapter(
         child: ListTileSameSizeOnTitle(
-          leading: Text("Paper Oriantaion"),
-          title: PaperOriantaionController(),
-        ),
+            //TODO translate
+            leading: Text("Paper Oriantaion"),
+            title: PaperOriantaionController(
+              initialValue: PaperOriantaionController.findPaperOriantation(
+                  printSettingListener.getSelectedFormat),
+              onValueSelectedFunction: (value) {
+                debugPrint("onValueSelectedFunction $value");
+                notifyNewSelectedFormat(
+                    context,
+                    value == PaperOriantation.portial
+                        ? printSettingListener.getSelectedFormat.portrait
+                        : printSettingListener.getSelectedFormat.landscape);
+              },
+            )),
       ),
       if (hasFromTo())
         SliverToBoxAdapter(
@@ -806,17 +831,17 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
             ],
           ),
         ),
-      // SliverToBoxAdapter(
-      //   child: ListTileSameSizeOnTitle(
-      //       leading: Text(getAppLocal(context)?.ok ?? ""),
-      //       title: PaperListController(
-      //         supportsLabelPrinting: supportsLabelPrinting(),
-      //         initialValue: _lastLoaded?.format ?? PdfPageFormat.a4,
-      //         onValueSelectedFunction: (value) {
-      //           notifyNewSelectedFormat(context, value ?? PdfPageFormat.a4);
-      //         },
-      //       )),
-      // ),
+      SliverToBoxAdapter(
+        child: ListTileSameSizeOnTitle(
+            leading: Text(getAppLocal(context)?.ok ?? ""),
+            title: PaperListController(
+              supportsLabelPrinting: supportsLabelPrinting(),
+              initialValue: _lastLoaded?.format ?? PdfPageFormat.a4,
+              onValueSelectedFunction: (value) {
+                notifyNewSelectedFormat(context, value ?? PdfPageFormat.a4);
+              },
+            )),
+      ),
       SliverFillRemaining(
         child: FutureBuilder(
           future: getSettingFuture(),
@@ -830,11 +855,15 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
               onValidate: (viewAbstract) async {
                 if (viewAbstract != null) {
                   debugPrint(
-                      "BasePdfPageConsumer newViewAbstract $viewAbstract");
+                      "BasePdfPageConsumer newViewAbstract  is null ${viewAbstract == null} $viewAbstract\n\n\n");
+                  printSettingListener.setViewAbstract =
+                      viewAbstract.getCopyInstance();
                   // notifyNewViewAbstract(viewAbstract.getCopyInstance());
                   await Configurations.saveViewAbstract(viewAbstract);
-                  printSettingListener.setViewAbstract = viewAbstract;
+
                   // context.pop();
+                } else {
+                  debugPrint("BasePdfPageConsumer newViewAbstract  is null");
                 }
               },
             );

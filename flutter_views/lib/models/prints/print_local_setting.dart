@@ -46,7 +46,6 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "printOptions": PrinterOptions(),
         "reportOptions": ReportOptions(),
         "hideQrCode": false,
         "sortByType": SortByType.DESC,

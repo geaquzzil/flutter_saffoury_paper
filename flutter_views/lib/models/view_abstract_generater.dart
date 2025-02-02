@@ -431,7 +431,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
           type: type,
           iD: iD,
           tableName: getTableNameApi(),
-          // extras: this,
+          extras: this,
         ),
       );
       return;
