@@ -125,7 +125,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
       BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) {
+      {GlobalKey<BasePageStateWithApi>? globalKey, TabControllerHelper? tab}) {
     return [
       DashableGridHelper(
           sectionsListToTabbar: getListOfTabbarFunds(),
@@ -156,7 +156,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   bool getPrintableSupportsLabelPrinting() => false;
   @override
   getDashboardSectionsSecoundPane(BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageWithApi>? globalKey,
+      {GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab,
       TabControllerHelper? tabSecondPane}) {
     if (tabSecondPane != null && tabSecondPane.extras != null) {
@@ -306,7 +306,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   @override
   getDashboardShouldWaitBeforeRequest(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi>? globalKey,
+      GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab}) {
     debugPrint("getDashboardShouldWaitBefore $iD");
     firstPane = firstPane ?? false;
@@ -349,7 +349,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   @override
   Widget? getDashboardAppbar(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi>? globalKey,
+      GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab}) {
     if (iD == -1 || firstPane == false) {
       return null;

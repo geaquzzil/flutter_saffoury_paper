@@ -938,7 +938,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   Widget? getCardTrailing(BuildContext context,
-      {ValueNotifier<SecondPaneHelper?>? secPaneHelper}) {
+      {SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) {
     // TODO: implement getCardTrailing
     return Text(
       "items: ${getDetailListFromMasterItemsCount()}",

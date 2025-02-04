@@ -6,30 +6,30 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_popup_widget.dart';
+import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_card_item.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
-import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
+import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-class ViewNew
-    extends BasePageSecoundPaneNotifier<ListToDetailsSecoundPaneHelper> {
-  ViewAbstract viewAbstract;
+class ViewNew extends BasePageApi {
   bool overrideTrailingToNull;
 
   ///[key] is required for navigation header
-  ViewNew({
-    super.key,
-    super.buildSecondPane,
-    required this.viewAbstract,
-    this.overrideTrailingToNull = false,
-    super.parent,
-    super.valueNotifierIfThirdPane,
-    super.forceHeaderToCollapse = true,
-    super.isFirstToSecOrThirdPane = true,
-    super.onBuild,
-  });
+  ViewNew(
+      {super.key,
+      super.buildSecondPane,
+      super.iD,
+      super.tableName,
+      super.extras,
+      this.overrideTrailingToNull = false,
+      super.forceHeaderToCollapse = true,
+      super.isFirstToSecOrThirdPane = true,
+      super.onBuild,
+      super.parent});
 
   @override
   State<ViewNew> createState() {
@@ -37,12 +37,12 @@ class ViewNew
   }
 }
 
-class _ViewNewState extends BasePageState<ViewNew>
+class _ViewNewState extends BasePageStateWithApi<ViewNew>
     with BasePageSecoundPaneNotifierState<ViewNew> {
   final kk = GlobalKey<BasePageSecoundPaneNotifierState>();
   Widget buildItem(BuildContext context, String field) {
     debugPrint("MasterView buildItem $field");
-    dynamic fieldValue = widget.viewAbstract.getFieldValue(field);
+    dynamic fieldValue = getExtrasCast().getFieldValue(field);
     if (fieldValue == null) {
       return ViewCardItem(
           // secNotifier: getSecondPaneNotifier,
@@ -70,9 +70,9 @@ class _ViewNewState extends BasePageState<ViewNew>
       return ViewCardItem(
           // secNotifier: getSecondPaneNotifier,
           overrideTrailingToNull: widget.overrideTrailingToNull,
-          title: widget.viewAbstract.getFieldLabel(context, field),
+          title: getExtrasCast().getFieldLabel(context, field),
           description: fieldValue.toString(),
-          icon: widget.viewAbstract.getFieldIconData(field));
+          icon: getExtrasCast().getFieldIconData(field));
     }
   }
 
@@ -98,12 +98,12 @@ class _ViewNewState extends BasePageState<ViewNew>
   List<Widget>? getCustomViewWhenSecondPaneIsEmpty(
       ScrollController? controler, TabControllerHelper? tab) {
     return [
-      if (widget.viewAbstract.getCustomTopWidget(context,
+      if (getExtrasCast().getCustomTopWidget(context,
               action: ServerActions.view, onClick: getSecondPaneNotifier) !=
           null)
         MultiSliver(
           children: [
-            ...widget.viewAbstract
+            ...getExtrasCast()
                 .getCustomTopWidget(context,
                     action: ServerActions.view, onClick: getSecondPaneNotifier)!
                 .map(
@@ -118,7 +118,7 @@ class _ViewNewState extends BasePageState<ViewNew>
           height: kDefaultPadding,
         ),
       ),
-      ...widget.viewAbstract.getCustomBottomWidget(
+      ...getExtrasCast().getCustomBottomWidget(
             context,
             action: ServerActions.view,
           ) ??
@@ -148,15 +148,37 @@ class _ViewNewState extends BasePageState<ViewNew>
   }
 
   @override
+  List<Widget>? getAppbarActions({bool? firstPane}) {
+    if (firstPane == true) {
+      return [
+        ActionsOnHeaderWidget(
+          viewAbstract: getExtras(),
+          serverActions: getServerActions(),
+        ),
+        ActionsOnHeaderPopupWidget(
+          viewAbstract: getExtras(),
+          serverActions: getServerActions(),
+        ),
+      ];
+    }
+    return null;
+  }
+
+  @override
   Widget? getAppbarTitle(
       {bool? firstPane,
       TabControllerHelper? tab,
       TabControllerHelper? secoundTab}) {
-    return firstPane == null
-        ? Text(AppLocalizations.of(context)!.printerSetting)
-        : isFirstPane(firstPane: firstPane)
-            ? widget.viewAbstract.getMainHeaderText(context)
-            : Text(lastSecondPaneItem?.title ?? "TO FIX");
+    if (firstPane == true) {
+      return Text(
+        getExtrasCast().getBaseTitle(context,
+            descriptionIsId: true, serverAction: ServerActions.view),
+      );
+    }
+    if (firstPane == false) {
+      return Text(getAppLocal(context)!.details);
+    }
+    return Text("dsadas");
   }
 
   @override
@@ -194,7 +216,7 @@ class _ViewNewState extends BasePageState<ViewNew>
   }
 
   bool isCartableInterface() {
-    return widget.viewAbstract is CartableProductItemInterface;
+    return getExtrasCast() is CartableProductItemInterface;
   }
 
   @override
@@ -214,7 +236,7 @@ class _ViewNewState extends BasePageState<ViewNew>
               // )),
               child: BottomWidgetOnViewIfCartable(
                   viewAbstract:
-                      widget.viewAbstract as CartableProductItemInterface))
+                      getExtrasCast() as CartableProductItemInterface))
           : null;
     }
     return null;
@@ -227,14 +249,13 @@ class _ViewNewState extends BasePageState<ViewNew>
       TabControllerHelper? tab,
       SecondPaneHelper? valueNotifier}) {
     if (firstPane) {
-      final fields = widget.viewAbstract
+      final fields = getExtrasCast()
           .getMainFields(context: context)
-          .where(
-              (element) => widget.viewAbstract.getFieldValue(element) != null)
+          .where((element) => getExtrasCast().getFieldValue(element) != null)
           .toList();
       return [
         SliverToBoxAdapter(
-          child: widget.viewAbstract
+          child: getExtrasCast()
               .getImageWithRoundedCorner(context, size: firstPaneWidth * .9),
         ),
         SliverList(
@@ -260,7 +281,7 @@ class _ViewNewState extends BasePageState<ViewNew>
         if (valueNotifier?.value != null)
           SliverFillRemaining(
             child: ViewNew(
-              viewAbstract: valueNotifier!.value as ViewAbstract,
+              extras: valueNotifier!.value as ViewAbstract,
               buildSecondPane: true,
               onBuild: onBuild,
               key: kk,
@@ -295,5 +316,17 @@ class _ViewNewState extends BasePageState<ViewNew>
   @override
   String onActionInitial() {
     return AppLocalizations.of(context)!.printerSetting;
+  }
+
+  @override
+  Future getCallApiFunctionIfNull(BuildContext context,
+      {TabControllerHelper? tab}) {
+    return (getExtras()).viewCallGetFirstFromList((getExtras()).iD,
+        context: context) as Future<ViewAbstract?>;
+  }
+
+  @override
+  ServerActions getServerActions() {
+    return ServerActions.view;
   }
 }

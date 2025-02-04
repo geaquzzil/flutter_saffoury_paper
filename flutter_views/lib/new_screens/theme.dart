@@ -271,7 +271,7 @@ ButtonStyle getButtonStyleIfIcon(BuildContext context, ColorScheme colorSheme) {
 }
 
 bool isLargeScreen(BuildContext context) {
-  return true;
+  return false;
 }
 
 double getIconSize(BuildContext context) {
@@ -386,9 +386,11 @@ OutlineInputBorder getThemeBorder(bool isLargeOrDesktop,
 
 BorderSide getBorderSide(bool isLargeOrDesktop,
     {Color? customColor, bool isErrorBuilder = false}) {
+  // return BorderSide.none;
   return isLargeOrDesktop && !isErrorBuilder
       ? BorderSide.none
-      : BorderSide(color: customColor ?? Color(0xFF000000));
+      : BorderSide(
+          color: customColor ?? Color(0xFF000000), style: BorderStyle.none);
 }
 
 OutlineInputBorder getErrorBorder(BuildContext context, bool isLargeOrDesktop,

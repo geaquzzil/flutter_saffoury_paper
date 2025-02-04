@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/customer_dashboard.dart';
 import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_single.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -12,7 +13,6 @@ import 'package:flutter_view_controller/interfaces/printable/printable_master.da
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
@@ -20,9 +20,10 @@ import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/test_var.dart';
-import '../../prints/print_customer_balances.dart';
-import 'package:pdf/widgets.dart' as pdf;
 import 'package:pdf/pdf.dart' as d;
+import 'package:pdf/widgets.dart' as pdf;
+
+import '../../prints/print_customer_balances.dart';
 
 class CustomerBalanceList
     extends ViewAbstractStandAloneCustomViewApi<CustomerBalanceList>
@@ -80,7 +81,7 @@ class CustomerBalanceList
   @override
   Widget? getDashboardAppbar(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi>? globalKey,
+      GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab}) {
     return null;
   }
@@ -88,7 +89,7 @@ class CustomerBalanceList
   @override
   getDashboardShouldWaitBeforeRequest(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi>? globalKey,
+      GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab}) {
     return null;
   }
@@ -316,7 +317,7 @@ class CustomerBalanceList
 
   @override
   getDashboardSectionsFirstPane(BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) {
+      {GlobalKey<BasePageStateWithApi>? globalKey, TabControllerHelper? tab}) {
     return [
       SliverFillRemaining(
         child: ListStaticSearchableWidget<CustomerBalanceSingle>(
@@ -362,7 +363,7 @@ class CustomerBalanceList
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
       BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageWithApi>? globalKey,
+      {GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab,
       TabControllerHelper? tabSecondPane}) {
     return [

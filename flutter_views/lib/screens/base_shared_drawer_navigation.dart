@@ -415,6 +415,17 @@ class SecondPaneHelper {
   SecondPaneHelper({required this.title, this.value, this.state});
 }
 
+class SecoundPaneHelperWithParentValueNotifier {
+  ValueNotifier<SecondPaneHelper?>? secPaneNotifier;
+  BasePageState? parent;
+  ValueNotifier? onBuild;
+  SecoundPaneHelperWithParentValueNotifier({
+    this.secPaneNotifier,
+    this.parent,
+    this.onBuild,
+  });
+}
+
 class SecoundPaneHelperWithParent {
   GlobalKey<BasePageSecoundPaneNotifierState> state;
   SecondPaneHelper? value;

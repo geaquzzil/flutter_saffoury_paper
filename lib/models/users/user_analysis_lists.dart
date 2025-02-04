@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/balance_due.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/customer_dashboard.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/dashboard.dart';
@@ -34,8 +35,8 @@ import 'package:flutter_view_controller/new_components/lists/list_card_item.dart
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 import '../funds/debits.dart';
 import '../funds/incomes.dart';
 import '../funds/spendings.dart';
@@ -409,7 +410,7 @@ class UserLists<T> extends AuthUser<T> {
   }
 
   SliverList getSliverListFromExtrasTabbar(
-    BuildContext context, TabControllerHelper tabSecondPane) {
+      BuildContext context, TabControllerHelper tabSecondPane) {
     return SliverList.builder(
         itemCount: (tabSecondPane.extras as List).length,
         itemBuilder: (c, index) {
@@ -529,7 +530,8 @@ class UserLists<T> extends AuthUser<T> {
 
   List<WidgetGridHelper> getFundWidgets(
       BuildContext context, int crossAxisCount,
-      {bool checkForEmpty = false, GlobalKey<BasePageWithApi>? globalKey}) {
+      {bool checkForEmpty = false,
+      GlobalKey<BasePageStateWithApi>? globalKey}) {
     bool isMezouj = crossAxisCount % 2 == 0;
     debugPrint(
         "isMezouj: $isMezouj   crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4} ");
@@ -638,7 +640,8 @@ class UserLists<T> extends AuthUser<T> {
 
   List<WidgetGridHelper> getInvoicesWidgets(
       BuildContext context, int crossAxisCount,
-      {bool checkForEmpty = false, GlobalKey<BasePageWithApi>? globalKey}) {
+      {bool checkForEmpty = false,
+      GlobalKey<BasePageStateWithApi>? globalKey}) {
     bool isMezouj = crossAxisCount % 2 == 0;
 
     int crossCountFund = crossAxisCount ~/ 4;

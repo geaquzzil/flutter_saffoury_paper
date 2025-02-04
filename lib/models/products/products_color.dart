@@ -168,10 +168,13 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
     }
     return [
       SliverApiMixinAutoRestWidget(
+          isGridView: true,
+          scrollDirection: Axis.horizontal,
           autoRest: AutoRest<Product>(
               range: 5,
               obj: Product()..setCustomMap(getSimilarCustomParams(context)),
-              key: "similarProducts${getSimilarCustomParams(context)}"))
+              key:
+                  "${getTableNameApi()}-$iD-${getSimilarCustomParams(context)}"))
       // ListHorizontalApiAutoRestWidget(
       //   valueNotifier: onHorizontalListItemClicked,
       //   titleString: AppLocalizations.of(context)!

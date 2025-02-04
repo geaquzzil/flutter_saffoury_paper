@@ -30,7 +30,7 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
   final ViewAbstract viewAbstract;
   final double? width;
   final ValueNotifier<List?> valueNotifer;
-  final ValueNotifier<SecondPaneHelper?>? secPaneNotifer;
+  final SecoundPaneHelperWithParentValueNotifier? secPaneNotifer;
 
   final iconSize = 20;
   final spacing = kDefaultPadding * .25;
@@ -111,7 +111,7 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
                   child: PrintIcon(
                     viewAbstract: viewAbstract,
                     list: list,
-                    secPaneNotifer: secPaneNotifer,
+                    parent: secPaneNotifer,
                   )),
             if (canTakeUpToFour)
               AnimatedScale(

@@ -17,9 +17,9 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
+import 'package:flutter_view_controller/new_screens/actions/cruds/edit.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
-import 'package:flutter_view_controller/new_screens/forms/base_edit_final.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/notifications/notification_popup.dart';
@@ -47,8 +47,8 @@ const animationDuration = 250;
 const double kDefualtAppBar = 70;
 
 const double kDefualtClipRect = 25;
-GlobalKey<BasePageWithApi> globalKeyBasePageWithApi =
-    GlobalKey<BasePageWithApi>();
+GlobalKey<BasePageStateWithApi> globalKeyBasePageWithApi =
+    GlobalKey<BasePageStateWithApi>();
 //TODO sliver_tools https://github.com/Kavantix/hn_state_example/blob/master/lib/ui/pages/news/components/news_section.dart
 //TODO
 // Widget build(BuildContext context) {
@@ -417,8 +417,6 @@ mixin BasePageWithThirdPaneMixin<T extends BasePage,
   }
 }
 
-mixin BasePageSecoundPaneNotifierStateApi<T extends BasePageApi>
-    on BasePageSecoundPaneNotifierState<T> {}
 mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
   final ValueNotifier<SecondPaneHelper?> _onSecoundPaneChanged =
       ValueNotifier<SecondPaneHelper?>(null);
@@ -446,6 +444,11 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
 
   SecondPaneHelper getInitialAction() {
     return SecondPaneHelper(title: onActionInitial());
+  }
+
+  SecoundPaneHelperWithParentValueNotifier getSecoundPaneHelper() {
+    return SecoundPaneHelperWithParentValueNotifier(
+        onBuild: onBuild, parent: this, secPaneNotifier: getSecondPaneNotifier);
   }
 
   String onActionInitial();
@@ -970,14 +973,19 @@ abstract class BasePageApi extends BasePage {
   final int? iD;
   final String? tableName;
   final dynamic extras;
-  BasePageApi(
-      {super.key,
-      this.iD,
-      this.tableName,
-      required this.extras,
-      super.buildDrawer,
-      super.isFirstToSecOrThirdPane,
-      super.buildSecondPane});
+  BasePageApi({
+    super.key,
+    this.iD,
+    this.tableName,
+    required this.extras,
+    super.buildDrawer,
+    super.onBuild,
+    super.parent,
+    super.buildSecondPane,
+    super.fillFirstPaneToAnimateTheThirdPane,
+    super.forceHeaderToCollapse,
+    super.isFirstToSecOrThirdPane,
+  });
 }
 
 ///Auto generate view
@@ -1081,6 +1089,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   Future<void>? getPaneIsRefreshIndicator({required bool firstPane});
 
+  //FIXME What if firstPane==null and it has widget
   Widget? getAppbarTitle({bool? firstPane, TabControllerHelper? tab});
   Widget? getAppbarLeading({bool? firstPane}) {
     return null;
@@ -1194,8 +1203,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     }
   }
 
-  List<Widget>? getAppbarActions(
-      {bool? firstPane, TabControllerHelper? tab, TabControllerHelper? sec}) {
+  List<Widget>? getAppbarActions({bool? firstPane}) {
     return null;
   }
 
@@ -1533,11 +1541,11 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       ListToDetailsSecoundPaneHelper? selectedItem}) {
     if (selectedItem == null) {
       return ListView(children: [
-        BaseEditFinal(
-          viewAbstract: context
-              .read<DrawerMenuControllerProvider>()
-              .getObjectCastViewAbstract,
-        )
+        // EditNew(
+        //   viewAbstract: context
+        //       .read<DrawerMenuControllerProvider>()
+        //       .getObjectCastViewAbstract,
+        // )
       ]);
       // return const Padding(
       //   padding: EdgeInsets.all(20),
@@ -1598,7 +1606,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
         );
         break;
       case ServerActions.print:
-        selectedItem.setKey = GlobalKey<BasePageWithApi>();
+        selectedItem.setKey = GlobalKey<BasePageStateWithApi>();
         currentWidget = PdfPageNew(
           key: selectedItem.getKey,
           buildSecondPane: false,
@@ -2016,7 +2024,8 @@ extension Connection on ConnectionState {
   }
 }
 
-abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
+abstract class BasePageStateWithApi<T extends BasePageApi>
+    extends BasePageState<T> {
   final refreshListener = ValueNotifier<bool>(true);
 
   late ValueNotifier<ConnectionStateExtension> _connectionState;
@@ -2058,6 +2067,7 @@ abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
     _iD = widget.iD;
     _tableName = widget.tableName;
     _extras = widget.extras;
+
     _extras ??=
         context.read<AuthProvider<AuthUser>>().getNewInstance(_tableName ?? "");
     _connectionState = ValueNotifier(
@@ -2225,6 +2235,7 @@ abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
         );
   }
 
+  void initStateAfterApiCalled() {}
   @override
   Widget getMainPanes() {
     debugPrint("getBody _getTowPanes TabController ");
@@ -2256,6 +2267,7 @@ abstract class BasePageWithApi<T extends BasePageApi> extends BasePageState<T> {
             setExtras(
               ex: snapshot.data,
             );
+            initStateAfterApiCalled();
             if (ex is ViewAbstract) {
               // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
               //   context.read<ListMultiKeyProvider>().edit(ex);

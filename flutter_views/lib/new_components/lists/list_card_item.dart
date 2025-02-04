@@ -52,7 +52,7 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
   @Deprecated("Use glbal key")
   ValueNotifier<ListToDetailsSecoundPaneHelper?>? onSelectedItem;
 
-  final ValueNotifier<SecondPaneHelper?>? secondPaneHelper;
+  final SecoundPaneHelperWithParentValueNotifier? secondPaneHelper;
 
   bool? isSelected;
   Function(T object)? onClick;
@@ -154,7 +154,10 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
         title: (object.getMainHeaderText(context)),
         subtitle: (object.getMainSubtitleHeaderText(context)),
         // isThreeLine: hasThreeLine,
-        leading: object.getCardLeading(context,),
-        trailing: object.getCardTrailing(context,secPaneHelper:secondPaneHelper));
+        leading: object.getCardLeading(
+          context,
+        ),
+        trailing:
+            object.getCardTrailing(context, secPaneHelper: secondPaneHelper));
   }
 }

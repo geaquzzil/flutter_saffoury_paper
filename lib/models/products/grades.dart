@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/base_with_name_string.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
@@ -6,9 +7,9 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+
 part 'grades.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -72,15 +73,12 @@ class Grades extends BaseWithNameString<Grades> {
       return null;
     }
     return [
-      ListHorizontalApiAutoRestWidget(
-        valueNotifier: onHorizontalListItemClicked,
-        titleString: AppLocalizations.of(context)!
-            .moreFromFormat(getMainHeaderTextOnly(context)),
-        autoRest: AutoRest<Product>(
-            range: 5,
-            obj: Product()..setCustomMap(getSimilarCustomParams(context)),
-            key: "similarProducts${getSimilarCustomParams(context)}"),
-      ),
+      SliverApiMixinAutoRestWidget(
+          autoRest: AutoRest<Product>(
+              range: 5,
+              obj: Product()..setCustomMap(getSimilarCustomParams(context)),
+              key:
+                  "${getTableNameApi()}-$iD-${getSimilarCustomParams(context)}")),
     ];
   }
 

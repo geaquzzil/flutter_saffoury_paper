@@ -89,6 +89,10 @@ class NestedFormBuilder extends StatelessWidget {
   /// name as the unregistered one.
   final bool clearValueOnUnregister;
 
+  final String? Function(Map<String, dynamic>?)? validator;
+
+  final void Function()? onReset;
+
   NestedFormBuilder({
     super.key,
     required this.name,
@@ -98,9 +102,11 @@ class NestedFormBuilder extends StatelessWidget {
     this.autovalidateMode,
     this.initialValue,
     this.skipDisabled = false,
+    this.onReset,
     this.enabled = true,
     this.autoFocusOnValidationFailure = false,
     this.clearValueOnUnregister = false,
+    this.validator,
     GlobalKey<FormBuilderState>? formKey,
     this.parentFormKey,
     this.valueTransformer,
@@ -111,24 +117,25 @@ class NestedFormBuilder extends StatelessWidget {
     return FormBuilderField<Map<String, dynamic>>(
       name: name,
       // autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (v) {
-        debugPrint("BaseEditFinalSub validater $v");
-        return formKey.currentState?.validate(
-                    autoScrollWhenFocusOnInvalid: false,
-                    focusOnInvalid: false) ??
-                false
-            ? null
-            : "Error";
-      },
+      validator: validator ??
+          (v) {
+            debugPrint("BaseEditFinalSub validater $v");
+            return formKey.currentState?.validate(
+                        autoScrollWhenFocusOnInvalid: false,
+                        focusOnInvalid: false) ??
+                    false
+                ? null
+                : "Error";
+          },
       initialValue:
-          parentFormKey?.currentState?.initialValue[name] ?? initialValue,
+          initialValue ?? parentFormKey?.currentState?.initialValue[name],
       valueTransformer: valueTransformer ??
           (value) {
             debugPrint("BaseEditFinalSub valueTransformer $name:$value");
             return value;
           },
       onReset: () => formKey.currentState?.reset(),
-      builder: (field) { 
+      builder: (field) {
         debugPrint("BaseEditFinalSub builder $name:${field.value}");
         convertableMap ??= toJsonViewAbstractForm(field.value);
         return FormBuilder(
@@ -157,7 +164,8 @@ class NestedFormBuilder extends StatelessWidget {
     );
   }
 
-  Map<String, dynamic> toJsonViewAbstractForm(Map<String, dynamic>? map) {
+  static Map<String, dynamic> toJsonViewAbstractForm(
+      Map<String, dynamic>? map) {
     if (map == null) {
       return {};
     }

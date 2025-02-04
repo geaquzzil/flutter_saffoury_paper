@@ -30,6 +30,7 @@ import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
+@Deprecated("Use [PrintNew] instade")
 class PdfPageNew<T extends PrintLocalSetting> extends BasePageApi {
   bool buildBaseHeader;
   List<PrintableMaster>? asList;
@@ -53,7 +54,7 @@ class PdfPageNew<T extends PrintLocalSetting> extends BasePageApi {
   State<PdfPageNew> createState() => _PdfPageNewState();
 }
 
-class _PdfPageNewState extends BasePageWithApi<PdfPageNew> {
+class _PdfPageNewState extends BasePageStateWithApi<PdfPageNew> {
   late Future<Uint8List> loadedFile;
   late Uint8List loadedFileBytes;
   late PrintSettingLargeScreenProvider printSettingListener;

@@ -41,7 +41,7 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return null;
   }
 
-  Icon? getFBIcon({ValueNotifier<SecondPaneHelper?>? secPaneHelper}) {
+  Icon? getFBIcon({SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) {
     IconData? ic = getFBEditIconData();
     return ic == null
         ? null

@@ -15,6 +15,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pdf/pdf.dart' as pdf2;
@@ -95,15 +96,12 @@ class ProductSize extends ViewAbstract<ProductSize> {
       return null;
     }
     return [
-      ListHorizontalApiAutoRestWidget(
-        valueNotifier: onHorizontalListItemClicked,
-        titleString: AppLocalizations.of(context)!
-            .moreFromFormat(getMainHeaderTextOnly(context)),
-        autoRest: AutoRest<Product>(
-            range: 5,
-            obj: Product()..setCustomMap(getSimilarCustomParams(context)),
-            key: "similarProducts${getSimilarCustomParams(context)}"),
-      ),
+      SliverApiMixinAutoRestWidget(
+          autoRest: AutoRest<Product>(
+              range: 5,
+              obj: Product()..setCustomMap(getSimilarCustomParams(context)),
+              key:
+                  "${getTableNameApi()}-$iD-${getSimilarCustomParams(context)}")),
     ];
   }
 

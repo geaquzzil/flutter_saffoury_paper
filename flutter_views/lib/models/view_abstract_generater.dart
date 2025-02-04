@@ -14,7 +14,10 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_components/dialog/bottom_sheet_viewabstract_options.dart';
+import 'package:flutter_view_controller/new_screens/actions/cruds/edit.dart';
 import 'package:flutter_view_controller/new_screens/actions/cruds/print.dart';
+import 'package:flutter_view_controller/new_screens/actions/cruds/view.dart';
+import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
@@ -149,7 +152,9 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     return "https://saffoury.com/$uri/$tableName/$iD";
   }
 
-  Future<void> sharePage(BuildContext context, {ServerActions? action}) async {
+  Future<void> sharePage(BuildContext context,
+      {ServerActions? action,
+      SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) async {
     try {
       ViewAbstract? newO = this as ViewAbstract;
       bool b = getBodyWithoutApi(action ?? ServerActions.view);
@@ -185,7 +190,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   ///routes if viewAbstract then extras is [ViewAbstract] and required [tableName] TODO [iD]
   void exportPage(BuildContext context,
       {List<ViewAbstract>? asList,
-      ValueNotifier<SecondPaneHelper?>? secPaneNotifer}) {
+      SecoundPaneHelperWithParentValueNotifier? secondPaneHelper}) {
     if (!setPaneToSecondOrThird(
         context,
         ListToDetailsSecoundPaneHelper(
@@ -212,7 +217,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void importPage(BuildContext context,
-      {ValueNotifier<SecondPaneHelper?>? secPaneNotifer}) {
+      {SecoundPaneHelperWithParentValueNotifier? secondPaneHelper}) {
     if (!setPaneToSecondOrThird(
         context,
         ListToDetailsSecoundPaneHelper(
@@ -262,7 +267,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void viewPage(BuildContext context,
       {bool? isSecoundSubPaneView,
       bool disableMasterToListOverride = true,
-      ValueNotifier<SecondPaneHelper?>? secPaneNotifer}) {
+      SecoundPaneHelperWithParentValueNotifier? secondPaneHelper}) {
     bool setToThirdPane = isSecoundSubPaneView ?? false;
     bool isGridableItem = isGridable();
     ViewAbstract? isMasterToList = isGridableItem
@@ -270,6 +275,13 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
             .getWebCategoryGridableIsMasterToList(context)
         : null;
     isMasterToList = disableMasterToListOverride ? null : isMasterToList;
+    //TODO what if master to list  fix this
+    if (secondPaneHelper != null) {
+      secondPaneHelper.secPaneNotifier?.value = SecondPaneHelper(
+          title: getIDWithLabel(context, action: ServerActions.print),
+          value: getViewPage(context, parent: secondPaneHelper));
+      return;
+    }
     ListToDetailsSecoundPaneHelper l = isMasterToList == null
         ? ListToDetailsSecoundPaneHelper(
             subObject: isSecoundSubPaneView == true ? this : null,
@@ -327,7 +339,13 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void editPage(BuildContext context,
-      {ValueNotifier<SecondPaneHelper?>? secPaneNotifer}) {
+      {SecoundPaneHelperWithParentValueNotifier? secondPaneHelper}) {
+    if (secondPaneHelper != null) {
+      secondPaneHelper.secPaneNotifier?.value = SecondPaneHelper(
+          title: getIDWithLabel(context, action: ServerActions.edit),
+          value: getEditPage(context, parent: secondPaneHelper));
+      return;
+    }
     if (!setPaneToSecondOrThird(
       context,
       ListToDetailsSecoundPaneHelper(
@@ -398,6 +416,55 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
         });
   }
 
+  Widget getEditPage(BuildContext context,
+      {SecoundPaneHelperWithParentValueNotifier? parent}) {
+    debugPrint("EDIODIDIDID");
+    return EditNew(
+        key: getKeyForWidget(context, ServerActions.edit),
+        extras: this,
+        iD: iD,
+        tableName: getTableNameApi(),
+        isFirstToSecOrThirdPane: true,
+        onBuild: parent?.onBuild,
+        parent: parent?.parent);
+  }
+
+  Widget getViewPage(BuildContext context,
+      {SecoundPaneHelperWithParentValueNotifier? parent}) {
+    return ViewNew(
+        key: getKeyForWidget(context, ServerActions.view),
+        extras: this,
+        iD: iD,
+        isFirstToSecOrThirdPane: true,
+        tableName: getTableNameApi(),
+        onBuild: parent?.onBuild,
+        parent: parent?.parent);
+  }
+
+  Widget getPrintPage(BuildContext context,
+      {required PrintPageType type,
+      List? list,
+      SecoundPaneHelperWithParentValueNotifier? parent}) {
+    return PrintNew(
+      key: getKeyForWidget(context, ServerActions.print),
+      // buildSecondPane: false,
+      isFirstToSecOrThirdPane: true,
+      asList: list?.cast(),
+      type: type,
+      iD: iD,
+      tableName: getTableNameApi(),
+      onBuild: parent?.onBuild,
+      parent: parent?.parent,
+      extras: this,
+    );
+  }
+
+  Key getKeyForWidget(BuildContext context, ServerActions action) {
+    return GlobalKey<BasePageSecoundPaneNotifierState>(
+        debugLabel:
+            "${getTableNameApi()}-${getIDFormat(context)}-${action.name}");
+  }
+
   Future<void> printDirect(BuildContext context, Uint8List file) async {
     Printer? p = await Printing.pickPrinter(context: context);
     if (p != null) {
@@ -412,7 +479,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       {bool standAlone = false,
       List<ViewAbstract>? list,
       bool? isSelfListPrint,
-      ValueNotifier<SecondPaneHelper?>? secPaneNotifer}) {
+      SecoundPaneHelperWithParentValueNotifier? secPaneNotifer}) {
     bool isListPrint = list != null;
     bool isSelfList = isSelfListPrint ?? false;
     PrintPageType type = !isListPrint
@@ -422,18 +489,10 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
             : PrintPageType.list;
     final typeString = type.toString();
     if (secPaneNotifer != null) {
-      secPaneNotifer.value = SecondPaneHelper(
-        title: getIDWithLabel(context, action: ServerActions.print),
-        value: PrintNew(
-          // buildSecondPane: false,
-          isFirstToSecOrThirdPane: true,
-          asList: list?.cast(),
-          type: type,
-          iD: iD,
-          tableName: getTableNameApi(),
-          extras: this,
-        ),
-      );
+      secPaneNotifer.secPaneNotifier?.value = SecondPaneHelper(
+          title: getIDWithLabel(context, action: ServerActions.print),
+          value: getPrintPage(context,
+              type: type, list: list, parent: secPaneNotifer));
       return;
     }
     if (!setPaneToSecondOrThird(

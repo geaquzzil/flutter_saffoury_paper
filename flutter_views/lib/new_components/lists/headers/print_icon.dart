@@ -10,9 +10,9 @@ import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.da
 class PrintIcon extends StatefulWidget {
   final ViewAbstract viewAbstract;
   final List? list;
-  final ValueNotifier<SecondPaneHelper?>? secPaneNotifer;
+  final SecoundPaneHelperWithParentValueNotifier? parent;
   const PrintIcon(
-      {super.key, required this.viewAbstract, this.list, this.secPaneNotifer});
+      {super.key, required this.viewAbstract, this.list, this.parent});
 
   @override
   State<PrintIcon> createState() => _PrintIconState();
@@ -58,12 +58,12 @@ class _PrintIconState extends State<PrintIcon> {
             widget.viewAbstract.printPage(context,
                 list: widget.list!.cast(),
                 isSelfListPrint: false,
-                secPaneNotifer: widget.secPaneNotifer);
+                secPaneNotifer: widget.parent);
           } else {
             widget.viewAbstract.printPage(context,
                 list: widget.list!.cast(),
                 isSelfListPrint: true,
-                secPaneNotifer: widget.secPaneNotifer);
+                secPaneNotifer: widget.parent);
           }
         },
       );
@@ -74,7 +74,7 @@ class _PrintIconState extends State<PrintIcon> {
             widget.viewAbstract.printPage(context,
                 list: widget.list!.cast(),
                 isSelfListPrint: false,
-                secPaneNotifer: widget.secPaneNotifer);
+                secPaneNotifer: widget.parent);
           },
           icon: const Icon(Icons.print));
     } else if (widget.viewAbstract is PrintableSelfListInterface) {
@@ -83,7 +83,7 @@ class _PrintIconState extends State<PrintIcon> {
             widget.viewAbstract.printPage(context,
                 list: widget.list!.cast(),
                 isSelfListPrint: true,
-                secPaneNotifer: widget.secPaneNotifer);
+                secPaneNotifer: widget.parent);
           },
           icon: const Icon(Icons.print));
     } else {

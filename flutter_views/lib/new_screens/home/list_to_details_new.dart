@@ -125,7 +125,7 @@ class _ListToDetailsSecoundPaneNotifierState
                         width: firstPaneWidth,
                         viewAbstract: _viewAbstract,
                         valueNotifer: _listNotifier,
-                        secPaneNotifer: getSecondPaneNotifier,
+                        secPaneNotifer: getSecoundPaneHelper(),
                       );
                     })
               ],
@@ -155,7 +155,7 @@ class _ListToDetailsSecoundPaneNotifierState
           key: keyList,
           hasCustomCardBuilder: (i, v) {
             return ListCardItem(
-              secondPaneHelper: getSecondPaneNotifier,
+              secondPaneHelper: getSecoundPaneHelper(),
               // state: this,
               object: v,
               // isSelected: (lastSecondPaneItem?.value?.isEquals(v) ?? false),//TODO what if the value of viewAbstract is Widget fix this
@@ -216,15 +216,17 @@ class _ListToDetailsSecoundPaneNotifierState
       //   ...top.map((p) => SliverToBoxAdapter(
       //         child: p,
       //       )),
-      SliverFillRemaining(
-        child: ViewNew(
-          buildSecondPane: true,
-          viewAbstract: valueNotifier.value,
-          onBuild: onBuild,
-          key: kk,
-          parent: this,
+      if (valueNotifier.value is ViewAbstract)
+        SliverFillRemaining(
+          child: ViewNew(
+            extras: valueNotifier.value,
+            iD: valueNotifier.value.iD,
+            tableName: valueNotifier.value.getTableNameApi(),
+            onBuild: onBuild,
+            key: kk,
+            parent: this,
+          ),
         ),
-      ),
       // MasterView(
       //   viewAbstract: valueNotifier.value,
       // ),

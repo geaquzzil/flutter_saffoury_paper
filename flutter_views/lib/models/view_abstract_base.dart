@@ -263,7 +263,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   Widget? getCardTrailing(BuildContext context,
-      {ValueNotifier<SecondPaneHelper?>? secPaneHelper}) {
+      {SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) {
     ViewAbstract viewAbstract = this as ViewAbstract;
     Widget? iconOnButton = generateCardLeadingBottomIcon(context);
     debugPrint("getCardTrailing sec ${secPaneHelper == null}");
@@ -538,7 +538,6 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   String getBaseMessage(BuildContext context, {ServerActions? serverAction}) {
     return "${AppLocalizations.of(context)!.areYouSure}${getBaseActionText(context, serverAction: serverAction)} ${getBaseLabelViewAbstract(context)} ";
   }
-  
 }
 
 class GroupItem {

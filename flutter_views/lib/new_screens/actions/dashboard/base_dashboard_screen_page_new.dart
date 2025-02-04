@@ -31,7 +31,7 @@ class BaseDashboardMainPage extends BasePageApi {
 }
 
 class _BaseDashboardMainPageState
-    extends BasePageWithApi<BaseDashboardMainPage> {
+    extends BasePageStateWithApi<BaseDashboardMainPage> {
   //  late DashableInterface dashboard;
   @override
   List<TabControllerHelper>? initTabBarList(

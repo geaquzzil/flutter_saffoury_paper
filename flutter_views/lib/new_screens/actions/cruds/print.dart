@@ -42,6 +42,7 @@ import 'package:tuple/tuple.dart';
 class PrintNew<T extends PrintLocalSetting> extends BasePageApi {
   bool buildBaseHeader;
   List<PrintableMaster>? asList;
+
   PrintPageType? type;
   T? customSetting;
 
@@ -50,6 +51,8 @@ class PrintNew<T extends PrintLocalSetting> extends BasePageApi {
       super.iD,
       super.extras,
       super.tableName,
+      super.onBuild,
+      super.parent,
       this.buildBaseHeader = false,
       this.asList,
       this.type,
@@ -87,7 +90,7 @@ class LoadedPrint {
   int get hashCode => Object.hash(setting, viewAbstract, format);
 }
 
-class _PrintNewState extends BasePageWithApi<PrintNew>
+class _PrintNewState extends BasePageStateWithApi<PrintNew>
     with BasePageSecoundPaneNotifierState<PrintNew> {
   late Future<Uint8List> loadedFile;
   Uint8List? loadedFileBytes;
@@ -447,7 +450,6 @@ class _PrintNewState extends BasePageWithApi<PrintNew>
         initialPageFormat: fomat,
         canChangePageFormat: true,
         canDebug: false,
-        
         scrollViewDecoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius:

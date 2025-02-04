@@ -15,6 +15,7 @@ class FilledCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     if (onPress == null) return getCard(context);
     return GestureDetector(
       onTap: () => onPress,

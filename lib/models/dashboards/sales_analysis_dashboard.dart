@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/funds/credits.dart';
 import 'package:flutter_saffoury_paper/models/funds/debits.dart';
 import 'package:flutter_saffoury_paper/models/funds/incomes.dart';
@@ -38,7 +39,6 @@ import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../invoices/invoice_master.dart';
 
@@ -136,7 +136,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   @override
   getDashboardShouldWaitBeforeRequest(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi>? globalKey,
+      GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab}) {
     return null;
   }
@@ -148,7 +148,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
       BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) {
+      {GlobalKey<BasePageStateWithApi>? globalKey, TabControllerHelper? tab}) {
     return [
       DashableGridHelper(
           title: AppLocalizations.of(context)!.profit_analysis,
@@ -271,7 +271,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
       BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageWithApi>? globalKey,
+      {GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab,
       TabControllerHelper? tabSecondPane}) {
     debugPrint("getDashboardSectionsSecoundPane $this");
@@ -411,7 +411,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   @override
   Widget? getDashboardAppbar(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi>? globalKey,
+      GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab}) {
     if (firstPane == false) return null;
     return DashboardHeader(

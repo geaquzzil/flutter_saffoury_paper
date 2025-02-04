@@ -1,6 +1,8 @@
 // import 'package:bitmap/bitmap.dart';
 // ignore_for_file: non_constant_identifier_names, constant_identifier_names, use_build_context_synchronously, library_prefixes
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -70,6 +72,7 @@ import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:flutter_view_controller/test_var.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pdf/pdf.dart' as d;
@@ -431,7 +434,7 @@ class Product extends ViewAbstract<Product>
       "qualities",
       "grades",
       "countries_manufactures",
-      "products_colors",
+      // "products_colors",
       "date",
       "comments",
       "barcode",
@@ -1408,21 +1411,21 @@ class Product extends ViewAbstract<Product>
     ];
   }
 
-  // @override
-  // Future<List<Product>?> listCall(
-  //     {int? count,
-  //     int? page,
-  //     OnResponseCallback? onResponse,
-  //     Map<String, FilterableProviderHelper>? filter,
-  //     required BuildContext context}) async {
-  //   try {
-  //     Iterable l = jsonDecode(jsonEncode(productsJson));
-  //     return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
-  //   } catch (e) {
-  //     debugPrint("listCallFake ${e.toString()}");
-  //   }
-  //   return null;
-  // }
+  @override
+  Future<List<Product>?> listCall(
+      {int? count,
+      int? page,
+      OnResponseCallback? onResponse,
+      Map<String, FilterableProviderHelper>? filter,
+      required BuildContext context}) async {
+    try {
+      Iterable l = jsonDecode(jsonEncode(productsJson));
+      return List<Product>.from(l.map((model) => fromJsonViewAbstract(model)));
+    } catch (e) {
+      debugPrint("listCallFake ${e.toString()}");
+    }
+    return null;
+  }
 
   @override
   Future getPosableInitObj(BuildContext context) {

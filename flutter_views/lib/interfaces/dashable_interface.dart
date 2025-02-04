@@ -10,9 +10,9 @@ abstract class DashableItemInterface {}
 
 abstract class DashableInterface<T extends ViewAbstract> {
   getDashboardSectionsFirstPane(BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab});
+      {GlobalKey<BasePageStateWithApi>? globalKey, TabControllerHelper? tab});
   getDashboardSectionsSecoundPane(BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageWithApi>? globalKey,
+      {GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab,
       TabControllerHelper? tabSecondPane});
 
@@ -24,16 +24,13 @@ abstract class DashableInterface<T extends ViewAbstract> {
   ///this should wait for user input before request api
   getDashboardShouldWaitBeforeRequest(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi>? globalKey,
+      GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab});
 
   Widget? getDashboardAppbar(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi>? globalKey,
+      GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab});
-
-
-      
 }
 
 enum WidgetDashboardType {
@@ -66,4 +63,3 @@ class DashableGridHelper {
       this.wrapWithCard = false,
       this.sectionsListToTabbar});
 }
-

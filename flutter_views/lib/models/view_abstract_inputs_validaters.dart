@@ -12,7 +12,6 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_generater.dart';
 import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
 import 'package:flutter_view_controller/new_screens/forms/nasted/expansion_edit.dart';
-import 'package:flutter_view_controller/new_screens/forms/nasted/form_builder_typeahead_tipple.dart';
 import 'package:flutter_view_controller/new_screens/forms/nasted/nasted_form_builder.dart';
 import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
@@ -417,8 +416,7 @@ abstract class ViewAbstractInputAndValidater<T>
     return FormOptions(
         type: getMirrorFieldType(field),
         isEnabled: isFieldEnabled(field),
-        value: getFieldValue(field, context: context) ??
-            getMirrorNewInstance(field));
+        value: getFieldValueCheckType(context, field));
   }
 
   Widget getFormFieldAutoComplete(
@@ -426,6 +424,29 @@ abstract class ViewAbstractInputAndValidater<T>
       required String field,
       FormOptions? options}) {
     FormOptions options = getFormOptions(context, field);
+
+    return TypeAheadField<String>(
+      builder: (context, controller, focusNode) {
+        controller.text = options.value as String? ?? "";
+        return getFormFieldText(
+            field: field,
+            context: context,
+            options: options,
+            controller: controller,
+            node: focusNode);
+      },
+      onSelected: (a) {},
+      itemBuilder: (context, containt) {
+        return _getAutoCompleteItemBuilder(context, field, containt);
+      },
+      suggestionsCallback: (query) {
+        if (query.isEmpty) return [];
+        if (query.trim().isEmpty) return [];
+
+        return searchByFieldName(
+            field: field, searchQuery: query, context: context);
+      },
+    );
     return FormBuilderTypeAheadCustom<String>(
         // onTap: () => controller.selection = TextSelection(
         //     baseOffset: 0, extentOffset: controller.value.text.length),
@@ -513,14 +534,24 @@ abstract class ViewAbstractInputAndValidater<T>
   //       borderRadius: const BorderRadius.all(Radius.circular(kBorderRadius)));
   // }
 
+  /// if its auto complete fioeld then we pass controller and node
   Widget getFormFieldText(
       {required BuildContext context,
       required String field,
-      FormOptions? options}) {
+      FormOptions? options,
+      GlobalKey<FormFieldState>? key,
+      TextEditingController? controller,
+      FocusNode? node}) {
     FormOptions options = getFormOptions(context, field);
 
-    return FormBuilderTextField(
+    Widget t = FormBuilderTextField(
+      key: key,
+      name: getTag(field),
+      focusNode: node,
+      controller: controller,
       enabled: options.isEnabled,
+      // initialValue: controller != null ? null : options.value?.toString(),
+
       // onTap: () => controller.selection = TextSelection(
       //     baseOffset: 0, extentOffset: controller.value.text.length),
       onSubmitted: (value) =>
@@ -542,7 +573,6 @@ abstract class ViewAbstractInputAndValidater<T>
       //   }
       // },
 
-      name: getTag(field),
       maxLength: getTextInputMaxLength(field),
       textCapitalization: getTextInputCapitalization(field),
       decoration: getDecoration(
@@ -564,6 +594,14 @@ abstract class ViewAbstractInputAndValidater<T>
         // }
       },
     );
+    // if (field == 'iD') {
+    //   return Visibility(
+    //     visible: false,
+    //     child: t,
+    //   );
+    // }
+
+    return t;
   }
 
   Widget getFormFieldCheckbox(
@@ -620,16 +658,16 @@ abstract class ViewAbstractInputAndValidater<T>
     options ??= getFormOptions(context, field);
 
     return FormBuilderColorPickerField(
-      valueTransformer: (v) {
-        return v?.toHex2();
-      },
       colorPickerType: ColorPickerType.materialPicker,
       // expands: true,
 
       enabled: options.isEnabled,
-      initialValue: (options.value is String)
-          ? (options.value as String).fromHex()
-          : null,
+      // initialValue: (options.value is String?)
+      //     ? (options.value as String?)?.fromHex()
+      //     : null,
+      // valueTransformer: (v) {
+      //   return v?.toHex2();
+      // },
       name: getTag(field),
       // initialDate: (value as String?).toDateTime(),
       decoration: getDecoration(context, castViewAbstract(), field: field),
@@ -644,15 +682,31 @@ abstract class ViewAbstractInputAndValidater<T>
     );
   }
 
-  Widget getFormFieldAutoCompleteViewAbstractResponse(
-      {required BuildContext context,
-      required String field,
-      FormOptions? options,
-      void Function(ViewAbstract<dynamic>)? onSuggestionSelected}) {
+  Widget getFormFieldAutoCompleteViewAbstractResponse({
+    required BuildContext context,
+    required String field,
+    FormOptions? options,
+    void Function(ViewAbstract<dynamic>)? onSuggestionSelected,
+  }) {
     options ??= getFormOptions(context, field);
-
+    GlobalKey<FormFieldState> key = GlobalKey<FormFieldState>();
     return TypeAheadField<ViewAbstract>(
-      onSelected: onSuggestionSelected,
+      builder: (context, controller, focusNode) {
+        controller.text = options?.value as String? ?? "";
+        return getFormFieldText(
+            key: key,
+            field: field,
+            context: context,
+            options: options,
+            controller: controller,
+            node: focusNode);
+      },
+      onSelected: (value) {
+        key.currentState?.didChange(NestedFormBuilder.toJsonViewAbstractForm(
+            value.toJsonViewAbstract()));
+        // key.currentState.save();
+        onSuggestionSelected?.call(value);
+      },
       itemBuilder: (context, containt) {
         return _getAutoCompleteItemBuilder(context, field, containt);
       },
@@ -778,114 +832,6 @@ abstract class ViewAbstractInputAndValidater<T>
     //     });
   }
 
-  Widget getFormFieldAutoCompleteViewAbstract(
-      {required BuildContext context,
-      required String field,
-      FormOptions? options}) {
-    options ??= getFormOptions(context, field);
-
-    return FormBuilderTypeAheadCustom<ViewAbstract>(
-        // suggestionsBoxDecoration:
-        //     _getDecorationAutoCompleteSuggestionBox(context),
-        // transitionBuilder: _getAutoCompleteSuggestionBoxTransition,//TODO
-        // suggestionsBoxDecoratio,
-        itemBuilder: (context, continent) {
-          return _getAutoCompleteItemBuilder(context, field, continent);
-        },
-        hideOnLoading: false,
-        hideOnEmpty: true,
-        // onTap: () => controller.selection = TextSelection(
-        //     baseOffset: 0, extentOffset: controller.value.text.length),
-        enabled: options.isEnabled,
-        // controller: controller,
-        debounceDuration: const Duration(milliseconds: 750),
-        onChangeGetObject: (text) {
-          return (options?.value as ViewAbstract)
-              .getNewInstance(searchByAutoCompleteTextInput: text);
-          // return autoCompleteBySearchQuery
-          //     ? viewAbstract.getNewInstance(searchByAutoCompleteTextInput: text)
-          //     : viewAbstract.getParnet == null
-          //         ? viewAbstract.getNewInstance()
-          //         : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
-          //             viewAbstract.fieldNameFromParent!)
-          //   ..setFieldValue(field, text);
-        },
-        selectionToTextTransformer: (suggestion) {
-          debugPrint(
-              "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.searchByAutoCompleteTextInput}");
-          debugPrint(
-              "getControllerEditTextViewAbstractAutoComplete suggestions => ${suggestion.isNew()}");
-          return suggestion.getMainHeaderTextOnly(context);
-          // return autoCompleteBySearchQuery
-          //     ? suggestion.isNew()
-          //         ? suggestion.searchByAutoCompleteTextInput ?? ""
-          //         : suggestion.getMainHeaderTextOnly(context)
-          //     : getEditControllerText(suggestion.getFieldValue(field));
-        },
-        name: getTag(field),
-        // initialValue: viewAbstract,
-        decoration: getDecoration(
-          context,
-          castViewAbstract(),
-          field: field,
-        ),
-        maxLength: getTextInputMaxLength(field),
-        inputFormatters: getTextInputFormatter(field),
-        textCapitalization: getTextInputCapitalization(field),
-        keyboardType: getTextInputType(field),
-        onSuggestionSelected: (value) {
-          // if (autoCompleteBySearchQuery) {
-          //   onSelected(value);
-          // }
-          // debugPrint(
-          //     "getControllerEditTextViewAbstractAutoComplete value=>$value");
-          // onSelected(viewAbstract.copyWithNewSuggestion(value));
-        },
-        onSaved: (newValue) {
-          // if (autoCompleteBySearchQuery) {}
-
-          // if (viewAbstract.getParnet != null) {
-          //   viewAbstract.getParnet!
-          //       .setFieldValue(viewAbstract.getFieldNameFromParent!, newValue);
-          // } else {
-          //   viewAbstract.setFieldValue(field, newValue);
-          // }
-          // debugPrint(
-          //     'getControllerEditTextViewAbstractAutoComplete onSave parent=> ${viewAbstract.parent.runtimeType} field = ${viewAbstract.getFieldNameFromParent}:value=> ${newValue.runtimeType}');
-        },
-        // loadingBuilder: (context) => const SizedBox(
-        //     width: double.infinity,
-        //     height: 200,
-        //     child: Center(child: CircularProgressIndicator())),
-
-        validator: (value) {
-          return null;
-          // if (autoCompleteBySearchQuery) {
-          //   if (value?.isNew() ?? true) {
-          //     return AppLocalizations.of(context)!
-          //         .errFieldNotSelected(getMainHeaderLabelTextOnly(context));
-          //   } else {
-          //     return getTextInputValidatorOnAutocompleteSelected(
-          //         context, field, value!);
-          //   }
-          // }
-          // return value?.getTextInputValidator(context, field,
-          //     getEditControllerText(value.getFieldValue(field)));
-        },
-        suggestionsCallback: (query) {
-          if (query.isEmpty) return [];
-          if (query.trim().isEmpty) return [];
-          return search(5, 0, query, context: context)
-              as Future<List<ViewAbstract>>;
-          // if (autoCompleteBySearchQuery) {
-          //   return search(5, 0, query, context: context)
-          //       as Future<List<ViewAbstract>>;
-          // }
-          // return searchViewAbstractByTextInputViewAbstract(
-          //     field: field, searchQuery: query, context: context);
-        });
-  }
-
   Widget getFormFieldDateTime(
       {required BuildContext context,
       required String field,
@@ -899,7 +845,7 @@ abstract class ViewAbstractInputAndValidater<T>
       initialValue: (options.value as String?)?.toDateTime(),
       name: getTag(field),
       firstDate: DateTime(2020),
-      lastDate: DateTime(2025),
+      lastDate: DateTime(2030),
       decoration: getDecoration(
         context,
         castViewAbstract(),
@@ -926,14 +872,16 @@ abstract class ViewAbstractInputAndValidater<T>
     FormOptions options = getFormOptions(context, field);
     Widget widget;
     bool shouldWrapWithTile = true;
+
     if (options.value is ViewAbstractEnum) {
       widget = const Text("ENUM");
       //TODO could be ChoiceChip or Dropdown
     } else if (options.value is ViewAbstract) {
+      // widget = Text("DSa");
       widget = NestedFormBuilder(
         name: field,
         parentFormKey: formKey,
-        child: getFormFieldAutoCompleteViewAbstract(
+        child: getFormFieldAutoCompleteViewAbstractResponse(
             context: context, field: field, options: options),
       );
     } else {
@@ -1188,11 +1136,11 @@ abstract class ViewAbstractInputAndValidater<T>
     return InputDecoration(
         icon: icon == null ? null : Icon(icon),
         hintText: hint,
-        border: InputBorder.none,
-        errorStyle: Theme.of(context)
-            .textTheme
-            .bodySmall
-            ?.copyWith(color: Theme.of(context).colorScheme.error),
+        // border: InputBorder.none,
+        // errorStyle: Theme.of(context)
+        //     .textTheme
+        //     .bodySmall
+        //     ?.copyWith(color: Theme.of(context).colorScheme.error),
         labelText: label,
         counterText: '',
         prefixText: prefix,

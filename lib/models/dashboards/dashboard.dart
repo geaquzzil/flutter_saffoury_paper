@@ -1,26 +1,37 @@
 import 'dart:convert';
-import 'package:flutter_saffoury_paper/models/funds/money_funds.dart';
-import 'package:flutter_saffoury_paper/models/prints/print_dashboard_setting.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
-import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
-import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
-import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
-import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
+import 'package:flutter_saffoury_paper/models/funds/money_funds.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
+import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
+import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
+import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
+import 'package:flutter_saffoury_paper/models/prints/print_dashboard_setting.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
+import 'package:flutter_view_controller/models/apis/growth_rate.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/setting.dart';
+import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
@@ -31,26 +42,18 @@ import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dar
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:json_annotation/json_annotation.dart';
-import '../invoices/cuts_invoices/cut_requests.dart';
-import '../invoices/priceless_invoices/reservation_invoice.dart';
-import '../users/balances/customer_terms.dart';
-import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
-import 'package:flutter_saffoury_paper/models/invoices/orders.dart';
-import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/customers_request_sizes.dart';
-import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
-import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
-import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
-import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
-import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
-import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
-import 'package:flutter_view_controller/models/apis/growth_rate.dart';
-import 'balance_due.dart';
+import 'package:pdf/pdf.dart' as d;
+import 'package:pdf/widgets.dart' as pdf;
+
 import '../funds/credits.dart';
 import '../funds/debits.dart';
 import '../funds/incomes.dart';
 import '../funds/spendings.dart';
-import 'package:pdf/widgets.dart' as pdf;
-import 'package:pdf/pdf.dart' as d;
+import '../invoices/cuts_invoices/cut_requests.dart';
+import '../invoices/priceless_invoices/reservation_invoice.dart';
+import '../users/balances/customer_terms.dart';
+import 'balance_due.dart';
+
 part 'dashboard.g.dart';
 
 //TODO on publish do not forget that the iD gives error messages because the response of dashboard iD not found
@@ -190,7 +193,8 @@ class Dashboard extends UserLists<Dashboard>
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
           BuildContext context, int crossAxisCount,
-          {GlobalKey<BasePageWithApi>? globalKey, TabControllerHelper? tab}) =>
+          {GlobalKey<BasePageStateWithApi>? globalKey,
+          TabControllerHelper? tab}) =>
       [
         DashableGridHelper(
             sectionsListToTabbar: getListOfTabbarFunds(),
@@ -331,7 +335,7 @@ class Dashboard extends UserLists<Dashboard>
 
   @override
   getDashboardSectionsSecoundPane(BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageWithApi>? globalKey,
+      {GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab,
       TabControllerHelper? tabSecondPane}) {
     // return [];
@@ -563,7 +567,7 @@ class Dashboard extends UserLists<Dashboard>
   @override
   Widget? getDashboardAppbar(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi>? globalKey,
+      GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab}) {
     if (firstPane == false) return null;
     return DashboardHeader(
@@ -584,7 +588,7 @@ class Dashboard extends UserLists<Dashboard>
   @override
   getDashboardShouldWaitBeforeRequest(BuildContext context,
       {bool? firstPane,
-      GlobalKey<BasePageWithApi>? globalKey,
+      GlobalKey<BasePageStateWithApi>? globalKey,
       TabControllerHelper? tab}) {
     return null;
   }

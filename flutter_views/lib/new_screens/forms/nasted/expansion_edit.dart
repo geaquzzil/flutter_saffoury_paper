@@ -8,6 +8,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/forms/nasted/nasted_form_builder.dart';
 
 const Duration _kExpand = Duration(milliseconds: 200);
 
@@ -20,7 +21,7 @@ class ListTileEdit extends ListTile {
     super.subtitle,
     super.trailing,
     super.isThreeLine = false,
-    super.dense = true,
+    super.dense,
     super.visualDensity,
     super.shape,
     super.style,
@@ -118,6 +119,7 @@ class _ExpansionEditState extends State<ExpansionEdit>
   late Animation<Color?> _headerColor;
   late Animation<Color?> _iconColor;
   late Animation<Color?> _backgroundColor;
+  final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
   bool canExpand = true;
   bool _isNullPressed = false;
@@ -270,18 +272,16 @@ class _ExpansionEditState extends State<ExpansionEdit>
     return _buildIcon(context);
   }
 
-  final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   @override
   Widget build(BuildContext context) {
     final ExpansionTileThemeData expansionTileTheme =
         ExpansionTileTheme.of(context);
     final bool closed = !_isExpanded && _animationController.isDismissed;
-    final bool shouldRemoveChildren = closed && !widget.maintainState;
 
     Widget result = Offstage(
       offstage: closed,
       child: TickerMode(
-        enabled: !closed,
+        enabled: true,
         child: Padding(
           padding: EdgeInsets.zero,
           child: Column(
@@ -295,12 +295,11 @@ class _ExpansionEditState extends State<ExpansionEdit>
     Widget d = AnimatedBuilder(
       animation: _animationController.view,
       builder: _buildChildren,
-      child: shouldRemoveChildren ? null : result,
+      child: result,
     );
-    return FormBuilderField<Map<String, dynamic>>(
+    return NestedFormBuilder(
       name: widget.name,
-      key: formKey,
-      // autovalidateMode: AutovalidateMode.onUserInteraction,
+      formKey: formKey,
       validator: (v) {
         debugPrint("BaseEditFinalSub validater $v");
         return widget.formKey.currentState?.validate(
@@ -310,40 +309,63 @@ class _ExpansionEditState extends State<ExpansionEdit>
             ? null
             : "Error";
       },
-      initialValue:
+      initialValue: convertableMap ??
           widget.parentFormKey?.currentState?.initialValue[widget.name],
-      valueTransformer: (value) {
-        debugPrint("BaseEditFinalSub valueTransformer ${widget.name}:$value");
-        return value;
-      },
-      onReset: () => widget.formKey.currentState?.reset(),
-      builder: (field) {
-        debugPrint("BaseEditFinalSub builder ${widget.name}:${field.value}");
-        convertableMap ??= toJsonViewAbstractForm(field.value);
-        return FormBuilder(
-          key: widget.formKey,
-          initialValue: convertableMap ?? {},
-          onChanged: () {
-            final st = widget.formKey.currentState;
-            if (st == null) return;
-            bool res = st.saveAndValidate(
-                autoScrollWhenFocusOnInvalid: false, focusOnInvalid: false);
-            field.didChange(st.value);
-            debugPrint("\n");
-            debugPrint(
-                "BaseEditFinalSub $res=>onChanged=>${widget.name}:${widget.formKey.currentState?.value}");
-          },
-          // autovalidateMode: AutovalidateMode.always,
+      // valueTransformer: (value) {
+      //   debugPrint("BaseEditFinalSub valueTransformer ${widget.name}:$value");
+      //   return value;
+      // },
+      // onReset: () => widget.formKey.currentState?.reset(),
+      // onReset: () => widget.formKey.currentState?.reset(),
+      child: d,
+      // builder: (field) {
+      //   debugPrint(
+      //       "BaseEditFinalSub builder=> ${widget.name}:${field.value} convertableMap:$convertableMap");
+      //   convertableMap ??= toJsonViewAbstractForm(field.value);
+      //   return FormBuilder(
+      //     key: widget.formKey,
+      //     initialValue: convertableMap ?? {},
+      //     onChanged: () {
+      //       final st = widget.formKey.currentState;
+      //       if (st == null) return;
+      //       bool res = st.saveAndValidate(
+      //           autoScrollWhenFocusOnInvalid: false, focusOnInvalid: false);
+      //       field.didChange(st.value);
+      //       debugPrint("\n");
+      //       debugPrint(
+      //           "BaseEditFinalSub $res=>onChanged=>${widget.name}:${widget.formKey.currentState?.value}");
+      //     },
+      //     // autovalidateMode: AutovalidateMode.always,
 
-          //  onWillPop: onWillPop,
-          skipDisabled: !isFormEnabled(),
-          enabled: isFormEnabled(),
-          //  autoFocusOnValidationFailure: autoFocusOnValidationFailure,
+      //     //  onWillPop: onWillPop,
+      //     skipDisabled: !isFormEnabled(),
+      //     enabled: isFormEnabled(),
+      //     //  autoFocusOnValidationFailure: autoFocusOnValidationFailure,
 
-          child: d,
-        );
-      },
+      //     child: d,
+      //   );
+      // },
     );
+    // return FormBuilderField<Map<String, dynamic>>(
+    //   name: widget.name,
+    //   key: formKey,
+    //   // autovalidateMode: AutovalidateMode.onUserInteraction,
+    //   validator: (v) {
+    //     debugPrint("BaseEditFinalSub validater $v");
+    //     return widget.formKey.currentState?.validate(
+    //                 autoScrollWhenFocusOnInvalid: false,
+    //                 focusOnInvalid: false) ??
+    //             false
+    //         ? null
+    //         : "Error";
+    //   },
+    //   initialValue: convertableMap ??
+    //       widget.parentFormKey?.currentState?.initialValue[widget.name],
+    //   valueTransformer: (value) {
+    //     debugPrint("BaseEditFinalSub valueTransformer ${widget.name}:$value");
+    //     return value;
+    //   },
+    // );
   }
 
   bool isFormEnabled() {
@@ -429,7 +451,7 @@ class _ExpansionEditState extends State<ExpansionEdit>
               textColor: _headerColor.value,
               child: ListTile(
                 // leadingAndTrailingTextStyle: ,
-                onTap: _handleTap,
+                onTap: hasChildrens() ? null : _handleTap,
                 contentPadding: EdgeInsets.zero,
                 // leading: widget.leading,
                 title: getTitle(),
@@ -478,7 +500,7 @@ class _ExpansionEditState extends State<ExpansionEdit>
   }
 
   Widget? getTrailing() {
-    if (!hasChildrens()) return null;
+    if (!hasChildrens()) return _buildTrailingIcon(context);
     return isNullable()
         ? ElevatedButton(
             // style: ,
@@ -519,6 +541,7 @@ class _ExpansionEditState extends State<ExpansionEdit>
         null;
   }
 
+  TextEditingController text = TextEditingController();
   Widget getTitle() {
     if (hasChildrens()) {
       return Focus(
@@ -532,31 +555,44 @@ class _ExpansionEditState extends State<ExpansionEdit>
             context: context,
             field: fieldThatHasAutoComplete,
             onSuggestionSelected: (p0) {
-              debugPrint("ExpansionTile $convertableMap");
-              setState(() {
-                convertableMap =
-                    toJsonViewAbstractForm(p0.toJsonViewAbstract());
-              });
+              // convertableMap = toJsonViewAbstractForm(p0.toJsonViewAbstract());
+              // debugPrint("ExpansionTile after=> $convertableMap");
+              // // setState(() {
+              // //   convertableMap =
+              // //       toJsonViewAbstractForm(p0.toJsonViewAbstract());
+              // //   debugPrint("ExpansionTile after $convertableMap");
+              // // });
+              // // _toggleExpansion(expand: false);
+              // // widget.formKey.currentState?.reset();
+              // // formKey.currentState.
+              // WidgetsBinding.instance.addPostFrameCallback((_) {
+              //   widget.parentFormKey?.currentState?.fields[widget.name]
+              //       ?.didChange(convertableMap);
+
+              formKey.currentState?.save();
               formKey.currentState?.reset();
+              // });
+
+              // formKey.currentState?.reset();
             },
           ));
     } else {
-      return const Text("TITL");
+      return Text(widget.viewAbstract.getMainHeaderLabelTextOnly(context));
     }
   }
 
   List<Widget>? getChildrens() {
-    List l = widget.viewAbstract.getMainFields()..add("iD");
-    if (hasChildrens()) {
-      return l
-          .where((p) => p != fieldThatHasAutoComplete)
-          .map((f) => widget.viewAbstract.getFormMainControllerWidget(
-              context: context,
-              field: f,
-              formKey: widget.formKey,
-              parent: widget.viewAbstract.getParnet))
-          .toList();
-    }
+    List l = widget.viewAbstract.getMainFields()..add('iD');
+
+    return l
+        .where((p) => p != fieldThatHasAutoComplete)
+        .map((f) => widget.viewAbstract.getFormMainControllerWidget(
+            context: context,
+            field: f,
+            formKey: widget.formKey,
+            parent: widget.viewAbstract.getParnet))
+        .toList();
+
     return null;
   }
 
@@ -582,10 +618,10 @@ class _ExpansionEditState extends State<ExpansionEdit>
     );
   }
 
-  TextEditingController text = TextEditingController();
+  // TextEditingController text = TextEditingController();
 
   void _handleTap() {
-    if (!hasChildrens()) return;
+    // if (!hasChildrens()) return;
     _toggleExpansion();
   }
 

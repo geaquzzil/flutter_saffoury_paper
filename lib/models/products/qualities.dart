@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 part 'qualities.g.dart';
@@ -77,15 +78,12 @@ class Quality extends BaseWithNameString<Quality> {
       return null;
     }
     return [
-      ListHorizontalApiAutoRestWidget(
-        valueNotifier: onHorizontalListItemClicked,
-        titleString: AppLocalizations.of(context)!
-            .moreFromFormat(getMainHeaderTextOnly(context)),
-        autoRest: AutoRest<Product>(
-            range: 5,
-            obj: Product()..setCustomMap(getSimilarCustomParams(context)),
-            key: "similarProducts${getSimilarCustomParams(context)}"),
-      ),
+      SliverApiMixinAutoRestWidget(
+          autoRest: AutoRest<Product>(
+              range: 5,
+              obj: Product()..setCustomMap(getSimilarCustomParams(context)),
+              key:
+                  "${getTableNameApi()}-$iD-${getSimilarCustomParams(context)}")),
     ];
   }
 

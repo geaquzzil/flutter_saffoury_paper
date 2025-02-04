@@ -360,7 +360,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   Widget getPopupMenuActionWidget(BuildContext c, ServerActions action,
       {SliverApiWithStaticMixin? state,
-      ValueNotifier<SecondPaneHelper?>? secPaneHelper}) {
+      SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) {
     //TODO for divider use PopupMenuDivider()
     List<MenuItemBuild> items = action == ServerActions.edit
         ? getPopupMenuActionsEdit(c)
@@ -389,7 +389,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   ListTile buildMenuItemListTile(BuildContext context, MenuItemBuild e,
       {SliverApiWithStaticMixin? state,
-      ValueNotifier<SecondPaneHelper?>? secPaneHelper}) {
+      SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) {
     return ListTile(
       leading: Icon(e.icon),
       title: Text(e.title),
@@ -403,7 +403,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   PopupMenuItem<MenuItemBuild> buildMenuItem(
           BuildContext context, MenuItemBuild e,
-          {ValueNotifier<SecondPaneHelper?>? secPaneHelper}) =>
+          {SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) =>
       PopupMenuItem(
           value: e,
           child:
@@ -417,18 +417,19 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result,
       {ServerActions? action,
       SliverApiWithStaticMixin? state,
-      ValueNotifier<SecondPaneHelper?>? secPaneHelper}) async {
+      SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) async {
     debugPrint(
         "onPopupMenuActionSelected $result secPaneHelper is null ? ${secPaneHelper == null}");
 
     if (result.icon == Icons.share) {
-      sharePage(context, action: action);
+      sharePage(context, action: action, secPaneHelper: secPaneHelper);
     } else if (result.icon == Icons.print) {
       printPage(context, secPaneNotifer: secPaneHelper);
     } else if (result.icon == Icons.edit) {
-      editPage(context, secPaneNotifer: secPaneHelper);
+      debugPrint("Dsadasdasdas");
+      editPage(context, secondPaneHelper: secPaneHelper);
     } else if (result.icon == Icons.view_agenda) {
-      viewPage(context, secPaneNotifer: secPaneHelper);
+      viewPage(context, secondPaneHelper: secPaneHelper);
     } else if (result.icon == Icons.list) {
       state?.toggleSelectedMood();
     }
