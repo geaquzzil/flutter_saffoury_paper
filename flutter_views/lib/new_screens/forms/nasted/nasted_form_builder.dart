@@ -119,7 +119,7 @@ class NestedFormBuilder extends StatelessWidget {
       // autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validator ??
           (v) {
-            debugPrint("BaseEditFinalSub validater $v");
+            debugPrint("NestedFormBuilder validater $v");
             return formKey.currentState?.validate(
                         autoScrollWhenFocusOnInvalid: false,
                         focusOnInvalid: false) ??
@@ -131,13 +131,22 @@ class NestedFormBuilder extends StatelessWidget {
           initialValue ?? parentFormKey?.currentState?.initialValue[name],
       valueTransformer: valueTransformer ??
           (value) {
-            debugPrint("BaseEditFinalSub valueTransformer $name:$value");
+            debugPrint("NestedFormBuilder valueTransformer $name:$value");
             return value;
           },
+      onChanged: (value) {
+        // formKey.currentState?.patchValue(value ?? {});
+        debugPrint("NestedFormBuilder onChanged $name:$value");
+        // formKey.currentState?.save();
+        // parentFormKey?.currentState?.reset();
+      },
+      onSaved: (newValue) {
+        debugPrint("NestedFormBuilder onSaved $name:$newValue");
+      },
       onReset: () => formKey.currentState?.reset(),
       builder: (field) {
-        debugPrint("BaseEditFinalSub builder $name:${field.value}");
-        convertableMap ??= toJsonViewAbstractForm(field.value);
+        debugPrint("NestedFormBuilder builder $name:${field.value}");
+        convertableMap = toJsonViewAbstractForm(field.value);
         return FormBuilder(
           key: formKey,
           initialValue: convertableMap ?? {},
@@ -147,9 +156,10 @@ class NestedFormBuilder extends StatelessWidget {
             bool res = st.saveAndValidate(
                 autoScrollWhenFocusOnInvalid: false, focusOnInvalid: false);
             field.didChange(valueTransformer?.call(st.value) ?? st.value);
+           
             debugPrint("\n");
             debugPrint(
-                "BaseEditFinalSub $res=>onChanged=>$name:${formKey.currentState?.value}");
+                "NestedFormBuilder $res=>onChanged=>$name:${formKey.currentState?.value}");
           },
           // autovalidateMode: AutovalidateMode.always,
 

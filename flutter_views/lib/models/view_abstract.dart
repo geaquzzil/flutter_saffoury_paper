@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -200,6 +202,54 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     //todo i added this for notify filter and sort by sliver api master
     (newObject).setCustomMap(getCustomMap);
 
+    return newObject;
+  }
+
+  Map<String, dynamic> toJsonViewAbstractForm(Map<String, dynamic>? map) {
+    if (map == null) {
+      return {};
+    }
+    String jsonString = jsonEncode(map);
+    return jsonDecode(
+      jsonString,
+      reviver: (key, value) {
+        if (value is num) {
+          return value.toString(); // Convert number to string
+        }
+        if (value is double) {
+          return value.toString();
+        }
+        if (value is int) {
+          return value.toString();
+        }
+
+        return value;
+      },
+    );
+  }
+
+  T? copyWithFromForms(Map<String, dynamic>? map) {
+    if (map == null) return null;
+    debugPrint("copyWithFromForms $map");
+    Map<String, dynamic> jsonCopy = toJsonViewAbstract();
+    jsonCopy.forEach((key, value) {
+      if (map.containsKey(key)) {
+        if (isViewAbstract(key)) {
+          ViewAbstract? v = (getMirrorNewInstance(key) as ViewAbstract?)
+              ?.copyWithFromForms(map[key]);
+          jsonCopy[key] = (v)?.toJsonViewAbstract();
+        } else {
+          jsonCopy[key] = castFieldValue(key, map[key]);
+        }
+      }
+    });
+    T newObject = fromJsonViewAbstract(jsonCopy);
+
+    ((newObject as ViewAbstract)).setFieldNameFromParent(fieldNameFromParent);
+    (newObject).setParent(parent);
+    (newObject).setLastSearchViewAbstractByTextInputList(
+        getLastSearchViewByTextInputList);
+    (newObject).textFieldController = textFieldController;
     return newObject;
   }
 

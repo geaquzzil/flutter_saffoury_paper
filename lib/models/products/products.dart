@@ -438,7 +438,7 @@ class Product extends ViewAbstract<Product>
       "date",
       "comments",
       "barcode",
-      "status"
+      // "status"
     ];
   }
 

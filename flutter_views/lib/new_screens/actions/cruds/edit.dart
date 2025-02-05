@@ -153,9 +153,12 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
           onChanged: () {
             bool? res = formKey.currentState?.saveAndValidate(
                 focusOnInvalid: false, autoScrollWhenFocusOnInvalid: false);
-
-            debugPrint(
-                "BaseEditFinal FormBuilder onChanged res $res onChanged${formKey.currentState?.value}");
+            setExtras(
+                ex: getExtrasCast()
+                    .copyWithFromForms(formKey.currentState?.value ?? {}));
+            // setState(() {});
+            // debugPrint(
+            //     "BaseEditFinal FormBuilder onChanged res $res onChanged${formKey.currentState?.value}");
 
             // formKey.currentState?.fields["status"]?.
 

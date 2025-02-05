@@ -422,20 +422,25 @@ abstract class ViewAbstractInputAndValidater<T>
   Widget getFormFieldAutoComplete(
       {required BuildContext context,
       required String field,
+      required GlobalKey<FormBuilderState> parentForm,
       FormOptions? options}) {
     FormOptions options = getFormOptions(context, field);
-
+    // GlobalKey<FormFieldState> fieldKey = GlobalKey<FormFieldState>();
     return TypeAheadField<String>(
       builder: (context, controller, focusNode) {
         controller.text = options.value as String? ?? "";
+
         return getFormFieldText(
+            // key: fieldKey,
             field: field,
             context: context,
             options: options,
             controller: controller,
             node: focusNode);
       },
-      onSelected: (a) {},
+      onSelected: (a) {
+        parentForm.currentState?.patchValue({field: a});
+      },
       itemBuilder: (context, containt) {
         return _getAutoCompleteItemBuilder(context, field, containt);
       },
@@ -550,7 +555,11 @@ abstract class ViewAbstractInputAndValidater<T>
       focusNode: node,
       controller: controller,
       enabled: options.isEnabled,
-      // initialValue: controller != null ? null : options.value?.toString(),
+      // onChanged: (value) {
+      //   controller?.text = value ?? "";
+      // },
+
+      initialValue: controller != null ? null : options.value?.toString(),
 
       // onTap: () => controller.selection = TextSelection(
       //     baseOffset: 0, extentOffset: controller.value.text.length),
@@ -685,6 +694,7 @@ abstract class ViewAbstractInputAndValidater<T>
   Widget getFormFieldAutoCompleteViewAbstractResponse({
     required BuildContext context,
     required String field,
+    GlobalKey<FormFieldState>? parentForm,
     FormOptions? options,
     void Function(ViewAbstract<dynamic>)? onSuggestionSelected,
   }) {
@@ -694,7 +704,7 @@ abstract class ViewAbstractInputAndValidater<T>
       builder: (context, controller, focusNode) {
         controller.text = options?.value as String? ?? "";
         return getFormFieldText(
-            key: key,
+            // key: key,
             field: field,
             context: context,
             options: options,
@@ -702,9 +712,7 @@ abstract class ViewAbstractInputAndValidater<T>
             node: focusNode);
       },
       onSelected: (value) {
-        key.currentState?.didChange(NestedFormBuilder.toJsonViewAbstractForm(
-            value.toJsonViewAbstract()));
-        // key.currentState.save();
+        debugPrint("onSeggestionSelected onSelected");
         onSuggestionSelected?.call(value);
       },
       itemBuilder: (context, containt) {
@@ -905,7 +913,10 @@ abstract class ViewAbstractInputAndValidater<T>
         widget = const Text("FILE");
       } else if (textFieldTypeVA == FormFieldControllerType.AUTO_COMPLETE) {
         widget = getFormFieldAutoComplete(
-            context: context, field: field, options: options);
+            context: context,
+            field: field,
+            parentForm: formKey,
+            options: options);
       } else if (textFieldTypeVA ==
           FormFieldControllerType.AUTO_COMPLETE_VIEW_ABSTRACT_RESPONSE) {
         widget = getFormFieldAutoCompleteViewAbstractResponse(

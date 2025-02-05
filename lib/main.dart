@@ -106,11 +106,39 @@ void initializeError() {
   };
 }
 
+// class MyApp extends StatelessWidget {
+//   MyApp({super.key});
+//   final form = FormGroup({
+//     'lightIntensity': FormControl<double>(value: 50.0),
+//   });
+//   @override
+//   Widget build(BuildContext context) {
+//     return ReactiveForm(
+//         formGroup: form,
+//         child: Column(
+//           children: <Widget>[
+//             ReactiveValueListenableBuilder<double>(
+//               formControlName: 'lightIntensity',
+//               builder: (context, value, child) {
+//                 return Text('lights at $value%');
+//               },
+//             ),
+//             ReactiveSlider(
+//               formControlName: 'lightIntensity',
+//               max: 100.0,
+//             ),
+//           ],
+//         ));
+//   }
+// }
+
 void main() async {
   initializeReflectable();
+  // runApp(MyApp());
+  // return;
 
   WidgetsFlutterBinding.ensureInitialized();
-  initializeError();
+  // initializeError();
 
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,

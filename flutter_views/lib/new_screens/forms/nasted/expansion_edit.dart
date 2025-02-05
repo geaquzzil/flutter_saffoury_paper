@@ -80,8 +80,8 @@ class ExpansionEdit extends StatefulWidget {
   final GlobalKey<FormBuilderState>? parentFormKey;
 
   /// Nested Form Key
-  final GlobalKey<FormBuilderState> formKey;
-  ExpansionEdit({
+  final GlobalKey<FormBuilderState>? formKey;
+  const ExpansionEdit({
     super.key,
     this.initiallyExpanded = false,
     this.controlAffinity,
@@ -89,9 +89,9 @@ class ExpansionEdit extends StatefulWidget {
     required this.viewAbstract,
     this.maintainState = true,
     required this.name,
-    GlobalKey<FormBuilderState>? formKey,
+    this.formKey,
     this.parentFormKey,
-  }) : formKey = formKey ?? GlobalKey<FormBuilderState>();
+  });
 
   @override
   State<ExpansionEdit> createState() => _ExpansionEditState();
@@ -119,7 +119,7 @@ class _ExpansionEditState extends State<ExpansionEdit>
   late Animation<Color?> _headerColor;
   late Animation<Color?> _iconColor;
   late Animation<Color?> _backgroundColor;
-  final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
+  late GlobalKey<FormBuilderState> formKey;
 
   bool canExpand = true;
   bool _isNullPressed = false;
@@ -131,6 +131,7 @@ class _ExpansionEditState extends State<ExpansionEdit>
   @override
   void initState() {
     super.initState();
+    formKey = widget.formKey ?? GlobalKey<FormBuilderState>();
     _animationController = AnimationController(duration: _kExpand, vsync: this);
     _heightFactor = _animationController.drive(_heightFactorTween);
     _iconTurns = _animationController.drive(_halfTween.chain(_easeInTween));
@@ -299,18 +300,20 @@ class _ExpansionEditState extends State<ExpansionEdit>
     );
     return NestedFormBuilder(
       name: widget.name,
+      parentFormKey: widget.parentFormKey,
       formKey: formKey,
       validator: (v) {
         debugPrint("BaseEditFinalSub validater $v");
-        return widget.formKey.currentState?.validate(
+        return formKey.currentState?.validate(
                     autoScrollWhenFocusOnInvalid: false,
                     focusOnInvalid: false) ??
                 false
             ? null
             : "Error";
       },
-      initialValue: convertableMap ??
+      initialValue:
           widget.parentFormKey?.currentState?.initialValue[widget.name],
+
       // valueTransformer: (value) {
       //   debugPrint("BaseEditFinalSub valueTransformer ${widget.name}:$value");
       //   return value;
@@ -555,7 +558,19 @@ class _ExpansionEditState extends State<ExpansionEdit>
             context: context,
             field: fieldThatHasAutoComplete,
             onSuggestionSelected: (p0) {
-              // convertableMap = toJsonViewAbstractForm(p0.toJsonViewAbstract());
+              convertableMap = toJsonViewAbstractForm(p0.toJsonViewAbstract());
+              debugPrint(
+                  "onSeggestionSelected onSuggestionSelected ${widget.name}:$convertableMap");
+
+              widget.parentFormKey?.currentState
+                  ?.patchValue({widget.name: convertableMap});
+              widget.parentFormKey?.currentState?.save();
+              formKey.currentState?.reset();
+              debugPrint(
+                  "onSeggestionSelected parent values ${widget.parentFormKey?.currentState?.value}");
+
+              // widget.parentFormKey?.currentState?.reset();
+              // formKey.currentState?.reset();
               // debugPrint("ExpansionTile after=> $convertableMap");
               // // setState(() {
               // //   convertableMap =
@@ -569,8 +584,8 @@ class _ExpansionEditState extends State<ExpansionEdit>
               //   widget.parentFormKey?.currentState?.fields[widget.name]
               //       ?.didChange(convertableMap);
 
-              formKey.currentState?.save();
-              formKey.currentState?.reset();
+              // formKey.currentState?.save();
+              // formKey.currentState?.reset();
               // });
 
               // formKey.currentState?.reset();
@@ -589,7 +604,7 @@ class _ExpansionEditState extends State<ExpansionEdit>
         .map((f) => widget.viewAbstract.getFormMainControllerWidget(
             context: context,
             field: f,
-            formKey: widget.formKey,
+            formKey: formKey,
             parent: widget.viewAbstract.getParnet))
         .toList();
 
@@ -601,21 +616,6 @@ class _ExpansionEditState extends State<ExpansionEdit>
       return true;
     }
     return false;
-  }
-
-  FormBuilderTextField getTextField(String key) {
-    return FormBuilderTextField(
-      maxLines: 1,
-      // controller: text,
-      name: key,
-      decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: "HINT",
-          icon: Icon(
-            Icons.access_alarms_outlined,
-            color: _iconColor.value,
-          )),
-    );
   }
 
   // TextEditingController text = TextEditingController();
