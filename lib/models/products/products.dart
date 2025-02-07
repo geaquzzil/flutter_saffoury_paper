@@ -427,14 +427,14 @@ class Product extends ViewAbstract<Product>
   @override
   List<String> getMainFields({BuildContext? context}) {
     return [
-      "customs_declarations",
-      "products_types",
+      // "customs_declarations",
+      // "products_types",
       "sizes",
-      "gsms",
-      "qualities",
-      "grades",
-      "countries_manufactures",
-      // "products_colors",
+      // "gsms",
+      // "qualities",
+      // "grades",
+      // "countries_manufactures",
+      "products_colors",
       "date",
       "comments",
       "barcode",

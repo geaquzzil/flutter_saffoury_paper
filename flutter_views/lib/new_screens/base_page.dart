@@ -17,7 +17,6 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
-import 'package:flutter_view_controller/new_screens/actions/cruds/edit.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
@@ -2245,6 +2244,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
       _connectionState.value =
           overrideConnectionState(BasePageWithApiConnection.build) ??
               ConnectionStateExtension.none;
+      initStateAfterApiCalled();
       return super.getMainPanes();
     }
     return FutureBuilder<dynamic>(

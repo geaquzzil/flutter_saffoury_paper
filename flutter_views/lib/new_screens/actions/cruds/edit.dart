@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart' as FB;
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/forms/nasted/expansion_edit.dart';
+import 'package:flutter_view_controller/new_screens/forms/nasted/expansion_edit_reactive.dart';
 import 'package:flutter_view_controller/new_screens/forms/nasted/nasted_form_builder.dart';
 import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
-import 'package:sliver_tools/sliver_tools.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
 class EditNew extends BasePageApi {
   EditNew(
@@ -27,12 +28,22 @@ class EditNew extends BasePageApi {
 
 class _BaseNewState extends BasePageStateWithApi<EditNew>
     with BasePageSecoundPaneNotifierState<EditNew> {
-  GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
-  late List<String> _fields;
+  GlobalKey<FB.FormBuilderState> formKey = GlobalKey<FB.FormBuilderState>();
+  FormGroup? _baseForm;
 
   @override
   void initStateAfterApiCalled() {
-    _fields = getExtrasCast().getMainFields(context: context).toList();
+    _baseForm ??= getExtrasCast().getBaseFormGroup(context);
+    _baseForm!.controls.forEach(
+      (key, value) {
+        if (value is FormGroup) {
+          debugPrint("_BaseNewState _baseForm $key:${value.controls}");
+        } else {
+          debugPrint("_BaseNewState _baseForm $key:$value");
+        }
+      },
+    );
+    // debugPrint("_BaseNewState _baseForm ${_baseForm.controls}");
   }
 
   Map<String, dynamic> getInitialData() {
@@ -53,6 +64,20 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     return child;
   }
 
+  List<Widget> getFormContentReactive(ViewAbstract viewAbstract,
+      {ViewAbstract? parent, String? fieldNameFromParent}) {
+    viewAbstract.onBeforeGenerateView(context, action: ServerActions.edit);
+    viewAbstract.setParent(parent);
+    viewAbstract.setFieldNameFromParent(fieldNameFromParent);
+    // List l = viewAbstract.getMainFields()..add("iD");
+    var child = <Widget>[
+      ...viewAbstract.getMainFields().map((e) {
+        return checkToGetControllerWidgetReactive(context, viewAbstract, e);
+      }),
+    ];
+    return child;
+  }
+
   Widget wrapWithColumn(List<Widget> childs) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -61,6 +86,40 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
   }
 
   bool isChanged = false;
+  Widget checkToGetControllerWidgetReactive(
+      BuildContext context, ViewAbstract viewAbstract, String field) {
+    dynamic fieldValue = viewAbstract.getFieldValue(field) ??
+        viewAbstract.getMirrorNewInstance(field);
+
+    bool enabled = viewAbstract.isFieldEnabled(field);
+
+    if (viewAbstract.isViewAbstract(field)) {
+      bool shouldWrap = viewAbstract.shouldWrapWithExpansionCardWhenChild();
+
+      if (shouldWrap) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: kDefaultPadding * .25),
+          child: ExpansionEditReactive(
+            name: field,
+            parentFormGroup: _baseForm!,
+            childFormGroup: _baseForm!.controls[field] as FormGroup,
+            viewAbstract: fieldValue,
+            valueFromParent: viewAbstract.getFieldValue(field),
+          ),
+        );
+      } else {
+        List<Widget> childs = getFormContent(fieldValue,
+            parent: viewAbstract, fieldNameFromParent: field);
+        return ReactiveForm(
+          formGroup: _baseForm!.controls[field]! as FormGroup,
+          child: wrapWithColumn(childs),
+        );
+      }
+    }
+    return viewAbstract.getFormMainControllerWidgetReactive(
+        context: context, field: field, baseForm: _baseForm!);
+  }
+
   Widget checkToGetControllerWidget(
       BuildContext context, ViewAbstract viewAbstract, String field) {
     dynamic fieldValue = viewAbstract.getFieldValue(field) ??
@@ -145,28 +204,59 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     debugPrint("dasdasas dassa");
     // return [];
     return [
-      FormBuilder(
-          initialValue: getInitialData(),
-          // autovalidateMode: AutovalidateMode.always,
-          key: formKey,
-          skipDisabled: true,
-          onChanged: () {
-            bool? res = formKey.currentState?.saveAndValidate(
-                focusOnInvalid: false, autoScrollWhenFocusOnInvalid: false);
-            setExtras(
-                ex: getExtrasCast()
-                    .copyWithFromForms(formKey.currentState?.value ?? {}));
-            // setState(() {});
-            // debugPrint(
-            //     "BaseEditFinal FormBuilder onChanged res $res onChanged${formKey.currentState?.value}");
-
-            // formKey.currentState?.fields["status"]?.
-
-            // onValidateForm(context);
-          },
-          child: MultiSliver(children: [...getFormContent(getExtrasCast())]))
+      // getFormBuilderWidget()
+      SliverToBoxAdapter(child: getFormReactive())
     ];
   }
+
+  Widget getFormReactive() {
+    return ReactiveFormBuilder(
+      form: () => _baseForm!,
+      builder: (context, form, child) {
+        return Column(
+          spacing: 10,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ...getFormContentReactive(getExtrasCast()),
+            ReactiveFormConsumer(
+              builder: (context, form, child) => TextButton(
+                onPressed: form.valid
+                    ? () {
+                        _baseForm!.markAllAsTouched();
+                        debugPrint("${_baseForm!.value}");
+                      }
+                    : null,
+                child: const Text('Sign Up'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // FB.FormBuilder getFormBuilderWidget() {
+  //   return FormBuilder(
+  //       initialValue: getInitialData(),
+  //       // autovalidateMode: AutovalidateMode.always,
+  //       key: formKey,
+  //       skipDisabled: true,
+  //       onChanged: () {
+  //         bool? res = formKey.currentState?.saveAndValidate(
+  //             focusOnInvalid: false, autoScrollWhenFocusOnInvalid: false);
+  //         setExtras(
+  //             ex: getExtrasCast()
+  //                 .copyWithFromForms(formKey.currentState?.value ?? {}));
+  //         // setState(() {});
+  //         // debugPrint(
+  //         //     "BaseEditFinal FormBuilder onChanged res $res onChanged${formKey.currentState?.value}");
+
+  //         // formKey.currentState?.fields["status"]?.
+
+  //         // onValidateForm(context);
+  //       },
+  //       child: MultiSliver(children: [...getFormContent(getExtrasCast())]));
+  // }
 
   @override
   ServerActions getServerActions() => ServerActions.edit;

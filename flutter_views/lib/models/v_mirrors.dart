@@ -30,7 +30,6 @@ abstract class VMirrors<T> {
     return getSelfNewInstance();
   }
 
-
   Type getMirrorFieldsType(String field) {
     return getMirrorFieldsMapNewInstance()[field].runtimeType;
   }
@@ -129,6 +128,15 @@ abstract class VMirrors<T> {
       if (getFieldValue(field, context: context) == null) return "";
       return getFieldValue(field, context: context).toString();
     }
+  }
+
+  dynamic getFieldValueReturnDefualtOnNull(BuildContext context, String field) {
+    dynamic v = getMirrorNewInstance(field);
+    dynamic fieldValue = getFieldValue(field, context: context);
+    if (fieldValue == null) {
+      return v;
+    }
+    return fieldValue;
   }
 
   String getFieldValueCheckTypeChangeToCurrencyFormat(

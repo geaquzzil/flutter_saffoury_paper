@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   desktop_window
   dynamic_color
+  file_selector_windows
   flutter_libserialport
   printing
   screen_retriever_windows

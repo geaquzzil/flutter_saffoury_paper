@@ -33,3 +33,7 @@ for github
      FutterFire
                 My workaround for now is to add set(CMAKE_BUILD_TYPE "Release")
                 to my windows/CMakeLists.txt file before the include(flutter/generated_plugins.cmake), but this is a nasty hack.
+
+
+                ReactiveForm when resetState it remove all values 
+                Use PatchValue to modifiy only the map given

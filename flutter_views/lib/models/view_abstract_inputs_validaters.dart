@@ -17,6 +17,9 @@ import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:reactive_color_picker/reactive_color_picker.dart';
+import 'package:reactive_forms/reactive_forms.dart';
+import 'package:reactive_raw_autocomplete/reactive_raw_autocomplete.dart';
 
 abstract class ViewAbstractInputAndValidater<T>
     extends ViewAbstractController<T> {
@@ -184,6 +187,33 @@ abstract class ViewAbstractInputAndValidater<T>
   String? getTextInputValidatorOnAutocompleteSelected(
       BuildContext context, String field, ViewAbstract value) {
     return null;
+  }
+
+  Map<String, String Function(Object)>? getTextInputValidatorReactive(
+      BuildContext context, String field) {
+    String passWordPattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    double? maxValue = getTextInputValidatorMaxValue(field);
+    double? minValue = getTextInputValidatorMinValue(field);
+    Validator? password = getValidatorsIfPassowrd(context, field);
+    Validator? name = getValidtorsIfName(context, field);
+    Validator? email = getValidatorsIfEmail(context, field);
+    debugPrint(
+        "getTextInputValidatorReactive for $field , maxValue:  $maxValue e=>  ");
+    return {
+      if (isFieldRequired(field))
+        ValidationMessage.required: (_) => getAppLocal(context)!.errField,
+      if (maxValue != null)
+        ValidationMessage.max: (as) =>
+            "${getAppLocal(context)!.errFieldShouldBeGreater} $as",
+      if (minValue != null)
+        ValidationMessage.min: (as) =>
+            "${getAppLocal(context)!.errFieldShouldBeLess} $as",
+      if (name != null) ValidationMessage.pattern: (as) => "TODO for name",
+      if (password != null)
+        ValidationMessage.pattern: (as) => "TODO for Passowrd",
+      if (email != null) ValidationMessage.pattern: (as) => "TODO for email",
+    };
   }
 
   String? Function(E? val) getTextInputValidatorCompose<E>(
@@ -419,6 +449,111 @@ abstract class ViewAbstractInputAndValidater<T>
         value: getFieldValueCheckType(context, field));
   }
 
+  Widget _optionsViewBuilder<E extends Object>(
+      BuildContext context,
+      String field,
+      AutocompleteOnSelected<E> onSelected,
+      Iterable<E> options,
+      BoxConstraints constraints) {
+    final selectedIndex = AutocompleteHighlightedOption.of(context);
+    return Align(
+      alignment: Alignment.topLeft,
+      child: SizedBox(
+        width: constraints.biggest.width * 0.8,
+        height: 300,
+        child: Material(
+          clipBehavior: Clip.antiAlias,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(kBorderRadius)),
+          ),
+          elevation: 4.0,
+          child: ListView.builder(
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(8.0),
+            itemCount: options.length,
+            itemBuilder: (BuildContext context, int index) {
+              final option = options.elementAt(index);
+              return GestureDetector(
+                  onTap: () {
+                    onSelected(option);
+                  },
+                  child: _getAutoCompleteItemBuilder(
+                    context,
+                    field,
+                    option,
+                    isSelected: selectedIndex == index,
+                  ));
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget getFormFieldAutoCompleteViewAbstractResponseReactive({
+    required BuildContext context,
+    required String field,
+    GlobalKey<FormFieldState>? parentForm,
+    FormOptions? options,
+    void Function(ViewAbstract<dynamic>)? onSuggestionSelected,
+  }) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return ReactiveRawAutocomplete<String, ViewAbstract>(
+        formControlName: field,
+        textInputAction: TextInputAction.next,
+        maxLength: getTextInputMaxLength(field),
+        textCapitalization: getTextInputCapitalization(field),
+        keyboardType: getTextInputType(field),
+        inputFormatters: getTextInputFormatter(field),
+        validationMessages: getTextInputValidatorReactive(context, field),
+        decoration: getDecoration(context, castViewAbstract(), field: field),
+        optionsViewOpenDirection: OptionsViewOpenDirection.up,
+        optionsViewBuilder: (context, onSelected, options) =>
+            _optionsViewBuilder(
+                context, field, onSelected, options, constraints),
+        optionsBuilder: (query) {
+          if (query.text.isEmpty) return [];
+          if (query.text.trim().isEmpty) return [];
+          if (query.text.length <= 2) return [];
+
+          return (search(5, 0, query.text, context: context, cache: true)
+              as Future<List<ViewAbstract>>);
+        },
+      );
+    });
+  }
+
+  Widget getFormFieldAutoCompleteReactive(
+      {required BuildContext context,
+      required String field,
+      FormOptions? options,
+      FormGroup? baseForm}) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return ReactiveRawAutocomplete<String, String>(
+        formControlName: field,
+        textInputAction: TextInputAction.next,
+        maxLength: getTextInputMaxLength(field),
+        textCapitalization: getTextInputCapitalization(field),
+        keyboardType: getTextInputType(field),
+        inputFormatters: getTextInputFormatter(field),
+        validationMessages: getTextInputValidatorReactive(context, field),
+        decoration: getDecoration(context, castViewAbstract(), field: field),
+        optionsViewOpenDirection: OptionsViewOpenDirection.up,
+        optionsViewBuilder: (context, onSelected, options) =>
+            _optionsViewBuilder(
+                context, field, onSelected, options, constraints),
+        optionsBuilder: (query) {
+          if (query.text.isEmpty) return [];
+          if (query.text.trim().isEmpty) return [];
+          if (query.text.length <= 2) return [];
+
+          return searchByFieldName(
+              field: field, searchQuery: query.text, context: context);
+        },
+      );
+    });
+  }
+
   Widget getFormFieldAutoComplete(
       {required BuildContext context,
       required String field,
@@ -452,54 +587,6 @@ abstract class ViewAbstractInputAndValidater<T>
             field: field, searchQuery: query, context: context);
       },
     );
-    return FormBuilderTypeAheadCustom<String>(
-        // onTap: () => controller.selection = TextSelection(
-        //     baseOffset: 0, extentOffset: controller.value.text.length),
-        // controller: controller,
-        onChangeGetObject: (text) => text,
-        valueTransformer: (value) {
-          return value?.trim();
-        },
-        enabled: options.isEnabled,
-        name: getTag(field),
-        decoration: getDecoration(context, castViewAbstract(), field: field),
-        initialValue: getFieldValue(field, context: context).toString(),
-        maxLength: getTextInputMaxLength(field),
-        textCapitalization: getTextInputCapitalization(field),
-        keyboardType: getTextInputType(field),
-        inputFormatters: getTextInputFormatter(field),
-        direction: VerticalDirection.up,
-        validator: (s) {
-          // debugPrint(
-          //     "getControllerEditTextAutoComplete field=>$field result=> ${viewAbstract.getTextInputValidatorCompose(context, field).call(s)}");
-          return getTextInputValidatorCompose<String?>(context, field).call(s);
-        },
-        // suggestionsBoxDecoration:
-        //     _getDecorationAutoCompleteSuggestionBox(context),
-        // transitionBuilder: _getAutoCompleteSuggestionBoxTransition,//TODO
-        // suggestionsBoxDecoratio,
-        itemBuilder: (context, continent) {
-          return _getAutoCompleteItemBuilder(context, field, continent);
-        },
-        hideOnLoading: false,
-        hideOnEmpty: true,
-        // errorBuilder: (context, error) => const CircularProgressIndicator(),
-        onSaved: (newValue) {
-          // viewAbstract.setFieldValue(field, newValue);
-          // debugPrint(
-          //     'getControllerEditTextAutoComplete onSave= $field:$newValue');
-          // if (viewAbstract.getFieldNameFromParent != null) {
-          //   viewAbstract.getParnet?.setFieldValue(
-          //       viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
-          // }
-        },
-        suggestionsCallback: (query) {
-          if (query.isEmpty) return [];
-          if (query.trim().isEmpty) return [];
-
-          return searchByFieldName(
-              field: field, searchQuery: query, context: context);
-        });
   }
 
   Widget _getAutoCompleteSuggestionBoxTransition(
@@ -512,14 +599,17 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   Widget _getAutoCompleteItemBuilder(
-      BuildContext context, String field, dynamic continent) {
+      BuildContext context, String field, dynamic continent,
+      {bool? isSelected}) {
     if (continent is String) {
       return ListTile(
+          selected: isSelected ?? false,
           leading: CircleAvatar(child: Icon(getFieldIconData(field))),
           title: Text(continent ?? "-"));
     }
     if (continent is ViewAbstract) {
       return ListTile(
+        selected: isSelected ?? false,
         leading: continent.getCardLeadingCircleAvatar(context),
         title: Text(continent.getCardItemDropdownText(context)),
         subtitle: Text(continent.getCardItemDropdownSubtitle(context)),
@@ -869,6 +959,351 @@ abstract class ViewAbstractInputAndValidater<T>
         // }
       },
     );
+  }
+
+  Widget getFormFieldColorPickerReactive(
+      {required BuildContext context,
+      required String field,
+      FormOptions? options,
+      FormGroup? baseForm}) {
+    return ReactiveColorPicker(
+        formControlName: field,
+        pickerAreaHeightPercent: 0.7,
+        displayThumbColor: true,
+
+        // labelTypes: const [],
+        validationMessages: getTextInputValidatorReactive(context, field),
+        // hexInputController: textController,
+        portraitOnly: true,
+        colorPickerBuilder: (pickColor, color) {
+          return ListTile(
+            title: Text(getFieldLabel(context, field)),
+            trailing: Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: Colors.grey.shade400,
+                ),
+              ),
+            ),
+            onTap: pickColor,
+          );
+        });
+  }
+
+  Widget getFormFieldTextReactive(
+      {required BuildContext context,
+      required String field,
+      FormOptions? options,
+      FormGroup? baseForm}) {
+    return ReactiveTextField(
+      formControlName: field,
+      textInputAction: TextInputAction.next,
+      maxLength: getTextInputMaxLength(field),
+      textCapitalization: getTextInputCapitalization(field),
+      keyboardType: getTextInputType(field),
+      inputFormatters: getTextInputFormatter(field),
+      validationMessages: getTextInputValidatorReactive(context, field),
+      decoration: getDecoration(
+        context,
+        castViewAbstract(),
+        field: field,
+      ),
+    );
+  }
+
+  Widget getFormFieldCheckboxReactive(
+      {required BuildContext context,
+      required String field,
+      FormOptions? options,
+      FormGroup? baseForm}) {
+    return ReactiveCheckboxListTile(
+        formControlName: field,
+        title: Text(getTextCheckBoxTitle(context, field)),
+        subtitle: Text(getTextCheckBoxDescription(context, field)));
+  }
+
+  Widget getFormFieldDateTimeReactive(
+      {required BuildContext context,
+      required String field,
+      FormOptions? options,
+      FormGroup? baseForm}) {
+    options ??= getFormOptions(context, field);
+    return ReactiveDatePicker<String>(
+        firstDate: "2024-01-01".toDateTimeOnlyDate(),
+        lastDate: "2030-01-01".toDateTimeOnlyDate(),
+        formControlName: field,
+        builder: (context, picker, child) => Row(
+              children: [
+                ReactiveValueListenableBuilder<String>(
+                  formControlName: field,
+                  builder: (context, control, child) {
+                    return Text(control.isNull
+                        //Todo translate
+                        ? 'isNotSet'
+                        : control.value!);
+                  },
+                ),
+                Spacer(),
+                IconButton(
+                  onPressed: picker.showPicker,
+                  icon: Icon(Icons.date_range),
+                ),
+              ],
+            ));
+    // enabled: options.isEnabled,
+    // valueTransformer: (value) {
+    //   return getFieldDateTimeParseFromDateTime(value);
+    // },
+    // initialValue: (options.value as String?)?.toDateTime(),
+    // name: getTag(field),
+    // firstDate: DateTime(2020),
+    // lastDate: DateTime(2030),
+    // decoration: getDecoration(
+    //   context,
+    //   castViewAbstract(),
+    //   field: field,
+    // ),
+    // onSaved: (newValue) {
+    //   // viewAbstract.setFieldValue(
+    //   //     field, viewAbstract.getFieldDateTimeParseFromDateTime(newValue));
+    //   // debugPrint('EditControllerEditText onSave= $field:$newValue');
+    //   // if (viewAbstract.getFieldNameFromParent != null) {
+    //   //   viewAbstract.getParnet?.setFieldValue(
+    //   //       viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
+    //   // }
+  }
+
+  FormGroup getViewAbstractGroup(
+      BuildContext context, ViewAbstract viewAbstract) {
+    return viewAbstract.getBaseFormGroup(context);
+  }
+
+  //  if (isFieldRequired(field)) ValidationMessage.required:(_)=>getAppLocal(context)!.errField,
+  //     if (maxValue != null) ValidationMessage.max(maxValue),
+  //     if (minValue != null) ValidationMessage.minLength(minValue),
+  //     // if (getTextInputType(field) == TextInputType.emailAddress)
+  //     //   FormBuilderValidators.email(),
+  //     if (getTextInputType(field) == TextInputType.name && "" is E)
+  //       FormBuilderValidators.match(RegExp(r'^\w+(\s\w+)+$'),
+  //           errorText: "Enter a valid name") as String? Function(E?),
+  //     if (getTextInputType(field) == TextInputType.phone)
+  //       ValidationMessage.(10),
+  //     if (getTextInputType(field) == TextInputType.emailAddress && "" is E)
+  //       FormBuilderValidators.match(
+  //               RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$'),
+  //               errorText:
+  //                   "Email should contain upper,lower,digit and Special character")
+  //           as String? Function(E?),
+  //     if (getTextInputType(field) == TextInputType.visiblePassword && "" is E)
+  //       FormBuilderValidators.match(
+  //               RegExp(
+  //                   r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$'),
+  //               errorText:
+  //                   "Password should contain upper,lower,digit and Special character")
+  //           as String? Function(E?),
+  //     if (getTextInputType(field) == TextInputType.visiblePassword)
+  //       FormBuilderValidators.minLength(6,
+  //           errorText: "Password Must be more than 5 characters"),
+  //     });
+  Validator<dynamic>? getValidatorsIfEmail(BuildContext context, String field) {
+    if (getTextInputType(field) == TextInputType.emailAddress) {
+      return Validators.pattern(
+          RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$'),
+          validationMessage: getAppLocal(context)!.errFieldIsIncorrect);
+    }
+    return null;
+  }
+
+  Validator<dynamic>? getValidtorsIfName(BuildContext context, String field) {
+    if (getTextInputType(field) == TextInputType.name) {
+      return Validators.pattern(RegExp(r'^\w+(\s\w+)+$'),
+          //TODO Enter a valid name
+
+          validationMessage: "Enter a valid name");
+    }
+    return null;
+  }
+
+  Validator<dynamic>? getValidatorsIfPassowrd(
+      BuildContext context, String field) {
+    if (getTextInputType(field) == TextInputType.visiblePassword) {
+      return Validators.pattern(
+          RegExp(
+              r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$'),
+          //TODO Password should contain upper,lower,digit and Special character todo translate
+          validationMessage:
+              "Password should contain upper,lower,digit and Special character");
+    }
+    return null;
+  }
+
+  FormControl getFormControl(BuildContext context, String e) {
+    Type? fieldType = getMirrorFieldType(e);
+    debugPrint("castFieldValue type is $fieldType");
+    int? maxLength = getTextInputMaxLength(e);
+    double? minValue = getTextInputValidatorMinValue(e);
+    double? maxValue = getTextInputValidatorMaxValue(e);
+    Validator? password = getValidatorsIfPassowrd(context, e);
+    Validator? name = getValidtorsIfName(context, e);
+    Validator? email = getValidatorsIfEmail(context, e);
+    FormFieldControllerType type = getInputType(e);
+    List<Validator> l = [
+      if (isFieldRequired(e)) Validators.required,
+      if (maxLength != null) Validators.maxLength(maxLength),
+      if (minValue != null) Validators.min(minValue),
+      if (maxValue != null) Validators.max(maxValue),
+      if (name != null) name,
+      if (password != null) password,
+      if (email != null) Validators.email,
+    ];
+    if (type == FormFieldControllerType.COLOR_PICKER) {
+      return FormControl<Color>(
+        validators: l,
+      );
+    }
+    // value = value ?? "";
+    if (fieldType == int) {
+      return FormControl<int>(
+        validators: l,
+      );
+    } else if (fieldType == num) {
+      return FormControl<num>(
+        validators: l,
+      );
+    } else if (fieldType == double) {
+      return FormControl<double>(
+        validators: l,
+      );
+    } else if (fieldType == String) {
+      return FormControl<String>(
+        validators: l,
+      );
+    } else {
+      return FormControl(validators: l);
+    }
+  }
+
+  FormGroup getBaseFormGroup(BuildContext context) {
+    Map<String, Object> controls = {};
+    getMainFields(context: context).forEach((e) {
+      if (isViewAbstract(e)) {
+        controls[e] =
+            (getFieldValueReturnDefualtOnNull(context, e) as ViewAbstract)
+                .getBaseFormGroup(context);
+      } else {
+        FormControl formControl = getFormControl(context, e);
+        dynamic value = getFieldValueReturnDefualtOnNull(context, e);
+        if (value != null) {
+          FormFieldControllerType type = getInputType(e);
+          if (type == FormFieldControllerType.COLOR_PICKER) {
+            value = (value as String).fromHex();
+          }
+        }
+        formControl.value = value;
+        controls[e] = formControl;
+      }
+    });
+    return fb.group(
+      controls,
+    );
+  }
+
+  Widget getReactiveForm(
+      {required BuildContext context,
+      required String field,
+      required FormGroup baseForm,
+      Widget? child}) {
+    FormGroup childFormGroup = baseForm.controls[field] as FormGroup;
+    return ReactiveForm(
+      formGroup: childFormGroup,
+      child: child ??
+          Column(
+            children: getMainFields(context: context)
+                .map((e) => getFormMainControllerWidgetReactive(
+                    context: context, field: e, baseForm: childFormGroup))
+                .toList(),
+          ),
+    );
+  }
+
+  Widget getFormMainControllerWidgetReactive({
+    required BuildContext context,
+    required String field,
+    required FormGroup baseForm,
+    ViewAbstract? parent,
+  }) {
+    FormOptions options = getFormOptions(context, field);
+    Widget widget;
+    bool shouldWrapWithTile = true;
+
+    if (options.value is ViewAbstractEnum) {
+      widget = const Text("ENUM");
+      //TODO could be ChoiceChip or Dropdown
+    } else if (options.value is ViewAbstract) {
+      widget = const Text("ENUM");
+      // widget = ReactiveForm(formGroup: baseForm.controls[field],child: Column(children: [],),);
+    } else {
+      FormFieldControllerType textFieldTypeVA = this.getInputType(field);
+      if (textFieldTypeVA == FormFieldControllerType.DATE_TIME) {
+        widget = getFormFieldDateTimeReactive(
+            context: context,
+            field: field,
+            options: options,
+            baseForm: baseForm);
+      } else if (textFieldTypeVA == FormFieldControllerType.CHECKBOX) {
+        shouldWrapWithTile = false;
+        widget = getFormFieldCheckboxReactive(
+            context: context,
+            field: field,
+            options: options,
+            baseForm: baseForm);
+      } else if (textFieldTypeVA == FormFieldControllerType.EDIT_TEXT) {
+        widget = getFormFieldTextReactive(
+            context: context,
+            field: field,
+            options: options,
+            baseForm: baseForm);
+      } else if (textFieldTypeVA == FormFieldControllerType.IMAGE) {
+        widget = const Text("IMAGE");
+      } else if (textFieldTypeVA == FormFieldControllerType.COLOR_PICKER) {
+        widget = getFormFieldColorPickerReactive(
+            context: context,
+            field: field,
+            options: options,
+            baseForm: baseForm);
+      } else if (textFieldTypeVA == FormFieldControllerType.FILE_PICKER) {
+        widget = const Text("FILE");
+      } else if (textFieldTypeVA == FormFieldControllerType.AUTO_COMPLETE) {
+        widget = getFormFieldAutoCompleteReactive(
+            context: context,
+            field: field,
+            baseForm: baseForm,
+            options: options);
+      } else if (textFieldTypeVA ==
+          FormFieldControllerType.AUTO_COMPLETE_VIEW_ABSTRACT_RESPONSE) {
+        widget = getFormFieldAutoCompleteViewAbstractResponseReactive(
+            context: context, field: field, options: options);
+
+        widget = Text("TODFO");
+      } else {
+        widget = const Text("OTHER");
+      }
+    }
+    if (hasParent() || !shouldWrapWithTile) {
+      return widget;
+    } else {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: kDefaultPadding * .25),
+        child: ListTileEdit(
+          title: widget,
+          context: context,
+        ),
+      );
+    }
   }
 
   Widget getFormMainControllerWidget(
