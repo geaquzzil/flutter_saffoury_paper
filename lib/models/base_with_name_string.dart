@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/interfaces/web/category_gridable_interfa
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
@@ -60,6 +61,14 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
   @override
   String getFieldToReduceSize() {
     return "name";
+  }
+
+  @override
+  FormFieldControllerType getInputType(String field) {
+    if ("name" == field) {
+      return FormFieldControllerType.AUTO_COMPLETE_VIEW_ABSTRACT_RESPONSE;
+    }
+    return super.getInputType(field);
   }
 
   @override

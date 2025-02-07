@@ -498,7 +498,7 @@ abstract class ViewAbstractInputAndValidater<T>
     void Function(ViewAbstract<dynamic>)? onSuggestionSelected,
   }) {
     return LayoutBuilder(builder: (context, constraints) {
-      return ReactiveRawAutocomplete<String, ViewAbstract>(
+      return ReactiveRawAutocomplete<ViewAbstract, String>(
         formControlName: field,
         textInputAction: TextInputAction.next,
         maxLength: getTextInputMaxLength(field),
@@ -530,6 +530,7 @@ abstract class ViewAbstractInputAndValidater<T>
       FormGroup? baseForm}) {
     return LayoutBuilder(builder: (context, constraints) {
       return ReactiveRawAutocomplete<String, String>(
+        // fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) => ,
         formControlName: field,
         textInputAction: TextInputAction.next,
         maxLength: getTextInputMaxLength(field),
@@ -971,8 +972,11 @@ abstract class ViewAbstractInputAndValidater<T>
         pickerAreaHeightPercent: 0.7,
         displayThumbColor: true,
 
+        // decoration: getDecoration(context, castViewAbstract(), field: field),
+
         // labelTypes: const [],
         validationMessages: getTextInputValidatorReactive(context, field),
+
         // hexInputController: textController,
         portraitOnly: true,
         colorPickerBuilder: (pickColor, color) {
@@ -983,10 +987,9 @@ abstract class ViewAbstractInputAndValidater<T>
               height: 30,
               decoration: BoxDecoration(
                 color: color,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: Colors.grey.shade400,
-                ),
+                borderRadius: BorderRadius.circular(kBorderRadius),
+                // border:
+                //     Border.all(color: Theme.of(context).colorScheme.outline),
               ),
             ),
             onTap: pickColor,
@@ -1164,6 +1167,9 @@ abstract class ViewAbstractInputAndValidater<T>
       return FormControl<Color>(
         validators: l,
       );
+    } else if (type ==
+        FormFieldControllerType.AUTO_COMPLETE_VIEW_ABSTRACT_RESPONSE) {
+      return FormControl<ViewAbstract>(validators: l);
     }
     // value = value ?? "";
     if (fieldType == int) {
@@ -1201,6 +1207,9 @@ abstract class ViewAbstractInputAndValidater<T>
           FormFieldControllerType type = getInputType(e);
           if (type == FormFieldControllerType.COLOR_PICKER) {
             value = (value as String).fromHex();
+          } else if (type ==
+              FormFieldControllerType.AUTO_COMPLETE_VIEW_ABSTRACT_RESPONSE) {
+            value = (value as ViewAbstract).getMainHeaderTextOnly(context);
           }
         }
         formControl.value = value;

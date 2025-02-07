@@ -431,7 +431,7 @@ class Product extends ViewAbstract<Product>
       // "products_types",
       "sizes",
       // "gsms",
-      // "qualities",
+      "qualities",
       // "grades",
       // "countries_manufactures",
       "products_colors",
