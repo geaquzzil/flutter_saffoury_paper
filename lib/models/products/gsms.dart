@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
@@ -153,6 +154,14 @@ class GSM extends ViewAbstract<GSM> {
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
+
+  @override
+  FormFieldControllerType getInputType(String field) {
+    if ("gsm" == field) {
+      return FormFieldControllerType.AUTO_COMPLETE_VIEW_ABSTRACT_RESPONSE;
+    }
+    return super.getInputType(field);
+  }
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() =>

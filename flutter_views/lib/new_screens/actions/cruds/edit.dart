@@ -5,9 +5,6 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
-import 'package:flutter_view_controller/new_screens/forms/nasted/expansion_edit.dart';
-import 'package:flutter_view_controller/new_screens/forms/nasted/expansion_edit_reactive.dart';
-import 'package:flutter_view_controller/new_screens/forms/nasted/nasted_form_builder.dart';
 import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -38,48 +35,68 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
       (key, value) {
         if (value is FormGroup) {
           debugPrint("_BaseNewState _baseForm $key:${value.controls}");
+          value.controls.forEach(
+            (k, v) {
+              (e) => debugPrint(
+                  "_BaseNewState _baseForm details $k:${v.runtimeType}");
+            },
+          );
         } else {
           debugPrint("_BaseNewState _baseForm $key:$value");
         }
       },
     );
-    // debugPrint("_BaseNewState _baseForm ${_baseForm.controls}");
+    debugPrint("_BaseNewState _baseForm all ${_baseForm?.controls}");
   }
 
   Map<String, dynamic> getInitialData() {
     return getExtrasCast().toJsonViewAbstract();
   }
 
-  List<Widget> getFormContent(ViewAbstract viewAbstract,
-      {ViewAbstract? parent, String? fieldNameFromParent}) {
-    viewAbstract.onBeforeGenerateView(context, action: ServerActions.edit);
-    viewAbstract.setParent(parent);
-    viewAbstract.setFieldNameFromParent(fieldNameFromParent);
-    // List l = viewAbstract.getMainFields()..add("iD");
-    var child = <Widget>[
-      ...viewAbstract.getMainFields().map((e) {
-        return checkToGetControllerWidget(context, viewAbstract, e);
-      }),
-    ];
-    return child;
+  Widget getFormReactive() {
+    return ReactiveFormBuilder(
+      form: () => _baseForm!,
+      builder: (context, form, child) {
+        return Column(
+          spacing: 10,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ...getFormContentReactive(getExtrasCast(), formGroup: _baseForm!),
+            ReactiveFormConsumer(
+              builder: (context, form, child) => TextButton(
+                onPressed: form.valid
+                    ? () {
+                        _baseForm!.markAllAsTouched();
+                        debugPrint("${_baseForm!.value}");
+                      }
+                    : null,
+                child: const Text('Sign Up'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   List<Widget> getFormContentReactive(ViewAbstract viewAbstract,
-      {ViewAbstract? parent, String? fieldNameFromParent}) {
+      {ViewAbstract? parent,
+      String? fieldNameFromParent,
+      required FormGroup formGroup}) {
     viewAbstract.onBeforeGenerateView(context, action: ServerActions.edit);
     viewAbstract.setParent(parent);
     viewAbstract.setFieldNameFromParent(fieldNameFromParent);
-    // List l = viewAbstract.getMainFields()..add("iD");
-    var child = <Widget>[
+    return <Widget>[
       ...viewAbstract.getMainFields().map((e) {
-        return checkToGetControllerWidgetReactive(context, viewAbstract, e);
+        return checkToGetControllerWidgetReactive(context, viewAbstract, e,
+            formGroup: formGroup);
       }),
     ];
-    return child;
   }
 
   Widget wrapWithColumn(List<Widget> childs) {
     return Column(
+      spacing: 10,
       mainAxisSize: MainAxisSize.min,
       children: childs,
     );
@@ -87,74 +104,102 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
 
   bool isChanged = false;
   Widget checkToGetControllerWidgetReactive(
-      BuildContext context, ViewAbstract viewAbstract, String field) {
+      BuildContext context, ViewAbstract viewAbstract, String field,
+      {required FormGroup formGroup}) {
     dynamic fieldValue = viewAbstract.getFieldValue(field) ??
         viewAbstract.getMirrorNewInstance(field);
 
     bool enabled = viewAbstract.isFieldEnabled(field);
 
     if (viewAbstract.isViewAbstract(field)) {
-      bool shouldWrap = viewAbstract.shouldWrapWithExpansionCardWhenChild();
-
-      if (shouldWrap) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: kDefaultPadding * .25),
-          child: ExpansionEditReactive(
-            name: field,
-            parentFormGroup: _baseForm!,
-            childFormGroup: _baseForm!.controls[field] as FormGroup,
-            viewAbstract: fieldValue,
-            valueFromParent: viewAbstract.getFieldValue(field),
-          ),
-        );
-      } else {
-        List<Widget> childs = getFormContent(fieldValue,
-            parent: viewAbstract, fieldNameFromParent: field);
-        return ReactiveForm(
-          formGroup: _baseForm!.controls[field]! as FormGroup,
+      FormGroup childGroup = formGroup.controls[field]! as FormGroup;
+      List<Widget> childs = getFormContentReactive(fieldValue,
+          formGroup: childGroup,
+          parent: viewAbstract,
+          fieldNameFromParent: field);
+      return Padding(
+        padding: const EdgeInsets.all(kDefaultPadding),
+        child: ReactiveForm(
+          formGroup: childGroup,
           child: wrapWithColumn(childs),
-        );
-      }
+        ),
+      );
+      // bool shouldWrap = viewAbstract.shouldWrapWithExpansionCardWhenChild();
+
+      // (fieldValue as ViewAbstract).setParent(viewAbstract);
+      // (fieldValue).setFieldNameFromParent(field);
+      // if (shouldWrap) {
+      //   return Padding(
+      //     padding: const EdgeInsets.symmetric(vertical: kDefaultPadding * .25),
+      //     child: ExpansionEditReactive(
+      //       name: field,
+      //       parentFormGroup: _baseForm!,
+      //       childFormGroup: _baseForm!.controls[field] as FormGroup,
+      //       viewAbstract: fieldValue,
+      //       valueFromParent: viewAbstract.getFieldValue(field),
+      //     ),
+      //   );
+      // } else {
+      //   List<Widget> childs = getFormContent(fieldValue,
+      //       parent: viewAbstract, fieldNameFromParent: field);
+      //   return ReactiveForm(
+      //     formGroup: _baseForm!.controls[field]! as FormGroup,
+      //     child: wrapWithColumn(childs),
+      //   );
+      // }
     }
     return viewAbstract.getFormMainControllerWidgetReactive(
-        context: context, field: field, baseForm: _baseForm!);
+        context: context, field: field, baseForm: formGroup);
   }
 
-  Widget checkToGetControllerWidget(
-      BuildContext context, ViewAbstract viewAbstract, String field) {
-    dynamic fieldValue = viewAbstract.getFieldValue(field) ??
-        viewAbstract.getMirrorNewInstance(field);
+  // List<Widget> getFormContent(ViewAbstract viewAbstract,
+  //     {ViewAbstract? parent, String? fieldNameFromParent}) {
+  //   viewAbstract.onBeforeGenerateView(context, action: ServerActions.edit);
+  //   viewAbstract.setParent(parent);
+  //   viewAbstract.setFieldNameFromParent(fieldNameFromParent);
+  //   // List l = viewAbstract.getMainFields()..add("iD");
+  //   var child = <Widget>[
+  //     ...viewAbstract.getMainFields().map((e) {
+  //       return checkToGetControllerWidget(context, viewAbstract, e);
+  //     }),
+  //   ];
+  //   return child;
+  // }
+  // Widget checkToGetControllerWidget(
+  //     BuildContext context, ViewAbstract viewAbstract, String field) {
+  //   dynamic fieldValue = viewAbstract.getFieldValue(field) ??
+  //       viewAbstract.getMirrorNewInstance(field);
 
-    bool enabled = viewAbstract.isFieldEnabled(field);
+  //   bool enabled = viewAbstract.isFieldEnabled(field);
 
-    if (viewAbstract.isViewAbstract(field)) {
-      bool shouldWrap = viewAbstract.shouldWrapWithExpansionCardWhenChild();
+  //   if (viewAbstract.isViewAbstract(field)) {
+  //     bool shouldWrap = viewAbstract.shouldWrapWithExpansionCardWhenChild();
 
-      if (shouldWrap) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: kDefaultPadding * .25),
-          child: ExpansionEdit(
-            name: field,
-            parentFormKey: formKey,
-            viewAbstract: fieldValue,
-            valueFromParent: viewAbstract.getFieldValue(field),
-          ),
-        );
-      } else {
-        List<Widget> childs = getFormContent(fieldValue,
-            parent: viewAbstract, fieldNameFromParent: field);
-        return NestedFormBuilder(
-          name: field,
-          parentFormKey: formKey,
-          enabled: enabled,
-          skipDisabled: !enabled,
-          child: wrapWithColumn(childs),
-        );
-      }
-    }
-    return viewAbstract.getFormMainControllerWidget(
-        context: context, field: field, formKey: formKey);
-  }
+  //     if (shouldWrap) {
+  //       return Padding(
+  //         padding: const EdgeInsets.symmetric(vertical: kDefaultPadding * .25),
+  //         child: ExpansionEdit(
+  //           name: field,
+  //           parentFormKey: formKey,
+  //           viewAbstract: fieldValue,
+  //           valueFromParent: viewAbstract.getFieldValue(field),
+  //         ),
+  //       );
+  //     } else {
+  //       List<Widget> childs = getFormContent(fieldValue,
+  //           parent: viewAbstract, fieldNameFromParent: field);
+  //       return NestedFormBuilder(
+  //         name: field,
+  //         parentFormKey: formKey,
+  //         enabled: enabled,
+  //         skipDisabled: !enabled,
+  //         child: wrapWithColumn(childs),
+  //       );
+  //     }
+  //   }
+  //   return viewAbstract.getFormMainControllerWidget(
+  //       context: context, field: field, formKey: formKey);
+  // }
 
   @override
   Widget? getAppbarTitle({bool? firstPane, TabControllerHelper? tab}) {
@@ -207,32 +252,6 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
       // getFormBuilderWidget()
       SliverToBoxAdapter(child: getFormReactive())
     ];
-  }
-
-  Widget getFormReactive() {
-    return ReactiveFormBuilder(
-      form: () => _baseForm!,
-      builder: (context, form, child) {
-        return Column(
-          spacing: 10,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ...getFormContentReactive(getExtrasCast()),
-            ReactiveFormConsumer(
-              builder: (context, form, child) => TextButton(
-                onPressed: form.valid
-                    ? () {
-                        _baseForm!.markAllAsTouched();
-                        debugPrint("${_baseForm!.value}");
-                      }
-                    : null,
-                child: const Text('Sign Up'),
-              ),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   // FB.FormBuilder getFormBuilderWidget() {

@@ -90,11 +90,19 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return newValue as T;
   }
 
-  T getNewInstance({String? searchByAutoCompleteTextInput}) {
+  Map<String, dynamic> getCopyWithFormTextField(String? text) {
+    return {'text': text};
+  }
+
+  Map<String, dynamic>? copyWithFormValues({Map<String, dynamic>? values}) {
+    return null;
+  }
+
+  T getNewInstance({Map<String, dynamic>? values}) {
     T ob = ((copyWithNewSuggestion(this) as ViewAbstract)..iD = -1) as T;
-    (ob as ViewAbstract).searchByAutoCompleteTextInput =
-        searchByAutoCompleteTextInput;
-    return ob;
+
+    return (ob as ViewAbstract)
+        .fromJsonViewAbstract(copyWithFormValues(values: values) ?? {'iD': -1});
   }
 
   T? onAfterValidate(BuildContext context) {

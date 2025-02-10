@@ -14,6 +14,8 @@ const Duration _kExpand = Duration(milliseconds: 200);
 class ExpansionEditReactive extends StatefulWidget {
   final bool initiallyExpanded;
 
+  final double? paddingWhenSearchChoice;
+
   /// Typically used to force the expansion arrow icon to the tile's leading or trailing edge.
   ///
   /// By default, the value of [controlAffinity] is [ListTileControlAffinity.platform],
@@ -41,6 +43,7 @@ class ExpansionEditReactive extends StatefulWidget {
     super.key,
     this.initiallyExpanded = false,
     this.controlAffinity,
+    this.paddingWhenSearchChoice,
     this.valueFromParent,
     required this.viewAbstract,
     this.maintainState = true,
@@ -77,7 +80,7 @@ class _ExpansionEditState extends State<ExpansionEditReactive>
   late Animation<Color?> _backgroundColor;
 
   bool canExpand = true;
-  bool _isNullPressed = false;
+  final bool _isNullPressed = false;
   bool hasAutoCompleteFieldValue = false;
   String fieldThatHasAutoComplete = "";
   bool _isExpanded = false;
@@ -204,6 +207,19 @@ class _ExpansionEditState extends State<ExpansionEditReactive>
     return RotationTransition(
       turns: _iconTurns,
       child: const Icon(Icons.expand_more),
+    );
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {},
+        ),
+        RotationTransition(
+          turns: _iconTurns,
+          child: const Icon(Icons.expand_more),
+        ),
+      ],
     );
   }
 
@@ -344,7 +360,7 @@ class _ExpansionEditState extends State<ExpansionEditReactive>
                 // leadingAndTrailingTextStyle: ,
                 onTap: hasChildrens() ? null : _handleTap,
                 contentPadding: EdgeInsets.zero,
-                leading: getLeading(),
+                leading: hasChildrens() ? null : getLeading(),
                 title: getTitle(),
 
                 trailing: getTrailing(),
@@ -391,30 +407,9 @@ class _ExpansionEditState extends State<ExpansionEditReactive>
   }
 
   Widget? getTrailing() {
+    // return _buildTrailingIcon(context);
     if (!hasChildrens()) return _buildTrailingIcon(context);
-    return isNullable()
-        ? ElevatedButton(
-            // style: ,
-
-            // iconAlignment: IconAlignment.end,
-
-            // padding: EdgeInsets.zero,
-            onPressed: () {
-              _toggleExpansion(expand: false);
-              _isNullPressed = true;
-            },
-            child: Text(
-              "—",
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(color: Theme.of(context).colorScheme.error),
-            )
-            // color: _isExpanded
-            //     ? _iconColor.value
-            //     : Theme.of(context).colorScheme.error,
-            )
-        : null;
+    return null;
   }
 
   bool hasAutoCompleteField() {
@@ -443,6 +438,7 @@ class _ExpansionEditState extends State<ExpansionEditReactive>
           },
           child: widget.viewAbstract
               .getFormFieldAutoCompleteViewAbstractResponseReactive(
+            baseForm: widget.parentFormGroup,
             context: context,
             field: fieldThatHasAutoComplete,
             onSuggestionSelected: (p0) {},

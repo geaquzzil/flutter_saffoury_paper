@@ -1,6 +1,7 @@
 // import 'package:bitmap/bitmap.dart';
 // ignore_for_file: non_constant_identifier_names, constant_identifier_names, use_build_context_synchronously, library_prefixes
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -427,18 +428,18 @@ class Product extends ViewAbstract<Product>
   @override
   List<String> getMainFields({BuildContext? context}) {
     return [
-      // "customs_declarations",
+      "customs_declarations",
       // "products_types",
       "sizes",
-      // "gsms",
+      "gsms",
       "qualities",
-      // "grades",
-      // "countries_manufactures",
+      "grades",
+      "countries_manufactures",
       "products_colors",
       "date",
       "comments",
       "barcode",
-      // "status"
+      "status"
     ];
   }
 
@@ -520,6 +521,16 @@ class Product extends ViewAbstract<Product>
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
+
+  @override
+  FutureOr<List>? getTextInputValidatorIsUnique(
+      BuildContext context, String field) {
+    if (field == 'barcode') {
+      return searchByFieldName(
+          context: context, field: 'barcode', searchQuery: '');
+    }
+    return super.getTextInputValidatorIsUnique(context, field);
+  }
 
   @override
   Map<String, int> getTextInputMaxLengthMap() =>

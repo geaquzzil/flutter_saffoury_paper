@@ -319,7 +319,7 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
           controller: controller,
           debounceDuration: const Duration(milliseconds: 750),
           onChangeGetObject: (text) => autoCompleteBySearchQuery
-              ? viewAbstract.getNewInstance(searchByAutoCompleteTextInput: text)
+              ? viewAbstract.getNewInstance(values: {'text': text})
               : viewAbstract.getParnet == null
                   ? viewAbstract.getNewInstance()
                   : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
@@ -446,8 +446,7 @@ Widget getControllerEditTextViewAbstractAutoCompleteNewIfNotFoundAsOneField(
           debounceDuration: const Duration(milliseconds: 750),
           onChangeGetObject: (text) {
             return autoCompleteBySearchQuery
-                ? viewAbstract.getNewInstance(
-                    searchByAutoCompleteTextInput: text)
+                ? viewAbstract.getNewInstance(values: {'text': text})
                 : viewAbstract.getParnet == null
                     ? viewAbstract.getNewInstance()
                     : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(

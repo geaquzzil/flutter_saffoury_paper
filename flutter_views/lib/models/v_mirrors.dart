@@ -134,7 +134,15 @@ abstract class VMirrors<T> {
     dynamic v = getMirrorNewInstance(field);
     dynamic fieldValue = getFieldValue(field, context: context);
     if (fieldValue == null) {
+      if (v is ViewAbstract) {
+        v.setParent(this as ViewAbstract);
+        v.setFieldNameFromParent(field);
+      }
       return v;
+    }
+    if (fieldValue is ViewAbstract) {
+      fieldValue.setParent(this as ViewAbstract);
+      fieldValue.setFieldNameFromParent(field);
     }
     return fieldValue;
   }

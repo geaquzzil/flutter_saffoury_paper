@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' as material;
+import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations_images.dart';
 import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
@@ -14,14 +15,13 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
-
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 
@@ -204,6 +204,17 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {
         "number": true,
       };
+
+  @override
+  FormFieldControllerType getInputType(String field) {
+    if (field == "number") {
+      return FormFieldControllerType.AUTO_COMPLETE_VIEW_ABSTRACT_RESPONSE;
+    }
+    if (field == "fromCountry" || field == "fromName") {
+      return FormFieldControllerType.AUTO_COMPLETE;
+    }
+    return super.getInputType(field);
+  }
 
   @override
   Map<String, int> getTextInputMaxLengthMap() =>

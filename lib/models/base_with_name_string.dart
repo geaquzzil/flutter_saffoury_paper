@@ -64,6 +64,11 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
   }
 
   @override
+  Map<String, dynamic>? copyWithFormValues({Map<String, dynamic>? values}) {
+    return {'name': values?['text']};
+  }
+
+  @override
   FormFieldControllerType getInputType(String field) {
     if ("name" == field) {
       return FormFieldControllerType.AUTO_COMPLETE_VIEW_ABSTRACT_RESPONSE;
