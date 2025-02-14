@@ -4,6 +4,8 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/new_components/forms/nullable_icon.dart';
+import 'package:flutter_view_controller/new_components/forms/reactive_consumer_with_listener.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
@@ -27,10 +29,12 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     with BasePageSecoundPaneNotifierState<EditNew> {
   GlobalKey<FB.FormBuilderState> formKey = GlobalKey<FB.FormBuilderState>();
   FormGroup? _baseForm;
+  Map<String, ExpansionTileController> expansionController = {};
 
   @override
   void initStateAfterApiCalled() {
     _baseForm ??= getExtrasCast().getBaseFormGroup(context);
+    expansionController = {};
     _baseForm!.controls.forEach(
       (key, value) {
         if (value is FormGroup) {
@@ -53,6 +57,43 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     return getExtrasCast().toJsonViewAbstract();
   }
 
+  Widget getListableFormReactive(FormGroup form) {
+    String listableKey = getExtrasCast()
+        .castListableInterface()
+        .getListableAddFromManual(context)
+        .getTableNameApi()!;
+    List<ViewAbstract> listableObjects =
+        getExtrasCast().castListableInterface().getListableList();
+    FormArray arr = form.control(listableKey) as FormArray;
+    return ReactiveFormArray(
+      formArrayName: listableKey,
+      builder: (context, formArray, child) {
+        debugPrint(
+            "ReactiveFormArray control list ${arr.controls.length} ${arr.controls.length} ");
+        List<Widget> widgets = List.empty(growable: true);
+        for (int i = 0; i < listableObjects.length; i++) {
+          var e = listableObjects[i];
+          e.onBeforeGenerateView(context, action: ServerActions.edit);
+          e.setParent(getExtrasCast());
+          e.setFieldNameFromParent(listableKey);
+
+          widgets.add(Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: e.getReactiveForm2(
+                  childGroup: arr.controls[i] as FormGroup, context: context),
+            ),
+          ));
+        }
+
+        return Column(
+          spacing: 10,
+          children: widgets,
+        );
+      },
+    );
+  }
+
   Widget getFormReactive() {
     return ReactiveFormBuilder(
       form: () => _baseForm!,
@@ -62,6 +103,16 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ...getFormContentReactive(getExtrasCast(), formGroup: _baseForm!),
+            if (getExtrasCast().isListable()) getListableFormReactive(form),
+            TextButton(
+              onPressed: () {
+                form.hasErrors;
+                debugPrint("ReactiveFormBuilder error ${form.errors}");
+                form.markAllAsTouched();
+                debugPrint("ReactiveFormBuilder ${form.value}");
+              },
+              child: const Text('Sign Up'),
+            ),
             ReactiveFormConsumer(
               builder: (context, form, child) => TextButton(
                 onPressed: form.valid
@@ -102,6 +153,12 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     );
   }
 
+  ExpansionTileController? getExpansionTile(
+      ViewAbstract viewAbstract, String field) {
+    return expansionController[
+        viewAbstract.getControllerKey(field, extras: "e")];
+  }
+
   bool isChanged = false;
   Widget checkToGetControllerWidgetReactive(
       BuildContext context, ViewAbstract viewAbstract, String field,
@@ -117,39 +174,78 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
           formGroup: childGroup,
           parent: viewAbstract,
           fieldNameFromParent: field);
-      return Padding(
-        padding: const EdgeInsets.all(kDefaultPadding),
-        child: ReactiveForm(
-          formGroup: childGroup,
-          child: wrapWithColumn(childs),
-        ),
+      bool canBeNullable = viewAbstract.isFieldCanBeNullable(context, field);
+      Widget formWidget = ReactiveForm(
+        formGroup: childGroup,
+        child: wrapWithColumn(childs),
       );
-      // bool shouldWrap = viewAbstract.shouldWrapWithExpansionCardWhenChild();
+      if (!canBeNullable) {
+        return formWidget;
+        return getExpansionTileWidget(
+            viewAbstract: viewAbstract,
+            field: field,
+            title: (fieldValue as ViewAbstract).getMainLabelText(context),
+            childGroup: childGroup,
+            formWidget: formWidget);
+      } else {
+        expansionController[viewAbstract.getControllerKey(field, extras: "e")] =
+            ExpansionTileController();
+      }
 
-      // (fieldValue as ViewAbstract).setParent(viewAbstract);
-      // (fieldValue).setFieldNameFromParent(field);
-      // if (shouldWrap) {
-      //   return Padding(
-      //     padding: const EdgeInsets.symmetric(vertical: kDefaultPadding * .25),
-      //     child: ExpansionEditReactive(
-      //       name: field,
-      //       parentFormGroup: _baseForm!,
-      //       childFormGroup: _baseForm!.controls[field] as FormGroup,
-      //       viewAbstract: fieldValue,
-      //       valueFromParent: viewAbstract.getFieldValue(field),
-      //     ),
-      //   );
-      // } else {
-      //   List<Widget> childs = getFormContent(fieldValue,
-      //       parent: viewAbstract, fieldNameFromParent: field);
-      //   return ReactiveForm(
-      //     formGroup: _baseForm!.controls[field]! as FormGroup,
-      //     child: wrapWithColumn(childs),
-      //   );
-      // }
+      return ReactiveValueListenableBuilderListener<bool>(
+        formControlName: viewAbstract.getControllerKey(field, extras: "n"),
+        onData: (value) {
+          if (value == true) {
+            getExpansionTile(viewAbstract, field)?.collapse();
+          } else {
+            getExpansionTile(viewAbstract, field)?.expand();
+          }
+        },
+        builder: (context, value, child) {
+          return getExpansionTileWidget(
+              viewAbstract: viewAbstract,
+              field: field,
+              title: (fieldValue as ViewAbstract).getMainLabelText(context),
+              childGroup: childGroup,
+              enabled: value.value == false,
+              isExpanded: value.value == false,
+              formWidget: formWidget);
+        },
+      );
     }
     return viewAbstract.getFormMainControllerWidgetReactive(
         context: context, field: field, baseForm: formGroup);
+  }
+
+  ExpansionTile getExpansionTileWidget(
+      {required ViewAbstract<dynamic> viewAbstract,
+      required String field,
+      required Widget title,
+      required FormGroup childGroup,
+      required Widget formWidget,
+      bool enabled = true,
+      bool isExpanded = true}) {
+    return ExpansionTile(
+        controller: getExpansionTile(viewAbstract, field),
+        initiallyExpanded: isExpanded,
+        enabled: enabled,
+        childrenPadding: EdgeInsets.all(kDefaultPadding),
+        title: title,
+        trailing: ReactiveNullableSwitch<bool>(
+          context: context,
+          formControlName: viewAbstract.getControllerKey(field, extras: "n"),
+          onChange: (value) {
+            debugPrint("ReactiveValueListenableBuilder $value ");
+            if (value == false) {
+              childGroup.markAsEnabled();
+              childGroup.markAllAsTouched();
+            } else {
+              childGroup.markAsDisabled();
+              childGroup.markAllAsTouched();
+            }
+          },
+        ),
+        children: [formWidget]);
   }
 
   // List<Widget> getFormContent(ViewAbstract viewAbstract,
@@ -246,7 +342,7 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
       ScrollController? controler,
       TabControllerHelper? tab,
       SecondPaneHelper? valueNotifier}) {
-    debugPrint("dasdasas dassa");
+    // debugPrint("dasdasas dassa");
     // return [];
     return [
       // getFormBuilderWidget()

@@ -15,7 +15,9 @@ abstract class ListableInterface<T extends ViewAbstract> {
   List<T> getListableList();
 
   /// if return null then its not supported
-  T? getListableAddFromManual(BuildContext context);
+  T getListableAddFromManual(BuildContext context);
+
+  bool isSupportAddFromManual();
 
   void onListableSelectedListAdded(
       BuildContext context, List<ViewAbstract> list);
@@ -42,5 +44,4 @@ abstract class ListableInterface<T extends ViewAbstract> {
   void onListableUpdate(T item);
 
   bool isListableIsImagable();
-
 }

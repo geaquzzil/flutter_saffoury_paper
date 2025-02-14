@@ -9,6 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/encyptions/encrypter.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_response_master.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -578,7 +579,34 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         "ViewAbstractApi BaseApiCallPageState getBodyWithoutApi result => $res");
     return res;
   }
+  Future<List<T>> listCallNotNull( {int? count,
+      int? page,
+      OnResponseCallback? onResponse,
+      Map<String, FilterableProviderHelper>? filter,
+      required BuildContext context}) async {
+    debugPrint("ViewAbstractApi listCall count=> $count page=>$page");
+    var response = await getRespones(
+        map: filter,
+        itemCount: count,
+        pageIndex: page,
+        onResponse: onResponse,
+        serverActions: ServerActions.list);
 
+    if (response == null) return [];
+    if (response.statusCode == 200) {
+      // final parser = ResultsParser<T>(response.body, castViewAbstract());
+      // return parser.parseInBackground();
+
+      Iterable l = convert.jsonDecode(response.body);
+      List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+
+      return t;
+    } else {
+      onCallCheckError(
+          onResponse: onResponse, response: response, context: context);
+      return [];
+    }
+  }
   Future<List<T>?> listCall(
       {int? count,
       int? page,
@@ -611,6 +639,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   ViewAbstract castViewAbstract() {
     return this as ViewAbstract;
+  }
+
+  ListableInterface castListableInterface() {
+    return (this as ListableInterface);
   }
 
   HttpWithMiddleware getHttp() {

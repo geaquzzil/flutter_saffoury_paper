@@ -306,7 +306,10 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
     // TODO: implement getPrintableSecondaryColor
     throw UnimplementedError();
   }
-
+  @override
+  bool isSupportAddFromManual() {
+    return false;
+  }
   // @override
   // Future<List<Page>> getPrintableCustomFromPDFPageLIst(
   //     material.BuildContext context,
@@ -356,7 +359,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   List<CustomsDeclarationImages>? deletedList;
 
   @override
-  CustomsDeclarationImages? getListableAddFromManual(
+  CustomsDeclarationImages getListableAddFromManual(
       material.BuildContext context) {
     return CustomsDeclarationImages();
   }

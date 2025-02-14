@@ -440,6 +440,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return "$T";
   }
 
+  String getControllerKey(String field, {String? extras}) {
+    return "${getTableNameApi() ?? ""}-$field-${extras ?? ""}";
+  }
+
   String? getFieldDateTimeParseFromDateTime(DateTime? dateTime) {
     return dateTime.toDateTimeString();
   }

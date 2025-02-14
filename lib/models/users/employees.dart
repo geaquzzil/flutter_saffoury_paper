@@ -1,16 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
-import 'package:flutter_saffoury_paper/models/users/user.dart';
-import 'package:flutter_saffoury_paper/models/users/users_actions/customer_by_employee_analysis.dart';
-import 'package:flutter_saffoury_paper/models/users/warehouse_employees.dart';
-import 'package:flutter_view_controller/models/dealers/dealer.dart';
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
-import 'package:flutter_view_controller/models/v_mirrors.dart';
-import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
-import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
@@ -19,17 +7,32 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/custom
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_inputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reservation_invoice.dart';
-import 'package:flutter_view_controller/models/permissions/setting.dart';
-import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/transfers.dart';
-import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
+import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
+import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
+import 'package:flutter_saffoury_paper/models/users/user.dart';
+import 'package:flutter_saffoury_paper/models/users/users_actions/customer_by_employee_analysis.dart';
+import 'package:flutter_saffoury_paper/models/users/warehouse_employees.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
+import 'package:flutter_view_controller/models/dealers/dealer.dart';
+import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
+import 'package:flutter_view_controller/models/permissions/setting.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 import '../funds/credits.dart';
 import '../funds/debits.dart';
 import '../funds/incomes.dart';
 import '../funds/spendings.dart';
+
 part 'employees.g.dart';
 
 @JsonSerializable(
@@ -50,7 +53,10 @@ class Employee extends User<Employee> {
   Employee() : super() {
     warehouse_employees = [];
   }
-
+  @override
+  Map<String, bool> isFieldRequiredMap() {
+    return super.isFieldRequiredMap()..addAll({"warehouse_employees": true});
+  }
   // @override
   // void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
   //   super.onBeforeGenerateView(context);
@@ -61,13 +67,19 @@ class Employee extends User<Employee> {
   // }
 
   @override
+  ViewAbstract getValueIfListMultiChipApi(String field) {
+    return Warehouse();
+  }
+
+  @override
   Employee getSelfNewInstance() {
     return Employee();
   }
 
   @override
   List<String> getMainFields({BuildContext? context}) {
-    return super.getMainFields(context: context)..addAll(["warehouse"]);
+    return super.getMainFields(context: context)
+      ..addAll(["warehouse_employees"]);
   }
 
   @override
@@ -149,7 +161,7 @@ class Employee extends User<Employee> {
 
   @override
   FormFieldControllerType getInputType(String field) {
-    if (field == "warehouse") {
+    if (field == "warehouse_employees") {
       return FormFieldControllerType.MULTI_CHIPS_API;
     }
     return super.getInputType(field);

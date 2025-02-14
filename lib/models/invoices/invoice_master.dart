@@ -104,6 +104,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     if (action == ServerActions.edit && isNew()) {
       employees =
           context.read<AuthProvider<AuthUser>>().getSimpleUser as Employee;
+      status = InvoiceStatus.APPROVED;
     }
     terms = getTermsFromID(TermsID ?? -1);
   }
@@ -204,14 +205,14 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   IconData? getMainDrawerGroupIconData() => Icons.receipt_long_rounded;
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "terms": Terms.none,
-        "date": "",
-        "billNo": "",
-        "comments": "",
         "employees": Employee(),
         "customers": Customer(),
         "cargo_transporters": CargoTransporter(),
-        "status": InvoiceStatus.NONE
+        "date": "",
+        "billNo": "",
+        "status": InvoiceStatus.NONE,
+        "terms": Terms.none,
+        "comments": "",
       };
   @override
   List<String> getMainFields({BuildContext? context}) => [
@@ -242,7 +243,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   Map<String, TextInputType?> getTextInputTypeMap() => {
         "date": TextInputType.datetime,
         "billNo": TextInputType.text,
-        "comments": TextInputType.text
+        "comments": TextInputType.multiline
       };
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
@@ -369,6 +370,11 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
+  bool isSupportAddFromManual() {
+    return true;
+  }
+
+  @override
   bool isListableRequired(BuildContext context) {
     return true;
   }
@@ -423,18 +429,22 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     );
     return [
       if (kIsWeb)
-        CardBackgroundWithTitle(
-            leading: Icons.summarize,
-            useHorizontalPadding: true,
-            useVerticalPadding: false,
-            title: AppLocalizations.of(context)!.no_summary,
-            child: child)
+        SliverToBoxAdapter(
+          child: CardBackgroundWithTitle(
+              leading: Icons.summarize,
+              useHorizontalPadding: true,
+              useVerticalPadding: false,
+              title: AppLocalizations.of(context)!.no_summary,
+              child: child),
+        )
       else
-        ExpansionTile(
-          initiallyExpanded: true,
-          leading: const Icon(Icons.summarize),
-          title: Text(AppLocalizations.of(context)!.no_summary),
-          children: [child],
+        SliverToBoxAdapter(
+          child: ExpansionTile(
+            initiallyExpanded: true,
+            leading: const Icon(Icons.summarize),
+            title: Text(AppLocalizations.of(context)!.no_summary),
+            children: [child],
+          ),
         )
     ];
   }
@@ -509,6 +519,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   List<InvoiceMasterDetails> getDetailListFromMaster() {
+
     if (runtimeType == Order) {
       return (this as Order).orders_details ?? [];
     } else if (runtimeType == Purchases) {
@@ -939,13 +950,21 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   @override
   Widget? getCardTrailing(BuildContext context,
       {SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) {
-    // TODO: implement getCardTrailing
-    return Text(
-      "items: ${getDetailListFromMasterItemsCount()}",
-      style: Theme.of(context)
-          .textTheme
-          .bodySmall!
-          .copyWith(color: Theme.of(context).colorScheme.primary),
+    Widget? superWidget =
+        super.getCardTrailing(context, secPaneHelper: secPaneHelper);
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          "items: ${getDetailListFromMasterItemsCount()}",
+          style: Theme.of(context)
+              .textTheme
+              .bodySmall!
+              .copyWith(color: Theme.of(context).colorScheme.primary),
+        ),
+        if (superWidget != null) superWidget,
+      ],
     );
   }
 

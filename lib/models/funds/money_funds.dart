@@ -131,7 +131,7 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
         "value":
             const TextInputType.numberWithOptions(decimal: true, signed: false),
         "date": TextInputType.datetime,
-        "comments": TextInputType.text
+        "comments": TextInputType.multiline
       };
 
   @override

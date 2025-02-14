@@ -198,7 +198,7 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
         "quantity": TextInputType.number,
         "date": TextInputType.datetime,
         "products_types": TextInputType.number,
-        "comments": TextInputType.text,
+        "comments": TextInputType.multiline,
         "customer": TextInputType.multiline,
         "sheets": TextInputType.number,
       };

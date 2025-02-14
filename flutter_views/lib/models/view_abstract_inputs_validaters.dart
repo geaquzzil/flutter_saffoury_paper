@@ -20,8 +20,10 @@ import 'package:flutter_view_controller/new_screens/forms/nasted/nasted_form_bui
 import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:reactive_color_picker/reactive_color_picker.dart';
+import 'package:reactive_date_time_picker/reactive_date_time_picker.dart';
 import 'package:reactive_dropdown_search/reactive_dropdown_search.dart';
 import 'package:reactive_flutter_typeahead/reactive_flutter_typeahead.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -66,6 +68,14 @@ abstract class ViewAbstractInputAndValidater<T>
   TextInputType? getTextInputType(String field) {
     //TODO I added TextInputType.none
     return getTextInputTypeMap()[field] ?? TextInputType.none;
+  }
+
+  int? getTextInputHasMaxLines(String field) {
+    if (getTextInputType(field) == TextInputType.multiline) {
+      return null;
+    } else {
+      return 1;
+    }
   }
 
   Map<String, List<String>>? getHasControlersAfterInputtMap(
@@ -124,7 +134,8 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   ///return async list to check not contains the list
-  FutureOr<List>? getTextInputValidatorIsUnique(BuildContext context,String field) {
+  FutureOr<List>? getTextInputValidatorIsUnique(
+      BuildContext context, String field) {
     return null;
   }
 
@@ -404,6 +415,7 @@ abstract class ViewAbstractInputAndValidater<T>
     throw UnimplementedError("getMultiChipInitalValue ");
   }
 
+  @Deprecated("")
   void onMultiChipSaved(
       BuildContext context, String field, List<dynamic>? selectedList) {
     debugPrint("onMultiChipSaved field=> $field value=> $selectedList");
@@ -555,6 +567,66 @@ abstract class ViewAbstractInputAndValidater<T>
     //         as Future<List<ViewAbstract>>);
     //   },
     // );
+  }
+
+  Widget getFormFieldMultiChipReactive(
+      {required BuildContext context,
+      required String field,
+      FormOptions? options,
+      FormGroup? baseForm}) {
+    ViewAbstract v = getValueIfListMultiChipApi(field);
+    return ReactiveDropdownSearchMultiSelection<ViewAbstract, ViewAbstract>(
+      formControlName: field,
+      // popupProps: PopupProps.bottomSheet(
+      //   showSearchBox: true,
+      //   bottomSheetProps: const BottomSheetProps(
+      //     constraints: BoxConstraints(maxHeight: 300),
+      //     shape: RoundedRectangleBorder(
+      //       borderRadius: BorderRadius.only(
+      //         topLeft: Radius.circular(24),
+      //         topRight: Radius.circular(24),
+      //       ),
+      //     ),
+      //   ),
+      //   title: Container(
+      //     height: 50,
+      //     decoration: BoxDecoration(
+      //       color: Theme.of(context).primaryColorDark,
+      //       borderRadius: const BorderRadius.only(
+      //         topLeft: Radius.circular(20),
+      //         topRight: Radius.circular(20),
+      //       ),
+      //     ),
+      //     child: const Center(
+      //       child: Text(
+      //         'Country',
+      //         style: TextStyle(
+      //           fontSize: 24,
+      //           fontWeight: FontWeight.bold,
+      //           color: Colors.white,
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      validationMessages: getTextInputValidatorReactive(context, field),
+      dropdownDecoratorProps: DropDownDecoratorProps(
+          dropdownSearchDecoration: getDecoration(context, v)),
+      itemAsString: (item) {
+        return item.getMainHeaderTextOnly(context);
+      },
+      asyncItems: (query) {
+        return v.listCallNotNull(
+          count: 50,
+          page: 0,
+          context: context,
+        ) as Future<List<ViewAbstract>>;
+      },
+    );
+  }
+
+  Future<List<ViewAbstract>> getEmptyList() {
+    return Future.value([]);
   }
 
   Widget getFormFieldAutoCompleteReactive(
@@ -724,6 +796,7 @@ abstract class ViewAbstractInputAndValidater<T>
                 )
               : null),
       keyboardType: getTextInputType(field),
+      maxLines: getTextInputHasMaxLines(field),
       inputFormatters: getTextInputFormatter(field),
       validator: (va) =>
           getTextInputValidatorCompose<String?>(context, field).call(va),
@@ -1050,18 +1123,21 @@ abstract class ViewAbstractInputAndValidater<T>
       TextEditingController? controller,
       FocusNode? node,
       void Function(FormControl<dynamic>)? onChanged,
+      void Function(FormControl<dynamic>)? onTap,
       bool enableClearButton = false}) {
     return ReactiveTextField(
       onChanged: onChanged,
       controller: controller,
       focusNode: node,
       formControlName: field,
+      onTap: onTap,
       textInputAction: TextInputAction.next,
       maxLength: getTextInputMaxLength(field),
       textCapitalization: getTextInputCapitalization(field),
       keyboardType: getTextInputType(field),
       inputFormatters: getTextInputFormatter(field),
       validationMessages: getTextInputValidatorReactive(context, field),
+      maxLines: getTextInputHasMaxLines(field),
       decoration: getDecoration(context, castViewAbstract(),
           field: field,
           suffixIcon: controller?.text.isEmpty == true
@@ -1088,7 +1164,7 @@ abstract class ViewAbstractInputAndValidater<T>
 
     return ReactiveDropdownSearch<ViewAbstractEnum, ViewAbstractEnum>(
       formControlName: field,
-
+      // showClearButton: true,
       validationMessages: getTextInputValidatorReactive(context, field),
 
       dropdownDecoratorProps: DropDownDecoratorProps(
@@ -1154,28 +1230,50 @@ abstract class ViewAbstractInputAndValidater<T>
       FormOptions? options,
       FormGroup? baseForm}) {
     options ??= getFormOptions(context, field);
-    return ReactiveDatePicker<String>(
-        firstDate: "2024-01-01".toDateTimeOnlyDate(),
-        lastDate: "2030-01-01".toDateTimeOnlyDate(),
-        formControlName: field,
-        builder: (context, picker, child) => Row(
-              children: [
-                ReactiveValueListenableBuilder<String>(
-                  formControlName: field,
-                  builder: (context, control, child) {
-                    return Text(control.isNull
-                        //Todo translate
-                        ? 'isNotSet'
-                        : control.value!);
-                  },
-                ),
-                Spacer(),
-                IconButton(
-                  onPressed: picker.showPicker,
-                  icon: Icon(Icons.date_range),
-                ),
-              ],
-            ));
+    return ReactiveDateTimePicker(
+      // fieldLabelText: "sda",
+      dateFormat: DateFormat(dateFormatString, 'en-US'),
+      type: ReactiveDatePickerFieldType.dateTime,
+      firstDate: "2020-01-01".toDateTimeOnlyDate(),
+      lastDate: "2030-01-01".toDateTimeOnlyDate(),
+      decoration: getDecoration(context, castViewAbstract(), field: field),
+      formControlName: field,
+      // builder: (context, picker, child) {
+      //   // return getFormFieldTextReactive(
+      //   //     context: context,
+      //   //     field: field,
+      //   //     baseForm: baseForm,
+      //   //     options: options,
+      //   //     onTap: (d) {
+      //   //       picker.showPicker();
+
+      //   //     });
+      //   return Row(
+      //     children: [
+      //       IconButton(
+      //         iconSize: getIconSize(context),
+      //         onPressed: picker.showPicker,
+      //         icon: Icon(Icons.date_range),
+      //       ),
+      //       ReactiveValueListenableBuilder<String>(
+      //         formControlName: field,
+      //         builder: (context, control, child) {
+      //           return Text(control.isNull
+      //               //Todo translate
+      //               ? 'isNotSet'
+      //               : control.value!);
+      //         },
+      //       ),
+      //       Spacer(),
+      //       TextButton(
+      //         onPressed: picker.showPicker,
+      //         //Todo translate
+      //         child: Text("Change"),
+      //       ),
+      //     ],
+      //   );
+      // }
+    );
     // enabled: options.isEnabled,
     // valueTransformer: (value) {
     //   return getFieldDateTimeParseFromDateTime(value);
@@ -1240,7 +1338,7 @@ abstract class ViewAbstractInputAndValidater<T>
 
   AsyncValidator<dynamic>? getValidtorsIfUnique(
       BuildContext context, String field) {
-    FutureOr<List>? future = getTextInputValidatorIsUnique(context,field);
+    FutureOr<List>? future = getTextInputValidatorIsUnique(context, field);
     return future == null ? null : UniqueValidator2(future: future);
   }
 
@@ -1267,7 +1365,7 @@ abstract class ViewAbstractInputAndValidater<T>
     return null;
   }
 
-  FormControl getFormControl(BuildContext context, String e) {
+  FormControl getFormControl(BuildContext context, String e, {bool? disabled}) {
     Type? fieldType = getMirrorFieldType(e);
 
     debugPrint(
@@ -1293,7 +1391,17 @@ abstract class ViewAbstractInputAndValidater<T>
     if (type == FormFieldControllerType.COLOR_PICKER) {
       return FormControl<Color>(
         validators: l,
-        disabled: !isFieldEnabled(e),
+        disabled: disabled ?? !isFieldEnabled(e),
+      );
+    } else if (type == FormFieldControllerType.DATE_TIME) {
+      return FormControl<DateTime>(
+        validators: l,
+        disabled: disabled ?? !isFieldEnabled(e),
+      );
+    } else if (type == FormFieldControllerType.MULTI_CHIPS_API) {
+      return FormControl<List<ViewAbstract>>(
+        validators: l,
+        disabled: disabled ?? !isFieldEnabled(e),
       );
     }
 
@@ -1302,25 +1410,25 @@ abstract class ViewAbstractInputAndValidater<T>
       return FormControl<int>(
         validators: l,
         asyncValidators: [if (isUnique != null) isUnique],
-        disabled: !isFieldEnabled(e),
+        disabled: disabled ?? !isFieldEnabled(e),
       );
     } else if (fieldType == num) {
       return FormControl<num>(
         validators: l,
         asyncValidators: [if (isUnique != null) isUnique],
-        disabled: !isFieldEnabled(e),
+        disabled: disabled ?? !isFieldEnabled(e),
       );
     } else if (fieldType == double) {
       return FormControl<double>(
         validators: l,
         asyncValidators: [if (isUnique != null) isUnique],
-        disabled: !isFieldEnabled(e),
+        disabled: disabled ?? !isFieldEnabled(e),
       );
     } else if (fieldType == String) {
       return FormControl<String>(
         validators: l,
         asyncValidators: [if (isUnique != null) isUnique],
-        disabled: !isFieldEnabled(e),
+        disabled: disabled ?? !isFieldEnabled(e),
       );
     } else {
       dynamic value = getFieldValueReturnDefualtOnNull(context, e);
@@ -1329,31 +1437,42 @@ abstract class ViewAbstractInputAndValidater<T>
         return FormControl<ViewAbstractEnum>(
           validators: l,
           asyncValidators: [if (isUnique != null) isUnique],
-          disabled: !isFieldEnabled(e),
+          disabled: disabled ?? !isFieldEnabled(e),
         );
       }
       return FormControl(
         validators: l,
         asyncValidators: [if (isUnique != null) isUnique],
-        disabled: !isFieldEnabled(e),
+        disabled: disabled ?? !isFieldEnabled(e),
       );
     }
   }
 
-  FormGroup getBaseFormGroup(BuildContext context, {ViewAbstract? parent}) {
+  FormGroup getBaseFormGroup(BuildContext context,
+      {ViewAbstract? parent, bool? disabled}) {
     Map<String, Object> controls = {};
     getMainFields(context: context).forEach((e) {
       if (isViewAbstract(e)) {
+        bool? isNull;
+        if (isFieldCanBeNullable(context, e)) {
+          isNull = getFieldValue(e, context: context) == null;
+          controls[getControllerKey(e, extras: "n")] =
+              FormControl<bool>(value: isNull);
+        }
         ViewAbstract v =
             (getFieldValueReturnDefualtOnNull(context, e) as ViewAbstract);
-        controls[e] = v.getBaseFormGroup(context, parent: castViewAbstract());
+        controls[e] = v.getBaseFormGroup(context,
+            parent: castViewAbstract(), disabled: isNull);
       } else {
-        FormControl formControl = getFormControl(context, e);
+        FormControl formControl =
+            getFormControl(context, e, disabled: disabled);
         dynamic value = getFieldValueReturnDefualtOnNull(context, e);
         if (value != null) {
           FormFieldControllerType type = getInputType(e);
           if (type == FormFieldControllerType.COLOR_PICKER) {
             value = (value as String).fromHex();
+          } else if (type == FormFieldControllerType.DATE_TIME) {
+            value = (value as String).toDateTime();
           }
         }
         formControl.value = value;
@@ -1361,8 +1480,49 @@ abstract class ViewAbstractInputAndValidater<T>
         controls[e] = formControl;
       }
     });
-    return fb.group(
-      controls,
+
+    if (isListable()) {
+      List<FormGroup> g = List.empty(growable: true);
+      List<ViewAbstract> listable = castListableInterface().getListableList();
+      for (var v in listable) {
+        g.add(v.getBaseFormGroup(context, parent: castViewAbstract()));
+      }
+      debugPrint(
+          "ReactiveFormArray  isListable details listable length:${listable.length} ${g.length} $g");
+      String keyName = castListableInterface()
+          .getListableAddFromManual(context)
+          .getTableNameApi()!;
+      controls[keyName] = FormArray(g, validators: [
+        if (castListableInterface().isListableRequired(context))
+          Validators.required
+      ]);
+    }
+    FormGroup f = fb.group(controls, [
+      // if (parent != null)
+      // NotRequiredValidator(
+      //     context: context, field: fieldNameFromParent!, parent: parent)
+    ]);
+    if (disabled == true) {
+      f.markAsDisabled();
+    }
+    return f;
+  }
+
+  Widget getReactiveForm2(
+      {required BuildContext context,
+      required FormGroup childGroup,
+      Widget? child}) {
+    FormGroup childFormGroup = childGroup;
+    return ReactiveForm(
+      formGroup: childFormGroup,
+      child: child ??
+          Column(
+            spacing: 10,
+            children: getMainFields(context: context)
+                .map((e) => getFormMainControllerWidgetReactive(
+                    context: context, field: e, baseForm: childFormGroup))
+                .toList(),
+          ),
     );
   }
 
@@ -1398,6 +1558,11 @@ abstract class ViewAbstractInputAndValidater<T>
           ),
         )
         .toList();
+  }
+
+  ViewAbstract getValueIfListMultiChipApi(String field) {
+    throw Exception(
+        "you should implement getValueIfListMultiChipApi for  $T field:$field");
   }
 
   Widget getFormMainControllerWidgetReactive({
@@ -1451,6 +1616,12 @@ abstract class ViewAbstractInputAndValidater<T>
             baseForm: baseForm);
       } else if (textFieldTypeVA == FormFieldControllerType.FILE_PICKER) {
         widget = const Text("FILE");
+      } else if (textFieldTypeVA == FormFieldControllerType.MULTI_CHIPS_API) {
+        widget = getFormFieldMultiChipReactive(
+            context: context,
+            field: field,
+            options: options,
+            baseForm: baseForm);
       } else if (textFieldTypeVA == FormFieldControllerType.AUTO_COMPLETE) {
         widget = getFormFieldAutoCompleteReactive(
             context: context,

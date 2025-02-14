@@ -169,7 +169,7 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
         "email": TextInputType.emailAddress,
         "address": TextInputType.streetAddress,
         "city": TextInputType.text,
-        "comments": TextInputType.text
+        "comments": TextInputType.multiline
       };
 
   @override

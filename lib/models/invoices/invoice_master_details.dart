@@ -173,7 +173,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
             decimal: false, signed: false),
         "price": const TextInputType.numberWithOptions(
             decimal: false, signed: false),
-        "comments": TextInputType.text
+        "comments": TextInputType.multiline
       };
   @override
   Map<String, bool> isFieldRequiredMap() => {

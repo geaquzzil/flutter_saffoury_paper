@@ -399,7 +399,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   Map<String, TextInputType?> getTextInputTypeMap() => {
         "date": TextInputType.datetime,
         "quantity": TextInputType.number,
-        "comments": TextInputType.text
+        "comments": TextInputType.multiline
       };
 
   @override
@@ -609,7 +609,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   List<SizesCutRequest>? deletedList;
 
   @override
-  SizesCutRequest? getListableAddFromManual(BuildContext context) {
+  SizesCutRequest getListableAddFromManual(BuildContext context) {
     return SizesCutRequest()
       ..sizes = (ProductSize()..width = getTotalRemainingRequestSizesWidth())
       ..quantity = getTotalRemainingQuantity();
@@ -647,7 +647,10 @@ class CutRequest extends ViewAbstract<CutRequest>
   double? getListableTotalDiscount(BuildContext context) {
     return null;
   }
-
+  @override
+  bool isSupportAddFromManual() {
+    return true;
+  }
   @override
   double? getListableTotalPrice(BuildContext context) {
     return null;
