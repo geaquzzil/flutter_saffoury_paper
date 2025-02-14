@@ -1512,16 +1512,19 @@ abstract class ViewAbstractInputAndValidater<T>
       {required BuildContext context,
       required FormGroup childGroup,
       Widget? child}) {
-    FormGroup childFormGroup = childGroup;
     return ReactiveForm(
-      formGroup: childFormGroup,
+      formGroup: childGroup,
       child: child ??
           Column(
             spacing: 10,
-            children: getMainFields(context: context)
-                .map((e) => getFormMainControllerWidgetReactive(
-                    context: context, field: e, baseForm: childFormGroup))
-                .toList(),
+            children: getMainFields(context: context).map((e) {
+              debugPrint("ReactiveFormArray getReactiveForm2 field $e");
+              return getFormMainControllerWidgetReactive(
+                  context: context,
+                  field: e,
+                  baseForm: childGroup,
+                  parent: castViewAbstract());
+            }).toList(),
           ),
     );
   }

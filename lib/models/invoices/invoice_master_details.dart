@@ -32,7 +32,6 @@ import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pdf/widgets.dart' as pdf;
-import 'package:pdf/pdf.dart' as pdf2;
 import 'package:provider/provider.dart';
 
 import '../prints/print_invoice.dart';

@@ -65,32 +65,39 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     List<ViewAbstract> listableObjects =
         getExtrasCast().castListableInterface().getListableList();
     FormArray arr = form.control(listableKey) as FormArray;
-    return ReactiveFormArray(
-      formArrayName: listableKey,
-      builder: (context, formArray, child) {
-        debugPrint(
-            "ReactiveFormArray control list ${arr.controls.length} ${arr.controls.length} ");
-        List<Widget> widgets = List.empty(growable: true);
-        for (int i = 0; i < listableObjects.length; i++) {
-          var e = listableObjects[i];
-          e.onBeforeGenerateView(context, action: ServerActions.edit);
-          e.setParent(getExtrasCast());
-          e.setFieldNameFromParent(listableKey);
+    return ExpansionTile(
+      title: Text("List"),
+      children: [
+        ReactiveFormArray(
+          formArrayName: listableKey,
+          builder: (context, formArray, child) {
+            debugPrint(
+                "ReactiveFormArray control list ${arr.controls.length} ${arr.controls.length} ");
+            List<Widget> widgets = List.empty(growable: true);
+            for (int i = 0; i < listableObjects.length; i++) {
+              var e = listableObjects[i];
+              debugPrint("ReactiveFormArray e is $e");
+              e.onBeforeGenerateView(context, action: ServerActions.edit);
+              e.setParent(getExtrasCast());
+              e.setFieldNameFromParent(listableKey);
 
-          widgets.add(Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: e.getReactiveForm2(
-                  childGroup: arr.controls[i] as FormGroup, context: context),
-            ),
-          ));
-        }
+              widgets.add(Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: e.getReactiveForm2(
+                      childGroup: arr.controls[i] as FormGroup,
+                      context: context),
+                ),
+              ));
+            }
 
-        return Column(
-          spacing: 10,
-          children: widgets,
-        );
-      },
+            return Column(
+              spacing: 20,
+              children: widgets,
+            );
+          },
+        )
+      ],
     );
   }
 
