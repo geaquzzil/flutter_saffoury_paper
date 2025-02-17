@@ -132,6 +132,10 @@ class User<T> extends UserLists<T> {
         "totalPurchases": TextInputType.number,
         "termsDate": TextInputType.datetime,
       };
+  @override
+  Map<String, dynamic>? copyWithFormValues({Map<String, dynamic>? values}) {
+    return {'name': values?['text']};
+  }
 
   @override
   Map<String, bool> isFieldRequiredMap() =>

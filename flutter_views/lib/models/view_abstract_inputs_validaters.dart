@@ -12,9 +12,11 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_generater.dart';
 import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
-import 'package:flutter_view_controller/new_components/forms/reative_type_ahead.dart';
+import 'package:flutter_view_controller/new_components/forms/reative_type_ahead_from_text.dart';
+import 'package:flutter_view_controller/new_components/forms/reative_type_ahead_when_no_focus.dart';
 import 'package:flutter_view_controller/new_components/forms/search_choice_reactive.dart';
 import 'package:flutter_view_controller/new_components/forms/validators/unique_email_async_validator.dart';
+import 'package:flutter_view_controller/new_screens/actions/cruds/edit.dart';
 import 'package:flutter_view_controller/new_screens/forms/nasted/expansion_edit.dart';
 import 'package:flutter_view_controller/new_screens/forms/nasted/nasted_form_builder.dart';
 import 'package:flutter_view_controller/new_screens/theme.dart';
@@ -1155,6 +1157,34 @@ abstract class ViewAbstractInputAndValidater<T>
     );
   }
 
+  Widget getReactiveViewAbstractField(
+      {required BuildContext context,
+      required FormGroup baseForm,
+      required String field,
+      required FormOptions options}) {
+    return ReactiveTypeAheadNewObjectOnUnfocus<ViewAbstract, ViewAbstract>(
+      decoration: getDecoration(context, options.value),
+
+      formControlName: field,
+      // debounceDuration: Duration(seconds: 10),
+      viewDataTypeFromTextEditingValue: (text) {
+        return (options.value as ViewAbstract).getNewInstance(text: text);
+      },
+      stringify: (value) => value.getMainHeaderTextOnly(context),
+      suggestionsCallback: (text) {
+        return (options.value as ViewAbstract).search(
+          10,
+          0,
+          text,
+          context: context,
+        ) as Future<List<ViewAbstract>>;
+      },
+      itemBuilder: (c, value) {
+        return value.getAutoCompleteItemBuilder(c, field, value);
+      },
+    );
+  }
+
   Widget getReactiveFormDropbox(
       {required BuildContext context,
       required String field,
@@ -1430,11 +1460,25 @@ abstract class ViewAbstractInputAndValidater<T>
         asyncValidators: [if (isUnique != null) isUnique],
         disabled: disabled ?? !isFieldEnabled(e),
       );
+    } else if (fieldType == ViewAbstract) {
+      debugPrint("fieldType= =ViewAbstract");
+      return FormControl<ViewAbstract>(
+        validators: l,
+        asyncValidators: [if (isUnique != null) isUnique],
+        disabled: disabled ?? !isFieldEnabled(e),
+      );
     } else {
       dynamic value = getFieldValueReturnDefualtOnNull(context, e);
       if (value is ViewAbstractEnum) {
         debugPrint("fieldType= =ViewAbstractEnum ");
         return FormControl<ViewAbstractEnum>(
+          validators: l,
+          asyncValidators: [if (isUnique != null) isUnique],
+          disabled: disabled ?? !isFieldEnabled(e),
+        );
+      } else if (value is ViewAbstract) {
+        debugPrint("value is = =ViewAbstract");
+        return FormControl<ViewAbstract>(
           validators: l,
           asyncValidators: [if (isUnique != null) isUnique],
           disabled: disabled ?? !isFieldEnabled(e),
@@ -1449,8 +1493,11 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   FormGroup getBaseFormGroup(BuildContext context,
-      {ViewAbstract? parent, bool? disabled}) {
+      {FormBuilderOptions? buildOptions,
+      ViewAbstract? parent,
+      bool? disabled}) {
     Map<String, Object> controls = {};
+
     getMainFields(context: context).forEach((e) {
       if (isViewAbstract(e)) {
         bool? isNull;
@@ -1461,8 +1508,19 @@ abstract class ViewAbstractInputAndValidater<T>
         }
         ViewAbstract v =
             (getFieldValueReturnDefualtOnNull(context, e) as ViewAbstract);
-        controls[e] = v.getBaseFormGroup(context,
-            parent: castViewAbstract(), disabled: isNull);
+        if (buildOptions?.canContinue(parent: parent) ?? true) {
+          controls[e] = v.getBaseFormGroup(context,
+              buildOptions: buildOptions,
+              parent: castViewAbstract(),
+              disabled: isNull);
+        } else {
+          FormControl formControl =
+              getFormControl(context, e, disabled: disabled);
+          dynamic value = getFieldValueReturnDefualtOnNull(context, e);
+          formControl.value = value;
+
+          controls[e] = formControl;
+        }
       } else {
         FormControl formControl =
             getFormControl(context, e, disabled: disabled);
@@ -1586,8 +1644,8 @@ abstract class ViewAbstractInputAndValidater<T>
     } else if (options.value is ViewAbstract) {
       debugPrint(
           "getFormMainControllerWidgetReactive isViewAbstract $field ${getTableNameApi()}");
-      widget = (options.value as ViewAbstract)
-          .getReactiveForm(context: context, baseForm: baseForm, field: field);
+      widget = (options.value as ViewAbstract).getReactiveViewAbstractField(
+          context: context, baseForm: baseForm, field: field, options: options);
     } else {
       FormFieldControllerType textFieldTypeVA = this.getInputType(field);
       if (textFieldTypeVA == FormFieldControllerType.DATE_TIME) {

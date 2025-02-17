@@ -6,8 +6,10 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:reactive_forms/src/models/models.dart';
 
 abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   @JsonKey(includeToJson: true, includeFromJson: false)
@@ -98,11 +100,12 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return null;
   }
 
-  T getNewInstance({Map<String, dynamic>? values}) {
+  T getNewInstance({Map<String, dynamic>? values, String? text}) {
     T ob = ((copyWithNewSuggestion(this) as ViewAbstract)..iD = -1) as T;
 
-    return (ob as ViewAbstract)
-        .fromJsonViewAbstract(copyWithFormValues(values: values) ?? {'iD': -1});
+    return (ob as ViewAbstract).fromJsonViewAbstract(text != null
+        ? copyWithFormValues(values: getCopyWithFormTextField(text)) ?? {}
+        : copyWithFormValues(values: values) ?? {'iD': -1});
   }
 
   T? onAfterValidate(BuildContext context) {

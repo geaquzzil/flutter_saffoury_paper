@@ -12,10 +12,12 @@ import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.da
 import 'package:reactive_forms/reactive_forms.dart';
 
 class EditNew extends BasePageApi {
+  FormBuilderOptions? buildOptions;
   EditNew(
       {super.key,
       super.extras,
       super.iD,
+      this.buildOptions,
       super.tableName,
       super.isFirstToSecOrThirdPane,
       super.parent,
@@ -29,11 +31,16 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     with BasePageSecoundPaneNotifierState<EditNew> {
   GlobalKey<FB.FormBuilderState> formKey = GlobalKey<FB.FormBuilderState>();
   FormGroup? _baseForm;
+  FormBuilderOptions? _builderOption;
   Map<String, ExpansionTileController> expansionController = {};
 
   @override
   void initStateAfterApiCalled() {
-    _baseForm ??= getExtrasCast().getBaseFormGroup(context);
+    _builderOption = widget.buildOptions ?? FormBuilderOptions();
+    _baseForm ??=
+        getExtrasCast().getBaseFormGroup(context, buildOptions: _builderOption);
+
+    _builderOption?.reset();
     expansionController = {};
     _baseForm!.controls.forEach(
       (key, value) {
@@ -141,15 +148,25 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
       {ViewAbstract? parent,
       String? fieldNameFromParent,
       required FormGroup formGroup}) {
-    viewAbstract.onBeforeGenerateView(context, action: ServerActions.edit);
-    viewAbstract.setParent(parent);
-    viewAbstract.setFieldNameFromParent(fieldNameFromParent);
+    setParents(
+        viewAbstract: viewAbstract,
+        parent: parent,
+        fieldNameFromParent: fieldNameFromParent);
     return <Widget>[
       ...viewAbstract.getMainFields().map((e) {
         return checkToGetControllerWidgetReactive(context, viewAbstract, e,
             formGroup: formGroup);
       }),
     ];
+  }
+
+  void setParents(
+      {required ViewAbstract<dynamic> viewAbstract,
+      ViewAbstract<dynamic>? parent,
+      String? fieldNameFromParent}) {
+    viewAbstract.onBeforeGenerateView(context, action: ServerActions.edit);
+    viewAbstract.setParent(parent);
+    viewAbstract.setFieldNameFromParent(fieldNameFromParent);
   }
 
   Widget wrapWithColumn(List<Widget> childs) {
@@ -176,49 +193,52 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     bool enabled = viewAbstract.isFieldEnabled(field);
 
     if (viewAbstract.isViewAbstract(field)) {
-      FormGroup childGroup = formGroup.controls[field]! as FormGroup;
-      List<Widget> childs = getFormContentReactive(fieldValue,
+      if (_builderOption?.canContinue(parent: viewAbstract.getParnet) ?? true) {
+        _builderOption?.plusOne();
+        FormGroup childGroup = formGroup.controls[field]! as FormGroup;
+        List<Widget> childs = getFormContentReactive(fieldValue,
+            formGroup: childGroup,
+            parent: viewAbstract,
+            fieldNameFromParent: field);
+        bool canBeNullable = viewAbstract.isFieldCanBeNullable(context, field);
+        Widget formWidget = ReactiveForm(
           formGroup: childGroup,
-          parent: viewAbstract,
-          fieldNameFromParent: field);
-      bool canBeNullable = viewAbstract.isFieldCanBeNullable(context, field);
-      Widget formWidget = ReactiveForm(
-        formGroup: childGroup,
-        child: wrapWithColumn(childs),
-      );
-      if (!canBeNullable) {
-        return formWidget;
-        return getExpansionTileWidget(
-            viewAbstract: viewAbstract,
-            field: field,
-            title: (fieldValue as ViewAbstract).getMainLabelText(context),
-            childGroup: childGroup,
-            formWidget: formWidget);
-      } else {
-        expansionController[viewAbstract.getControllerKey(field, extras: "e")] =
-            ExpansionTileController();
-      }
-
-      return ReactiveValueListenableBuilderListener<bool>(
-        formControlName: viewAbstract.getControllerKey(field, extras: "n"),
-        onData: (value) {
-          if (value == true) {
-            getExpansionTile(viewAbstract, field)?.collapse();
-          } else {
-            getExpansionTile(viewAbstract, field)?.expand();
-          }
-        },
-        builder: (context, value, child) {
+          child: wrapWithColumn(childs),
+        );
+        if (!canBeNullable) {
+          return formWidget;
           return getExpansionTileWidget(
               viewAbstract: viewAbstract,
               field: field,
               title: (fieldValue as ViewAbstract).getMainLabelText(context),
               childGroup: childGroup,
-              enabled: value.value == false,
-              isExpanded: value.value == false,
               formWidget: formWidget);
-        },
-      );
+        } else {
+          expansionController[viewAbstract.getControllerKey(field,
+              extras: "e")] = ExpansionTileController();
+        }
+
+        return ReactiveValueListenableBuilderListener<bool>(
+          formControlName: viewAbstract.getControllerKey(field, extras: "n"),
+          onData: (value) {
+            if (value == true) {
+              getExpansionTile(viewAbstract, field)?.collapse();
+            } else {
+              getExpansionTile(viewAbstract, field)?.expand();
+            }
+          },
+          builder: (context, value, child) {
+            return getExpansionTileWidget(
+                viewAbstract: viewAbstract,
+                field: field,
+                title: (fieldValue as ViewAbstract).getMainLabelText(context),
+                childGroup: childGroup,
+                enabled: value.value == false,
+                isExpanded: value.value == false,
+                formWidget: formWidget);
+          },
+        );
+      }
     }
     return viewAbstract.getFormMainControllerWidgetReactive(
         context: context, field: field, baseForm: formGroup);
@@ -459,4 +479,29 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
   //   _viewAbstract.addTextFieldController(field, controllers[field]!);
   //   return controllers[field]!;
   // }
+}
+
+class FormBuilderOptions {
+  int recursiveLevel;
+  int _currentLevel = 0;
+
+  FormBuilderOptions({this.recursiveLevel = -1});
+
+  @Deprecated("")
+  void plusOne() {
+    // _currentLevel = _currentLevel + 1;
+  }
+
+  bool canContinue({required ViewAbstract? parent}) {
+    if (parent == null) return true;
+    final res = _currentLevel <= recursiveLevel;
+    _currentLevel = _currentLevel + 1;
+    debugPrint("canContinue curentLevel $_currentLevel =>$res");
+
+    return res;
+  }
+
+  void reset() {
+    _currentLevel = 0;
+  }
 }
