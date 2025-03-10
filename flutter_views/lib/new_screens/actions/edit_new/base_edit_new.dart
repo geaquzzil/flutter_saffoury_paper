@@ -128,7 +128,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
 
   bool isFieldEnableSubViewAbstract() {
     if (_viewAbstract.hasParent()) {
-      bool isEnabled = _viewAbstract.getParnet!
+      bool isEnabled = _viewAbstract.getParent!
           .isFieldEnabled(_viewAbstract.getFieldNameFromParent!);
       return isEnabled;
     }
@@ -233,8 +233,8 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
           context, field, controllers[field]!.text,
           formKey: formKey);
 
-      if (_viewAbstract.getParnet != null) {
-        _viewAbstract.getParnet!.onTextChangeListenerOnSubViewAbstract(
+      if (_viewAbstract.getParent != null) {
+        _viewAbstract.getParent!.onTextChangeListenerOnSubViewAbstract(
             context, _viewAbstract, _viewAbstract.getFieldNameFromParent!,
             parentformKey: widget.parentFormKey);
       }
@@ -281,11 +281,11 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
   }
 
   Widget getExpansionTileCustom(BuildContext context, Widget form) {
-    bool f = _viewAbstract.getParnet?.getIsSubViewAbstractIsExpanded(
+    bool f = _viewAbstract.getParent?.getIsSubViewAbstractIsExpanded(
             _viewAbstract.getFieldNameFromParent ?? "") ??
         false;
     debugPrint(
-        "getExpansionTileCustom initiallyExpanded => $f field=>${_viewAbstract.getFieldNameFromParent} table= ${_viewAbstract.getParnet?.getTableNameApi()}");
+        "getExpansionTileCustom initiallyExpanded => $f field=>${_viewAbstract.getFieldNameFromParent} table= ${_viewAbstract.getParent?.getTableNameApi()}");
     if (isLargeScreen(context)) {
       return Column(
         children: [
@@ -560,7 +560,7 @@ class BaseEditWidgetState extends State<BaseEditWidget> {
         throw Exception(
             "Do not select isAutoCompleteViewAbstract and DROP_DOWN_TEXT_SEARCH_API");
       }
-      if (_viewAbstract.getParnet == null) {
+      if (_viewAbstract.getParent == null) {
         return getControllerEditText(context,
             viewAbstract: _viewAbstract,
             field: field,

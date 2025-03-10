@@ -135,6 +135,90 @@ class ReactiveTypeAheadCustom<E, T> extends ReactiveFormField<E, T> {
     InputDecoration? decoration,
     void Function(T)? onSuggestionSelected,
   }) : super(builder: (field) {
+          // final state = field as _ReactiveTypeaheadState<T, V>;
+          //           final effectiveDecoration = (decoration ?? const InputDecoration())
+          //               .applyDefaults(Theme.of(state.context).inputDecorationTheme);
+
+          //           state._setFocusNode(focusNode);
+          //           final controller = textEditingController ?? state._textController;
+          //           if (field.value != null) {
+          //             controller.text = stringify(field.value as V);
+          //           }
+
+          //           return TypeAheadField<V>(
+
+          //             suggestionsCallback: suggestionsCallback,
+          //             itemBuilder: itemBuilder,
+          //             onSelected: (value) {
+          //               controller.text = stringify(value);
+          //               field.didChange(value);
+          //               onSuggestionSelected?.call(value);
+          //             },
+          //             builder: (context, controller, focusNode) {
+          //               // Keep the selected value in the text field
+          //               if (field.value == null) {
+          //                 controller.text = '';
+          //               } else if (field.value != null) {
+          //                 controller.text = stringify(field.value as V);
+          //               }
+
+          //               return TextField(
+          //                 controller: controller,
+          //                 focusNode: focusNode,
+          //                 decoration: effectiveDecoration.copyWith(
+          //                   errorText: state.errorText,
+          //                 ),
+          //                 onTapOutside: (event) {
+          //                   debugPrint("ReactiveTypeAheadNewObjectOnUnfocus onTapOutside");
+          //                   if (controller.text.isEmpty) {
+          //                     field.didChange(null);
+          //                   } else if (viewDataTypeFromTextEditingValue != null) {
+          //                     field.didChange(viewDataTypeFromTextEditingValue
+          //                         .call(controller.text));
+          //                   }
+          //                 },
+          //                 enabled: field.control.enabled,
+          //                 style: style,
+          //                 strutStyle: strutStyle,
+          //                 textDirection: textDirection,
+          //                 textAlign: textAlign,
+          //                 textAlignVertical: textAlignVertical,
+          //                 autofocus: autofocus,
+          //                 readOnly: readOnly,
+          //                 showCursor: showCursor,
+          //                 obscureText: obscureText,
+          //                 obscuringCharacter: obscuringCharacter,
+          //                 autocorrect: autocorrect,
+          //                 onChanged: (value) {
+          //                   if(value.isEmpty){
+          //                       field.didChange(null);
+          //                   }
+          //                 },
+          //               );
+          //             },
+          //             decorationBuilder: decorationBuilder,
+          //             debounceDuration: debounceDuration,
+          //             suggestionsController: suggestionsController,
+          //             loadingBuilder: loadingBuilder,
+          //             emptyBuilder: emptyBuilder,
+          //             errorBuilder: errorBuilder,
+          //             transitionBuilder: transitionBuilder,
+          //             animationDuration: animationDuration,
+          //             offset: offset ?? const Offset(0, 5.0),
+          //             direction: direction,
+          //             hideOnLoading: hideOnLoading,
+          //             hideOnEmpty: hideOnEmpty,
+          //             hideOnError: hideOnError,
+          //             hideWithKeyboard: hideWithKeyboard,
+          //             retainOnLoading: retainOnLoading,
+          //             hideOnSelect: hideOnSelect,
+          //             autoFlipDirection: autoFlipDirection,
+          //             scrollController: scrollController,
+          //             hideKeyboardOnDrag: hideKeyboardOnDrag,
+          //             itemSeparatorBuilder: itemSeparatorBuilder,
+          //             listBuilder: listBuilder,
+          //           );
+
           final controller = SuggestionsController<ViewAbstract>();
           final textController = TextEditingController();
 
@@ -168,7 +252,7 @@ class ReactiveTypeAheadCustom<E, T> extends ReactiveFormField<E, T> {
               debugPrint(
                   "onSeggestionSelected onSelected ${formGroup.controls}  value $value   value field = >${value.toJsonViewAbstract()[fieldFromChild]}");
               // field.didChange(value.toJsonViewAbstract()[fieldFromChild]);
-              formGroup.patchValue(value.toJsonViewAbstract());
+              formGroup.patchValue(value.toJsonViewAbstractForAutoCompleteField(context));
             },
             itemBuilder: (context, containt) {
               return childViewAbstractApi.getAutoCompleteItemBuilder(

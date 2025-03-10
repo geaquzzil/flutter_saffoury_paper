@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 
 class User<T> extends UserLists<T> {
   String? name; //var 100
@@ -104,6 +107,36 @@ class User<T> extends UserLists<T> {
 
   @override
   String getMainHeaderTextOnly(BuildContext context) => name ?? "not found";
+  @override
+  FutureOr<List>? getTextInputValidatorIsUnique(
+      BuildContext context, String field, String? currentText) {
+    if (getParent == null) {
+      if (field == 'email') {
+        return searchByFieldName(
+            context: context, field: 'email', searchQuery: currentText ?? "");
+      } else if (field == 'phone') {
+        return searchByFieldName(
+            context: context, field: 'phone', searchQuery: currentText ?? "");
+      } else if (field == 'name') {
+        return searchByFieldName(
+            context: context, field: 'name', searchQuery: currentText ?? "");
+      }
+    }
+    return super.getTextInputValidatorIsUnique(context, field, currentText);
+  }
+
+  @override
+  Map<String, dynamic>? copyWithFormValues({Map<String, dynamic>? values}) {
+    return {'name': values?['text']};
+  }
+
+  @override
+  FormFieldControllerType getInputType(String field) {
+    if ("name" == field) {
+      return FormFieldControllerType.AUTO_COMPLETE_VIEW_ABSTRACT_RESPONSE;
+    }
+    return super.getInputType(field);
+  }
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() =>
@@ -132,10 +165,6 @@ class User<T> extends UserLists<T> {
         "totalPurchases": TextInputType.number,
         "termsDate": TextInputType.datetime,
       };
-  @override
-  Map<String, dynamic>? copyWithFormValues({Map<String, dynamic>? values}) {
-    return {'name': values?['text']};
-  }
 
   @override
   Map<String, bool> isFieldRequiredMap() =>

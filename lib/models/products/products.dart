@@ -523,13 +523,13 @@ class Product extends ViewAbstract<Product>
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
 
   @override
-  FutureOr<List>? getTextInputValidatorIsUnique(
-      BuildContext context, String field) {
+  FutureOr<List> ? getTextInputValidatorIsUnique(
+      BuildContext context, String field,String ? currentText) {
     if (field == 'barcode') {
       return searchByFieldName(
-          context: context, field: 'barcode', searchQuery: '');
+          context: context, field: 'barcode', searchQuery: currentText??"");
     }
-    return super.getTextInputValidatorIsUnique(context, field);
+    return super.getTextInputValidatorIsUnique(context, field,currentText);
   }
 
   @override

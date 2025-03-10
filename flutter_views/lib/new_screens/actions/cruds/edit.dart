@@ -193,7 +193,7 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     bool enabled = viewAbstract.isFieldEnabled(field);
 
     if (viewAbstract.isViewAbstract(field)) {
-      if (_builderOption?.canContinue(parent: viewAbstract.getParnet) ?? true) {
+      if (_builderOption?.canContinue(parent: viewAbstract.getParent) ?? true) {
         _builderOption?.plusOne();
         FormGroup childGroup = formGroup.controls[field]! as FormGroup;
         List<Widget> childs = getFormContentReactive(fieldValue,
@@ -206,12 +206,13 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
           child: wrapWithColumn(childs),
         );
         if (!canBeNullable) {
-          return formWidget;
+          // return formWidget;
           return getExpansionTileWidget(
               viewAbstract: viewAbstract,
               field: field,
               title: (fieldValue as ViewAbstract).getMainLabelText(context),
               childGroup: childGroup,
+              setReactiveNullableSwitch: false,
               formWidget: formWidget);
         } else {
           expansionController[viewAbstract.getControllerKey(field,
@@ -244,34 +245,39 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
         context: context, field: field, baseForm: formGroup);
   }
 
-  ExpansionTile getExpansionTileWidget(
-      {required ViewAbstract<dynamic> viewAbstract,
-      required String field,
-      required Widget title,
-      required FormGroup childGroup,
-      required Widget formWidget,
-      bool enabled = true,
-      bool isExpanded = true}) {
+  ExpansionTile getExpansionTileWidget({
+    required ViewAbstract<dynamic> viewAbstract,
+    required String field,
+    required Widget title,
+    required FormGroup childGroup,
+    required Widget formWidget,
+    bool enabled = true,
+    bool isExpanded = true,
+    bool setReactiveNullableSwitch = true,
+  }) {
     return ExpansionTile(
         controller: getExpansionTile(viewAbstract, field),
         initiallyExpanded: isExpanded,
         enabled: enabled,
         childrenPadding: EdgeInsets.all(kDefaultPadding),
         title: title,
-        trailing: ReactiveNullableSwitch<bool>(
-          context: context,
-          formControlName: viewAbstract.getControllerKey(field, extras: "n"),
-          onChange: (value) {
-            debugPrint("ReactiveValueListenableBuilder $value ");
-            if (value == false) {
-              childGroup.markAsEnabled();
-              childGroup.markAllAsTouched();
-            } else {
-              childGroup.markAsDisabled();
-              childGroup.markAllAsTouched();
-            }
-          },
-        ),
+        trailing: !setReactiveNullableSwitch
+            ? null
+            : ReactiveNullableSwitch<bool>(
+                context: context,
+                formControlName:
+                    viewAbstract.getControllerKey(field, extras: "n"),
+                onChange: (value) {
+                  debugPrint("ReactiveValueListenableBuilder $value ");
+                  if (value == false) {
+                    childGroup.markAsEnabled();
+                    childGroup.markAllAsTouched();
+                  } else {
+                    childGroup.markAsDisabled();
+                    childGroup.markAllAsTouched();
+                  }
+                },
+              ),
         children: [formWidget]);
   }
 

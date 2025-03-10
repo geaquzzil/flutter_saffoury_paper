@@ -32,7 +32,7 @@ class EditControllerCheckBox extends StatelessWidget {
             viewAbstract.setFieldValue(field, valueToSave);
 
             if (viewAbstract.getFieldNameFromParent != null) {
-              viewAbstract.getParnet?.setFieldValue(
+              viewAbstract.getParent?.setFieldValue(
                   viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
             }
           },

@@ -432,8 +432,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   int getParentsCount({int count = 0}) {
-    if (getParnet == null) return count;
-    return getParnet!.getParentsCount(count: count + 1);
+    if (getParent == null) return count;
+    return getParent!.getParentsCount(count: count + 1);
   }
 
   String getGenericClassName() {

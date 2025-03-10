@@ -138,7 +138,7 @@ Widget getContollerCheckBox(BuildContext context,
           viewAbstract.setFieldValue(field, valueToSave);
 
           if (viewAbstract.getFieldNameFromParent != null) {
-            viewAbstract.getParnet?.setFieldValue(
+            viewAbstract.getParent?.setFieldValue(
                 viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
           }
         },
@@ -168,7 +168,7 @@ Widget getContolerColorPicker(BuildContext context,
           viewAbstract.setFieldValue(field, newValue?.toHex2());
           debugPrint('getContolerColorPicker onSave= $field:$newValue');
           if (viewAbstract.getFieldNameFromParent != null) {
-            viewAbstract.getParnet?.setFieldValue(
+            viewAbstract.getParent?.setFieldValue(
                 viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
           }
         },
@@ -202,7 +202,7 @@ Widget getControllerDateTime(BuildContext context,
               field, viewAbstract.getFieldDateTimeParseFromDateTime(newValue));
           debugPrint('EditControllerEditText onSave= $field:$newValue');
           if (viewAbstract.getFieldNameFromParent != null) {
-            viewAbstract.getParnet?.setFieldValue(
+            viewAbstract.getParent?.setFieldValue(
                 viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
           }
         },
@@ -320,7 +320,7 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
           debounceDuration: const Duration(milliseconds: 750),
           onChangeGetObject: (text) => autoCompleteBySearchQuery
               ? viewAbstract.getNewInstance(values: {'text': text})
-              : viewAbstract.getParnet == null
+              : viewAbstract.getParent == null
                   ? viewAbstract.getNewInstance()
                   : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
                       viewAbstract.fieldNameFromParent!)
@@ -365,8 +365,8 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
           onSaved: (newValue) {
             if (autoCompleteBySearchQuery) {}
 
-            if (viewAbstract.getParnet != null) {
-              viewAbstract.getParnet!.setFieldValue(
+            if (viewAbstract.getParent != null) {
+              viewAbstract.getParent!.setFieldValue(
                   viewAbstract.getFieldNameFromParent!, newValue);
             } else {
               viewAbstract.setFieldValue(field, newValue);
@@ -447,7 +447,7 @@ Widget getControllerEditTextViewAbstractAutoCompleteNewIfNotFoundAsOneField(
           onChangeGetObject: (text) {
             return autoCompleteBySearchQuery
                 ? viewAbstract.getNewInstance(values: {'text': text})
-                : viewAbstract.getParnet == null
+                : viewAbstract.getParent == null
                     ? viewAbstract.getNewInstance()
                     : viewAbstract.parent!.getMirrorNewInstanceViewAbstract(
                         viewAbstract.fieldNameFromParent!)
@@ -489,8 +489,8 @@ Widget getControllerEditTextViewAbstractAutoCompleteNewIfNotFoundAsOneField(
           onSaved: (newValue) {
             if (autoCompleteBySearchQuery) {}
 
-            if (viewAbstract.getParnet != null) {
-              viewAbstract.getParnet!.setFieldValue(
+            if (viewAbstract.getParent != null) {
+              viewAbstract.getParent!.setFieldValue(
                   viewAbstract.getFieldNameFromParent!, newValue);
             } else {
               viewAbstract.setFieldValue(field, newValue);
@@ -583,7 +583,7 @@ Widget getControllerEditTextAutoComplete(BuildContext context,
             debugPrint(
                 'getControllerEditTextAutoComplete onSave= $field:$newValue');
             if (viewAbstract.getFieldNameFromParent != null) {
-              viewAbstract.getParnet?.setFieldValue(
+              viewAbstract.getParent?.setFieldValue(
                   viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
             }
           },
@@ -640,7 +640,7 @@ Widget getControllerEditText(BuildContext context,
           debugPrint(
               'getControllerEditText onSave= $field:$value textController:${controller.text}');
           if (viewAbstract.getFieldNameFromParent != null) {
-            viewAbstract.getParnet?.setFieldValue(
+            viewAbstract.getParent?.setFieldValue(
                 viewAbstract.getFieldNameFromParent ?? "", viewAbstract);
           }
         },

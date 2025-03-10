@@ -4,7 +4,6 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 class ListCardItemSelected<T extends ViewAbstract> extends StatefulWidget {
   final T object;
   bool? isSelected;
-  
 
   void Function(T obj, bool selected)? onSelected;
 
@@ -44,7 +43,7 @@ class _ListCardItemSelected<T extends ViewAbstract>
       value: isSelected,
       onChanged: (value) {
         debugPrint("CheckboxListTile changed  => $value");
-        if ((widget.object.getParnet?.hasPermissionFromParentSelectItem(
+        if ((widget.object.getParent?.hasPermissionFromParentSelectItem(
                     context, widget.object) ??
                 true) ==
             false) return;

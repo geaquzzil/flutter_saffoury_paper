@@ -165,6 +165,7 @@ class ReactiveTypeAheadNewObjectOnUnfocus<T, V>
                     errorText: state.errorText,
                   ),
                   onTapOutside: (event) {
+                    debugPrint("ReactiveTypeAheadNewObjectOnUnfocus onTapOutside");
                     if (controller.text.isEmpty) {
                       field.didChange(null);
                     } else if (viewDataTypeFromTextEditingValue != null) {

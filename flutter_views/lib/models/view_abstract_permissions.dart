@@ -42,7 +42,7 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   )
   int iD = -1;
 
-  ViewAbstract? get getParnet => parent;
+  ViewAbstract? get getParent => parent;
   String? get getFieldNameFromParent => fieldNameFromParent;
 
   static int convertToMinusOneIfNotFound(dynamic number) =>
@@ -279,7 +279,7 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   }
 
   bool isNullableAlreadyFromParentCheck(String field) {
-    return getParnet?.getFieldValue(field) == null;
+    return getParent?.getFieldValue(field) == null;
   }
 
   void setFieldNameFromParent(String? fieldNameFromParent) =>

@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart'
     as v;
+
 import '../../new_screens/controllers/ext.dart';
 
 class EditableWidget extends StatefulWidget {
@@ -210,7 +211,7 @@ class _EditableWidget extends State<EditableWidget> {
               widget.viewAbstract.setFieldValue(fieldName, value);
               debugPrint('EditControllerEditText onSave= $fieldName:$value');
               if (widget.viewAbstract.getFieldNameFromParent != null) {
-                widget.viewAbstract.getParnet?.setFieldValue(
+                widget.viewAbstract.getParent?.setFieldValue(
                     widget.viewAbstract.getFieldNameFromParent ?? "",
                     widget.viewAbstract);
               }

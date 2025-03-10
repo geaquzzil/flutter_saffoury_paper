@@ -15,6 +15,7 @@ import 'package:flutter_view_controller/models/servers/server_response_master.da
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/http.dart';
@@ -579,7 +580,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         "ViewAbstractApi BaseApiCallPageState getBodyWithoutApi result => $res");
     return res;
   }
-  Future<List<T>> listCallNotNull( {int? count,
+
+  Future<List<T>> listCallNotNull(
+      {int? count,
       int? page,
       OnResponseCallback? onResponse,
       Map<String, FilterableProviderHelper>? filter,
@@ -607,6 +610,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       return [];
     }
   }
+
   Future<List<T>?> listCall(
       {int? count,
       int? page,
@@ -761,6 +765,23 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   T fromJsonViewAbstract(Map<String, dynamic> json);
   Map<String, dynamic> toJsonViewAbstract();
+
+  Map<String, dynamic> toJsonViewAbstractForAutoCompleteField(
+      BuildContext context) {
+    Map<String, dynamic> map = toJsonViewAbstract();
+
+    for (var element in map.entries) {
+      if (element.value == null) continue;
+      FormFieldControllerType type =
+          castViewAbstract().getInputType(element.key);
+      if (type == FormFieldControllerType.COLOR_PICKER) {
+        map[element.key] = (element.value as String).fromHex();
+      } else if (type == FormFieldControllerType.DATE_TIME) {
+        map[element.key] = (element.value as String).toDateTime();
+      }
+    }
+    return map;
+  }
 }
 
 class ViewAbstractListResponseHelper {

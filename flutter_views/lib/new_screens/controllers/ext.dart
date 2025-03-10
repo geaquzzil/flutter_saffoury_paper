@@ -206,7 +206,7 @@ Widget getSpaceWidth({double? width = 20}) {
 }
 
 bool canSubmitChanges(ViewAbstract viewAbstract) =>
-    (viewAbstract.getParnet) != null;
+    (viewAbstract.getParent) != null;
 
 ViewAbstract copyWithSetNew(
     ViewAbstract oldViewAbstract, String field, dynamic value) {
@@ -324,5 +324,3 @@ Widget getTextInputController(
 //                   );
 //                 },
 //               ),
-
-

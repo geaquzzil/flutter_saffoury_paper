@@ -137,7 +137,7 @@ abstract class ViewAbstractInputAndValidater<T>
 
   ///return async list to check not contains the list
   FutureOr<List>? getTextInputValidatorIsUnique(
-      BuildContext context, String field) {
+      BuildContext context, String field, String? currentText) {
     return null;
   }
 
@@ -189,7 +189,7 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   bool? canBeNullableFromParentCheck(BuildContext context, String field) {
-    return getParnet?.isFieldCanBeNullable(context, field);
+    return getParent?.isFieldCanBeNullable(context, field);
   }
 
   TextCapitalization getTextInputCapitalization(String field) {
@@ -530,12 +530,39 @@ abstract class ViewAbstractInputAndValidater<T>
     double? padding,
     void Function(ViewAbstract<dynamic>)? onSuggestionSelected,
   }) {
+    /// this changes auto completye field if no parent presented we dont need to present this
+    ///
+    if (getParent == null) {
+      return getFormFieldTextReactive(
+          context: context, field: field, baseForm: baseForm, options: options);
+    }
+    // return ReactiveTypeAheadNewObjectOnUnfocus<ViewAbstract, ViewAbstract>(
+    //   decoration: getDecoration(context, options?.value),
+
+    //   formControlName: field,
+    //   // debounceDuration: Duration(seconds: 10),
+    //   viewDataTypeFromTextEditingValue: (text) {
+    //     return (options!.value as ViewAbstract).getNewInstance(text: text);
+    //   },
+    //   stringify: (value) => value.getMainHeaderTextOnly(context),
+    //   suggestionsCallback: (text) {
+    //     return (options!.value as ViewAbstract).search(
+    //       10,
+    //       0,
+    //       text,
+    //       context: context,
+    //     ) as Future<List<ViewAbstract>>;
+    //   },
+    //   itemBuilder: (c, value) {
+    //     return value.getAutoCompleteItemBuilder(c, field, value);
+    //   },
+    // );
     return ReactiveTypeAheadCustom(
       formControlName: field,
       childViewAbstractApi: castViewAbstract(),
-      parentViewAbstract: getParnet!,
+      parentViewAbstract: getParent ?? castViewAbstract(),
       context: context,
-      fieldFromParent: fieldNameFromParent!,
+      fieldFromParent: fieldNameFromParent ?? field,
       formGroup: baseForm!,
       fieldFromChild: field,
     );
@@ -1368,8 +1395,15 @@ abstract class ViewAbstractInputAndValidater<T>
 
   AsyncValidator<dynamic>? getValidtorsIfUnique(
       BuildContext context, String field) {
-    FutureOr<List>? future = getTextInputValidatorIsUnique(context, field);
-    return future == null ? null : UniqueValidator2(future: future);
+    FutureOr<List>? future =
+        getTextInputValidatorIsUnique(context, field, null);
+    return future == null
+        ? null
+        : UniqueValidator2(
+            futureText: (value) {
+              return getTextInputValidatorIsUnique(context, field, value)!;
+            },
+            initialValue: getFieldValue(field, context: context));
   }
 
   Validator<dynamic>? getValidtorsIfName(BuildContext context, String field) {
@@ -1505,6 +1539,9 @@ abstract class ViewAbstractInputAndValidater<T>
           isNull = getFieldValue(e, context: context) == null;
           controls[getControllerKey(e, extras: "n")] =
               FormControl<bool>(value: isNull);
+        } else {
+          //       controls[getControllerKey(e, extras: "n")] =
+          // FormControl<bool>(value: isNull);
         }
         ViewAbstract v =
             (getFieldValueReturnDefualtOnNull(context, e) as ViewAbstract);

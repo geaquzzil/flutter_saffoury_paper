@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 import '../../../constants.dart';
 import '../../../models/view_abstract.dart';
 import '../../../models/view_abstract_inputs_validaters.dart';
-
 import '../../controllers/edit_controller_dropdown.dart';
 import '../../controllers/edit_controller_dropdown_api.dart';
 import '../../controllers/edit_controller_file_picker.dart';
@@ -324,7 +323,7 @@ class BaseEditWidgetSliver extends StatelessWidget {
       );
     }
     if (isAutoCompleteViewAbstract) {
-      if (viewAbstract.getParnet == null) {
+      if (viewAbstract.getParent == null) {
         return getControllerEditText(context,
             viewAbstract: viewAbstract,
             field: field,

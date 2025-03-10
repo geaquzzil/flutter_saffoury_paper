@@ -276,11 +276,11 @@ class _ExpansionEditState extends State<ExpansionEditReactive>
   }
 
   bool isFormEnabled() {
-    return widget.viewAbstract.getParnet?.isFieldEnabled(widget.name) ?? true;
+    return widget.viewAbstract.getParent?.isFieldEnabled(widget.name) ?? true;
   }
 
   bool isNullable() {
-    return widget.viewAbstract.getParnet
+    return widget.viewAbstract.getParent
             ?.isFieldCanBeNullable(context, widget.name) ??
         false;
   }
@@ -457,7 +457,7 @@ class _ExpansionEditState extends State<ExpansionEditReactive>
             context: context,
             field: f,
             baseForm: widget.childFormGroup,
-            parent: widget.viewAbstract.getParnet))
+            parent: widget.viewAbstract.getParent))
         .toList();
   }
 
