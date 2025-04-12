@@ -237,6 +237,7 @@ class ReactiveTypeAheadCustom<E, T> extends ReactiveFormField<E, T> {
                     //             .copyWithFormValues(values: {'text': p0})));
                   },
                   enableClearButton: true,
+                  
                   // key: key,
                   field: fieldFromChild,
                   context: context,

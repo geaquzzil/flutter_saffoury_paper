@@ -115,7 +115,7 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
       };
 
   @override
-  String getMainHeaderTextOnly(BuildContext context) => name ?? "not found";
+  String getMainHeaderTextOnly(BuildContext context) => name ?? "";
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};

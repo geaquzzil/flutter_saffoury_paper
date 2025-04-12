@@ -56,7 +56,7 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
 
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
-      name ?? "not found for $T";
+      name ?? "";
 
   @override
   String getFieldToReduceSize() {

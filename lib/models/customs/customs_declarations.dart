@@ -239,7 +239,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   Map<String, bool> isFieldCanBeNullableMap() => {};
 
   @override
-  Map<String, bool> isFieldRequiredMap() => {"number": true};
+  Map<String, bool> isFieldRequiredMap() => {"number": true, "employee": true};
 
   factory CustomsDeclaration.fromJson(Map<String, dynamic> data) =>
       _$CustomsDeclarationFromJson(data);
@@ -306,6 +306,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
     // TODO: implement getPrintableSecondaryColor
     throw UnimplementedError();
   }
+
   @override
   bool isSupportAddFromManual() {
     return false;

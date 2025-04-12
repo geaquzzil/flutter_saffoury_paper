@@ -106,7 +106,7 @@ class User<T> extends UserLists<T> {
       };
 
   @override
-  String getMainHeaderTextOnly(BuildContext context) => name ?? "not found";
+  String getMainHeaderTextOnly(BuildContext context) => name ?? "";
   @override
   FutureOr<List>? getTextInputValidatorIsUnique(
       BuildContext context, String field, String? currentText) {

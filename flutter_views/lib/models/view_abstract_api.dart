@@ -772,6 +772,18 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
     for (var element in map.entries) {
       if (element.value == null) continue;
+      if (isViewAbstract(element.key)) {
+        map[element.key] = getMirrorNewInstanceViewAbstract(element.key)
+            .fromJsonViewAbstract(element.value);
+        continue;
+      }
+      if (element.value is List) {
+        map[element.key] =
+            (fromJsonViewAbstract({element.key: element.value}) as ViewAbstract)
+                .getFieldValue(element.key);
+        continue;
+      }
+
       FormFieldControllerType type =
           castViewAbstract().getInputType(element.key);
       if (type == FormFieldControllerType.COLOR_PICKER) {

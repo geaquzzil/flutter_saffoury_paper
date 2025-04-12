@@ -55,7 +55,7 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
       };
 
   @override
-  String getMainHeaderTextOnly(BuildContext context) => "not found";
+  String getMainHeaderTextOnly(BuildContext context) => "";
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
@@ -310,7 +310,7 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
       AppLocalizations.of(context)!.customer;
 
   @override
-  String getMainHeaderTextOnly(BuildContext context) => "not found";
+  String getMainHeaderTextOnly(BuildContext context) => "";
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};

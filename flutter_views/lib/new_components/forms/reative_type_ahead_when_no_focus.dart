@@ -2,10 +2,11 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:reactive_flutter_typeahead/reactive_flutter_typeahead.dart';
 import 'package:reactive_forms/reactive_forms.dart';
-import 'dart:async';
 
 /// A [ReactiveTypeAhead] that contains a [TextField].
 ///
@@ -93,7 +94,7 @@ class ReactiveTypeAheadNewObjectOnUnfocus<T, V>
     required FutureOr<List<V>?> Function(String) suggestionsCallback,
     required Widget Function(BuildContext, V) itemBuilder,
     Widget Function(BuildContext, Widget)? decorationBuilder,
-    Duration debounceDuration = const Duration(milliseconds: 300),
+    Duration debounceDuration = const Duration(milliseconds: 500),
     Widget Function(BuildContext)? loadingBuilder,
     Widget Function(BuildContext)? emptyBuilder,
     Widget Function(BuildContext, Object?)? errorBuilder,
@@ -142,13 +143,14 @@ class ReactiveTypeAheadNewObjectOnUnfocus<T, V>
             }
 
             return TypeAheadField<V>(
-              
               suggestionsCallback: suggestionsCallback,
               itemBuilder: itemBuilder,
+              showOnFocus: false,
               onSelected: (value) {
                 controller.text = stringify(value);
                 field.didChange(value);
                 onSuggestionSelected?.call(value);
+                // focusNode?.unfocus();
               },
               builder: (context, controller, focusNode) {
                 // Keep the selected value in the text field
@@ -160,20 +162,25 @@ class ReactiveTypeAheadNewObjectOnUnfocus<T, V>
 
                 return TextField(
                   controller: controller,
+
+                  // validationMessages: validationMessages,
                   focusNode: focusNode,
                   decoration: effectiveDecoration.copyWith(
                     errorText: state.errorText,
                   ),
                   onTapOutside: (event) {
-                    debugPrint("ReactiveTypeAheadNewObjectOnUnfocus onTapOutside");
+                    debugPrint(
+                        "ReactiveTypeAheadNewObjectOnUnfocus onTapOutside");
                     if (controller.text.isEmpty) {
                       field.didChange(null);
                     } else if (viewDataTypeFromTextEditingValue != null) {
                       field.didChange(viewDataTypeFromTextEditingValue
                           .call(controller.text));
                     }
+                    // focusNode.unfocus();
                   },
-                  enabled: field.control.enabled,
+
+                  // enabled: field.control.enabled,
                   style: style,
                   strutStyle: strutStyle,
                   textDirection: textDirection,
@@ -186,8 +193,8 @@ class ReactiveTypeAheadNewObjectOnUnfocus<T, V>
                   obscuringCharacter: obscuringCharacter,
                   autocorrect: autocorrect,
                   onChanged: (value) {
-                    if(value.isEmpty){
-                        field.didChange(null);
+                    if (value.isEmpty) {
+                      field.didChange(null);
                     }
                   },
                 );
@@ -239,7 +246,8 @@ class _ReactiveTypeaheadState<T, V> extends ReactiveFormFieldState<T, V> {
     _textController = TextEditingController(
       text: initialValue == null
           ? ''
-          : (widget as ReactiveTypeAheadNewObjectOnUnfocus<T, V>).stringify(initialValue),
+          : (widget as ReactiveTypeAheadNewObjectOnUnfocus<T, V>)
+              .stringify(initialValue),
     );
   }
 
@@ -259,7 +267,8 @@ class _ReactiveTypeaheadState<T, V> extends ReactiveFormFieldState<T, V> {
   void onControlValueChanged(dynamic value) {
     final effectiveValue = value == null
         ? ''
-        : (widget as ReactiveTypeAheadNewObjectOnUnfocus<T, V>).stringify(value as V);
+        : (widget as ReactiveTypeAheadNewObjectOnUnfocus<T, V>)
+            .stringify(value as V);
 
     _textController.value = _textController.value.copyWith(
       text: effectiveValue,

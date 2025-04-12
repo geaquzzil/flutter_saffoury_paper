@@ -1189,9 +1189,29 @@ abstract class ViewAbstractInputAndValidater<T>
       required FormGroup baseForm,
       required String field,
       required FormOptions options}) {
+    // return ReactiveTypeAhead<String, ViewAbstract>(
+    //   decoration: getDecoration(context, options.value),
+    //   validationMessages: getTextInputValidatorReactive(context, field),
+    //   formControlName: field,
+    //   stringify: (value) => value.getMainHeaderTextOnly(context),
+    //   viewDataTypeFromTextEditingValue: (p0) {
+    //     return (options.value as ViewAbstract).getNewInstance(text: p0);
+    //   },
+    //   suggestionsCallback: (text) {
+    //     return (options.value as ViewAbstract).search(
+    //       10,
+    //       0,
+    //       text,
+    //       context: context,
+    //     ) as Future<List<ViewAbstract>>;
+    //   },
+    //   itemBuilder: (c, value) {
+    //     return value.getAutoCompleteItemBuilder(c, field, value);
+    //   },
+    // );
     return ReactiveTypeAheadNewObjectOnUnfocus<ViewAbstract, ViewAbstract>(
       decoration: getDecoration(context, options.value),
-
+      validationMessages: getTextInputValidatorReactive(context, field),
       formControlName: field,
       // debounceDuration: Duration(seconds: 10),
       viewDataTypeFromTextEditingValue: (text) {
@@ -1539,9 +1559,6 @@ abstract class ViewAbstractInputAndValidater<T>
           isNull = getFieldValue(e, context: context) == null;
           controls[getControllerKey(e, extras: "n")] =
               FormControl<bool>(value: isNull);
-        } else {
-          //       controls[getControllerKey(e, extras: "n")] =
-          // FormControl<bool>(value: isNull);
         }
         ViewAbstract v =
             (getFieldValueReturnDefualtOnNull(context, e) as ViewAbstract);

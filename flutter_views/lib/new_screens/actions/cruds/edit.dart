@@ -14,7 +14,7 @@ import 'package:reactive_forms/reactive_forms.dart';
 class EditNew extends BasePageApi {
   FormBuilderOptions? buildOptions;
   EditNew(
-      {super.key,
+      {super.key, 
       super.extras,
       super.iD,
       this.buildOptions,
