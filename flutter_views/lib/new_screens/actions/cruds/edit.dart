@@ -14,7 +14,7 @@ import 'package:reactive_forms/reactive_forms.dart';
 class EditNew extends BasePageApi {
   FormBuilderOptions? buildOptions;
   EditNew(
-      {super.key, 
+      {super.key,
       super.extras,
       super.iD,
       this.buildOptions,
@@ -108,6 +108,10 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     );
   }
 
+  Map<String, dynamic> getObject(FormGroup form) {
+    return getExtrasCast().getObjectFromForm(context, form);
+  }
+
   Widget getFormReactive() {
     return ReactiveFormBuilder(
       form: () => _baseForm!,
@@ -123,7 +127,8 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
                 form.hasErrors;
                 debugPrint("ReactiveFormBuilder error ${form.errors}");
                 form.markAllAsTouched();
-                debugPrint("ReactiveFormBuilder ${form.value}");
+
+                debugPrint("ReactiveFormBuilder ${getObject(form)}");
               },
               child: const Text('Sign Up'),
             ),
@@ -153,7 +158,7 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
         parent: parent,
         fieldNameFromParent: fieldNameFromParent);
     return <Widget>[
-      ...viewAbstract.getMainFields().map((e) {
+      ...viewAbstract.getMainFieldsForForms(context: context).map((e) {
         return checkToGetControllerWidgetReactive(context, viewAbstract, e,
             formGroup: formGroup);
       }),

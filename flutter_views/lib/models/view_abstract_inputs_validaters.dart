@@ -1153,6 +1153,7 @@ abstract class ViewAbstractInputAndValidater<T>
       FocusNode? node,
       void Function(FormControl<dynamic>)? onChanged,
       void Function(FormControl<dynamic>)? onTap,
+      bool readOnly = false,
       bool enableClearButton = false}) {
     return ReactiveTextField(
       onChanged: onChanged,
@@ -1160,6 +1161,7 @@ abstract class ViewAbstractInputAndValidater<T>
       focusNode: node,
       formControlName: field,
       onTap: onTap,
+      readOnly: readOnly,
       textInputAction: TextInputAction.next,
       maxLength: getTextInputMaxLength(field),
       textCapitalization: getTextInputCapitalization(field),
@@ -1450,6 +1452,9 @@ abstract class ViewAbstractInputAndValidater<T>
   }
 
   FormControl getFormControl(BuildContext context, String e, {bool? disabled}) {
+    if (e == 'iD') {
+      return FormControl<int>();
+    }
     Type? fieldType = getMirrorFieldType(e);
 
     debugPrint(
@@ -1546,13 +1551,21 @@ abstract class ViewAbstractInputAndValidater<T>
     }
   }
 
+  List<String> getMainFieldsForForms({BuildContext? context}) {
+    return ['iD', ...getMainFields(context: context)];
+  }
+
+  Map<String, dynamic> getObjectFromForm(BuildContext context, FormGroup form) {
+    return {'iD': iD, ...form.value};
+  }
+
   FormGroup getBaseFormGroup(BuildContext context,
       {FormBuilderOptions? buildOptions,
       ViewAbstract? parent,
       bool? disabled}) {
     Map<String, Object> controls = {};
 
-    getMainFields(context: context).forEach((e) {
+    getMainFieldsForForms(context: context).forEach((e) {
       if (isViewAbstract(e)) {
         bool? isNull;
         if (isFieldCanBeNullable(context, e)) {
@@ -1581,7 +1594,8 @@ abstract class ViewAbstractInputAndValidater<T>
         dynamic value = getFieldValueReturnDefualtOnNull(context, e);
         if (value != null) {
           FormFieldControllerType type = getInputType(e);
-          if (type == FormFieldControllerType.COLOR_PICKER) {
+          if (e == 'iD') {
+          } else if (type == FormFieldControllerType.COLOR_PICKER) {
             value = (value as String).fromHex();
           } else if (type == FormFieldControllerType.DATE_TIME) {
             value = (value as String).toDateTime();
@@ -1629,7 +1643,7 @@ abstract class ViewAbstractInputAndValidater<T>
       child: child ??
           Column(
             spacing: 10,
-            children: getMainFields(context: context).map((e) {
+            children: getMainFieldsForForms(context: context).map((e) {
               debugPrint("ReactiveFormArray getReactiveForm2 field $e");
               return getFormMainControllerWidgetReactive(
                   context: context,
@@ -1651,7 +1665,7 @@ abstract class ViewAbstractInputAndValidater<T>
       formGroup: childFormGroup,
       child: child ??
           Column(
-            children: getMainFields(context: context)
+            children: getMainFieldsForForms(context: context)
                 .map((e) => getFormMainControllerWidgetReactive(
                     context: context, field: e, baseForm: childFormGroup))
                 .toList(),
@@ -1691,6 +1705,17 @@ abstract class ViewAbstractInputAndValidater<T>
     debugPrint(
         "getFormMainControllerWidgetReactive parent=> ${getTableNameApi()} field=> $field ");
     bool shouldWrapWithTile = true;
+    if (field == 'iD') {
+      return Visibility(
+        visible: false,
+        child: getFormFieldTextReactive(
+            context: context,
+            field: field,
+            options: options,
+            readOnly: true,
+            baseForm: baseForm),
+      );
+    }
 
     if (options.value is ViewAbstractEnum) {
       widget = getReactiveFormDropbox(

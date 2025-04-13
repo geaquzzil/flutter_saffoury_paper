@@ -220,40 +220,76 @@ class ReactiveTypeAheadCustom<E, T> extends ReactiveFormField<E, T> {
           //           );
 
           final controller = SuggestionsController<ViewAbstract>();
-          final textController = TextEditingController();
+          // final textController = TextEditingController();
 
           // controller.close();
           return TypeAheadField<ViewAbstract>(
-            controller: textController,
-            suggestionsController: controller,
+            // controller: textController,
+            // suggestionsController: controller,
             builder: (context, controller, focusNode) {
-              textController.text = field.value?.toString() ?? "";
-
+              // textController.text = field.value?.toString() ?? "";
+              // return TextField(
+              //   controller: controller,
+              //   focusNode: focusNode,
+              //   // decoration: effectiveDecoration.copyWith(
+              //   //   errorText: state.errorText,
+              //   // ),
+              //   onTapOutside: (event) {
+              //     debugPrint(
+              //         "ReactiveTypeAheadNewObjectOnUnfocus onTapOutside");
+              //     // if (controller.text.isEmpty) {
+              //     //   field.didChange(null);
+              //     // } else if (viewDataTypeFromTextEditingValue != null) {
+              //     //   field.didChange(viewDataTypeFromTextEditingValue
+              //     //       .call(controller.text));
+              //     // }
+              //   },
+              //   enabled: field.control.enabled,
+              //   style: style,
+              //   strutStyle: strutStyle,
+              //   textDirection: textDirection,
+              //   textAlign: textAlign,
+              //   textAlignVertical: textAlignVertical,
+              //   autofocus: autofocus,
+              //   readOnly: readOnly,
+              //   showCursor: showCursor,
+              //   obscureText: obscureText,
+              //   obscuringCharacter: obscuringCharacter,
+              //   autocorrect: autocorrect,
+              //   onChanged: (value) {
+              //     if (value.isEmpty) {
+              //       field.didChange(null);
+              //     }
+              //   },
+              // );
               return childViewAbstractApi.getFormFieldTextReactive(
                   onChanged: (p0) {
+                    formGroup.patchValue({'iD': -1}, updateParent: false);
+                    debugPrint("dasdasdsdas ${formGroup.value}");
                     // formGroup.controls[fieldFromParent]?.patchValue(
                     //     childViewAbstractApi.getNewInstance(
                     //         values: childViewAbstractApi
                     //             .copyWithFormValues(values: {'text': p0})));
                   },
                   enableClearButton: true,
-                  
+
                   // key: key,
                   field: fieldFromChild,
                   context: context,
                   // options: options,
-                  controller: textController,
+                  controller: controller,
                   node: focusNode);
             },
 
-            hideOnEmpty: true,
+            hideOnEmpty: false,
             // debounceDuration: ,
             onSelected: (value) {
               // controller.
               debugPrint(
                   "onSeggestionSelected onSelected ${formGroup.controls}  value $value   value field = >${value.toJsonViewAbstract()[fieldFromChild]}");
               // field.didChange(value.toJsonViewAbstract()[fieldFromChild]);
-              formGroup.patchValue(value.toJsonViewAbstractForAutoCompleteField(context));
+              formGroup.patchValue(
+                  value.toJsonViewAbstractForAutoCompleteField(context));
             },
             itemBuilder: (context, containt) {
               return childViewAbstractApi.getAutoCompleteItemBuilder(
