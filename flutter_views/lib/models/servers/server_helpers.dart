@@ -25,14 +25,14 @@ class URLS {
   static String getBaseUrl() {
     if (!kIsWeb) {
       // return 'http://localhost/SaffouryPaper2/index.php';
-      return 'https://saffoury.com/api2/index.php';
+      return 'http://localhost/SaffouryPaper2/index.php';
     }
     if (kIsWeb && kDebugMode) {
       // return 'http://localhost/SaffouryPaper2/index.php';
-      return 'https://saffoury.com/api2/index.php';
+      return 'http://localhost/SaffouryPaper2/index.php';
     } else {
       // return 'http://localhost/SaffouryPaper2/index.php';
-      return 'https://saffoury.com/api2/index.php';
+      return 'http://localhost/SaffouryPaper2/index.php';
     }
   }
 
