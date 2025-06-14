@@ -7,16 +7,17 @@ import 'package:flutter_saffoury_paper/models/products/products_types.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/models/view_apstract_stand_alone_without_api.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/file_rader_object_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/file_reader_validation.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_self_list_page.dart';
 import 'package:introduction_screen/src/model/page_view_model.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+
 part 'excel_to_product_converter.g.dart';
 
 @reflector

@@ -4,7 +4,7 @@
 // import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 // import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 // import 'package:flutter_view_controller/new_screens/home/base_home_shared_with_widget.dart';
-// import 'package:flutter_gen/gen_l10n/app_localization.dart';
+// import 'package:flutter_view_controller/l10n/app_localization.dart';
 // import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 
 // class HomeCameraNavigationWidget extends BaseHomeSharedWithWidgets {
@@ -52,7 +52,7 @@
 //       SliverFillRemaining(
 //           child: QrCodeReader(
 //         getViewAbstract: true,
-        
+
 //       ))
 //     ];
 //   }

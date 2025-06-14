@@ -5,7 +5,7 @@ import 'package:flutter_view_controller/new_screens/home/components/empty_widget
 import 'package:flutter_view_controller/new_screens/pos/pos_cart_item.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 class POSCartList extends StatelessWidget {
   final bool useSliver;

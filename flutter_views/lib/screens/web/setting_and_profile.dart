@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
@@ -205,15 +205,15 @@ class Logout extends StatelessWidget {
 }
 
 class PrintSetting extends BasePageSecoundPaneNotifier<ModifiableInterface> {
-  PrintSetting(
-      {super.key,
-      super.buildSecondPane,
-      super.parent,
-      super.valueNotifierIfThirdPane,
-      super.forceHeaderToCollapse = true,
-      super.isFirstToSecOrThirdPane = true,
-      super.onBuild,
-      });
+  PrintSetting({
+    super.key,
+    super.buildSecondPane,
+    super.parent,
+    super.valueNotifierIfThirdPane,
+    super.forceHeaderToCollapse = true,
+    super.isFirstToSecOrThirdPane = true,
+    super.onBuild,
+  });
 
   @override
   State<PrintSetting> createState() {

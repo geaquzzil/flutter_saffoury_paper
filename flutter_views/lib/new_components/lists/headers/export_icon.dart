@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
@@ -15,8 +15,9 @@ class ExportIcon extends StatefulWidget {
   final ViewAbstract viewAbstract;
 
   final List<ViewAbstract>? list;
-    final ValueNotifier<SecondPaneHelper?>? secPaneNotifer;
-  const ExportIcon({super.key, required this.viewAbstract, this.list,this.secPaneNotifer});
+  final ValueNotifier<SecondPaneHelper?>? secPaneNotifer;
+  const ExportIcon(
+      {super.key, required this.viewAbstract, this.list, this.secPaneNotifer});
 
   @override
   State<ExportIcon> createState() => _ExportIconState();

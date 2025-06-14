@@ -3,12 +3,11 @@ import 'package:flutter_saffoury_paper/models/dashboards/balance_due.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master_details.dart';
 import 'package:flutter_saffoury_paper/models/products/products_types.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:supercharged/supercharged.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../funds/money_funds.dart';
-import 'package:flutter_view_controller/ext_utils.dart';
-
 import '../products/products.dart';
 import '../products/sizes.dart';
 

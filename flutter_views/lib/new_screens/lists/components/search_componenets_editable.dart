@@ -4,7 +4,7 @@ import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 
 import 'package:flutter_view_controller/utils/debouncer.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 class SearchWidgetComponentEditable extends StatelessWidget {
   TextEditingController controller = TextEditingController();

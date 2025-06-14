@@ -5,7 +5,7 @@
 // import 'package:flutter_view_controller/components/title_text.dart';
 // import 'package:flutter_view_controller/extensions.dart';
 // import 'package:flutter_view_controller/light_color.dart';
-// import 'package:flutter_gen/gen_l10n/app_localization.dart';
+// import 'package:flutter_view_controller/l10n/app_localization.dart';
 // import 'package:flutter_view_controller/screens/mobile_screens/home_mobile_page_drawer.dart';
 // import 'package:flutter_view_controller/screens/mobile_screens/main_mobile_page.dart';
 // import 'package:flutter_view_controller/screens/profile_page.dart';

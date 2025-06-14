@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/components/prints/paper_list_controller.dart';
 import 'package:flutter_view_controller/components/prints/paper_oriantation_controller.dart';
 import 'package:flutter_view_controller/components/prints/printer_list_controller.dart';

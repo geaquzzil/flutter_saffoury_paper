@@ -45,9 +45,10 @@ class ResponsiveScroll extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isDesktopPlatform()) {
       return WebSmoothScroll(
-          animationDuration: animationDuration,
+
+          // animationDuration: animationDuration,
           curve: curve,
-          scrollOffset: scrollOffset,
+          // scrollOffset: scrollOffset,
           controller: controller,
           child: child);
     }

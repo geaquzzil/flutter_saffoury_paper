@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
@@ -197,7 +197,8 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
 
   void _refresh() {
     widget.listProvider.refresh(
-        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract,context:context);
+        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract,
+        context: context);
   }
 
   Widget getRefreshWidget() => IconButton(

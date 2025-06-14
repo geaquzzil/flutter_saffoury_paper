@@ -7,7 +7,7 @@ import 'package:flutter_map/flutter_map.dart' as map;
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/screens/web/components/contact_info_item.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:latlong2/latlong.dart';
@@ -44,7 +44,7 @@ var contactInfo = [
 
 class ContactUsWebPage extends BaseWebPageSlivers {
   ContactUsWebPage({super.key});
-  
+
   @override
   Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
     return null;
@@ -180,9 +180,7 @@ class ContactUsWebPage extends BaseWebPageSlivers {
                 },
                 icon: const Icon(Icons.email)),
           ]),
-          ...contactInfo
-              .map((c) => ContactInfoItemWidget(contactInfo: c))
-              ,
+          ...contactInfo.map((c) => ContactInfoItemWidget(contactInfo: c)),
         ],
       ),
       // description:

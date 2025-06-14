@@ -1,6 +1,6 @@
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
@@ -120,7 +120,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   void didUpdateWidget(covariant T oldWidget) {
     super.didUpdateWidget(oldWidget);
     debugPrint("didUpdateWidget tabController");
-    
+
     extras = widget.viewAbstract;
     iD = widget.viewAbstract.iD;
     tableName = widget.viewAbstract.getTableNameApi();
@@ -346,7 +346,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
               // color: Theme.of(context).colorScheme.surfaceVariant,
               child: TabBar(
                 // padding: EdgeInsets.all(kDefaultPadding),
-             
+
                 tabs: _tabs,
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.circular(80.0),

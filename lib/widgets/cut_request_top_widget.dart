@@ -5,11 +5,11 @@ import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_r
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/new_components/header_description_as_expanstion.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_rating.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class CutRequestTopWidget extends StatelessWidget {
   CutRequest object;
@@ -35,9 +35,7 @@ class CutRequestTopWidget extends StatelessWidget {
           title: AppLocalizations.of(context)!.overview,
           description: "Overview of the cut request requested sizes",
         ),
-        ...object.sizes_cut_requests!
-            .map((e) => getSizeWidget(context, e))
-            ,
+        ...object.sizes_cut_requests!.map((e) => getSizeWidget(context, e)),
         if (hasCutResult)
           HeaderDescriptionAsExpanstion(
             isTitleLarge: false,

@@ -1,11 +1,10 @@
-
 import 'package:animations/animations.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_screens/actions/master_to_list_page.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 import '../models/products/products_types.dart';
 

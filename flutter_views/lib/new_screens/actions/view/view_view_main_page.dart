@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_action_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 class BaseViewNewPage extends BaseActionScreenPage {
-  BaseViewNewPage({super.key, required super.viewAbstract,super.actionOnToolbarItem}) : super();
+  BaseViewNewPage(
+      {super.key, required super.viewAbstract, super.actionOnToolbarItem})
+      : super();
 
   @override
   State<BaseActionScreenPage> createState() => _BaseViewNewPage();

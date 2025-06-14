@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:json_annotation/json_annotation.dart';
-import'package:flutter_gen/gen_l10n/app_localization.dart';
-
 import 'server_response.dart';
 
 part 'server_response_master.g.dart';

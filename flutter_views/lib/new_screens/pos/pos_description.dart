@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../constants.dart';
 import '../../providers/cart/cart_provider.dart';
 import '../cart/cart_description/cart_description.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 class POSDescription extends StatefulWidget {
   const POSDescription({super.key});

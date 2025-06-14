@@ -2,7 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -190,7 +190,8 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
                             currentViewAbstract!.copyToUplode();
                         apiCallState.value = ApiCallState.LOADING;
                         currentViewAbstract =
-                            await currentViewAbstract!.addCall(context: context,
+                            await currentViewAbstract!.addCall(
+                                context: context,
                                 onResponse: OnResponseCallback(
                                     onServerResponse: (response) {},
                                     onServerNoMoreItems: () {},
@@ -203,9 +204,9 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
                           apiCallState.value = ApiCallState.DONE;
                           extras = currentViewAbstract;
                           currentViewAbstract!.onCardClicked(context);
-                          context
-                              .read<ListMultiKeyProvider>()
-                              .notifyAdd(currentViewAbstract!,context:context);
+                          context.read<ListMultiKeyProvider>().notifyAdd(
+                              currentViewAbstract!,
+                              context: context);
                         }
 
                         // context.read<ListMultiKeyProvider>().addCustomSingle(viewAbstract);

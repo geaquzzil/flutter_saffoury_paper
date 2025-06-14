@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart' as mt;
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';

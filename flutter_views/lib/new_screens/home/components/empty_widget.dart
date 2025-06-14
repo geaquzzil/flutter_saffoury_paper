@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:lottie/lottie.dart';
 
@@ -87,7 +87,7 @@ class EmptyWidget extends StatelessWidget {
     this.lottieJson,
   })  : subtitle = AppLocalizations.of(context)!.noItems,
         title = AppLocalizations.of(context)!.no_content;
-  
+
   EmptyWidget.emptyPage(
     BuildContext context, {
     super.key,

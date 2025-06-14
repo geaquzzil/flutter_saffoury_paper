@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/components/scroll_snap_list.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -84,7 +84,9 @@ class _ListHorizontalApiWidgetState
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (listProvider.getCount(_autoRest!.key) == 0) {
           listProvider.fetchList(_autoRest!.key,
-              viewAbstract: _autoRest!.obj, autoRest: _autoRest,context:context);
+              viewAbstract: _autoRest!.obj,
+              autoRest: _autoRest,
+              context: context);
         }
       });
     }
@@ -228,7 +230,8 @@ class _ListHorizontalApiWidgetState
             ? () {
                 listProvider.fetchList(widget.autoRest!.key,
                     viewAbstract: widget.autoRest!.obj,
-                    autoRest: widget.autoRest,context:context);
+                    autoRest: widget.autoRest,
+                    context: context);
               }
             : null,
         lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
@@ -321,7 +324,8 @@ class _ListHorizontalApiWidgetState
                   if (_isBottom) {
                     listProvider.fetchList(widget.autoRest!.key,
                         viewAbstract: widget.autoRest!.obj,
-                        autoRest: widget.autoRest,context:context);
+                        autoRest: widget.autoRest,
+                        context: context);
                     isButtonScrolling = true;
                   } else {
                     _scroll();
@@ -404,7 +408,9 @@ class _ListHorizontalApiWidgetState
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
       listProvider.fetchList(widget.autoRest!.key,
-          viewAbstract: widget.autoRest!.obj, autoRest: widget.autoRest,context:context);
+          viewAbstract: widget.autoRest!.obj,
+          autoRest: widget.autoRest,
+          context: context);
     }
   }
 

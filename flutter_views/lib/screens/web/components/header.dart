@@ -16,7 +16,7 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import '../ext.dart';
 import '../models/header_item.dart';
 
@@ -112,7 +112,9 @@ class HeaderRow extends StatelessWidget {
     var headerItems = getHeaderItems(context);
     return ResponsiveVisibility(
       visible: false,
-      visibleConditions: const [Condition.largerThan(name: MOBILE, value: true)],
+      visibleConditions: const [
+        Condition.largerThan(name: MOBILE, value: true)
+      ],
       // visibleWhen: const [
       //   Condition.largerThan(name: MOBILE),
       // ],
@@ -193,7 +195,8 @@ class HeaderRow extends StatelessWidget {
               getWebText(
                   fontSize: 12,
                   color: Colors.orange,
-                  title: "${AppLocalizations.of(context)!.hiThere}\n${context.read<AuthProvider<AuthUser>>().getUserName}"),
+                  title:
+                      "${AppLocalizations.of(context)!.hiThere}\n${context.read<AuthProvider<AuthUser>>().getUserName}"),
               const SizedBox(
                 width: kDefaultPadding / 2,
               ),

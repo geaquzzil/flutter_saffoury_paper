@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:intl/intl.dart' as intl;

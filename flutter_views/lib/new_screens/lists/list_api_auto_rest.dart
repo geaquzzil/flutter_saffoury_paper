@@ -4,7 +4,7 @@ import 'package:flutter_view_controller/new_components/lists/list_card_item.dart
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 import '../../new_components/loading_shimmer.dart';
 
@@ -33,7 +33,7 @@ class _ListApiWidgetState extends State<ListApiAutoRestWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (listProvider.getCount(widget.autoRest.key) == 0) {
         listProvider.fetchList(widget.autoRest.key,
-            viewAbstract: widget.autoRest.obj,context:context);
+            viewAbstract: widget.autoRest.obj, context: context);
       }
     });
   }
@@ -125,7 +125,7 @@ class _ListApiWidgetState extends State<ListApiAutoRestWidget> {
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
       listProvider.fetchList(widget.autoRest.key,
-          viewAbstract: widget.autoRest.obj,context:context);
+          viewAbstract: widget.autoRest.obj, context: context);
     }
   }
 

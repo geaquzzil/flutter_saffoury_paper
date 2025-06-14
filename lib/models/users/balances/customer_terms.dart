@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 
 import '../customers.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 //  {
 //     "iD": 1036,
@@ -118,13 +118,13 @@ class CustomerTerms extends Customer
   CustomerTerms fromJson(Map<String, dynamic> data) {
     return CustomerTerms.fromJson(data);
   }
-  
+
   @override
   Widget? getCustomViewOnResponse(CustomerTerms response) {
     // TODO: implement getCustomViewOnResponse
     throw UnimplementedError();
   }
-  
+
   @override
   Widget? getCustomViewOnResponseAddWidget(CustomerTerms response) {
     // TODO: implement getCustomViewOnResponseAddWidget

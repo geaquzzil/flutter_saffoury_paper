@@ -6,15 +6,15 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/products_types.dart';
 import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_apstract_stand_alone_without_api.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/printing_generator/page/ext.dart';
-import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart' as pdf;
+import 'package:printing/printing.dart';
 
 class PrintProductLabelCustomView
     extends ViewAbstractStandAloneCustomView<PrintProductLabelCustomView> {

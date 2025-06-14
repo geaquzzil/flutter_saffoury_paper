@@ -12,7 +12,7 @@ import 'package:flutter_view_controller/providers/filterables/filterable_provide
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:tuple/tuple.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 class ListWebApiMaster extends StatelessWidget {
   late ListMultiKeyProvider _listProvider;
@@ -77,14 +77,17 @@ class ListWebApiMaster extends StatelessWidget {
       _listProvider.fetchList(customKey,
           viewAbstract: viewAbstract,
           customPage: customPage,
-          customCount: customCount,context:context);
+          customCount: customCount,
+          context: context);
     } else if (searchQuery == null) {
       _listProvider.fetchList(customKey,
           viewAbstract: viewAbstract,
           customPage: customPage,
-          customCount: customCount,context:context);
+          customCount: customCount,
+          context: context);
     } else {
-      _listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!,context:  context);
+      _listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!,
+          context: context);
     }
   }
 
@@ -162,7 +165,8 @@ class ListWebApiMaster extends StatelessWidget {
           p1.getCount(findCustomKey()), p1.isHasError(findCustomKey())),
     );
   }
- Widget getShimmerLoadingList() {
+
+  Widget getShimmerLoadingList() {
     return SkeletonTheme(
       shimmerGradient: const LinearGradient(
         colors: [

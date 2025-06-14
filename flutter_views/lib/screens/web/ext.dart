@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -56,7 +56,6 @@ Widget getWidgetFromProfile(
     return const AdminSetting();
   } else if (value.icon == Icons.local_print_shop) {
     return PrintSetting(
-      
       buildSecondPane: true,
     );
   } else if (value.icon == Icons.account_box_outlined) {

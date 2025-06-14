@@ -6,7 +6,7 @@ import 'package:flutter_view_controller/new_screens/home/components/empty_widget
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 ///no scroll controller for now
 @Deprecated("Use Mixin")
@@ -63,10 +63,11 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
       switch (widget.autoRest.getCustomViewResponseType()) {
         case ResponseType.LIST:
           listProvider.fetchList(key,
-              viewAbstract: widget.autoRest as ViewAbstract,context:context);
+              viewAbstract: widget.autoRest as ViewAbstract, context: context);
           break;
         case ResponseType.SINGLE:
-          listProvider.fetchView(key, viewAbstract: autoRest as ViewAbstract,context:context);
+          listProvider.fetchView(key,
+              viewAbstract: autoRest as ViewAbstract, context: context);
           break;
 
         case ResponseType.NONE_RESPONSE_TYPE:

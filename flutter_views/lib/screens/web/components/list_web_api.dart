@@ -28,7 +28,7 @@ import 'package:provider/provider.dart';
 
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:tuple/tuple.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 class ListWebApiPage extends BaseWebPageSlivers {
   final String? searchQuery;
@@ -102,11 +102,14 @@ class ListWebApiPage extends BaseWebPageSlivers {
     if (customFilterChecker != null) {
       viewAbstract.setFilterableMap(customFilterChecker!);
       customKey = findCustomKey();
-      listProvider.fetchList(customKey, viewAbstract: viewAbstract,context:context);
+      listProvider.fetchList(customKey,
+          viewAbstract: viewAbstract, context: context);
     } else if (searchQuery == null) {
-      listProvider.fetchList(customKey, viewAbstract: viewAbstract,context:context);
+      listProvider.fetchList(customKey,
+          viewAbstract: viewAbstract, context: context);
     } else {
-      listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!,context:context);
+      listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!,
+          context: context);
     }
   }
 
@@ -230,7 +233,7 @@ class ListWebApiPage extends BaseWebPageSlivers {
       }, childCount: count + (isLoading ? 1 : 0))),
     );
   }
-  
+
   Widget getShimmerLoadingList() {
     return SliverFillRemaining(
       child: SkeletonTheme(

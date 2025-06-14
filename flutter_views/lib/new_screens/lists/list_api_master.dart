@@ -13,7 +13,7 @@ import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:tuple/tuple.dart';
 import '../../new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import '../home/components/empty_widget.dart';
@@ -144,7 +144,8 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (listProvider.getPage(getCustomKey()) == 0) {
-        listProvider.fetchList(getCustomKey(), viewAbstract: viewAbstract,context:context);
+        listProvider.fetchList(getCustomKey(),
+            viewAbstract: viewAbstract, context: context);
       }
     });
   }
@@ -224,7 +225,8 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
 
   void _refresh() {
     listProvider.refresh(
-        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract,context:context);
+        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract,
+        context: context);
   }
 
   Widget getRefreshWidget() => IconButton(
@@ -347,7 +349,8 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
 
   void fetshList() {
     if (listProvider.getCount(getCustomKey()) == 0) {
-      listProvider.fetchList(getCustomKey(), viewAbstract: viewAbstract,context:context);
+      listProvider.fetchList(getCustomKey(),
+          viewAbstract: viewAbstract, context: context);
     }
   }
 
@@ -389,7 +392,8 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
   void fetshListSearch(String query) {
     controller.text = query;
     listProvider.fetchListSearch(
-        getCustomKey(searchTextKey: query), viewAbstract, query,context:context);
+        getCustomKey(searchTextKey: query), viewAbstract, query,
+        context: context);
   }
 
   void _onChangedViewAbstract() {
@@ -397,7 +401,8 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
     if (widget.viewAbstract != null) return;
 
     viewAbstract = drawerViewAbstractObsever.getObjectCastViewAbstract;
-    listProvider.fetchList(findCustomKey(), viewAbstract: viewAbstract,context:context);
+    listProvider.fetchList(findCustomKey(),
+        viewAbstract: viewAbstract, context: context);
     debugPrint("ViewAbstractProvider CHANGED");
   }
 
@@ -430,12 +435,14 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
     if (_isBottom) {
       // debugPrint(" IS BOTTOM $_isBottom");
       if (controller.text.isEmpty) {
-        listProvider.fetchList(getCustomKey(), viewAbstract: viewAbstract,context:context);
+        listProvider.fetchList(getCustomKey(),
+            viewAbstract: viewAbstract, context: context);
       } else {
         listProvider.fetchListSearch(
             getCustomKey(searchTextKey: controller.text),
             viewAbstract,
-            controller.text,context:context);
+            controller.text,
+            context: context);
       }
       widget.onScroll(
           context: context,

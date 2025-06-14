@@ -2,22 +2,17 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_custom_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:pdf/pdf.dart';
-import 'package:pdf/src/pdf/page_format.dart';
-import 'package:pdf/src/widgets/document.dart';
-import 'package:pdf/src/widgets/page.dart';
-import 'package:pdf/src/widgets/page_theme.dart';
-import 'package:pdf/src/widgets/theme.dart';
-import 'package:pdf/src/widgets/widget.dart';
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
+
 part 'customs_declarations_images.g.dart';
 
 @JsonSerializable(explicitToJson: true)

@@ -4,7 +4,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 class EditControllerChipsFromViewAbstract<T extends ViewAbstract>
     extends StatefulWidget {
@@ -29,8 +29,7 @@ class _EditControllerChipsFromViewAbstract<T extends ViewAbstract>
   List<T?>? _list;
   Future<List<T?>?> getFuture() async {
     if (_list != null) return _list;
-    _list = await widget.viewAbstract
-            .listApiReduceSizes(context: context)
+    _list = await widget.viewAbstract.listApiReduceSizes(context: context)
         as List<T?>;
     if (mounted) {
       setState(() {});

@@ -1,11 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
+import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
 import 'package:flutter_saffoury_paper/models/invoices/invoice_master.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
+import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
+import 'package:flutter_saffoury_paper/models/users/customers.dart';
+import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_saffoury_paper/widgets/chart_date_chosser.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
@@ -19,16 +26,11 @@ import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_de
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
-import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_saffoury_paper/models/invoices/cargo_transporters.dart';
-import 'package:flutter_saffoury_paper/models/users/customers.dart';
-import 'package:flutter_saffoury_paper/models/users/employees.dart';
-import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:provider/provider.dart';
+
 import 'invoice_master_details.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
-import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
+
 part 'orders.g.dart';
 
 @JsonSerializable(explicitToJson: true)

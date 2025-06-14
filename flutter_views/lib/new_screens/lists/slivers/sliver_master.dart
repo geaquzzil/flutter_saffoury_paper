@@ -1,6 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
@@ -9,7 +8,7 @@ import 'package:flutter_view_controller/new_components/lists/horizontal_list_car
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:provider/provider.dart';
 
 class SliverMaster extends StatefulWidget {
@@ -220,7 +219,6 @@ class SliverMasterState<T extends SliverMaster> extends State<T> {
             ? AppLocalizations.of(context)!.no_search_result
             : AppLocalizations.of(context)!.no_content);
   }
-
 }
 
 enum SliverListMood { NONE, SELECT }

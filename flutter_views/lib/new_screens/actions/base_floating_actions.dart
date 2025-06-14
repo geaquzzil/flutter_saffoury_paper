@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -180,7 +180,7 @@ class BaseFloatingActionButtons extends StatelessWidget {
               ),
               ElevatedButton(
                   onPressed: () {
-                    //todo check for pop result 
+                    //todo check for pop result
                     Navigator.of(context)
                         .pop(AppLocalizations.of(context)!.subment);
                   },

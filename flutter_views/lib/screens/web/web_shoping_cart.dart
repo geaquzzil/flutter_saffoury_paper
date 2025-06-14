@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import '../../providers/cart/cart_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 class WebShoppingCartDrawer extends StatefulWidget {
   const WebShoppingCartDrawer({super.key});

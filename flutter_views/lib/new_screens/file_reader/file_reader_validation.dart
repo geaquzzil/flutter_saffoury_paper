@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/file_rader_object_view_abstract.dart';
@@ -72,7 +72,8 @@ class FileReaderValidationWidgetState
     return FutureBuilder(
         future: context
             .read<FilterableListApiProvider<FilterableData>>()
-            .getServerData(widget.fileReaderObject.viewAbstract,context: context),
+            .getServerData(widget.fileReaderObject.viewAbstract,
+                context: context),
         builder: ((s, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return getWidget(context, snapshot: snapshot);

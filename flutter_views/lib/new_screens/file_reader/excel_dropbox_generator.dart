@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 
 class ExcelDropboxGenerator extends StatefulWidget {

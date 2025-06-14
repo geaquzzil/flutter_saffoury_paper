@@ -5,7 +5,7 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_list_api.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 import '../../interfaces/printable/printable_master.dart';
 import 'ext.dart';
@@ -56,7 +56,7 @@ class _PdfListPage<T extends PrintLocalSetting> extends State<PdfListPage<T>> {
         initialPageFormat: PdfPageFormat.a4,
         canChangePageFormat: true,
         canChangeOrientation: true,
-        
+
         // pdfPreviewPageDecoration:
         canDebug: false,
         pageFormats: {

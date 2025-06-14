@@ -5,7 +5,7 @@ import 'package:flutter_view_controller/new_components/lists/horizontal_list_car
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:tuple/tuple.dart';
 
 class ListApiMasterHorizontal<T> extends StatefulWidget {
@@ -60,24 +60,28 @@ class _ListApiMasterHorizontalState<T>
     if (widget.object is List<ViewAbstract>) {
       debugPrint("listApiMasterHorizontal is List<ViewAbstract>");
       if (listProvider.getCount(findCustomKey()) == 0) {
-        listProvider.fetchListOfObject(widget.object as List<ViewAbstract>,context:context);
+        listProvider.fetchListOfObject(widget.object as List<ViewAbstract>,
+            context: context);
       }
     } else if (widget.object is List<AutoRest>) {
       debugPrint("listApiMasterHorizontal is List<AutoRest>");
       if (listProvider.getCount(findCustomKey()) == 0) {
-        listProvider.fetchListOfObjectAutoRest(widget.object as List<AutoRest>,context:context);
+        listProvider.fetchListOfObjectAutoRest(widget.object as List<AutoRest>,
+            context: context);
       }
     } else {
       var checkType = widget.object;
       if (checkType is AutoRest) {
         if (listProvider.getCount(findCustomKey()) == 0) {
           listProvider.fetchList(checkType.key,
-              viewAbstract: checkType.obj, autoRest: checkType,context:context);
+              viewAbstract: checkType.obj,
+              autoRest: checkType,
+              context: context);
         }
       } else if (checkType is ViewAbstract) {
         if (listProvider.getCount(findCustomKey()) == 0) {
           listProvider.fetchList(checkType.getListableKey(),
-              viewAbstract: checkType,context:context);
+              viewAbstract: checkType, context: context);
         }
       }
     }
@@ -85,17 +89,19 @@ class _ListApiMasterHorizontalState<T>
 
   void fetshListOnScroll() {
     if (widget.object is List<ViewAbstract>) {
-      listProvider.fetchListOfObject(widget.object as List<ViewAbstract>,context:context);
+      listProvider.fetchListOfObject(widget.object as List<ViewAbstract>,
+          context: context);
     } else if (widget.object is List<AutoRest>) {
-      listProvider.fetchListOfObjectAutoRest(widget.object as List<AutoRest>,context:context);
+      listProvider.fetchListOfObjectAutoRest(widget.object as List<AutoRest>,
+          context: context);
     } else {
       var checkType = widget.object;
       if (checkType is AutoRest) {
         listProvider.fetchList(checkType.key,
-            viewAbstract: checkType.obj, autoRest: checkType,context:context);
+            viewAbstract: checkType.obj, autoRest: checkType, context: context);
       } else if (checkType is ViewAbstract) {
         listProvider.fetchList(checkType.getListableKey(),
-            viewAbstract: checkType,context:context);
+            viewAbstract: checkType, context: context);
       }
     }
   }
