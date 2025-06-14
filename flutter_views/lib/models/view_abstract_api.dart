@@ -5,12 +5,12 @@ import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/configrations.dart';
-import 'package:flutter_view_controller/encyptions/encrypter.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_response_master.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -25,6 +25,10 @@ import 'package:pretty_http_logger/pretty_http_logger.dart';
 import 'servers/server_helpers.dart';
 
 abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  RequestOptions? _requestOption;
+ 
   @JsonKey(includeFromJson: false, includeToJson: false)
   int _page = 0;
 
@@ -36,8 +40,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   List<T>? get getLastSearchViewByTextInputList =>
       _lastSearchViewAbstractByTextInputList;
 
+  @Deprecated("use RequestOptions")
   @JsonKey(includeFromJson: false, includeToJson: false)
   Map<String, String>? _customMap;
+  @Deprecated("use RequestOptions")
   @JsonKey(includeFromJson: false, includeToJson: false)
   Map<String, String>? _customMapOnSearch;
 
@@ -49,6 +55,16 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   Map<String, String> get getCustomMap => _customMap ?? {};
 
+
+RequestOptions? get getRequestOption => this._requestOption;
+
+ set setRequestOption(RequestOptions value) => this._requestOption = value;
+
+ RequestOptions getRequestOptionCopyWith(RequestOptions v){
+  if(getRequestOption!=null){
+    
+  }
+ }
   void setCustomMap(Map<String, String> customMap) {
     _customMap = customMap;
   }
@@ -80,16 +96,20 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
             .contains(fieldValue.toLowerCase()));
   }
 
+  @Deprecated("use RequestOptions")
   int get getPageIndex => _page;
 
+  @Deprecated("use RequestOptions")
   int get getPageItemCount => 20;
 
+  @Deprecated("use RequestOptions")
   int get getPageItemCountSearch => 20;
 
   String? getCustomAction() {
     return null;
   }
 
+  @Deprecated("use RequestOptions")
   bool isRequiredObjects() {
     return true;
   }
@@ -132,23 +152,14 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   Future<Map<String, String>> getHeadersExtenstion() async {
     Map<String, String> defaultHeaders = HashMap<String, String>();
-    defaultHeaders['Platform'] = "Flutter";
-    defaultHeaders['Auth'] =
-        Encriptions.encypt("HIIAMANANDROIDUSERFROMSAFFOURYCOMPANY");
-    debugPrint("ViewAbstractApi ViewAbstractApiAUTH:${defaultHeaders['Auth']}");
-
-    defaultHeaders['X-Authorization'] =
-        "WNYDGno8agC7nVmX99/uxyz24UgjvUTsjWFk3T94bERF9JLgBubq4cwiga3q5r9XExvUiE5rezZ5axsWvBjfmOwyW0GL34NS0y5y1UeVM12OU6JLnAEWfO6TxkMe7O9nr+H1LUkn4uYhVJFcJ0t8pYZF9iO7UHQXZTnDzTRQ4vnDRrWazwgtPXrBjMHNrYzNhxiuBzsH5CGtE2ZPnX+slhCI4F1KWfJHrXJX7n+Ddvc=";
-
     bool hasUser = await Configurations.hasSavedValue(AuthUser());
     if (hasUser) {
       AuthUser? authUser = await Configurations.get(AuthUser());
-      if (authUser != null) {
-        // defaultHeaders['X-Authorization'] =
-        //     Encriptions.encypt(authUser.toJsonString());
+      String? token = authUser?.barrerToken;
+      if (token != null) {
+        defaultHeaders['Authorization'] = 'Bearer $token';
       }
     }
-
     return defaultHeaders;
   }
 
@@ -157,6 +168,94 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     defaultHeaders.addAll(URLS.requestHeaders);
     defaultHeaders.addAll(await getHeadersExtenstion());
     return defaultHeaders;
+  }
+
+  Uri _getUrl(
+      {String? tableName,
+      String? customAction,
+      int? iD,
+      Map<String, dynamic>? params}) {
+    var url = Uri(
+        scheme: "http",
+        queryParameters: params,
+        host: URLS.getBaseUrl(),
+        pathSegments: [
+          if (customAction != null || tableName != null)
+            (customAction ?? tableName) ?? "",
+          if (iD != null) "$iD"
+        ]);
+    return url;
+  }
+
+  Map<String, String> _getRequiredForgins() {
+    return {
+      'forginList': convert.jsonEncode(isRequiredObjects()),
+      'forginObject': convert.jsonEncode(
+          canGetObjectWithoutApiCheckerList()?[ServerActions.list] ?? []),
+    };
+  }
+
+  Map<String,String>_getRequestOptions(){
+    return RequestOptions()
+  }
+
+  Future<Response?> _getListResponse(
+      {String? searchQuery,
+      int? itemCount,
+      int? page,
+      Map<String, FilterableProviderHelper>? map}) async {
+    return await getHttp().get(
+        _getUrl(
+          customAction: getCustomAction(),
+          tableName: getTableNameApi(),
+          params: {
+            ..._getRequiredForgins(),
+            if (page != null) 'page': page,
+            if (itemCount != null) 'countPerPage': itemCount,
+            if (searchQuery != null) 'searchQuery': searchQuery,
+            if (map != null) ...map
+          },
+        ),
+        headers: await getHeaders());
+  }
+
+  Future<Response?> _getViewResponse({int? customID}) async {
+    return await getHttp().get(
+        _getUrl(
+            iD: customID ?? iD,
+            tableName: getTableNameApi(),
+            params: _getRequiredForgins(),
+            customAction: getCustomAction()),
+        headers: await getHeaders());
+  }
+
+  Future<Response?> _getEditResponse() async {
+    var headers = await getHeaders();
+    return await getHttp().put(
+        _getUrl(
+            iD: iD,
+            tableName: getTableNameApi(),
+            customAction: getCustomAction()),
+        headers: headers,
+        body: toJsonString());
+  }
+
+  Future<Response?> _getAddResponse() async {
+    var headers = await getHeaders();
+    return await getHttp().post(
+        _getUrl(tableName: getTableNameApi(), customAction: getCustomAction()),
+        headers: headers,
+        body: toJsonString());
+  }
+
+  Future<Response?> _getDeleteResponse() async {
+    var headers = await getHeaders();
+    return await getHttp().delete(
+        _getUrl(
+            iD: iD,
+            tableName: getTableNameApi(),
+            customAction: getCustomAction()),
+        headers: headers);
   }
 
   Future<Response?> getRespones(
@@ -169,6 +268,31 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       int? pageIndex,
       ViewAbstract? printObject}) async {
     try {
+      var headers = await getHeaders();
+      switch (serverActions) {
+        case ServerActions.add:
+          return await getHttp().post(
+              getUrl(
+                  tableName: getTableNameApi(),
+                  customAction: getCustomAction()),
+              headers: headers,
+              body: toJsonString());
+        case ServerActions.edit:
+        case ServerActions.list:
+          return await getHttp().get(
+              getUrl(
+                  tableName: getTableNameApi(),
+                  customAction: getCustomAction()),
+              headers: headers);
+        case ServerActions.view:
+        case ServerActions.delete_action:
+          return await getHttp().delete(
+              getUrl(
+                  iD: iD,
+                  tableName: getTableNameApi(),
+                  customAction: getCustomAction()),
+              headers: headers);
+      }
       return await getHttp().post(
           Uri.parse(serverActions == ServerActions.print
               ? URLS.getBaseUrlPrint()
@@ -230,23 +354,24 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
-  Future<T?> viewCall(
-    int iD, {
-    OnResponseCallback? onResponse,
+  Future<T?> viewCall({
     required BuildContext context,
+    OnResponseCallback? onResponse,
+    int? customID,
   }) async {
-    this.iD = iD;
-    var response = await getRespones(
-        onResponse: onResponse, serverActions: ServerActions.view);
-    if (response == null) return null;
-    if (response.statusCode == 200) {
-      return fromJsonViewAbstract(convert.jsonDecode(response.body));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      onCallCheckError(response: response, context: context);
-      return null;
+    try {
+      var response = await _getViewResponse(customID: customID);
+      if (response == null) return null;
+      if (response.statusCode == 200) {
+        return fromJsonViewAbstract(convert.jsonDecode(response.body));
+      } else {
+        onCallCheckError(response: response, context: context);
+        return null;
+      }
+    } on Exception catch (e) {
+      onResponse?.onClientFailure(e);
     }
+    return null;
   }
 
   Future<T?> addCall({
@@ -673,8 +798,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         : action == ServerActions.list_reduce_size
             ? "list_reduce_size"
             : customAction ?? action.toString().split(".").last;
-    mainBody['objectTables'] = convert.jsonEncode(isRequiredObjects());
-    mainBody['detailTables'] = canGetObjectWithoutApiCheckerList() == null
+    mainBody['forginList'] = convert.jsonEncode(isRequiredObjects());
+    mainBody['forginObject'] = canGetObjectWithoutApiCheckerList() == null
         ? convert.jsonEncode([])
         : convert
             .jsonEncode(canGetObjectWithoutApiCheckerList()?[action] ?? []);
@@ -696,9 +821,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         break;
       case ServerActions.list:
         mainBody.addAll(getBodyCurrentActionASC(action));
-        mainBody['start'] =
+        mainBody['countPerPage'] =
             itemCount?.toString() ?? getPageItemCount.toString();
-        mainBody['end'] = pageIndex?.toString() ?? getPageIndex.toString();
+        mainBody['page'] = pageIndex?.toString() ?? getPageIndex.toString();
         SortFieldValue? sort = (this as ViewAbstract).getSortFieldValue;
         if (sort != null) {
           mainBody.addAll(sort.getMap());

@@ -25,17 +25,17 @@ class URLS {
   static String getBaseUrl() {
     if (!kIsWeb) {
       // return 'http://localhost/SaffouryPaper2/index.php';
-      return 'http://localhost/SaffouryPaper2/index.php';
+      return 'localhost/SaffouryPaper2/publicindex.php/api/v1/';
     }
     if (kIsWeb && kDebugMode) {
       // return 'http://localhost/SaffouryPaper2/index.php';
-      return 'http://localhost/SaffouryPaper2/index.php';
+      return 'localhost/SaffouryPaper2/publicindex.php/api/v1/';
     } else {
       // return 'http://localhost/SaffouryPaper2/index.php';
-      return 'http://localhost/SaffouryPaper2/index.php';
+      return 'localhost/SaffouryPaper2/publicindex.php/api/v1/';
     }
   }
-
+  @Deprecated("")
   static String getBaseUrlPrint() {
     if (!kIsWeb) {
       return 'https://saffoury.com/api2/print/index.php';

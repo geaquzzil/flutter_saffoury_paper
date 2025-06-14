@@ -83,7 +83,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   }
 
   Future<void> onAppStart(BuildContext context) async {
-    await initFakeData();
+    await init();
     await initDrawerItems(context);
     // This is just to demonstrate the splash screen is working.
     // In real-life applications, it is not recommended to interrupt the user experience by doing such things.
@@ -204,8 +204,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     }
   }
 
-  //Todo on publish use this method
-  void init() async {
+  Future init() async {
     hasSavedUser = await Configurations.hasSavedValue(_initUser);
     final Response? responseUser;
     if (hasSavedUser == false) {

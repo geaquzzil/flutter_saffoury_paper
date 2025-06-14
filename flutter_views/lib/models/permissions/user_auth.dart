@@ -156,6 +156,7 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   int? response;
   String? phone;
   String? password;
+  String? barrerToken;
 
   PermissionLevelAbstract? userlevels;
   Setting? setting;
@@ -202,6 +203,7 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
         "response": 0,
         "phone": "",
         "password": "",
+        "barrerToken": "",
         "userlevels": PermissionLevelAbstract(),
         "setting": Setting()
       };

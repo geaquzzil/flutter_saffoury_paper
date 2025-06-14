@@ -12,6 +12,7 @@ AuthUser<T> _$AuthUserFromJson<T>(Map<String, dynamic> json) => AuthUser<T>()
   ..permission = json['permission'] as bool?
   ..response = json['response'] as int?
   ..phone = json['phone'] as String?
+  ..barrerToken = json['barrerToken'] as String?
   ..password = json['password'] as String?
   ..userlevels = json['userlevels'] == null
       ? null
@@ -32,6 +33,7 @@ Map<String, dynamic> _$AuthUserToJson<T>(AuthUser<T> instance) =>
       'permission': instance.permission,
       'response': instance.response,
       'phone': instance.phone,
+      'barrerToken': instance.barrerToken,
       'password': instance.password,
       'userlevels': instance.userlevels?.toJson(),
       'setting': instance.setting?.toJson(),
