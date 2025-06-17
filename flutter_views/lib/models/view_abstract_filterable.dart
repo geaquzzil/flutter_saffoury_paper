@@ -53,6 +53,7 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   SortFieldValue? _sortFieldValue;
 
   //set initial value  if
+  @Deprecated("use RequestOption")
   SortFieldValue? get getSortFieldValue =>
       this._sortFieldValue ?? getSortByInitialType();
 
@@ -106,18 +107,6 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
 
   String getListableKey() {
     return "${getTableNameApi()}listAPI$_lastFilterableMap$getCustomMap";
-  }
-
-  Map<String, String> getFilterableMap(
-      Map<String, FilterableProviderHelper>? map) {
-    if (map == null) return {};
-    debugPrint("getFilterableMap=> $map");
-    Map<String, String> bodyMap = {};
-    map.forEach((key, value) {
-      bodyMap["<${map[key]!.fieldNameApi}>"] = map[key]!.getValue();
-    });
-    debugPrint("getFilterableMap bodyMap $bodyMap");
-    return bodyMap;
   }
 
   void setFilterableMap(Map<String, FilterableProviderHelper> map) {

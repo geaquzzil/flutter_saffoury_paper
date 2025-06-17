@@ -17,7 +17,8 @@ class FilterableListApiProvider<T extends FilterableData> with ChangeNotifier {
     return _filterData;
   }
 
-  Future<T?> getServerData(ViewAbstract viewAbstract,{required BuildContext context}) async {
+  Future<T?> getServerData(ViewAbstract viewAbstract,
+      {required BuildContext context}) async {
     _lastViewAbstract = viewAbstract;
     if (viewAbstract == _lastViewAbstract &&
         _requiredFiltter.isNotEmpty &&
@@ -26,7 +27,7 @@ class FilterableListApiProvider<T extends FilterableData> with ChangeNotifier {
           "setRequiredFilterList called with no process to do viewAbstract == _lastViewAbstract && _requiredFiltter.isNotEmpty _filterData!=null");
       return _filterData;
     }
-    _filterData ??= await _filterOb.viewCall(0,context:context);
+    _filterData ??= await _filterOb.viewCall(context: context);
     await setRequiredFilterList(viewAbstract);
     return _filterData;
   }

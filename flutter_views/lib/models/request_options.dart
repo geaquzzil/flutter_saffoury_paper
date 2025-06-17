@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 
 class BetweenRequest {
   String field;
@@ -36,7 +38,7 @@ class RequestOptions {
   List<String> groupBy = [];
 //&quantity&
   List<String> sumBy = [];
-  Map<String, dynamic> filterMap = {};
+  Map<String, FilterableProviderHelper> filterMap = {};
 
   dynamic requestObjcets;
   dynamic requestLists;
@@ -57,14 +59,30 @@ class RequestOptions {
       this.sortBy,
       this.sumBy = const []});
 
-      RequestOptions 
+  RequestOptions copyWithObjcet({RequestOptions? option}) {
+    return copyWith(
+        betweenMap: option?.betweenMap,
+        countPerPage: option?.countPerPage,
+        countPerPageWhenSearch: option?.countPerPageWhenSearch,
+        date: option?.date,
+        filterMap: option?.filterMap,
+        groupBy: option?.groupBy,
+        limit: option?.limit,
+        page: option?.page,
+        requestLists: option?.requestLists,
+        requestObjcets: option?.requestObjcets,
+        searchByField: option?.searchByField,
+        searchQuery: option?.searchQuery,
+        sortBy: option?.sortBy,
+        sumBy: option?.sumBy);
+  }
 
   RequestOptions copyWith(
       {Map<String, List<BetweenRequest>>? betweenMap,
       int? countPerPage,
       int? countPerPageWhenSearch,
       DateObject? date,
-      Map<String, dynamic>? filterMap,
+      Map<String, FilterableProviderHelper>? filterMap,
       List<String>? groupBy,
       int? limit,
       int? page,
@@ -126,6 +144,17 @@ class RequestOptions {
     }
   }
 
+  Map<String, String> getFilterableMap() {
+    if (filterMap.isEmpty) return {};
+    debugPrint("getFilterableMap=> $filterMap");
+    Map<String, String> bodyMap = {};
+    filterMap.forEach((key, value) {
+      bodyMap["<${filterMap[key]!.fieldNameApi}>"] = filterMap[key]!.getValue();
+    });
+    debugPrint("getFilterableMap bodyMap $bodyMap");
+    return bodyMap;
+  }
+
   Map<String, dynamic> getRequestParamsOnlyForings() {
     var list = _getIsRequestList();
     var objects = _getIsRequestObjcets();
@@ -139,17 +168,22 @@ class RequestOptions {
     return {
       if (page != null) 'page': page,
       if (limit != null) 'limit': limit,
-      if (countPerPage != null) 'countPerPage': countPerPage,
+      if (countPerPage != null || countPerPageWhenSearch != null)
+        'countPerPage': countPerPageWhenSearch ?? countPerPage,
       if (date != null) 'date': date.toString(),
-      if (sortBy != null) sortBy!.type.name.toString(): sortBy!.field,
+      if (sortBy != null) ...sortBy!.getMap(),
       if (searchQuery != null) "searchQuery": searchQuery,
       ...getRequestParamsOnlyForings(),
       ..._getGroupBy(),
       ..._getSumBy(),
       ...betweenMap,
       ...searchByField,
-      ...filterMap
+      ...getFilterableMap()
     };
+  }
+
+  RequestOptions setPageAndCount(int page, {int? customCountPerPage}) {
+    return copyWith(page: page, countPerPageWhenSearch: customCountPerPage);
   }
 
   RequestOptions addRequestObjcets(dynamic value) {
@@ -164,6 +198,13 @@ class RequestOptions {
 
   RequestOptions addDate(DateObject date) {
     this.date = date;
+    return this;
+  }
+
+  ///value should bey array or val of int or string
+  RequestOptions addSearchByField(String field, dynamic value) {
+    String key = "<$field>";
+    searchByField[key] = value;
     return this;
   }
 
@@ -183,12 +224,6 @@ class RequestOptions {
 
   RequestOptions addGroupBy(String field) {
     groupBy.add(field);
-    return this;
-  }
-
-  RequestOptions addSearchByField(String field, String value) {
-    String key = "<$field>";
-    searchByField[key] = value;
     return this;
   }
 

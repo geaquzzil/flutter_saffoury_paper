@@ -153,43 +153,43 @@ class GridViewApi extends StatelessWidget {
           ),
         );
 
-        return FutureBuilder<List<dynamic>?>(
-          future: viewAbstract.listCall(
-              count: isDesktop(context) ? 10 : 4, page: value,context: context),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            }
-            List<ViewAbstract>? list = snapshot.data?.cast();
-            if (list == null) {
-              return Container();
-            }
+        // return FutureBuilder<List<dynamic>?>(
+        //   future: viewAbstract.listCall(
+        //       count: isDesktop(context) ? 10 : 4, page: value,context: context),
+        //   builder: (context, snapshot) {
+        //     if (snapshot.connectionState == ConnectionState.waiting) {
+        //       return const CircularProgressIndicator();
+        //     }
+        //     List<ViewAbstract>? list = snapshot.data?.cast();
+        //     if (list == null) {
+        //       return Container();
+        //     }
 
-            return ResponsiveGridView.builder(
-              padding: const EdgeInsets.all(0.0),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              alignment: Alignment.topCenter,
-              gridDelegate: ResponsiveGridDelegate(
-                mainAxisSpacing: isDesktop(context) ? 40.0 : 20.0,
-                crossAxisSpacing: 40.0,
-                maxCrossAxisExtent:
-                    isTablet(context) || isMobile(context) ? width / 2 : 250,
-                // Hack to adjust child height
-                childAspectRatio: isDesktop(context)
-                    ? 1
-                    : MediaQuery.of(context).size.aspectRatio * 1.5,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                var designProcesse = list[index];
-                return WebGridViewItem(
-                  item: designProcesse,
-                );
-              },
-              itemCount: list.length,
-            );
-          },
-        );
+        //     return ResponsiveGridView.builder(
+        //       padding: const EdgeInsets.all(0.0),
+        //       shrinkWrap: true,
+        //       physics: const NeverScrollableScrollPhysics(),
+        //       alignment: Alignment.topCenter,
+        //       gridDelegate: ResponsiveGridDelegate(
+        //         mainAxisSpacing: isDesktop(context) ? 40.0 : 20.0,
+        //         crossAxisSpacing: 40.0,
+        //         maxCrossAxisExtent:
+        //             isTablet(context) || isMobile(context) ? width / 2 : 250,
+        //         // Hack to adjust child height
+        //         childAspectRatio: isDesktop(context)
+        //             ? 1
+        //             : MediaQuery.of(context).size.aspectRatio * 1.5,
+        //       ),
+        //       itemBuilder: (BuildContext context, int index) {
+        //         var designProcesse = list[index];
+        //         return WebGridViewItem(
+        //           item: designProcesse,
+        //         );
+        //       },
+        //       itemCount: list.length,
+        //     );
+        //   },
+        // );
       },
     );
   }

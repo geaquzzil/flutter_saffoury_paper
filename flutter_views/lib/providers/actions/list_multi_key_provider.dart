@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
@@ -118,10 +119,13 @@ class ListMultiKeyProvider with ChangeNotifier {
     clear(key);
     fetchList(key, viewAbstract: viewAbstract, context: context);
   }
-   refreshIndicater(String key,ViewAbstract v,{required BuildContext context}){
+
+  Future<void> refreshIndicater(String key, ViewAbstract v,
+      {required BuildContext context}) {
     clear(key);
-     return fetchList(key, viewAbstract: v, context: context);
+    return fetchList(key, viewAbstract: v, context: context);
   }
+
   void addCardToRequest(String key, ViewAbstract viewAbstract) {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
     multiListProviderHelper.hasError = false;
@@ -323,11 +327,13 @@ class ListMultiKeyProvider with ChangeNotifier {
             context: context);
       } else {
         list = await viewAbstract!.listCall(
-            filter: filter,
-            count:
-                customCount ?? autoRest?.range ?? viewAbstract.getPageItemCount,
-            page: customPage ?? multiListProviderHelper.page,
-            context: context);
+            context: context,
+            option: RequestOptions(
+                page: customPage ?? multiListProviderHelper.page,
+                countPerPage: customCount ??
+                    autoRest?.range ??
+                    viewAbstract.getPageItemCount,
+                filterMap: filter ?? {}));
       }
 
       multiListProviderHelper.isLoading = false;

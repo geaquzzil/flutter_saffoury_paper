@@ -25,10 +25,9 @@ import 'package:pretty_http_logger/pretty_http_logger.dart';
 import 'servers/server_helpers.dart';
 
 abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
-
   @JsonKey(includeFromJson: false, includeToJson: false)
   RequestOptions? _requestOption;
- 
+
   @JsonKey(includeFromJson: false, includeToJson: false)
   int _page = 0;
 
@@ -55,16 +54,24 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   Map<String, String> get getCustomMap => _customMap ?? {};
 
-
-RequestOptions? get getRequestOption => this._requestOption;
-
- set setRequestOption(RequestOptions value) => this._requestOption = value;
-
- RequestOptions getRequestOptionCopyWith(RequestOptions v){
-  if(getRequestOption!=null){
-    
+  RequestOptions  getRequestOption({ServerActions? action}) {
+    if (this._requestOption == null) {
+      this._requestOption = RequestOptions(
+        searchByField: getCustomMap,
+        requestObjcets: isRequiredObjects(),
+        requestLists: ,
+          countPerPage: getPageItemCount,
+          sortBy: castViewAbstract().getSortFieldValue);
+    }
+    return this._requestOption!;
   }
- }
+
+  set setRequestOption(RequestOptions value) => this._requestOption = value;
+
+  RequestOptions getRequestOptionCopyWith(RequestOptions option) {
+    return getRequestOption.copyWithObjcet(option: option);
+  }
+
   void setCustomMap(Map<String, String> customMap) {
     _customMap = customMap;
   }
@@ -187,35 +194,14 @@ RequestOptions? get getRequestOption => this._requestOption;
     return url;
   }
 
-  Map<String, String> _getRequiredForgins() {
-    return {
-      'forginList': convert.jsonEncode(isRequiredObjects()),
-      'forginObject': convert.jsonEncode(
-          canGetObjectWithoutApiCheckerList()?[ServerActions.list] ?? []),
-    };
-  }
-
-  Map<String,String>_getRequestOptions(){
-    return RequestOptions()
-  }
-
-  Future<Response?> _getListResponse(
-      {String? searchQuery,
-      int? itemCount,
-      int? page,
-      Map<String, FilterableProviderHelper>? map}) async {
+  Future<Response?> _getListResponse({RequestOptions? option}) async {
     return await getHttp().get(
         _getUrl(
-          customAction: getCustomAction(),
-          tableName: getTableNameApi(),
-          params: {
-            ..._getRequiredForgins(),
-            if (page != null) 'page': page,
-            if (itemCount != null) 'countPerPage': itemCount,
-            if (searchQuery != null) 'searchQuery': searchQuery,
-            if (map != null) ...map
-          },
-        ),
+            customAction: getCustomAction(),
+            tableName: getTableNameApi(),
+            params: getRequestOption
+                .copyWithObjcet(option: option)
+                .getRequestParams()),
         headers: await getHeaders());
   }
 
@@ -224,7 +210,7 @@ RequestOptions? get getRequestOption => this._requestOption;
         _getUrl(
             iD: customID ?? iD,
             tableName: getTableNameApi(),
-            params: _getRequiredForgins(),
+            params: getRequestOption.getRequestParamsOnlyForings(),
             customAction: getCustomAction()),
         headers: await getHeaders());
   }
@@ -258,6 +244,7 @@ RequestOptions? get getRequestOption => this._requestOption;
         headers: headers);
   }
 
+  @Deprecated("")
   Future<Response?> getRespones(
       {ServerActions? serverActions,
       OnResponseCallback? onResponse,
@@ -268,31 +255,6 @@ RequestOptions? get getRequestOption => this._requestOption;
       int? pageIndex,
       ViewAbstract? printObject}) async {
     try {
-      var headers = await getHeaders();
-      switch (serverActions) {
-        case ServerActions.add:
-          return await getHttp().post(
-              getUrl(
-                  tableName: getTableNameApi(),
-                  customAction: getCustomAction()),
-              headers: headers,
-              body: toJsonString());
-        case ServerActions.edit:
-        case ServerActions.list:
-          return await getHttp().get(
-              getUrl(
-                  tableName: getTableNameApi(),
-                  customAction: getCustomAction()),
-              headers: headers);
-        case ServerActions.view:
-        case ServerActions.delete_action:
-          return await getHttp().delete(
-              getUrl(
-                  iD: iD,
-                  tableName: getTableNameApi(),
-                  customAction: getCustomAction()),
-              headers: headers);
-      }
       return await getHttp().post(
           Uri.parse(serverActions == ServerActions.print
               ? URLS.getBaseUrlPrint()
@@ -354,10 +316,33 @@ RequestOptions? get getRequestOption => this._requestOption;
     }
   }
 
+  Future<List<T>?> listCall({
+    required BuildContext context,
+    RequestOptions? option,
+    OnResponseCallback? onResponse,
+  }) async {
+    try {
+      var response = await _getListResponse(option: option);
+      if (response == null) return null;
+      if (response.statusCode == 200) {
+        Iterable l = convert.jsonDecode(response.body);
+        List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+        return t;
+      } else {
+        onCallCheckError(
+            onResponse: onResponse, response: response, context: context);
+        return null;
+      }
+    } catch (e) {
+      onResponse?.onClientFailure(e);
+    }
+    return null;
+  }
+
   Future<T?> viewCall({
     required BuildContext context,
-    OnResponseCallback? onResponse,
     int? customID,
+    OnResponseCallback? onResponse,
   }) async {
     try {
       var response = await _getViewResponse(customID: customID);
@@ -574,20 +559,14 @@ RequestOptions? get getRequestOption => this._requestOption;
   String getErrorCodeMessage(BuildContext context, int code) {
     if (code == 500) {
       return AppLocalizations.of(context)!.error500;
-      return "Server error access denied";
     } else if (code == 401) {
       return AppLocalizations.of(context)!.error401;
-      return "Authentication error access denied";
     } else if (code == 400) {
       return AppLocalizations.of(context)!.error400;
-      return "bad request access denied";
     } else if (code == 200) {
       return AppLocalizations.of(context)!.success200;
-      return "Success";
     } else {
       return AppLocalizations.of(context)!.success200;
-
-      return "Success";
     }
   }
 
@@ -736,36 +715,6 @@ RequestOptions? get getRequestOption => this._requestOption;
     }
   }
 
-  Future<List<T>?> listCall(
-      {int? count,
-      int? page,
-      OnResponseCallback? onResponse,
-      Map<String, FilterableProviderHelper>? filter,
-      required BuildContext context}) async {
-    debugPrint("ViewAbstractApi listCall count=> $count page=>$page");
-    var response = await getRespones(
-        map: filter,
-        itemCount: count,
-        pageIndex: page,
-        onResponse: onResponse,
-        serverActions: ServerActions.list);
-
-    if (response == null) return null;
-    if (response.statusCode == 200) {
-      // final parser = ResultsParser<T>(response.body, castViewAbstract());
-      // return parser.parseInBackground();
-
-      Iterable l = convert.jsonDecode(response.body);
-      List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
-
-      return t;
-    } else {
-      onCallCheckError(
-          onResponse: onResponse, response: response, context: context);
-      return null;
-    }
-  }
-
   ViewAbstract castViewAbstract() {
     return this as ViewAbstract;
   }
@@ -809,12 +758,6 @@ RequestOptions? get getRequestOption => this._requestOption;
       mainBody['table'] = table;
     }
     switch (action) {
-      case ServerActions.add:
-      case ServerActions.edit:
-        //TODO multiple add
-        mainBody['data'] = convert.jsonEncode(toJsonViewAbstract());
-        break;
-
       case ServerActions.view:
       case ServerActions.delete_action:
         mainBody['<iD>'] = iD.toString();
