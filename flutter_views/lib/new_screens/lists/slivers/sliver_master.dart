@@ -3,12 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:provider/provider.dart';
 
 class SliverMaster extends StatefulWidget {
@@ -164,7 +166,11 @@ class SliverMasterState<T extends SliverMaster> extends State<T> {
 
           case QrCodeCurrentState.DONE:
             scanedQr = value.viewAbstract as ViewAbstract;
-            scanedQr!.setCustomMap({"<iD>": "${scanedQr!.iD}"});
+            scanedQr?.setRequestOption(
+              action: ServerActions.list,
+              option:
+                  RequestOptions().addSearchByField("iD", "${scanedQr!.iD}"),
+            );
             return SliverFillRemaining(
               child: Center(
                 child: SizedBox(

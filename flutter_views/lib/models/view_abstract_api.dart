@@ -26,68 +26,49 @@ import 'servers/server_helpers.dart';
 
 abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
-  RequestOptions? _requestOption;
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  int _page = 0;
+  Map<ServerActions, RequestOptions> _requestOption = {};
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   List<T>? _lastSearchViewAbstractByTextInputList;
+
   @JsonKey(includeFromJson: false, includeToJson: false)
   static Map<String, List<ViewAbstract?>>? _lastListReduseSizeViewAbstract;
+
+  RequestOptions? getRequestOption({required ServerActions action});
+  Map<ServerActions, RequestOptions> getRequestOptionMap() {
+    return _requestOption;
+  }
 
   List<T>? get getLastSearchViewByTextInputList =>
       _lastSearchViewAbstractByTextInputList;
 
-  @Deprecated("use RequestOptions")
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  Map<String, String>? _customMap;
-  @Deprecated("use RequestOptions")
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  Map<String, String>? _customMapOnSearch;
-
   @JsonKey(includeFromJson: false, includeToJson: false)
   final List<SearchCache> _searchCache = [];
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  Map<String, String> get getCustomMapOnSearch => _customMapOnSearch ?? {};
+  T setRequestOption(
+      {required ServerActions action, required RequestOptions option}) {
+    _requestOption[action] = option;
+    return this as T;
+  }
 
-  Map<String, String> get getCustomMap => _customMap ?? {};
+  T setRequestOptionMap(
+      {required Map<ServerActions, RequestOptions> requestOption}) {
+    _requestOption = requestOption;
+    return this as T;
+  }
 
-  RequestOptions  getRequestOption({ServerActions? action}) {
-    if (this._requestOption == null) {
-      this._requestOption = RequestOptions(
-        searchByField: getCustomMap,
-        requestObjcets: isRequiredObjects(),
-        requestLists: ,
-          countPerPage: getPageItemCount,
-          sortBy: castViewAbstract().getSortFieldValue);
+  RequestOptions _getDefaultRequestOptions({required ServerActions action}) {
+    return RequestOptions(page: 0, countPerPage: 20);
+  }
+
+  RequestOptions? _getRequestOptionFromParamOrAbstract(
+      {required ServerActions action}) {
+    if (_requestOption.isNotEmpty) {
+      if (_requestOption.containsKey(action)) {
+        return _requestOption[action];
+      }
     }
-    return this._requestOption!;
-  }
-
-  set setRequestOption(RequestOptions value) => this._requestOption = value;
-
-  RequestOptions getRequestOptionCopyWith(RequestOptions option) {
-    return getRequestOption.copyWithObjcet(option: option);
-  }
-
-  void setCustomMap(Map<String, String> customMap) {
-    _customMap = customMap;
-  }
-
-  void setCustomMapOnSearch(Map<String, String> customMap) {
-    _customMapOnSearch = customMap;
-  }
-
-  void setCustomMapOnListAndSearch(Map<String, String> customMap) {
-    setCustomMap(customMap);
-    setCustomMapOnSearch(customMap);
-  }
-
-  void setCustomMapAsSearchable(String? searchQuery) {
-    _customMap = <String, String>{};
-    _customMap!["searchStringQuery"] = searchQuery ?? "";
+    return getRequestOption(action: action);
   }
 
   dynamic getListSearchViewByTextInputList(String field, String fieldValue) {
@@ -103,23 +84,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
             .contains(fieldValue.toLowerCase()));
   }
 
-  @Deprecated("use RequestOptions")
-  int get getPageIndex => _page;
-
-  @Deprecated("use RequestOptions")
-  int get getPageItemCount => 20;
-
-  @Deprecated("use RequestOptions")
-  int get getPageItemCountSearch => 20;
-
   String? getCustomAction() {
     return null;
   }
 
-  @Deprecated("use RequestOptions")
-  bool isRequiredObjects() {
-    return true;
-  }
+  List<String>? getRequestedForginListOnCall({required ServerActions action});
 
   Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() {
     return null;
@@ -128,33 +97,6 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   /// call api to get objects list if its false
   bool canGetObjectWithoutApiChecker(ServerActions action) {
     return false;
-  }
-
-  Map<String, String> getBodyExtenstionParams() => {};
-
-  Map<String, String> getBodyCurrentActionASC(ServerActions? action) {
-    Map<String, String> map = HashMap<String, String>();
-
-    return map;
-  }
-
-  Map<String, String> getBody(ServerActions? action,
-      {String? fieldBySearchQuery,
-      String? searchQuery,
-      int? itemCount,
-      Map<String, FilterableProviderHelper>? map,
-      int? pageIndex,
-      ViewAbstract? printObject}) {
-    Map<String, String> mainBody = HashMap<String, String>();
-    mainBody.addAll(getBodyExtenstionParams());
-    mainBody.addAll(getBodyCurrentAction(action,
-        fieldBySearchQuery: fieldBySearchQuery,
-        searchQuery: searchQuery,
-        itemCount: itemCount,
-        map: map,
-        pageIndex: pageIndex,
-        printObject: printObject));
-    return mainBody;
   }
 
   Future<Map<String, String>> getHeadersExtenstion() async {
@@ -194,13 +136,28 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return url;
   }
 
+  dynamic _checkListToRequest(ServerActions action) {
+    List<String>? requiredList = getRequestedForginListOnCall(action: action);
+    if (requiredList == null) return false;
+    if (requiredList.isNotEmpty) {
+      return requiredList
+          .where(
+            (element) => (getFieldValue(element) as List?)?.isEmpty ?? true,
+          )
+          .toList();
+    }
+    return false;
+  }
+
   Future<Response?> _getListResponse({RequestOptions? option}) async {
     return await getHttp().get(
         _getUrl(
             customAction: getCustomAction(),
             tableName: getTableNameApi(),
-            params: getRequestOption
-                .copyWithObjcet(option: option)
+            params: _getRequestOptionFromParamOrAbstract(
+                    action: ServerActions.list)
+                ?.copyWithObjcet(option: option)
+                .copyWith(requestLists: _checkListToRequest(ServerActions.list))
                 .getRequestParams()),
         headers: await getHeaders());
   }
@@ -210,7 +167,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         _getUrl(
             iD: customID ?? iD,
             tableName: getTableNameApi(),
-            params: getRequestOption.getRequestParamsOnlyForings(),
+            params:
+                _getRequestOptionFromParamOrAbstract(action: ServerActions.view)
+                    ?.copyWith(
+                        requestLists: _checkListToRequest(ServerActions.list))
+                    .getRequestParams(),
             customAction: getCustomAction()),
         headers: await getHeaders());
   }
@@ -242,40 +203,6 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
             tableName: getTableNameApi(),
             customAction: getCustomAction()),
         headers: headers);
-  }
-
-  @Deprecated("")
-  Future<Response?> getRespones(
-      {ServerActions? serverActions,
-      OnResponseCallback? onResponse,
-      Map<String, FilterableProviderHelper>? map,
-      String? searchQuery,
-      String? fieldBySearchQuery,
-      int? itemCount,
-      int? pageIndex,
-      ViewAbstract? printObject}) async {
-    try {
-      return await getHttp().post(
-          Uri.parse(serverActions == ServerActions.print
-              ? URLS.getBaseUrlPrint()
-              : URLS.getBaseUrl()),
-          headers: await getHeaders(),
-          body: getBody(serverActions,
-              searchQuery: searchQuery,
-              fieldBySearchQuery: fieldBySearchQuery,
-              itemCount: itemCount,
-              pageIndex: pageIndex,
-              map: map,
-              printObject: printObject));
-    } on Exception catch (e) {
-      // Display an alert, no internet
-      onResponse?.onClientFailure(e);
-      debugPrint(e.toString());
-      return null;
-    } catch (err) {
-      debugPrint(err.toString());
-      return null;
-    }
   }
 
   ///call only with custom action and added custom params
@@ -725,88 +652,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   HttpWithMiddleware getHttp() {
     return HttpWithMiddleware.build(
-        requestTimeout: const Duration(seconds: 120),
+        requestTimeout: const Duration(seconds: 60),
         middlewares: [
           HttpLogger(logLevel: LogLevel.BODY),
         ]);
-  }
-
-  Map<String, String> getBodyCurrentAction(ServerActions? action,
-      {String? fieldBySearchQuery,
-      String? searchQuery,
-      Map<String, FilterableProviderHelper>? map,
-      int? itemCount,
-      int? pageIndex,
-      ViewAbstract? printObject}) {
-    Map<String, String> mainBody = HashMap();
-    String? customAction = getCustomAction();
-    mainBody['action'] = action == ServerActions.search ||
-            action == ServerActions.search_by_field ||
-            action == ServerActions.search_viewabstract_by_field
-        ? "list"
-        : action == ServerActions.list_reduce_size
-            ? "list_reduce_size"
-            : customAction ?? action.toString().split(".").last;
-    mainBody['forginList'] = convert.jsonEncode(isRequiredObjects());
-    mainBody['forginObject'] = canGetObjectWithoutApiCheckerList() == null
-        ? convert.jsonEncode([])
-        : convert
-            .jsonEncode(canGetObjectWithoutApiCheckerList()?[action] ?? []);
-
-    String? table = getTableNameApi();
-    if (table != null) {
-      mainBody['table'] = table;
-    }
-    switch (action) {
-      case ServerActions.view:
-      case ServerActions.delete_action:
-        mainBody['<iD>'] = iD.toString();
-        break;
-      case ServerActions.list:
-        mainBody.addAll(getBodyCurrentActionASC(action));
-        mainBody['countPerPage'] =
-            itemCount?.toString() ?? getPageItemCount.toString();
-        mainBody['page'] = pageIndex?.toString() ?? getPageIndex.toString();
-        SortFieldValue? sort = (this as ViewAbstract).getSortFieldValue;
-        if (sort != null) {
-          mainBody.addAll(sort.getMap());
-        }
-        mainBody.addAll(getCustomMap);
-        mainBody.addAll(castViewAbstract().getFilterableMap(map));
-        break;
-      case ServerActions.call:
-        mainBody.addAll(getCustomMap);
-        break;
-      case ServerActions.search:
-        mainBody['searchStringQuery'] = searchQuery?.trim() ?? "";
-        mainBody['start'] =
-            itemCount?.toString() ?? getPageItemCount.toString();
-        mainBody['end'] = pageIndex?.toString() ?? getPageIndex.toString();
-
-        mainBody.addAll(getCustomMapOnSearch);
-        mainBody.addAll(castViewAbstract().getFilterableMap(map));
-        break;
-
-      case ServerActions.list_reduce_size:
-        mainBody['<fieldToSelectList>'] = searchQuery?.trim() ?? "";
-        break;
-      case ServerActions.search_by_field:
-        mainBody['<$fieldBySearchQuery>'] = searchQuery?.trim() ?? "";
-        mainBody['searchByFieldName'] = fieldBySearchQuery ?? "";
-
-        break;
-      case ServerActions.search_viewabstract_by_field:
-        mainBody['<$fieldBySearchQuery>'] = searchQuery?.trim() ?? "";
-        mainBody['searchViewAbstractByFieldName'] = fieldBySearchQuery ?? "";
-        break;
-      case ServerActions.print:
-        mainBody['data'] = printObject?.toJsonString() ?? "";
-        break;
-      default:
-        break;
-    }
-
-    return mainBody;
   }
 
   void setLastSearchViewAbstractByTextInputList(List<T>? lastList) {

@@ -44,68 +44,68 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
     return key;
   }
 
-  @override
-  Future<T?> viewCall(
-    int iD, {
-    required BuildContext context,
-    OnResponseCallback? onResponse,
-  }) async {
-    this.iD = iD;
-    var response = await getRespones(
-        onResponse: onResponse, serverActions: ServerActions.view);
-    if (response == null) return null;
-    if (response.statusCode == 200) {
-      return responseObjcect.fromJson(convert.jsonDecode(response.body));
-    } else if (response.statusCode == 401) {
-      ServerResponseMaster serverResponse =
-          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse
-          ?.onServerFailureResponse(serverResponse.getFailureMessage(context));
-      //throw Exception('Failed to load album');
-      return null;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      return null;
-    }
-  }
+  // @override
+  // Future<T?> viewCall(
+  //   int iD, {
+  //   required BuildContext context,
+  //   OnResponseCallback? onResponse,
+  // }) async {
+  //   this.iD = iD;
+  //   var response = await getRespones(
+  //       onResponse: onResponse, serverActions: ServerActions.view);
+  //   if (response == null) return null;
+  //   if (response.statusCode == 200) {
+  //     return responseObjcect.fromJson(convert.jsonDecode(response.body));
+  //   } else if (response.statusCode == 401) {
+  //     ServerResponseMaster serverResponse =
+  //         ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
+  //     onResponse
+  //         ?.onServerFailureResponse(serverResponse.getFailureMessage(context));
+  //     //throw Exception('Failed to load album');
+  //     return null;
+  //   } else {
+  //     // If the server did not return a 200 OK response,
+  //     // then throw an exception.
+  //     return null;
+  //   }
+  // }
 
-  @override
-  Future<List<T>?> listCall(
-      {int? count,
-      int? page,
-      OnResponseCallback? onResponse,
-      required BuildContext context,
-      Map<String, FilterableProviderHelper>? filter}) async {
-    var response = await getRespones(
-        map: filter,
-        itemCount: count,
-        pageIndex: page,
-        onResponse: onResponse,
-        serverActions: ServerActions.list);
+  // @override
+  // Future<List<T>?> listCall(
+  //     {int? count,
+  //     int? page,
+  //     OnResponseCallback? onResponse,
+  //     required BuildContext context,
+  //     Map<String, FilterableProviderHelper>? filter}) async {
+  //   var response = await getRespones(
+  //       map: filter,
+  //       itemCount: count,
+  //       pageIndex: page,
+  //       onResponse: onResponse,
+  //       serverActions: ServerActions.list);
 
-    if (response == null) return null;
-    if (response.statusCode == 200) {
-      Iterable l = convert.jsonDecode(response.body);
-      return List<T>.from(l.map((model) => responseObjcect.fromJson(model)));
-    } else if (response.statusCode == 401) {
-      ServerResponseMaster serverResponse =
-          ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-      onResponse
-          ?.onServerFailureResponse(serverResponse.getFailureMessage(context));
-      return null;
-    } else {
-      return null;
-    }
-  }
+  //   if (response == null) return null;
+  //   if (response.statusCode == 200) {
+  //     Iterable l = convert.jsonDecode(response.body);
+  //     return List<T>.from(l.map((model) => responseObjcect.fromJson(model)));
+  //   } else if (response.statusCode == 401) {
+  //     ServerResponseMaster serverResponse =
+  //         ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
+  //     onResponse
+  //         ?.onServerFailureResponse(serverResponse.getFailureMessage(context));
+  //     return null;
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   @override
   String? getCustomAction() {
     return action;
   }
 
-  @override
-  Map<String, String> get getCustomMap => customMap ?? super.getCustomMap;
+  // @override
+  // Map<String, String> get getCustomMap => customMap ?? super.getCustomMap;
 
   @override
   T fromJsonViewAbstract(Map<String, dynamic> json) {

@@ -1,15 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:reactive_forms/src/models/models.dart';
 
 abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   @JsonKey(includeToJson: true, includeFromJson: false)
@@ -209,9 +207,7 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     (newObject).setLastSearchViewAbstractByTextInputList(
         getLastSearchViewByTextInputList);
     (newObject).textFieldController = textFieldController;
-
-    //todo i added this for notify filter and sort by sliver api master
-    (newObject).setCustomMap(getCustomMap);
+    (newObject).setRequestOptionMap(requestOption: getRequestOptionMap());
 
     return newObject;
   }
@@ -320,7 +316,7 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return null;
   }
 
-  getScrollKey(ServerActions action) {
+  String getScrollKey(ServerActions action) {
     return "$action-${getTableNameApi()}-$iD";
   }
 }
