@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/add_ons/cuts_worker/cut_request_list_card.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_view_controller/extensions.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/today_text.dart';
@@ -123,25 +124,26 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage> {
     if (firstPane) {
       return [
         SliverToBoxAdapter(
+          //todo translate
           child: getPrimaryText(
               "PENDING CUT REQUEST\n SCAN WITH Code Scanner to begin progress "),
         ),
         SliverApiMixinViewAbstractWidget(
-          isGridView: false,
-          scrollDirection: Axis.vertical,
-          enableSelection: false,
-          // hasCustomSeperater: Divider(),
-          isSliver: true,
-          searchString: _searchQuery,
-          hasCustomCardBuilder: (index, item) {
-            CutRequest cutRequest = item as CutRequest;
-            return CutRequestListCard(
-              item: cutRequest,
-            );
-          },
-          toListObject: CutRequestWorker()
-            ..setCustomMapOnListAndSearch({"<cut_status>": "PENDING"}),
-        ),
+            isGridView: false,
+            scrollDirection: Axis.vertical,
+            enableSelection: false,
+            // hasCustomSeperater: Divider(),
+            isSliver: true,
+            searchString: _searchQuery,
+            hasCustomCardBuilder: (index, item) {
+              CutRequest cutRequest = item as CutRequest;
+              return CutRequestListCard(
+                item: cutRequest,
+              );
+            },
+            toListObject: CutRequestWorker().setRequestOption(
+                option: RequestOptions()
+                    .addSearchByField("cut_status", "PENDING"))),
       ];
     }
     return [
@@ -149,28 +151,29 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //todo translate
             getPrimaryText("ON PROGRESS"),
             Expanded(
               child: Card(
                 child: SliverApiMixinViewAbstractWidget(
-                  searchString: _searchQuery,
-                  isSliver: false,
-                  scrollDirection: Axis.vertical,
-                  toListObject: CutRequestWorker()
-                    ..setCustomMapOnListAndSearch(
-                        {"<cut_status>": "PROCESSING"}),
-                ),
+                    searchString: _searchQuery,
+                    isSliver: false,
+                    scrollDirection: Axis.vertical,
+                    toListObject: CutRequestWorker().setRequestOption(
+                        option: RequestOptions()
+                            .addSearchByField("cut_status", "PROCESSING"))),
               ),
             ),
+            //todo translate
             getPrimaryText("COMPLETED WITH IN A WEEK"),
             Expanded(
               child: SliverApiMixinViewAbstractWidget(
-                searchString: _searchQuery,
-                isSliver: false,
-                scrollDirection: Axis.vertical,
-                toListObject: CutRequestWorker()
-                  ..setCustomMapOnListAndSearch({"<cut_status>": "COMPLETED"}),
-              ),
+                  searchString: _searchQuery,
+                  isSliver: false,
+                  scrollDirection: Axis.vertical,
+                  toListObject: CutRequestWorker().setRequestOption(
+                      option: RequestOptions()
+                          .addSearchByField("cut_status", "COMPLETED"))),
             ),
           ],
         ),

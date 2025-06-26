@@ -45,8 +45,25 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   final List<SearchCache> _searchCache = [];
 
+  T getSelfInstanceWithSimilarOption(
+      {ServerActions action = ServerActions.list,
+      ViewAbstract? obj,
+      RequestOptions? copyWith}) {
+    RequestOptions? o =
+        obj?.getSimilarCustomParams() ?? getSimilarCustomParams();
+
+    return setRequestOption(
+        action: action, option: o.copyWithObjcet(option: copyWith));
+  }
+
+  RequestOptions getSimilarCustomParams() {
+    return RequestOptions()
+        .addSearchByField(castViewAbstract().getForeignKeyName(), iD);
+  }
+
   T setRequestOption(
-      {required ServerActions action, required RequestOptions option}) {
+      {ServerActions action = ServerActions.list,
+      required RequestOptions option}) {
     _requestOption[action] = option;
     return this as T;
   }
@@ -140,11 +157,15 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     List<String>? requiredList = getRequestedForginListOnCall(action: action);
     if (requiredList == null) return false;
     if (requiredList.isNotEmpty) {
-      return requiredList
-          .where(
-            (element) => (getFieldValue(element) as List?)?.isEmpty ?? true,
-          )
-          .toList();
+      return requiredList.where(
+        (element) {
+          int? count = getFieldValue("${element}_count");
+          List? list = getFieldValue(element);
+          debugPrint(
+              "checkListToRequest field:$element count:$count list:${list?.length}");
+          return count != list?.length;
+        },
+      ).toList();
     }
     return false;
   }

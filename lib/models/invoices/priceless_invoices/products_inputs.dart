@@ -51,9 +51,9 @@ class ProductInput extends InvoiceMaster<ProductInput> {
   @override
   String? getTableNameApi() => "products_inputs";
   @override
-  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
-        ServerActions.list: ["products_inputs_details"],
-      };
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return ["products_inputs_details"];
+  }
 
   @override
   List<String> getMainFields({BuildContext? context}) {

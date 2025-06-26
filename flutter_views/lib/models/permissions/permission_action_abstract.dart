@@ -1,12 +1,16 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
-import '../view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+import '../view_abstract.dart';
+
 part 'permission_action_abstract.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -144,10 +148,6 @@ class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
   }
 
   @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "table_name", type: SortByType.DESC);
-
-  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "table_name": "",
         "print": 0,
@@ -162,6 +162,16 @@ class PermissionActionAbstract extends ViewAbstract<PermissionActionAbstract> {
   @override
   PermissionActionAbstract getSelfNewInstance() {
     return PermissionActionAbstract();
+  }
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("table_name", SortByType.DESC);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
   }
 
   // @override

@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
-import 'package:flutter_view_controller/models/v_non_view_object.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:flutter_view_controller/models/v_non_view_object.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/chart/pie_chart.dart';
-import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list_icon.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list_icon.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 import '../view_abstract.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
     implements CustomViewHorizontalListResponse<ChangesRecords> {
@@ -40,55 +43,22 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   ChangesRecords.init(T this.viewAbstract, String this.fieldToGroupBy,
       {this.fieldToSumBy, this.pieChartEnabled = false});
 
-  // @Override
-  // public Object getObjectOnRecyclerServerResponse(Context context, Object object) {
-  //     ChangesRecords recordRespone = (ChangesRecords) object;
-  //     return new ViewAbstractCustomView() {
-  //         @Override
-  //         public View getView(Context context) {
-  //             SummaryViewGenerator summaryViewGenerator = new SummaryViewGenerator(context);
-  //             summaryViewGenerator.setTotal(recordRespone.getTotal());
-  //             for (ChangesRecords.ChangesRecordGroup c :
-  //                     recordRespone.getTotalGrouped()
-  //             ) {
-  //                 ViewAbstract<?> viewAbstract = recordRespone.getViewAbstract();
-  //                 Spanned spanned = viewAbstract.getFieldTextValueEnum(context, viewAbstract.
-  //                         getChangedRecordsGroupedByFieldName(), c.getGroupBy());
-
-  //                 List<SummaryViewGenerator.SubSummaryFill> subSummaryFills =
-  //                         summaryViewGenerator.getSingleSub(c.getCount(), spanned.toString(), false);
-  //                 //  SummaryViewGenerator.SummaryFill  summaryFill=
-  //                 summaryViewGenerator.summaryAdd(
-  //                         summaryViewGenerator.getPriorityKey(c.getGroupBy().toUpperCase(), SummaryViewGenerator.PriorityKey.TOTAL_PRIORITY),
-  //                         summaryViewGenerator.getSummaryFill(subSummaryFills).setOnClickListener1(v -> {
-  //                             try {
-  //                                 viewAbstract.getFilterableObject().clear();
-  //                                 viewAbstract.addFilterableObjectNewManual(viewAbstract.getField(viewAbstract.getChangedRecordsGroupedByFieldName()), c.getGroupBy());
-  //                                 showFragment(context,
-  //                                         FragmentSearchResultAnim.newInstance((BaseActivity) context, viewAbstract, viewAbstract.getFilterableObject()),
-  //                                         spanned);
-  //                             } catch (Exception e) {
-  //                                 e.printStackTrace();
-  //                             }
-
-  //                         }));
-  //             }
-
-  //             return summaryViewGenerator.getViewSummaryViewRecyclerView();
-  //         }
-  //     };
-  // }
+  @override
+  String? getTableNameApi() => null;
 
   @override
-  String? getTableNameApi() => viewAbstract?.getTableNameApi();
+  String? getCustomAction() =>
+      "${viewAbstract?.getTableNameApi()}/changed_records";
 
   @override
-  String? getCustomAction() => "list_changes_records_table";
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addGroupBy(fieldToGroupBy).addSumBy(fieldToSumBy);
+  }
+
   @override
-  Map<String, String> get getCustomMap => {
-        "fieldToGroupBy": fieldToGroupBy ?? "",
-        if (fieldToSumBy != null) "fieldToSumBy": fieldToSumBy!
-      };
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 
   @override
   ChangesRecords fromJsonViewAbstract(Map<String, dynamic> json) =>
@@ -196,6 +166,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
     // TODO: implement getCustomViewOnResponseAddWidget
     throw UnimplementedError();
   }
+
   // @Override
   // public ViewAbstract<?> onReadNewObject(Context context, ViewAbstract<?> newObject, ViewAbstract<?> oldCalledViewAbstract) {
   //     ((ChangesRecords) newObject).viewAbstract = ((ChangesRecords) oldCalledViewAbstract).viewAbstract;

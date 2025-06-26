@@ -52,11 +52,6 @@ class ProductOutput extends InvoiceMaster<ProductOutput> {
   String? getTableNameApi() => "products_outputs";
 
   @override
-  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
-        ServerActions.list: ["products_outputs_details"],
-      };
-
-  @override
   List<String> getMainFields({BuildContext? context}) {
     List<String> list = super.getMainFields(context: context);
     list.add("warehouse");
@@ -78,6 +73,11 @@ class ProductOutput extends InvoiceMaster<ProductOutput> {
   @override
   ProductOutput fromJsonViewAbstract(Map<String, dynamic> json) =>
       ProductOutput.fromJson(json);
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return ["products_outputs_details"];
+  }
 }
 
 @JsonSerializable(explicitToJson: true)

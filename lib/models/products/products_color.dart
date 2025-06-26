@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'products_color.g.dart';
@@ -155,9 +155,6 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "top", type: SortByType.ASC);
-  @override
   List<Widget>? getCustomBottomWidget(BuildContext context,
       {ServerActions? action,
       ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
@@ -167,29 +164,21 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
       return null;
     }
     return [
-      SliverApiMixinAutoRestWidget(
+      SliverApiMixinViewAbstractWidget(
           isGridView: true,
           scrollDirection: Axis.horizontal,
-          autoRest: AutoRest<Product>(
-              range: 5,
-              obj: Product()..setCustomMap(getSimilarCustomParams(context)),
-              key:
-                  "${getTableNameApi()}-$iD-${getSimilarCustomParams(context)}"))
-      // ListHorizontalApiAutoRestWidget(
-      //   valueNotifier: onHorizontalListItemClicked,
-      //   titleString: AppLocalizations.of(context)!
-      //       .moreFromFormat(getMainHeaderTextOnly(context)),
-      //   autoRest: AutoRest<Product>(
-      //       range: 5,
-      //       obj: Product()..setCustomMap(getSimilarCustomParams(context)),
-      //       key: "similarProducts${getSimilarCustomParams(context)}"),
-      // ),
+          toListObject: Product().getSelfInstanceWithSimilarOption(
+              obj: this, copyWith: RequestOptions(countPerPage: 5))),
     ];
   }
 
-  Map<String, String> getSimilarCustomParams(BuildContext context) {
-    Map<String, String> hashMap = getCustomMap;
-    hashMap["<${getForeignKeyName()}>"] = ("$iD");
-    return hashMap;
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("top", SortByType.ASC);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
   }
 }

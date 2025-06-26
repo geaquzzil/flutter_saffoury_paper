@@ -8,12 +8,13 @@ import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
+import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_enum.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_enum_icon.dart';
-import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
+
 import '../v_non_view_object.dart';
 
 class ChartRecordAnalysis<T extends ViewAbstract>
@@ -24,13 +25,13 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   EnteryInteval? enteryInteval;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  T? viewAbstract;
+  T viewAbstract;
   @JsonKey(includeFromJson: false, includeToJson: false)
   Map<String, dynamic>? customAction;
 
-  ChartRecordAnalysis() : super();
+  ChartRecordAnalysis({required this.viewAbstract}) : super();
 
-  ChartRecordAnalysis.init(T this.viewAbstract, DateObject this.date,
+  ChartRecordAnalysis.init(this.viewAbstract, DateObject this.date,
       EnteryInteval this.enteryInteval,
       {this.customAction}) {
     customAction = customAction;
@@ -38,7 +39,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
 
   @override
   ChartRecordAnalysis getSelfNewInstance() {
-    return ChartRecordAnalysis();
+    return ChartRecordAnalysis(viewAbstract: viewAbstract);
   }
 
   double getTotalListAnalysis() {
@@ -63,7 +64,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   String? getCustomAction() => "list_dashboard_single_item";
 
   @override
-  String? getTableNameApi() => viewAbstract?.getTableNameApi();
+  String? getTableNameApi() => viewAbstract.getTableNameApi();
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
@@ -157,27 +158,25 @@ class ChartRecordAnalysis<T extends ViewAbstract>
       BuildContext context, ValueNotifier valueNotifier) {
     Widget? dropDownTile;
     Widget? dateWidget;
-    if (viewAbstract != null) {
-      dropDownTile = DropdownEnumControllerListenerByIcon<EnteryInteval>(
-          viewAbstractEnum: EnteryInteval.monthy,
-          onSelected: (obj) {
-            if (obj == null) return;
-            if (obj == enteryInteval) return;
-            valueNotifier.value = ChartRecordAnalysis.init(
-                viewAbstract!, date ?? DateObject.initFirstDateOfYear(), obj);
-          });
-      // dateWidget = DropdownDateControllerListener(
-      //   viewAbstractEnum: DateEnum.this_year,
-      //   onSelected: (o) {},
-      //   onSelectedDateObject: (dateObject) {
-      //     if (dateObject == null) return;
-      //     if (dateObject.isEqual(date)) return;
-      //     valueNotifier.value = ChartRecordAnalysis.init(
-      //         viewAbstract!, dateObject, enteryInteval ?? EnteryInteval.monthy);
-      //   },
-      // );
-    }
-
+    dropDownTile = DropdownEnumControllerListenerByIcon<EnteryInteval>(
+        viewAbstractEnum: EnteryInteval.monthy,
+        onSelected: (obj) {
+          if (obj == null) return;
+          if (obj == enteryInteval) return;
+          valueNotifier.value = ChartRecordAnalysis.init(
+              viewAbstract, date ?? DateObject.initFirstDateOfYear(), obj);
+        });
+    // dateWidget = DropdownDateControllerListener(
+    //   viewAbstractEnum: DateEnum.this_year,
+    //   onSelected: (o) {},
+    //   onSelectedDateObject: (dateObject) {
+    //     if (dateObject == null) return;
+    //     if (dateObject.isEqual(date)) return;
+    //     valueNotifier.value = ChartRecordAnalysis.init(
+    //         viewAbstract!, dateObject, enteryInteval ?? EnteryInteval.monthy);
+    //   },
+    // );
+  
     Widget row = SizedBox(
       width: 200,
       height: 40,
@@ -186,7 +185,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          if (dropDownTile != null) dropDownTile,
+          dropDownTile,
           // if (dateWidget != null) dateWidget
         ],
       ),

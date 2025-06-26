@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
@@ -117,9 +118,14 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
       ["employees", "number", "date", "fromCountry", "fromName", "comments"];
 
   @override
-  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
-        ServerActions.list: ["customs_declarations_images"],
-      };
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("date", SortByType.DESC);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return ["customs_declarations_images"];
+  }
 
   @override
   Map<String, material.IconData> getFieldIconDataMap() => {
@@ -182,16 +188,8 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   String getMainHeaderLabelTextOnly(material.BuildContext context) =>
       AppLocalizations.of(context)!.customs_clearnces;
 
-  // @override
-  // String getMainHeaderTextOnly(material.BuildContext context) =>
-  //     "$number : $comments";
-
   @override
   material.IconData getMainIconData() => material.Icons.document_scanner;
-
-  @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "date", type: SortByType.DESC);
 
   @override
   String? getTableNameApi() => "customs_declarations";

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -78,10 +80,6 @@ class Equalities extends ViewAbstract<Equalities> {
   IconData getMainIconData() => Icons.currency_exchange;
 
   @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "date", type: SortByType.DESC);
-
-  @override
   String? getTableNameApi() => "equalities";
 
   @override
@@ -119,4 +117,14 @@ class Equalities extends ViewAbstract<Equalities> {
 
   @override
   Map<String, double> getTextInputMaxValidateMap() => {};
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("date", SortByType.DESC);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 }

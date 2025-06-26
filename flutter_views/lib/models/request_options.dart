@@ -45,13 +45,13 @@ class RequestOptions {
 
   RequestOptions(
       {this.betweenMap = const {},
-      this.countPerPage,
-      this.countPerPageWhenSearch,
+      this.countPerPage = 20,
+      this.countPerPageWhenSearch = 20,
       this.date,
       this.filterMap = const {},
       this.groupBy = const [],
       this.limit,
-      this.page,
+      this.page = 0,
       this.requestLists,
       this.requestObjcets,
       this.searchByField = const {},
@@ -164,6 +164,10 @@ class RequestOptions {
     };
   }
 
+  String getKey() {
+    return "${getRequestParams()}";
+  }
+
   Map<String, dynamic> getRequestParams() {
     return {
       if (page != null) 'page': page,
@@ -214,15 +218,18 @@ class RequestOptions {
   }
 
   RequestOptions addSortBy(String field, SortByType type) {
+    sortBy = SortFieldValue(field: field, type: type);
     return this;
   }
 
-  RequestOptions addSumBy(String field) {
+  RequestOptions addSumBy(String? field) {
+    if (field == null) return this;
     sumBy.add(field);
     return this;
   }
 
-  RequestOptions addGroupBy(String field) {
+  RequestOptions addGroupBy(String? field) {
+    if (field == null) return this;
     groupBy.add(field);
     return this;
   }

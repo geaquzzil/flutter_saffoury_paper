@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/base_with_name_string.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -119,10 +121,6 @@ class AccountNameType extends ViewAbstract<AccountNameType> {
   IconData getMainIconData() => Icons.type_specimen;
 
   @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "type", type: SortByType.DESC);
-
-  @override
   String? getTableNameApi() => "account_names_types";
 
   @override
@@ -171,4 +169,14 @@ class AccountNameType extends ViewAbstract<AccountNameType> {
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.money_fund;
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("type", SortByType.DESC);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 }

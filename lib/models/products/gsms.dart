@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
@@ -44,15 +45,9 @@ class GSM extends ViewAbstract<GSM> {
       SliverApiMixinViewAbstractWidget(
           isGridView: true,
           scrollDirection: Axis.horizontal,
-          toListObject: Product()
-            ..setCustomMap(getSimilarCustomParams(context))),
+          toListObject: Product().getSelfInstanceWithSimilarOption(
+              obj: this, copyWith: RequestOptions(countPerPage: 5))),
     ];
-  }
-
-  Map<String, String> getSimilarCustomParams(BuildContext context) {
-    Map<String, String> hashMap = getCustomMap;
-    hashMap["<${getForeignKeyName()}>"] = ("$iD");
-    return hashMap;
   }
 
   @override
@@ -189,6 +184,12 @@ class GSM extends ViewAbstract<GSM> {
   }
 
   @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "gsm", type: SortByType.ASC);
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("gsm", SortByType.ASC);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 }

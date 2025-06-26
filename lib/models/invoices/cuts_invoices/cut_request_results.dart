@@ -4,6 +4,8 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/produc
 import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/products_outputs.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -48,8 +50,6 @@ class CutRequestResult extends ViewAbstract<CutRequestResult> {
     return products_inputs?.getProductsFromDetailList() ?? [];
   }
 
-  // List<
-
   @override
   Map<String, IconData> getFieldIconDataMap() => {};
 
@@ -70,10 +70,6 @@ class CutRequestResult extends ViewAbstract<CutRequestResult> {
 
   @override
   IconData getMainIconData() => Icons.content_cut;
-
-  @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "iD", type: SortByType.DESC);
 
   @override
   String? getTableNameApi() => "cut_request_results";
@@ -113,4 +109,14 @@ class CutRequestResult extends ViewAbstract<CutRequestResult> {
   @override
   CutRequestResult fromJsonViewAbstract(Map<String, dynamic> json) =>
       CutRequestResult.fromJson(json);
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("iD", SortByType.DESC);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 }

@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -63,8 +64,9 @@ class Credits extends MoneyFunds<Credits> {
         AppLocalizations.of(context)!.findSimilar,
         widget: ListApiAutoRestWidget(
           autoRest: AutoRest<Credits>(
-              obj: Credits()
-                ..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
+              obj: Credits().setRequestOption(
+                  option: RequestOptions()
+                      .addSearchByField("CustomerID", customers?.iD)),
               key: "CustomerByCredit$iD"),
         ),
       ),

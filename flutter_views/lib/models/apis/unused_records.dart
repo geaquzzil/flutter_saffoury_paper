@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_non_view_object.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_components/buttons/api_button.dart';
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -12,14 +12,12 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
   List<int> list = [];
   List<T>? listObjects = [];
   @JsonKey(includeFromJson: false, includeToJson: false)
-  T? viewAbstract;
+  T viewAbstract;
   bool? requireObjects;
-  UnusedRecords() : super();
-
-  UnusedRecords.init(T this.viewAbstract);
+  UnusedRecords({required this.viewAbstract}) : super();
   @override
   UnusedRecords getSelfNewInstance() {
-    return UnusedRecords();
+    return UnusedRecords(viewAbstract: viewAbstract);
   }
 
   @override
@@ -27,9 +25,9 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
       {if (requireObjects != null) "requireObjects": "true"};
 
   @override
-  String? getCustomAction() => "list_not_used_records";
+  String? getCustomAction() => "${viewAbstract?.getTableNameApi()}/not_used";
   @override
-  String? getTableNameApi() => viewAbstract?.getTableNameApi();
+  String? getTableNameApi() => null;
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
@@ -76,13 +74,13 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
   }
 
   Widget? getLeading(BuildContext context) {
-    return viewAbstract?.getMainIconData() == null
+    return viewAbstract.getMainIconData() == null
         ? null
-        : Icon(viewAbstract!.getMainIconData());
+        : Icon(viewAbstract.getMainIconData());
   }
 
   Widget? getTrailing(BuildContext context) {
-    return viewAbstract?.getCardTrailing(context);
+    return viewAbstract.getCardTrailing(context);
   }
 
   Widget getDecription(BuildContext context, UnusedRecords item) {

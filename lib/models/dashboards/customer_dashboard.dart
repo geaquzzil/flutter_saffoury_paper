@@ -31,6 +31,7 @@ import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/setting.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -102,6 +103,15 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.customer;
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions()
+        .addSearchByField(
+            "date", jsonEncode(dateObject?.toJson() ?? DateObject().toJson()))
+        .addSearchByField("withAnalysis", true);
+  }
+  l
 
   @override
   Map<String, String> get getCustomMap => {

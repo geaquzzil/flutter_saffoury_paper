@@ -17,9 +17,6 @@ class Country extends BaseWithNameString<Country> {
   }
 
   @override
-  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      super.getMirrorFieldsMapNewInstance();
-  @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.country;
   }

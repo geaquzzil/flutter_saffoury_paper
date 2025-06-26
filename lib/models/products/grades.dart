@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/base_with_name_string.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'grades.g.dart';
@@ -73,18 +73,11 @@ class Grades extends BaseWithNameString<Grades> {
       return null;
     }
     return [
-      SliverApiMixinAutoRestWidget(
-          autoRest: AutoRest<Product>(
-              range: 5,
-              obj: Product()..setCustomMap(getSimilarCustomParams(context)),
-              key:
-                  "${getTableNameApi()}-$iD-${getSimilarCustomParams(context)}")),
+      SliverApiMixinViewAbstractWidget(
+          isGridView: true,
+          scrollDirection: Axis.horizontal,
+          toListObject: Product().getSelfInstanceWithSimilarOption(
+              obj: this, copyWith: RequestOptions(countPerPage: 5))),
     ];
-  }
-
-  Map<String, String> getSimilarCustomParams(BuildContext context) {
-    Map<String, String> hashMap = getCustomMap;
-    hashMap["<${getForeignKeyName()}>"] = ("$iD");
-    return hashMap;
   }
 }

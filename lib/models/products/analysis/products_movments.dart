@@ -12,6 +12,8 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
@@ -21,7 +23,6 @@ import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import '../../invoices/orders.dart';
 import '../../invoices/priceless_invoices/transfers.dart';
 
-//TODO ADD DATE
 class ProductMovments
     extends ViewAbstractStandAloneCustomViewApi<ProductMovments>
     implements CustomViewHorizontalListResponse<ProductMovments> {
@@ -67,9 +68,18 @@ class ProductMovments
   @override
   String getCustomViewKey() => "products_movments$iD";
   @override
-  String? getCustomAction() => "list_products_movements";
+  String? getCustomAction() => "products/movements";
+
   @override
-  Map<String, String> get getCustomMap => {"<ProductID>": iD.toString()};
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSearchByField("ProductID", iD);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
+
   @override
   bool getCustomStandAloneWidgetIsPadding() {
     return false;
@@ -279,12 +289,10 @@ class ProductMovments
 
   @override
   void onCustomViewCardClicked(BuildContext context, ProductMovments istem) {
-    // TODO: implement onCustomViewCardClicked
   }
 
   @override
   Widget getCustomStandAloneWidget(BuildContext context) {
-    // TODO: implement getCustomStandAloneWidget
     throw UnimplementedError();
   }
 

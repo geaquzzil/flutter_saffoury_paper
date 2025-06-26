@@ -4,6 +4,8 @@ import 'package:flutter_view_controller/interfaces/printable/printable_custom_in
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -73,10 +75,6 @@ class CustomsDeclarationImages extends ViewAbstract<CustomsDeclarationImages>
 
   @override
   material.IconData getMainIconData() => material.Icons.gavel_sharp;
-
-  @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "comments", type: SortByType.DESC);
 
   @override
   String? getTableNameApi() => "customs_declarations_images";
@@ -182,4 +180,13 @@ class CustomsDeclarationImages extends ViewAbstract<CustomsDeclarationImages>
 
   @override
   bool getPrintableSupportsLabelPrinting() => false;
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("iD", SortByType.DESC);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 }

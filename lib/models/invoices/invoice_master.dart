@@ -35,6 +35,7 @@ import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -275,9 +276,6 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     return products;
   }
 
-  @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "date", type: SortByType.DESC);
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
 
@@ -1190,6 +1188,16 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     // });
     return content;
   }
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    if (action == ServerActions.list) {
+      return RequestOptions().addSortBy("date", SortByType.DESC);
+    }
+    return null;
+  }
+
+  
 }
 
 enum Terms implements ViewAbstractEnum<Terms> {

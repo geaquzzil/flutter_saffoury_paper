@@ -3,11 +3,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/src/form_builder.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:printing/printing.dart';
 
 @reflector
@@ -79,11 +80,6 @@ class PrinterDefaultSetting extends ViewAbstract<PrinterDefaultSetting>
 
   @override
   PrinterDefaultSetting getSelfNewInstance() => PrinterDefaultSetting();
-  @override
-  SortFieldValue? getSortByInitialType() => null;
-
-  @override
-  String? getTableNameApi() => null;
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
@@ -183,4 +179,19 @@ class PrinterDefaultSetting extends ViewAbstract<PrinterDefaultSetting>
   @override
   String getModifibleTitleName(BuildContext context) =>
       getMainHeaderLabelTextOnly(context);
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return null;
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
+
+  @override
+  String? getTableNameApi() {
+    return null;
+  }
 }

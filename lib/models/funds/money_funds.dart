@@ -18,14 +18,14 @@ import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceA
 import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:intl/intl.dart';
@@ -107,9 +107,20 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
 
   @override
   IconData? getMainDrawerGroupIconData() => Icons.credit_card;
+
   @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "date", type: SortByType.DESC);
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    if (action == ServerActions.list) {
+      return RequestOptions(
+          sortBy: SortFieldValue(field: "date", type: SortByType.DESC));
+    }
+    return null;
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
@@ -414,18 +425,15 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
       return null;
     }
     return [
-      SliverApiMixinAutoRestWidget(
-        autoRest: AutoRest<T>(
-            range: 5,
-            obj: getSelfNewInstance()
-              ..setCustomMap(getSimilarCustomParams(context)),
-            key: "similarMoneyFund${getSimilarCustomParams(context)}"),
-      ),
+      SliverApiMixinViewAbstractWidget(
+          toListObject: getSelfNewInstance().getSelfInstanceWithSimilarOption(
+              obj: this, copyWith: RequestOptions(countPerPage: 5))),
     ];
   }
 
-  Map<String, String> getSimilarCustomParams(BuildContext context) {
-    Map<String, String> hashMap = getCustomMap;
+  @override
+  RequestOptions getSimilarCustomParams() {
+    Map<String, String> hashMap = {};
     if (isCreditAndDebit()) {
       hashMap["<CustomerID>"] = ("${customers!.iD}");
     } else {
@@ -437,7 +445,7 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
         hashMap["<NameID>"] = ("${ob.account_names!.iD}");
       }
     }
-    return hashMap;
+    return RequestOptions(searchByField: hashMap);
   }
 
   @override

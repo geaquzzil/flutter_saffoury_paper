@@ -7,7 +7,7 @@ import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
@@ -16,7 +16,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
@@ -90,19 +90,12 @@ class ProductType extends ViewAbstract<ProductType>
       return null;
     }
     return [
-      SliverApiMixinAutoRestWidget(
-          autoRest: AutoRest<Product>(
-              range: 5,
-              obj: Product()..setCustomMap(getSimilarCustomParams(context)),
-              key:
-                  "${getTableNameApi()}-$iD-${getSimilarCustomParams(context)}")),
+      SliverApiMixinViewAbstractWidget(
+          isGridView: true,
+          scrollDirection: Axis.horizontal,
+          toListObject: Product().getSelfInstanceWithSimilarOption(
+              obj: this, copyWith: RequestOptions(countPerPage: 5))),
     ];
-  }
-
-  Map<String, String> getSimilarCustomParams(BuildContext context) {
-    Map<String, String> hashMap = getCustomMap;
-    hashMap["<${getForeignKeyName()}>"] = ("$iD");
-    return hashMap;
   }
 
   // @override
@@ -265,10 +258,6 @@ class ProductType extends ViewAbstract<ProductType>
   ProductType fromJsonViewAbstract(Map<String, dynamic> json) =>
       ProductType.fromJson(json);
 
-  @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "name", type: SortByType.ASC);
-
   String getUnit(BuildContext context) {
     if (unit == null) return "-";
     return unit!.getFieldLabelString(context, unit!);
@@ -276,7 +265,7 @@ class ProductType extends ViewAbstract<ProductType>
 
   @override
   ViewAbstract? getWebCategoryGridableIsMasterToList(BuildContext context) {
-    return Product()..setCustomMap({"<${getForeignKeyName()}>": getIDString()});
+    return Product().getSelfInstanceWithSimilarOption(obj: this);
   }
 
   @override
@@ -302,6 +291,16 @@ class ProductType extends ViewAbstract<ProductType>
     return field == "grades"
         ? FormFieldControllerType.DROP_DOWN_TEXT_SEARCH_API
         : super.getInputType(field);
+  }
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("name", SortByType.ASC);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
   }
 }
 

@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -110,8 +112,6 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
 
   @override
   BarcodeSetting getSelfNewInstance() => BarcodeSetting();
-  @override
-  SortFieldValue? getSortByInitialType() => null;
 
   @override
   String? getTableNameApi() => null;
@@ -224,6 +224,16 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
   @override
   String getModifibleTitleName(BuildContext context) =>
       getMainHeaderLabelTextOnly(context);
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("table_name", SortByType.DESC);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 }
 
 const bitsList = [

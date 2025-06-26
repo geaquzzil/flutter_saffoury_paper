@@ -16,6 +16,7 @@ import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -70,11 +71,6 @@ class Order extends InvoiceMaster<Order>
   String? getTableNameApi() => "orders";
 
   @override
-  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
-        ServerActions.list: ["orders_details"],
-      };
-
-  @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.orders;
 
@@ -93,7 +89,9 @@ class Order extends InvoiceMaster<Order>
         AppLocalizations.of(context)!.findSimilar,
         widget: ListApiAutoRestWidget(
           autoRest: AutoRest<Order>(
-              obj: Order()..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
+              obj: Order().setRequestOption(
+                  option: RequestOptions()
+                      .addSearchByField("CustomerID", customers?.iD)),
               key: "CustomerByOrder${customers?.iD}"),
         ),
       ),
@@ -226,6 +224,11 @@ class Order extends InvoiceMaster<Order>
   @override
   void onCartClear() {
     orders_details?.clear();
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return ["orders_details"];
   }
 }
 

@@ -242,7 +242,7 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
 
   @override
   String? getTableNameApi() {
-    return "";
+    return null;
   }
 
   @override

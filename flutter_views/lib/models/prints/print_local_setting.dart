@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/prints/printer_options.dart';
 import 'package:flutter_view_controller/models/prints/report_options.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 
@@ -110,7 +112,14 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
   String? getMainDrawerGroupName(BuildContext context) => null;
 
   @override
-  SortFieldValue? getSortByInitialType() => null;
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return null;
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 
   @override
   String? getTableNameApi() => null;

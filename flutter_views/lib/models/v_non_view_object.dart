@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 
 ///is non editable view
 abstract class VObject<T> extends ViewAbstract<T> {
@@ -25,10 +24,6 @@ abstract class VObject<T> extends ViewAbstract<T> {
 
   @override
   IconData getMainIconData() => Icons.abc;
-
-  @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "iD", type: SortByType.DESC);
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {};

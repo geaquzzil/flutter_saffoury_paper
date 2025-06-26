@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/barcode_setting.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/printer_default_setting.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -119,8 +120,9 @@ class SettingAndProfileWeb extends BaseWebPageSlivers {
     String key = authProvider.getUser.isGeneralEmployee(context)
         ? "EmployeeID"
         : "CustomerID";
-    orderSample.setCustomMap({"<$key>": "${authProvider.getUser.iD}"});
-    return orderSample;
+    return orderSample.setRequestOption(
+        option:
+            RequestOptions().addSearchByField(key, authProvider.getUser.iD));
   }
 }
 
@@ -133,8 +135,9 @@ class OrdersWeb extends StatelessWidget {
     String key = authProvider.getUser.isGeneralEmployee(context)
         ? "EmployeeID"
         : "CustomerID";
-    orderSample.setCustomMap({"<$key>": "${authProvider.getUser.iD}"});
-    return orderSample;
+    return orderSample.setRequestOption(
+        option:
+            RequestOptions().addSearchByField(key, authProvider.getUser.iD));
   }
 
   @override
@@ -260,10 +263,7 @@ class _PrintSettingState extends BasePageState<PrintSetting>
     if (firstPane) {
       return "printer_list";
     }
-    return ((lastSecondPaneItem?.value as ViewAbstract?)
-                ?.getScrollKey(ServerActions.print) ??
-            "") +
-        "printerDetails";
+    return "${(lastSecondPaneItem?.value as ViewAbstract?)?.getScrollKey(ServerActions.print) ?? ""}printerDetails";
   }
 
   Widget _getItem(BuildContext ctx, ModifiableInterface element) {
@@ -534,7 +534,9 @@ class _MasterToListFromProfileState extends State<MasterToListFromProfile>
     String key = authProvider.getUser.isGeneralEmployee(context)
         ? "EmployeeID"
         : "CustomerID";
-    orderSample.setCustomMap({"<$key>": "${authProvider.getUser.iD}"});
+    orderSample.setRequestOption(
+        option:
+            RequestOptions().addSearchByField(key, authProvider.getUser.iD));
     return orderSample;
   }
 

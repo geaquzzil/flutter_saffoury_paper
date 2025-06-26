@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/cities/governorates.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -76,10 +78,6 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
   IconData getMainIconData() => Icons.local_shipping;
 
   @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "name", type: SortByType.ASC);
-
-  @override
   String? getTableNameApi() => "cargo_transporters";
 
   @override
@@ -142,4 +140,17 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
       CargoTransporter.fromJson(json);
 
   static String? intFromString(dynamic number) => number?.toString();
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    if (action == ServerActions.list) {
+      return RequestOptions().addSortBy("name", SortByType.ASC);
+    }
+    return null;
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 }

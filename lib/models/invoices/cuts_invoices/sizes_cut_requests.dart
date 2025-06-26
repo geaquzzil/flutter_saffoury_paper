@@ -4,6 +4,7 @@ import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_request
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -108,9 +109,6 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
       "${sizes?.getMainHeaderTextOnly(context)}";
   @override
   IconData getMainIconData() => Icons.screen_rotation_alt_sharp;
-  @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "iD", type: SortByType.ASC);
 
   @override
   String? getTableNameApi() => "sizes_cut_requests";
@@ -194,4 +192,14 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
 
   @override
   int get hashCode => sizes?.width.hashCode ?? super.hashCode;
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("iD", SortByType.ASC);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 }

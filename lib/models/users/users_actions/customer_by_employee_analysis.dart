@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
@@ -299,6 +300,18 @@ class CustomerByEmployeeAnanlysis
   Widget? getCustomViewOnResponseAddWidget(
       CustomerByEmployeeAnanlysis response) {
     // TODO: implement getCustomViewOnResponseAddWidget
+    throw UnimplementedError();
+  }
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    // TODO: implement getRequestOption
+    throw UnimplementedError();
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    // TODO: implement getRequestedForginListOnCall
     throw UnimplementedError();
   }
 }

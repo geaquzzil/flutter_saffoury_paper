@@ -29,6 +29,7 @@ import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -86,8 +87,11 @@ class CutRequest extends ViewAbstract<CutRequest>
     cut_status = CutStatus.PENDING;
   }
   Widget getPendingCutRequestWidget() {
+
+    
     return ListHorizontalApiAutoRestWidget(
       isSliver: true,
+      //todo translate
       titleString: "Pending",
       // listItembuilder: (v) =>
       //     ListItemProductTypeCategory(productType: v as ProductType),
@@ -381,8 +385,9 @@ class CutRequest extends ViewAbstract<CutRequest>
           titleString: (AppLocalizations.of(context)!
               .moreFromFormat(customers?.name ?? "")),
           autoRest: AutoRest<CutRequest>(
-              obj: CutRequest()
-                ..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
+              obj: CutRequest().setRequestOption(
+                  option: RequestOptions()
+                      .addSearchByField("CustomerID", customers?.iD)),
               key: "CustomerByCutRequest$iD"),
         )
       ];

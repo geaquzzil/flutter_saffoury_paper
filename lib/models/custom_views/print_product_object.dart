@@ -4,6 +4,8 @@ import 'package:flutter_saffoury_paper/models/products/gsms.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -162,9 +164,14 @@ class ProductPrintObject extends ViewAbstract<ProductPrintObject> {
   }
 
   @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "date", type: SortByType.DESC);
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("date", SortByType.DESC);
+  }
 
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 //  return FloatingActionButton(
 //         heroTag: UniqueKey(),
 //         child: const Icon(Icons.print),

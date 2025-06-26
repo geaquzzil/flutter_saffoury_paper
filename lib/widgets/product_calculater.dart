@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_custom_scroll_widget.dart';
@@ -125,6 +127,18 @@ class ProductCalculater extends ViewAbstract<ProductCalculater> {
   @override
   Map<String, dynamic> toJsonViewAbstract() {
     // TODO: implement toJsonViewAbstract
+    throw UnimplementedError();
+  }
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    // TODO: implement getRequestOption
+    throw UnimplementedError();
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    // TODO: implement getRequestedForginListOnCall
     throw UnimplementedError();
   }
 }

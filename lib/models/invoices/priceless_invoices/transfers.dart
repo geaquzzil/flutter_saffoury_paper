@@ -46,9 +46,10 @@ class Transfers extends InvoiceMaster<Transfers> {
   String? getTableNameApi() => "transfers";
 
   @override
-  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
-        ServerActions.list: ["transfers_details"],
-      };
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return ["transfers_details"];
+  }
+
   @override
   List<String> getMainFields({BuildContext? context}) {
     List<String> list = super.getMainFields(context: context);

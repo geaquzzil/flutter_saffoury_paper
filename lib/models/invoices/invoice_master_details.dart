@@ -24,6 +24,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_master.da
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -201,8 +202,14 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   IconData getMainIconData() => Icons.list;
 
   @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "iD", type: SortByType.DESC);
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("iD", SortByType.DESC);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};

@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/permissions/permission_action_abstract.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -169,10 +171,18 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
     return PermissionLevelAbstract.fromJson(json);
   }
 
-  @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "userlevelname", type: SortByType.ASC);
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {"userlevelname": ""};
+
+
+   @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("userlevelname", SortByType.ASC);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 }

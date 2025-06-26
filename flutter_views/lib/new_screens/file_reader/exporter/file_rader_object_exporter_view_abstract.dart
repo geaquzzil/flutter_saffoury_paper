@@ -4,11 +4,12 @@ import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
-
 import 'package:path/path.dart';
 
 @reflector
@@ -338,4 +339,14 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
   @override
   FileExporterObject fromJsonViewAbstract(Map<String, dynamic> json) =>
       FileExporterObject(viewAbstract: viewAbstract);
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return null;
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 }

@@ -47,7 +47,6 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   SortByType? _lastFilterableSortType;
 
-  SortFieldValue? getSortByInitialType();
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   SortFieldValue? _sortFieldValue;

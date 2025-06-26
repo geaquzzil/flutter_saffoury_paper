@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -59,9 +60,6 @@ class WarehouseEmployee extends ViewAbstract<WarehouseEmployee> {
       "${warehouse?.name}: ${employees?.name}";
 
   @override
-  SortFieldValue? getSortByInitialType() => null;
-
-  @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
 
   @override
@@ -98,4 +96,14 @@ class WarehouseEmployee extends ViewAbstract<WarehouseEmployee> {
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       {"warehouse": Warehouse(), "employee": Employee()};
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return null;
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 }

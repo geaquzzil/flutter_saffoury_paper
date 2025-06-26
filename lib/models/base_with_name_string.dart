@@ -3,7 +3,9 @@ import 'package:flutter_saffoury_paper/models/converters.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_data.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
@@ -47,16 +49,11 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "name": "",
       };
-
-  @override
-  // Map<String, dynamic> getMirrorFieldsMapNewInstance() => {"name": ""};
-
   @override
   List<String> getMainFields({BuildContext? context}) => ["name"];
 
   @override
-  String getMainHeaderTextOnly(BuildContext context) =>
-      name ?? "";
+  String getMainHeaderTextOnly(BuildContext context) => name ?? "";
 
   @override
   String getFieldToReduceSize() {
@@ -75,10 +72,6 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
     }
     return super.getInputType(field);
   }
-
-  @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "name", type: SortByType.DESC);
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
@@ -121,7 +114,22 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
 
   @override
   ViewAbstract? getWebCategoryGridableIsMasterToList(BuildContext context) =>
-      Product()..setCustomMap({"<${getForeignKeyName()}>": getIDString()});
+      Product().setRequestOption(
+          action: ServerActions.list, option: getSimilarCustomParams());
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    if (action == ServerActions.list) {
+      return RequestOptions(
+          sortBy: SortFieldValue(field: "name", type: SortByType.DESC));
+    }
+    return null;
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 
   @override
   BaseWithNameString getWebCategoryGridableInterface(BuildContext context) {

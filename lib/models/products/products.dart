@@ -44,6 +44,7 @@ import 'package:flutter_view_controller/models/apis/unused_records.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 // import 'package:flutter_view_controller/interfaces/settings/printable_setting.dart';
@@ -176,9 +177,6 @@ class Product extends ViewAbstract<Product>
   double? qrQuantity;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  bool requireObjcetsResquest = true;
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
   bool disbleStatusAndSizeOnFilter = false;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -245,13 +243,13 @@ class Product extends ViewAbstract<Product>
   Product.disableCustomFilterable({this.disbleStatusAndSizeOnFilter = true});
 
   Product.requiresInventory() {
-    setCustomMap({"requireInventory": "true"});
+    setRequestOption(option: _getOnlyInventory());
     date = "".toDateTimeNowString();
     status = ProductStatus.NONE;
   }
 
   Product.inventoryWorker() {
-    setCustomMap({"requireInventory": "true"});
+    setRequestOption(option: _getOnlyInventory());
     disbleStatusAndSizeOnFilter = true;
     isInventoryWorker = true;
     date = "".toDateTimeNowString();
@@ -277,8 +275,19 @@ class Product extends ViewAbstract<Product>
   }
 
   Product.initOnlyReelsCustomParams() {
-    setCustomMap(getOnlyReelsCustomParams());
+    setRequestOption(
+        option: _getOnlyInventory().addValueBetween(
+            ProductSize(),
+            BetweenRequest(
+                field: "lenght",
+                fromTo: [FromToBetweenRequest(from: "0", to: "0")])));
   }
+  RequestOptions _getOnlyInventory() {
+    setRequestOption(
+        option: RequestOptions().addSearchByField("requiresInventory", true));
+    return getRequestOption(action: ServerActions.list)!;
+  }
+
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.product;
@@ -753,9 +762,6 @@ class Product extends ViewAbstract<Product>
   Map<String, dynamic> toJson() => _$ProductToJson(this);
 
   @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "date", type: SortByType.DESC);
-  @override
   getCardLeadingBottomIcon(BuildContext context) {
     switch (status) {
       case ProductStatus.PENDING:
@@ -876,7 +882,7 @@ class Product extends ViewAbstract<Product>
         mainAxisCellCount: mainAxisCellCountList,
         child: ListHorizontalApiAutoRestWidget(
           isSliver: true,
-
+          //todo translate
           titleString: "Today",
           // listItembuilder: (v) => SizedBox(
           //     width: 100, height: 100, child: POSListCardItem(object: v)),
@@ -930,12 +936,9 @@ class Product extends ViewAbstract<Product>
     return "ProductID";
   }
 
-  Map<String, String> getOnlyReelsCustomParams() {
-    Map<String, String> hashMap = getCustomMap;
-    // hashMap["<maxWaste>"] = ("[\"100\"]");
-    hashMap["<unit>"] = ("[\"Roll\"]");
-    hashMap["requireInventory"] = "yes";
-    return hashMap;
+  BetweenRequest getOnlyReelsParams() {
+    return BetweenRequest(
+        field: "lenght", fromTo: [FromToBetweenRequest(from: "0", to: "0")]);
   }
 
   @override
@@ -972,6 +975,7 @@ class Product extends ViewAbstract<Product>
     setCustomMap(hashMap);
   }
 
+  @override
   Map<String, String> getSimilarCustomParams(BuildContext context) {
     Map<String, String> hashMap = getCustomMap;
     hashMap["<maxWaste>"] = ("[\"100\"]");
@@ -1010,28 +1014,6 @@ class Product extends ViewAbstract<Product>
                 ..setCustomMap(getSimilarWithSameSizeCustomParams(context)),
               key:
                   "productsWithSimilarSize${getSimilarWithSameSizeCustomParams(context)}")),
-    ];
-    return [
-      ListHorizontalApiAutoRestWidget(
-        isSliver: true,
-        // valueNotifier: onHorizontalListItemClicked,
-        titleString: AppLocalizations.of(context)!.simialrProducts,
-        autoRest: AutoRest<Product>(
-            range: 5,
-            obj: Product()..setCustomMap(getSimilarCustomParams(context)),
-            key: "similarProducts${getSimilarCustomParams(context)}"),
-      ),
-      ListHorizontalApiAutoRestWidget(
-        isSliver: true,
-        // valueNotifier: onHorizontalListItemClicked,
-        titleString: AppLocalizations.of(context)!.productsWithSimilarSize,
-        autoRest: AutoRest<Product>(
-            range: 5,
-            obj: Product()
-              ..setCustomMap(getSimilarWithSameSizeCustomParams(context)),
-            key:
-                "productsWithSimilarSize${getSimilarWithSameSizeCustomParams(context)}"),
-      )
     ];
   }
 
@@ -1663,7 +1645,7 @@ class Product extends ViewAbstract<Product>
   @override
   Map<String, String> get getCustomMapOnSearch => {
         "requireInventory": "true",
-        if (parent is CutRequest) ...getOnlyReelsCustomParams()
+        if (parent is CutRequest) ...getBetweenParams()
       };
   @override
   Widget getPosableMainWidget(

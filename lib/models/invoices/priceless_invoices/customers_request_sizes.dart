@@ -45,11 +45,6 @@ class CustomerRequestSize extends InvoiceMaster<CustomerRequestSize> {
   String? getTableNameApi() => "customers_request_sizes";
 
   @override
-  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
-        ServerActions.list: ["customers_request_sizes_details"],
-      };
-
-  @override
   List<String> getMainFields({BuildContext? context}) =>
       ["customers", "employees", "date", "comments"];
   @override
@@ -67,6 +62,11 @@ class CustomerRequestSize extends InvoiceMaster<CustomerRequestSize> {
   @override
   CustomerRequestSize fromJsonViewAbstract(Map<String, dynamic> json) =>
       CustomerRequestSize.fromJson(json);
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return ["customers_request_sizes_details"];
+  }
 }
 
 @JsonSerializable(explicitToJson: true)

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -145,4 +147,16 @@ class CustomerContacts extends ViewAbstract<CustomerContacts> {
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       {"customers": Customer(), "name": "", "phone": ""};
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    // TODO: implement getRequestOption
+    throw UnimplementedError();
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    // TODO: implement getRequestedForginListOnCall
+    throw UnimplementedError();
+  }
 }

@@ -1,13 +1,16 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 import '../view_abstract_enum.dart';
+
 part 'printer_options.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -116,7 +119,15 @@ class PrinterOptions extends ViewAbstract<PrinterOptions> {
       };
 
   @override
-  SortFieldValue? getSortByInitialType() => null;
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return null;
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
+
 
   // @override
   // Map<String, Type> getMirrorFieldsTypeMap() => {

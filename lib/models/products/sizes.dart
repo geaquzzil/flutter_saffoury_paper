@@ -7,14 +7,14 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pdf/pdf.dart' as pdf2;
@@ -95,19 +95,12 @@ class ProductSize extends ViewAbstract<ProductSize> {
       return null;
     }
     return [
-      SliverApiMixinAutoRestWidget(
-          autoRest: AutoRest<Product>(
-              range: 5,
-              obj: Product()..setCustomMap(getSimilarCustomParams(context)),
-              key:
-                  "${getTableNameApi()}-$iD-${getSimilarCustomParams(context)}")),
+      SliverApiMixinViewAbstractWidget(
+          isGridView: true,
+          scrollDirection: Axis.horizontal,
+          toListObject: Product().getSelfInstanceWithSimilarOption(
+              obj: this, copyWith: RequestOptions(countPerPage: 5))),
     ];
-  }
-
-  Map<String, String> getSimilarCustomParams(BuildContext context) {
-    Map<String, String> hashMap = getCustomMap;
-    hashMap["<${getForeignKeyName()}>"] = ("$iD");
-    return hashMap;
   }
 
   @override
@@ -311,12 +304,19 @@ class ProductSize extends ViewAbstract<ProductSize> {
   }
 
   @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "width", type: SortByType.ASC);
-
-  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       {"width": 0, "length": 0};
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions(
+        sortBy: SortFieldValue(field: "width", type: SortByType.ASC));
+  }
 }
 
 enum ProductSizeType implements ViewAbstractEnum<ProductSizeType> {
