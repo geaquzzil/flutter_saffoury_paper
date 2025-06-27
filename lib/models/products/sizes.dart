@@ -1,7 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
@@ -319,22 +317,30 @@ class ProductSize extends ViewAbstract<ProductSize> {
     return RequestOptions(
         sortBy: SortFieldValue(field: "width", type: SortByType.ASC));
   }
-  getListOfSizesWithMaxWaste({int maxWaste=100}){
-    int? suggestedWidth=width;
-    int? suggestedLength=length;
 
-    List<int> suggWidthList=List.empty(growable: true);
-    List<int> suggLengthList=List.empty(growable: true);
-    final suggWidthList = List.generate(10, (index) {
-      int w=index*width.toNonNullable();
-      
+  List<int> generate(int initialValue, {int maxWaste = 100, int maxMin = 20}) {
+    var list = List<int>.empty(growable: true);
+    int sugg = initialValue;
+    int idx = 1;
+    do {
+      int w = (idx * initialValue);
+      list.add(w + maxWaste);
+      list.add(w - maxMin);
+      sugg = w;
+      idx = idx + 1;
+    } while (sugg > 3000);
 
-    return pow(width!, index);
-  });
-  final suggLengthList = isRoll()? []:List.generate(10, (index) {
-    return pow(width, index);
-  });
+    return list;
+  }
 
+  void getListOfSizesWithMaxWaste({int maxWaste = 100, int maxMin = 20}) {
+    List<int> lengthList =
+        isRoll() ? [] : generate(length.toNonNullable(), maxWaste: maxWaste, maxMin: maxMin);
+    List<int> widthList = isRoll()
+        ? []
+        : generate(width.toNonNullable(), maxWaste: maxWaste, maxMin: maxMin);
+
+        
   }
 }
 
