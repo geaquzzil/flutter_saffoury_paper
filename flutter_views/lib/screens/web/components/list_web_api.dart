@@ -99,18 +99,14 @@ class ListWebApiPage extends BaseWebPageSlivers {
 
   void fetshListNotCheckingZero(BuildContext context) {
     String customKey = findCustomKey();
-    if (customFilterChecker != null) {
-      viewAbstract.setFilterableMap(customFilterChecker!);
-      customKey = findCustomKey();
-      listProvider.fetchList(customKey,
-          viewAbstract: viewAbstract, context: context);
-    } else if (searchQuery == null) {
-      listProvider.fetchList(customKey,
-          viewAbstract: viewAbstract, context: context);
-    } else {
-      listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!,
-          context: context);
-    }
+
+listProvider.fetchList(customKey,
+        viewAbstract: viewAbstract,
+        options: RequestOptions(
+        
+            filterMap: customFilterChecker ?? {},
+            searchQuery: searchQuery),
+        context: context);
   }
 
   Widget getEmptyWidget(BuildContext context, {bool isError = false}) {

@@ -6,6 +6,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/encyptions/compressions.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
@@ -91,18 +92,11 @@ class ProductWebPage extends BaseWebPageSlivers {
 
   void fetshListNotCheckingZero(BuildContext context) {
     String customKey = findCustomKey();
-    if (customFilterChecker != null) {
-      viewAbstract.setFilterableMap(customFilterChecker!);
-      customKey = findCustomKey();
-      listProvider.fetchList(customKey,
-          viewAbstract: viewAbstract, context: context);
-    } else if (searchQuery == null) {
-      listProvider.fetchList(customKey,
-          viewAbstract: viewAbstract, context: context);
-    } else {
-      listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!,
-          context: context);
-    }
+    listProvider.fetchList(customKey,
+        viewAbstract: viewAbstract,
+        options: RequestOptions(
+            filterMap: customFilterChecker ?? {}, searchQuery: searchQuery),
+        context: context);
   }
 
   Widget getEmptyWidget(BuildContext context, {bool isError = false}) {

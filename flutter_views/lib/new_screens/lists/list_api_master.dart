@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/fabs_on_list_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/skeleton.dart';
@@ -10,11 +12,10 @@ import 'package:flutter_view_controller/providers/actions/list_actions_provider.
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
-
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:tuple/tuple.dart';
+
 import '../../new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import '../home/components/empty_widget.dart';
 import 'components/search_components.dart';
@@ -83,7 +84,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
   bool _selectMood = false;
   bool get isSelectedMode => _selectMood;
 
-  List<ViewAbstract> _selectedList = [];
+  final List<ViewAbstract> _selectedList = [];
 
   List<ViewAbstract> get getSelectedList => _selectedList;
 
@@ -391,8 +392,9 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
 
   void fetshListSearch(String query) {
     controller.text = query;
-    listProvider.fetchListSearch(
-        getCustomKey(searchTextKey: query), viewAbstract, query,
+    listProvider.fetchList(getCustomKey(searchTextKey: query),
+        viewAbstract: viewAbstract,
+        options: RequestOptions(searchQuery: query),
         context: context);
   }
 
@@ -433,17 +435,15 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
     }
     // debugPrint(" IS _onScroll $_isBottom");
     if (_isBottom) {
-      // debugPrint(" IS BOTTOM $_isBottom");
-      if (controller.text.isEmpty) {
-        listProvider.fetchList(getCustomKey(),
-            viewAbstract: viewAbstract, context: context);
-      } else {
-        listProvider.fetchListSearch(
-            getCustomKey(searchTextKey: controller.text),
-            viewAbstract,
-            controller.text,
-            context: context);
-      }
+      bool isEmptySearchText = controller.text.isEmpty;
+      listProvider.fetchList(
+          getCustomKey(
+              searchTextKey: isEmptySearchText ? null : controller.text),
+          viewAbstract: viewAbstract,
+          options: isEmptySearchText
+              ? null
+              : RequestOptions(searchQuery: controller.text),
+          context: context);
       widget.onScroll(
           context: context,
           listProvider: listProvider,

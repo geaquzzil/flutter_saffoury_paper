@@ -74,8 +74,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return this as T;
   }
 
-  RequestOptions _getDefaultRequestOptions({required ServerActions action}) {
-    return RequestOptions(page: 0, countPerPage: 20);
+  SortFieldValue? getSortByInitialType(
+      {ServerActions action = ServerActions.list}) {
+    return getRequestOption(action: action)?.sortBy;
   }
 
   RequestOptions? _getRequestOptionFromParamOrAbstract(
@@ -264,7 +265,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
-  Future<List<T>?> listCall({
+  Future<List<T>?> listCall<T>({
     required BuildContext context,
     RequestOptions? option,
     OnResponseCallback? onResponse,
@@ -287,7 +288,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return null;
   }
 
-  Future<T?> viewCall({
+  Future<T?> viewCall<T>({
     required BuildContext context,
     int? customID,
     OnResponseCallback? onResponse,
@@ -449,35 +450,6 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
-  Future<List<T>> search(int count, int pageIndex, String searchQuery,
-      {OnResponseCallback? onResponse,
-      Map<String, FilterableProviderHelper>? filter,
-      bool cache = false,
-      required BuildContext context}) async {
-    var response = await getRespones(
-        onResponse: onResponse,
-        map: filter,
-        serverActions: ServerActions.search,
-        searchQuery: searchQuery,
-        itemCount: count,
-        pageIndex: pageIndex);
-
-    if (response == null) return [];
-    if (response.statusCode == 200) {
-//       final parser = ResultsParser<T>(response.body, castViewAbstract());
-// parser.parseInBackground();
-      Iterable l = convert.jsonDecode(response.body);
-      List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
-      //TODO if (cache) {
-      //   return SearchCache.getResultAndAdd(searchQuery, t, _searchCache).cast();
-      // }
-      return t;
-    } else {
-      onCallCheckError(
-          onResponse: onResponse, response: response, context: context);
-      return [];
-    }
-  }
 
   Future<List<T>?> listCallFake() async {
     try {
@@ -691,10 +663,6 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       String field, List<ViewAbstract> lastList) {
     _lastListReduseSizeViewAbstract ??= {};
     _lastListReduseSizeViewAbstract!["$T$field"] = lastList;
-  }
-
-  set setPageIndex(int page) {
-    _page = page;
   }
 
   String toJsonString() {

@@ -298,8 +298,6 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
     debugPrint('generateExcel Downloaded executed in ${stopwatch.elapsed}');
   }
 
-  @override
-  SortFieldValue? getSortByInitialType() => null;
 
   @override
   String? getTableNameApi() => null;

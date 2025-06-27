@@ -75,8 +75,6 @@ class CustomerContacts extends ViewAbstract<CustomerContacts> {
     throw UnimplementedError();
   }
 
-  @override
-  SortFieldValue? getSortByInitialType() => null;
 
   @override
   String? getTableNameApi() {

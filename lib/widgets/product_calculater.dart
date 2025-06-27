@@ -64,11 +64,6 @@ class ProductCalculater extends ViewAbstract<ProductCalculater> {
     throw UnimplementedError();
   }
 
-  @override
-  SortFieldValue? getSortByInitialType() {
-    // TODO: implement getSortByInitialType
-    throw UnimplementedError();
-  }
 
   @override
   String? getTableNameApi() {

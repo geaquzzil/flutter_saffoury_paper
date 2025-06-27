@@ -10,6 +10,8 @@ import 'package:flutter_view_controller/providers/filterables/filterable_provide
 import 'package:flutter_view_controller/theming/text_field_theming.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import 'servers/server_helpers.dart';
+
 class SortFieldValue {
   String field;
   SortByType type;
@@ -38,28 +40,7 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   String? searchByAutoCompleteTextInput;
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  Map<String, FilterableProviderHelper>? _lastFilterableMap;
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  String? _lastFilterableFieldName;
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  SortByType? _lastFilterableSortType;
-
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  SortFieldValue? _sortFieldValue;
-
-  //set initial value  if
-  @Deprecated("use RequestOption")
-  SortFieldValue? get getSortFieldValue =>
-      this._sortFieldValue ?? getSortByInitialType();
-
-  Map<String, FilterableProviderHelper>? get getLastFilterableMap =>
-      _lastFilterableMap;
-
-  set setSortFieldValue(SortFieldValue? value) => this._sortFieldValue = value;
+ 
 
   String getForeignKeyName() {
     return getTableNameApi() ?? " no_foreign_key";
@@ -69,7 +50,7 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
     return "iD";
   }
 
-  bool isSortAvailable() => getSortFieldValue != null;
+  bool isSortAvailable() => getRequestOption(action: ServerActions.list)?.sortBy != null;
 
   List<String> getFilterableFields() => getMainFields();
 
@@ -84,9 +65,6 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
             "",
             type: TextInputType.datetime)
       ];
-  String getSortByFieldNameApi() {
-    return getSortFieldValue?.field ?? "";
-  }
 
   String getFilterableFieldNameApi(String field) {
     return "<$field>";
@@ -106,11 +84,6 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
 
   String getListableKey() {
     return "${getTableNameApi()}listAPI$_lastFilterableMap$getCustomMap";
-  }
-
-  void setFilterableMap(Map<String, FilterableProviderHelper> map) {
-    _lastFilterableMap = map;
-    setCustomMap(getFilterableMap(map));
   }
 }
 

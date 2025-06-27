@@ -87,8 +87,6 @@ class CutRequest extends ViewAbstract<CutRequest>
     cut_status = CutStatus.PENDING;
   }
   Widget getPendingCutRequestWidget() {
-
-    
     return ListHorizontalApiAutoRestWidget(
       isSliver: true,
       //todo translate
@@ -96,14 +94,15 @@ class CutRequest extends ViewAbstract<CutRequest>
       // listItembuilder: (v) =>
       //     ListItemProductTypeCategory(productType: v as ProductType),
       autoRest: AutoRest<CutRequest>(
-          obj: CutRequest()..setCustomMap({"<cut_status>": "PENDING"}),
+          obj: CutRequest().setRequestOption(
+              option:
+                  RequestOptions().addSearchByField("cut_status", "PENDING")),
           key: "CutRequest<Pending>"),
     );
   }
 
   @override
   List<Widget>? getHomeListHeaderWidgetList(BuildContext context) {
-    // TODO: implement getHomeListHeaderWidgetList
     return [getPendingCutRequestWidget()];
   }
 
@@ -208,14 +207,13 @@ class CutRequest extends ViewAbstract<CutRequest>
         "sizes_cut_requests_count": 0
       };
   @override
-  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
-        ServerActions.edit: ["cut_request_results", "sizes_cut_requests"],
-        ServerActions.view: ["cut_request_results", "sizes_cut_requests"],
-      };
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("date", SortByType.DESC);
+  }
 
   @override
-  bool canGetObjectWithoutApiChecker(ServerActions action) {
-    return cut_request_results?.length == cut_request_results_count;
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return ["cut_request_results", "sizes_cut_requests"];
   }
 
   @override

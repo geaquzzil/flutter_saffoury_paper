@@ -208,7 +208,9 @@ class RequestOptions {
   ///value should bey array or val of int or string
   RequestOptions addSearchByField(String field, dynamic value) {
     String key = "<$field>";
-    searchByField[key] = value;
+    if(value!=null) {
+      searchByField[key] = value;
+    }
     return this;
   }
 

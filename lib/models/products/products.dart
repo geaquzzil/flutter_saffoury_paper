@@ -142,7 +142,7 @@ class Product extends ViewAbstract<Product>
   Quality? qualities;
   Grades? grades;
   ProductsColor? products_colors;
-  List<Stocks>? inStock;
+  List<Stocks>? inventory;
 
   Product? products;
 
@@ -301,10 +301,6 @@ class Product extends ViewAbstract<Product>
     return AppLocalizations.of(context)!.outOfStock;
   }
 
-  @override
-  bool isRequiredObjects() {
-    return requireObjcetsResquest;
-  }
 
   @override
   Widget? getMainSubtitleHeaderText(BuildContext context) {
@@ -746,12 +742,12 @@ class Product extends ViewAbstract<Product>
   }
 
   double getQuantity({Warehouse? warehouse}) {
-    if (inStock == null) return 0;
+    if (inventory == null) return 0;
     if (warehouse == null) {
-      return inStock!
+      return inventory!
           .fold(0, (value, element) => value + (element.quantity ?? 0));
     }
-    return inStock!
+    return inventory!
         .where((element) => warehouse.iD == element.warehouse?.iD)
         .fold(0, (value, element) => value + (element.quantity ?? 0));
   }
@@ -975,22 +971,33 @@ class Product extends ViewAbstract<Product>
     setCustomMap(hashMap);
   }
 
-  @override
-  Map<String, String> getSimilarCustomParams(BuildContext context) {
-    Map<String, String> hashMap = getCustomMap;
-    hashMap["<maxWaste>"] = ("[\"100\"]");
-    if (hasSheetWeight()) {
-      hashMap["<GSMID>"] = "[\"${gsms?.iD}\"]";
-    }
-    if (!isGeneralEmployee(context)) {
-      hashMap["<status>"] = "[\"NONE\"]";
-    }
-    hashMap["<width>"] = ("[\"${getWidth()}\"]");
-    hashMap["<length>"] = ("[\"${getLength()}\"]");
-    hashMap["<ProductTypeID>"] = "[\"${products_types?.iD}\"]";
-    hashMap["requireInventory"] = "yes";
-    return hashMap;
+
+@override
+  RequestOptions getSimilarCustomParams() {
+    RequestOptions op= RequestOptions().addSearchByField("GSMID",gsms?.iD)
+    .addSearchByField("ProductTypeID",products_types?.iD).addSearchByField("requireInventory",true);
+
+    return !isGeneralEmployee(context) ? op.addSearchByField("status","NONE"):op;
+
+
+
   }
+  // @override
+  // Map<String, String> getSimilarCustomParams(BuildContext context) {
+  //   Map<String, String> hashMap = getCustomMap;
+  //   hashMap["<maxWaste>"] = ("[\"100\"]");
+  //   if (hasSheetWeight()) {
+  //     hashMap["<GSMID>"] = "[\"${gsms?.iD}\"]";
+  //   }
+  //   if (!isGeneralEmployee(context)) {
+  //     hashMap["<status>"] = "[\"NONE\"]";
+  //   }
+  //   hashMap["<width>"] = ("[\"${getWidth()}\"]");
+  //   hashMap["<length>"] = ("[\"${getLength()}\"]");
+  //   hashMap["<ProductTypeID>"] = "[\"${products_types?.iD}\"]";
+  //   hashMap["requireInventory"] = "yes";
+  //   return hashMap;
+  // }
 
   @override
   List<Widget>? getCustomBottomWidget(BuildContext context,
@@ -1976,8 +1983,8 @@ class Product extends ViewAbstract<Product>
   }
 
   void addInStock(int quantity, {Warehouse? warehouse}) {
-    inStock ??= [
-      ...inStock ?? [],
+    inventory ??= [
+      ...inventory ?? [],
       Stocks()
         ..quantity = quantity.toDouble()
         ..warehouse = warehouse
@@ -1992,7 +1999,7 @@ class Product extends ViewAbstract<Product>
 
   String getWareHouseAvailableIn(BuildContext context,
       {String joinString = "\n"}) {
-    return inStock
+    return inventory
             ?.map((o) => o.warehouse?.name ?? "")
             .toList()
             .join(joinString) ??

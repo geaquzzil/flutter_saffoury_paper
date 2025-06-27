@@ -3,7 +3,6 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 
 import '../../models/auto_rest.dart';
 
@@ -222,8 +221,7 @@ class ListMultiKeyProvider with ChangeNotifier {
 
     try {
       List? list = await viewAbstract.listCall(
-          count: range ?? viewAbstract.getPageItemCount,
-          page: 0,
+          option: RequestOptions(countPerPage: range, page: 0),
           context: context);
       multiListProviderHelper.isLoading = false;
 
@@ -272,43 +270,11 @@ class ListMultiKeyProvider with ChangeNotifier {
     await Future.delayed(const Duration(milliseconds: 100));
   }
 
-  Future fetchListSearch(String key, ViewAbstract viewAbstract, String query,
-      {Map<String, FilterableProviderHelper>? filter,
-      int? customCount,
-      bool requiresFullFetsh = false,
-      required BuildContext context}) async {
-    MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
-    if (multiListProviderHelper.isLoading) return;
-    if (multiListProviderHelper.isNoMoreItem) return;
-
-    multiListProviderHelper.isLoading = true;
-    notifyListeners();
-    List? list = await viewAbstract.search(
-      customCount ?? viewAbstract.getPageItemCountSearch,
-      customCount != null ? 0 : multiListProviderHelper.page,
-      query,
-      filter: filter,
-      context: context,
-    );
-
-    multiListProviderHelper.isLoading = false;
-    if (requiresFullFetsh) {
-      multiListProviderHelper.isNoMoreItem = true;
-    } else {
-      multiListProviderHelper.isNoMoreItem = list.isEmpty;
-    }
-    multiListProviderHelper.getObjects.addAll(list as List<ViewAbstract>);
-    multiListProviderHelper.page = multiListProviderHelper.page + 1;
-    notifyListeners();
-  }
-
   Future<void> fetchList(String key,
       {AutoRest? autoRest,
       ViewAbstract? viewAbstract,
       AutoRestCustom? customAutoRest,
-      Map<String, FilterableProviderHelper>? filter,
-      int? customCount,
-      int? customPage,
+      RequestOptions? options,
       bool requiresFullFetsh = false,
       required BuildContext context}) async {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
@@ -319,22 +285,26 @@ class ListMultiKeyProvider with ChangeNotifier {
     notifyListeners();
     try {
       List? list;
-      if (customAutoRest != null) {
-        list = await customAutoRest.listCall(
-            filter: filter,
-            count: customCount ?? customAutoRest.getPageItemCount,
-            page: customPage ?? multiListProviderHelper.page,
-            context: context);
-      } else {
-        list = await viewAbstract!.listCall(
-            context: context,
-            option: RequestOptions(
-                page: customPage ?? multiListProviderHelper.page,
-                countPerPage: customCount ??
-                    autoRest?.range ??
-                    viewAbstract.getPageItemCount,
-                filterMap: filter ?? {}));
-      }
+      dynamic ob = customAutoRest ?? viewAbstract;
+      list = await ob.listCall(
+          option: options?.copyWith(page: multiListProviderHelper.page),
+          context: context);
+
+      // if (customAutoRest != null) {
+      //   list = await customAutoRest.listCall(
+      //       option: RequestOptions(
+      //           filterMap: filter ?? {},
+      //           countPerPage: customCount,
+      //           page: customPage ?? multiListProviderHelper.page),
+      //       context: context);
+      // } else {
+      //   list = await viewAbstract!.listCall(
+      //       context: context,
+      //       option: RequestOptions(
+      //           page: customPage ?? multiListProviderHelper.page,
+      //           countPerPage: customCount ?? autoRest?.range,
+      //           filterMap: filter ?? {}));
+      // }
 
       multiListProviderHelper.isLoading = false;
       if (requiresFullFetsh) {
@@ -345,8 +315,9 @@ class ListMultiKeyProvider with ChangeNotifier {
 
       if (list != null) {
         multiListProviderHelper.getObjects.addAll(list);
-        multiListProviderHelper.page =
-            customPage ?? multiListProviderHelper.page + 1;
+        // multiListProviderHelper.page =
+        //     customPage ?? multiListProviderHelper.page + 1;
+        multiListProviderHelper.page = multiListProviderHelper.page + 1;
         notifyListeners();
       } else {
         multiListProviderHelper.isLoading = false;

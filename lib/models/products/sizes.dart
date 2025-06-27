@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/sizes_cut_requests.dart';
@@ -316,6 +318,23 @@ class ProductSize extends ViewAbstract<ProductSize> {
   RequestOptions? getRequestOption({required ServerActions action}) {
     return RequestOptions(
         sortBy: SortFieldValue(field: "width", type: SortByType.ASC));
+  }
+  getListOfSizesWithMaxWaste({int maxWaste=100}){
+    int? suggestedWidth=width;
+    int? suggestedLength=length;
+
+    List<int> suggWidthList=List.empty(growable: true);
+    List<int> suggLengthList=List.empty(growable: true);
+    final suggWidthList = List.generate(10, (index) {
+      int w=index*width.toNonNullable();
+      
+
+    return pow(width!, index);
+  });
+  final suggLengthList = isRoll()? []:List.generate(10, (index) {
+    return pow(width, index);
+  });
+
   }
 }
 

@@ -112,7 +112,6 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
     super.initState();
     _notifier.addListener(whenFileReaderImportList);
     inventoryProduct = Product.inventoryWorker();
-    inventoryProduct.requireObjcetsResquest = false;
   }
 
   @override

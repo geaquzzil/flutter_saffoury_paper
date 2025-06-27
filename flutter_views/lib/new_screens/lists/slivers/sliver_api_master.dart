@@ -1,12 +1,13 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cartable_draggable_header.dart';
@@ -443,7 +444,8 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
 
           case QrCodeCurrentState.DONE:
             scanedQr = value.viewAbstract as ViewAbstract;
-            scanedQr!.setCustomMap({"<iD>": "${scanedQr!.iD}"});
+            scanedQr!.setRequestOption(
+                option: RequestOptions().addSearchByField("iD", scanedQr?.iD));
             return SliverFillRemaining(
               child: Center(
                 child: SizedBox(

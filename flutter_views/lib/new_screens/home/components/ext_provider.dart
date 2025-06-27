@@ -64,8 +64,8 @@ void notifyListApi(BuildContext context) {
   ViewAbstract? v =
       context.read<DrawerMenuControllerProvider>().getObjectCastViewAbstract;
   v.setFilterableMap(context.read<FilterableProvider>().getList);
-  debugPrint(
-      "notifyListApi viewAbstract ${v.getTableNameApi()} customMap ${v.getCustomMap}");
+  // debugPrint(
+  //     "notifyListApi viewAbstract ${v.getTableNameApi()} customMap ${v.getCustomMap}");
   context.read<DrawerMenuControllerProvider>().change(
       context, v, DrawerMenuControllerProviderAction.list,
       changeWithFilterable: true);

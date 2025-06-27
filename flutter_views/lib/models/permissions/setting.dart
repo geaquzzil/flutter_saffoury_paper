@@ -105,8 +105,6 @@ class Setting extends ViewAbstract<Setting> {
     throw UnimplementedError();
   }
 
-  @override
-  SortFieldValue? getSortByInitialType() => null;
 
   @override
   String? getTableNameApi() {

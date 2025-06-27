@@ -74,7 +74,7 @@ class PrintProductLabelCustomView
             ..sizes = ppo.size
             ..gsms = g
             ..products_types = productType
-            ..inStock = [Stocks()..quantity = ppo.quantity];
+            ..inventory = [Stocks()..quantity = ppo.quantity];
         }
       },
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
@@ -136,9 +137,14 @@ class WebProductList extends StatelessWidget {
                 builder: (context, value, child) =>
                     FutureBuilder<List<dynamic>?>(
                   future: searchQuery != null
-                      ? viewAbstract.search(20, value, searchQuery!,context: context)
+                      ? viewAbstract.search(20, value, searchQuery!,
+                          context: context)
                       : viewAbstract.listCall(
-                          count: isDesktop(context) ? 20 : 4, page: value,context: context),
+                          option: RequestOptions(
+                            countPerPage: isDesktop(context) ? 20 : 4,
+                            page: value,
+                          ),
+                          context: context),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();

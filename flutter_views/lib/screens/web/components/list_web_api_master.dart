@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/encyptions/compressions.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/theme.dart';
@@ -71,24 +72,14 @@ class ListWebApiMaster extends StatelessWidget {
 
   void fetshListNotCheckingZero(BuildContext context) {
     String customKey = findCustomKey();
-    if (customFilterChecker != null) {
-      viewAbstract.setFilterableMap(customFilterChecker!);
-      customKey = findCustomKey();
-      _listProvider.fetchList(customKey,
-          viewAbstract: viewAbstract,
-          customPage: customPage,
-          customCount: customCount,
-          context: context);
-    } else if (searchQuery == null) {
-      _listProvider.fetchList(customKey,
-          viewAbstract: viewAbstract,
-          customPage: customPage,
-          customCount: customCount,
-          context: context);
-    } else {
-      _listProvider.fetchListSearch(customKey, viewAbstract, searchQuery!,
-          context: context);
-    }
+    _listProvider.fetchList(customKey,
+        viewAbstract: viewAbstract,
+        options: RequestOptions(
+            page: customPage,
+            countPerPage: customCount,
+            filterMap: customFilterChecker ?? {},
+            searchQuery: searchQuery),
+        context: context);
   }
 
   Widget getShimmerLoading(BuildContext context) {
