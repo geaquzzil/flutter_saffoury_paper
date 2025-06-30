@@ -156,18 +156,12 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       {ServerActions? action,
       SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) async {
     try {
-      ViewAbstract? newO = this as ViewAbstract;
-      bool b = getBodyWithoutApi(action ?? ServerActions.view);
-      if (!b) {
-        debugPrint("sharePage waiting to get object form api");
-        newO = (await viewCallGetFirstFromList(iD, context: context))
-            as ViewAbstract?;
-        debugPrint("sharePage done");
-      }
+      ViewAbstract? newO =
+          await (this as ViewAbstract).viewCall(context: context);
       if (newO != null) {
         debugPrint("sharePage updated list");
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          context.read<ListMultiKeyProvider>().edit(newO as ViewAbstract);
+          context.read<ListMultiKeyProvider>().edit(newO);
         });
       } else {
         //TODO Show the error

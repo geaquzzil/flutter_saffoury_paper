@@ -3,9 +3,11 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
@@ -404,12 +406,17 @@ Widget getControllerEditTextViewAbstractAutoComplete(BuildContext context,
             if (query.isEmpty) return [];
             if (query.trim().isEmpty) return [];
             if (autoCompleteBySearchQuery) {
-              return viewAbstract.search(5, 0, query, context: context)
-                  as Future<List<ViewAbstract>>;
+              return viewAbstract.listCall(
+                  context: context,
+                  option: RequestOptions(
+                      searchQuery: query, countPerPage: 5, page: 0));
+
               // field: field, searchQuery: query);
             }
-            return viewAbstract.searchViewAbstractByTextInputViewAbstract(
-                field: field, searchQuery: query, context: context);
+            return viewAbstract.listCall(
+                context: context,
+                option: RequestOptions(searchQuery: query),
+                customAction: ServerActions.search_viewabstract_by_field);
           }),
       requiredSpace: withDecoration
           ? viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0
@@ -525,12 +532,17 @@ Widget getControllerEditTextViewAbstractAutoCompleteNewIfNotFoundAsOneField(
             if (query.isEmpty) return [];
             if (query.trim().isEmpty) return [];
             if (autoCompleteBySearchQuery) {
-              return viewAbstract.search(5, 0, query, context: context)
-                  as Future<List<ViewAbstract>>;
+              return viewAbstract.listCall(
+                  context: context,
+                  option: RequestOptions(
+                      searchQuery: query, countPerPage: 5, page: 0));
               // field: field, searchQuery: query);
             }
-            return viewAbstract.searchViewAbstractByTextInputViewAbstract(
-                field: field, searchQuery: query, context: context);
+            return viewAbstract.listCall(
+              context: context,
+              option: RequestOptions(searchQuery: query),
+              customAction: ServerActions.search_viewabstract_by_field,
+            );
           }),
       requiredSpace: withDecoration
           ? viewAbstract.getTextInputMaxLength(field).toNonNullable() == 0

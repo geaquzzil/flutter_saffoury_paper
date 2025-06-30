@@ -2,12 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'setting.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -105,7 +107,6 @@ class Setting extends ViewAbstract<Setting> {
     throw UnimplementedError();
   }
 
-
   @override
   String? getTableNameApi() {
     // TODO: implement getTableNameApi
@@ -183,11 +184,15 @@ class Setting extends ViewAbstract<Setting> {
     throw UnimplementedError();
   }
 
-  // @override
-  // Map<String, Type> getMirrorFieldsTypeMap() {
-  //   // TODO: implement getMirrorFieldsTypeMap
-  //   throw UnimplementedError();
-  // }
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+     return null;
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 }
 
 enum CurrencySetting { DOLLAR, DOLLAR_THREE_ZERO, SYP }

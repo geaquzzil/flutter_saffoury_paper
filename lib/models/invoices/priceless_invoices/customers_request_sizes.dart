@@ -114,9 +114,6 @@ class CustomerRequestSizeDetails
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.customer;
 
-  @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "date", type: SortByType.DESC);
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:intl/intl.dart';
 
 class DateObject {
   String from;
@@ -47,6 +47,10 @@ class DateObject {
   static DateTime findLastDateOfTheWeek(DateTime dateTime) {
     return dateTime
         .add(Duration(days: DateTime.daysPerWeek - dateTime.weekday));
+  }
+
+  static DateObject today() {
+    return DateObject();
   }
 
   factory DateObject.fromJson(Map<String, dynamic> data) => DateObject()

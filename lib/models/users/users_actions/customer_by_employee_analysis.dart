@@ -36,11 +36,12 @@ class CustomerByEmployeeAnanlysis
   CustomerByEmployeeAnanlysis getSelfNewInstance() {
     return CustomerByEmployeeAnanlysis();
   }
-
   @override
-  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
-        ServerActions.list: ["orders"],
-      };
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return ["orders"];
+  }
+
+
   @override
   Widget getCustomStandAloneWidget(BuildContext context) {
     throw UnimplementedError();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/search_card_item.dart';
 import 'package:paginated_search_bar/paginated_search_bar.dart';
@@ -69,7 +70,9 @@ class SearchWidgetApi extends StatelessWidget {
 
                     // return await viewAbstract.search(5, pageIndex, searchQuery);
                     return Future.delayed(const Duration(milliseconds: 1000),
-                        () => viewAbstract.search(5, pageIndex, searchQuery,context: context));
+                        () => viewAbstract.listCall(
+                          option: RequestOptions(countPerPage: 5,page: pageIndex,searchQuery: searchQuery),context: context));
+                          
                   },
                   itemBuilder: (
                     context, {

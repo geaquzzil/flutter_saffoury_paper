@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/skeleton.dart';
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
@@ -244,28 +245,30 @@ class _ListApiSelectedSearchableWidget<T extends ViewAbstract>
     debugPrint(" IS _onScroll $_isBottom");
     if (_isBottom) {
       debugPrint(" IS BOTTOM $_isBottom");
-      if (controller.text.isEmpty) {
-        listProvider.fetchList(getCustomKey(),
-            viewAbstract: widget.viewAbstract, context: context);
-      } else {
-        listProvider.fetchListSearch(
-            getCustomKey(searchTextKey: controller.text),
-            widget.viewAbstract,
-            controller.text,
-            context: context);
-      }
+      String? searchQuery = controller.text.isEmpty ? null : controller.text;
+      listProvider.fetchList(
+        getCustomKey(searchTextKey: searchQuery),
+        context: context,
+        viewAbstract: widget.viewAbstract,
+        options: RequestOptions(
+          searchQuery: searchQuery,
+        ),
+      );
     }
   }
 
-  onSearchTextChanged(String text) async {
+  Future<void> onSearchTextChanged(String text) async {
     await Future.delayed(
       const Duration(milliseconds: 750),
       () {
-        listProvider.fetchListSearch(
-            getCustomKey(searchTextKey: controller.text),
-            widget.viewAbstract,
-            controller.text,
-            context: context);
+        listProvider.fetchList(
+          getCustomKey(searchTextKey: controller.text),
+          context: context,
+          viewAbstract: widget.viewAbstract,
+          options: RequestOptions(
+            searchQuery: controller.text,
+          ),
+        );
         // setState(() {});
       },
     );

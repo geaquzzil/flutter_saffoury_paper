@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
@@ -29,8 +30,9 @@ class RequestOptions {
   DateObject? date;
   SortFieldValue? sortBy;
 
-  //>SizeID<:width:{from:200,to:300}
-  Map<String, List<BetweenRequest>> betweenMap = {};
+  //>SizeID<:width:{from:200,to:300},length:{from:800,to:900}
+  //>SizeID<:[[{width:{from:200,to:300},length:{from:800,to:900}],[],[]}]
+  Map<String, dynamic> betweenMap = {};
 
   // <SizeID>:20
   Map<String, dynamic> searchByField = {};
@@ -78,7 +80,7 @@ class RequestOptions {
   }
 
   RequestOptions copyWith(
-      {Map<String, List<BetweenRequest>>? betweenMap,
+      {Map<String, dynamic>? betweenMap,
       int? countPerPage,
       int? countPerPageWhenSearch,
       DateObject? date,
@@ -120,6 +122,17 @@ class RequestOptions {
     return Map.fromEntries(sumBy.map(
       (e) => MapEntry('&$e&', "true"),
     ));
+  }
+
+  bool isSearchServerAction() {
+    return searchQuery != null;
+  }
+
+  ServerActions getServerAction() {
+    if (isSearchServerAction()) {
+      return ServerActions.search;
+    }
+    return ServerActions.list;
   }
 
   dynamic _getIsRequestObjcets() {
@@ -200,15 +213,17 @@ class RequestOptions {
     return this;
   }
 
-  RequestOptions addDate(DateObject date) {
-    this.date = date;
+  RequestOptions addDate(DateObject? date) {
+    if (date != null) {
+      this.date = date;
+    }
     return this;
   }
 
   ///value should bey array or val of int or string
   RequestOptions addSearchByField(String field, dynamic value) {
     String key = "<$field>";
-    if(value!=null) {
+    if (value != null) {
       searchByField[key] = value;
     }
     return this;
@@ -236,15 +251,19 @@ class RequestOptions {
     return this;
   }
 
-  RequestOptions addValueBetween(ViewAbstract child, BetweenRequest between) {
-    String forignID = child.getForeignKeyName();
-    String key = ">$forignID<";
+  RequestOptions addBetween(String field, dynamic value) {
+    if (value == null) return this;
+    String key = ">$field<";
     if (betweenMap.containsKey(key)) {
       List<BetweenRequest> list = betweenMap[key]!;
-      list.add(between);
+      list.add(value);
       betweenMap[key] = list;
     }
-    betweenMap[key] = [between];
+    betweenMap[key] = [value];
     return this;
+  }
+
+  RequestOptions addValueBetween(ViewAbstract child, BetweenRequest between) {
+    return addBetween(child.getForeignKeyName(), between);
   }
 }

@@ -100,7 +100,7 @@ class _BaseDashboardState extends State<BaseDashboard>
           widget.dashboard.setDate(value);
           init(context);
           return FutureBuilder(
-            future: viewAbstract.callApi(context: context),
+            future: viewAbstract.viewCall(context: context),
             builder: (context, snapshot) {
               try {
                 if (snapshot.connectionState == ConnectionState.done) {

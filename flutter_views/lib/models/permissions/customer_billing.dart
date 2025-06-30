@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 import 'permission_level_abstract.dart';
 import 'setting.dart';
+
 part 'customer_billing.g.dart';
 
 @reflector
@@ -185,10 +188,11 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
         "day": true,
       };
 
-  @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "name", type: SortByType.ASC);
 
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+   return RequestOptions().addSortBy("name", SortByType.ASC);
+  }
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.users;

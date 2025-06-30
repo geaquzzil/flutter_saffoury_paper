@@ -1,27 +1,29 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:math' as math;
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_components/fabs/floating_action_button_extended.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
+import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+
 import '../../interfaces/printable/printable_master.dart';
 import '../../models/servers/server_helpers.dart';
 import 'base_pdf_page.dart';
 import 'ext.dart';
-import 'dart:math' as math;
 // import 'package:webcontent_converter/webcontent_converter.dart';
 
 class PdfPage<T extends PrintLocalSetting> extends BasePdfPage {
@@ -67,11 +69,11 @@ class _PdfPageState<T extends PrintLocalSetting>
     if (getExtras() == null) {
       ViewAbstract newViewAbstract =
           context.read<AuthProvider<AuthUser>>().getNewInstance(tableName!)!;
-      return newViewAbstract.viewCallGetFirstFromList(iD!, context: context)
+      return newViewAbstract.viewCall(customID: iD!, context: context)
           as Future<PrintableMaster<T>?>;
     } else {
-      return (getExtras() as ViewAbstract).viewCallGetFirstFromList(
-          (getExtras() as ViewAbstract).iD,
+      return (getExtras() as ViewAbstract).viewCall(
+          customID: (getExtras() as ViewAbstract).iD,
           context: context) as Future<PrintableMaster<T>?>;
     }
   }
@@ -79,12 +81,8 @@ class _PdfPageState<T extends PrintLocalSetting>
   @override
   Widget getFutureBody(BuildContext context, PrintableMaster<T>? newObject,
       PdfPageFormat formt) {
-    if (getBodyWithoutApi()) {
-      return getBody(context, formt);
-    }
     return FutureBuilder(
-      future: (newObject as ViewAbstract).viewCallGetFirstFromList(
-          (newObject as ViewAbstract).iD,
+      future: (newObject as ViewAbstract).viewCall(
           context: context),
       builder: (context, snapshot) {
         if (snapshot.hasError) {

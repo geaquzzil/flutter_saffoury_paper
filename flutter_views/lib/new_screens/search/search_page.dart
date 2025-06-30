@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
@@ -315,7 +316,7 @@ class _SearchPageState extends State<SearchPage> {
                   useOutLineCards: true,
                   object: snapshot.data!
                       .map((e) => AutoRest(
-                          obj: getNewInstance()..setCustomMapAsSearchable(e),
+                          obj: getNewInstance().setRequestOption(option: RequestOptions(searchQuery: e)),
                           key: viewAbstract.getListableKeyWithoutCustomMap()))
                       .toList()));
         }

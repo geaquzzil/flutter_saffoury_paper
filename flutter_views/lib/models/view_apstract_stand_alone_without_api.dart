@@ -47,8 +47,6 @@ abstract class ViewAbstractStandAloneCustomView<T>
     throw UnimplementedError();
   }
 
-  @override
-  SortFieldValue? getSortByInitialType() => null;
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() {

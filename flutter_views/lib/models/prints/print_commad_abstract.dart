@@ -98,8 +98,5 @@ abstract class PrintCommandAbstract<T> extends ViewAbstract<T> {
   String? getMainDrawerGroupName(BuildContext context) => null;
 
   @override
-  SortFieldValue? getSortByInitialType() => null;
-
-  @override
   String? getTableNameApi() => null;
 }

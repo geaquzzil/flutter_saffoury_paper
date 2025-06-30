@@ -8,6 +8,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_generater.dart';
@@ -958,8 +959,9 @@ abstract class ViewAbstractInputAndValidater<T>
         if (query.isEmpty) return [];
         if (query.trim().isEmpty) return [];
 
-        return (search(5, 0, query, context: context, cache: true)
-            as Future<List<ViewAbstract>>);
+        return listCall(
+            context: context,
+            option: RequestOptions(searchQuery: query, countPerPage: 5));
       },
     );
     // return FormBuilderTypeAheadTupple<ViewAbstract>(
@@ -1221,12 +1223,9 @@ abstract class ViewAbstractInputAndValidater<T>
       },
       stringify: (value) => value.getMainHeaderTextOnly(context),
       suggestionsCallback: (text) {
-        return (options.value as ViewAbstract).search(
-          10,
-          0,
-          text,
-          context: context,
-        ) as Future<List<ViewAbstract>>;
+        return (options.value as ViewAbstract).listCall(
+            context: context,
+            option: RequestOptions(searchQuery: text, countPerPage: 10));
       },
       itemBuilder: (c, value) {
         return value.getAutoCompleteItemBuilder(c, field, value);

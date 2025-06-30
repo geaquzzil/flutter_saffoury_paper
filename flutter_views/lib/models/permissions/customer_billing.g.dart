@@ -9,9 +9,6 @@ part of 'customer_billing.dart';
 BillingCustomer _$BillingCustomerFromJson(Map<String, dynamic> json) =>
     BillingCustomer()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
-      ..login = json['login'] as bool?
-      ..permission = json['permission'] as bool?
-      ..response = json['response'] as int?
       ..phone = json['phone'] as String?
       ..password = json['password'] as String?
       ..userlevels = json['userlevels'] == null
@@ -39,9 +36,6 @@ Map<String, dynamic> _$BillingCustomerToJson(BillingCustomer instance) =>
     <String, dynamic>{
       'iD': instance.iD,
       'delete': instance.delete,
-      'login': instance.login,
-      'permission': instance.permission,
-      'response': instance.response,
       'phone': instance.phone,
       'password': instance.password,
       'userlevels': instance.userlevels?.toJson(),

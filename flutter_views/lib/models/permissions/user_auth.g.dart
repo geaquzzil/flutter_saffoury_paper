@@ -8,11 +8,8 @@ part of 'user_auth.dart';
 
 AuthUser<T> _$AuthUserFromJson<T>(Map<String, dynamic> json) => AuthUser<T>()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
-  ..login = json['login'] as bool?
-  ..permission = json['permission'] as bool?
-  ..response = json['response'] as int?
   ..phone = json['phone'] as String?
-  ..barrerToken = json['barrerToken'] as String?
+  ..token = json['token'] as String?
   ..password = json['password'] as String?
   ..userlevels = json['userlevels'] == null
       ? null
@@ -29,11 +26,8 @@ Map<String, dynamic> _$AuthUserToJson<T>(AuthUser<T> instance) =>
     <String, dynamic>{
       'iD': instance.iD,
       'delete': instance.delete,
-      'login': instance.login,
-      'permission': instance.permission,
-      'response': instance.response,
       'phone': instance.phone,
-      'barrerToken': instance.barrerToken,
+      'token': instance.token,
       'password': instance.password,
       'userlevels': instance.userlevels?.toJson(),
       'setting': instance.setting?.toJson(),

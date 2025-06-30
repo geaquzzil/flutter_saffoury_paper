@@ -74,9 +74,6 @@ class CustomerBalanceSingle extends Customer
   factory CustomerBalanceSingle.fromJson(Map<String, dynamic> json) =>
       CustomerBalanceSingle()
         ..iD = json['iD'] as int
-        ..login = json['login'] as bool?
-        ..permission = json['permission'] as bool?
-        ..response = json['response'] as int?
         ..phone = json['phone'] as String?
         ..name = json['name'] as String?
         ..email = json['email'] as String?

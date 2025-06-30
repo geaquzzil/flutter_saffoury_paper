@@ -45,7 +45,7 @@ class GSM extends ViewAbstract<GSM> {
       SliverApiMixinViewAbstractWidget(
           isGridView: true,
           scrollDirection: Axis.horizontal,
-          toListObject: Product().getSelfInstanceWithSimilarOption(
+          toListObject: Product().getSelfInstanceWithSimilarOption(context: context,
               obj: this, copyWith: RequestOptions(countPerPage: 5))),
     ];
   }

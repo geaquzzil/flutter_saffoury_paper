@@ -105,13 +105,9 @@ class CustomerBalanceList
   @override
   IconData getMainIconData() => Icons.balance;
 
-  // @override
-  // String? getTableNameApi() => "list_customers_balances";
 
   @override
-  String? getCustomAction() => "list_customers_balances";
-  @override
-  Map<String, String> get getCustomMap => {"requireTerms": "true"};
+  String? getCustomAction() => "customers/balance";
 
   @override
   Map<String, dynamic> toJsonViewAbstract() => {};
@@ -401,10 +397,7 @@ class CustomerBalanceList
           BuildContext context) =>
       null;
 
-  @override
-  bool canGetObjectWithoutApiChecker(ServerActions action) {
-    return customers != null;
-  }
+
 
   @override
   void setDate(DateObject? date) {

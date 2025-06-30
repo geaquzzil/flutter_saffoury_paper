@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/extensions.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
@@ -369,7 +370,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
     );
   }
 
-  getDesktopFirstPane({TabControllerHelper? tab}) {
+  List<Widget> getDesktopFirstPane({TabControllerHelper? tab}) {
     debugPrint(
         "getDesktopFirstPane lastDrawerItem ${lastDrawerItemSelected?.title}");
     return [
@@ -494,7 +495,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
     );
   }
 
-  getDesktopSecondPane(
+  List<Widget> getDesktopSecondPane(
       {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
     if (isPurchuses()) {
       return [
@@ -698,7 +699,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
                   debugPrint("onPrint");
                   //todo
 
-                  inventoryProduct.setFilterableMap(filterData ?? {});
+                  inventoryProduct.setRequestOption(
+                      option: RequestOptions(filterMap: filterData ?? {}));
                   inventoryProduct.setComparedList =
                       (keyInventoryFilterList.currentState?.getList());
                   inventoryProduct.printDialog(context,

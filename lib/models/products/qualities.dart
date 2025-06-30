@@ -82,7 +82,9 @@ class Quality extends BaseWithNameString<Quality> {
           isGridView: true,
           scrollDirection: Axis.horizontal,
           toListObject: Product().getSelfInstanceWithSimilarOption(
-              obj: this, copyWith: RequestOptions(countPerPage: 5))),
+              context: context,
+              obj: this,
+              copyWith: RequestOptions(countPerPage: 5))),
     ];
   }
 }

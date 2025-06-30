@@ -52,9 +52,6 @@ class CustomerTerms extends Customer
     ..iD = json['iD'] as int
     ..termsDate = json['termsDate'] as String?
     ..OrderID = json['OrderID'] as int?
-    ..login = json['login'] as bool?
-    ..permission = json['permission'] as bool?
-    ..response = json['response'] as int?
     ..phone = json['phone'] as String?
     ..name = json['name'] as String?
     ..email = json['email'] as String?

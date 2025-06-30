@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/setting.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -45,7 +46,7 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
 
   @override
   String? getCustomAction() {
-    return "login_flutter";
+    return "login";
   }
 
   @override
@@ -79,16 +80,17 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
       };
 
   @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "name", type: SortByType.ASC);
-
-  @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.users;
 
   @override
   void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
     super.onBeforeGenerateView(context);
+  }
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("name", SortByType.ASC);
   }
 
   @override
@@ -151,16 +153,17 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
 
 @JsonSerializable(explicitToJson: true)
 class AuthUser<T> extends ViewAbstract<AuthUser> {
-  bool? login;
-  bool? permission;
-  int? response;
   String? phone;
   String? password;
-  String? barrerToken;
+  String? token;
 
   PermissionLevelAbstract? userlevels;
   Setting? setting;
   Dealers? dealers;
+
+  bool isLoggedIn() {
+    return token != null && (token?.isNotEmpty ?? false);
+  }
 
   AuthUser({bool? setPassword}) : super() {
     if (setPassword != null) {
@@ -191,6 +194,13 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
     _authState.add(null);
   }
 
+  Future<AuthUser?> loginCall({
+    required BuildContext context,
+    OnResponseCallback? onResponse,
+  }) {
+    return addCall(context: context, onResponse: onResponse);
+  }
+
   @override
   AuthUser getSelfNewInstance() {
     return AuthUser();
@@ -198,12 +208,9 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "login": false,
-        "permission": false,
-        "response": 0,
         "phone": "",
         "password": "",
-        "barrerToken": "",
+        "token": "",
         "userlevels": PermissionLevelAbstract(),
         "setting": Setting()
       };
@@ -222,7 +229,7 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   Map<String, dynamic> toJson() => _$AuthUserToJson(this);
   @override
   String? getCustomAction() {
-    return "login_flutter";
+    return "login";
   }
 
   @override
@@ -299,9 +306,6 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   }
 
   @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "phone", type: SortByType.ASC);
-  @override
   String? getMainDrawerGroupName(BuildContext context) {
     // TODO: implement getMainDrawerGroupName
     throw UnimplementedError();
@@ -321,5 +325,15 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() {
     // TODO: implement getTextInputIsAutoCompleteViewAbstractMap
     throw UnimplementedError();
+  }
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("phone", SortByType.ASC);
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
   }
 }

@@ -39,6 +39,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return _requestOption;
   }
 
+  int getPageItemCount({ServerActions action = ServerActions.list}) {
+    return getRequestOption(action: action)?.countPerPage ?? 20;
+  }
+
   List<T>? get getLastSearchViewByTextInputList =>
       _lastSearchViewAbstractByTextInputList;
 
@@ -46,17 +50,18 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   final List<SearchCache> _searchCache = [];
 
   T getSelfInstanceWithSimilarOption(
-      {ServerActions action = ServerActions.list,
+      {required BuildContext context,
+      ServerActions action = ServerActions.list,
       ViewAbstract? obj,
       RequestOptions? copyWith}) {
-    RequestOptions? o =
-        obj?.getSimilarCustomParams() ?? getSimilarCustomParams();
+    RequestOptions? o = obj?.getSimilarCustomParams(context: context) ??
+        getSimilarCustomParams(context: context);
 
     return setRequestOption(
         action: action, option: o.copyWithObjcet(option: copyWith));
   }
 
-  RequestOptions getSimilarCustomParams() {
+  RequestOptions getSimilarCustomParams({required BuildContext context}) {
     return RequestOptions()
         .addSearchByField(castViewAbstract().getForeignKeyName(), iD);
   }
@@ -86,7 +91,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         return _requestOption[action];
       }
     }
-    return getRequestOption(action: action);
+    RequestOptions? op = getRequestOption(action: action);
+    if (op != null) setRequestOption(action: action, option: op);
+    return op;
   }
 
   dynamic getListSearchViewByTextInputList(String field, String fieldValue) {
@@ -108,21 +115,12 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   List<String>? getRequestedForginListOnCall({required ServerActions action});
 
-  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() {
-    return null;
-  }
-
-  /// call api to get objects list if its false
-  bool canGetObjectWithoutApiChecker(ServerActions action) {
-    return false;
-  }
-
   Future<Map<String, String>> getHeadersExtenstion() async {
     Map<String, String> defaultHeaders = HashMap<String, String>();
     bool hasUser = await Configurations.hasSavedValue(AuthUser());
     if (hasUser) {
       AuthUser? authUser = await Configurations.get(AuthUser());
-      String? token = authUser?.barrerToken;
+      String? token = authUser?.token;
       if (token != null) {
         defaultHeaders['Authorization'] = 'Bearer $token';
       }
@@ -177,23 +175,25 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
             customAction: getCustomAction(),
             tableName: getTableNameApi(),
             params: _getRequestOptionFromParamOrAbstract(
-                    action: ServerActions.list)
+                    action: option?.getServerAction() ?? ServerActions.list)
                 ?.copyWithObjcet(option: option)
                 .copyWith(requestLists: _checkListToRequest(ServerActions.list))
                 .getRequestParams()),
         headers: await getHeaders());
   }
 
-  Future<Response?> _getViewResponse({int? customID}) async {
+  Future<Response?> _getViewResponse(
+      {int? customID, ServerActions? customAction}) async {
     return await getHttp().get(
         _getUrl(
             iD: customID ?? iD,
             tableName: getTableNameApi(),
-            params:
-                _getRequestOptionFromParamOrAbstract(action: ServerActions.view)
-                    ?.copyWith(
-                        requestLists: _checkListToRequest(ServerActions.list))
-                    .getRequestParams(),
+            params: _getRequestOptionFromParamOrAbstract(
+                    action: customAction ?? ServerActions.view)
+                ?.copyWith(
+                    requestLists:
+                        _checkListToRequest(customAction ?? ServerActions.view))
+                .getRequestParams(),
             customAction: getCustomAction()),
         headers: await getHeaders());
   }
@@ -227,55 +227,24 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         headers: headers);
   }
 
-  ///call only with custom action and added custom params
-  Future<T?> callApi({required BuildContext context}) async {
-    var response = await getRespones(serverActions: ServerActions.call);
-    // debugPrint("ViewAbstractApi ViewAbstractApicallApi $response");
-
-    debugPrint(
-        "ViewAbstractApi ViewAbstractApi callApi status code ${response?.statusCode}");
-    // debugPrint("ViewAbstractApi ViewAbstractApi callApi response =>${response?.body}");
-
-    if (response == null) return null;
-    if (response.statusCode == 200) {
-      return fromJsonViewAbstract(convert.jsonDecode(response.body));
-    } else {
-      onCallCheckError(response: response, context: context);
-      return null;
-    }
-  }
-
   T onResponse200K(T oldValue) {
     return this as T;
   }
 
-  Future<T?> viewCallGetFirstFromList(int iD,
-      {required BuildContext context}) async {
-    this.iD = iD;
-    var response = await getRespones(serverActions: ServerActions.view);
-    if (response == null) return null;
-    if (response.statusCode == 200) {
-      Iterable l = convert.jsonDecode(response.body);
-
-      List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
-      return (t[0] as ViewAbstract).onResponse200K(this as ViewAbstract);
-    } else {
-      onCallCheckError(response: response, context: context);
-      return null;
-    }
-  }
-
-  Future<List<T>?> listCall<T>({
-    required BuildContext context,
-    RequestOptions? option,
-    OnResponseCallback? onResponse,
-  }) async {
+  Future<List<T>?> listCall<T>(
+      {required BuildContext context,
+      RequestOptions? option,
+      OnResponseCallback? onResponse,
+      ServerActions? customAction}) async {
     try {
       var response = await _getListResponse(option: option);
       if (response == null) return null;
       if (response.statusCode == 200) {
         Iterable l = convert.jsonDecode(response.body);
         List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+        if (customAction == ServerActions.search_viewabstract_by_field) {
+          setLastSearchViewAbstractByTextInputList(t.cast());
+        }
         return t;
       } else {
         onCallCheckError(
@@ -288,12 +257,20 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return null;
   }
 
-  Future<T?> viewCall<T>({
+  Future<T?> viewCall({
     required BuildContext context,
     int? customID,
     OnResponseCallback? onResponse,
+    ServerActions? customAction,
   }) async {
     try {
+      dynamic isRequireList =
+          _checkListToRequest(customAction ?? ServerActions.view);
+      if (customID == null) {
+        if (isRequireList == false) {
+          return this as T;
+        }
+      }
       var response = await _getViewResponse(customID: customID);
       if (response == null) return null;
       if (response.statusCode == 200) {
@@ -312,17 +289,40 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     OnResponseCallback? onResponse,
     required BuildContext context,
   }) async {
-    var response = await getRespones(
-        onResponse: onResponse,
-        serverActions: isEditing() ? ServerActions.edit : ServerActions.add);
-    if (response == null) return null;
-    if (response.statusCode == 200) {
-      return fromJsonViewAbstract(convert.jsonDecode(response.body));
-    } else {
-      onCallCheckError(
-          onResponse: onResponse, response: response, context: context);
-      return null;
+    try {
+      var response = await _getAddResponse();
+      if (response == null) return null;
+      if (response.statusCode == 200) {
+        return fromJsonViewAbstract(convert.jsonDecode(response.body));
+      } else {
+        onCallCheckError(
+            onResponse: onResponse, response: response, context: context);
+        return null;
+      }
+    } catch (e) {
+      onResponse?.onClientFailure(e);
     }
+    return null;
+  }
+
+  Future<T?> editCall({
+    OnResponseCallback? onResponse,
+    required BuildContext context,
+  }) async {
+    try {
+      var response = await _getEditResponse();
+      if (response == null) return null;
+      if (response.statusCode == 200) {
+        return fromJsonViewAbstract(convert.jsonDecode(response.body));
+      } else {
+        onCallCheckError(
+            onResponse: onResponse, response: response, context: context);
+        return null;
+      }
+    } catch (e) {
+      onResponse?.onClientFailure(e);
+    }
+    return null;
   }
 
   // Future<E> getServerDataApi<E extends ServerData>(
@@ -334,122 +334,23 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   //       headers: await getHeaders(), body: mainBody);
 
   // }
-  Future<List<ViewAbstract>> searchViewAbstractByTextInputViewAbstract(
-      {required String field,
-      required String searchQuery,
-      required BuildContext context,
-      OnResponseCallback? onResponse}) async {
-    var response = await getRespones(
-        onResponse: onResponse,
-        fieldBySearchQuery: field,
-        serverActions: ServerActions.search_viewabstract_by_field,
-        searchQuery: searchQuery);
-
-    if (response == null) return [];
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-
-      Iterable l = convert.jsonDecode(response.body);
-      List<T> list =
-          List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
-      setLastSearchViewAbstractByTextInputList(list);
-
-      return list.cast();
-    } else {
-      onCallCheckError(
-          onResponse: onResponse, response: response, context: context);
-      return [];
-    }
-  }
-
-  Future<List<String>> searchViewAbstractByTextInput(
-      {required String field,
-      required String searchQuery,
-      OnResponseCallback? onResponse,
-      required BuildContext context}) async {
-    var response = await getRespones(
-        onResponse: onResponse,
-        fieldBySearchQuery: field,
-        serverActions: ServerActions.search_viewabstract_by_field,
-        searchQuery: searchQuery);
-
-    if (response == null) return [];
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-
-      Iterable l = convert.jsonDecode(response.body);
-      List<T> list =
-          List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
-      setLastSearchViewAbstractByTextInputList(list);
-
-      return list
-          .map((e) => (e as ViewAbstract).getFieldValue(field).toString())
-          .toList();
-    } else {
-      onCallCheckError(
-          onResponse: onResponse, response: response, context: context);
-      return [];
-    }
-  }
 
   Future<List<String>> searchByFieldName(
       {required String field,
       required String searchQuery,
       OnResponseCallback? onResponse,
       required BuildContext context}) async {
-    var response = await getRespones(
+    var response = await listCall(
         onResponse: onResponse,
-        fieldBySearchQuery: field,
-        serverActions: ServerActions.search_by_field,
-        searchQuery: searchQuery);
-
-    if (response == null) return [];
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-
-      Iterable l = convert.jsonDecode(response.body);
-      List<T> list =
-          List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
-
-      return list
+        context: context,
+        option: RequestOptions(searchQuery: searchQuery));
+    if (response != null) {
+      return response
           .map((e) => (e as ViewAbstract).getFieldValue(field).toString())
           .toList();
-    } else {
-      onCallCheckError(
-          onResponse: onResponse, response: response, context: context);
-      return [];
     }
+    return [];
   }
-
-  Future<List<T>>? listApiReduceSizes({required BuildContext context}) async {
-    String customField = (this as ViewAbstract).getFieldToReduceSize();
-    if (getLastReduseSize(customField).isNotEmpty) {
-      return getLastReduseSize(customField).cast();
-    }
-    var response = await getRespones(
-        serverActions: ServerActions.list_reduce_size,
-        searchQuery: customField);
-
-    if (response == null) return [];
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-
-      Iterable l = convert.jsonDecode(response.body);
-      List<T> list =
-          List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
-
-      setListReduseSizeViewAbstract(customField, list.cast());
-      return list;
-    } else {
-      onCallCheckError(response: response, context: context);
-      return [];
-    }
-  }
-
 
   Future<List<T>?> listCallFake() async {
     try {
@@ -460,20 +361,6 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
           "ViewAbstractApi ViewAbstractApi listCallFake ${e.toString()}");
     }
     return null;
-  }
-
-  Future<Response?> printCall(ViewAbstract printObject,
-      {required BuildContext context}) async {
-    var response = await getRespones(
-        serverActions: ServerActions.print, printObject: printObject);
-
-    if (response == null) return null;
-    if (response.statusCode == 200) {
-      return response;
-    } else {
-      onCallCheckError(response: response, context: context);
-      return null;
-    }
   }
 
   String getErrorCodeMessage(BuildContext context, int code) {
@@ -548,6 +435,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   void deleteCall(BuildContext context,
       {required OnResponseCallback onResponse}) async {
     debugPrint("ViewAbstractApi deleteCall iD=> $iD ");
+
+
     var response = await getRespones(
         onResponse: onResponse, serverActions: ServerActions.delete_action);
 
@@ -587,22 +476,6 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   String toJsonViewAbstractList(List list) {
     return jsonEncode(list.map((i) => i.toJson()).toList()).toString();
-  }
-
-  bool getBodyWithoutApi(ServerActions action) {
-    bool canGetBody =
-        (this as ViewAbstract).canGetObjectWithoutApiCheckerList()?[action] ==
-            null;
-    if (canGetBody) {
-      debugPrint(
-          "ViewAbstractApi BaseApiCallPageState getBodyWithoutApi skiped");
-      return true;
-    }
-    bool res = (this as ViewAbstract).isNew() ||
-        (this as ViewAbstract).canGetObjectWithoutApiChecker(action);
-    debugPrint(
-        "ViewAbstractApi BaseApiCallPageState getBodyWithoutApi result => $res");
-    return res;
   }
 
   Future<List<T>> listCallNotNull(

@@ -1,6 +1,7 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -230,19 +231,19 @@ class ReactiveSearchChoice<T> extends ReactiveFormField<T, ViewAbstract> {
                 // }
                 // dynamic data = jsonDecode(response.body);
 
-                List<ViewAbstract> list =
-                    await (viewAbstractApi.search(5, 0, keyword ?? "",
-                        context: context,
-                        cache: true,
-                        onResponse: OnResponseCallback(
-                          onServerResponse: (response) {},
-                          onServerNoMoreItems: () {},
-                          onServerFailureResponse: (message) {},
-                          onClientFailure: (o) {
-                            //TODO translate
-                            throw Exception("failed to get data from internet");
-                          },
-                        )) as Future<List<ViewAbstract>>);
+                List<ViewAbstract> list = await (viewAbstractApi.listCall(
+                    option: RequestOptions(
+                        countPerPage: 5, page: 0, searchQuery: keyword),
+                    context: context,
+                    onResponse: OnResponseCallback(
+                      onServerResponse: (response) {},
+                      onServerNoMoreItems: () {},
+                      onServerFailureResponse: (message) {},
+                      onClientFailure: (o) {
+                        //TODO translate
+                        throw Exception("failed to get data from internet");
+                      },
+                    )) as Future<List<ViewAbstract>>);
 
                 List<DropdownMenuItem> results = list
                     .map<DropdownMenuItem>((item) => DropdownMenuItem(

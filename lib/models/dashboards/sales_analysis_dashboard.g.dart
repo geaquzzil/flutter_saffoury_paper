@@ -12,9 +12,6 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
-      ..login = json['login'] as bool?
-      ..permission = json['permission'] as bool?
-      ..response = (json['response'] as num?)?.toInt()
       ..phone = json['phone'] as String?
       ..password = json['password'] as String?
       ..userlevels = json['userlevels'] == null
@@ -199,9 +196,6 @@ Map<String, dynamic> _$SalesAnalysisDashboardToJson(
     <String, dynamic>{
       'iD': instance.iD,
       'delete': instance.delete,
-      'login': instance.login,
-      'permission': instance.permission,
-      'response': instance.response,
       'phone': instance.phone,
       'password': instance.password,
       'userlevels': instance.userlevels?.toJson(),

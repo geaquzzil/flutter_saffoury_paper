@@ -88,9 +88,10 @@ class Employee extends User<Employee> {
   }
 
   @override
-  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
-        ServerActions.list: ["warehouse_employees"]
-      };
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return ["warehouse_employees"];
+  }
+
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>

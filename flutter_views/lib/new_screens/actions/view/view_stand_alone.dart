@@ -13,7 +13,7 @@ class MasterViewStandAlone extends StatelessWidget {
   Future<dynamic>? getFuture(BuildContext context) {
     debugPrint(
         "getFuture responseType=> ${viewAbstract.getCustomStandAloneResponseType()}");
-    return viewAbstract.callApi(context: context);
+    return viewAbstract.viewCall(context: context);
   }
 
   Widget getFutureBuilder(BuildContext context) {
@@ -86,7 +86,6 @@ class MasterViewStandAlone extends StatelessWidget {
       // return viewAbstract.getCustomStandAloneWidget(context);
       return Card(
         child: ListView(
-          
           shrinkWrap: true,
           children: [
             BaseSharedHeaderViewDetailsActions(

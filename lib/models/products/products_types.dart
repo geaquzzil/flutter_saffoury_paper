@@ -94,7 +94,9 @@ class ProductType extends ViewAbstract<ProductType>
           isGridView: true,
           scrollDirection: Axis.horizontal,
           toListObject: Product().getSelfInstanceWithSimilarOption(
-              obj: this, copyWith: RequestOptions(countPerPage: 5))),
+              context: context,
+              obj: this,
+              copyWith: RequestOptions(countPerPage: 5))),
     ];
   }
 
@@ -265,7 +267,8 @@ class ProductType extends ViewAbstract<ProductType>
 
   @override
   ViewAbstract? getWebCategoryGridableIsMasterToList(BuildContext context) {
-    return Product().getSelfInstanceWithSimilarOption(obj: this);
+    return Product()
+        .getSelfInstanceWithSimilarOption(context: context, obj: this);
   }
 
   @override

@@ -28,6 +28,7 @@ import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/setting.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -156,11 +157,6 @@ class Dashboard extends UserLists<Dashboard>
   Dashboard fromJsonViewAbstract(Map<String, dynamic> json) =>
       Dashboard.fromJson(json);
 
-  @override
-  bool canGetObjectWithoutApiChecker(ServerActions action) {
-    return debitsDue != null;
-  }
-
   String getTotalPreviousBalance({int? cashBoxID}) {
     var incomes = getMapPlus(previouscreditsDue, previousincomesDue,
         cashBoxID: cashBoxID);
@@ -240,10 +236,9 @@ class Dashboard extends UserLists<Dashboard>
                       // listItembuilder: (v) => SizedBox(
                       //     width: 100, height: 100, child: POSListCardItem(object: v)),
                       autoRest: AutoRest<Order>(
-                          obj: Order()
-                            ..setCustomMap({
-                              "<status>": "[\"PENDING\"]",
-                            }),
+                          obj: Order().setRequestOption(
+                              option: RequestOptions()
+                                  .addSearchByField("status", "PENDING")),
                           key: "Order<status>PENDING"),
                     ),
                   ),

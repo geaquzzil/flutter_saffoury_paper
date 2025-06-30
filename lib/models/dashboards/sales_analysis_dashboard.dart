@@ -384,10 +384,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
           BuildContext context) =>
       null;
 
-  @override
-  bool canGetObjectWithoutApiChecker(ServerActions action) {
-    return wastesByCutRequests != null;
-  }
+
 
   @override
   void setDate(DateObject? date) {

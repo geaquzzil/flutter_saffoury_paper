@@ -36,7 +36,6 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
@@ -94,7 +93,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   }
 
   @override
-  String? getCustomAction() => "view_customer_statement";
+  String? getCustomAction() => "customers/statement/$iD";
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
@@ -107,18 +106,10 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   @override
   RequestOptions? getRequestOption({required ServerActions action}) {
     return RequestOptions()
-        .addSearchByField(
-            "date", jsonEncode(dateObject?.toJson() ?? DateObject().toJson()))
+        .addDate(dateObject ?? DateObject())
         .addSearchByField("withAnalysis", true);
   }
-  l
 
-  @override
-  Map<String, String> get getCustomMap => {
-        "<iD>": iD.toString(),
-        "date": jsonEncode(dateObject?.toJson() ?? DateObject().toJson()),
-        "withAnalysis": "true"
-      };
 
   factory CustomerDashboard.fromJson(Map<String, dynamic> data) =>
       _$CustomerDashboardFromJson(data);
@@ -294,11 +285,6 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   void setDate(DateObject? date) {
     dateObject = date;
     balance = null;
-  }
-
-  @override
-  bool canGetObjectWithoutApiChecker(ServerActions action) {
-    return balance != null;
   }
 
   @override
@@ -647,9 +633,6 @@ class CustomerDashboardSelector
   CustomerDashboardSelector getSelfNewInstance() => CustomerDashboardSelector();
 
   @override
-  SortFieldValue? getSortByInitialType() => null;
-
-  @override
   String? getTableNameApi() => null;
 
   @override
@@ -676,4 +659,14 @@ class CustomerDashboardSelector
 
   @override
   Map<String, bool> isFieldRequiredMap() => {"date": true, "customer": true};
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return null;
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 }

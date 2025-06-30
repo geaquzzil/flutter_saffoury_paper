@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_view_controller/interfaces/notification_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/v_non_view_object.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -26,7 +28,6 @@ class NotificationsClinet extends VObject<NotificationsClinet>
   factory NotificationsClinet.fromJson(Map<String, dynamic> data) =>
       _$NotificationsClinetFromJson(data);
 
-  @override
   Map<String, dynamic> toJson() => _$NotificationsClinetToJson(this);
 
   @override
@@ -59,4 +60,14 @@ class NotificationsClinet extends VObject<NotificationsClinet>
 
   @override
   String? getTableNameApi() => "notifications";
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return null;
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
 }

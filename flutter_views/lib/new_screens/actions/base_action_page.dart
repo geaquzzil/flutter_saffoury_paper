@@ -1,6 +1,5 @@
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -169,9 +169,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     );
   }
 
-  bool hasNotApiToCall() {
-    return widget.getServerAction() == ServerActions.list;
-  }
+
 
   @override
   ServerActions getServerActions() {
@@ -180,14 +178,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   @override
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context) {
-    return (getExtras()).viewCallGetFirstFromList((getExtras()).iD,
+    return (getExtras()).viewCall(
         context: context) as Future<ViewAbstract?>;
-  }
-
-  @override
-  bool getBodyWithoutApi() {
-    if (hasNotApiToCall()) return true;
-    return super.getBodyWithoutApi();
   }
 
   SliverOverlapAbsorber getSilverAppBar(
@@ -932,7 +924,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 class BaseActionProviders with ChangeNotifier {
   bool _isLoaded = false;
 
-  get getIsLoaded {
+  bool get getIsLoaded {
     return _isLoaded;
   }
 

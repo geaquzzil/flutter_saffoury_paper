@@ -5,6 +5,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/encyptions/compressions.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
@@ -25,10 +27,8 @@ import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:tuple/tuple.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 class ListWebApiPage extends BaseWebPageSlivers {
   final String? searchQuery;
@@ -100,12 +100,10 @@ class ListWebApiPage extends BaseWebPageSlivers {
   void fetshListNotCheckingZero(BuildContext context) {
     String customKey = findCustomKey();
 
-listProvider.fetchList(customKey,
+    listProvider.fetchList(customKey,
         viewAbstract: viewAbstract,
         options: RequestOptions(
-        
-            filterMap: customFilterChecker ?? {},
-            searchQuery: searchQuery),
+            filterMap: customFilterChecker ?? {}, searchQuery: searchQuery),
         context: context);
   }
 
@@ -269,7 +267,7 @@ listProvider.fetchList(customKey,
           // tileMode: TileMode.clamp,
         ),
         child: SkeletonListView(
-          itemCount: viewAbstract.getPageItemCount,
+          itemCount: viewAbstract.getPageItemCount(),
         ),
       ),
     );

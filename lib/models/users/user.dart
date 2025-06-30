@@ -5,13 +5,14 @@ import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 
 class User<T> extends UserLists<T> {
   String? name; //var 100
   String? email; //var 50
-  String? token; // text
   int? activated; //tinyint
   String? date; //date
   String? city; // varchar 20
@@ -28,7 +29,6 @@ class User<T> extends UserLists<T> {
         ..addAll({
           "name": "",
           "email": "",
-          "token": "",
           "activated": 0,
           "date": "",
           "city": "",
@@ -171,8 +171,9 @@ class User<T> extends UserLists<T> {
       {"name": true, "phone": true, "password": true};
 
   @override
-  SortFieldValue? getSortByInitialType() =>
-      SortFieldValue(field: "name", type: SortByType.ASC);
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    return RequestOptions().addSortBy("name", SortByType.ASC);
+  }
 
   double getTotalAnalsis(List<GrowthRate>? growthRateList) {
     if (growthRateList?.length == 1) {

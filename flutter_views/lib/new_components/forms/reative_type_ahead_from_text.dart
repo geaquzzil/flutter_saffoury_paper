@@ -2,9 +2,8 @@
 // Use of this source code is governed by the MIT license that can be
 // found in the LICENSE file.
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:reactive_flutter_typeahead/reactive_flutter_typeahead.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -299,8 +298,9 @@ class ReactiveTypeAheadCustom<E, T> extends ReactiveFormField<E, T> {
               if (query.isEmpty) return [];
               if (query.trim().isEmpty) return [];
 
-              return (childViewAbstractApi.search(5, 0, query,
-                  context: context, cache: true) as Future<List<ViewAbstract>>);
+              return childViewAbstractApi.listCall(
+                  context: context,
+                  option: RequestOptions(searchQuery: query, countPerPage: 5));
             },
           );
         });

@@ -47,11 +47,10 @@ class WebMasterToList extends BaseWebPageSliversApi {
     if (getExtras() == null) {
       ViewAbstract newViewAbstract =
           context.read<AuthProvider<AuthUser>>().getNewInstance(tableName)!;
-      return newViewAbstract.viewCallGetFirstFromList(iD,context: context)
+      return newViewAbstract.viewCall(customID: iD, context: context)
           as Future<ViewAbstract?>;
     } else {
-      return (getExtras() as ViewAbstract)
-              .viewCallGetFirstFromList((getExtras() as ViewAbstract).iD,context: context)
+      return (getExtras() as ViewAbstract).viewCall(context: context)
           as Future<ViewAbstract?>;
     }
   }

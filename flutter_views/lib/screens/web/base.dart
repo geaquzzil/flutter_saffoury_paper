@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_components/scroll_to_hide_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
@@ -572,17 +572,8 @@ abstract class BaseWebPageSliversApi extends BaseWebPageSlivers {
     return extras;
   }
 
-  bool getBodyWithoutApi() {
-    if (extras is! ViewAbstract) return false;
-    return extras!.getBodyWithoutApi(getServerActions());
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (extras != null && getBodyWithoutApi()) {
-      return getScaffold(context);
-    }
-
     return FutureBuilder<ViewAbstract?>(
       future: getCallApiFunctionIfNull(context),
       builder: (context, snapshot) {

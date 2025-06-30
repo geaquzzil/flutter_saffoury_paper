@@ -98,7 +98,7 @@ class ProductSize extends ViewAbstract<ProductSize> {
       SliverApiMixinViewAbstractWidget(
           isGridView: true,
           scrollDirection: Axis.horizontal,
-          toListObject: Product().getSelfInstanceWithSimilarOption(
+          toListObject: Product().getSelfInstanceWithSimilarOption(context: context,
               obj: this, copyWith: RequestOptions(countPerPage: 5))),
     ];
   }
@@ -318,29 +318,64 @@ class ProductSize extends ViewAbstract<ProductSize> {
         sortBy: SortFieldValue(field: "width", type: SortByType.ASC));
   }
 
-  List<int> generate(int initialValue, {int maxWaste = 100, int maxMin = 20}) {
+  Map<int, FromToBetweenRequest> _generate(int initialValue,
+      {int maxWaste = 100, int maxMin = 20}) {
     var list = List<int>.empty(growable: true);
+    Map<int, FromToBetweenRequest> map = {};
+
     int sugg = initialValue;
     int idx = 1;
     do {
       int w = (idx * initialValue);
       list.add(w + maxWaste);
       list.add(w - maxMin);
+
+      map[idx] = FromToBetweenRequest(
+          from: w.toString(), to: (w + maxWaste).toString());
       sugg = w;
       idx = idx + 1;
     } while (sugg > 3000);
 
-    return list;
+    return map;
   }
 
-  void getListOfSizesWithMaxWaste({int maxWaste = 100, int maxMin = 20}) {
-    List<int> lengthList =
-        isRoll() ? [] : generate(length.toNonNullable(), maxWaste: maxWaste, maxMin: maxMin);
-    List<int> widthList = isRoll()
-        ? []
-        : generate(width.toNonNullable(), maxWaste: maxWaste, maxMin: maxMin);
+  List<List<BetweenRequest>> getListOfSizesWithMaxWaste(
+      {ProductSize? customSize, int maxWaste = 100, int maxMin = 20}) {
+    List<List<BetweenRequest>> main = List.empty(growable: true);
+    var lengthList = isRoll()
+        ? {}
+        : _generate(customSize?.length ?? length.toNonNullable(),
+            maxWaste: maxWaste, maxMin: maxMin);
+    var widthList = _generate(customSize?.width ?? width.toNonNullable(),
+        maxWaste: maxWaste, maxMin: maxMin);
 
-        
+    widthList.forEach(
+      (key, value) {
+        bool containsLength = false;
+        List<BetweenRequest> v = List.empty(growable: true);
+        v.add(BetweenRequest(field: "width", fromTo: [value]));
+        if (lengthList.containsKey(key)) {
+          containsLength = true;
+          v.add(BetweenRequest(field: "length", fromTo: [lengthList[key]]));
+        } else {
+          v.add(BetweenRequest(
+              field: "length",
+              fromTo: [FromToBetweenRequest(from: "0", to: "0")]));
+        }
+
+        main.add(v);
+        if (containsLength) {
+          main.add(List.of([
+            BetweenRequest(field: "width", fromTo: [value]),
+            BetweenRequest(
+                field: "length",
+                fromTo: [FromToBetweenRequest(from: "0", to: "0")])
+          ]));
+        }
+      },
+    );
+    debugPrint(main.toString());
+    return main;
   }
 }
 

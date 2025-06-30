@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
@@ -39,14 +38,8 @@ class _ListCardItemApiState extends State<ListCardItemApi> {
     if (_viewAbstract != null) {
       return getItem();
     }
-    if (widget.viewAbstract.getBodyWithoutApi(ServerActions.list)) {
-      _viewAbstract = widget.viewAbstract;
-      return getItem();
-    }
-
     return FutureBuilder(
-        future: widget.viewAbstract
-            .viewCallGetFirstFromList(widget.viewAbstract.iD, context: context),
+        future: widget.viewAbstract.viewCall(context: context),
         builder: (c, a) {
           debugPrint("ListCardItemApi futureBuilder ");
           if (a.connectionState == ConnectionState.waiting) {
@@ -75,7 +68,6 @@ class _ListCardItemApiState extends State<ListCardItemApi> {
               widget.state?.listProvider.edit(_viewAbstract!);
             }
           }
-
           return getItem();
         });
   }

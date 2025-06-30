@@ -31,8 +31,8 @@ class _EditControllerDropdownFromViewAbstractState<T extends ViewAbstract>
   Future<List<T?>> getFuture() async {
     List<T?>? list = List.empty(growable: true);
     list = [null];
-    list.addAll(await widget.viewAbstract.listApiReduceSizes(context: context)
-        as List<T?>);
+    list.addAll(
+        await widget.viewAbstract.listCall(context: context) as List<T?>);
     return list;
   }
 

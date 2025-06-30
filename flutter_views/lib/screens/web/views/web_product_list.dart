@@ -136,15 +136,13 @@ class WebProductList extends StatelessWidget {
                 valueListenable: valuePageNotifier,
                 builder: (context, value, child) =>
                     FutureBuilder<List<dynamic>?>(
-                  future: searchQuery != null
-                      ? viewAbstract.search(20, value, searchQuery!,
-                          context: context)
-                      : viewAbstract.listCall(
-                          option: RequestOptions(
-                            countPerPage: isDesktop(context) ? 20 : 4,
-                            page: value,
-                          ),
-                          context: context),
+                  future: viewAbstract.listCall(
+                      option: RequestOptions(
+                        countPerPage: isDesktop(context) ? 20 : 4,
+                        searchQuery: searchQuery,
+                        page: value,
+                      ),
+                      context: context),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();

@@ -168,7 +168,9 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
           isGridView: true,
           scrollDirection: Axis.horizontal,
           toListObject: Product().getSelfInstanceWithSimilarOption(
-              obj: this, copyWith: RequestOptions(countPerPage: 5))),
+              context: context,
+              obj: this,
+              copyWith: RequestOptions(countPerPage: 5))),
     ];
   }
 

@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 
 import '../v_non_view_object.dart';
 
+//equal to dashit
 class ChartRecordAnalysis<T extends ViewAbstract>
     extends VObject<ChartRecordAnalysis>
     implements CustomViewHorizontalListResponse<ChartRecordAnalysis> {
@@ -31,8 +32,8 @@ class ChartRecordAnalysis<T extends ViewAbstract>
 
   ChartRecordAnalysis({required this.viewAbstract}) : super();
 
-  ChartRecordAnalysis.init(this.viewAbstract, DateObject this.date,
-      EnteryInteval this.enteryInteval,
+  ChartRecordAnalysis.init(
+      this.viewAbstract, DateObject this.date, EnteryInteval this.enteryInteval,
       {this.customAction}) {
     customAction = customAction;
   }
@@ -130,9 +131,8 @@ class ChartRecordAnalysis<T extends ViewAbstract>
                     if (obj != null) {
                       enteryInteval = obj;
                       context.read<ListMultiKeyProvider>().recall(
-                          getCustomViewKey(),
-                          this,
-                          getCustomViewResponseType(),context: context);
+                          getCustomViewKey(), this, getCustomViewResponseType(),
+                          context: context);
                     }
                   }),
             )
@@ -176,7 +176,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
     //         viewAbstract!, dateObject, enteryInteval ?? EnteryInteval.monthy);
     //   },
     // );
-  
+
     Widget row = SizedBox(
       width: 200,
       height: 40,
@@ -191,7 +191,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
       ),
     );
     return HeaderDescription(
-       //TODO Translate
+      //TODO Translate
       title: "Changes records",
       trailing: row,
     );

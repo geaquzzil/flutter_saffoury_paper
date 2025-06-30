@@ -205,6 +205,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   }
 
   Future init() async {
+
     hasSavedUser = await Configurations.hasSavedValue(_initUser);
     final Response? responseUser;
     if (hasSavedUser == false) {
@@ -219,9 +220,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     }
     responseUser =
         await _initUser.getRespones(serverActions: ServerActions.add);
-    if (responseUser == null) {
-      _status = Status.Faild;
-    } else if (responseUser.statusCode == 401) {
+    if (responseUser.statusCode == 401) {
       _status = Status.Faild;
     } else {
       _user =
@@ -259,7 +258,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     //  g.groupBy<DateTime,GrowthRate>((element) => element.map((e) => e.total).toList() )
   }
 
-  Future<bool> signIn({AuthUser? user}) async {
+  Future<bool> signIn({required AuthUser user}) async {
     try {
       debugPrint(
           "AuthProvider auth user =>phone: ${user?.phone} password: ${user?.password}");
@@ -284,9 +283,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
       _status = Status.Authenticating;
       notifyListeners();
       responseUser = await _user.getRespones(serverActions: ServerActions.add);
-      if (responseUser == null) {
-        _status = Status.Faild;
-      } else if (responseUser.statusCode == 401) {
+      if (responseUser.statusCode == 401) {
         _status = Status.Faild;
       } else {
         _user =
@@ -304,12 +301,6 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
       }
       // _status = Status.Authenticating;
       notifyListeners();
-      // await auth
-      //     .signInWithEmailAndPassword(
-      //         email: email.text.trim(), password: password.text.trim())
-      //     .then((value) async {
-      //   await prefs.setString("id", value.getUser.uid);
-      // });
       return true;
     } catch (e) {
       _status = Status.Unauthenticated;
@@ -318,32 +309,6 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
       return false;
     }
   }
-
-  // Future<bool> signUp() async {
-  //   try {
-  //     _status = Status.Authenticating;
-  //     notifyListeners();
-  //     await auth
-  //         .createUserWithEmailAndPassword(
-  //             email: email.text.trim(), password: password.text.trim())
-  //         .then((result) async {
-  //       SharedPreferences prefs = await SharedPreferences.getInstance();
-  //       await prefs.setString("id", result.user.uid);
-  //       _userServices.createAdmin(
-  //         id: result.user.uid,
-  //         name: name.text.trim(),
-  //         email: email.text.trim(),
-  //       );
-  //     });
-  //     return true;
-  //   } catch (e) {
-  //     _status = Status.Unauthenticated;
-  //     notifyListeners();
-  //     print(e.toString());
-  //     return false;
-  //   }
-  // }
-
   Future signOut() async {
     // auth.signOut();
     _status = Status.Unauthenticated;

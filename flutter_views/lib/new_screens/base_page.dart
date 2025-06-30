@@ -6,12 +6,12 @@ import 'package:animate_do/animate_do.dart';
 // import 'package:connectivity_listener/connectivity_listener.dart';
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -26,7 +26,6 @@ import 'package:flutter_view_controller/new_screens/home/components/profile/prof
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_custom_scroll_draggable.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
-import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
@@ -159,7 +158,7 @@ mixin BasePageWithTicker<T extends BasePage> on BasePageState<T> {
     return getWidgetFromBase(firstPane, tab: tab);
   }
 
-  getWidgetFromBase(bool firstPane, {TabControllerHelper? tab}) {
+  Widget getWidgetFromBase(bool firstPane, {TabControllerHelper? tab}) {
     debugPrint("BasePageActionOnToolbarMixin getWidgetFromBase");
     ValueNotifierPane pane = getTickerPane();
     if (pane == ValueNotifierPane.NONE) {
@@ -1103,11 +1102,11 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   bool setClipRect(bool? firstPane);
 
-  get getWidth => this._width;
+  double get getWidth => this._width;
 
-  get getHeight => this._height;
-  get firstPaneWidth => this._firstPaneWidth;
-  get secPaneWidth => this._secPaneWidth;
+  double get getHeight => this._height;
+  double get firstPaneWidth => this._firstPaneWidth;
+  double get secPaneWidth => this._secPaneWidth;
 
   DrawerMenuItem? lastDrawerItemSelected;
 
@@ -1217,7 +1216,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   ///generate all toolbars for the base and first pane and second pane
   ///if [customAppBar] is null then generates the base toolbar
   ///else if [customAppBar] is not null then generates the app bar based on the panes
-  generateBaseAppbar() {
+  AppBar? generateBaseAppbar() {
     List<Widget>? actions = getAppbarActions(firstPane: null);
     Widget? title = getBaseAppbarTitle();
     bool isEmpty = actions?.isEmpty == true;
@@ -1676,7 +1675,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     return child;
   }
 
-  beforeGetPaneWidget({
+  List<Widget>? beforeGetPaneWidget({
     required bool firstPane,
     ScrollController? controler,
     TabControllerHelper? tab,
@@ -2180,20 +2179,6 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     setState(() {});
   }
 
-  bool getBodyWithoutApi({TabControllerHelper? tab}) {
-    dynamic ex = getExtras(tab: tab);
-    if (ex is! ViewAbstract) return false;
-    if (ex is DashableInterface) {
-      if ((ex as DashableInterface)
-              .getDashboardShouldWaitBeforeRequest(context, tab: tab) !=
-          null) {
-        return true;
-      }
-      return (ex).canGetObjectWithoutApiChecker(getServerActions());
-    }
-    return ex.getBodyWithoutApi(getServerActions());
-  }
-
   // @override
   // generateToolbar({Widget? customAppBar}) {
   //   if (_isLoading) {
@@ -2201,7 +2186,8 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   //   }
   //   return super.generateToolbar(customAppBar: customAppBar);
   // }
-  getLoadingWidget(bool firstPane, {TabControllerHelper? tab}) {
+  List<SliverFillRemaining> getLoadingWidget(bool firstPane,
+      {TabControllerHelper? tab}) {
     Widget loading = const Center(child: CircularProgressIndicator());
 
     return [
@@ -2304,61 +2290,6 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
         },
         title: AppLocalizations.of(context)!.cantConnect,
         subtitle: AppLocalizations.of(context)!.cantConnectRetry);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return super.build(context);
-    _isLoading = !getBodyWithoutApi();
-    if (getExtras() != null && !_isLoading) {
-      return super.build(context);
-    }
-
-    return FutureBuilder<dynamic>(
-      future: getCallApiFunctionIfNull(context),
-      builder: (context, snapshot) {
-        debugPrint("BasePageApi snapshot: $snapshot");
-        if (snapshot.hasError) {
-          _isLoading = false;
-          return EmptyWidget(
-              lottiUrl:
-                  "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-              onSubtitleClicked: () {
-                setState(() {});
-              },
-              title: AppLocalizations.of(context)!.cantConnect,
-              subtitle: AppLocalizations.of(context)!.cantConnectRetry);
-        } else if (snapshot.connectionState == ConnectionState.done) {
-          _isLoading = false;
-          if (snapshot.data != null) {
-            setExtras(ex: snapshot.data);
-            if (getExtras() is ViewAbstract) {
-              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                context
-                    .read<ListMultiKeyProvider>()
-                    .edit(getExtras() as ViewAbstract);
-              });
-            }
-            return super.build(context);
-          } else {
-            _isLoading = false;
-            return EmptyWidget(
-                lottiUrl:
-                    "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-                onSubtitleClicked: () {
-                  setState(() {});
-                },
-                title: AppLocalizations.of(context)!.cantConnect,
-                subtitle: AppLocalizations.of(context)!.cantConnectRetry);
-          }
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
-          _isLoading = true;
-          return super.build(context);
-        } else {
-          return const Text("TOTODO");
-        }
-      },
-    );
   }
 }
 

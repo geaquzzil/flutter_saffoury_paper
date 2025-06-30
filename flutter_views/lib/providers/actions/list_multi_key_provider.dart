@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
 import '../../models/auto_rest.dart';
@@ -60,8 +59,6 @@ class ListMultiKeyProvider with ChangeNotifier {
         debugPrint("ListMultiKeyProvider changed element ");
         _listMap[i.key]?.page = getPage(i.key);
         // element.objects.insert(0, o);
-        debugPrint(
-            "ListMultiKeyProvider changed element required list=> ${o.canGetObjectWithoutApiChecker(ServerActions.edit)} ");
         _listMap[i.key]?.isLoading = true;
         notifyListeners();
         await Future.delayed(const Duration(milliseconds: 500), () {
@@ -349,9 +346,9 @@ class ListMultiKeyProvider with ChangeNotifier {
     // );
     dynamic list;
     if (customAutoRest != null) {
-      list = await customAutoRest.callApi(context: context);
+      list = await customAutoRest.viewCall(context: context);
     } else {
-      list = await viewAbstract!.callApi(context: context);
+      list = await viewAbstract!.viewCall(context: context);
     }
 
     multiListProviderHelper.isLoading = false;

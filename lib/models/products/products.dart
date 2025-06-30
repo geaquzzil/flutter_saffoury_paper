@@ -283,9 +283,7 @@ class Product extends ViewAbstract<Product>
                 fromTo: [FromToBetweenRequest(from: "0", to: "0")])));
   }
   RequestOptions _getOnlyInventory() {
-    setRequestOption(
-        option: RequestOptions().addSearchByField("requiresInventory", true));
-    return getRequestOption(action: ServerActions.list)!;
+    return RequestOptions().addSearchByField("requiresInventory", true);
   }
 
   @override
@@ -300,7 +298,6 @@ class Product extends ViewAbstract<Product>
     }
     return AppLocalizations.of(context)!.outOfStock;
   }
-
 
   @override
   Widget? getMainSubtitleHeaderText(BuildContext context) {
@@ -444,18 +441,6 @@ class Product extends ViewAbstract<Product>
       "barcode",
       "status"
     ];
-  }
-
-  @override
-  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() {
-    // TODO: implement canGetObjectWithoutApiCheckerList
-    return {ServerActions.list: []};
-  }
-
-  @override
-  bool canGetObjectWithoutApiChecker(ServerActions action) {
-    debugPrint("Product canGetObjectWithoutApiChecker action => $action");
-    return products_types != null;
   }
 
   @override
@@ -883,9 +868,8 @@ class Product extends ViewAbstract<Product>
           // listItembuilder: (v) => SizedBox(
           //     width: 100, height: 100, child: POSListCardItem(object: v)),
           autoRest: AutoRest<Product>(
-              obj: Product()
-                ..setCustomMap(
-                    {"<dateEnum>": "[\"Today\"]", "requireInventory": "true"}),
+              obj: Product().setRequestOption(
+                  option: _getOnlyInventory().addDate(DateObject.today())),
               key: "productsByType<dateEnum>thisDay"),
         ),
       ),
@@ -896,11 +880,9 @@ class Product extends ViewAbstract<Product>
           isSliver: true,
           titleString: "This week",
           autoRest: AutoRest<Product>(
-              obj: Product()
-                ..setCustomMap({
-                  "<dateEnum>": "[\"This week\"]",
-                  "requireInventory": "true"
-                }),
+              obj: Product().setRequestOption(
+                  option:
+                      _getOnlyInventory().addDate(DateObject.initThisWeek())),
               key: "productsByType<dateEnum>thisWeek"),
         ),
       ),
@@ -942,16 +924,13 @@ class Product extends ViewAbstract<Product>
     return "${getIDFormat(context)} /${getQuantityStringFormat(context: context)}";
   }
 
-  Map<String, String> getSimilarWithSameSizeCustomParams(BuildContext context) {
-    Map<String, String> hashMap = getCustomMap;
-    hashMap["<maxWaste>"] = ("[\"100\"]");
-    hashMap["<width>"] = ("[\"${getWidth()}\"]");
-    hashMap["<length>"] = ("[\"${getLength()}\"]");
-    hashMap["requireInventory"] = "yes";
-    if (!isGeneralEmployee(context)) {
-      hashMap["<status>"] = "[\"NONE\"]";
-    }
-    return hashMap;
+  RequestOptions getSimilarWithSameSize(BuildContext context) {
+    RequestOptions op = _getOnlyInventory()
+        .addBetween("SizeID", sizes?.getListOfSizesWithMaxWaste(maxWaste: 20));
+
+    return !isGeneralEmployee(context)
+        ? op.addSearchByField("status", "NONE")
+        : op;
   }
 
   bool hasSheetWeight() {
@@ -960,27 +939,24 @@ class Product extends ViewAbstract<Product>
 
   void setProductsByCategoryCustomParams(
       BuildContext context, ProductType category) {
-    Map<String, String> hashMap = getCustomMap;
-
-    if (!isGeneralEmployee(context)) {
-      hashMap["<status>"] = "[\"NONE\"]";
-    }
-    hashMap["<ProductTypeID>"] = "[\"${category.iD}\"]";
-    hashMap["requireInventory"] = "yes";
-
-    setCustomMap(hashMap);
+    RequestOptions op =
+        _getOnlyInventory().addSearchByField("ProductTypeID", category.iD);
+    op = !isGeneralEmployee(context)
+        ? op.addSearchByField("status", "NONE")
+        : op;
+    setRequestOption(option: op);
   }
 
+  @override
+  RequestOptions getSimilarCustomParams({required BuildContext context}) {
+    RequestOptions op = RequestOptions()
+        .addSearchByField("GSMID", gsms?.iD)
+        .addSearchByField("ProductTypeID", products_types?.iD)
+        .addSearchByField("requireInventory", true);
 
-@override
-  RequestOptions getSimilarCustomParams() {
-    RequestOptions op= RequestOptions().addSearchByField("GSMID",gsms?.iD)
-    .addSearchByField("ProductTypeID",products_types?.iD).addSearchByField("requireInventory",true);
-
-    return !isGeneralEmployee(context) ? op.addSearchByField("status","NONE"):op;
-
-
-
+    return !isGeneralEmployee(context)
+        ? op.addSearchByField("status", "NONE")
+        : op;
   }
   // @override
   // Map<String, String> getSimilarCustomParams(BuildContext context) {
@@ -1012,15 +988,13 @@ class Product extends ViewAbstract<Product>
       SliverApiMixinViewAbstractWidget(
           isGridView: true,
           scrollDirection: Axis.horizontal,
+          toListObject:
+              Product().getSelfInstanceWithSimilarOption(context: context)),
+      SliverApiMixinViewAbstractWidget(
+          isGridView: true,
+          scrollDirection: Axis.horizontal,
           toListObject: Product()
-            ..setCustomMap(getSimilarCustomParams(context))),
-      SliverApiMixinAutoRestWidget(
-          autoRest: AutoRest<Product>(
-              range: 5,
-              obj: Product()
-                ..setCustomMap(getSimilarWithSameSizeCustomParams(context)),
-              key:
-                  "productsWithSimilarSize${getSimilarWithSameSizeCustomParams(context)}")),
+              .setRequestOption(option: getSimilarWithSameSize(context))),
     ];
   }
 
@@ -1489,11 +1463,9 @@ class Product extends ViewAbstract<Product>
                 titleString: "This week",
                 listItembuilder: (v) => PosCardSquareItem(object: v),
                 autoRest: AutoRest<Product>(
-                    obj: Product()
-                      ..setCustomMap({
-                        "<dateEnum>": "[\"This week\"]",
-                        "requireInventory": "true"
-                      }),
+                    obj: Product().setRequestOption(
+                        option: _getOnlyInventory()
+                            .addDate(DateObject.initThisMonth())),
                     key: "productsByType<dateEnum>thisWeek"),
               ),
             ),
@@ -1505,11 +1477,9 @@ class Product extends ViewAbstract<Product>
                 // listItembuilder: (v) => SizedBox(
                 //     width: 100, height: 100, child: POSListCardItem(object: v)),
                 autoRest: AutoRest<Product>(
-                    obj: Product()
-                      ..setCustomMap({
-                        "<dateEnum>": "[\"Today\"]",
-                        "requireInventory": "true"
-                      }),
+                    obj: Product().setRequestOption(
+                        option:
+                            _getOnlyInventory().addDate(DateObject.today())),
                     key: "productsByType<dateEnum>thisDay"),
               ),
             ),
@@ -1650,10 +1620,19 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  Map<String, String> get getCustomMapOnSearch => {
-        "requireInventory": "true",
-        if (parent is CutRequest) ...getBetweenParams()
-      };
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    if (action == ServerActions.list) {
+      return _getOnlyInventory();
+    } else if (action == ServerActions.search) {
+      return _getOnlyInventory();
+    }
+    return null;
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return ["inventory"];
+  }
   @override
   Widget getPosableMainWidget(
       BuildContext context, AsyncSnapshot snapshotResponse) {
@@ -1681,11 +1660,9 @@ class Product extends ViewAbstract<Product>
                   e.getCardLeadingCircleAvatar(context, height: 20, width: 20),
               widget: POSListWidget(
                 autoRest: AutoRest<Product>(
-                    obj: Product()
-                      ..setCustomMap({
-                        "<ProductTypeID>": "${e.iD}",
-                        "requireInventory": "true"
-                      }),
+                    obj: Product().setRequestOption(
+                        option: _getOnlyInventory()
+                            .addSearchByField("ProductTypeID", e.iD)),
                     key: "productsByType${e.iD}"),
               ),
             );
@@ -1821,9 +1798,9 @@ class Product extends ViewAbstract<Product>
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoicDesFirstRow(
       BuildContext context, List<Product> list, PrintProductList? pca) {
     // if (customers == null) return [];
-
+    Map<String, FilterableProviderHelper>? lastFilter = getLastFilterableMap();
     List<FilterableProviderHelper> finalList =
-        getAllSelectedFiltersRead(context, map: getLastFilterableMap);
+        getAllSelectedFiltersRead(context, map: lastFilter);
 
     var t = finalList.groupBy((item) => item.mainFieldName,
         valueTransform: (v) => v.mainValuesName[0]);
@@ -1833,7 +1810,7 @@ class Product extends ViewAbstract<Product>
     });
 
     return [
-      if (getLastFilterableMap?.isNotEmpty == true)
+      if (lastFilter?.isNotEmpty == true)
         InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.filter,
           description: results.join("\n"),

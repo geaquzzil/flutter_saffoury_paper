@@ -40,8 +40,6 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   String? searchByAutoCompleteTextInput;
 
- 
-
   String getForeignKeyName() {
     return getTableNameApi() ?? " no_foreign_key";
   }
@@ -50,7 +48,12 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
     return "iD";
   }
 
-  bool isSortAvailable() => getRequestOption(action: ServerActions.list)?.sortBy != null;
+  Map<String, FilterableProviderHelper>? getLastFilterableMap(
+          {ServerActions action = ServerActions.list}) =>
+      getRequestOption(action: action)?.filterMap;
+
+  bool isSortAvailable() =>
+      getRequestOption(action: ServerActions.list)?.sortBy != null;
 
   List<String> getFilterableFields() => getMainFields();
 
@@ -79,11 +82,11 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   }
 
   String getListableKeyWithoutCustomMap() {
-    return "${getTableNameApi()}listAPI$_lastFilterableMap";
+    return "${getTableNameApi()}listAPI${getRequestOption(action: ServerActions.list)?.filterMap}";
   }
 
   String getListableKey() {
-    return "${getTableNameApi()}listAPI$_lastFilterableMap$getCustomMap";
+    return "${getTableNameApi()}listAPI${getRequestOption(action: ServerActions.list)?.getKey() ?? ""}";
   }
 }
 

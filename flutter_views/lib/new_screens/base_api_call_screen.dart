@@ -25,16 +25,11 @@ abstract class BaseApiCallPageState<T extends StatefulWidget, C>
     return buildAfterCall(context, extras as C);
   }
 
-  bool getBodyWithoutApi() {
-    return (extras as ViewAbstract?)?.getBodyWithoutApi(getServerActions()) ==
-        true;
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (extras != null && getBodyWithoutApi()) {
-      return beforeBuildAfterCall(context);
-    }
+    // if (extras != null && getBodyWithoutApi()) {
+    //   return beforeBuildAfterCall(context);
+    // }
 
     return FutureBuilder<C?>(
       future: getCallApiFunctionIfNull(context),

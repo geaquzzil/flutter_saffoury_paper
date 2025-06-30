@@ -1,14 +1,25 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'server_response.g.dart';
 
-@JsonSerializable(explicitToJson:true)
+@JsonSerializable(explicitToJson: true)
 class ServerResponse {
+  String? message;
+  String? className;
+  String? trace;
+  String? status;
+  int? code;
+
+  int? requestCount;
+
+  List<int>? requestIDS;
+  int? serverCount;
+  bool? serverStatus;
+
   int? activated;
   bool? permission;
   bool? login;
   bool? error;
-  String? message;
-  int? code;
   ServerResponse();
   factory ServerResponse.fromJson(Map<String, dynamic> data) =>
       _$ServerResponseFromJson(data);

@@ -3,7 +3,6 @@ import 'package:flutter_saffoury_paper/models/add_ons/cuts_worker/cut_request_li
 import 'package:flutter_saffoury_paper/models/invoices/cuts_invoices/cut_requests.dart';
 import 'package:flutter_view_controller/extensions.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
-import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
@@ -12,13 +11,6 @@ import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_ab
 
 class CutRequestWorker extends CutRequest {
   CutRequestWorker();
-  @override
-  Map<ServerActions, List<String>>? canGetObjectWithoutApiCheckerList() => {
-        ServerActions.edit: ["cut_request_results", "sizes_cut_requests"],
-        ServerActions.view: ["cut_request_results", "sizes_cut_requests"],
-        ServerActions.list: ["cut_request_results", "sizes_cut_requests"],
-        ServerActions.search: ["cut_request_results", "sizes_cut_requests"],
-      };
 }
 
 class CutWorkerPage extends BasePage {

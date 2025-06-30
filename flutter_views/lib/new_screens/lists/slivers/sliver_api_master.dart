@@ -924,14 +924,14 @@ class SliverApiMasterState<T extends SliverApiMaster> extends State<T> {
       listProvider.notifyNotSearchable(customKey);
     }
     if (listProvider.getCount(customKey) == 0) {
-      if (_searchStringQuery == null) {
-        listProvider.fetchList(customKey,
-            viewAbstract: scanedQr ?? viewAbstract, context: context);
-      } else {
-        listProvider.fetchListSearch(
-            customKey, viewAbstract, _searchStringQuery!,
-            context: context);
-      }
+      listProvider.fetchList(
+        customKey,
+        context: context,
+        viewAbstract: scanedQr ?? viewAbstract,
+        options: RequestOptions(
+          searchQuery: _searchStringQuery,
+        ),
+      );
     }
   }
 

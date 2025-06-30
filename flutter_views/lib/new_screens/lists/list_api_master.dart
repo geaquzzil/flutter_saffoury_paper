@@ -359,7 +359,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
     return widget.useSlivers
         ? SliverFillRemaining(
             child: SkeletonListView(
-              itemCount: viewAbstract.getPageItemCount,
+              itemCount: viewAbstract.getPageItemCount(),
             ),
           )
         : _getShimmerLoadingBody();
@@ -372,7 +372,7 @@ class ListApiMasterState<T extends ListApiMaster> extends State<T> {
         // darkShimmerGradient: ,
         isLoading: true,
         skeleton: SkeletonListView(
-          itemCount: viewAbstract.getPageItemCount,
+          itemCount: viewAbstract.getPageItemCount(),
         ),
         child: Container(child: const Center(child: Text("Content"))),
       ),

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
+import 'package:flutter_saffoury_paper/models/users/user.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
@@ -12,14 +13,12 @@ import 'package:json_annotation/json_annotation.dart';
 @reflector
 class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
   BlockMood blockMood;
-  Customer customer;
-  bool block;
-  Blocking(this.customer, this.blockMood, this.block) : super();
+  User user;
+  Blocking(this.user, this.blockMood, {super.iD}) : super();
 
   @override
   Blocking getSelfNewInstance() {
-    //TODO
-    return Blocking(Customer(), BlockMood.CUSTOMER, true);
+    return Blocking(Customer(), BlockMood.BLOCK);
   }
 
   @override
@@ -29,7 +28,7 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      {"blockMood": BlockMood.ALL, "customer": Customer(), "block": false};
+      {"blockMood": BlockMood.BLOCK, "user": User(), "block": false};
   @override
   Map<String, IconData> getFieldIconDataMap() => {"block": Icons.block};
 
@@ -42,7 +41,7 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
 
   @override
   List<String> getMainFields({BuildContext? context}) =>
-      ["customer", "blockMood", "block"];
+      ["user", "blockMood", "block"];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
@@ -52,47 +51,25 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
 
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
-      "${AppLocalizations.of(context)!.block} ${customer.getMainHeaderTextOnly(context)}";
+      "${AppLocalizations.of(context)!.block} ${user.getMainHeaderTextOnly(context)}";
 
   @override
   IconData getMainIconData() => Icons.block;
 
   @override
-  String? getTableNameApi() => "action_block";
-  @override
-  String? getCustomAction() => "action_block";
+  String? getCustomAction() {
+    String tableName = user.getTableNameApi()!;
+    return "block/$tableName/";
+  }
 
   @override
   Map<String, dynamic> toJsonViewAbstract() => {};
 
   @override
   Blocking fromJsonViewAbstract(Map<String, dynamic> json) => Blocking(
-      Customer.fromJson(json['customer']),
+      Customer.fromJson(json['user']),
       $enumDecodeNullable(_$BlockMood, json['blockMood']) ?? BlockMood.NONE,
       json['block'] as bool);
-
-  String getTableName() {
-    switch (blockMood) {
-      case BlockMood.NONE:
-      case BlockMood.ALL:
-        return blockMood.toString();
-      // break;
-      case BlockMood.CUSTOMER:
-        return "customers";
-      // break;
-      case BlockMood.EMPLOYEE:
-        return "employees";
-      //break;
-    }
-    return "";
-  }
-
-  @override
-  Map<String, String> get getCustomMap => {
-        "iD": customer.iD.toString(),
-        "tableName": getTableName(),
-        "blockValue": block ? "0" : "1"
-      };
 
   @override
   ResponseType getCustomStandAloneResponseType() {
@@ -116,17 +93,13 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
 }
 
 const _$BlockMood = {
-  BlockMood.ALL: 'ALL',
-  BlockMood.NONE: 'NONE',
-  BlockMood.CUSTOMER: 'CUSTOMER',
-  BlockMood.EMPLOYEE: 'EMPLOYEE',
+  BlockMood.BLOCK: 'BLOCK',
+  BlockMood.UNBLOCK: 'UNBLOCK',
 };
 
 enum BlockMood implements ViewAbstractEnum<BlockMood> {
-  ALL,
-  NONE,
-  CUSTOMER,
-  EMPLOYEE,
+  BLOCK,
+  UNBLOCK,
   ;
 
   @override
@@ -142,31 +115,20 @@ enum BlockMood implements ViewAbstractEnum<BlockMood> {
   @override
   String getFieldLabelString(BuildContext context, BlockMood field) {
     switch (field) {
-      case NONE:
-        return AppLocalizations.of(context)!.none;
-      case ALL:
-        return AppLocalizations.of(context)!.allClintes;
-
-      case CUSTOMER:
-        return AppLocalizations.of(context)!.customer;
-
-      case EMPLOYEE:
-        return AppLocalizations.of(context)!.employee;
+      case BLOCK:
+        return AppLocalizations.of(context)!.block;
+      case UNBLOCK:
+        return AppLocalizations.of(context)!.unBlock;
     }
   }
 
   @override
   IconData getFieldLabelIconData(BuildContext context, BlockMood field) {
     switch (field) {
-      case NONE:
-        return Icons.disabled_by_default;
-      case ALL:
-        return Icons.all_inbox;
-      case CUSTOMER:
-        return Icons.account_circle;
-
-      case EMPLOYEE:
-        return Icons.engineering;
+      case BLOCK:
+        return Icons.block;
+      case UNBLOCK:
+        return Icons.disabled_by_default_outlined;
     }
   }
 

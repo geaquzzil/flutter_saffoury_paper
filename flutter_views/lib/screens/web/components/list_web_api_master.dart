@@ -195,7 +195,7 @@ class ListWebApiMaster extends StatelessWidget {
         // tileMode: TileMode.clamp,
       ),
       child: SkeletonListView(
-        itemCount: viewAbstract.getPageItemCount,
+        itemCount: viewAbstract.getPageItemCount(),
       ),
     );
   }

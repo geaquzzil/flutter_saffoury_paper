@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/components/scroll_snap_list.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
@@ -709,26 +710,16 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       if (notifyNotSearchable) {
         listProvider.notifyNotSearchable(customKey);
       }
-      // if (listProvider.getCount(customKey) == 0) {
-      if (_searchString == null) {
-        listProvider.fetchList(customKey,
-            filter: _filterData,
-            autoRest: getToListObjectCastAutoRestNullIfNot(),
-            requiresFullFetsh: widget.requiresFullFetsh,
-            viewAbstract: getToListObjectCastAutoRestNullIfNot()?.obj ??
-                getToListObjectCastViewAbstractNullIfNot(),
-            customCount: widget.requiresFullFetsh == true ? 10000000 : null,
-            customPage: widget.requiresFullFetsh == true ? 0 : null,
-            context: context);
-      } else {
-        listProvider.fetchListSearch(
-            customKey, getToListObjectCastViewAbstract(), _searchString!,
-            requiresFullFetsh: widget.requiresFullFetsh,
-            filter: _filterData,
-            customCount: widget.requiresFullFetsh == true ? 10000000 : null,
-            context: context);
-        // }
-      }
+      listProvider.fetchList(customKey,
+          context: context,
+          viewAbstract: getToListObjectCastAutoRestNullIfNot()?.obj ??
+              getToListObjectCastViewAbstractNullIfNot(),
+          autoRest: getToListObjectCastAutoRestNullIfNot(),
+          options: RequestOptions(
+            filterMap: _filterData ?? {},
+            searchQuery: _searchString,
+          ),
+          requiresFullFetsh: widget.requiresFullFetsh);
     }
   }
 

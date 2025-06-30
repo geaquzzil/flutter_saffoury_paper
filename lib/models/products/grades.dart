@@ -77,7 +77,9 @@ class Grades extends BaseWithNameString<Grades> {
           isGridView: true,
           scrollDirection: Axis.horizontal,
           toListObject: Product().getSelfInstanceWithSimilarOption(
-              obj: this, copyWith: RequestOptions(countPerPage: 5))),
+              context: context,
+              obj: this,
+              copyWith: RequestOptions(countPerPage: 5))),
     ];
   }
 }

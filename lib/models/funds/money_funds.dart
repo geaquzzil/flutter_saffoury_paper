@@ -426,13 +426,13 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
     }
     return [
       SliverApiMixinViewAbstractWidget(
-          toListObject: getSelfNewInstance().getSelfInstanceWithSimilarOption(
+          toListObject: getSelfNewInstance().getSelfInstanceWithSimilarOption(context: context,
               obj: this, copyWith: RequestOptions(countPerPage: 5))),
     ];
   }
 
   @override
-  RequestOptions getSimilarCustomParams() {
+  RequestOptions getSimilarCustomParams({required BuildContext context}) {
     Map<String, String> hashMap = {};
     if (isCreditAndDebit()) {
       hashMap["<CustomerID>"] = ("${customers!.iD}");

@@ -115,7 +115,8 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
   @override
   ViewAbstract? getWebCategoryGridableIsMasterToList(BuildContext context) =>
       Product().setRequestOption(
-          action: ServerActions.list, option: getSimilarCustomParams());
+          action: ServerActions.list,
+          option: getSimilarCustomParams(context: context));
 
   @override
   RequestOptions? getRequestOption({required ServerActions action}) {

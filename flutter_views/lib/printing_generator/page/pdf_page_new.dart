@@ -2,10 +2,10 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -515,8 +515,7 @@ class _PdfPageNewState extends BasePageStateWithApi<PdfPageNew> {
   Future getCallApiFunctionIfNull(BuildContext context,
       {TabControllerHelper? tab}) {
     debugPrint("getCallApiFunctionIfNull");
-    return (getExtras() as ViewAbstract).viewCallGetFirstFromList(
-        (getExtras() as ViewAbstract).iD,
+    return (getExtras() as ViewAbstract).viewCall(
         context: context) as Future<PrintableMaster?>;
   }
 
