@@ -1,7 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:async';
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
@@ -75,10 +74,10 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     ..phone = _currentUser.phone
     ..password = _currentUser.password
     ..setFieldValue("name", getUserName);
-  Dealers? get getDealers => _currentUser.dealers;
+  Dealers? get getDealers => _currentUser?.dealers;
   ViewAbstract get getOrderSimple => _orderSimple.getSelfNewInstance();
-  String get getUserName => _currentUser.getFieldValue("name") ?? "_UNKONW";
-  String get getUserPermission => _currentUser.userlevels?.userlevelname ?? "";
+  String get getUserName => _currentUser?.getFieldValue("name") ?? "_UNKONW";
+  String get getUserPermission => _currentUser?.userlevels?.userlevelname ?? "";
   String get getUserImageUrl {
     // return "";
     //todo for some reason we canot add profile image
@@ -217,7 +216,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
       Function(Status s)? currentStatus}) async {
     notifyListeners();
     currentStatus?.call(Status.Authenticating);
-    _currentUser = await _initUser.viewCall(
+    _currentUser = await _initUser.loginCall(
         context: context,
         onResponse: OnResponseCallback(
           onBlocked: () {
@@ -242,7 +241,6 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
       currentStatus?.call(Status.Authenticated);
       Configurations.saveViewAbstract(_currentUser!);
       _permissions = _currentUser!.userlevels!;
-
       return true;
     } else {
       currentStatus?.call(Status.Unauthenticated);
@@ -251,11 +249,10 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   }
 
   Future signOut() async {
-    // auth.signOut();
+    _currentUser != null
+        ? Configurations.removeViewAbstract(_currentUser!)
+        : null;
     _status = Status.Unauthenticated;
-    //TODO remove saved user;
-
-    Configurations.removeViewAbstract(_init);
     notifyListeners();
     return Future.delayed(Duration.zero);
   }

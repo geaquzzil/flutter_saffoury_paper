@@ -337,17 +337,5 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
     return null;
   }
 
-  @override
-  Future<AuthUser?> viewCall(
-      {required BuildContext context,
-      int? customID,
-      OnResponseCallback? onResponse,
-      ServerActions? customAction}) {
-    // TODO: implement viewCall
-    return super.viewCall(
-        context: context,
-        customID: customID,
-        onResponse: onResponse,
-        customAction: customAction);
-  }
+
 }
