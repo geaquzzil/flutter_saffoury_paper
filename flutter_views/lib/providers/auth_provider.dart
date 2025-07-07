@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:async';
-import 'dart:convert';
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
@@ -14,9 +14,7 @@ import 'package:flutter_view_controller/models/permissions/permission_level_abst
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/test_var.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/src/response.dart';
 import 'package:provider/provider.dart';
 import 'package:supercharged/supercharged.dart';
 
@@ -39,6 +37,11 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
           (dynamic _) => notifyListeners(),
         );
   }
+  static bool isLoggedIn(BuildContext context) {
+    return context.read<AuthProvider<AuthUser>>().getUser?.isLoggedIn() ??
+        false;
+  }
+
   @override
   void dispose() {
     _subscription.cancel();
@@ -49,7 +52,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   late List<ViewAbstract> _drawerItems;
   late Map<String?, List<ViewAbstract>> __drawerItemsGrouped;
   final List<ViewAbstract> _drawerItemsPermissions = [];
-  late T _user;
+  T? _currentUser;
   late T _initUser;
   late ViewAbstract _orderSimple;
 
@@ -66,16 +69,16 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   bool hasSavedUser = false;
   late PermissionLevelAbstract _permissions;
   Status get getStatus => _status;
-  T get getUser => _user;
-  T get getSimpleUser => (_user.getSelfNewInstance() as T)
-    ..iD = _user.iD
-    ..phone = _user.phone
-    ..password = _user.password
+  T? get getUser => _currentUser;
+  T get getSimpleUser => (_currentUser.getSelfNewInstance() as T)
+    ..iD = _currentUser.iD
+    ..phone = _currentUser.phone
+    ..password = _currentUser.password
     ..setFieldValue("name", getUserName);
-  Dealers? get getDealers => _user.dealers;
+  Dealers? get getDealers => _currentUser.dealers;
   ViewAbstract get getOrderSimple => _orderSimple.getSelfNewInstance();
-  String get getUserName => _user.getFieldValue("name") ?? "_UNKONW";
-  String get getUserPermission => _user.userlevels?.userlevelname ?? "";
+  String get getUserName => _currentUser.getFieldValue("name") ?? "_UNKONW";
+  String get getUserPermission => _currentUser.userlevels?.userlevelname ?? "";
   String get getUserImageUrl {
     // return "";
     //todo for some reason we canot add profile image
@@ -103,10 +106,6 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
 
   NotificationHandlerInterface getNotificationHandler() {
     return _notificationHandler!;
-  }
-
-  static bool isLoggedIn(BuildContext context) {
-    return context.read<AuthProvider<AuthUser>>().getUser.login == true;
   }
 
   PermissionLevelAbstract get getPermissions => _permissions;
@@ -153,7 +152,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     _drawerItems = drawerItems;
     _initUser = initUser;
     _orderSimple = orderSimple;
-    _user = _initUser;
+    _currentUser = _initUser;
     _getGoRoutesAddOns = getGoRoutesAddOns;
     _notificationHandlerSimple = notificationHandlerSimple;
     _subscription = _initUser.authStateChanges().asBroadcastStream().listen(
@@ -183,64 +182,17 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     );
   }
 
-  Future initFakeData() async {
-    // await Future.delayed(const Duration(seconds: 2));
-    try {
-      _user = _initUser.fromJsonViewAbstract(jsonDecode(jsonEncode(loginJson)))
-          as T;
-      _user.login = true;
-      _status = Status.Authenticated;
-
-      _permissions = _user.userlevels ?? PermissionLevelAbstract();
-      hasSavedUser = true;
-      debugPrint("initFakeData _permissions :$_permissions");
-
-      _notificationHandler = _user.setting?.DISABLE_NOTIFICATIONS == 1
-          ? null
-          : _notificationHandlerSimple;
-      // notifyListeners();
-    } catch (ex) {
-      debugPrint("Error initial $ex");
-    }
-  }
-
   Future init() async {
-
-    hasSavedUser = await Configurations.hasSavedValue(_initUser);
-    final Response? responseUser;
-    if (hasSavedUser == false) {
-      _user = _initUser;
-
-      _user.password = "";
-      _user.phone = "";
-      _user.login = true;
-      _status = Status.Guest;
-    } else {
-      _user = (await Configurations.get<T>(_initUser))!;
-    }
-    responseUser =
-        await _initUser.getRespones(serverActions: ServerActions.add);
-    if (responseUser.statusCode == 401) {
-      _status = Status.Faild;
-    } else {
-      _user =
-          _initUser.fromJsonViewAbstract(jsonDecode(responseUser.body)) as T;
-      bool isLogin = _user.login ?? false;
-      bool hasPermission = _user.permission ?? false;
-      _status = isLogin ? Status.Authenticated : Status.Guest;
-      // }
-      _permissions = _user.userlevels ?? PermissionLevelAbstract();
-      debugPrint("Authenticated $_status");
-      notifyListeners();
-    }
+    _currentUser = (await Configurations.get<T>(_initUser));
+    _status = _currentUser != null ? Status.Authenticated : Status.Guest;
+    notifyListeners();
   }
 
   Future initDrawerItems(BuildContext context) async {
     await Future.forEach(_drawerItems, (item) async {
-      // debugPrint("checing permission for $item ");
-      bool hasPermssion = _user.hasPermissionList(context, viewAbstract: item);
-      // debugPrint("checing permission for $item value is $hasPermssion ");
-      if (hasPermssion) {
+      bool? hasPermssion =
+          _currentUser?.hasPermissionList(context, viewAbstract: item);
+      if (hasPermssion ?? false) {
         _drawerItemsPermissions.add(item);
       }
     });
@@ -258,60 +210,52 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     //  g.groupBy<DateTime,GrowthRate>((element) => element.map((e) => e.total).toList() )
   }
 
-  Future<bool> signIn({required AuthUser user}) async {
-    try {
-      debugPrint(
-          "AuthProvider auth user =>phone: ${user?.phone} password: ${user?.password}");
-      hasSavedUser = await Configurations.hasSavedValue(_initUser);
-      final Response? responseUser;
-      if (user != null) {
-        _user = user as T;
-        _user.password = user.password ?? "";
-        _user.phone = user.phone ?? "";
-        _user.login = false;
-        _status = Status.Guest;
-        Configurations.save("", _user);
-      } else if (hasSavedUser == false) {
-        _user = _initUser;
-        _user.password = "";
-        _user.phone = "";
-        _user.login = false;
-        _status = Status.Guest;
-      } else {
-        _user = (await Configurations.get<T>(_initUser))!;
-      }
-      _status = Status.Authenticating;
-      notifyListeners();
-      responseUser = await _user.getRespones(serverActions: ServerActions.add);
-      if (responseUser.statusCode == 401) {
-        _status = Status.Faild;
-      } else {
-        _user =
-            _initUser.fromJsonViewAbstract(jsonDecode(responseUser.body)) as T;
-        bool isLogin = _user.login ?? false;
-        bool hasPermission = _user.permission ?? false;
-        _status = isLogin ? Status.Authenticated : Status.Unauthenticated;
-        if (isLogin) {
-          Configurations.save("", _user);
-        }
-        // }
-        _permissions = _user.userlevels ?? PermissionLevelAbstract();
-        debugPrint("Authenticated $_status");
-        // notifyListeners();
-      }
-      // _status = Status.Authenticating;
-      notifyListeners();
+  Future<bool> signIn(
+      {required BuildContext context,
+      required AuthUser user,
+      OnResponseCallback? onResponeCallback,
+      Function(Status s)? currentStatus}) async {
+    notifyListeners();
+    currentStatus?.call(Status.Authenticating);
+    _currentUser = await _initUser.viewCall(
+        context: context,
+        onResponse: OnResponseCallback(
+          onBlocked: () {
+            //TODO BLOCK ACTION
+            debugPrint("SignIn==========> is blocked");
+            currentStatus?.call(Status.Blocked);
+            onResponeCallback?.onBlocked?.call();
+          },
+          onEmailOrPassword: () {
+            debugPrint("onEmailOrPassword==========> is not valid");
+            currentStatus?.call(Status.Unauthenticated);
+
+            onResponeCallback?.onEmailOrPassword?.call();
+          },
+          onClientFailure: (o) {
+            currentStatus?.call(Status.Faild);
+            onResponeCallback?.onClientFailure?.call(o);
+          },
+        )) as T?;
+
+    if (_currentUser != null) {
+      currentStatus?.call(Status.Authenticated);
+      Configurations.saveViewAbstract(_currentUser!);
+      _permissions = _currentUser!.userlevels!;
+
       return true;
-    } catch (e) {
-      _status = Status.Unauthenticated;
-      notifyListeners();
-      debugPrint(e.toString());
+    } else {
+      currentStatus?.call(Status.Unauthenticated);
       return false;
     }
   }
+
   Future signOut() async {
     // auth.signOut();
     _status = Status.Unauthenticated;
+    //TODO remove saved user;
+
+    Configurations.removeViewAbstract(_init);
     notifyListeners();
     return Future.delayed(Duration.zero);
   }
@@ -328,19 +272,19 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   }
 
   String getPriceFromSetting(BuildContext context, double value) {
-    if (_user.setting == null) return value.toCurrencyFormat();
-    return _user.setting!.getPriceAndCurrency(context, value);
+    if (_currentUser.setting == null) return value.toCurrencyFormat();
+    return _currentUser.setting!.getPriceAndCurrency(context, value);
   }
 
   double getPriceFromSettingDouble(BuildContext context, double value) {
-    if (_user.setting == null) return value.roundDouble();
-    return _user.setting!.getPriceFromSetting(value);
+    if (_currentUser.setting == null) return value.roundDouble();
+    return _currentUser.setting!.getPriceFromSetting(value);
   }
 
   double getPriceFromSettingDoubleFindSYPEquality(
       BuildContext context, double value) {
-    if (_user.setting == null) return -1;
-    return _user.setting!.getPriceSYPEquality(value);
+    if (_currentUser.setting == null) return -1;
+    return _currentUser.setting!.getPriceSYPEquality(value);
   }
 
   String? validateEmail(String value) {

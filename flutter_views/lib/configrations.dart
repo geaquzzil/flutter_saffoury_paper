@@ -14,7 +14,8 @@ class Configurations {
     return await SharedPreferences.getInstance();
   }
 
-  static saveScrollOffset(BuildContext context, double offset, String key) =>
+  static void saveScrollOffset(
+          BuildContext context, double offset, String key) =>
       appBucket.writeState(context, offset, identifier: ValueKey(key));
   static double currentPageScrollOffset(BuildContext context, String key) =>
       appBucket.readState(context, identifier: ValueKey(key)) ?? 0.0;
@@ -66,6 +67,16 @@ class Configurations {
       {String? customKey}) async {
     save((value.runtimeType.toString()) + (customKey ?? ""),
         jsonEncode(value.toJsonViewAbstract()));
+  }
+
+  static Future<void> removeViewAbstract(ViewAbstract value,
+      {String? customKey}) async {
+    await remove(value.runtimeType.toString() + (customKey ?? ""));
+  }
+
+  static Future<void> remove(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(key);
   }
 
   static void save(String key, dynamic value) async {

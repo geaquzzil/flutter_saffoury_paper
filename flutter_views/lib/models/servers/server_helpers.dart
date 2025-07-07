@@ -35,6 +35,7 @@ class URLS {
       return 'localhost/SaffouryPaper2/publicindex.php/api/v1/';
     }
   }
+
   @Deprecated("")
   static String getBaseUrlPrint() {
     if (!kIsWeb) {
@@ -72,13 +73,17 @@ class URLS {
 }
 
 class OnResponseCallback {
-  final void Function(dynamic response) onServerResponse;
-  final void Function() onServerNoMoreItems;
-  final void Function(dynamic o) onClientFailure;
-  final void Function(String message) onServerFailureResponse;
+  final void Function(dynamic response)? onServerResponse;
+  final void Function()? onServerNoMoreItems;
+  final void Function(dynamic o)? onClientFailure;
+  final void Function(String message)? onServerFailureResponse;
+  final void Function()? onEmailOrPassword;
+  final void Function()? onBlocked;
   OnResponseCallback(
       {required this.onServerNoMoreItems,
       required this.onClientFailure,
       required this.onServerResponse,
-      required this.onServerFailureResponse});
+      required this.onServerFailureResponse,
+      required this.onBlocked,
+      required this.onEmailOrPassword});
 }

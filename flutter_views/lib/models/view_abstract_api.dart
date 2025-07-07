@@ -11,7 +11,7 @@ import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
-import 'package:flutter_view_controller/models/servers/server_response_master.dart';
+import 'package:flutter_view_controller/models/servers/server_response.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
@@ -390,13 +390,20 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       int statusCode = response.statusCode;
 
       if (statusCode >= 400 && statusCode <= 500) {
-        //this is a error
-        ServerResponseMaster serverResponse =
-            ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
+        ServerResponse serverResponse =
+            ServerResponse.fromJson(convert.jsonDecode(response.body));
         debugPrint(
             "ViewAbstractApi onCallCheckError====> called code:$statusCode  message : ${serverResponse.toJson()}");
-        onResponse.onServerFailureResponse(
-            (serverResponse.getFailureMessage(context)));
+        if (statusCode == 401) {
+          onResponse.onEmailOrPassword?.call();
+          //Invalid user and password
+        } else if (statusCode == 402) {
+          onResponse.onBlocked?.call();
+          //BLOCK
+        }
+        //this is a error
+
+        onResponse.onServerFailureResponse((serverResponse.message ?? "+"));
       }
     }
   }
@@ -435,7 +442,6 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   void deleteCall(BuildContext context,
       {required OnResponseCallback onResponse}) async {
     debugPrint("ViewAbstractApi deleteCall iD=> $iD ");
-
 
     var response = await getRespones(
         onResponse: onResponse, serverActions: ServerActions.delete_action);

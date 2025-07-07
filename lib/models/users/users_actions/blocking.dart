@@ -18,7 +18,7 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
 
   @override
   Blocking getSelfNewInstance() {
-    return Blocking(Customer(), BlockMood.BLOCK);
+    return Blocking(Customer(), BlockMood.block);
   }
 
   @override
@@ -28,7 +28,7 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      {"blockMood": BlockMood.BLOCK, "user": User(), "block": false};
+      {"blockMood": BlockMood.block, "user": User(), "block": false};
   @override
   Map<String, IconData> getFieldIconDataMap() => {"block": Icons.block};
 
@@ -59,7 +59,9 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
   @override
   String? getCustomAction() {
     String tableName = user.getTableNameApi()!;
-    return "block/$tableName/";
+    String id = iD == -1 ? "" : "/$iD";
+
+    return "${blockMood.name}/$tableName$id";
   }
 
   @override
@@ -68,7 +70,7 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
   @override
   Blocking fromJsonViewAbstract(Map<String, dynamic> json) => Blocking(
       Customer.fromJson(json['user']),
-      $enumDecodeNullable(_$BlockMood, json['blockMood']) ?? BlockMood.NONE,
+      $enumDecodeNullable(_$BlockMood, json['blockMood']) ?? BlockMood.block,
       json['block'] as bool);
 
   @override
@@ -93,13 +95,13 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
 }
 
 const _$BlockMood = {
-  BlockMood.BLOCK: 'BLOCK',
-  BlockMood.UNBLOCK: 'UNBLOCK',
+  BlockMood.block: 'block',
+  BlockMood.unblock: 'unblock',
 };
 
 enum BlockMood implements ViewAbstractEnum<BlockMood> {
-  BLOCK,
-  UNBLOCK,
+  block,
+  unblock,
   ;
 
   @override
@@ -115,9 +117,9 @@ enum BlockMood implements ViewAbstractEnum<BlockMood> {
   @override
   String getFieldLabelString(BuildContext context, BlockMood field) {
     switch (field) {
-      case BLOCK:
+      case block:
         return AppLocalizations.of(context)!.block;
-      case UNBLOCK:
+      case unblock:
         return AppLocalizations.of(context)!.unBlock;
     }
   }
@@ -125,9 +127,9 @@ enum BlockMood implements ViewAbstractEnum<BlockMood> {
   @override
   IconData getFieldLabelIconData(BuildContext context, BlockMood field) {
     switch (field) {
-      case BLOCK:
+      case block:
         return Icons.block;
-      case UNBLOCK:
+      case unblock:
         return Icons.disabled_by_default_outlined;
     }
   }
