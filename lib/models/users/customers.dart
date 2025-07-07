@@ -52,8 +52,7 @@ class Customer extends User<Customer> {
   void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
     super.onBeforeGenerateView(context);
     if (action == ServerActions.edit && isNew()) {
-      employees =
-          context.read<AuthProvider<AuthUser>>().getSimpleUser as Employee;
+      employees = context.read<AuthProvider<AuthUser>>().getUser as Employee?;
     }
   }
 

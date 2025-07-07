@@ -41,6 +41,18 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
         false;
   }
 
+  bool isLoggedInN() {
+    return getUser?.isLoggedIn() ?? false;
+  }
+
+  bool isGeneralEmployee(BuildContext context) {
+    return getUser?.isGeneralEmployee(context) ?? false;
+  }
+
+  int getID() {
+    return getUser?.iD ?? -1;
+  }
+
   @override
   void dispose() {
     _subscription.cancel();
@@ -69,11 +81,6 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   late PermissionLevelAbstract _permissions;
   Status get getStatus => _status;
   T? get getUser => _currentUser;
-  T get getSimpleUser => (_currentUser.getSelfNewInstance() as T)
-    ..iD = _currentUser.iD
-    ..phone = _currentUser.phone
-    ..password = _currentUser.password
-    ..setFieldValue("name", getUserName);
   Dealers? get getDealers => _currentUser?.dealers;
   ViewAbstract get getOrderSimple => _orderSimple.getSelfNewInstance();
   String get getUserName => _currentUser?.getFieldValue("name") ?? "_UNKONW";
@@ -231,9 +238,9 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
 
             onResponeCallback?.onEmailOrPassword?.call();
           },
-          onClientFailure: (o) {
+          onFlutterClientFailure: (o) {
             currentStatus?.call(Status.Faild);
-            onResponeCallback?.onClientFailure?.call(o);
+            onResponeCallback?.onFlutterClientFailure?.call(o);
           },
         )) as T?;
 
@@ -269,19 +276,18 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   }
 
   String getPriceFromSetting(BuildContext context, double value) {
-    if (_currentUser.setting == null) return value.toCurrencyFormat();
-    return _currentUser.setting!.getPriceAndCurrency(context, value);
+    return _currentUser?.setting?.getPriceAndCurrency(context, value) ??
+        value.toCurrencyFormat();
   }
 
   double getPriceFromSettingDouble(BuildContext context, double value) {
-    if (_currentUser.setting == null) return value.roundDouble();
-    return _currentUser.setting!.getPriceFromSetting(value);
+    return _currentUser?.setting?.getPriceFromSetting(value) ??
+        value.roundDouble();
   }
 
   double getPriceFromSettingDoubleFindSYPEquality(
       BuildContext context, double value) {
-    if (_currentUser.setting == null) return -1;
-    return _currentUser.setting!.getPriceSYPEquality(value);
+    return _currentUser?.setting?.getPriceSYPEquality(value) ?? -1;
   }
 
   String? validateEmail(String value) {

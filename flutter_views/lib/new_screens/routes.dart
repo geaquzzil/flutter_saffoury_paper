@@ -13,7 +13,6 @@ import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/home/home_notification_widget.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_main_page.dart';
-import 'package:flutter_view_controller/new_screens/search/search_page.dart';
 import 'package:flutter_view_controller/new_screens/setting/setting_page.dart';
 import 'package:flutter_view_controller/new_screens/sign_in.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page.dart';
@@ -103,20 +102,19 @@ class RouteGenerator {
   });
 
   String? getRouterAuthWeb(GoRouterState state) {
-    final isLogedIn = appService.getUser.login == true;
+    final splashLocation = state.namedLocation("splash");
+    final loginLocation = state.namedLocation(loginRouteName);
+    final posLocation = state.namedLocation(posRouteName);
+    final goodsLocation = state.namedLocation(goodsInventoryRouteName);
+    final reelLocation = state.namedLocation(reelCutterRouteName);
+
+    final isLogedIn = appService.isLoggedInN();
     final isInitialized = appService.getStatus == Status.Initialization;
     final isAuthenticated = appService.getStatus == Status.Authenticated;
     final isFinishedInitialization = appService.isInitialized;
 
-    final loginLocation = state.namedLocation(loginRouteName);
-    final posLocation = state.namedLocation(posRouteName);
-
-    final goodsLocation = state.namedLocation(goodsInventoryRouteName);
-
-    final reelLocation = state.namedLocation(reelCutterRouteName);
-
     var homeLocation = "/index";
-    final splashLocation = state.namedLocation("splash");
+
     if (isInitialized) {
       return splashLocation;
     } else if (isLogedIn && !isFinishedInitialization) {
@@ -151,7 +149,7 @@ class RouteGenerator {
     // homeLocation=state.namedLocation("listable",pathParameters: {"tableName": "products","iD":"213"});
     // final onboardLocation = state.namedLocation(APP_PAGE.onBoarding.toName);
 
-    final isLogedIn = appService.getUser.login == true;
+    final isLogedIn = appService.isLoggedInN();
     final isInitialized = appService.getStatus == Status.Initialization;
     final isAuthenticated = appService.getStatus == Status.Authenticated;
     final isFinishedInitialization = appService.isInitialized;
@@ -168,17 +166,14 @@ class RouteGenerator {
     if (isInitialized) {
       return splashLocation;
       // If not onboard and not going to onboard redirect to OnBoarding
+    } else if (!isLogedIn) {
+      return loginLocation;
     } else if (isLogedIn && !isFinishedInitialization) {
       debugPrint(
           "getRouterAuth: userPermissionID ${appService.getPermissions.iD}");
       appService.isInitialized = true;
       AuthProvider authProvider = context.read<AuthProvider>();
       if (authProvider.isGoodsInventory(context)) {
-        // return posLocation;
-
-        // return reelCutterLocation;
-
-        return homeLocation;
         return goodsInventoryLocation;
       } else if (authProvider.isPOS(context)) {
         return posLocation;
@@ -476,20 +471,20 @@ class RouteGenerator {
                 return MaterialPage(key: state.pageKey, child: w);
               },
             ),
-            GoRoute(
-              name: searchRouteName,
-              path: "search/:tableName",
-              pageBuilder: (context, state) {
-                return MaterialPage(
-                    key: state.pageKey,
-                    child: SearchPage(
-                      // heroTag: (state.extra as List)[1],
-                      tableName: state.pathParameters["tableName"],
-                      viewAbstract: null,
-                      // viewAbstract: (state.extra as List)[0],
-                    ));
-              },
-            ),
+            // GoRoute(
+            //   name: searchRouteName,
+            //   path: "search/:tableName",
+            //   pageBuilder: (context, state) {
+            //     return MaterialPage(
+            //         key: state.pageKey,
+            //         child: SearchPage(
+            //           // heroTag: (state.extra as List)[1],
+            //           tableName: state.pathParameters["tableName"],
+            //           viewAbstract: null,
+            //           // viewAbstract: (state.extra as List)[0],
+            //         ));
+            //   },
+            // ),
           ]),
       GoRoute(
         name: dashboardRouteName,
@@ -582,8 +577,8 @@ class RouteGenerator {
       case '/':
         return getHomePage();
 
-      case "/search":
-        return getSearchPage();
+      // case "/search":
+      //   return getSearchPage();
       case '/sign_in':
         return MaterialPageRoute(builder: (context) => SignInPage());
 
@@ -673,10 +668,10 @@ class RouteGenerator {
     return _errorRoute();
   }
 
-  static MaterialPageRoute<dynamic> getSearchPage() => MaterialPageRoute(
-      builder: (context) => SearchPage(
-            viewAbstract: null,
-          ));
+  // static MaterialPageRoute<dynamic> getSearchPage() => MaterialPageRoute(
+  //     builder: (context) => SearchPage(
+  //           viewAbstract: null,
+  //         ));
 
   static MaterialPageRoute<dynamic> getHomePage() {
     return MaterialPageRoute(

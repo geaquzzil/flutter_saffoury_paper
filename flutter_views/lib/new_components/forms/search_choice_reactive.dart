@@ -239,7 +239,7 @@ class ReactiveSearchChoice<T> extends ReactiveFormField<T, ViewAbstract> {
                       onServerResponse: (response) {},
                       onServerNoMoreItems: () {},
                       onServerFailureResponse: (message) {},
-                      onClientFailure: (o) {
+                      onFlutterClientFailure: (o) {
                         //TODO translate
                         throw Exception("failed to get data from internet");
                       },

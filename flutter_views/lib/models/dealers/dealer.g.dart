@@ -7,24 +7,24 @@ part of 'dealer.dart';
 // **************************************************************************
 
 Dealers _$DealersFromJson(Map<String, dynamic> json) => Dealers()
-  ..iD = json['iD'] as int?
+  ..iD = (json['iD'] as num?)?.toInt()
   ..name = json['name'] as String?
   ..nameAr = json['nameAr'] as String?
-  ..commNum = json['commNum'] as int?
+  ..commNum = (json['commNum'] as num?)?.toInt()
   ..address = json['address'] as String?
   ..addressAr = json['addressAr'] as String?
   ..dealers_emails = (json['dealers_emails'] as List<dynamic>?)
       ?.map((e) => DealersEmails.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..dealers_emails_count = json['dealers_emails_count'] as int?
+  ..dealers_emails_count = (json['dealers_emails_count'] as num?)?.toInt()
   ..dealers_phones = (json['dealers_phones'] as List<dynamic>?)
       ?.map((e) => DealersPhone.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..dealers_phones_count = json['dealers_phones_count'] as int?
+  ..dealers_phones_count = (json['dealers_phones_count'] as num?)?.toInt()
   ..dealers_social = (json['dealers_social'] as List<dynamic>?)
       ?.map((e) => DealersSocial.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..dealers_social_count = json['dealers_social_count'] as int?;
+  ..dealers_social_count = (json['dealers_social_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$DealersToJson(Dealers instance) => <String, dynamic>{
       'iD': instance.iD,
@@ -46,8 +46,8 @@ Map<String, dynamic> _$DealersToJson(Dealers instance) => <String, dynamic>{
 
 DealersEmails _$DealersEmailsFromJson(Map<String, dynamic> json) =>
     DealersEmails()
-      ..iD = json['iD'] as int?
-      ..DealerID = json['DealerID'] as int?
+      ..iD = (json['iD'] as num?)?.toInt()
+      ..DealerID = (json['DealerID'] as num?)?.toInt()
       ..title = json['title'] as String?
       ..type = json['type'] as String?
       ..url = json['url'] as String?
@@ -68,8 +68,8 @@ Map<String, dynamic> _$DealersEmailsToJson(DealersEmails instance) =>
     };
 
 DealersPhone _$DealersPhoneFromJson(Map<String, dynamic> json) => DealersPhone()
-  ..iD = json['iD'] as int?
-  ..DealerID = json['DealerID'] as int?
+  ..iD = (json['iD'] as num?)?.toInt()
+  ..DealerID = (json['DealerID'] as num?)?.toInt()
   ..title = json['title'] as String?
   ..type = json['type'] as String?
   ..url = json['url'] as String?
@@ -91,8 +91,8 @@ Map<String, dynamic> _$DealersPhoneToJson(DealersPhone instance) =>
 
 DealersSocial _$DealersSocialFromJson(Map<String, dynamic> json) =>
     DealersSocial()
-      ..iD = json['iD'] as int?
-      ..DealerID = json['DealerID'] as int?
+      ..iD = (json['iD'] as num?)?.toInt()
+      ..DealerID = (json['DealerID'] as num?)?.toInt()
       ..title = json['title'] as String?
       ..type = json['type'] as String?
       ..url = json['url'] as String?

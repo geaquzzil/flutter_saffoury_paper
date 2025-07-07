@@ -12,6 +12,7 @@ Dashboard _$DashboardFromJson(Map<String, dynamic> json) => Dashboard()
   ..fb_edit = json['fb_edit'] as String?
   ..phone = json['phone'] as String?
   ..password = json['password'] as String?
+  ..token = json['token'] as String?
   ..userlevels = json['userlevels'] == null
       ? null
       : PermissionLevelAbstract.fromJson(
@@ -203,6 +204,7 @@ Map<String, dynamic> _$DashboardToJson(Dashboard instance) => <String, dynamic>{
       'delete': instance.delete,
       'phone': instance.phone,
       'password': instance.password,
+      'token': instance.token,
       'userlevels': instance.userlevels?.toJson(),
       'setting': instance.setting?.toJson(),
       'dealers': instance.dealers?.toJson(),

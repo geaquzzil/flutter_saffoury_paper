@@ -34,12 +34,7 @@ class ServerResponse {
     return login ?? false;
   }
 
-  bool isAccountHasPermission() {
-    return permission ?? false;
-  }
-
   bool isAuthError() {
-    if (message == null) return false;
-    return message == "Authorization error";
+    return code == 406 || code == 405;
   }
 }

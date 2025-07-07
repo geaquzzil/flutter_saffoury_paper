@@ -117,12 +117,10 @@ class SettingAndProfileWeb extends BaseWebPageSlivers {
   ViewAbstract getListOfOrders(BuildContext context) {
     AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
     ViewAbstract orderSample = authProvider.getOrderSimple;
-    String key = authProvider.getUser.isGeneralEmployee(context)
-        ? "EmployeeID"
-        : "CustomerID";
+    String key =
+        authProvider.isGeneralEmployee(context) ? "EmployeeID" : "CustomerID";
     return orderSample.setRequestOption(
-        option:
-            RequestOptions().addSearchByField(key, authProvider.getUser.iD));
+        option: RequestOptions().addSearchByField(key, authProvider.getID()));
   }
 }
 
@@ -132,12 +130,10 @@ class OrdersWeb extends StatelessWidget {
   ViewAbstract getListOfOrders(BuildContext context) {
     AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
     ViewAbstract orderSample = authProvider.getOrderSimple;
-    String key = authProvider.getUser.isGeneralEmployee(context)
-        ? "EmployeeID"
-        : "CustomerID";
+    String key =
+        authProvider.isGeneralEmployee(context) ? "EmployeeID" : "CustomerID";
     return orderSample.setRequestOption(
-        option:
-            RequestOptions().addSearchByField(key, authProvider.getUser.iD));
+        option: RequestOptions().addSearchByField(key, authProvider.getID()));
   }
 
   @override
@@ -485,7 +481,7 @@ class ProfileEdit extends StatelessWidget {
                 .editFormat(AppLocalizations.of(context)!.profile)),
           ),
           BaseEditWidget(
-            viewAbstract: context.read<AuthProvider<AuthUser>>().getUser,
+            viewAbstract: context.read<AuthProvider<AuthUser>>().getUser!,
             onValidate: (viewAbstract) {
               // billingCustomerNotifier.value = viewAbstract;
             },
@@ -531,12 +527,10 @@ class _MasterToListFromProfileState extends State<MasterToListFromProfile>
   ViewAbstract getListOfOrders(BuildContext context) {
     AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
     ViewAbstract orderSample = authProvider.getOrderSimple;
-    String key = authProvider.getUser.isGeneralEmployee(context)
-        ? "EmployeeID"
-        : "CustomerID";
+    String key =
+        authProvider.isGeneralEmployee(context) ? "EmployeeID" : "CustomerID";
     orderSample.setRequestOption(
-        option:
-            RequestOptions().addSearchByField(key, authProvider.getUser.iD));
+        option: RequestOptions().addSearchByField(key, authProvider.getID()));
     return orderSample;
   }
 

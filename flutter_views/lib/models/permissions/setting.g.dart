@@ -8,13 +8,15 @@ part of 'setting.dart';
 
 Setting _$SettingFromJson(Map<String, dynamic> json) => Setting()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
-  ..ENABLE_APP = json['ENABLE_APP'] as int?
-  ..DISABLE_NOTIFICATIONS = json['DISABLE_NOTIFICATIONS'] as int?
-  ..ENABLE_MULTI_EDIT = json['ENABLE_MULTI_EDIT'] as int?
-  ..EXCHANGE_RATE = json['EXCHANGE_RATE'] as int?
-  ..OLD_EXCHANGE_RATE = json['OLD_EXCHANGE_RATE'] as int?
-  ..BUY_EXCHANGE_RATE = json['BUY_EXCHANGE_RATE'] as int?
-  ..BUY_EXCHANGE_RATE_OLD = json['BUY_EXCHANGE_RATE_OLD'] as int?
+  ..serverStatus = json['serverStatus'] as String?
+  ..fb_edit = json['fb_edit'] as String?
+  ..ENABLE_APP = (json['ENABLE_APP'] as num?)?.toInt()
+  ..DISABLE_NOTIFICATIONS = (json['DISABLE_NOTIFICATIONS'] as num?)?.toInt()
+  ..ENABLE_MULTI_EDIT = (json['ENABLE_MULTI_EDIT'] as num?)?.toInt()
+  ..EXCHANGE_RATE = (json['EXCHANGE_RATE'] as num?)?.toInt()
+  ..OLD_EXCHANGE_RATE = (json['OLD_EXCHANGE_RATE'] as num?)?.toInt()
+  ..BUY_EXCHANGE_RATE = (json['BUY_EXCHANGE_RATE'] as num?)?.toInt()
+  ..BUY_EXCHANGE_RATE_OLD = (json['BUY_EXCHANGE_RATE_OLD'] as num?)?.toInt()
   ..date = json['date'] as String?
   ..currency = $enumDecodeNullable(_$CurrencySettingEnumMap, json['currency']);
 

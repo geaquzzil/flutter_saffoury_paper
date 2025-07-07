@@ -647,10 +647,9 @@ abstract class ViewAbstractInputAndValidater<T>
       },
       asyncItems: (query) {
         return v.listCallNotNull(
-          count: 50,
-          page: 0,
-          context: context,
-        ) as Future<List<ViewAbstract>>;
+                context: context,
+                option: RequestOptions(page: 0, countPerPage: 50))
+            as Future<List<ViewAbstract>>;
       },
     );
   }

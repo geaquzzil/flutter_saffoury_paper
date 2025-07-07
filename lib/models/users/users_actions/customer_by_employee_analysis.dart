@@ -36,11 +36,11 @@ class CustomerByEmployeeAnanlysis
   CustomerByEmployeeAnanlysis getSelfNewInstance() {
     return CustomerByEmployeeAnanlysis();
   }
+
   @override
   List<String>? getRequestedForginListOnCall({required ServerActions action}) {
     return ["orders"];
   }
-
 
   @override
   Widget getCustomStandAloneWidget(BuildContext context) {
@@ -67,6 +67,12 @@ class CustomerByEmployeeAnanlysis
 
   @override
   IconData getMainIconData() => Icons.analytics;
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    // TODO: implement getRequestOption
+    throw UnimplementedError();
+  }
+
   @override
   String? getTableNameApi() => null;
   @override
@@ -301,18 +307,6 @@ class CustomerByEmployeeAnanlysis
   Widget? getCustomViewOnResponseAddWidget(
       CustomerByEmployeeAnanlysis response) {
     // TODO: implement getCustomViewOnResponseAddWidget
-    throw UnimplementedError();
-  }
-
-  @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
-    // TODO: implement getRequestOption
-    throw UnimplementedError();
-  }
-
-  @override
-  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
-    // TODO: implement getRequestedForginListOnCall
     throw UnimplementedError();
   }
 }

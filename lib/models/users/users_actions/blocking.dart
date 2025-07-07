@@ -5,6 +5,8 @@ import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/user.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
@@ -14,7 +16,7 @@ import 'package:json_annotation/json_annotation.dart';
 class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
   BlockMood blockMood;
   User user;
-  Blocking(this.user, this.blockMood, {super.iD}) : super();
+  Blocking(this.user, this.blockMood) : super();
 
   @override
   Blocking getSelfNewInstance() {
@@ -60,7 +62,6 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
   String? getCustomAction() {
     String tableName = user.getTableNameApi()!;
     String id = iD == -1 ? "" : "/$iD";
-
     return "${blockMood.name}/$tableName$id";
   }
 
@@ -69,9 +70,9 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
 
   @override
   Blocking fromJsonViewAbstract(Map<String, dynamic> json) => Blocking(
-      Customer.fromJson(json['user']),
-      $enumDecodeNullable(_$BlockMood, json['blockMood']) ?? BlockMood.block,
-      json['block'] as bool);
+        Customer.fromJson(json['user']),
+        $enumDecodeNullable(_$BlockMood, json['blockMood']) ?? BlockMood.block,
+      );
 
   @override
   ResponseType getCustomStandAloneResponseType() {
@@ -90,6 +91,22 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
 
   @override
   Widget? getCustomFloatingActionWidget(BuildContext context) {
+    return null;
+  }
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    // TODO: implement getRequestOption
+    throw UnimplementedError();
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    return null;
+  }
+
+  @override
+  String? getTableNameApi() {
     return null;
   }
 }
@@ -120,7 +137,7 @@ enum BlockMood implements ViewAbstractEnum<BlockMood> {
       case block:
         return AppLocalizations.of(context)!.block;
       case unblock:
-        return AppLocalizations.of(context)!.unBlock;
+        return AppLocalizations.of(context)!.unblock;
     }
   }
 

@@ -10,12 +10,14 @@ PrinterOptions _$PrinterOptionsFromJson(Map<String, dynamic> json) =>
     PrinterOptions(
       language: $enumDecodeNullable(_$LanguageEnumMap, json['language']) ??
           Language.English,
-      copies: json['copies'] as int? ?? 1,
+      copies: (json['copies'] as num?)?.toInt() ?? 1,
       printPaperSize: $enumDecodeNullable(
               _$PrintPaperSizeEnumMap, json['printPaperSize']) ??
           PrintPaperSize.Default,
     )
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..startEndPage = json['startEndPage'] as String?
       ..printerName = json['printerName'] as String?
       ..printerNameLabel = json['printerNameLabel'] as String?;

@@ -2296,6 +2296,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get unavailable => 'غير متوفر';
 
   @override
+  String get unblock => 'فك الحظر';
+
+  @override
   String get undefined => 'غير معرف';
 
   @override

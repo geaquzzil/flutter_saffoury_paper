@@ -12,13 +12,14 @@ import 'package:json_annotation/json_annotation.dart';
 @reflector
 class UserToken extends ViewAbstractApi<UserToken> {
   @JsonKey(includeFromJson: false, includeToJson: false)
-  AuthUser auth;
-  
-  String token;
-  UserToken({required this.token, required this.auth}) : super();
+  AuthUser? auth;
+
+  String? token;
+  UserToken() : super();
+
   @override
   String? getCustomAction() {
-    return "${auth.getTableNameApi()}/token";
+    return "${auth!.getTableNameApi()}/token";
   }
 
   @override
@@ -58,7 +59,6 @@ class UserToken extends ViewAbstractApi<UserToken> {
 
   factory UserToken.fromMap(Map<String, dynamic> map) {
     return UserToken(
-      token: map['token'] ?? '',
     );
   }
 

@@ -10,14 +10,16 @@ PermissionActionAbstract _$PermissionActionAbstractFromJson(
         Map<String, dynamic> json) =>
     PermissionActionAbstract()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
       ..table_name = json['table_name'] as String?
-      ..print = json['print'] as int?
-      ..notification = json['notification'] as int?
-      ..list = json['list'] as int?
-      ..view = json['view'] as int?
-      ..add = json['add'] as int?
-      ..edit = json['edit'] as int?
-      ..delete_action = json['delete_action'] as int?;
+      ..print = (json['print'] as num?)?.toInt()
+      ..notification = (json['notification'] as num?)?.toInt()
+      ..list = (json['list'] as num?)?.toInt()
+      ..view = (json['view'] as num?)?.toInt()
+      ..add = (json['add'] as num?)?.toInt()
+      ..edit = (json['edit'] as num?)?.toInt()
+      ..delete_action = (json['delete_action'] as num?)?.toInt();
 
 Map<String, dynamic> _$PermissionActionAbstractToJson(
         PermissionActionAbstract instance) =>

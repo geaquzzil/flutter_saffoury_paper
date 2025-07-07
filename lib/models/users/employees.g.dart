@@ -12,6 +12,7 @@ Employee _$EmployeeFromJson(Map<String, dynamic> json) => Employee()
   ..fb_edit = json['fb_edit'] as String?
   ..phone = json['phone'] as String?
   ..password = json['password'] as String?
+  ..token = json['token'] as String?
   ..userlevels = json['userlevels'] == null
       ? null
       : PermissionLevelAbstract.fromJson(
@@ -135,7 +136,6 @@ Employee _$EmployeeFromJson(Map<String, dynamic> json) => Employee()
       (json['cargo_transporters_count'] as num?)?.toInt()
   ..name = json['name'] as String?
   ..email = json['email'] as String?
-  ..token = json['token'] as String?
   ..activated = (json['activated'] as num?)?.toInt()
   ..date = json['date'] as String?
   ..city = json['city'] as String?
@@ -155,6 +155,7 @@ Map<String, dynamic> _$EmployeeToJson(Employee instance) => <String, dynamic>{
       'delete': instance.delete,
       'phone': instance.phone,
       'password': instance.password,
+      'token': instance.token,
       'userlevels': instance.userlevels?.toJson(),
       'setting': instance.setting?.toJson(),
       'dealers': instance.dealers?.toJson(),
@@ -225,7 +226,6 @@ Map<String, dynamic> _$EmployeeToJson(Employee instance) => <String, dynamic>{
       'cargo_transporters_count': instance.cargo_transporters_count,
       'name': instance.name,
       'email': instance.email,
-      'token': instance.token,
       'activated': instance.activated,
       'date': instance.date,
       'city': instance.city,

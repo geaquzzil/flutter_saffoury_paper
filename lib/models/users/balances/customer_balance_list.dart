@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
@@ -104,7 +105,6 @@ class CustomerBalanceList
 
   @override
   IconData getMainIconData() => Icons.balance;
-
 
   @override
   String? getCustomAction() => "customers/balance";
@@ -397,8 +397,6 @@ class CustomerBalanceList
           BuildContext context) =>
       null;
 
-
-
   @override
   void setDate(DateObject? date) {
     //TODO this.date = date;TODO
@@ -414,5 +412,17 @@ class CustomerBalanceList
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
       BuildContext context, PrintLocalSetting? dashboardSetting) {
     return null;
+  }
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    // TODO: implement getRequestOption
+    throw UnimplementedError();
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    // TODO: implement getRequestedForginListOnCall
+    throw UnimplementedError();
   }
 }

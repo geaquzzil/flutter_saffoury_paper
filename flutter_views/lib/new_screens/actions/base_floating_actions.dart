@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
@@ -105,7 +105,7 @@ class BaseFloatingActionButtons extends StatelessWidget {
                 viewAbstract.deleteCall(context,
                     onResponse: OnResponseCallback(
                         onServerNoMoreItems: () {},
-                        onClientFailure: (s) {
+                        onFlutterClientFailure: (s) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             // backgroundColor: color,
                             duration: const Duration(seconds: 2),

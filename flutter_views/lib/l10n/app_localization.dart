@@ -4340,6 +4340,12 @@ abstract class AppLocalizations {
   /// **'Unavailable'**
   String get unavailable;
 
+  /// No description provided for @unblock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock'**
+  String get unblock;
+
   /// No description provided for @undefined.
   ///
   /// In en, this message translates to:

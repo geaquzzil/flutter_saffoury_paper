@@ -1,11 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, constant_identifier_names
-import 'dart:convert' as convert;
-
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
-import 'package:flutter_view_controller/models/servers/server_response_master.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 
 import 'view_abstract_api.dart';
 
@@ -166,6 +163,18 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
 
   @override
   String? getTableNameApi() => action;
+
+  @override
+  RequestOptions? getRequestOption({required ServerActions action}) {
+    // TODO: implement getRequestOption
+    throw UnimplementedError();
+  }
+
+  @override
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    // TODO: implement getRequestedForginListOnCall
+    throw UnimplementedError();
+  }
 }
 
 abstract class CustomViewHorizontalListResponse<T extends ViewAbstract> {

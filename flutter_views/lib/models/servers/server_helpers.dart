@@ -75,15 +75,19 @@ class URLS {
 class OnResponseCallback {
   final void Function(dynamic response)? onServerResponse;
   final void Function()? onServerNoMoreItems;
-  final void Function(dynamic o)? onClientFailure;
+  final void Function(dynamic o)? onFlutterClientFailure;
   final void Function(String message)? onServerFailureResponse;
   final void Function()? onEmailOrPassword;
   final void Function()? onBlocked;
+  final void Function(bool isValid)? onAuthRequired;
+  final void Function()? onNoPermission;
   OnResponseCallback(
-      {required this.onServerNoMoreItems,
-      required this.onClientFailure,
-      required this.onServerResponse,
-      required this.onServerFailureResponse,
-      required this.onBlocked,
-      required this.onEmailOrPassword});
+      {this.onServerNoMoreItems,
+      this.onFlutterClientFailure,
+      this.onServerResponse,
+      this.onServerFailureResponse,
+      this.onBlocked,
+      this.onAuthRequired,
+      this.onNoPermission,
+      this.onEmailOrPassword});
 }

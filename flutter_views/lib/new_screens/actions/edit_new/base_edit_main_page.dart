@@ -2,8 +2,8 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_action_page.dart';
@@ -189,17 +189,14 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
                         currentViewAbstract =
                             currentViewAbstract!.copyToUplode();
                         apiCallState.value = ApiCallState.LOADING;
-                        currentViewAbstract =
-                            await currentViewAbstract!.addCall(
+                        currentViewAbstract = await currentViewAbstract!
+                            .addCall(
                                 context: context,
                                 onResponse: OnResponseCallback(
-                                    onServerResponse: (response) {},
-                                    onServerNoMoreItems: () {},
-                                    onClientFailure: (d) {},
                                     onServerFailureResponse: (s) {
-                                      debugPrint("onServerFailure $s");
-                                      apiCallState.value = ApiCallState.ERROR;
-                                    }));
+                                  debugPrint("onServerFailure $s");
+                                  apiCallState.value = ApiCallState.ERROR;
+                                }));
                         if (currentViewAbstract != null) {
                           apiCallState.value = ApiCallState.DONE;
                           extras = currentViewAbstract;
@@ -259,12 +256,10 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
     if (getExtras() is! ListableInterface) return null;
     ViewAbstract? value =
         getListableInterface().getListableAddFromManual(context);
-    if (value == null) return null;
     return FloatingActionButton.small(
       heroTag: UniqueKey(),
       onPressed: () async {
-        value = getListableInterface().getListableAddFromManual(context)
-            as ViewAbstract;
+        value = getListableInterface().getListableAddFromManual(context);
         value!.setParent(getExtras());
         await showFullScreenDialogExt<ViewAbstract?>(
             anchorPoint: const Offset(1000, 1000),

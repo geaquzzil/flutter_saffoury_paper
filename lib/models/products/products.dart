@@ -855,7 +855,7 @@ class Product extends ViewAbstract<Product>
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
             autoRest: ChartRecordAnalysis.init(
-                Order(), DateObject(), EnteryInteval.monthy)),
+                Order(), DateObject())),
       ),
 
       StaggeredGridTile.count(

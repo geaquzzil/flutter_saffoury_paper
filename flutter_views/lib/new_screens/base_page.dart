@@ -155,7 +155,7 @@ mixin BasePageWithTicker<T extends BasePage> on BasePageState<T> {
     ScrollController? controler,
     TabControllerHelper? tab,
   }) {
-    return getWidgetFromBase(firstPane, tab: tab);
+    return [getWidgetFromBase(firstPane, tab: tab)];
   }
 
   Widget getWidgetFromBase(bool firstPane, {TabControllerHelper? tab}) {
@@ -2225,7 +2225,8 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   Widget getMainPanes() {
     debugPrint("getBody _getTowPanes TabController ");
     dynamic ex = getExtras();
-    _isLoading = !getBodyWithoutApi();
+    // _isLoading = !getBodyWithoutApi();
+    _isLoading = false;
     if (ex != null && !_isLoading) {
       _connectionState.value =
           overrideConnectionState(BasePageWithApiConnection.build) ??

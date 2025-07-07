@@ -127,7 +127,7 @@ class CutRequest extends ViewAbstract<CutRequest>
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
             autoRest: ChartRecordAnalysis.init(
-                CutRequest(), DateObject(), EnteryInteval.monthy)),
+                CutRequest(), DateObject())),
       ),
     ];
   }
@@ -136,8 +136,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
     super.onBeforeGenerateView(context);
     if (action == ServerActions.edit && isNew()) {
-      employees =
-          context.read<AuthProvider<AuthUser>>().getSimpleUser as Employee;
+      employees = context.read<AuthProvider<AuthUser>>().getUser as Employee?;
     }
   }
 
@@ -341,7 +340,6 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   IconData getMainIconData() => Icons.content_cut;
-
 
   @override
   String? getTableNameApi() => "cut_requests";

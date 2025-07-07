@@ -103,8 +103,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
     super.onBeforeGenerateView(context);
     if (action == ServerActions.edit && isNew()) {
-      employees =
-          context.read<AuthProvider<AuthUser>>().getSimpleUser as Employee;
+      employees = context.read<AuthProvider<AuthUser>>().getUser as Employee?;
       status = InvoiceStatus.APPROVED;
     }
     terms = getTermsFromID(TermsID ?? -1);
@@ -918,7 +917,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
             autoRest: ChartRecordAnalysis.init(
-                this, DateObject(), EnteryInteval.monthy)),
+                this, DateObject())),
       ),
     ];
   }
@@ -1196,8 +1195,6 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     }
     return null;
   }
-
-  
 }
 
 enum Terms implements ViewAbstractEnum<Terms> {

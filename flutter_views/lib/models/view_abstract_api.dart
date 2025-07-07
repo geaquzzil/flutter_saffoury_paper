@@ -16,7 +16,6 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
-import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -252,7 +251,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         return null;
       }
     } catch (e) {
-      onResponse?.onClientFailure(e);
+      onResponse?.onFlutterClientFailure?.call(e);
     }
     return null;
   }
@@ -280,7 +279,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         return null;
       }
     } on Exception catch (e) {
-      onResponse?.onClientFailure(e);
+      onResponse?.onFlutterClientFailure?.call(e);
     }
     return null;
   }
@@ -300,7 +299,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         return null;
       }
     } catch (e) {
-      onResponse?.onClientFailure(e);
+      onResponse?.onFlutterClientFailure?.call(e);
     }
     return null;
   }
@@ -320,7 +319,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         return null;
       }
     } catch (e) {
-      onResponse?.onClientFailure(e);
+      onResponse?.onFlutterClientFailure?.call(e);
     }
     return null;
   }
@@ -388,7 +387,6 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         return;
       }
       int statusCode = response.statusCode;
-
       if (statusCode >= 400 && statusCode <= 500) {
         ServerResponse serverResponse =
             ServerResponse.fromJson(convert.jsonDecode(response.body));
@@ -400,10 +398,14 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         } else if (statusCode == 402) {
           onResponse.onBlocked?.call();
           //BLOCK
+        } else if (statusCode == 403) {
+          onResponse.onNoPermission?.call();
+        } else if (statusCode == 405 || statusCode == 406) {
+          onResponse.onAuthRequired?.call(statusCode == 405);
+        } else {
+          onResponse.onServerFailureResponse
+              ?.call((serverResponse.message ?? " unkown exceptions"));
         }
-        //this is a error
-
-        onResponse.onServerFailureResponse((serverResponse.message ?? "+"));
       }
     }
   }
@@ -429,12 +431,13 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     bool allFaild = faildCount == list.length;
     //TODO translate
     if (allSuccess) {
-      onResponse.onServerResponse(AppLocalizations.of(context)!.successDeleted);
+      onResponse.onServerResponse
+          ?.call(AppLocalizations.of(context)!.successDeleted);
     } else if (allFaild) {
-      onResponse.onServerFailureResponse(
-          "ALL ${AppLocalizations.of(context)!.errOperationFailed}");
+      onResponse.onServerFailureResponse
+          ?.call("ALL ${AppLocalizations.of(context)!.errOperationFailed}");
     } else {
-      onResponse.onServerFailureResponse(
+      onResponse.onServerFailureResponse?.call(
           "${AppLocalizations.of(context)!.errOperationFailed}: $faildCount");
     }
   }
@@ -442,36 +445,26 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   void deleteCall(BuildContext context,
       {required OnResponseCallback onResponse}) async {
     debugPrint("ViewAbstractApi deleteCall iD=> $iD ");
+    try {
+      var response = await _getDeleteResponse();
+      if (response == null) return null;
+      if (response.statusCode == 200) {
+        ServerResponse serverResponse =
+            ServerResponse.fromJson(convert.jsonDecode(response.body));
 
-    var response = await getRespones(
-        onResponse: onResponse, serverActions: ServerActions.delete_action);
-
-    if (response == null) {
-      // onResponse.onClientFailure("response is null");
-      return;
-    }
-    if (response.statusCode == 200) {
-      Iterable l = convert.jsonDecode(response.body);
-      List list = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
-      if (list.length == 1) {
-        bool success = (list[0] as ViewAbstract).successOnDelete();
-        if (success) {
-          onResponse
-              .onServerResponse(AppLocalizations.of(context)!.successDeleted);
+        if (serverResponse.serverStatus == false) {
+          onResponse.onServerFailureResponse
+              ?.call("ALL ${AppLocalizations.of(context)!.errOperationFailed}");
         } else {
-          onResponse.onServerFailureResponse(
-              "${AppLocalizations.of(context)!.errOperationFailed}: ${(list[0] as ViewAbstract).serverStatus}");
+          onResponse.onServerResponse
+              ?.call(AppLocalizations.of(context)!.successDeleted);
         }
       } else {
-        onCallCheck200Response(
-            context: context,
-            action: ServerActions.delete_action,
-            list: list,
-            onResponse: onResponse);
+        onCallCheckError(
+            onResponse: onResponse, response: response, context: context);
       }
-    } else {
-      onCallCheckError(
-          onResponse: onResponse, response: response, context: context);
+    } catch (e) {
+      onResponse.onFlutterClientFailure?.call(e);
     }
   }
 
@@ -485,33 +478,17 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   Future<List<T>> listCallNotNull(
-      {int? count,
-      int? page,
+      {required BuildContext context,
+      RequestOptions? option,
       OnResponseCallback? onResponse,
-      Map<String, FilterableProviderHelper>? filter,
-      required BuildContext context}) async {
-    debugPrint("ViewAbstractApi listCall count=> $count page=>$page");
-    var response = await getRespones(
-        map: filter,
-        itemCount: count,
-        pageIndex: page,
+      ServerActions? customAction}) async {
+    var response = await listCall(
+        context: context,
+        customAction: customAction,
         onResponse: onResponse,
-        serverActions: ServerActions.list);
-
+        option: option);
     if (response == null) return [];
-    if (response.statusCode == 200) {
-      // final parser = ResultsParser<T>(response.body, castViewAbstract());
-      // return parser.parseInBackground();
-
-      Iterable l = convert.jsonDecode(response.body);
-      List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
-
-      return t;
-    } else {
-      onCallCheckError(
-          onResponse: onResponse, response: response, context: context);
-      return [];
-    }
+    return response.cast();
   }
 
   ViewAbstract castViewAbstract() {

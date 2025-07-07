@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/screens/web/components/web_button.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -343,7 +344,14 @@ class SignInPage extends BaseWebPage {
                                             auth.phone = value.phone;
                                             context
                                                 .read<AuthProvider<AuthUser>>()
-                                                .signIn(user: auth);
+                                                .signIn(
+                                                    context: context,
+                                                    onResponeCallback:
+                                                        OnResponseCallback(
+                                                      onBlocked: () {},
+                                                      onEmailOrPassword: () {},
+                                                    ),
+                                                    user: auth);
                                           }
                                         : null,
                                   ),

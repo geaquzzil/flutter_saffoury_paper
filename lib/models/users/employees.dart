@@ -92,7 +92,6 @@ class Employee extends User<Employee> {
     return ["warehouse_employees"];
   }
 
-
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()

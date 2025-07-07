@@ -8,15 +8,18 @@ part of 'products.dart';
 
 Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
-  ..ParentID = json['ParentID']
   ..serverStatus = json['serverStatus'] as String?
   ..fb_edit = json['fb_edit'] as String?
   ..status = $enumDecodeNullable(_$ProductStatusEnumMap, json['status'])
   ..date = json['date'] as String?
   ..sheets = (json['sheets'] as num?)?.toInt()
+  ..ParentID = (json['ParentID'] as num?)?.toInt()
   ..barcode = Product.intFromString(json['barcode'])
   ..fiberLines = json['fiberLines'] as String?
   ..comments = json['comments'] as String?
+  ..parents = (json['parents'] as List<dynamic>?)
+      ?.map((e) => Product.fromJson(e as Map<String, dynamic>))
+      .toList()
   ..pending_reservation_invoice =
       (json['pending_reservation_invoice'] as num?)?.toDouble()
   ..pending_cut_requests = (json['pending_cut_requests'] as num?)?.toDouble()
@@ -47,11 +50,8 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..products_colors = json['products_colors'] == null
       ? null
       : ProductsColor.fromJson(json['products_colors'] as Map<String, dynamic>)
-  ..inventory = (json['inStock'] as List<dynamic>?)
+  ..inventory = (json['inventory'] as List<dynamic>?)
       ?.map((e) => Stocks.fromJson(e as Map<String, dynamic>))
-      .toList()
-  ..parents = (json['parents'] as List<dynamic>?)
-      ?.map((e) => Product.fromJson(e as Map<String, dynamic>))
       .toList()
   ..products = json['products'] == null
       ? null
@@ -108,7 +108,6 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'iD': instance.iD,
-      'ParentID': instance.ParentID,
       'delete': instance.delete,
       'status': _$ProductStatusEnumMap[instance.status],
       'date': instance.date,
@@ -116,6 +115,7 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'barcode': instance.barcode,
       'fiberLines': instance.fiberLines,
       'comments': instance.comments,
+      'parents': instance.parents?.map((e) => e.toJson()).toList(),
       'pending_reservation_invoice': instance.pending_reservation_invoice,
       'pending_cut_requests': instance.pending_cut_requests,
       'cut_request_quantity': instance.cut_request_quantity,
@@ -127,8 +127,7 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'qualities': instance.qualities?.toJson(),
       'grades': instance.grades?.toJson(),
       'products_colors': instance.products_colors?.toJson(),
-      'inStock': instance.inventory?.map((e) => e.toJson()).toList(),
-      'parents': instance.parents?.map((e) => e.toJson()).toList(),
+      'inventory': instance.inventory?.map((e) => e.toJson()).toList(),
       'products': instance.products?.toJson(),
       'cut_requests': instance.cut_requests?.map((e) => e.toJson()).toList(),
       'cut_requests_count': instance.cut_requests_count,

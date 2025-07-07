@@ -2319,6 +2319,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unavailable => 'Unavailable';
 
   @override
+  String get unblock => 'Unblock';
+
+  @override
   String get undefined => 'Undefined';
 
   @override
