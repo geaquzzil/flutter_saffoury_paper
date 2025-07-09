@@ -1900,6 +1900,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
           firstPane: null,
           tab: null,
         ),
+        bottomNavigationBar: getBottomNavigationBar(),
         key: widget.isFirstToSecOrThirdPane
             ? null
             : _drawerMenuControllerProvider.getStartDrawableKey,

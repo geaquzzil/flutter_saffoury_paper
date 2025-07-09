@@ -32,7 +32,7 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
   GlobalKey<FB.FormBuilderState> formKey = GlobalKey<FB.FormBuilderState>();
   FormGroup? _baseForm;
   FormBuilderOptions? _builderOption;
-  Map<String, ExpansionTileController> expansionController = {};
+  Map<String, ExpansibleController> expansionController = {};
 
   @override
   void initStateAfterApiCalled() {
@@ -113,6 +113,9 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
   }
 
   Widget getFormReactive() {
+    if (_baseForm == null) {
+      return Text("_baseForm is null");
+    }
     return ReactiveFormBuilder(
       form: () => _baseForm!,
       builder: (context, form, child) {
@@ -182,7 +185,7 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     );
   }
 
-  ExpansionTileController? getExpansionTile(
+  ExpansibleController? getExpansionTile(
       ViewAbstract viewAbstract, String field) {
     return expansionController[
         viewAbstract.getControllerKey(field, extras: "e")];
@@ -221,7 +224,7 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
               formWidget: formWidget);
         } else {
           expansionController[viewAbstract.getControllerKey(field,
-              extras: "e")] = ExpansionTileController();
+              extras: "e")] = ExpansibleController();
         }
 
         return ReactiveValueListenableBuilderListener<bool>(

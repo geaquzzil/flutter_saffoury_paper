@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -159,8 +159,8 @@ AppLocalizations? getAppLocal(BuildContext context) {
   return AppLocalizations.of(context);
 }
 
-getTabBarTheme(BuildContext context, ColorScheme colorScheme) {
-  return TabBarTheme(
+TabBarThemeData getTabBarTheme(BuildContext context, ColorScheme colorScheme) {
+  return TabBarThemeData(
     indicatorColor: colorScheme.primary,
     dividerColor: colorScheme.surfaceContainerHighest,
     labelStyle: Theme.of(context).textTheme.titleSmall,
@@ -172,8 +172,8 @@ getTabBarTheme(BuildContext context, ColorScheme colorScheme) {
   );
 }
 
-getCardTheme(BuildContext context, ColorScheme colorScheme) {
-  return CardTheme(
+CardThemeData getCardTheme(BuildContext context, ColorScheme colorScheme) {
+  return CardThemeData(
     margin: isLargeScreen(context)
         ? const EdgeInsets.all(1)
         : const EdgeInsets.all(4),
@@ -186,14 +186,15 @@ getCardTheme(BuildContext context, ColorScheme colorScheme) {
   );
 }
 
-getBadgeTheme(BuildContext context, ColorScheme colorScheme) {
+BadgeThemeData getBadgeTheme(BuildContext context, ColorScheme colorScheme) {
   return BadgeThemeData(
     backgroundColor: colorScheme.primary,
     offset: const Offset(-2, -2),
   );
 }
 
-getExpansionTileTheme(BuildContext context, ColorScheme colorScheme) {
+ExpansionTileThemeData getExpansionTileTheme(
+    BuildContext context, ColorScheme colorScheme) {
   return ExpansionTileThemeData(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(kBorderRadius)),
@@ -229,12 +230,12 @@ double getSizeOfScalledIcon(BuildContext context, WidgetState state) {
 ButtonStyle getButtonStyleIfIcon(BuildContext context, ColorScheme colorSheme) {
   return ButtonStyle(
     elevation: WidgetStateProperty.all(0),
-    padding: WidgetStateProperty.all(EdgeInsets.zero),
-    overlayColor: WidgetStateProperty.all(Colors.transparent),
+    // padding: WidgetStateProperty.all(EdgeInsets.zero),
+    // overlayColor: WidgetStateProperty.all(Colors.transparent),
 
     // surfaceTintColor:
     //     WidgetStateProperty.all(const Color.fromRGBO(0, 0, 0, 0)),
-    shape: WidgetStateProperty.all(const CircleBorder()),
+    // shape: WidgetStateProperty.all(const CircleBorder()),
     //  side: ,
     // shape:  WidgetStateProperty.all(),
     iconSize: WidgetStateProperty.resolveWith((states) {
@@ -337,7 +338,7 @@ InputDecorationTheme getTextFieldTheme(BuildContext context) {
   );
 }
 
-getQtyPlusDecoration(BuildContext context) {
+QtyDecorationProps getQtyPlusDecoration(BuildContext context) {
   return QtyDecorationProps(
       // contentPadding: EdgeInsets.all(kDefaultPadding * .2),
       border: getThemeBorder(isLargeScreen(context)),
@@ -367,7 +368,7 @@ getQtyPlusDecoration(BuildContext context) {
       ));
 }
 
-getQtyFormProps(BuildContext context) {
+QtyFormProps getQtyFormProps(BuildContext context) {
   return QtyFormProps(
     style: Theme.of(context).textTheme.titleSmall,
   );

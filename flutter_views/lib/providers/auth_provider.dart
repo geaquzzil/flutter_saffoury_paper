@@ -221,9 +221,9 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
       required AuthUser user,
       OnResponseCallback? onResponeCallback,
       Function(Status s)? currentStatus}) async {
-    notifyListeners();
+    // notifyListeners();
     currentStatus?.call(Status.Authenticating);
-    _currentUser = await _initUser.loginCall(
+    _currentUser = await user.loginCall(
         context: context,
         onResponse: OnResponseCallback(
           onBlocked: () {

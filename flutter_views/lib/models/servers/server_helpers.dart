@@ -22,17 +22,21 @@ enum ServerActions {
 }
 
 class URLS {
+  static List<String> getBasePath() {
+    return ["SaffouryPaper2", "public", "index.php", "api", "v1"];
+  }
+
   static String getBaseUrl() {
     if (!kIsWeb) {
       // return 'http://localhost/SaffouryPaper2/index.php';
-      return 'localhost/SaffouryPaper2/publicindex.php/api/v1/';
+      return 'localhost';
     }
     if (kIsWeb && kDebugMode) {
       // return 'http://localhost/SaffouryPaper2/index.php';
-      return 'localhost/SaffouryPaper2/publicindex.php/api/v1/';
+      return "localhost";
     } else {
       // return 'http://localhost/SaffouryPaper2/index.php';
-      return 'localhost/SaffouryPaper2/publicindex.php/api/v1/';
+      return 'localhost';
     }
   }
 
@@ -60,15 +64,16 @@ class URLS {
     'Access-Control-Allow-Credentials': 'true',
   };
   static const Map<String, String> requestHeaders = {
-    'Accept': 'application/json',
-    'Accept-Encoding': 'gzip',
+    'Accept': '*/*',
+    'Content-Type': 'application/json',
+
     "Access-Control-Allow-Origin":
         "*", // Required for CORS support to work/ Required for CORS support to work
     "Access-Control-Allow-Credentials":
         'true', // Required for cookies, authorization headers with HTTPS
     "Access-Control-Allow-Headers":
         "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale,Platform",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS, HEAD"
+    "Access-Control-Allow-Methods": "GET, POST, PUT,DELETE"
   };
 }
 

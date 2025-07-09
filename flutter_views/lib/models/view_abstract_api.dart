@@ -134,16 +134,15 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return defaultHeaders;
   }
 
-  Uri _getUrl(
-      {String? tableName,
-      String? customAction,
-      int? iD,
-      Map<String, dynamic>? params}) {
+  Uri _getUrl({int? iD, Map<String, dynamic>? params}) {
+    String? customAction = getCustomAction();
+    String? tableName = getTableNameApi();
     var url = Uri(
         scheme: "http",
         queryParameters: params,
         host: URLS.getBaseUrl(),
         pathSegments: [
+          ...URLS.getBasePath(),
           if (customAction != null || tableName != null)
             (customAction ?? tableName) ?? "",
           if (iD != null) "$iD"
@@ -171,8 +170,6 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   Future<Response?> _getListResponse({RequestOptions? option}) async {
     return await getHttp().get(
         _getUrl(
-            customAction: getCustomAction(),
-            tableName: getTableNameApi(),
             params: _getRequestOptionFromParamOrAbstract(
                     action: option?.getServerAction() ?? ServerActions.list)
                 ?.copyWithObjcet(option: option)
@@ -185,15 +182,14 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       {int? customID, ServerActions? customAction}) async {
     return await getHttp().get(
         _getUrl(
-            iD: customID ?? iD,
-            tableName: getTableNameApi(),
-            params: _getRequestOptionFromParamOrAbstract(
-                    action: customAction ?? ServerActions.view)
-                ?.copyWith(
-                    requestLists:
-                        _checkListToRequest(customAction ?? ServerActions.view))
-                .getRequestParams(),
-            customAction: getCustomAction()),
+          iD: customID ?? iD,
+          params: _getRequestOptionFromParamOrAbstract(
+                  action: customAction ?? ServerActions.view)
+              ?.copyWith(
+                  requestLists:
+                      _checkListToRequest(customAction ?? ServerActions.view))
+              .getRequestParams(),
+        ),
         headers: await getHeaders());
   }
 
@@ -201,28 +197,24 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     var headers = await getHeaders();
     return await getHttp().put(
         _getUrl(
-            iD: iD,
-            tableName: getTableNameApi(),
-            customAction: getCustomAction()),
+          iD: iD,
+        ),
         headers: headers,
         body: toJsonString());
   }
 
   Future<Response?> _getAddResponse() async {
     var headers = await getHeaders();
-    return await getHttp().post(
-        _getUrl(tableName: getTableNameApi(), customAction: getCustomAction()),
-        headers: headers,
-        body: toJsonString());
+    return await getHttp()
+        .post(_getUrl(), headers: headers, body: toJsonString());
   }
 
   Future<Response?> _getDeleteResponse() async {
     var headers = await getHeaders();
     return await getHttp().delete(
         _getUrl(
-            iD: iD,
-            tableName: getTableNameApi(),
-            customAction: getCustomAction()),
+          iD: iD,
+        ),
         headers: headers);
   }
 
@@ -522,7 +514,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   String toJsonString() {
-    return jsonEncode(toJsonViewAbstract());
+    String js = jsonEncode(toJsonViewAbstract());
+    debugPrint("toJsonString ========> $js");
+    return js;
   }
 
   T fromJsonViewAbstract(Map<String, dynamic> json);

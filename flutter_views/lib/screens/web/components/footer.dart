@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
+import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/models/footer_item.dart';
@@ -10,8 +12,6 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 
 final List<FooterItem> footerItems = [
   FooterItem(
@@ -41,14 +41,15 @@ final List<FooterItem> footerItems = [
 ];
 
 class Footer extends StatelessWidget {
-  const Footer({super.key});
+  final double? width;
+  const Footer({this.width, super.key});
 
   @override
   Widget build(BuildContext context) {
     return ScreenHelper(
-      largeTablet: _buildUi(kDesktopMaxWidth, context),
-      smallTablet: _buildUi(kTabletMaxWidth, context),
-      mobile: _buildUi(getMobileMaxWidth(context), context),
+      largeTablet: _buildUi(width ?? kDesktopMaxWidth, context),
+      smallTablet: _buildUi(width ?? kTabletMaxWidth, context),
+      mobile: _buildUi(width ?? getMobileMaxWidth(context), context),
     );
   }
 }
