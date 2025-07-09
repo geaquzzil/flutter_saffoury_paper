@@ -197,7 +197,9 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   Future<AuthUser?> loginCall({
     required BuildContext context,
     OnResponseCallback? onResponse,
-  }) {
+  }) async {
+    // AuthUser? response =
+    //     await addCall(context: context, onResponse: onResponse);
     return addCall(context: context, onResponse: onResponse);
   }
 
@@ -336,6 +338,4 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   List<String>? getRequestedForginListOnCall({required ServerActions action}) {
     return null;
   }
-
-
 }

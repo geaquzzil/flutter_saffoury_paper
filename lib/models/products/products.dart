@@ -283,7 +283,7 @@ class Product extends ViewAbstract<Product>
                 fromTo: [FromToBetweenRequest(from: "0", to: "0")])));
   }
   RequestOptions _getOnlyInventory() {
-    return RequestOptions().addSearchByField("requiresInventory", true);
+    return RequestOptions().addSearchByField("requiresInventory", "true").addRequestObjcets(true).addSortBy("date",SortByType.DESC);
   }
 
   @override

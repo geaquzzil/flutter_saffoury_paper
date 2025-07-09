@@ -62,7 +62,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   RequestOptions getSimilarCustomParams({required BuildContext context}) {
     return RequestOptions()
-        .addSearchByField(castViewAbstract().getForeignKeyName(), iD);
+        .addSearchByField(castViewAbstract().getForeignKeyName(), "$iD");
   }
 
   T setRequestOption(
@@ -137,6 +137,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   Uri _getUrl({int? iD, Map<String, dynamic>? params}) {
     String? customAction = getCustomAction();
     String? tableName = getTableNameApi();
+    debugPrint("listCall _getUrl params ===>$params");
     var url = Uri(
         scheme: "http",
         queryParameters: params,
@@ -152,23 +153,27 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   dynamic _checkListToRequest(ServerActions action) {
     List<String>? requiredList = getRequestedForginListOnCall(action: action);
+
     if (requiredList == null) return false;
     if (requiredList.isNotEmpty) {
-      return requiredList.where(
+      List l = requiredList.where(
         (element) {
           int? count = getFieldValue("${element}_count");
           List? list = getFieldValue(element);
+          if (count == null && list == null) return true;
           debugPrint(
               "checkListToRequest field:$element count:$count list:${list?.length}");
           return count != list?.length;
         },
       ).toList();
+      debugPrint("checkListToRequest list $l");
+      return l.isEmpty ? false : l;
     }
     return false;
   }
 
   Future<Response?> _getListResponse({RequestOptions? option}) async {
-    return await getHttp().get(
+    return getHttp().get(
         _getUrl(
             params: _getRequestOptionFromParamOrAbstract(
                     action: option?.getServerAction() ?? ServerActions.list)
@@ -231,18 +236,23 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       var response = await _getListResponse(option: option);
       if (response == null) return null;
       if (response.statusCode == 200) {
+        debugPrint("listCall response s ${response.body}");
         Iterable l = convert.jsonDecode(response.body);
         List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
         if (customAction == ServerActions.search_viewabstract_by_field) {
           setLastSearchViewAbstractByTextInputList(t.cast());
         }
         return t;
+      } else if (response.statusCode == 204) {
+        return [];
       } else {
         onCallCheckError(
             onResponse: onResponse, response: response, context: context);
         return null;
       }
-    } catch (e) {
+    } on Exception catch (e, s) {
+      debugPrint("listCall ex ${e.toString()}");
+      debugPrint("listCall trace ${s.toString()}");
       onResponse?.onFlutterClientFailure?.call(e);
     }
     return null;

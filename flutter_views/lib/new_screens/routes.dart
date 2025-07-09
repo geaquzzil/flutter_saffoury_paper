@@ -119,7 +119,7 @@ class RouteGenerator {
       return splashLocation;
     } else if (isLogedIn && !isFinishedInitialization) {
       appService.isInitialized = true;
-      if (appService.getPermissions.isReelCutter(context)) {
+      if (appService.isReelCutter(context)) {
         return reelLocation;
       }
       return homeLocation;
@@ -170,7 +170,7 @@ class RouteGenerator {
       return loginLocation;
     } else if (isLogedIn && !isFinishedInitialization) {
       debugPrint(
-          "getRouterAuth: userPermissionID ${appService.getPermissions.iD}");
+          "getRouterAuth: userPermissionID ${appService.getPermissions?.iD}");
       appService.isInitialized = true;
       AuthProvider authProvider = context.read<AuthProvider>();
       if (authProvider.isGoodsInventory(context)) {

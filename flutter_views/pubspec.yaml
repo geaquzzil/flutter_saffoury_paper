@@ -173,6 +173,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icons/
+    - assets/lotties/
     - assets/images/
     - assets/images/vector/
     - assets/images/raster/

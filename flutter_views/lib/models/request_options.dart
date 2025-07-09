@@ -32,34 +32,34 @@ class RequestOptions {
 
   //>SizeID<:width:{from:200,to:300},length:{from:800,to:900}
   //>SizeID<:[[{width:{from:200,to:300},length:{from:800,to:900}],[],[]}]
-  Map<String, dynamic> betweenMap = {};
+  Map<String, dynamic>? betweenMap;
 
   // <SizeID>:20
-  Map<String, dynamic> searchByField = {};
+  Map<String, dynamic>? searchByField;
   //#SizeID#
-  List<String> groupBy = [];
+  List<String>? groupBy;
 //&quantity&
-  List<String> sumBy = [];
-  Map<String, FilterableProviderHelper> filterMap = {};
+  List<String>? sumBy;
+  Map<String, FilterableProviderHelper>? filterMap;
 
   dynamic requestObjcets;
   dynamic requestLists;
 
   RequestOptions(
-      {this.betweenMap = const {},
+      {this.betweenMap,
       this.countPerPage = 20,
       this.countPerPageWhenSearch = 20,
       this.date,
-      this.filterMap = const {},
-      this.groupBy = const [],
+      this.filterMap,
+      this.groupBy,
       this.limit,
       this.page = 0,
       this.requestLists,
       this.requestObjcets,
-      this.searchByField = const {},
+      this.searchByField,
       this.searchQuery,
       this.sortBy,
-      this.sumBy = const []});
+      this.sumBy});
 
   RequestOptions copyWithObjcet({RequestOptions? option}) {
     return copyWith(
@@ -113,13 +113,15 @@ class RequestOptions {
   }
 
   Map<String, String> _getGroupBy() {
-    return Map.fromEntries(groupBy.map(
+    if (groupBy == null) return {};
+    return Map.fromEntries(groupBy!.map(
       (e) => MapEntry('#$e#', "true"),
     ));
   }
 
   Map<String, String> _getSumBy() {
-    return Map.fromEntries(sumBy.map(
+    if (sumBy == null) return {};
+    return Map.fromEntries(sumBy!.map(
       (e) => MapEntry('&$e&', "true"),
     ));
   }
@@ -140,7 +142,7 @@ class RequestOptions {
       case List():
         return jsonEncode(requestObjcets);
       case bool():
-        return requestObjcets;
+        return "$requestObjcets";
       default:
         return null;
     }
@@ -151,18 +153,19 @@ class RequestOptions {
       case List():
         return jsonEncode(requestLists);
       case bool():
-        return requestLists;
+        return "$requestLists";
       default:
         return null;
     }
   }
 
   Map<String, String> getFilterableMap() {
-    if (filterMap.isEmpty) return {};
+    if (filterMap?.isEmpty ?? true) return {};
     debugPrint("getFilterableMap=> $filterMap");
     Map<String, String> bodyMap = {};
-    filterMap.forEach((key, value) {
-      bodyMap["<${filterMap[key]!.fieldNameApi}>"] = filterMap[key]!.getValue();
+    filterMap?.forEach((key, value) {
+      bodyMap["<${filterMap?[key]!.fieldNameApi}>"] =
+          filterMap?[key]!.getValue();
     });
     debugPrint("getFilterableMap bodyMap $bodyMap");
     return bodyMap;
@@ -183,18 +186,20 @@ class RequestOptions {
 
   Map<String, dynamic> getRequestParams() {
     return {
-      if (page != null) 'page': page,
-      if (limit != null) 'limit': limit,
+      if (page != null) 'page': "$page",
+      if (limit != null) 'limit': "$limit",
       if (countPerPage != null || countPerPageWhenSearch != null)
-        'countPerPage': countPerPageWhenSearch ?? countPerPage,
+        'countPerPage': countPerPageWhenSearch != null
+            ? "$countPerPageWhenSearch"
+            : "$countPerPage",
       if (date != null) 'date': date.toString(),
       if (sortBy != null) ...sortBy!.getMap(),
       if (searchQuery != null) "searchQuery": searchQuery,
       ...getRequestParamsOnlyForings(),
       ..._getGroupBy(),
       ..._getSumBy(),
-      ...betweenMap,
-      ...searchByField,
+      if (betweenMap != null) ...betweenMap!,
+      if (searchByField != null) ...searchByField!,
       ...getFilterableMap()
     };
   }
@@ -224,13 +229,16 @@ class RequestOptions {
   RequestOptions addSearchByField(String field, dynamic value) {
     String key = "<$field>";
     if (value != null) {
-      searchByField[key] = value;
+      searchByField ??= {};
+      value = "$value";
+      searchByField![key] = value;
     }
     return this;
   }
 
   RequestOptions addFilterMap(Map<String, String> value) {
-    searchByField.addAll(value);
+    searchByField ??= {};
+    searchByField!.addAll(value);
     return this;
   }
 
@@ -241,25 +249,29 @@ class RequestOptions {
 
   RequestOptions addSumBy(String? field) {
     if (field == null) return this;
-    sumBy.add(field);
+
+    sumBy ??= [];
+    sumBy!.add(field);
     return this;
   }
 
   RequestOptions addGroupBy(String? field) {
     if (field == null) return this;
-    groupBy.add(field);
+    groupBy ??= [];
+    groupBy!.add(field);
     return this;
   }
 
   RequestOptions addBetween(String field, dynamic value) {
     if (value == null) return this;
     String key = ">$field<";
-    if (betweenMap.containsKey(key)) {
-      List<BetweenRequest> list = betweenMap[key]!;
+    betweenMap ??= {};
+    if (betweenMap?.containsKey(key) ?? false) {
+      List<BetweenRequest> list = betweenMap?[key]!;
       list.add(value);
-      betweenMap[key] = list;
+      betweenMap?[key] = list;
     }
-    betweenMap[key] = [value];
+    betweenMap?[key] = [value];
     return this;
   }
 

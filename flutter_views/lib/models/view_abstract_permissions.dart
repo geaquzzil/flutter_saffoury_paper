@@ -186,17 +186,17 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
 
   PermissionActionAbstract? findCurrentPermission(
       BuildContext context, dynamic toDo) {
-    PermissionLevelAbstract permissionLevelAbstract =
+    PermissionLevelAbstract? permissionLevelAbstract =
         getUserPermissionLevel(context);
 
-    return permissionLevelAbstract.findPermissionBy(toDo);
+    return permissionLevelAbstract?.findPermissionBy(toDo);
   }
 
   List<PermissionActionAbstract> getPermssionActions(BuildContext context) {
-    return getUserPermissionLevel(context).permissions_levels ?? [];
+    return getUserPermissionLevel(context)?.permissions_levels ?? [];
   }
 
-  PermissionLevelAbstract getUserPermissionLevel(BuildContext context) {
+  PermissionLevelAbstract? getUserPermissionLevel(BuildContext context) {
     return context.read<AuthProvider<AuthUser>>().getPermissions;
   }
 
@@ -231,28 +231,32 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   }
 
   bool isReelCutter(BuildContext context) =>
-      getUserPermissionLevel(context).iD == REEL_CUTTER || isAdmin(context);
+      getUserPermissionLevel(context)?.iD == REEL_CUTTER;
+  // || isAdmin(context);
 
   bool isPOS(BuildContext context) =>
-      getUserPermissionLevel(context).iD == POS || isAdmin(context);
+      getUserPermissionLevel(context)?.iD == POS;
+  // || isAdmin(context);
 
   bool isPalletCutter(BuildContext context) =>
-      getUserPermissionLevel(context).iD == PALLET_CUTTER || isAdmin(context);
+      getUserPermissionLevel(context)?.iD == PALLET_CUTTER;
+  //  || isAdmin(context);
 
   bool isAdmin(BuildContext context) =>
-      getUserPermissionLevel(context).iD == ADMIN_ID;
+      getUserPermissionLevel(context)?.iD == ADMIN_ID;
 
   bool isGoodsInventoryWorker(BuildContext context) =>
-      getUserPermissionLevel(context).iD == GOODS_INVENTORY_WORKER ||
-      isAdmin(context);
+      getUserPermissionLevel(context)?.iD == GOODS_INVENTORY_WORKER;
+  //  || isAdmin(context);
 
-  bool isGuest(BuildContext context) => getUserPermissionLevel(context).iD == 0;
+  bool isGuest(BuildContext context) =>
+      getUserPermissionLevel(context)?.iD == 0;
 
   bool isGeneralClient(BuildContext context) =>
-      getUserPermissionLevel(context).iD > 0;
+      (getUserPermissionLevel(context)?.iD ?? 0) > 0;
 
   bool isGeneralEmployee(BuildContext context) =>
-      getUserPermissionLevel(context).iD < 0;
+      (getUserPermissionLevel(context)?.iD ?? 0) < 0;
 
   bool isEditing() {
     return iD != -1;

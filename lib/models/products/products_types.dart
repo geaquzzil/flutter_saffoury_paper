@@ -206,7 +206,7 @@ class ProductType extends ViewAbstract<ProductType>
   String? getImageUrl(BuildContext context) {
     if (image == null) return null;
     if (image?.isEmpty ?? true) return null;
-    return "https://$image";
+    return "$image";
   }
 
   @override

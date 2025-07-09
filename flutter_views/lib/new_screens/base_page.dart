@@ -1164,6 +1164,10 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     return false;
   }
 
+  bool forceDisabledActions() {
+    return false;
+  }
+
   double getCustomPaneProportion() {
     {
       CurrentScreenSize s = getCurrentScreenSize();
@@ -1219,7 +1223,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   AppBar? generateBaseAppbar() {
     List<Widget>? actions = getAppbarActions(firstPane: null);
     Widget? title = getBaseAppbarTitle();
-    bool isEmpty = actions?.isEmpty == true;
+    bool isEmpty = forceDisabledActions() || actions?.isEmpty == true;
     if (actions == null && title == null) return null;
     return AppBar(
         surfaceTintColor: Colors.transparent,

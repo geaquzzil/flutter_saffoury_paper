@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/new_screens/actions/dashboard/base_deter
 import 'package:flutter_view_controller/new_screens/authentecation/components/loading_auth.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/network_faild_auth.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
+import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -34,23 +35,25 @@ class _BaseAuthenticatingScreenState extends State<BaseAuthenticatingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return getLoadingWidget();
-    switch (authProvider.getStatus) {
-      case Status.Initialization:
-        return getLoadingWidget();
-      case Status.Unauthenticated:
-      case Status.Authenticating:
-        return const LoadingAuth();
-      case Status.Authenticated:
-      case Status.Guest:
-        return authProvider.hasFinished()
-            ? getDoneWidget(context)
-            : getFutureDrawerItemsBuilder(context, authProvider);
-      case Status.Faild:
-        return const NetworkFaildAuth();
-      default:
-        return const LoadingAuth();
-    }
+    return EmptyWidget(
+      lottieJson: "loading_lottie.json",
+    );
+    // switch (authProvider.getStatus) {
+    //   case Status.Initialization:
+    //     return getLoadingWidget();
+    //   case Status.Unauthenticated:
+    //   case Status.Authenticating:
+    //     return const LoadingAuth();
+    //   case Status.Authenticated:
+    //   case Status.Guest:
+    //     return authProvider.hasFinished()
+    //         ? getDoneWidget(context)
+    //         : getFutureDrawerItemsBuilder(context, authProvider);
+    //   case Status.Faild:
+    //     return const NetworkFaildAuth();
+    //   default:
+    //     return const LoadingAuth();
+    // }
   }
 
   Widget getLoadingWidget() => Center(

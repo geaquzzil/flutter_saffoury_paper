@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_api.dart';
 
 import '../../models/auto_rest.dart';
 
@@ -281,9 +282,11 @@ class ListMultiKeyProvider with ChangeNotifier {
     multiListProviderHelper.isLoading = true;
     notifyListeners();
     try {
-      List? list;
-      dynamic ob = customAutoRest ?? viewAbstract;
-      list = await ob.listCall(
+      debugPrint("listCall fetchList");
+
+      ViewAbstractApi ob =
+          customAutoRest as ViewAbstractApi? ?? viewAbstract as ViewAbstractApi;
+      List? list = await ob.listCall(
           option: options?.copyWith(page: multiListProviderHelper.page),
           context: context);
 
@@ -321,8 +324,9 @@ class ListMultiKeyProvider with ChangeNotifier {
         multiListProviderHelper.hasError = true;
         notifyListeners();
       }
-    } catch (e) {
-      debugPrint("Exceptionsos $e");
+    } on Exception catch (e, s) {
+      debugPrint("listCall Exceptionsos $e");
+      debugPrint("listCall Exceptionsos $s");
       multiListProviderHelper.isLoading = false;
       multiListProviderHelper.hasError = true;
       notifyListeners();

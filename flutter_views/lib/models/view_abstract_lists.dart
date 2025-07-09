@@ -26,7 +26,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   ///This could be A [Widget] or [IconDate]
-  getCardLeadingBottomIcon(BuildContext context) {
+  dynamic getCardLeadingBottomIcon(BuildContext context) {
     return null;
   }
 
@@ -196,7 +196,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   Widget getBlurringImage(BuildContext context, {bool addBottomWidget = true}) {
-    String? imageUrl = getImageUrl(context);
+    String? imageUrl = getImageUrlAddHost(context);
     if (imageUrl == null) {
       return Icon(getMainIconData());
     }
@@ -225,15 +225,15 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         width: size,
         height: size,
         decoration: getBoxDecoration(context),
-        child: getImageUrl(context) == null ? getImageIfNoUrl() : null);
+        child: getImageUrlAddHost(context) == null ? getImageIfNoUrl() : null);
   }
 
   BoxDecoration getBoxDecoration(BuildContext context) {
     return BoxDecoration(
-        image: getImageUrl(context) == null
+        image: getImageUrlAddHost(context) == null
             ? null
             : DecorationImage(
-                image: FastCachedImageProvider(getImageUrl(context)!),
+                image: FastCachedImageProvider(getImageUrlAddHost(context)!),
                 fit: BoxFit.cover),
         color: null,
         border: Border.all(width: 2, color: Theme.of(context).highlightColor),
@@ -242,7 +242,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
 
   Widget getCardLeadingImage(BuildContext context,
       {bool? isSelected, bool addBottomWidget = true, double? size}) {
-    String? imageUrl = getImageUrl(context);
+    String? imageUrl = getImageUrlAddHost(context);
     if (imageUrl == null) {
       return Icon(
         getMainIconData(),

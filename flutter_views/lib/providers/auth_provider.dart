@@ -78,21 +78,24 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   set isInitialized(bool value) => this._isInitialized = value;
   bool _hasFinishedUpSettingUp = false;
   bool hasSavedUser = false;
-  late PermissionLevelAbstract _permissions;
   Status get getStatus => _status;
   T? get getUser => _currentUser;
   Dealers? get getDealers => _currentUser?.dealers;
   ViewAbstract get getOrderSimple => _orderSimple.getSelfNewInstance();
   String get getUserName => _currentUser?.getFieldValue("name") ?? "_UNKONW";
   String get getUserPermission => _currentUser?.userlevels?.userlevelname ?? "";
+
+  PermissionLevelAbstract? get getPermissions => getUser?.userlevels;
+  List<ViewAbstract> get getDrawerItems => _drawerItems;
+  List<ViewAbstract> get getDrawerItemsPermissions => _drawerItemsPermissions;
   String get getUserImageUrl {
     // return "";
     //todo for some reason we canot add profile image
     return "https://play-lh.googleusercontent.com/i1qvljmS0nE43vtDhNKeGYtNlujcFxq72WAsyD2htUHOac57Z9Oiew0FrpGKlEehOvo=w240-h480-rw";
   }
 
-  Future<void> onAppStart(BuildContext context) async {
-    await init();
+  Future<void> onAppStart(BuildContext context, {T? newUser}) async {
+    await init(newUser: newUser);
     await initDrawerItems(context);
     // This is just to demonstrate the splash screen is working.
     // In real-life applications, it is not recommended to interrupt the user experience by doing such things.
@@ -114,20 +117,18 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     return _notificationHandler!;
   }
 
-  PermissionLevelAbstract get getPermissions => _permissions;
-  List<ViewAbstract> get getDrawerItems => _drawerItems;
-  List<ViewAbstract> get getDrawerItemsPermissions => _drawerItemsPermissions;
-
   ///each of this has seperate pages
-  bool isPOS(BuildContext context) => _permissions.isPOS(context);
+  bool isPOS(BuildContext context) => getPermissions?.isPOS(context) ?? false;
   bool isPalletCutter(BuildContext context) =>
-      _permissions.isPalletCutter(context);
-  bool isReelCutter(BuildContext context) => _permissions.isReelCutter(context);
+      getPermissions?.isPalletCutter(context) ?? false;
+  bool isReelCutter(BuildContext context) =>
+      getPermissions?.isReelCutter(context) ?? false;
 
   bool isGoodsInventory(BuildContext context) =>
-      _permissions.isGoodsInventoryWorker(context);
+      getPermissions?.isGoodsInventoryWorker(context) ?? false;
 
-  bool isAdmin(BuildContext context) => _permissions.isAdmin(context);
+  bool isAdmin(BuildContext context) =>
+      getPermissions?.isAdmin(context) ?? false;
 
   Map<String?, List<ViewAbstract>> get getDrawerItemsGrouped =>
       __drawerItemsGrouped;
@@ -188,8 +189,9 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     );
   }
 
-  Future init() async {
-    _currentUser = (await Configurations.get<T>(_initUser));
+  Future init({T? newUser}) async {
+    _currentUser =
+        newUser ?? (await Configurations.get<T>(_initUser, customKey: "USER"));
     _status = _currentUser != null ? Status.Authenticated : Status.Guest;
     notifyListeners();
   }
@@ -246,8 +248,8 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
 
     if (_currentUser != null) {
       currentStatus?.call(Status.Authenticated);
-      Configurations.saveViewAbstract(_currentUser!);
-      _permissions = _currentUser!.userlevels!;
+      Configurations.saveViewAbstract(_currentUser!, customKey: "USER");
+      onAppStart(context, newUser: _currentUser);
       return true;
     } else {
       currentStatus?.call(Status.Unauthenticated);

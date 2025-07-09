@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
-import 'package:flutter_view_controller/new_screens/actions/cruds/edit.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
+import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/web/components/footer.dart';
 import 'package:flutter_view_controller/screens/web/components/web_button.dart';
 import 'package:flutter_view_controller/size_config.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
@@ -87,47 +90,49 @@ class _SignInPageState extends BasePageState<SignInPage>
         //   ),
         // ),
 
-        // SizedBox(
-        //   width: firstPaneWidth * .5,
-        //   child: BaseEditWidget(
-        //     viewAbstract: user,
-        //     isTheFirst: true,
-        //     requireOnValidateEvenIfNull: true,
-        //     onValidate: (viewAbstract) {
-        //       _loginState.value = viewAbstract;
-        //     },
-        //   ),
-        // ),
-        // SizedBox(
-        //   width: firstPaneWidth * .5,
-        //   child: ElevatedButton(
-        //     child: Text(AppLocalizations.of(context)!.action_sign_in),
-        //     onPressed: () {
-        //       notify(SecondPaneHelper(
-        //           title: AppLocalizations.of(context)!.action_sign_in,
-        //           value: AppLocalizations.of(context)!.action_sign_in));
-        //     },
-        //   ),
-        // ),
-        // SizedBox(
-        //     width: firstPaneWidth * .5,
-        //     child: Row(
-        //       // crossAxisAlignment: CrossAxisAlignment.center,
-        //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //       mainAxisSize: MainAxisSize.max,
-        //       children: [
-        //         TextButton.icon(
-        //           icon: Icon(Icons.facebook),
-        //           label: Text("Facebook"),
-        //           onPressed: () {},
-        //         ),
-        //         TextButton.icon(
-        //           icon: Icon(Icons.apple),
-        //           label: Text("Apple"),
-        //           onPressed: () {},
-        //         )
-        //       ],
-        //     )),
+        SizedBox(
+          width: firstPaneWidth * .5,
+          child: BaseEditWidget(
+            viewAbstract: user,
+            isTheFirst: true,
+            requireOnValidateEvenIfNull: true,
+            onValidate: (viewAbstract) {
+              _loginState.value = viewAbstract;
+            },
+          ),
+        ),
+        SizedBox(
+          width: firstPaneWidth * .5,
+          child: ElevatedButton(
+            child: Text(AppLocalizations.of(context)!.action_sign_in),
+            onPressed: () {
+              if (_loginState.value == null) return;
+              notify(SecondPaneHelper(
+                  title: AppLocalizations.of(context)!.action_sign_in,
+                  value: AppLocalizations.of(context)!.action_sign_in));
+              _signIn();
+            },
+          ),
+        ),
+        SizedBox(
+            width: firstPaneWidth * .5,
+            child: Row(
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                TextButton.icon(
+                  icon: Icon(Icons.facebook),
+                  label: Text("Facebook"),
+                  onPressed: () {},
+                ),
+                TextButton.icon(
+                  icon: Icon(Icons.apple),
+                  label: Text("Apple"),
+                  onPressed: () {},
+                )
+              ],
+            )),
       ],
     );
   }
@@ -262,6 +267,11 @@ class _SignInPageState extends BasePageState<SignInPage>
   }
 
   @override
+  bool forceDisabledActions() {
+    return true;
+  }
+
+  @override
   List<Widget>? getPaneNotifier(
       {required bool firstPane,
       ScrollController? controler,
@@ -286,20 +296,14 @@ class _SignInPageState extends BasePageState<SignInPage>
         SliverToBoxAdapter(
           child: getFirstPaneLarge(),
         ),
-        SliverFillRemaining(
-          child: EditNew(
-            extras: user,
-            onBuild: onBuild,
-            key: kk,
-            parent: this,
-          ),
-        ),
       ];
     } else {
       return [
-        SliverToBoxAdapter(
-          child: Text(""),
-        )
+        if (valueNotifier == null)
+          SliverFillRemaining(
+              child: EmptyWidget(
+            lottieJson: "hi_lottie.json",
+          ))
         // SliverFillRemaining(
         //   child: EditNew(
         //     isFirstToSecOrThirdPane: true,
@@ -313,9 +317,53 @@ class _SignInPageState extends BasePageState<SignInPage>
     }
   }
 
+  void _getSnackbar(String text) {
+    var snackBar = SnackBar(
+      width: firstPaneWidth,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kBorderRadius),
+      ),
+      content: Text(text),
+      behavior: SnackBarBehavior.floating,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   String onActionInitial() {
     return "Sign in";
+  }
+
+  Future<void> _signIn() async {
+    var value = _loginState.value;
+    bool isSignIn = false;
+    AuthUser auth = AuthUser();
+    auth.password = (value as AuthUserLogin).password;
+    auth.phone = value.phone;
+    isSignIn = await context.read<AuthProvider<AuthUser>>().signIn(
+        context: context,
+        onResponeCallback: OnResponseCallback(
+          onFlutterClientFailure: (o) {
+            debugPrint("AuthPRovider on Flutter $o");
+            _getSnackbar(AppLocalizations.of(context)!.cantConnect);
+          },
+          onBlocked: () {
+            debugPrint(
+                "AuthProvider  onBlocked ds auth user =>phone: ${(value as AuthUserLogin?)?.phone} password: ${(value as AuthUserLogin?)?.password}");
+
+            _getSnackbar(AppLocalizations.of(context)!.blockDes);
+          },
+          onEmailOrPassword: () {
+            debugPrint(
+                "AuthProvider  onEmailOrPassword ds auth user =>phone: ${(value as AuthUserLogin?)?.phone} password: ${(value as AuthUserLogin?)?.password}");
+            _getSnackbar(AppLocalizations.of(context)!.errLogin);
+          },
+        ),
+        user: auth);
+
+    if (isSignIn) {
+      context.goNamed(homeRouteName);
+    }
   }
 }
 

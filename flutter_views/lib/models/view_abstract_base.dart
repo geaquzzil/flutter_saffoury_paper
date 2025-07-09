@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -288,6 +288,12 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   String? getImageUrl(BuildContext context) {
     return null;
+  }
+
+  String? getImageUrlAddHost(BuildContext context) {
+    String? url = getImageUrl(context);
+    if (url == null) return null;
+    return "http://${URLS.getBaseUrl()}/SaffouryPaper2/Images/$url";
   }
 
   String getAddToFormat(BuildContext context) {

@@ -53,7 +53,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
     RequestOptions ro = RequestOptions(date: date);
     //TODO   if (customAction != null) "customAction": jsonEncode(customAction)
     return (enteryInteval == EnteryInteval.daily)
-        ? ro.addSearchByField("inteval", true)
+        ? ro.addSearchByField("inteval", "true")
         : ro;
   }
 

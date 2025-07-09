@@ -64,9 +64,9 @@ class Configurations {
   }
 
   static Future<void> saveViewAbstract(ViewAbstract value,
-      {String? customKey}) async {
-    save((value.runtimeType.toString()) + (customKey ?? ""),
-        jsonEncode(value.toJsonViewAbstract()));
+      {String? postKey, String? customKey}) async {
+    String key = customKey ?? (value.runtimeType.toString()) + (postKey ?? "");
+    save(key, jsonEncode(value.toJsonViewAbstract()));
   }
 
   static Future<void> removeViewAbstract(ViewAbstract value,
@@ -118,8 +118,8 @@ class Configurations {
   }
 
   static Future<T?> get<T extends ViewAbstract>(T obj,
-      {String? customKey}) async {
-    String key = (obj.runtimeType.toString()) + (customKey ?? "");
+      {String? postKey, String? customKey}) async {
+    String key = customKey ?? (obj.runtimeType.toString()) + (postKey ?? "");
     String? objectHistoryList = await getValueString(key);
     if (objectHistoryList == null) {
       debugPrint("Configrations  cant get saved value for key =>$key");

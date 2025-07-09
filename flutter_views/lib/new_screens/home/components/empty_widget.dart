@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:lottie/lottie.dart';
 
 class LottieColorFilter extends StatelessWidget {
@@ -176,13 +176,14 @@ class EmptyWidget extends StatelessWidget {
       );
     } else {
       widget = Lottie.asset(
+        repeat: false,
         lottieAssetPath + lottieJson!,
       );
     }
-    return widget;
+    // return widget;
     return ColorFiltered(
         colorFilter: ColorFilter.mode(
-          Theme.of(context).colorScheme.surface,
+          Theme.of(context).colorScheme.primary,
           BlendMode.modulate,
         ),
         child: widget);
