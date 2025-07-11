@@ -59,10 +59,11 @@ class EmptyWidget extends StatelessWidget {
 
   const EmptyWidget.loading({
     super.key,
-    this.lottiUrl = "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json",
+    // this.lottieJson = "https://assets3.lottiefiles.com/packages/lf20_mr1olA.json",
+    this.lottieJson = "loading_lottie.json",
     this.expand = true,
   })  : onSubtitleClicked = null,
-        lottieJson = null,
+        lottiUrl = null,
         title = null,
         subtitle = null;
 

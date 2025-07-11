@@ -16,7 +16,7 @@ List<ActionOnToolbarItem> getListOfProfileSettings(BuildContext context,
     {CustomPopupMenuController? controller}) {
   List<ActionOnToolbarItem> menuItems = [];
   AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
-  if (authProvider.hasSavedUser) {
+  if (authProvider.isLoggedInN()) {
     menuItems = [
       if (authProvider.isAdmin(context))
         ActionOnToolbarItem(

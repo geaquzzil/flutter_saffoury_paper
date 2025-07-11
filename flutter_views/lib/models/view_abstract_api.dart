@@ -193,7 +193,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       {int? customID, ServerActions? customAction}) async {
     return await getHttp().get(
         _getUrl(
-          iD: customID ?? iD,
+          iD: customID == null ? customID : (isNew() ? null : iD),
           params: getRequestOptionFromParamOrAbstract(
                   action: customAction ?? ServerActions.view)
               ?.copyWith(
@@ -271,14 +271,16 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     ServerActions? customAction,
   }) async {
     try {
+      debugPrint("viewCall is Called");
       dynamic isRequireList =
           _checkListToRequest(customAction ?? ServerActions.view);
       if (customID == null) {
-        if (isRequireList == false) {
+        if (isRequireList == false && !isNew()) {
           return this as T;
         }
       }
       var response = await _getViewResponse(customID: customID);
+      // debugPrint("viewCall  resp ${response?.body}");
       if (response == null) return null;
       if (response.statusCode == 200) {
         return fromJsonViewAbstract(convert.jsonDecode(response.body));
@@ -286,7 +288,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         onCallCheckError(response: response, context: context);
         return null;
       }
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
+      debugPrint("viewCall ex ${e.toString()}");
+      debugPrint("viewCall trace ${s.toString()}");
       onResponse?.onFlutterClientFailure?.call(e);
     }
     return null;

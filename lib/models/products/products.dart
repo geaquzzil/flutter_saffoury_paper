@@ -999,16 +999,9 @@ class Product extends ViewAbstract<Product>
     }
     return [
       HeaderDescription(
-          isSliver: true, title: AppLocalizations.of(context)!.simialrProducts),
-      SliverApiMixinViewAbstractWidget(
-          isGridView: true,
-          scrollDirection: Axis.horizontal,
-          toListObject: Product().setRequestOption(
-              option: getSimilarCustomParams(context: context))),
-      HeaderDescription(
           isSliver: true,
           title: //TODO translate
-              "${AppLocalizations.of(context)!.productsWithSimilarSize} AND TYPE"),
+              AppLocalizations.of(context)!.simialrProducts),
       SliverApiMixinViewAbstractWidget(
           isGridView: true,
           scrollDirection: Axis.horizontal,

@@ -19,6 +19,7 @@ import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 part 'server_data_api.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -62,9 +63,9 @@ class FilterableDataApi extends FilterableData<FilterableDataApi> {
       FilterableDataApi.fromJson(json);
 
   @override
-  String? getTableNameApi() => "";
+  String? getTableNameApi() => null;
   @override
-  String? getCustomAction() => "list_server_data";
+  String? getCustomAction() => "server_data";
 
   T? searchForValue<T extends ViewAbstract>(
       T viewAbstract, dynamic value, bool Function(T) test) {
