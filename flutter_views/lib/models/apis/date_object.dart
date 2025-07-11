@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
@@ -53,10 +55,6 @@ class DateObject {
     return DateObject();
   }
 
-  factory DateObject.fromJson(Map<String, dynamic> data) => DateObject()
-    ..from = data["from"] as String
-    ..to = data["to"] as String;
-
   String getTitle(BuildContext context) {
     String title = "";
     if (from == to && from == "".toDateTimeOnlyDateString()) {
@@ -97,9 +95,26 @@ class DateObject {
   }
 
   @override
-  String toString() {
-    return toJson().toString();
+  String toString() => 'DateObject(from: $from, to: $to)';
+
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+
+    result.addAll({'from': from});
+    result.addAll({'to': to});
+
+    return result;
   }
 
-  Map<String, dynamic> toJson() => {"""from""": from, """to""": to};
+  factory DateObject.fromMap(Map<String, dynamic> map) {
+    return DateObject(
+      from: map['from'] ?? '',
+      to: map['to'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory DateObject.fromJson(Map<String, dynamic> map) =>
+      DateObject.fromMap(map);
 }

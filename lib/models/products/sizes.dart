@@ -334,7 +334,7 @@ class ProductSize extends ViewAbstract<ProductSize> {
           from: w.toString(), to: (w + maxWaste).toString());
       sugg = w;
       idx = idx + 1;
-    } while (sugg > 3000);
+    } while (sugg < 3000);
 
     return map;
   }

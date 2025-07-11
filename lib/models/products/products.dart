@@ -283,7 +283,10 @@ class Product extends ViewAbstract<Product>
                 fromTo: [FromToBetweenRequest(from: "0", to: "0")])));
   }
   RequestOptions _getOnlyInventory() {
-    return RequestOptions().addSearchByField("requiresInventory", "true").addRequestObjcets(true).addSortBy("date",SortByType.DESC);
+    return RequestOptions()
+        .addSearchByField("requiresInventory", "true")
+        .addRequestObjcets(true)
+        .addSortBy("date", SortByType.DESC);
   }
 
   @override
@@ -854,8 +857,7 @@ class Product extends ViewAbstract<Product>
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
-            autoRest: ChartRecordAnalysis.init(
-                Order(), DateObject())),
+            autoRest: ChartRecordAnalysis.init(Order(), DateObject())),
       ),
 
       StaggeredGridTile.count(
@@ -926,7 +928,7 @@ class Product extends ViewAbstract<Product>
 
   RequestOptions getSimilarWithSameSize(BuildContext context) {
     RequestOptions op = _getOnlyInventory()
-        .addBetween("SizeID", sizes?.getListOfSizesWithMaxWaste(maxWaste: 20));
+        .setBetween("SizeID", sizes?.getListOfSizesWithMaxWaste(maxWaste: 20));
 
     return !isGeneralEmployee(context)
         ? op.addSearchByField("status", "NONE")
@@ -949,10 +951,10 @@ class Product extends ViewAbstract<Product>
 
   @override
   RequestOptions getSimilarCustomParams({required BuildContext context}) {
-    RequestOptions op = RequestOptions()
+    RequestOptions op = _getOnlyInventory()
         .addSearchByField("GSMID", gsms?.iD)
-        .addSearchByField("ProductTypeID", products_types?.iD)
-        .addSearchByField("requireInventory", true);
+        .addSearchByField("ProductTypeID", products_types?.iD);
+    // debugPrint("getSimilarCustomParams is In function $op");
 
     return !isGeneralEmployee(context)
         ? op.addSearchByField("status", "NONE")
@@ -985,11 +987,17 @@ class Product extends ViewAbstract<Product>
       return null;
     }
     return [
+      SliverToBoxAdapter(
+        child: Text(
+          AppLocalizations.of(context)!.simialrProducts,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+      ),
       SliverApiMixinViewAbstractWidget(
           isGridView: true,
           scrollDirection: Axis.horizontal,
-          toListObject:
-              Product().getSelfInstanceWithSimilarOption(context: context)),
+          toListObject: Product().setRequestOption(
+              option: getSimilarCustomParams(context: context))),
       SliverApiMixinViewAbstractWidget(
           isGridView: true,
           scrollDirection: Axis.horizontal,
@@ -1633,6 +1641,7 @@ class Product extends ViewAbstract<Product>
   List<String>? getRequestedForginListOnCall({required ServerActions action}) {
     return ["inventory"];
   }
+
   @override
   Widget getPosableMainWidget(
       BuildContext context, AsyncSnapshot snapshotResponse) {

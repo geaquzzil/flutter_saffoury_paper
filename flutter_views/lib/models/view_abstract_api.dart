@@ -48,13 +48,17 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   final List<SearchCache> _searchCache = [];
 
+  @Deprecated("dont use new self")
   T getSelfInstanceWithSimilarOption(
       {required BuildContext context,
       ServerActions action = ServerActions.list,
       ViewAbstract? obj,
       RequestOptions? copyWith}) {
     RequestOptions? o = obj?.getSimilarCustomParams(context: context) ??
-        getSimilarCustomParams(context: context);
+        this.getSimilarCustomParams(context: context);
+
+    debugPrint(
+        "getSelfInstanceWithSimilarOption getSimilarCustomParams ====> ${o.getKey()}");
 
     return setRequestOption(
         action: action, option: o.copyWithObjcet(option: copyWith));
@@ -83,9 +87,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return getRequestOption(action: action)?.sortBy;
   }
 
-  RequestOptions? _getRequestOptionFromParamOrAbstract(
+  RequestOptions? getRequestOptionFromParamOrAbstract(
       {required ServerActions action}) {
     if (_requestOption.isNotEmpty) {
+      // debugPrint(
+      //     "_getRequestOptionFromParamOrAbstract is Not empty ${_requestOption.toString()}");
       if (_requestOption.containsKey(action)) {
         return _requestOption[action];
       }
@@ -175,7 +181,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   Future<Response?> _getListResponse({RequestOptions? option}) async {
     return getHttp().get(
         _getUrl(
-            params: _getRequestOptionFromParamOrAbstract(
+            params: getRequestOptionFromParamOrAbstract(
                     action: option?.getServerAction() ?? ServerActions.list)
                 ?.copyWithObjcet(option: option)
                 .copyWith(requestLists: _checkListToRequest(ServerActions.list))
@@ -188,7 +194,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return await getHttp().get(
         _getUrl(
           iD: customID ?? iD,
-          params: _getRequestOptionFromParamOrAbstract(
+          params: getRequestOptionFromParamOrAbstract(
                   action: customAction ?? ServerActions.view)
               ?.copyWith(
                   requestLists:
@@ -236,7 +242,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       var response = await _getListResponse(option: option);
       if (response == null) return null;
       if (response.statusCode == 200) {
-        debugPrint("listCall response s ${response.body}");
+        // debugPrint("listCall response s ${response.body}");
         Iterable l = convert.jsonDecode(response.body);
         List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
         if (customAction == ServerActions.search_viewabstract_by_field) {
@@ -505,7 +511,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return HttpWithMiddleware.build(
         requestTimeout: const Duration(seconds: 60),
         middlewares: [
-          HttpLogger(logLevel: LogLevel.BODY),
+          HttpLogger(logLevel: LogLevel.HEADERS),
         ]);
   }
 
@@ -525,7 +531,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   String toJsonString() {
     String js = jsonEncode(toJsonViewAbstract());
-    debugPrint("toJsonString ========> $js");
+    // debugPrint("toJsonString ========> $js");
     return js;
   }
 

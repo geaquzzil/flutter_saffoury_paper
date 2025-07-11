@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -34,6 +36,26 @@ class SortFieldValue {
         icon: parent.getFieldIconData(field),
         value: field);
   }
+
+  Map<String, dynamic> toMap() {
+    final result = <String, dynamic>{};
+
+    result.addAll({'field': field});
+    result.addAll({'type': _$SortByType[type]});
+
+    return result;
+  }
+
+  factory SortFieldValue.fromMap(Map<String, dynamic> map) {
+    return SortFieldValue(
+        field: map['field'] ?? '',
+        type: $enumDecode(_$SortByType, map['type']));
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory SortFieldValue.fromJson(String source) =>
+      SortFieldValue.fromMap(json.decode(source));
 }
 
 abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
@@ -82,11 +104,11 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   }
 
   String getListableKeyWithoutCustomMap() {
-    return "${getTableNameApi()}listAPI${getRequestOption(action: ServerActions.list)?.filterMap}";
+    return "${getTableNameApi()}listAPI${getRequestOptionFromParamOrAbstract(action: ServerActions.list)?.filterMap}";
   }
 
   String getListableKey() {
-    return "${getTableNameApi()}listAPI${getRequestOption(action: ServerActions.list)?.getKey() ?? ""}";
+    return "${getTableNameApi()}listAPI${getRequestOptionFromParamOrAbstract(action: ServerActions.list)?.getKey() ?? ""}";
   }
 }
 
@@ -95,6 +117,10 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
 //   ASC,
 //   @JsonValue("DESC")
 //   DESC }
+const _$SortByType = {
+  SortByType.ASC: 'ASC',
+  SortByType.DESC: 'DESC',
+};
 
 enum SortByType implements ViewAbstractEnum<SortByType> {
   ASC,
