@@ -243,12 +243,14 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   Widget getCardLeadingImage(BuildContext context,
       {bool? isSelected, bool addBottomWidget = true, double? size}) {
     String? imageUrl = getImageUrlAddHost(context);
+    debugPrint("getCardLeadingImage $imageUrl");
     if (imageUrl == null) {
       return Icon(
         getMainIconData(),
         size: 30,
       );
     }
+    debugPrint("getCardLeadingImage $imageUrl");
     // IconData? iconOnButton =
     //     addBottomWidget ? getCardLeadingBottomIcon(context) : null;
     Widget image = getCachedImage(context, url: imageUrl, size: size);

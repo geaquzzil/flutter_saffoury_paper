@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/components/scroll_snap_list.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
@@ -320,7 +320,7 @@ class _ListHorizontalApiWidgetState
               )),
               HoverButtons(
                 valueNotifier: _valueNotifier,
-                valuePageNotifierVoid: (idx) {
+                valuePageNotifierVoid: (idx, isNext) {
                   if (_isBottom) {
                     listProvider.fetchList(widget.autoRest!.key,
                         viewAbstract: widget.autoRest!.obj,

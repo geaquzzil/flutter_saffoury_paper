@@ -10,7 +10,7 @@ class WebProductImages extends StatelessWidget {
   const WebProductImages({super.key, required this.item});
   @override
   Widget build(BuildContext context) {
-    String? url = item.getImageUrl(context);
+    String? url = item.getImageUrlAddHost(context);
     bool hasImage = url != null;
     hasImage = false;
     return item.getHeroTag(

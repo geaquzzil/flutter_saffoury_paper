@@ -204,7 +204,7 @@ class HoverButtons extends StatelessWidget {
 
   final ValueNotifier<bool> valueNotifier;
   final ValueNotifier<int>? valuePageNotifier;
-  final Function(int idx)? valuePageNotifierVoid;
+  final Function(int idx, bool isNext)? valuePageNotifierVoid;
 
   int idx = 0;
 
@@ -228,7 +228,7 @@ class HoverButtons extends StatelessWidget {
                     if (i == 0) return;
                     idx = i - 1;
                     if (valuePageNotifierVoid != null) {
-                      valuePageNotifierVoid!.call(idx);
+                      valuePageNotifierVoid!.call(idx, false);
                     }
                     if (valuePageNotifier != null) {
                       valuePageNotifier?.value = idx;
@@ -240,7 +240,7 @@ class HoverButtons extends StatelessWidget {
                       int i = valuePageNotifier?.value ?? idx;
                       idx = i + 1;
                       if (valuePageNotifierVoid != null) {
-                        valuePageNotifierVoid!.call(idx);
+                        valuePageNotifierVoid!.call(idx, true);
                       }
                       if (valuePageNotifier != null) {
                         valuePageNotifier?.value = idx;
@@ -294,7 +294,7 @@ class WebGridViewItem extends StatelessWidget {
               ),
             )
           : null,
-      image: item.getImageUrl(context) ?? "",
+      image: item.getImageUrlAddHost(context) ?? "",
 
       // scale: false,
       builder: (isHovered) {
@@ -394,10 +394,10 @@ class WebGridViewItem extends StatelessWidget {
 
   Widget _buildHoverBackground(BuildContext context) {
     return Positioned.fill(
-        child: item.getImageUrl(context) == null
+        child: item.getImageUrlAddHost(context) == null
             ? Container()
             : HoverImage(
-                image: item.getImageUrl(context)!,
+                image: item.getImageUrlAddHost(context)!,
               ));
   }
 
@@ -407,7 +407,7 @@ class WebGridViewItem extends StatelessWidget {
       context: context,
       child: Container(
           decoration: getBoxDecoration(context),
-          child: item.getImageUrl(context) == null
+          child: item.getImageUrlAddHost(context) == null
               ? item.getImageIfNoUrl()
               : null),
     ));
@@ -415,10 +415,11 @@ class WebGridViewItem extends StatelessWidget {
 
   BoxDecoration getBoxDecoration(BuildContext context) {
     return BoxDecoration(
-        image: item.getImageUrl(context) == null
+        image: item.getImageUrlAddHost(context) == null
             ? null
             : DecorationImage(
-                image: FastCachedImageProvider(item.getImageUrl(context)!),
+                image:
+                    FastCachedImageProvider(item.getImageUrlAddHost(context)!),
                 fit: BoxFit.cover),
         color: null,
         border: isSelected && isSelectMood

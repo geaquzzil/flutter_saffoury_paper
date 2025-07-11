@@ -197,7 +197,7 @@ class _ListCardItemHorizontalState<T extends ViewAbstract>
   }
 
   void init(BuildContext context) async {
-    imgUrl = widget.object.getImageUrl(context);
+    imgUrl = widget.object.getImageUrlAddHost(context);
     if (imgUrl == null) return;
   }
 

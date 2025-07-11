@@ -70,7 +70,7 @@ class WebMasterToList extends BaseWebPageSliversApi {
               useResponsiveLayout: false,
               useClipRect: false,
               // soildColor: Colors.black38,
-              imageUrl: extras?.getImageUrl(context) ?? "",
+              imageUrl: extras?.getImageUrlAddHost(context) ?? "",
               name: extras!.getMainHeaderTextOnly(context),
               country: ""),
         ],

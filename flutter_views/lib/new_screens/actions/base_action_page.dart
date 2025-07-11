@@ -163,7 +163,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   }
 
   Future<void> _updatePaletter() async {
-    imgUrl = getExtras().getImageUrl(context);
+    imgUrl = getExtras().getImageUrlAddHost(context);
     valueNotifierColor.value = await PaletteGenerator.fromImageProvider(
       FastCachedImageProvider(imgUrl!),
     );
@@ -231,7 +231,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   }
 
   Widget getAppBarBackground() {
-    String? imgUrl = widget.viewAbstract.getImageUrl(context);
+    String? imgUrl = widget.viewAbstract.getImageUrlAddHost(context);
     return ValueListenableBuilder<PaletteGenerator?>(
       valueListenable: valueNotifierColor,
       builder: (__, color, ___) => Stack(
@@ -523,7 +523,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                             child: Card.outlined(
                                 child: InkWell(
                           onTap: () async {
-                            final imageUrl = i.getImageUrl(context);
+                            final imageUrl = i.getImageUrlAddHost(context);
                             final url = Uri.parse(imageUrl ?? "");
                             final response =
                                 await HttpWithMiddleware.build().get(url);
@@ -541,7 +541,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                           },
                           child: Expanded(
                               child: FastCachedImage(
-                                  url: i.getImageUrl(context) ?? "")),
+                                  url: i.getImageUrlAddHost(context) ?? "")),
                         )));
                       })
                     ]);

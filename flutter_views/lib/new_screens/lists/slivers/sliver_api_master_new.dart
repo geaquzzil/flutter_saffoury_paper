@@ -19,6 +19,7 @@ import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
@@ -86,7 +87,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   ViewAbstract? _setParentForChildCardItem;
   String? _searchString;
   Map<String, FilterableProviderHelper>? _filterData;
-
+  final ValueNotifier<bool> _valueNotifierHover = ValueNotifier<bool>(false);
   late String _lastKey;
   late final ScrollController _scrollController;
   late ListMultiKeyProvider listProvider;
@@ -568,39 +569,41 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       child: LayoutBuilder(
         builder: (co, constraints) {
           double size = constraints.maxHeight;
-          return ScrollSnapList(
-            itemCount: list.length + (isLoading ? 5 : 0),
-            selectedItemAnchor: SelectedItemAnchor.START,
-            // endOfListTolerance: constraints.maxWidth,
-            scrollDirection: Axis.horizontal,
-            itemSize: size,
-            listController: _scrollController,
-            itemBuilder: (c, index) {
-              if (isLoading && index > list.length - 1) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: kDefaultPadding / 2),
-                  child: GridTile(
-                      child: SizedBox(
-                          height: size,
-                          width: size,
-                          child: ListHorizontalItemShimmer(
-                            lines: SizeConfig.hasPointer(context) ? 0 : 3,
-                          ))),
-                );
-              }
-              Widget currentTile = WebGridViewItem(
-                setDescriptionAtBottom: !SizeConfig.hasPointer(context),
-                item: list[index],
-              );
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
-                child: GridTile(child: currentTile),
-              );
-            },
-            onItemFocus: (p0) {},
-          );
+          return wrapWithArrows(
+              ScrollSnapList(
+                itemCount: list.length + (isLoading ? 5 : 0),
+                selectedItemAnchor: SelectedItemAnchor.START,
+                // endOfListTolerance: constraints.maxWidth,
+                scrollDirection: Axis.horizontal,
+                itemSize: size,
+                listController: _scrollController,
+                itemBuilder: (c, index) {
+                  if (isLoading && index > list.length - 1) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: kDefaultPadding / 2),
+                      child: GridTile(
+                          child: SizedBox(
+                              height: size,
+                              width: size,
+                              child: ListHorizontalItemShimmer(
+                                lines: SizeConfig.hasPointer(context) ? 0 : 3,
+                              ))),
+                    );
+                  }
+                  Widget currentTile = WebGridViewItem(
+                    setDescriptionAtBottom: !SizeConfig.hasPointer(context),
+                    item: list[index],
+                  );
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: kDefaultPadding / 2),
+                    child: GridTile(child: currentTile),
+                  );
+                },
+                onItemFocus: (p0) {},
+              ),
+              size);
         },
       ),
     );
@@ -629,6 +632,41 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         sliverChildBuilderDelegateOptions: SliverChildBuilderDelegateOptions(),
         minItemWidth: minGridItemSize,
         children: getGridList(count: count, isLoading: isLoading));
+  }
+
+  Widget wrapWithArrows(Widget widget, double itemSize) {
+    if (!SizeConfig.hasPointer(context)) return widget;
+    return OnHoverWidget(
+      onHover: _valueNotifierHover,
+      scale: false,
+      builder: (isHovered) {
+        return Stack(clipBehavior: Clip.none, children: [
+          Positioned.fill(
+              child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+            child: widget,
+          )),
+          HoverButtons(
+            valueNotifier: _valueNotifierHover,
+            valuePageNotifierVoid: (idx, isNext) {
+              debugPrint("HoverButton idx $idx");
+              if (isNext) {
+                if (_isBottom) {
+                  fetshList();
+                } else {
+                  //todo fix that only when item is scrolling
+                  scrollToCollapsed(
+                      customOffset: _scrollController.offset + itemSize - 20);
+                }
+              } else {
+                scrollToCollapsed(
+                    customOffset: _scrollController.position.minScrollExtent);
+              }
+            },
+          )
+        ]);
+      },
+    );
   }
 
   Widget getEmptyWidget({bool isError = false}) {
@@ -752,10 +790,17 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       pos,
     );
   }
+  // void _scroll() {
+  //   _scrollController.position.animateTo(
+  //     _scrollController.offset + itemsShowingWidth - 20,
+  //     duration: const Duration(milliseconds: 500),
+  //     curve: Curves.fastOutSlowIn,
+  //   );
+  // }
 
-  void scrollToCollapsed() {
+  void scrollToCollapsed({double? customOffset}) {
     _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
+      customOffset ?? _scrollController.position.maxScrollExtent,
       duration: _defaultScrollDuration,
       curve: _defualtScrollCurve,
     );

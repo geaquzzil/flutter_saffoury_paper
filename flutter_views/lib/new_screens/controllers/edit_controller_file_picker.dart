@@ -37,11 +37,11 @@ class _EditControllerFilePickerState extends State<EditControllerFilePicker> {
   }
 
   bool isHasImage() {
-    return widget.viewAbstract.getImageUrl(context) != null;
+    return widget.viewAbstract.getImageUrlAddHost(context) != null;
   }
 
   bool isURL() {
-    String? image = widget.viewAbstract.getImageUrl(context);
+    String? image = widget.viewAbstract.getImageUrlAddHost(context);
     if (image == null) return false;
     return Uri.parse(image).isAbsolute;
   }

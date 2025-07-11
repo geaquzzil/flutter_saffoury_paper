@@ -93,7 +93,7 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
   double getCustomPaneProportion() {
     return .3;
   }
-
+  
   @override
   List<Widget>? getCustomViewWhenSecondPaneIsEmpty(
       ScrollController? controler, TabControllerHelper? tab) {

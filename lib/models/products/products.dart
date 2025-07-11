@@ -54,6 +54,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
@@ -935,6 +936,16 @@ class Product extends ViewAbstract<Product>
         : op;
   }
 
+  RequestOptions getSimilarWithSameAndTypeSize(BuildContext context) {
+    RequestOptions op = _getOnlyInventory()
+        .addSearchByField("ProductTypeID", products_types?.iD)
+        .setBetween("SizeID", sizes?.getListOfSizesWithMaxWaste(maxWaste: 20));
+
+    return !isGeneralEmployee(context)
+        ? op.addSearchByField("status", "NONE")
+        : op;
+  }
+
   bool hasSheetWeight() {
     return gsms != null;
   }
@@ -987,17 +998,25 @@ class Product extends ViewAbstract<Product>
       return null;
     }
     return [
-      SliverToBoxAdapter(
-        child: Text(
-          AppLocalizations.of(context)!.simialrProducts,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-      ),
+      HeaderDescription(
+          isSliver: true, title: AppLocalizations.of(context)!.simialrProducts),
       SliverApiMixinViewAbstractWidget(
           isGridView: true,
           scrollDirection: Axis.horizontal,
           toListObject: Product().setRequestOption(
               option: getSimilarCustomParams(context: context))),
+      HeaderDescription(
+          isSliver: true,
+          title: //TODO translate
+              "${AppLocalizations.of(context)!.productsWithSimilarSize} AND TYPE"),
+      SliverApiMixinViewAbstractWidget(
+          isGridView: true,
+          scrollDirection: Axis.horizontal,
+          toListObject: Product().setRequestOption(
+              option: getSimilarWithSameAndTypeSize(context))),
+      HeaderDescription(
+          isSliver: true,
+          title: AppLocalizations.of(context)!.productsWithSimilarSize),
       SliverApiMixinViewAbstractWidget(
           isGridView: true,
           scrollDirection: Axis.horizontal,

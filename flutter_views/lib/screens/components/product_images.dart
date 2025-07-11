@@ -19,7 +19,7 @@ class ProductImages<T extends ViewAbstract> extends StatelessWidget {
         itemBuilder: (context, index) {
           return Padding(
               padding: const EdgeInsets.only(right: 30),
-              child: Image.network(product.getImageUrl(context) ?? ""));
+              child: Image.network(product.getImageUrlAddHost(context) ?? ""));
         },
         itemCount: 3,
       ),

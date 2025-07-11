@@ -7,6 +7,7 @@ class HeaderDescription extends StatelessWidget {
   final bool isTitleLarge;
   final Color? titleColor;
   final Widget? trailing;
+  final bool isSliver;
   const HeaderDescription(
       {super.key,
       required this.title,
@@ -14,11 +15,12 @@ class HeaderDescription extends StatelessWidget {
       this.iconData,
       this.trailing,
       this.titleColor,
+      this.isSliver = false,
       this.isTitleLarge = true});
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    Widget listTile = ListTile(
       trailing: trailing,
       leading: iconData == null ? null : Icon(iconData),
       title: Text(
@@ -32,5 +34,12 @@ class HeaderDescription extends StatelessWidget {
       ),
       subtitle: description == null ? null : Text(description!),
     );
+    if (!isSliver) {
+      return listTile;
+    } else {
+      return SliverToBoxAdapter(
+        child: listTile,
+      );
+    }
   }
 }
