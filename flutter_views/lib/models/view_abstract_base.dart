@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
@@ -126,7 +127,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     );
   }
 
-  Widget? getMainSubtitleHeaderText(BuildContext context) {
+  Widget? getMainSubtitleHeaderText(BuildContext context,{String? searchQuery}) {
     return Text(
       getMainHeaderLabelTextOnly(context),
       style: Theme.of(context).textTheme.bodySmall,
@@ -149,7 +150,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         );
   }
 
-  Widget getMainHeaderText(BuildContext context) {
+  Widget getMainHeaderText(BuildContext context,{String? searchQuery}) {
     return Text(
       getMainHeaderTextOnly(context)
       // style: const TextStyle(color: kTextLightColor)
@@ -221,7 +222,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   Widget getHorizontalCardMainHeader(BuildContext context) {
-    return Text(
+    return AutoSizeText(
       getMainHeaderTextOnly(context),
       style: Theme.of(context).textTheme.bodySmall,
     );
@@ -229,7 +230,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   Widget getHorizontalCardSubtitle(BuildContext context) {
     return getMainSubtitleHeaderText(context) ??
-        Text(
+        AutoSizeText(
           "",
           style: Theme.of(context).textTheme.bodySmall,
         );
@@ -287,6 +288,11 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   String? getImageUrl(BuildContext context) {
+    return null;
+  }
+
+  Widget? getCustomImage(BuildContext context,
+      {double size = 50, bool isGrid = false}) {
     return null;
   }
 

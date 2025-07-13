@@ -26,15 +26,15 @@ enum Status {
   Unauthenticated,
   Faild,
   Blocked,
-  Guest
+  Guest,
 }
 
 class AuthProvider<T extends AuthUser> with ChangeNotifier {
   AuthProvider(Stream<dynamic> stream) {
     notifyListeners();
     _subscription = stream.asBroadcastStream().listen(
-          (dynamic _) => notifyListeners(),
-        );
+      (dynamic _) => notifyListeners(),
+    );
   }
   static bool isLoggedIn(BuildContext context) {
     return context.read<AuthProvider<AuthUser>>().getUser?.isLoggedIn() ??
@@ -153,21 +153,25 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
         .cast();
   }
 
-  AuthProvider.initialize(T initUser, List<ViewAbstract> drawerItems,
-      ViewAbstract orderSimple, List<RouteableInterface>? getGoRoutesAddOns,
-      {required NotificationHandlerInterface notificationHandlerSimple}) {
+  AuthProvider.initialize(
+    T initUser,
+    List<ViewAbstract> drawerItems,
+    ViewAbstract orderSimple,
+    List<RouteableInterface>? getGoRoutesAddOns, {
+    required NotificationHandlerInterface notificationHandlerSimple,
+  }) {
     _drawerItems = drawerItems;
     _initUser = initUser;
     _orderSimple = orderSimple;
     _currentUser = _initUser;
     _getGoRoutesAddOns = getGoRoutesAddOns;
     _notificationHandlerSimple = notificationHandlerSimple;
-    _subscription = _initUser.authStateChanges().asBroadcastStream().listen(
-      (dynamic _) {
-        debugPrint("initUser.authStateChanges() $_");
-        notifyListeners();
-      },
-    );
+    _subscription = _initUser.authStateChanges().asBroadcastStream().listen((
+      dynamic a,
+    ) {
+      debugPrint("initUser.authStateChanges() $a");
+      notifyListeners();
+    });
     // initFakeData();
   }
   DashableInterface getDashableInterface() {
@@ -199,8 +203,10 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
 
   Future initDrawerItems(BuildContext context) async {
     await Future.forEach(_drawerItems, (item) async {
-      bool? hasPermssion =
-          _currentUser?.hasPermissionList(context, viewAbstract: item);
+      bool? hasPermssion = _currentUser?.hasPermissionList(
+        context,
+        viewAbstract: item,
+      );
       if (hasPermssion ?? false) {
         _drawerItemsPermissions.add(item);
       }
@@ -209,8 +215,9 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     //     "initDrawerItems genrated list is ${_drawerItemsPermissions.toString()}");
 
     __drawerItemsGrouped = _drawerItemsPermissions.groupBy(
-        (item) => item.getMainDrawerGroupName(context),
-        valueTransform: (v) => v);
+      (item) => item.getMainDrawerGroupName(context),
+      valueTransform: (v) => v,
+    );
     _hasFinishedUpSettingUp = true;
     // debugPrint(
     //     "initDrawerItems _drawerItemsPermissions Grouped list is ${__drawerItemsGrouped.toString()}");
@@ -219,33 +226,37 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
     //  g.groupBy<DateTime,GrowthRate>((element) => element.map((e) => e.total).toList() )
   }
 
-  Future<bool> signIn(
-      {required BuildContext context,
-      required AuthUser user,
-      OnResponseCallback? onResponeCallback,
-      Function(Status s)? currentStatus}) async {
+  Future<bool> signIn({
+    required BuildContext context,
+    required AuthUser user,
+    OnResponseCallback? onResponeCallback,
+    Function(Status s)? currentStatus,
+  }) async {
     // notifyListeners();
     currentStatus?.call(Status.Authenticating);
-    _currentUser = await user.loginCall(
-        context: context,
-        onResponse: OnResponseCallback(
-          onBlocked: () {
-            //TODO BLOCK ACTION
-            debugPrint("SignIn==========> is blocked");
-            currentStatus?.call(Status.Blocked);
-            onResponeCallback?.onBlocked?.call();
-          },
-          onEmailOrPassword: () {
-            debugPrint("onEmailOrPassword==========> is not valid");
-            currentStatus?.call(Status.Unauthenticated);
+    _currentUser =
+        await user.loginCall(
+              context: context,
+              onResponse: OnResponseCallback(
+                onBlocked: () {
+                  //TODO BLOCK ACTION
+                  debugPrint("SignIn==========> is blocked");
+                  currentStatus?.call(Status.Blocked);
+                  onResponeCallback?.onBlocked?.call();
+                },
+                onEmailOrPassword: () {
+                  debugPrint("onEmailOrPassword==========> is not valid");
+                  currentStatus?.call(Status.Unauthenticated);
 
-            onResponeCallback?.onEmailOrPassword?.call();
-          },
-          onFlutterClientFailure: (o) {
-            currentStatus?.call(Status.Faild);
-            onResponeCallback?.onFlutterClientFailure?.call(o);
-          },
-        )) as T?;
+                  onResponeCallback?.onEmailOrPassword?.call();
+                },
+                onFlutterClientFailure: (o) {
+                  currentStatus?.call(Status.Faild);
+                  onResponeCallback?.onFlutterClientFailure?.call(o);
+                },
+              ),
+            )
+            as T?;
 
     if (_currentUser != null) {
       currentStatus?.call(Status.Authenticated);
@@ -289,7 +300,9 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   }
 
   double getPriceFromSettingDoubleFindSYPEquality(
-      BuildContext context, double value) {
+    BuildContext context,
+    double value,
+  ) {
     return _currentUser?.setting?.getPriceSYPEquality(value) ?? -1;
   }
 
@@ -298,8 +311,11 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
 
     if (value.isEmpty) {
       return 'Email can\'t be empty';
-    } else if (!value.contains(RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))) {
+    } else if (!value.contains(
+      RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+      ),
+    )) {
       return 'Enter a correct email address';
     }
 

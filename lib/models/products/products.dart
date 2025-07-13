@@ -3,6 +3,7 @@
 
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_saffoury_paper/models/cities/countries_manufactures.dart';
@@ -24,6 +25,8 @@ import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/products/widgets/pos/pos_header.dart';
 import 'package:flutter_saffoury_paper/widgets/product_top_widget.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_view_controller/components/text_image.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
@@ -54,9 +57,14 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/modified_packages/timelines/connector_theme.dart';
+import 'package:flutter_view_controller/modified_packages/timelines/timeline_theme.dart';
+import 'package:flutter_view_controller/modified_packages/timelines/timeline_tile_builder.dart';
+import 'package:flutter_view_controller/modified_packages/timelines/timelines.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -82,6 +90,7 @@ import 'package:pdf/widgets.dart' as pdfWidget;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:supercharged/supercharged.dart';
+import 'package:user_avatar_generator/core/export_paths.dart';
 
 import '../invoices/cuts_invoices/cut_requests.dart';
 import '../invoices/orders.dart';
@@ -94,9 +103,7 @@ import '../prints/print_product_list.dart';
 
 part 'products.g.dart';
 
-@JsonSerializable(
-  explicitToJson: true,
-)
+@JsonSerializable(explicitToJson: true)
 @reflector
 class Product extends ViewAbstract<Product>
     with ModifiableInterface<PrintProduct>
@@ -206,36 +213,33 @@ class Product extends ViewAbstract<Product>
       (t) => t.getQuantity().toNonNullable(),
     );
     totalInventoryItmes ??= list.length;
-    totalQrItems ??= list
-        .where(
-          (t) => t.qrQuantity != null,
-        )
-        .length;
-    totalRemaining ??=
-        list.sumCustom<Product>((o) => o.getQuantityFromTow(o, o));
+    totalQrItems ??= list.where((t) => t.qrQuantity != null).length;
+    totalRemaining ??= list.sumCustom<Product>(
+      (o) => o.getQuantityFromTow(o, o),
+    );
   }
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "status": ProductStatus.NONE,
-        "date": "",
-        "sheets": 0,
-        "barcode": "",
-        "fiberLines": "",
-        "comments": "",
-        "pending_reservation_invoice": 0,
-        "pending_cut_requests": 0,
-        "products_types": ProductType(),
-        "customs_declarations": CustomsDeclaration(),
-        "countries_manufactures": CountryManufacture(),
-        "sizes": ProductSize(),
-        "gsms": GSM(),
-        "qualities": Quality(),
-        "grades": Grades(),
-        "products_colors": ProductsColor(),
-        "inStock": List<Stocks>.empty(),
-        "qrQuantity": 0.0,
-      };
+    "status": ProductStatus.NONE,
+    "date": "",
+    "sheets": 0,
+    "barcode": "",
+    "fiberLines": "",
+    "comments": "",
+    "pending_reservation_invoice": 0,
+    "pending_cut_requests": 0,
+    "products_types": ProductType(),
+    "customs_declarations": CustomsDeclaration(),
+    "countries_manufactures": CountryManufacture(),
+    "sizes": ProductSize(),
+    "gsms": GSM(),
+    "qualities": Quality(),
+    "grades": Grades(),
+    "products_colors": ProductsColor(),
+    "inStock": List<Stocks>.empty(),
+    "qrQuantity": 0.0,
+  };
 
   Product() : super() {
     date = "".toDateTimeNowString();
@@ -278,11 +282,14 @@ class Product extends ViewAbstract<Product>
 
   Product.initOnlyReelsCustomParams() {
     setRequestOption(
-        option: _getOnlyInventory().addValueBetween(
-            ProductSize(),
-            BetweenRequest(
-                field: "lenght",
-                fromTo: [FromToBetweenRequest(from: "0", to: "0")])));
+      option: _getOnlyInventory().addValueBetween(
+        ProductSize(),
+        BetweenRequest(
+          field: "lenght",
+          fromTo: [FromToBetweenRequest(from: "0", to: "0")],
+        ),
+      ),
+    );
   }
   RequestOptions _getOnlyInventory() {
     return RequestOptions()
@@ -304,32 +311,157 @@ class Product extends ViewAbstract<Product>
     return AppLocalizations.of(context)!.outOfStock;
   }
 
+  bool isSearchQueryEqualToProductType(String? searchQuery) {
+    if (searchQuery == null) return false;
+    return products_types?.name?.contains(searchQuery) ?? false;
+  }
+
+  bool isSearchQueryEqualToSizeWidth(String? searchQuery) {
+    if (searchQuery == null) return false;
+    return sizes?.width?.toString().contains(searchQuery) ?? false;
+  }
+
+  bool isSearchQueryEqualToSizeLength(String? searchQuery) {
+    if (searchQuery == null) return false;
+    return sizes?.length?.toString().contains(searchQuery) ?? false;
+  }
+
+  bool isSearchQueryEqualGsm(String? searchQuery) {
+    if (searchQuery == null) return false;
+    return gsms?.gsm?.toString().contains(searchQuery) ?? false;
+  }
+
   @override
-  Widget? getMainSubtitleHeaderText(BuildContext context) {
+  Widget? getMainSubtitleHeaderText(
+    BuildContext context, {
+    String? searchQuery,
+  }) {
     double quantity = qrQuantity ?? getQuantity();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(products_types?.getLabelWithTextFromField(context, 'sellPrice') ??
-            ""),
+        Text(
+          products_types?.getLabelWithTextFromField(context, 'sellPrice') ?? "",
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
         Text(
           getQuantityStringAndLabel(context),
-          style: TextStyle(
-              color: quantity > 0
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.error),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: quantity > 0
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.error,
+          ),
         ),
       ],
     );
   }
 
+  TextStyle getTextStyleIfSearchQueryFound(BuildContext context) {
+    return TextStyle(
+      fontWeight: FontWeight.bold,
+      fontStyle: FontStyle.normal,
+      color: Theme.of(context).colorScheme.surfaceTint,
+      fontSize: (Theme.of(
+        context,
+      ).textTheme.titleSmall!.fontSize.toNonNullable()),
+    );
+  }
+
+  Widget getTitleRichText(
+    BuildContext context, {
+    String? fiberLines,
+    String? searchQuery,
+  }) {
+    String? productType = products_types?.getMainHeaderTextOnly(context);
+    int widthNon = sizes?.width?.toNonNullable() ?? 0;
+    int lengthNon = sizes?.length?.toNonNullable() ?? 0;
+    String? gsm = gsms?.getMainHeaderTextOnly(context);
+    TextStyle? forWidth = fiberLines == null
+        ? null
+        : fiberLines == "Width"
+        ? TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: (Theme.of(
+              context,
+            ).textTheme.titleSmall!.fontSize.toNonNullable()),
+          )
+        : null;
+    TextStyle? forLength = fiberLines == null
+        ? null
+        : fiberLines == "Length"
+        ? TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize:
+                (Theme.of(
+                  context,
+                ).textTheme.titleSmall!.fontSize.toNonNullable() +
+                2),
+          )
+        : null;
+    if (isSearchQueryEqualToSizeLength(searchQuery)) {
+      TextStyle textStyle = getTextStyleIfSearchQueryFound(context);
+      if (forLength == null) {
+        forLength = textStyle;
+      } else {
+        forLength = forLength.copyWith(
+          color: textStyle.color,
+          fontStyle: textStyle.fontStyle,
+          fontWeight: textStyle.fontWeight,
+          fontSize: textStyle.fontSize,
+        );
+      }
+    }
+    if (isSearchQueryEqualToSizeWidth(searchQuery)) {
+      TextStyle textStyle = getTextStyleIfSearchQueryFound(context);
+      if (forWidth == null) {
+        forWidth = textStyle;
+      } else {
+        forWidth = forWidth.copyWith(
+          color: textStyle.color,
+          fontStyle: textStyle.fontStyle,
+          fontWeight: textStyle.fontWeight,
+          fontSize: textStyle.fontSize,
+        );
+      }
+    }
+    return RichText(
+      text: TextSpan(
+        // Note: Styles for TextSpans must be explicitly defined.
+        // Child text spans will inherit styles from parent
+        children: <TextSpan>[
+          TextSpan(
+            text: "$productType ",
+            style: isSearchQueryEqualToProductType(searchQuery)
+                ? getTextStyleIfSearchQueryFound(context)
+                : null,
+          ),
+          TextSpan(text: '$widthNon', style: forWidth),
+          if (lengthNon != 0) TextSpan(text: " X "),
+          if (lengthNon != 0) TextSpan(text: '$lengthNon', style: forLength),
+          if (gsm != null) TextSpan(text: " X "),
+          if (gsm != null)
+            TextSpan(
+              text: gsm,
+              style: isSearchQueryEqualGsm(searchQuery)
+                  ? getTextStyleIfSearchQueryFound(context)
+                  : null,
+            ),
+        ],
+      ),
+    );
+  }
+
   Widget getTitleTextHtml(BuildContext context) {
     String? productType = products_types?.getMainHeaderTextOnly(context);
-    String? size =
-        sizes?.getSizeHtmlFormatString(context, fiberLines: fiberLines);
+    String? size = sizes?.getSizeHtmlFormatString(
+      context,
+      fiberLines: fiberLines,
+    );
     String? gsm = gsms?.getMainHeaderTextOnly(context);
     return Html(
+      shrinkWrap: true,
+
       data: "$productType $size X $gsm",
 
       // style:{
@@ -340,14 +472,21 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  Widget getMainHeaderText(BuildContext context) {
-    return getTitleTextHtml(context);
+  Widget getMainHeaderText(BuildContext context, {String? searchQuery}) {
+    return getTitleRichText(
+      context,
+      fiberLines: fiberLines,
+      searchQuery: searchQuery,
+    );
   }
 
   @override
   IconData? getMainDrawerGroupIconData() => Icons.waterfall_chart_outlined;
   @override
-  Widget getHorizontalCardMainHeader(BuildContext context) {
+  Widget getHorizontalCardMainHeader(
+    BuildContext context, {
+    bool isHoverd = false,
+  }) {
     String? productType = products_types?.getMainHeaderTextOnly(context);
     String? size = sizes?.getMainHeaderTextOnly(context);
     String? gsm = gsms?.getMainHeaderTextOnly(context);
@@ -355,6 +494,11 @@ class Product extends ViewAbstract<Product>
     return Text(
       res,
       textAlign: TextAlign.start,
+      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+        color: isHoverd
+            ? Theme.of(context).colorScheme.onSecondaryContainer
+            : null,
+      ),
     );
   }
 
@@ -369,12 +513,39 @@ class Product extends ViewAbstract<Product>
   @override
   void onCardDismissedView(BuildContext context, DismissDirection direction) {
     if (direction == DismissDirection.endToStart) {
-      context
-          .read<CartProvider>()
-          .onCartItemAdded(context, -1, this, getQuantity());
+      context.read<CartProvider>().onCartItemAdded(
+        context,
+        -1,
+        this,
+        getQuantity(),
+      );
       return;
     }
     super.onCardDismissedView(context, direction);
+  }
+
+  @override
+  Widget? getCustomImage(
+    BuildContext context, {
+    double size = 50,
+    bool isGrid = false,
+  }) {
+    if (getImageUrl(context) == null) {
+      return TextImageGenerater(
+        text: products_types?.name,
+        avatarSize: size,
+        borderRadius: BorderRadius.circular(kBorderRadius),
+
+        border: Border.all(width: 1, color: Theme.of(context).highlightColor),
+
+        backgroundColor: Colors.transparent,
+        // shortcutGenerationType: ShortcutGenerationType.initials,
+        avatarBackgroundGradient: AvatarBackgroundGradient.sunsetPastels,
+        fontStyle: AvatarFontStyles.concertOne,
+        textStyle: Theme.of(context).textTheme.titleLarge,
+      );
+    }
+    return null;
   }
 
   @override
@@ -402,14 +573,17 @@ class Product extends ViewAbstract<Product>
 
   bool hasPermissionPrice(BuildContext context) {
     return hasPermission(
-        context, "text_prices_for_customer", ServerActions.view);
+      context,
+      "text_prices_for_customer",
+      ServerActions.view,
+    );
   }
 
   @override
   Map<String, String> getPermissionFieldsMap(BuildContext context) {
     return {
       "inStock": "text_products_quantity",
-      "comments": "text_products_notes"
+      "comments": "text_products_notes",
     };
   }
 
@@ -426,7 +600,7 @@ class Product extends ViewAbstract<Product>
       "products_colors",
       "comments",
       "barcode",
-      "qrQuantity"
+      "qrQuantity",
     ];
   }
 
@@ -444,23 +618,24 @@ class Product extends ViewAbstract<Product>
       "date",
       "comments",
       "barcode",
-      "status"
+      "status",
     ];
   }
 
   @override
   List<CustomFilterableField> getCustomFilterableFields(BuildContext context) {
-    return super.getCustomFilterableFields(context)
-      ..addAll(!disbleStatusAndSizeOnFilter
+    return super.getCustomFilterableFields(context)..addAll(
+      !disbleStatusAndSizeOnFilter
           ? [
               CustomFilterableField(
-                  this,
-                  ProductStatus.NONE.getMainLabelText(context),
-                  Icons.date_range,
-                  "status",
-                  "status",
-                  ProductStatus.NONE,
-                  singleChoiceIfList: true),
+                this,
+                ProductStatus.NONE.getMainLabelText(context),
+                Icons.date_range,
+                "status",
+                "status",
+                ProductStatus.NONE,
+                singleChoiceIfList: true,
+              ),
               // CustomFilterableField(this, "width", Icons.border_left_outlined,
               //     "width", "width", "",
               //     type: const TextInputType.numberWithOptions(
@@ -470,7 +645,8 @@ class Product extends ViewAbstract<Product>
               //     type: const TextInputType.numberWithOptions(
               //         decimal: false, signed: false)),
             ]
-          : []);
+          : [],
+    );
   }
 
   @override
@@ -480,34 +656,34 @@ class Product extends ViewAbstract<Product>
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "id": TextInputType.number,
-        "date": TextInputType.datetime,
-        "comments": TextInputType.multiline,
-        "barcode": TextInputType.text,
-        "products_count": TextInputType.number,
-        "pending_reservation_invoice": TextInputType.phone,
-        "cut_request_quantity": TextInputType.number,
-        "qrQuantity": TextInputType.number,
-      };
+    "id": TextInputType.number,
+    "date": TextInputType.datetime,
+    "comments": TextInputType.multiline,
+    "barcode": TextInputType.text,
+    "products_count": TextInputType.number,
+    "pending_reservation_invoice": TextInputType.phone,
+    "cut_request_quantity": TextInputType.number,
+    "qrQuantity": TextInputType.number,
+  };
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {
-        "date": Icons.date_range,
-        "sheets": Icons.view_comfortable_outlined,
-        "barcode": Icons.qr_code,
-        "fiberLines": Icons.face,
-        "comments": Icons.notes,
-        "qrQuantity": Icons.line_weight
-      };
+    "date": Icons.date_range,
+    "sheets": Icons.view_comfortable_outlined,
+    "barcode": Icons.qr_code,
+    "fiberLines": Icons.face,
+    "comments": Icons.notes,
+    "qrQuantity": Icons.line_weight,
+  };
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        'date': AppLocalizations.of(context)!.date,
-        "barcode": AppLocalizations.of(context)!.barcode,
-        "fiberLines": AppLocalizations.of(context)!.grain,
-        "comments": AppLocalizations.of(context)!.comments,
-        "qrQuantity": AppLocalizations.of(context)!.quantity,
-      };
+    'date': AppLocalizations.of(context)!.date,
+    "barcode": AppLocalizations.of(context)!.barcode,
+    "fiberLines": AppLocalizations.of(context)!.grain,
+    "comments": AppLocalizations.of(context)!.comments,
+    "qrQuantity": AppLocalizations.of(context)!.quantity,
+  };
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
@@ -517,17 +693,25 @@ class Product extends ViewAbstract<Product>
 
   @override
   FutureOr<List>? getTextInputValidatorIsUnique(
-      BuildContext context, String field, String? currentText) {
+    BuildContext context,
+    String field,
+    String? currentText,
+  ) {
     if (field == 'barcode') {
       return searchByFieldName(
-          context: context, field: 'barcode', searchQuery: currentText ?? "");
+        context: context,
+        field: 'barcode',
+        searchQuery: currentText ?? "",
+      );
     }
     return super.getTextInputValidatorIsUnique(context, field, currentText);
   }
 
   @override
-  Map<String, int> getTextInputMaxLengthMap() =>
-      {'barcode': 255, 'fiberLines': 10};
+  Map<String, int> getTextInputMaxLengthMap() => {
+    'barcode': 255,
+    'fiberLines': 10,
+  };
 
   @override
   Map<String, double> getTextInputMaxValidateMap() => {};
@@ -542,13 +726,13 @@ class Product extends ViewAbstract<Product>
 
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {
-        "grades": true,
-        "gsms": true,
-        "countries_manufactures": true,
-        "products_colors": true,
-        "qualities": true,
-        "customs_declarations": true,
-      };
+    "grades": true,
+    "gsms": true,
+    "countries_manufactures": true,
+    "products_colors": true,
+    "qualities": true,
+    "customs_declarations": true,
+  };
 
   @override
   Map<String, bool> isFieldRequiredMap() => {"qrQuantity": true};
@@ -571,10 +755,13 @@ class Product extends ViewAbstract<Product>
         .roundDouble();
   }
 
-  String getTotalSellPriceStringFormat(
-      {required BuildContext context, Warehouse? warehouse}) {
-    return getTotalSellPrice(warehouse: warehouse)
-        .toCurrencyFormatFromSetting(context);
+  String getTotalSellPriceStringFormat({
+    required BuildContext context,
+    Warehouse? warehouse,
+  }) {
+    return getTotalSellPrice(
+      warehouse: warehouse,
+    ).toCurrencyFormatFromSetting(context);
   }
 
   double getUnitPurchasesPrice() {
@@ -658,20 +845,26 @@ class Product extends ViewAbstract<Product>
     }
   }
 
-  String getSheetWeightStringFormat(
-      {required BuildContext context, ProductSize? customSize}) {
-    return getSheetWeight(customSize: customSize)
-        .toCurrencyFormat(symbol: AppLocalizations.of(context)!.gramSymbol);
+  String getSheetWeightStringFormat({
+    required BuildContext context,
+    ProductSize? customSize,
+  }) {
+    return getSheetWeight(
+      customSize: customSize,
+    ).toCurrencyFormat(symbol: AppLocalizations.of(context)!.gramSymbol);
   }
 
   double getOneSheetPrice({ProductSize? customSize}) {
     return (getSheetWeight(customSize: customSize) / 1000) * getUnitSellPrice();
   }
 
-  String getOneSheetPriceStringFormat(
-      {required BuildContext context, ProductSize? customSize}) {
-    return getOneSheetPrice(customSize: customSize)
-        .toCurrencyFormatFromSetting(context);
+  String getOneSheetPriceStringFormat({
+    required BuildContext context,
+    ProductSize? customSize,
+  }) {
+    return getOneSheetPrice(
+      customSize: customSize,
+    ).toCurrencyFormatFromSetting(context);
   }
 
   int getWidth() {
@@ -694,9 +887,7 @@ class Product extends ViewAbstract<Product>
   }
 
   bool isRollCut() {
-    //todo check type of value return  is cutrequest
-
-    return parents != null && (parents?.isNotEmpty ?? false);
+    return products != null;
   }
 
   String getCountryNameString() {
@@ -725,17 +916,22 @@ class Product extends ViewAbstract<Product>
     return "";
   }
 
-  String getQuantityStringFormat(
-      {required BuildContext context, Warehouse? warehouse}) {
-    return (qrQuantity ?? getQuantity(warehouse: warehouse))
-        .toCurrencyFormat(symbol: getProductTypeUnit(context));
+  String getQuantityStringFormat({
+    required BuildContext context,
+    Warehouse? warehouse,
+  }) {
+    return (qrQuantity ?? getQuantity(warehouse: warehouse)).toCurrencyFormat(
+      symbol: getProductTypeUnit(context),
+    );
   }
 
   double getQuantity({Warehouse? warehouse}) {
     if (inventory == null) return 0;
     if (warehouse == null) {
-      return inventory!
-          .fold(0, (value, element) => value + (element.quantity ?? 0));
+      return inventory!.fold(
+        0,
+        (value, element) => value + (element.quantity ?? 0),
+      );
     }
     return inventory!
         .where((element) => warehouse.iD == element.warehouse?.iD)
@@ -755,10 +951,9 @@ class Product extends ViewAbstract<Product>
       case ProductStatus.WASTED:
         return Text(
           status!.getFieldLabelString(context, status!).toUpperCase(),
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall
-              ?.copyWith(color: Theme.of(context).colorScheme.error),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Theme.of(context).colorScheme.error,
+          ),
         );
       case ProductStatus.RETURNED:
         return Icons.arrow_back;
@@ -781,10 +976,12 @@ class Product extends ViewAbstract<Product>
         Icons.account_circle,
         color: Theme.of(context).colorScheme.primary,
       ),
-      title: Text("Welcom back",
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-              )),
+      title: Text(
+        "Welcom back",
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
       trailing: Icon(
         Icons.arrow_right_outlined,
         color: Theme.of(context).colorScheme.primary,
@@ -797,16 +994,21 @@ class Product extends ViewAbstract<Product>
     // TODO: implement getHomeListHeaderWidgetList
     return [
       SliverApiMixinAutoRestWidget(
-          autoRest: AutoRest<ProductType>(
-              obj: ProductType.init(true), key: "ProductType<Category>")),
+        autoRest: AutoRest<ProductType>(
+          obj: ProductType.init(true),
+          key: "ProductType<Category>",
+        ),
+      ),
     ];
   }
 
   @override
   List<StaggeredGridTile>? getHomeListHeaderWidget(BuildContext context) {
     num mainAxisCellCount = SizeConfig.getMainAxisCellCount(context);
-    num mainAxisCellCountList = SizeConfig.getMainAxisCellCount(context,
-        mainAxisType: MainAxisType.ListHorizontal);
+    num mainAxisCellCountList = SizeConfig.getMainAxisCellCount(
+      context,
+      mainAxisType: MainAxisType.ListHorizontal,
+    );
     return [
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
@@ -818,7 +1020,9 @@ class Product extends ViewAbstract<Product>
           // listItembuilder: (v) =>
           //     ListItemProductTypeCategory(productType: v as ProductType),
           autoRest: AutoRest<ProductType>(
-              obj: ProductType.init(true), key: "ProductType<Category>"),
+            obj: ProductType.init(true),
+            key: "ProductType<Category>",
+          ),
         ),
       ),
     ];
@@ -827,8 +1031,10 @@ class Product extends ViewAbstract<Product>
   @override
   List<StaggeredGridTile> getHomeHorizotalList(BuildContext context) {
     num mainAxisCellCount = SizeConfig.getMainAxisCellCount(context);
-    num mainAxisCellCountList = SizeConfig.getMainAxisCellCount(context,
-        mainAxisType: MainAxisType.ListHorizontal);
+    num mainAxisCellCountList = SizeConfig.getMainAxisCellCount(
+      context,
+      mainAxisType: MainAxisType.ListHorizontal,
+    );
     return [
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
@@ -840,26 +1046,31 @@ class Product extends ViewAbstract<Product>
           // listItembuilder: (v) =>
           //     ListItemProductTypeCategory(productType: v as ProductType),
           autoRest: AutoRest<ProductType>(
-              obj: ProductType.init(true), key: "ProductType<Category>"),
+            obj: ProductType.init(true),
+            key: "ProductType<Category>",
+          ),
         ),
       ),
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount / 2,
         child: ListHorizontalCustomViewApiAutoRestWidget(
-            autoRest: UnusedRecords.init(Product())),
+          autoRest: UnusedRecords.init(Product()),
+        ),
       ),
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
-            autoRest: ChangesRecords.init(Product(), "status")),
+          autoRest: ChangesRecords.init(Product(), "status"),
+        ),
       ),
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
-            autoRest: ChartRecordAnalysis.init(Order(), DateObject())),
+          autoRest: ChartRecordAnalysis.init(Order(), DateObject()),
+        ),
       ),
 
       StaggeredGridTile.count(
@@ -872,9 +1083,11 @@ class Product extends ViewAbstract<Product>
           // listItembuilder: (v) => SizedBox(
           //     width: 100, height: 100, child: POSListCardItem(object: v)),
           autoRest: AutoRest<Product>(
-              obj: Product().setRequestOption(
-                  option: _getOnlyInventory().addDate(DateObject.today())),
-              key: "productsByType<dateEnum>thisDay"),
+            obj: Product().setRequestOption(
+              option: _getOnlyInventory().addDate(DateObject.today()),
+            ),
+            key: "productsByType<dateEnum>thisDay",
+          ),
         ),
       ),
       StaggeredGridTile.count(
@@ -884,10 +1097,11 @@ class Product extends ViewAbstract<Product>
           isSliver: true,
           titleString: "This week",
           autoRest: AutoRest<Product>(
-              obj: Product().setRequestOption(
-                  option:
-                      _getOnlyInventory().addDate(DateObject.initThisWeek())),
-              key: "productsByType<dateEnum>thisWeek"),
+            obj: Product().setRequestOption(
+              option: _getOnlyInventory().addDate(DateObject.initThisWeek()),
+            ),
+            key: "productsByType<dateEnum>thisWeek",
+          ),
         ),
       ),
 
@@ -920,7 +1134,9 @@ class Product extends ViewAbstract<Product>
 
   BetweenRequest getOnlyReelsParams() {
     return BetweenRequest(
-        field: "lenght", fromTo: [FromToBetweenRequest(from: "0", to: "0")]);
+      field: "lenght",
+      fromTo: [FromToBetweenRequest(from: "0", to: "0")],
+    );
   }
 
   @override
@@ -928,16 +1144,21 @@ class Product extends ViewAbstract<Product>
     return "${getIDFormat(context)} /${getQuantityStringFormat(context: context)}";
   }
 
-  RequestOptions getSimilarWithSameSize(BuildContext context,
-      {int? width, int? maxWaste}) {
+  RequestOptions getSimilarWithSameSize(
+    BuildContext context, {
+    int? width,
+    int? maxWaste,
+  }) {
     ProductSize? customSize = width == null
         ? sizes
         : (ProductSize()
-          ..width = width.toNonNullable()
-          ..length = 0);
+            ..width = width.toNonNullable()
+            ..length = 0);
 
-    RequestOptions op = _getOnlyInventory().setBetween("SizeID",
-        customSize?.getListOfSizesWithMaxWaste(maxWaste: maxWaste ?? 20));
+    RequestOptions op = _getOnlyInventory().setBetween(
+      "SizeID",
+      customSize?.getListOfSizesWithMaxWaste(maxWaste: maxWaste ?? 20),
+    );
 
     return !isGeneralEmployee(context)
         ? op.addSearchByField("status", "NONE")
@@ -959,9 +1180,13 @@ class Product extends ViewAbstract<Product>
   }
 
   void setProductsByCategoryCustomParams(
-      BuildContext context, ProductType category) {
-    RequestOptions op =
-        _getOnlyInventory().addSearchByField("ProductTypeID", category.iD);
+    BuildContext context,
+    ProductType category,
+  ) {
+    RequestOptions op = _getOnlyInventory().addSearchByField(
+      "ProductTypeID",
+      category.iD,
+    );
     op = !isGeneralEmployee(context)
         ? op.addSearchByField("status", "NONE")
         : op;
@@ -997,9 +1222,11 @@ class Product extends ViewAbstract<Product>
   // }
 
   @override
-  List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+  List<Widget>? getCustomBottomWidget(
+    BuildContext context, {
+    ServerActions? action,
+    ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+  }) {
     if (action == ServerActions.add ||
         action == ServerActions.edit ||
         action == ServerActions.list) {
@@ -1007,47 +1234,59 @@ class Product extends ViewAbstract<Product>
     }
     return [
       HeaderDescription(
-          isSliver: true,
-          title: //TODO translate
-              AppLocalizations.of(context)!.simialrProducts),
+        isSliver: true,
+        title: //TODO translate
+        AppLocalizations.of(
+          context,
+        )!.simialrProducts,
+      ),
       SliverApiMixinViewAbstractWidget(
-          isGridView: true,
-          scrollDirection: Axis.horizontal,
-          toListObject: Product().setRequestOption(
-              option: getSimilarWithSameAndTypeSize(context))),
+        isGridView: true,
+        scrollDirection: Axis.horizontal,
+        toListObject: Product().setRequestOption(
+          option: getSimilarWithSameAndTypeSize(context),
+        ),
+      ),
       HeaderDescription(
-          isSliver: true,
-          title: AppLocalizations.of(context)!.productsWithSimilarSize),
+        isSliver: true,
+        title: AppLocalizations.of(context)!.productsWithSimilarSize,
+      ),
       SliverApiMixinViewAbstractWidget(
-          isGridView: true,
-          scrollDirection: Axis.horizontal,
-          toListObject: Product()
-              .setRequestOption(option: getSimilarWithSameSize(context))),
+        isGridView: true,
+        scrollDirection: Axis.horizontal,
+        toListObject: Product().setRequestOption(
+          option: getSimilarWithSameSize(context),
+        ),
+      ),
     ];
   }
 
   @override
   Widget? getTabControllerFirstHeaderWidget(BuildContext context) {
     if (isNew()) return null;
-    return ProductHeaderToggle(
-      product: this,
-    );
+    return ProductHeaderToggle(product: this);
   }
 
   @override
-  List<Widget>? getCustomTopWidget(BuildContext context,
-      {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
-      ValueNotifier<SecondPaneHelper?>? onClick,
-      bool? isFromFirstAndSecPane,
-      dynamic extras}) {
+  List<Widget>? getCustomTopWidget(
+    BuildContext context, {
+    ServerActions? action,
+    ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+    ValueNotifier<SecondPaneHelper?>? onClick,
+    BasePageSecoundPaneNotifierState? basePage,
+    bool? isFromFirstAndSecPane,
+    dynamic extras,
+  }) {
     debugPrint(
-        "getCustomTopWidg4et asd sad assd from $isFromFirstAndSecPane extras $extras action:$action");
+      "getCustomTopWidg4et asd sad assd from $isFromFirstAndSecPane extras $extras action:$action",
+    );
 
     if (isFromFirstAndSecPane != null) {
       if (isFromFirstAndSecPane == true && action == ServerActions.search) {
         int? val = int.tryParse(extras);
         if (val == null) return null;
+        if (val < 350 || val > 1500) return null;
+
         return [
           HeaderDescription(
             isSliver: true,
@@ -1056,10 +1295,33 @@ class Product extends ViewAbstract<Product>
           ),
           SliverApiMixinViewAbstractWidget(
             toListObject: Product().setRequestOption(
-                option: getSimilarWithSameSize(context,
-                    width: val * 2, maxWaste: 50)),
+              option: getSimilarWithSameSize(
+                context,
+                width: val + 20,
+                maxWaste: 50,
+              ),
+            ),
             isGridView: true,
             isSliver: true,
+            isSelectForCard: (object) {
+              bool res =
+                  (basePage?.lastSecondPaneItem?.value?.isEquals(object) ??
+                  false);
+
+              debugPrint(
+                "isSelectForCard  ${object.getMainHeaderTextOnly(context)} $res",
+              );
+              return res;
+            },
+            onClickForCard: (object) {
+              debugPrint("getPaneNotifier onClickForCard $object");
+              basePage?.notify(
+                SecondPaneHelper(
+                  title: object.getMainHeaderTextOnly(context),
+                  value: object,
+                ),
+              );
+            },
             scrollDirection: Axis.horizontal,
           ),
           HeaderDescription(
@@ -1069,60 +1331,75 @@ class Product extends ViewAbstract<Product>
             title: "seaerch resulkt",
           ),
         ];
+      } else {
+        return null;
       }
-    } else {
-      return null;
     }
-    return null;
+    List<Product>? parents = getParents();
     return [
       if (action == ServerActions.view)
-        SliverFillRemaining(
-            child: ProductTopWidget(product: this, valueNotifier: onClick)),
-      // if (isRollCut())
-      //   FixedTimeline.tileBuilder(
-      //     theme: TimelineTheme.of(context).copyWith(
-      //       connectorTheme: ConnectorThemeData(color: primary),
-      //       color: primary,
-      //     ),
-      //     builder: TimelineTileBuilder.connectedFromStyle(
-      //       contentsAlign: ContentsAlign.alternating,
-      //       oppositeContentsBuilder: (context, index) => Padding(
-      //         padding: const EdgeInsets.all(20),
-      //         child: Text(parents![index].date!),
-      //       ),
-      //       contentsBuilder: (context, index) => Card(
-      //         child: Padding(
-      //           padding: const EdgeInsets.all(20),
-      //           child: Text(parents![index].getMainHeaderTextOnly(context)),
-      //         ),
-      //       ),
-      //       connectorStyleBuilder: (context, index) => ConnectorStyle.solidLine,
-      //       indicatorStyleBuilder: (context, index) => IndicatorStyle.dot,
-      //       itemCount: parents!.length,
-      //     ),
-      //   ),
+        ProductTopWidget(product: this, valueNotifier: onClick),
+      if (parents!=null)
+        FixedTimeline.tileBuilder(
+          theme: TimelineTheme.of(context).copyWith(
+            connectorTheme: ConnectorThemeData(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          builder: TimelineTileBuilder.connectedFromStyle(
+            contentsAlign: ContentsAlign.alternating,
+            oppositeContentsBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(products?.date ?? ""),
+            ),
+            contentsBuilder: (context, index) => Card(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(parents[index].getMainHeaderTextOnly(context)),
+              ),
+            ),
+            connectorStyleBuilder: (context, index) => ConnectorStyle.solidLine,
+            indicatorStyleBuilder: (context, index) => IndicatorStyle.dot,
+            itemCount: parents.length,
+          ),
+        ),
     ];
     return super.getCustomTopWidget(context, action: action);
   }
 
+  List<Product>? getParents({Product? p, List<Product>? list}) {
+    if (p == null) {
+      return getParents(p: this, list: List.empty(growable: true));
+    } else if (p.products == null) {
+      return list;
+    } else {
+      return getParents(p: p.products, list: [...?list, ?p.products]);
+    }
+  }
+
   @override
-  List<TabControllerHelper> getCustomTabList(BuildContext context,
-      {ServerActions? action}) {
+  List<TabControllerHelper> getCustomTabList(
+    BuildContext context, {
+    ServerActions? action,
+  }) {
     if (action == ServerActions.list) return [];
     return [
       if (isEditing())
-        TabControllerHelper(AppLocalizations.of(context)!.movments,
-            draggableHeaderWidget: Text(
-              AppLocalizations.of(context)!.movments,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(color: Theme.of(context).colorScheme.primary),
+        TabControllerHelper(
+          AppLocalizations.of(context)!.movments,
+          draggableHeaderWidget: Text(
+            AppLocalizations.of(context)!.movments,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
             ),
-            isResponsiveIsSliver: true,
-            // extras: ,
-            widget: ListHorizontalCustomViewApiAutoRestWidget(
-                autoRest: ProductMovments.init(iD))),
+          ),
+          isResponsiveIsSliver: true,
+          // extras: ,
+          widget: ListHorizontalCustomViewApiAutoRestWidget(
+            autoRest: ProductMovments.init(iD),
+          ),
+        ),
       // TabControllerHelper(
       //   AppLocalizations.of(context)!.movments,
       //   widget: ListHorizontalCustomViewApiAutoRestWidget(
@@ -1176,20 +1453,20 @@ class Product extends ViewAbstract<Product>
   //     // ),
   //   ];
   // }
-//  @override
-//   Widget? getCustomTopWidget(BuildContext context, ServerActions action) {
-//     if (action == ServerActions.view) {
-//       return ListHorizontalApiAutoRestWidget(
-//         customHeight: 300,
-//         title: getMainHeaderText(context),
-//         autoRest: AutoRest<Product>(
-//             obj: Product()
-//               ..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
-//             key: "similarProducts$iD"),
-//       );
-//     }
-//     return null;
-//   }
+  //  @override
+  //   Widget? getCustomTopWidget(BuildContext context, ServerActions action) {
+  //     if (action == ServerActions.view) {
+  //       return ListHorizontalApiAutoRestWidget(
+  //         customHeight: 300,
+  //         title: getMainHeaderText(context),
+  //         autoRest: AutoRest<Product>(
+  //             obj: Product()
+  //               ..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
+  //             key: "similarProducts$iD"),
+  //       );
+  //     }
+  //     return null;
+  //   }
 
   static String? intFromString(dynamic number) => number?.toString();
 
@@ -1239,9 +1516,11 @@ class Product extends ViewAbstract<Product>
       getMainHeaderLabelTextOnly(context);
 
   @override
-  Future<pdfWidget.Widget?>? getPrintableCustomFooter(BuildContext context,
-          {pdf.PdfPageFormat? format, PrintProduct? setting}) =>
-      null;
+  Future<pdfWidget.Widget?>? getPrintableCustomFooter(
+    BuildContext context, {
+    pdf.PdfPageFormat? format,
+    PrintProduct? setting,
+  }) => null;
   // null;
 
   @override
@@ -1250,25 +1529,33 @@ class Product extends ViewAbstract<Product>
       return null;
     }
     return pdfWidget.FullPage(
-        ignoreMargins: true,
-        child: pdfWidget.Watermark.text('SAFFOURY\n',
-            fit: pdfWidget.BoxFit.scaleDown,
-            // angle: 0,
-            style: pdfWidget.TextStyle.defaultStyle().copyWith(
-              fontSize: 80,
-              color: pdf.PdfColors.grey400,
-              fontWeight: pdfWidget.FontWeight.bold,
-            )));
+      ignoreMargins: true,
+      child: pdfWidget.Watermark.text(
+        'SAFFOURY\n',
+        fit: pdfWidget.BoxFit.scaleDown,
+        // angle: 0,
+        style: pdfWidget.TextStyle.defaultStyle().copyWith(
+          fontSize: 80,
+          color: pdf.PdfColors.grey400,
+          fontWeight: pdfWidget.FontWeight.bold,
+        ),
+      ),
+    );
   }
 
   @override
-  Future<pdfWidget.Widget?>? getPrintableCustomHeader(BuildContext context,
-          {pdf.PdfPageFormat? format, PrintProduct? setting}) =>
-      null;
+  Future<pdfWidget.Widget?>? getPrintableCustomHeader(
+    BuildContext context, {
+    pdf.PdfPageFormat? format,
+    PrintProduct? setting,
+  }) => null;
 
   @override
-  Future<List<pdfWidget.Widget>> getPrintableCustomPage(BuildContext context,
-      {pdf.PdfPageFormat? format, PrintProduct? setting}) async {
+  Future<List<pdfWidget.Widget>> getPrintableCustomPage(
+    BuildContext context, {
+    pdf.PdfPageFormat? format,
+    PrintProduct? setting,
+  }) async {
     pdfWidget.Widget? header;
     if (format != roll80) {
       header = await buildHeader(setting: setting);
@@ -1289,15 +1576,19 @@ class Product extends ViewAbstract<Product>
         ),
 
       if (!printableIsLabel(format: format))
-        ProductLabelPDF(context, this, setting: setting, format: format)
-            .generate()
+        ProductLabelPDF(
+          context,
+          this,
+          setting: setting,
+          format: format,
+        ).generate()
       else
         ProductLabelIfLabelRoll80(
-                context: context,
-                product: this,
-                format: format,
-                setting: setting)
-            .generate(qrObject: this)
+          context: context,
+          product: this,
+          format: format,
+          setting: setting,
+        ).generate(qrObject: this),
 
       //  Row(
       // crossAxisAlignment: CrossAxisAlignment.start,
@@ -1383,10 +1674,7 @@ class Product extends ViewAbstract<Product>
 
   @override
   String getPrintableQrCode() {
-    var q = QRCodeID(
-      iD: iD,
-      action: getTableNameApi() ?? "",
-    );
+    var q = QRCodeID(iD: iD, action: getTableNameApi() ?? "");
     return q.getQrCode();
   }
 
@@ -1435,14 +1723,17 @@ class Product extends ViewAbstract<Product>
 
   @override
   List<MenuItemBuildGenirc> getPopupMenuActionsThreeDot(
-      BuildContext c, ServerActions? action) {
+    BuildContext c,
+    ServerActions? action,
+  ) {
     return [
       if (hasPermissionAdd(c, viewAbstract: CutRequest()))
         MenuItemBuildGenirc<CutRequest>(
-            title: CutRequest().getAddToFormat(c),
-            icon: Icons.add,
-            route: "/edit",
-            value: CutRequest()..products = this)
+          title: CutRequest().getAddToFormat(c),
+          icon: Icons.add,
+          route: "/edit",
+          value: CutRequest()..products = this,
+        ),
     ];
   }
 
@@ -1471,19 +1762,19 @@ class Product extends ViewAbstract<Product>
   Widget getPosableOnAddWidget(BuildContext context) {
     return AlertDialog(
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      ),
       scrollable: true,
       title: getMainHeaderText(context),
-      content: Builder(builder: (context) {
-        // Get available height and width of the build area of this widget. Make a choice depending on the size.
-        var height = MediaQuery.of(context).size.height;
-        var width = MediaQuery.of(context).size.width;
+      content: Builder(
+        builder: (context) {
+          // Get available height and width of the build area of this widget. Make a choice depending on the size.
+          var height = MediaQuery.of(context).size.height;
+          var width = MediaQuery.of(context).size.width;
 
-        return SizedBox(
-          height: height - 400,
-          width: width - 400,
-        );
-      }),
+          return SizedBox(height: height - 400, width: width - 400);
+        },
+      ),
       actions: <Widget>[
         ElevatedButton(
           child: const Text('CANCEL'),
@@ -1526,10 +1817,13 @@ class Product extends ViewAbstract<Product>
                 titleString: "This week",
                 listItembuilder: (v) => PosCardSquareItem(object: v),
                 autoRest: AutoRest<Product>(
-                    obj: Product().setRequestOption(
-                        option: _getOnlyInventory()
-                            .addDate(DateObject.initThisMonth())),
-                    key: "productsByType<dateEnum>thisWeek"),
+                  obj: Product().setRequestOption(
+                    option: _getOnlyInventory().addDate(
+                      DateObject.initThisMonth(),
+                    ),
+                  ),
+                  key: "productsByType<dateEnum>thisWeek",
+                ),
               ),
             ),
             SizedBox(
@@ -1540,10 +1834,11 @@ class Product extends ViewAbstract<Product>
                 // listItembuilder: (v) => SizedBox(
                 //     width: 100, height: 100, child: POSListCardItem(object: v)),
                 autoRest: AutoRest<Product>(
-                    obj: Product().setRequestOption(
-                        option:
-                            _getOnlyInventory().addDate(DateObject.today())),
-                    key: "productsByType<dateEnum>thisDay"),
+                  obj: Product().setRequestOption(
+                    option: _getOnlyInventory().addDate(DateObject.today()),
+                  ),
+                  key: "productsByType<dateEnum>thisDay",
+                ),
               ),
             ),
           ],
@@ -1552,15 +1847,18 @@ class Product extends ViewAbstract<Product>
     );
   }
 
-  Widget getSummaryTotal(
-      {required BuildContext context, required List<Product> productList}) {
+  Widget getSummaryTotal({
+    required BuildContext context,
+    required List<Product> productList,
+  }) {
     if (productList.isEmpty) {
       return Card(
         child: ListTile(
           //todo translate
           title: const Text("Select filter data to view list"),
           subtitle: const Text(
-              "Start filtering by presssing the filter data to view summary"),
+            "Start filtering by presssing the filter data to view summary",
+          ),
           trailing: ElevatedButton.icon(
             icon: const Icon(Icons.filter_alt_rounded),
             label: const Text("Filter"),
@@ -1572,8 +1870,8 @@ class Product extends ViewAbstract<Product>
     double getTotalImportQuanity = productList.isEmpty
         ? 0
         : productList
-            .map((e) => e.getQuantity())
-            .reduce((value, element) => (value) + (element));
+              .map((e) => e.getQuantity())
+              .reduce((value, element) => (value) + (element));
 
     int totalImportedLength = productList.length;
 
@@ -1582,7 +1880,8 @@ class Product extends ViewAbstract<Product>
       icon: Icons.list,
       title: "TOTAL ITEMS IMPORTED",
       description: getTotalImportQuanity.toCurrencyFormat(
-          symbol: AppLocalizations.of(context)!.kg),
+        symbol: AppLocalizations.of(context)!.kg,
+      ),
       footer: totalImportedLength.toCurrencyFormat(),
 
       // footer: incomes?.length.toString(),
@@ -1590,18 +1889,19 @@ class Product extends ViewAbstract<Product>
     );
   }
 
-  Widget getSummary(
-      {required BuildContext context,
-      required List<Product> productList,
-      String customKey = ""}) {
+  Widget getSummary({
+    required BuildContext context,
+    required List<Product> productList,
+    String customKey = "",
+  }) {
     if (productList.isEmpty) {
       return EmptyWidget.emptyList(context);
     }
     double getTotalImportQuanity = productList.isEmpty
         ? 0
         : productList
-            .map((e) => e.getQuantity())
-            .reduce((value, element) => (value) + (element));
+              .map((e) => e.getQuantity())
+              .reduce((value, element) => (value) + (element));
 
     int totalImportedLength = productList.length;
 
@@ -1610,43 +1910,48 @@ class Product extends ViewAbstract<Product>
       builder: (crossAxisCount, crossCountFundCalc, crossAxisCountMod, h) {
         return [
           StaggeredGridTile.count(
-              crossAxisCellCount: crossCountFundCalc,
-              mainAxisCellCount: h,
-              child: ChartCardItemCustom(
-                color: Colors.blue,
-                icon: Icons.list,
-                title: "TOTAL ITEMS IMPORTED",
-                description: getTotalImportQuanity.toCurrencyFormat(
-                    symbol: AppLocalizations.of(context)!.kg),
-                footer: totalImportedLength.toCurrencyFormat(),
+            crossAxisCellCount: crossCountFundCalc,
+            mainAxisCellCount: h,
+            child: ChartCardItemCustom(
+              color: Colors.blue,
+              icon: Icons.list,
+              title: "TOTAL ITEMS IMPORTED",
+              description: getTotalImportQuanity.toCurrencyFormat(
+                symbol: AppLocalizations.of(context)!.kg,
+              ),
+              footer: totalImportedLength.toCurrencyFormat(),
 
-                // footer: incomes?.length.toString(),
-                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-              )),
+              // footer: incomes?.length.toString(),
+              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+            ),
+          ),
           StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: ChartCardItemCustom(
-                color: Colors.blue,
-                icon: Icons.list,
-                title: "TOTAL ITEMS IMPORTED",
-                description: getTotalImportQuanity.toCurrencyFormat(
-                    symbol: AppLocalizations.of(context)!.kg),
-                footer: totalImportedLength.toCurrencyFormat(),
+            crossAxisCellCount: 2,
+            mainAxisCellCount: 1,
+            child: ChartCardItemCustom(
+              color: Colors.blue,
+              icon: Icons.list,
+              title: "TOTAL ITEMS IMPORTED",
+              description: getTotalImportQuanity.toCurrencyFormat(
+                symbol: AppLocalizations.of(context)!.kg,
+              ),
+              footer: totalImportedLength.toCurrencyFormat(),
 
-                // footer: incomes?.length.toString(),
-                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-              )),
+              // footer: incomes?.length.toString(),
+              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+            ),
+          ),
           StaggeredGridTile.count(
-              crossAxisCellCount: 4,
-              mainAxisCellCount: 4,
-              child: Card(
-                child: SliverApiMixinStaticList(
-                  isSliver: false,
-                  listKey: "products_goods_working$customKey",
-                  list: productList,
-                ),
-              )),
+            crossAxisCellCount: 4,
+            mainAxisCellCount: 4,
+            child: Card(
+              child: SliverApiMixinStaticList(
+                isSliver: false,
+                listKey: "products_goods_working$customKey",
+                list: productList,
+              ),
+            ),
+          ),
 
           // StaggeredGridTile.count(
           //     crossAxisCellCount: 2,
@@ -1683,9 +1988,10 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     if (action == ServerActions.list) {
       return _getOnlyInventory();
     } else if (action == ServerActions.search) {
@@ -1702,7 +2008,9 @@ class Product extends ViewAbstract<Product>
 
   @override
   Widget getPosableMainWidget(
-      BuildContext context, AsyncSnapshot snapshotResponse) {
+    BuildContext context,
+    AsyncSnapshot snapshotResponse,
+  ) {
     var data = snapshotResponse.data as List<ProductType>;
     data.insert(0, ProductType()..availability = 2);
     return Column(
@@ -1710,30 +2018,38 @@ class Product extends ViewAbstract<Product>
         const PosHeader(),
         Expanded(
           child: Container(
-              // color: Theme.of(context).colorScheme.background,
-              child: TabBarByListWidget(
-                  tabs: data
-                      .where(
-            (element) => element.availability.toNonNullable() > 0,
-          )
-                      .map((e) {
-            if (data.indexOf(e) == 0) {
-              return getPosableFirstWidget(context);
-            }
+            // color: Theme.of(context).colorScheme.background,
+            child: TabBarByListWidget(
+              tabs: data
+                  .where((element) => element.availability.toNonNullable() > 0)
+                  .map((e) {
+                    if (data.indexOf(e) == 0) {
+                      return getPosableFirstWidget(context);
+                    }
 
-            return TabControllerHelper(
-              e.name ?? "dsa",
-              icon:
-                  e.getCardLeadingCircleAvatar(context, height: 20, width: 20),
-              widget: POSListWidget(
-                autoRest: AutoRest<Product>(
-                    obj: Product().setRequestOption(
-                        option: _getOnlyInventory()
-                            .addSearchByField("ProductTypeID", e.iD)),
-                    key: "productsByType${e.iD}"),
-              ),
-            );
-          }).toList())),
+                    return TabControllerHelper(
+                      e.name ?? "dsa",
+                      icon: e.getCardLeadingCircleAvatar(
+                        context,
+                        height: 20,
+                        width: 20,
+                      ),
+                      widget: POSListWidget(
+                        autoRest: AutoRest<Product>(
+                          obj: Product().setRequestOption(
+                            option: _getOnlyInventory().addSearchByField(
+                              "ProductTypeID",
+                              e.iD,
+                            ),
+                          ),
+                          key: "productsByType${e.iD}",
+                        ),
+                      ),
+                    );
+                  })
+                  .toList(),
+            ),
+          ),
         ),
       ],
     );
@@ -1741,25 +2057,34 @@ class Product extends ViewAbstract<Product>
 
   @override
   Future<List<InvoiceHeaderTitleAndDescriptionInfo>>?
-      getPrintableSelfListAccountInfoInBottom(
-          BuildContext context, List list, PrintProductList? pca) {
+  getPrintableSelfListAccountInfoInBottom(
+    BuildContext context,
+    List list,
+    PrintProductList? pca,
+  ) {
     return null;
   }
 
   @override
   Future<List<List<InvoiceHeaderTitleAndDescriptionInfo>>>?
-      getPrintableSelfListHeaderInfo(
-          BuildContext context, List list, PrintProductList? pca) async {
+  getPrintableSelfListHeaderInfo(
+    BuildContext context,
+    List list,
+    PrintProductList? pca,
+  ) async {
     setTotalsFromPrintable(list.cast());
     return [
       getInvoicDesFirstRow(context, list.cast(), pca),
       getInvoiceDesSecRow(context, list.cast(), pca),
-      getInvoiceDesTherdRow(context, list.cast(), pca)
+      getInvoiceDesTherdRow(context, list.cast(), pca),
     ];
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesSecRow(
-      BuildContext context, List<Product> list, PrintProductList? pca) {
+    BuildContext context,
+    List<Product> list,
+    PrintProductList? pca,
+  ) {
     return [
       // InvoiceHeaderTitleAndDescriptionInfo(
       //   title: AppLocalizations.of(context)!.iD,
@@ -1776,7 +2101,10 @@ class Product extends ViewAbstract<Product>
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesTherdRow(
-      BuildContext context, List<Product> list, PrintProductList? pca) {
+    BuildContext context,
+    List<Product> list,
+    PrintProductList? pca,
+  ) {
     double? total;
     if (((pca?.hideQuantity == false))) {
       pca?.currentGroupList?.forEach((element) {
@@ -1790,54 +2118,65 @@ class Product extends ViewAbstract<Product>
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesWhenComparable(
-      PrintProductList? pca, BuildContext context, List<Product> list) {
+    PrintProductList? pca,
+    BuildContext context,
+    List<Product> list,
+  ) {
     return [
       InvoiceHeaderTitleAndDescriptionInfo(
-          //todo translate
-          title: "C.I.Q: Current invdntory quantity",
-          description: "$totalQrQuantity items: $totalQrItems",
-          hexColor: getPrintablePrimaryColor(
-              PrintProduct()..primaryColor = pca?.primaryColor)
-          // icon: Icons.tag
-          ),
+        //todo translate
+        title: "C.I.Q: Current invdntory quantity",
+        description: "$totalQrQuantity items: $totalQrItems",
+        hexColor: getPrintablePrimaryColor(
+          PrintProduct()..primaryColor = pca?.primaryColor,
+        ),
+        // icon: Icons.tag
+      ),
       InvoiceHeaderTitleAndDescriptionInfo(
-          //todo translate
-          title: "TOTAL ",
-          description: "$totalInventoryQuantity items: $totalInventoryItmes",
-          hexColor: getPrintablePrimaryColor(
-              PrintProduct()..primaryColor = pca?.primaryColor)
-          // icon: Icons.tag
-          ),
+        //todo translate
+        title: "TOTAL ",
+        description: "$totalInventoryQuantity items: $totalInventoryItmes",
+        hexColor: getPrintablePrimaryColor(
+          PrintProduct()..primaryColor = pca?.primaryColor,
+        ),
+        // icon: Icons.tag
+      ),
       InvoiceHeaderTitleAndDescriptionInfo(
-          //todo translate
-          title: "Remainig ",
-          description: totalRemaining.toCurrencyFormat(),
-          hexColor: getPrintablePrimaryColor(
-              PrintProduct()..primaryColor = pca?.primaryColor)
-          // icon: Icons.tag
-          ),
+        //todo translate
+        title: "Remainig ",
+        description: totalRemaining.toCurrencyFormat(),
+        hexColor: getPrintablePrimaryColor(
+          PrintProduct()..primaryColor = pca?.primaryColor,
+        ),
+        // icon: Icons.tag
+      ),
     ];
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesWhenNotComparable(
-      PrintProductList? pca, BuildContext context, double? total) {
+    PrintProductList? pca,
+    BuildContext context,
+    double? total,
+  ) {
     return [
       if (pca?.currentGroupNameFromList != null)
         InvoiceHeaderTitleAndDescriptionInfo(
-            title: pca?.groupedByField ?? "-",
-            description: pca?.currentGroupNameFromList ?? "sad",
-            hexColor: getPrintablePrimaryColor(
-                PrintProduct()..primaryColor = pca?.primaryColor)
-            // icon: Icons.tag
-            ),
+          title: pca?.groupedByField ?? "-",
+          description: pca?.currentGroupNameFromList ?? "sad",
+          hexColor: getPrintablePrimaryColor(
+            PrintProduct()..primaryColor = pca?.primaryColor,
+          ),
+          // icon: Icons.tag
+        ),
       if ((pca?.hideQuantity == false))
         InvoiceHeaderTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.total,
-            description: total.toCurrencyFormat(),
-            hexColor: getPrintablePrimaryColor(
-                PrintProduct()..primaryColor = pca?.primaryColor)
-            // icon: Icons.tag
-            ),
+          title: AppLocalizations.of(context)!.total,
+          description: total.toCurrencyFormat(),
+          hexColor: getPrintablePrimaryColor(
+            PrintProduct()..primaryColor = pca?.primaryColor,
+          ),
+          // icon: Icons.tag
+        ),
 
       // if (!isPricelessInvoice())
       //   if ((pca?.hideCustomerBalance == false))
@@ -1863,14 +2202,21 @@ class Product extends ViewAbstract<Product>
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoicDesFirstRow(
-      BuildContext context, List<Product> list, PrintProductList? pca) {
+    BuildContext context,
+    List<Product> list,
+    PrintProductList? pca,
+  ) {
     // if (customers == null) return [];
     Map<String, FilterableProviderHelper>? lastFilter = getLastFilterableMap();
-    List<FilterableProviderHelper> finalList =
-        getAllSelectedFiltersRead(context, map: lastFilter);
+    List<FilterableProviderHelper> finalList = getAllSelectedFiltersRead(
+      context,
+      map: lastFilter,
+    );
 
-    var t = finalList.groupBy((item) => item.mainFieldName,
-        valueTransform: (v) => v.mainValuesName[0]);
+    var t = finalList.groupBy(
+      (item) => item.mainFieldName,
+      valueTransform: (v) => v.mainValuesName[0],
+    );
     List<String> results = [];
     t.forEach((key, value) {
       results.add("- $key:\n  ${value.join(",")}\n");
@@ -1908,7 +2254,9 @@ class Product extends ViewAbstract<Product>
 
   @override
   String getPrintableSelfListInvoiceTitle(
-      BuildContext context, PrintProductList? pca) {
+    BuildContext context,
+    PrintProductList? pca,
+  ) {
     return isInventoryWorker
         ? AppLocalizations.of(context)!.inventoryprocess
         : getMainHeaderLabelTextOnly(context);
@@ -1917,7 +2265,8 @@ class Product extends ViewAbstract<Product>
   @override
   String getPrintableSelfListPrimaryColor(PrintProductList? pca) {
     return getPrintablePrimaryColor(
-        PrintProduct()..primaryColor = pca?.primaryColor);
+      PrintProduct()..primaryColor = pca?.primaryColor,
+    );
   }
 
   @override
@@ -1933,12 +2282,16 @@ class Product extends ViewAbstract<Product>
   @override
   String getPrintableSelfListSecondaryColor(PrintProductList? pca) {
     return getPrintableSecondaryColor(
-        PrintProduct()..secondaryColor = pca?.secondaryColor);
+      PrintProduct()..secondaryColor = pca?.secondaryColor,
+    );
   }
 
   @override
   Map<String, String> getPrintableSelfListTableHeaderAndContent(
-      BuildContext context, dynamic item, PrintProductList? pca) {
+    BuildContext context,
+    dynamic item,
+    PrintProductList? pca,
+  ) {
     item = item as Product;
     return {
       AppLocalizations.of(context)!.iD: item.getIDFormat(context),
@@ -1946,14 +2299,17 @@ class Product extends ViewAbstract<Product>
           "${item.getProductTypeNameString()}\n${item.getSizeString(context)}",
       AppLocalizations.of(context)!.gsm: item.gsms?.gsm.toString() ?? "0",
       if (((pca?.hideQuantity == false)))
-        AppLocalizations.of(context)!.quantity:
-            item.getQuantity().toCurrencyFormat(),
+        AppLocalizations.of(context)!.quantity: item
+            .getQuantity()
+            .toCurrencyFormat(),
       if (((pca?.hideWarehouse == false)))
-        AppLocalizations.of(context)!.availableIn:
-            item.getWareHouseAvailableIn(context),
+        AppLocalizations.of(context)!.availableIn: item.getWareHouseAvailableIn(
+          context,
+        ),
       if (((pca?.hideUnitPriceAndTotalPrice == false)))
-        AppLocalizations.of(context)!.unit_price:
-            item.getUnitSellPrice().toCurrencyFormatFromSetting(context),
+        AppLocalizations.of(context)!.unit_price: item
+            .getUnitSellPrice()
+            .toCurrencyFormatFromSetting(context),
     };
   }
 
@@ -1965,23 +2321,33 @@ class Product extends ViewAbstract<Product>
 
   @override
   Future<List<InvoiceTotalTitleAndDescriptionInfo>>? getPrintableSelfListTotal(
-      BuildContext context, List list, PrintProductList? pca) async {
+    BuildContext context,
+    List list,
+    PrintProductList? pca,
+  ) async {
     // return null;
     List<Product> items = list.cast<Product>();
-    double total = items.map((e) => (e).getQuantity()).reduce(
-        (value, element) => value.toNonNullable() + element.toNonNullable());
+    double total = items
+        .map((e) => (e).getQuantity())
+        .reduce(
+          (value, element) => value.toNonNullable() + element.toNonNullable(),
+        );
     // double total = 231231;
     return [
       InvoiceTotalTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
-          description: total.toCurrencyFormat()),
+        title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
+        description: total.toCurrencyFormat(),
+      ),
       InvoiceTotalTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.no_summary.toUpperCase(),
-          description:
-              items.getTotalQuantityGroupedSizeTypeFormattedText(context)),
+        title: AppLocalizations.of(context)!.no_summary.toUpperCase(),
+        description: items.getTotalQuantityGroupedSizeTypeFormattedText(
+          context,
+        ),
+      ),
       InvoiceTotalTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.total.toUpperCase(),
-          description: items.getTotalQuantityGroupedFormattedText(context)),
+        title: AppLocalizations.of(context)!.total.toUpperCase(),
+        description: items.getTotalQuantityGroupedFormattedText(context),
+      ),
       // InvoiceTotalTitleAndDescriptionInfo(
       //     title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
       //     description: total.toCurrencyFormat(),
@@ -1991,8 +2357,11 @@ class Product extends ViewAbstract<Product>
 
   @override
   Future<List<InvoiceTotalTitleAndDescriptionInfo>>?
-      getPrintableSelfListTotalDescripton(
-          BuildContext context, List list, PrintProductList? pca) {
+  getPrintableSelfListTotalDescripton(
+    BuildContext context,
+    List list,
+    PrintProductList? pca,
+  ) {
     return null;
   }
 
@@ -2031,18 +2400,22 @@ class Product extends ViewAbstract<Product>
       ...inventory ?? [],
       Stocks()
         ..quantity = quantity.toDouble()
-        ..warehouse = warehouse
+        ..warehouse = warehouse,
     ];
   }
 
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-      BuildContext context, PrintLocalSetting? dashboardSetting) {
+    BuildContext context,
+    PrintLocalSetting? dashboardSetting,
+  ) {
     return null;
   }
 
-  String getWareHouseAvailableIn(BuildContext context,
-      {String joinString = "\n"}) {
+  String getWareHouseAvailableIn(
+    BuildContext context, {
+    String joinString = "\n",
+  }) {
     return inventory
             ?.map((o) => o.warehouse?.name ?? "")
             .toList()
@@ -2052,10 +2425,14 @@ class Product extends ViewAbstract<Product>
 
   @override
   String getContentSharable(BuildContext context, {ServerActions? action}) {
-    PrintProductList settings =
-        getModifiablePrintableSelfPdfSetting(context).copyWithEnableAll();
-    return getPrintableSelfListTableHeaderAndContent(context, this, settings)
-        .getString(newLineOnSubDetials: true);
+    PrintProductList settings = getModifiablePrintableSelfPdfSetting(
+      context,
+    ).copyWithEnableAll();
+    return getPrintableSelfListTableHeaderAndContent(
+      context,
+      this,
+      settings,
+    ).getString(newLineOnSubDetials: true);
   }
 
   @override
@@ -2075,16 +2452,24 @@ class Product extends ViewAbstract<Product>
 
   @override
   Map<String, String> getPrintableComparableTableHeaderAndContent(
-      BuildContext context, item, comparedItem, PrintProductList? pca) {
+    BuildContext context,
+    item,
+    comparedItem,
+    PrintProductList? pca,
+  ) {
     debugPrint(
-        "getPrintableComparableTableHeaderAndContent  item=> ${item.runtimeType} compared=>${comparedItem.runtimeType}");
+      "getPrintableComparableTableHeaderAndContent  item=> ${item.runtimeType} compared=>${comparedItem.runtimeType}",
+    );
     return {
       //todo translate
       //Current Inventory Quantity
-      "C.I.Q":
-          item == null ? "0" : (item as Product).qrQuantity.toCurrencyFormat(),
-      AppLocalizations.of(context)!.remaning:
-          getQuantityFromTow(item, comparedItem).toString()
+      "C.I.Q": item == null
+          ? "0"
+          : (item as Product).qrQuantity.toCurrencyFormat(),
+      AppLocalizations.of(context)!.remaning: getQuantityFromTow(
+        item,
+        comparedItem,
+      ).toString(),
     };
   }
 

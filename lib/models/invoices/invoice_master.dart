@@ -250,7 +250,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       "${getIDFormat(context)} ${getMainHeaderLabelTextOnly(context)}";
 
   @override
-  Widget? getMainSubtitleHeaderText(BuildContext context) {
+  Widget? getMainSubtitleHeaderText(BuildContext context,{String? searchQuery}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       // mainAxisAlignment: MainAxisAlignment.start,

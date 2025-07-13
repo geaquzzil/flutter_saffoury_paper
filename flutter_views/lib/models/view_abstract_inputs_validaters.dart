@@ -856,7 +856,7 @@ abstract class ViewAbstractInputAndValidater<T>
     options ??= getFormOptions(context, field);
     return FormBuilderCheckbox(
       enabled: options.isEnabled,
-      valueTransformer: (_) => _, //TODO
+      valueTransformer: (a) => a, //TODO
 
       // autovalidateMode: AutovalidateMode.always,
       name: getTag(field),

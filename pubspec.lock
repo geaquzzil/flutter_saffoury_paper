@@ -2550,6 +2550,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.4"
+  user_avatar_generator:
+    dependency: "direct main"
+    description:
+      name: user_avatar_generator
+      sha256: "599327df0a4ededb8783c40af155acfba7784543919e7ef50deb93b34e1931ef"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   uuid:
     dependency: transitive
     description:

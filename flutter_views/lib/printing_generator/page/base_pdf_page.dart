@@ -74,10 +74,10 @@ abstract class BasePdfPageState<T extends BasePdfPage, C>
   Widget getFloatingActionButtonConsomer(BuildContext context,
       {required Widget Function(BuildContext, bool) builder}) {
     return Selector<PrintSettingLargeScreenProvider, bool>(
-      builder: (_, isExpanded, __) {
+      builder: (a, isExpanded, __) {
         debugPrint(
             "BasePdfPageConsumer Selector =>  getFloatingActionButtonConsomer");
-        return builder(_, isExpanded);
+        return builder(a, isExpanded);
       },
       selector: (ctx, provider) => provider.getFloatActionIsExpanded,
     );

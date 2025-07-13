@@ -194,7 +194,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   }
 
   @override
-  Text? getMainSubtitleHeaderText(BuildContext context) {
+  Text? getMainSubtitleHeaderText(BuildContext context,{String? searchQuery}) {
     return Text(quantity.toCurrencyFormat(symbol: "KG"));
   }
 

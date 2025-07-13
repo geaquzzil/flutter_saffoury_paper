@@ -278,6 +278,39 @@ class ProductSize extends ViewAbstract<ProductSize> {
     );
   }
 
+  Widget getSizeHtmlFormatStringRichText(BuildContext context,
+      {String? fiberLines}) {
+    int widthNon = width.toNonNullable();
+    int lengthNon = length.toNonNullable();
+    if (length.toNonNullable() == 0) {
+      return Text("$widthNon");
+    }
+    return RichText(
+      text: TextSpan(
+        // Note: Styles for TextSpans must be explicitly defined.
+        // Child text spans will inherit styles from parent
+
+        children: <TextSpan>[
+          TextSpan(
+              text: '$widthNon',
+              style: fiberLines == null
+                  ? null
+                  : fiberLines == "Width"
+                      ? TextStyle(fontWeight: FontWeight.bold)
+                      : null),
+          TextSpan(text: " X "),
+          TextSpan(
+              text: '$lengthNon',
+              style: fiberLines == null
+                  ? null
+                  : fiberLines == "Length"
+                      ? TextStyle(fontWeight: FontWeight.bold)
+                      : null)
+        ],
+      ),
+    );
+  }
+
   String getSizeHtmlFormatString(BuildContext context, {String? fiberLines}) {
     int widthNon = width.toNonNullable();
     int lengthNon = length.toNonNullable();

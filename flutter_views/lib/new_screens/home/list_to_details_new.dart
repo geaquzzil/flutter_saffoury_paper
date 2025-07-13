@@ -6,7 +6,6 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
-import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/actions/cruds/view.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
@@ -106,6 +105,7 @@ class _ListToDetailsSecoundPaneNotifierState
                 action: _lastSearchQuery != null
                     ? ServerActions.search
                     : ServerActions.view,
+                basePage: this,
                 isFromFirstAndSecPane: firstPane,
                 extras: _lastSearchQuery);
     if (firstPane) {
@@ -189,20 +189,14 @@ class _ListToDetailsSecoundPaneNotifierState
         SliverApiMixinViewAbstractWidget(
           valueListProviderNotifier: _listNotifier,
           key: keyList,
-          hasCustomCardBuilder: (i, v) {
-            return ListCardItem(
-              secondPaneHelper: getSecoundPaneHelper(),
-              // state: this,
-              object: v,
-              // isSelected: (lastSecondPaneItem?.value?.isEquals(v) ?? false),//TODO what if the value of viewAbstract is Widget fix this
 
-              //  valueNotifier?.value.hashCode == v.hashCode,
-              onClick: (v) {
-                debugPrint("getPaneNotifier onClick $v");
-                notify(SecondPaneHelper(
-                    title: v.getMainHeaderTextOnly(context), value: v));
-              },
-            );
+          isSelectForCard: (object) {
+            return (lastSecondPaneItem?.value?.isEquals(object) ?? false);
+          },
+          onClickForCard: (object) {
+            // debugPrint("getPaneNotifier onClick $v");
+            notify(SecondPaneHelper(
+                title: object.getMainHeaderTextOnly(context), value: object));
           },
 
           isGridView: false,

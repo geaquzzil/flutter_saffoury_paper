@@ -138,7 +138,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
       };
 
   @override
-  material.Widget? getMainSubtitleHeaderText(material.BuildContext context) {
+  material.Widget? getMainSubtitleHeaderText(material.BuildContext context,{String? searchQuery}) {
     return material.Column(
       crossAxisAlignment: material.CrossAxisAlignment.start,
       // mainAxisAlignment: MainAxisAlignment.start,

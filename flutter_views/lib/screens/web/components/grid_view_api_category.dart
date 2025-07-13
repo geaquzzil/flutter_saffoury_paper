@@ -19,15 +19,12 @@ class GridViewApi extends StatelessWidget {
 
   ValueNotifier<bool> valueNotifier = ValueNotifier<bool>(false);
   ValueNotifier<int> valuePageNotifier = ValueNotifier<int>(0);
-  GridViewApi({
-    super.key,
-    this.customHeight,
-    required this.viewAbstract,
-  });
+  GridViewApi({super.key, this.customHeight, required this.viewAbstract});
 
   @override
   Widget build(BuildContext context) {
-    customHeight = customHeight ??
+    customHeight =
+        customHeight ??
         MediaQuery.of(context).size.height *
             (SizeConfig.isMobile(context) ? .5 : .65);
     return OnHoverWidget(
@@ -39,30 +36,33 @@ class GridViewApi extends StatelessWidget {
             return SizedBox(
               height: customHeight,
               child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [_buildUi(context, width), getButtons()]),
+                clipBehavior: Clip.none,
+                children: [_buildUi(context, width), getButtons()],
+              ),
             );
           },
         );
         return SizedBox(
           width: double.infinity,
           height: customHeight,
-          child: Stack(children: [
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ScreenHelper(
-                    largeTablet: _buildUi(context, kDesktopMaxWidth),
-                    smallTablet: _buildUi(context, kTabletMaxWidth),
-                    mobile: _buildUi(context, getMobileMaxWidth(context)),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ScreenHelper(
+                      largeTablet: _buildUi(context, kDesktopMaxWidth),
+                      smallTablet: _buildUi(context, kTabletMaxWidth),
+                      mobile: _buildUi(context, getMobileMaxWidth(context)),
+                    ),
                   ),
                 ),
               ),
-            ),
-            getButtons(),
-          ]),
+              getButtons(),
+            ],
+          ),
         );
       },
     );
@@ -70,7 +70,9 @@ class GridViewApi extends StatelessWidget {
 
   Widget getButtons() {
     return HoverButtons(
-        valueNotifier: valueNotifier, valuePageNotifier: valuePageNotifier);
+      valueNotifier: valueNotifier,
+      valuePageNotifier: valuePageNotifier,
+    );
   }
 
   Widget _buildUi(BuildContext context, double width) {
@@ -87,8 +89,8 @@ class GridViewApi extends StatelessWidget {
             customCount: isDesktop(context)
                 ? 10
                 : isTablet(context)
-                    ? 4
-                    : 4,
+                ? 4
+                : 4,
             customPage: value,
             onLoad: (context, list, count, isLoading) {
               // return ResponsiveGridList(
@@ -134,8 +136,8 @@ class GridViewApi extends StatelessWidget {
                   maxCrossAxisExtent: isTablet(context)
                       ? width / 4
                       : isMobile(context)
-                          ? width / 2
-                          : 250,
+                      ? width / 2
+                      : 250,
                   // Hack to adjust child height
                   childAspectRatio: isDesktop(context)
                       ? 1
@@ -143,9 +145,7 @@ class GridViewApi extends StatelessWidget {
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   var designProcesse = list[index];
-                  return WebGridViewItem(
-                    item: designProcesse,
-                  );
+                  return WebGridViewItem(item: designProcesse);
                 },
                 itemCount: list.length,
               );
@@ -196,11 +196,12 @@ class GridViewApi extends StatelessWidget {
 }
 
 class HoverButtons extends StatelessWidget {
-  HoverButtons(
-      {super.key,
-      required this.valueNotifier,
-      this.valuePageNotifier,
-      this.valuePageNotifierVoid});
+  HoverButtons({
+    super.key,
+    required this.valueNotifier,
+    this.valuePageNotifier,
+    this.valuePageNotifierVoid,
+  });
 
   final ValueNotifier<bool> valueNotifier;
   final ValueNotifier<int>? valuePageNotifier;
@@ -236,17 +237,18 @@ class HoverButtons extends StatelessWidget {
                   },
                 ),
                 RoundedIconButton(
-                    onTap: () {
-                      int i = valuePageNotifier?.value ?? idx;
-                      idx = i + 1;
-                      if (valuePageNotifierVoid != null) {
-                        valuePageNotifierVoid!.call(idx, true);
-                      }
-                      if (valuePageNotifier != null) {
-                        valuePageNotifier?.value = idx;
-                      }
-                    },
-                    icon: Icons.arrow_forward_ios_sharp),
+                  onTap: () {
+                    int i = valuePageNotifier?.value ?? idx;
+                    idx = i + 1;
+                    if (valuePageNotifierVoid != null) {
+                      valuePageNotifierVoid!.call(idx, true);
+                    }
+                    if (valuePageNotifier != null) {
+                      valuePageNotifier?.value = idx;
+                    }
+                  },
+                  icon: Icons.arrow_forward_ios_sharp,
+                ),
               ],
             ),
           ),
@@ -261,21 +263,26 @@ class WebGridViewItem extends StatelessWidget {
   final bool isSelectMood;
   final bool isSelected;
   void Function(ViewAbstract item, bool isSelectd)? onSelected;
+
+  final bool? isSelectedForCard;
+  final double? currentSize;
   SliverApiWithStaticMixin? state;
   final bool hightLightonSelect;
   final Function()? onPress;
   final bool setDescriptionAtBottom;
 
-  WebGridViewItem(
-      {required this.item,
-      this.setDescriptionAtBottom = false,
-      this.isSelectMood = false,
-      this.hightLightonSelect = false,
-      this.isSelected = false,
-      this.onSelected,
-      this.state,
-      this.onPress})
-      : super(key: GlobalKey());
+  WebGridViewItem({
+    required this.item,
+    this.setDescriptionAtBottom = false,
+    this.isSelectMood = false,
+    this.hightLightonSelect = false,
+    this.isSelected = false,
+    this.currentSize,
+    this.isSelectedForCard,
+    this.onSelected,
+    this.state,
+    this.onPress,
+  }) : super(key: GlobalKey());
 
   @override
   Widget build(BuildContext context) {
@@ -299,18 +306,20 @@ class WebGridViewItem extends StatelessWidget {
       // scale: false,
       builder: (isHovered) {
         Widget child = GestureDetector(
-            onLongPress: () {
-              item.onCardLongClicked(context,
-                  state: state, clickedWidget: key as GlobalKey);
-            },
-            onTap: onPress ??
-                () {
-                  item.onCardClicked(
-                    context,
-                    isSecoundSubPaneView: false,
-                  );
-                },
-            child: _getStack(context, isHovered));
+          onLongPress: () {
+            item.onCardLongClicked(
+              context,
+              state: state,
+              clickedWidget: key as GlobalKey,
+            );
+          },
+          onTap:
+              onPress ??
+              () {
+                item.onCardClicked(context, isSecoundSubPaneView: false);
+              },
+          child: _getStack(context, isHovered),
+        );
         return child;
       },
     );
@@ -319,15 +328,18 @@ class WebGridViewItem extends StatelessWidget {
   Widget _getStack(BuildContext context, bool isHovered) {
     return Stack(
       children: [
-        _buildBackground(context),
+        _buildBackground(context, isHovered),
         _buildGradient(context, isHovered),
-        _buildTitleAndSubtitle(context, isHovered),
+        _buildTitleAndSubtitle(
+          context,
+          (isSelectedForCard ?? false) || isHovered,
+        ),
         if (item is CartableProductItemInterface)
           if (item
                   .getCartableProductItemInterface()
                   .getCartableProductQuantity() !=
               0)
-            _buildCartIcon(isHovered, context),
+            ?_buildCartIcon(isHovered, context),
         if (hightLightonSelect)
           Selector<ActionViewAbstractProvider, ViewAbstract?>(
             builder: (context, value, child) {
@@ -337,34 +349,31 @@ class WebGridViewItem extends StatelessWidget {
 
               debugPrint("WebGride is selected $isSelected");
               return !isSelected
-                  ? const Positioned.fill(
-                      child: SizedBox(),
-                    )
+                  ? const Positioned.fill(child: SizedBox())
                   : Positioned.fill(
                       // top: ,
                       child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 275),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Theme.of(context)
-                                .colorScheme
-                                .surfaceTint
-                                .withOpacity(.2),
-                            // .withOpacity(.9),
-                            Theme.of(context)
-                                .colorScheme
-                                .surfaceTint
-                                .withOpacity(.9)
-                            // .withOpacity(.9),
-                            // Colors.black.withOpacity(0.7),
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          stops: const [0.6, 0.95],
+                        duration: const Duration(milliseconds: 275),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Theme.of(
+                                context,
+                              ).colorScheme.surfaceTint.withOpacity(.2),
+                              // .withOpacity(.9),
+                              Theme.of(
+                                context,
+                              ).colorScheme.surfaceTint.withOpacity(.9),
+                              // .withOpacity(.9),
+                              // Colors.black.withOpacity(0.7),
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            stops: const [0.6, 0.95],
+                          ),
                         ),
                       ),
-                    ));
+                    );
             },
             selector: (p0, p1) => p1.getObject,
           ),
@@ -372,80 +381,118 @@ class WebGridViewItem extends StatelessWidget {
     );
   }
 
-  Positioned _buildCartIcon(bool isHovered, BuildContext context) {
+  Positioned? _buildCartIcon(bool isHovered, BuildContext context) {
+    debugPrint("buildCart $currentSize");
+    if (currentSize != null) {
+      if (currentSize! < 150) {
+        return null;
+      }
+    }
     return Positioned.fill(
-        child: AnimatedOpacity(
-      duration: const Duration(milliseconds: 275),
-      opacity: isHovered ? 1 : 0,
-      child: AnimatedScale(
+      child: AnimatedOpacity(
         duration: const Duration(milliseconds: 275),
-        scale: isHovered ? 1 : 0,
-        child: Center(
-          child: IconButton(
-            icon: const Icon(Icons.add_shopping_cart),
-            onPressed: () {
-              showCartDialog(context, item as CartableProductItemInterface);
-            },
+        opacity: isHovered ? 1 : 0,
+        child: AnimatedScale(
+          duration: const Duration(milliseconds: 275),
+          scale: isHovered ? 1 : 0,
+          child: Center(
+            child: IconButton(
+              icon: const Icon(Icons.add_shopping_cart),
+              onPressed: () {
+                showCartDialog(context, item as CartableProductItemInterface);
+              },
+            ),
           ),
         ),
       ),
-    ));
+    );
   }
 
   Widget _buildHoverBackground(BuildContext context) {
     return Positioned.fill(
-        child: item.getImageUrlAddHost(context) == null
-            ? Container()
-            : HoverImage(
-                image: item.getImageUrlAddHost(context)!,
-              ));
+      child: item.getImageUrlAddHost(context) == null
+          ? Container()
+          : HoverImage(image: item.getImageUrlAddHost(context)!),
+    );
   }
 
-  Widget _buildBackground(BuildContext context) {
+  Widget _buildBackground(BuildContext context, bool isHoverd) {
     return Positioned.fill(
-        child: item.getHeroTag(
-      context: context,
-      child: Container(
-          decoration: getBoxDecoration(context),
+      child: item.getHeroTag(
+        context: context,
+        child: Container(
+          decoration: getBoxDecoration(context, isHoverd),
           child: item.getImageUrlAddHost(context) == null
-              ? item.getImageIfNoUrl()
-              : null),
-    ));
+              ? item.getCustomImage(context, isGrid: true) ??
+                    item.getImageIfNoUrl()
+              : null,
+        ),
+      ),
+    );
   }
 
-  BoxDecoration getBoxDecoration(BuildContext context) {
+  BoxDecoration getBoxDecoration(BuildContext context, bool isHoverd) {
     return BoxDecoration(
-        image: item.getImageUrlAddHost(context) == null
-            ? null
-            : DecorationImage(
-                image:
-                    FastCachedImageProvider(item.getImageUrlAddHost(context)!),
-                fit: BoxFit.cover),
-        color: null,
-        border: isSelected && isSelectMood
-            ? Border.all(width: 2, color: Theme.of(context).highlightColor)
-            : null,
-        borderRadius: getBorderRedius());
+      image: item.getImageUrlAddHost(context) == null
+          ? null
+          : DecorationImage(
+              image: FastCachedImageProvider(item.getImageUrlAddHost(context)!),
+              fit: BoxFit.cover,
+            ),
+      color: null,
+      border: isHoverd || (isSelected && isSelectMood)
+          ? Border.all(
+              width: 2,
+              color: isSelectedForCard == true
+                  ? Theme.of(context).colorScheme.onSecondaryContainer
+                  : Theme.of(context).highlightColor,
+            )
+          : null,
+      borderRadius: getBorderRedius(),
+    );
   }
 
   BorderRadius getBorderRedius() =>
-      const BorderRadius.all(Radius.circular(kDefaultPadding));
+      const BorderRadius.all(Radius.circular(kBorderRadius));
 
   Widget _buildGradient(BuildContext context, bool isHoverd) {
     return Positioned.fill(
-        child: AnimatedContainer(
-      duration: const Duration(milliseconds: 275),
-      decoration: BoxDecoration(
-        borderRadius: getBorderRedius(),
-        gradient: getLinearGradient(context, isHoverd),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 275),
+        decoration: BoxDecoration(
+          border:
+              isHoverd ||
+                  (isSelected && isSelectMood) ||
+                  (isSelectedForCard ?? false)
+              ? Border.all(
+                  width: 1,
+                  color: Theme.of(context).colorScheme.secondary,
+                )
+              : null,
+          borderRadius: getBorderRedius(),
+          gradient: getLinearGradient(
+            context,
+            (isSelectedForCard ?? false) || isHoverd,
+          ),
+        ),
       ),
-    ));
+    );
   }
 
   LinearGradient getLinearGradient(BuildContext context, bool isHoverd) {
     List<Color> colors = [];
     List<double> stops = [];
-    if (isSelectMood) {
+    if (isSelectedForCard == true) {
+      colors = [
+        isHoverd
+            ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(.7)
+            : Theme.of(context).colorScheme.secondaryContainer.withOpacity(.7),
+        isHoverd
+            ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(.7)
+            : Theme.of(context).colorScheme.secondaryContainer.withOpacity(.7),
+      ];
+      stops = [0, 0.99];
+    } else if (isSelectMood) {
       if (isSelected) {
         colors = [
           isHoverd
@@ -499,8 +546,8 @@ class WebGridViewItem extends StatelessWidget {
         opacity: isHoverd
             ? 1
             : setDescriptionAtBottom
-                ? 1
-                : 0,
+            ? 1
+            : 0,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -525,62 +572,64 @@ class WebGridViewItemCustom extends StatelessWidget {
   final bool roundedCorners;
   final bool showChildOnHoverOnly;
 
-  const WebGridViewItemCustom(
-      {super.key,
-      required this.title,
-      this.subtitle,
-      this.imageUrl,
-      this.roundedCorners = true,
-      this.onClick,
-      this.child,
-      this.paddingToInside = false,
-      this.showChildOnHoverOnly = false,
-      this.setDescriptionAtBottom = false});
+  const WebGridViewItemCustom({
+    super.key,
+    required this.title,
+    this.subtitle,
+    this.imageUrl,
+    this.roundedCorners = true,
+    this.onClick,
+    this.child,
+    this.paddingToInside = false,
+    this.showChildOnHoverOnly = false,
+    this.setDescriptionAtBottom = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return HoverImage(
-        roundedCorners: roundedCorners,
-        animatedScale: !paddingToInside,
-        bottomWidget: setDescriptionAtBottom
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    title,
-                    if (subtitle != null)
-                      Text(
-                        subtitle!,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      )
-                  ],
-                ),
+      roundedCorners: roundedCorners,
+      animatedScale: !paddingToInside,
+      bottomWidget: setDescriptionAtBottom
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  title,
+                  if (subtitle != null)
+                    Text(
+                      subtitle!,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                ],
+              ),
+            )
+          : null,
+      image: imageUrl ?? "",
+      // scale: false,
+      builder: (isHovered) => GestureDetector(
+        onTap: () {
+          onClick?.call();
+        },
+        child: paddingToInside
+            ? AnimatedScale(
+                scale: isHovered ? 0.95 : 1,
+                duration: const Duration(milliseconds: 175),
+                child: _getStack(context, isHovered),
               )
-            : null,
-        image: imageUrl ?? "",
-        // scale: false,
-        builder: (isHovered) => GestureDetector(
-            onTap: () {
-              onClick?.call();
-            },
-            child: paddingToInside
-                ? AnimatedScale(
-                    scale: isHovered ? 0.95 : 1,
-                    duration: const Duration(milliseconds: 175),
-                    child: _getStack(context, isHovered),
-                  )
-                : _getStack(context, isHovered))
+            : _getStack(context, isHovered),
+      ),
 
-        // isHovered
-        //     ? Padding(
-        //         padding: const EdgeInsets.all(8.0),
-        //         child: _getStack(context, isHovered),
-        //       )
-        //     : _getStack(context, isHovered)),
-        );
+      // isHovered
+      //     ? Padding(
+      //         padding: const EdgeInsets.all(8.0),
+      //         child: _getStack(context, isHovered),
+      //       )
+      //     : _getStack(context, isHovered)),
+    );
   }
 
   bool canShowChild(bool isHovered) {
@@ -604,46 +653,54 @@ class WebGridViewItemCustom extends StatelessWidget {
 
   Widget _buildBackground(BuildContext context) {
     return Positioned.fill(
-        child: Container(
-            // width: 150,
-            // height: 100,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: FastCachedImageProvider(imageUrl!),
-                    fit: BoxFit.cover),
-                color: null,
-                borderRadius: roundedCorners
-                    ? const BorderRadius.all(Radius.circular(18))
-                    : null)));
+      child: Container(
+        // width: 150,
+        // height: 100,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: FastCachedImageProvider(imageUrl!),
+            fit: BoxFit.cover,
+          ),
+          color: null,
+          borderRadius: roundedCorners
+              ? const BorderRadius.all(Radius.circular(18))
+              : null,
+        ),
+      ),
+    );
   }
 
   Widget _buildChild(BuildContext context) {
     return Positioned.fill(
-        child: Container(
-            decoration: BoxDecoration(
-                color: null,
-                borderRadius: roundedCorners
-                    ? const BorderRadius.all(Radius.circular(18))
-                    : null),
-            child: child!));
+      child: Container(
+        decoration: BoxDecoration(
+          color: null,
+          borderRadius: roundedCorners
+              ? const BorderRadius.all(Radius.circular(18))
+              : null,
+        ),
+        child: child!,
+      ),
+    );
   }
 
   Widget _buildGradient(bool isHoverd) {
     return Positioned.fill(
-        child: AnimatedContainer(
-      duration: const Duration(milliseconds: 275),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
-            isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: const [0.6, 0.95],
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 275),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+              isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: const [0.6, 0.95],
+          ),
         ),
       ),
-    ));
+    );
   }
 
   Widget _buildTitleAndSubtitle(BuildContext context, bool isHoverd) {
@@ -659,10 +716,7 @@ class WebGridViewItemCustom extends StatelessWidget {
           children: [
             title,
             if (subtitle != null)
-              Text(
-                subtitle!,
-                style: Theme.of(context).textTheme.bodySmall,
-              )
+              Text(subtitle!, style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
       ),

@@ -16,18 +16,12 @@ class ListCardItemWeb<T extends ViewAbstract> extends StatelessWidget {
   void Function()? onTap;
   void Function()? onLongTap;
 
-  ListCardItemWeb({
-    Key? key,
-    required this.object,
-    this.onTap,
-    this.onLongTap,
-  }) : super(key: GlobalKey());
+  ListCardItemWeb({Key? key, required this.object, this.onTap, this.onLongTap})
+    : super(key: GlobalKey());
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: getListTile(false, context),
-    );
+    return Card(child: getListTile(false, context));
   }
 
   Widget getListTile(bool isSelected, BuildContext context) {
@@ -53,15 +47,16 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
   ValueNotifier<ListToDetailsSecoundPaneHelper?>? onSelectedItem;
 
   final SecoundPaneHelperWithParentValueNotifier? secondPaneHelper;
-
-  bool? isSelected;
   Function(T object)? onClick;
+  bool? isSelected;
+  String? searchQuery;
 
   ListCardItem({
     Key? key,
     this.listState,
     this.onSelectedItem,
     this.onClick,
+    this.searchQuery,
     this.secondPaneHelper,
     this.state,
     this.isSelected,
@@ -70,17 +65,19 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("ListCardItem iis ListCardItem");
     if (isLargeScreen(context)) {
       return _getCardNew(context);
     }
     return Dismissible(
-        key: UniqueKey(),
-        direction: object.getDismissibleDirection(),
-        background: object.getDismissibleBackground(context),
-        secondaryBackground: object.getDismissibleSecondaryBackground(context),
-        onDismissed: (direction) =>
-            object.onCardDismissedView(context, direction),
-        child: _getCardNew(context));
+      key: UniqueKey(),
+      direction: object.getDismissibleDirection(),
+      background: object.getDismissibleBackground(context),
+      secondaryBackground: object.getDismissibleSecondaryBackground(context),
+      onDismissed: (direction) =>
+          object.onCardDismissedView(context, direction),
+      child: _getCardNew(context),
+    );
   }
 
   Widget _getCardNew(BuildContext context) {
@@ -133,31 +130,40 @@ class ListCardItem<T extends ViewAbstract> extends StatelessWidget {
     // }
     bool hasThreeLine = object.getMainSubtitleHeaderText(context) is Column;
     return ListTile(
-        selected: isSelected,
-        // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-        onTap: () {
-          if (onSelectedItem != null) {
-            onSelectedItem!.value = ListToDetailsSecoundPaneHelper(
-                actionTitle: AppLocalizations.of(context)!.view,
-                action: ServerActions.view,
-                viewAbstract: object);
-          } else if (onClick != null) {
-            onClick!.call(object);
-          } else {
-            object.onCardClicked(context);
-          }
-        },
-        onLongPress: () {
-          object.onCardLongClicked(context,
-              clickedWidget: key as GlobalKey, state: state);
-        },
-        title: (object.getMainHeaderText(context)),
-        subtitle: (object.getMainSubtitleHeaderText(context)),
-        // isThreeLine: hasThreeLine,
-        leading: object.getCardLeading(
+      selected: isSelected,
+      // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+      onTap: () {
+        if (onSelectedItem != null) {
+          onSelectedItem!.value = ListToDetailsSecoundPaneHelper(
+            actionTitle: AppLocalizations.of(context)!.view,
+            action: ServerActions.view,
+            viewAbstract: object,
+          );
+        } else if (onClick != null) {
+          onClick!.call(object);
+        } else {
+          object.onCardClicked(context);
+        }
+      },
+      onLongPress: () {
+        object.onCardLongClicked(
           context,
-        ),
-        trailing:
-            object.getCardTrailing(context, secPaneHelper: secondPaneHelper));
+          clickedWidget: key as GlobalKey,
+          state: state,
+        );
+      },
+      title: (object.getMainHeaderText(context,searchQuery: searchQuery)),
+
+      // contentPadding: EdgeInsets.all(20),
+      // minVerticalPadding: 4,
+      // dense: false,
+      subtitle: (object.getMainSubtitleHeaderText(context,searchQuery: searchQuery)),
+      // isThreeLine: hasThreeLine,
+      leading: object.getCardLeading(context),
+      trailing: object.getCardTrailing(
+        context,
+        secPaneHelper: secondPaneHelper,
+      ),
+    );
   }
 }

@@ -125,7 +125,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         // height: 100,
         decoration: BoxDecoration(
           // color: Colors.blueAccent,
-          borderRadius: BorderRadius.circular(kBorderRadius / 2),
+          borderRadius: BorderRadius.circular(kBorderRadius),
 
           image: url == null
               ? null
@@ -225,7 +225,9 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
         width: size,
         height: size,
         decoration: getBoxDecoration(context),
-        child: getImageUrlAddHost(context) == null ? getImageIfNoUrl() : null);
+        child: getImageUrlAddHost(context) == null
+            ? getCustomImage(context, size: size) ?? getImageIfNoUrl()
+            : null);
   }
 
   BoxDecoration getBoxDecoration(BuildContext context) {
@@ -245,10 +247,11 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     String? imageUrl = getImageUrlAddHost(context);
     debugPrint("getCardLeadingImage $imageUrl");
     if (imageUrl == null) {
-      return Icon(
-        getMainIconData(),
-        size: 30,
-      );
+      return getCustomImage(context) ??
+          Icon(
+            getMainIconData(),
+            size: 30,
+          );
     }
     debugPrint("getCardLeadingImage $imageUrl");
     // IconData? iconOnButton =

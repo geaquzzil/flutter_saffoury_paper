@@ -37,6 +37,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
@@ -217,7 +218,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
-  Widget? getMainSubtitleHeaderText(BuildContext context) {
+  Widget? getMainSubtitleHeaderText(BuildContext context,{String? searchQuery}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -289,9 +290,9 @@ class CutRequest extends ViewAbstract<CutRequest>
   @override
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action,
+      BasePageSecoundPaneNotifierState? basePage,
       ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
       ValueNotifier<SecondPaneHelper?>? onClick,
-      
       bool? isFromFirstAndSecPane,
       dynamic extras}) {
     if ((action == ServerActions.view || action == ServerActions.edit) &&

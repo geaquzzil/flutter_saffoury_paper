@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -93,7 +93,7 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
   double getCustomPaneProportion() {
     return .3;
   }
-  
+
   @override
   List<Widget>? getCustomViewWhenSecondPaneIsEmpty(
       ScrollController? controler, TabControllerHelper? tab) {
@@ -256,7 +256,7 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
       return [
         SliverToBoxAdapter(
           child: getExtrasCast()
-              .getImageWithRoundedCorner(context, size: firstPaneWidth * .9),
+              .getImageWithRoundedCorner(context, size: getHeight * .25),
         ),
         SliverList(
             delegate: SliverChildBuilderDelegate(

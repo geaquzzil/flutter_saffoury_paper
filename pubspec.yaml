@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.2.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -83,6 +83,7 @@ dependencies:
   flutter_local_notifications: ^19.2.1
   sliver_tools: ^0.2.12
   reactive_forms: ^17.0.1
+  user_avatar_generator: ^0.0.4
   # reactive_forms: ^17.0.1
   # timelines: ^0.1.0
   # firebase_messaging: ^15.2.1
