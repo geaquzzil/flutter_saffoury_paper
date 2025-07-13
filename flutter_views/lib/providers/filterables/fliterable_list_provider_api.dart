@@ -27,7 +27,11 @@ class FilterableListApiProvider<T extends FilterableData> with ChangeNotifier {
           "setRequiredFilterList called with no process to do viewAbstract == _lastViewAbstract && _requiredFiltter.isNotEmpty _filterData!=null");
       return _filterData;
     }
+
+    debugPrint("setRequiredFilterList called viewCAll");
     _filterData ??= await _filterOb.viewCall(context: context);
+    debugPrint("setRequiredFilterList finish ");
+    // debugPrint("setRequiredFilterList $_filterData");
     await setRequiredFilterList(viewAbstract);
     return _filterData;
   }
@@ -52,9 +56,11 @@ class FilterableListApiProvider<T extends FilterableData> with ChangeNotifier {
     debugPrint("setRequiredFilterList called with sharedFields $sharedFields");
 
     for (var field in sharedFields) {
-      _requiredFiltter[
-              _lastViewAbstract.getMirrorNewInstanceViewAbstract(field)] =
-          _filterData?.getFieldValue(field);
+      final res = _filterData?.getFieldValue(field);
+      if (res != null) {
+        _requiredFiltter[
+            _lastViewAbstract.getMirrorNewInstanceViewAbstract(field)] = res;
+      }
     }
     debugPrint(
         "setRequiredFilterList called with _filterData $_requiredFiltter");

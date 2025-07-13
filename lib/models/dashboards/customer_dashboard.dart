@@ -104,12 +104,13 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
       AppLocalizations.of(context)!.customer;
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions()
         .addDate(dateObject ?? DateObject())
         .addSearchByField("withAnalysis", true);
   }
-
 
   factory CustomerDashboard.fromJson(Map<String, dynamic> data) =>
       _$CustomerDashboardFromJson(data);
@@ -661,7 +662,9 @@ class CustomerDashboardSelector
   Map<String, bool> isFieldRequiredMap() => {"date": true, "customer": true};
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return null;
   }
 

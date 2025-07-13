@@ -58,7 +58,7 @@ class DealersEmails extends DealersDetailsApstract {
 
 ///dealers_phones
 class DealersPhone extends DealersDetailsApstract {
-  String? phone;
+  int? phone;
   DealersPhone() : super();
 
   factory DealersPhone.fromJson(Map<String, dynamic> data) =>

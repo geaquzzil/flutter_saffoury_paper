@@ -98,8 +98,10 @@ class ProductSize extends ViewAbstract<ProductSize> {
       SliverApiMixinViewAbstractWidget(
           isGridView: true,
           scrollDirection: Axis.horizontal,
-          toListObject: Product().getSelfInstanceWithSimilarOption(context: context,
-              obj: this, copyWith: RequestOptions(countPerPage: 5))),
+          toListObject: Product().getSelfInstanceWithSimilarOption(
+              context: context,
+              obj: this,
+              copyWith: RequestOptions(countPerPage: 5))),
     ];
   }
 
@@ -313,7 +315,9 @@ class ProductSize extends ViewAbstract<ProductSize> {
   }
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions(
         sortBy: SortFieldValue(field: "width", type: SortByType.ASC));
   }

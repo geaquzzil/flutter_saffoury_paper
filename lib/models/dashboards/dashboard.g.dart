@@ -10,7 +10,7 @@ Dashboard _$DashboardFromJson(Map<String, dynamic> json) => Dashboard()
   ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
   ..serverStatus = json['serverStatus'] as String?
   ..fb_edit = json['fb_edit'] as String?
-  ..phone = json['phone'] as String?
+  ..phone = (json['phone'] as num?)?.toInt()
   ..password = json['password'] as String?
   ..token = json['token'] as String?
   ..userlevels = json['userlevels'] == null

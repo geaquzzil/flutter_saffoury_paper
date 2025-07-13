@@ -102,7 +102,9 @@ class ReportOptions extends ViewAbstract<ReportOptions> {
   //     {"reportHeader": String, "reportFooter": String};
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return null;
   }
 

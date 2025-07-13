@@ -98,7 +98,9 @@ class WarehouseEmployee extends ViewAbstract<WarehouseEmployee> {
       {"warehouse": Warehouse(), "employee": Employee()};
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return null;
   }
 

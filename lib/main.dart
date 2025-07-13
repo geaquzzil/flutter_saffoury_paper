@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_saffoury_paper/main.reflectable.dart';
 import 'package:flutter_saffoury_paper/models/add_ons/add_ons_classes.dart';
+import 'package:flutter_saffoury_paper/models/cities/countries.dart';
+import 'package:flutter_saffoury_paper/models/cities/manufactures.dart';
 import 'package:flutter_saffoury_paper/models/custom_views/excel_to_product_converter.dart';
 import 'package:flutter_saffoury_paper/models/custom_views/print_product_label_custom_view.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
@@ -31,6 +33,7 @@ import 'package:flutter_saffoury_paper/models/invoices/purchases.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/purchasers_refunds.dart';
 import 'package:flutter_saffoury_paper/models/notifications.dart';
+import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/gsms.dart';
 import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
@@ -201,6 +204,10 @@ void main() async {
     ExcelToProductConverter(),
     Product(),
     ProductSize(),
+    GSM(),
+    Country(),
+    Manufacture(),
+    Grades(),
     Currency(),
     Order(),
     Purchases(),

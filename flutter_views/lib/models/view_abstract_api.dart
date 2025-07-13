@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
@@ -16,10 +15,12 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pretty_http_logger/pretty_http_logger.dart';
+import 'package:provider/provider.dart';
 
 import 'servers/server_helpers.dart';
 
@@ -33,7 +34,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   static Map<String, List<ViewAbstract?>>? _lastListReduseSizeViewAbstract;
 
-  RequestOptions? getRequestOption({required ServerActions action});
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall});
   Map<ServerActions, RequestOptions> getRequestOptionMap() {
     return _requestOption;
   }
@@ -88,7 +91,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   RequestOptions? getRequestOptionFromParamOrAbstract(
-      {required ServerActions action}) {
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     if (_requestOption.isNotEmpty) {
       // debugPrint(
       //     "_getRequestOptionFromParamOrAbstract is Not empty ${_requestOption.toString()}");
@@ -120,12 +124,11 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   List<String>? getRequestedForginListOnCall({required ServerActions action});
 
-  Future<Map<String, String>> getHeadersExtenstion() async {
+  Future<Map<String, String>> getHeadersExtenstion(BuildContext context) async {
     Map<String, String> defaultHeaders = HashMap<String, String>();
-    bool hasUser = await Configurations.hasSavedValue(AuthUser());
-    if (hasUser) {
-      AuthUser? authUser = await Configurations.get(AuthUser());
-      String? token = authUser?.token;
+    AuthUser? hasUser = context.read<AuthProvider<AuthUser>>().getUser;
+    if (hasUser != null) {
+      String? token = hasUser.token;
       if (token != null) {
         defaultHeaders['Authorization'] = 'Bearer $token';
       }
@@ -133,17 +136,17 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return defaultHeaders;
   }
 
-  Future<Map<String, String>> getHeaders() async {
+  Future<Map<String, String>> getHeaders(BuildContext context) async {
     Map<String, String> defaultHeaders = HashMap<String, String>();
     defaultHeaders.addAll(URLS.requestHeaders);
-    defaultHeaders.addAll(await getHeadersExtenstion());
+    defaultHeaders.addAll(await getHeadersExtenstion(context));
     return defaultHeaders;
   }
 
   Uri _getUrl({int? iD, Map<String, dynamic>? params}) {
     String? customAction = getCustomAction();
     String? tableName = getTableNameApi();
-    debugPrint("listCall _getUrl params ===>$params");
+    debugPrint("_getUrl params ===>$params");
     var url = Uri(
         scheme: "http",
         queryParameters: params,
@@ -178,19 +181,23 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return false;
   }
 
-  Future<Response?> _getListResponse({RequestOptions? option}) async {
+  Future<Response?> _getListResponse(
+      {required BuildContext context, RequestOptions? option}) async {
     return getHttp().get(
         _getUrl(
             params: getRequestOptionFromParamOrAbstract(
-                    action: option?.getServerAction() ?? ServerActions.list)
+                    action: option?.getServerAction() ?? ServerActions.list,
+                    generatedOptionFromListCall: option)
                 ?.copyWithObjcet(option: option)
                 .copyWith(requestLists: _checkListToRequest(ServerActions.list))
                 .getRequestParams()),
-        headers: await getHeaders());
+        headers: await getHeaders(context));
   }
 
   Future<Response?> _getViewResponse(
-      {int? customID, ServerActions? customAction}) async {
+      {required BuildContext context,
+      int? customID,
+      ServerActions? customAction}) async {
     return await getHttp().get(
         _getUrl(
           iD: customID == null ? customID : (isNew() ? null : iD),
@@ -201,11 +208,13 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
                       _checkListToRequest(customAction ?? ServerActions.view))
               .getRequestParams(),
         ),
-        headers: await getHeaders());
+        headers: await getHeaders(context));
   }
 
-  Future<Response?> _getEditResponse() async {
-    var headers = await getHeaders();
+  Future<Response?> _getEditResponse({
+    required BuildContext context,
+  }) async {
+    var headers = await getHeaders(context);
     return await getHttp().put(
         _getUrl(
           iD: iD,
@@ -214,14 +223,18 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         body: toJsonString());
   }
 
-  Future<Response?> _getAddResponse() async {
-    var headers = await getHeaders();
+  Future<Response?> _getAddResponse({
+    required BuildContext context,
+  }) async {
+    var headers = await getHeaders(context);
     return await getHttp()
         .post(_getUrl(), headers: headers, body: toJsonString());
   }
 
-  Future<Response?> _getDeleteResponse() async {
-    var headers = await getHeaders();
+  Future<Response?> _getDeleteResponse({
+    required BuildContext context,
+  }) async {
+    var headers = await getHeaders(context);
     return await getHttp().delete(
         _getUrl(
           iD: iD,
@@ -239,7 +252,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       OnResponseCallback? onResponse,
       ServerActions? customAction}) async {
     try {
-      var response = await _getListResponse(option: option);
+      var response = await _getListResponse(context: context, option: option);
       if (response == null) return null;
       if (response.statusCode == 200) {
         // debugPrint("listCall response s ${response.body}");
@@ -276,15 +289,21 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
           _checkListToRequest(customAction ?? ServerActions.view);
       if (customID == null) {
         if (isRequireList == false && !isNew()) {
+          debugPrint("viewCall returning this");
           return this as T;
         }
       }
-      var response = await _getViewResponse(customID: customID);
+      var response =
+          await _getViewResponse(context: context, customID: customID);
       // debugPrint("viewCall  resp ${response?.body}");
       if (response == null) return null;
       if (response.statusCode == 200) {
-        return fromJsonViewAbstract(convert.jsonDecode(response.body));
+        debugPrint("viewCall 200 ");
+        T o = fromJsonViewAbstract(convert.jsonDecode(response.body));
+        // debugPrint("viewCall 200 $o");
+        return o;
       } else {
+        debugPrint("viewCall error");
         onCallCheckError(response: response, context: context);
         return null;
       }
@@ -301,7 +320,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     required BuildContext context,
   }) async {
     try {
-      var response = await _getAddResponse();
+      var response = await _getAddResponse(context: context);
       if (response == null) return null;
       if (response.statusCode == 200) {
         return fromJsonViewAbstract(convert.jsonDecode(response.body));
@@ -321,7 +340,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     required BuildContext context,
   }) async {
     try {
-      var response = await _getEditResponse();
+      var response = await _getEditResponse(context: context);
       if (response == null) return null;
       if (response.statusCode == 200) {
         return fromJsonViewAbstract(convert.jsonDecode(response.body));
@@ -458,7 +477,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       {required OnResponseCallback onResponse}) async {
     debugPrint("ViewAbstractApi deleteCall iD=> $iD ");
     try {
-      var response = await _getDeleteResponse();
+      var response = await _getDeleteResponse(context: context);
       if (response == null) return null;
       if (response.statusCode == 200) {
         ServerResponse serverResponse =

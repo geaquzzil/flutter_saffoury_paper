@@ -1,23 +1,25 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/permissions/permission_action_abstract.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/permissions/permission_action_abstract.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:json_annotation/json_annotation.dart';
-import '../view_abstract.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+import '../view_abstract.dart';
+
 part 'permission_level_abstract.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
 class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
   String? userlevelname;
-
+  List<PermissionActionAbstract>? permissions_levels;
   PermissionLevelAbstract() : super() {
     userlevelname = "-";
     permissions_levels = List.empty();
@@ -29,8 +31,6 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
 
   static Map<String, PermissionActionAbstract> hashMapOfPermissionTableAction =
       {};
-
-  List<PermissionActionAbstract>? permissions_levels;
 
   static bool containsStaticKey(String key) {
     return hashMapOfPermissionTableAction.containsKey(key);
@@ -171,13 +171,13 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
     return PermissionLevelAbstract.fromJson(json);
   }
 
-
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {"userlevelname": ""};
 
-
-   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  @override
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("userlevelname", SortByType.ASC);
   }
 

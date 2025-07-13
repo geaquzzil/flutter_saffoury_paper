@@ -21,6 +21,7 @@ part 'customer_billing.g.dart';
 class BillingCustomer extends AuthUser<BillingCustomer> {
   String? name; //var 100
   String? email; //var 50
+  @override
   String? token; // text
   int? activated; //tinyint
   String? date; //date
@@ -188,11 +189,13 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
         "day": true,
       };
 
-
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
-   return RequestOptions().addSortBy("name", SortByType.ASC);
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
+    return RequestOptions().addSortBy("name", SortByType.ASC);
   }
+
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
       AppLocalizations.of(context)!.users;

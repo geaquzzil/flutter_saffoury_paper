@@ -171,7 +171,9 @@ class User<T> extends UserLists<T> {
       {"name": true, "phone": true, "password": true};
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("name", SortByType.ASC);
   }
 

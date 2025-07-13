@@ -185,8 +185,10 @@ class Setting extends ViewAbstract<Setting> {
   }
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
-     return null;
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
+    return null;
   }
 
   @override

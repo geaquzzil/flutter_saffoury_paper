@@ -111,7 +111,9 @@ class CutRequestResult extends ViewAbstract<CutRequestResult> {
       CutRequestResult.fromJson(json);
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("iD", SortByType.DESC);
   }
 

@@ -126,8 +126,7 @@ class CutRequest extends ViewAbstract<CutRequest>
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
-            autoRest: ChartRecordAnalysis.init(
-                CutRequest(), DateObject())),
+            autoRest: ChartRecordAnalysis.init(CutRequest(), DateObject())),
       ),
     ];
   }
@@ -206,7 +205,9 @@ class CutRequest extends ViewAbstract<CutRequest>
         "sizes_cut_requests_count": 0
       };
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("date", SortByType.DESC);
   }
 
@@ -289,7 +290,10 @@ class CutRequest extends ViewAbstract<CutRequest>
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action,
       ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
-      ValueNotifier<SecondPaneHelper?>? onClick}) {
+      ValueNotifier<SecondPaneHelper?>? onClick,
+      
+      bool? isFromFirstAndSecPane,
+      dynamic extras}) {
     if ((action == ServerActions.view || action == ServerActions.edit) &&
         products != null &&
         cut_status == CutStatus.COMPLETED) {

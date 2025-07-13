@@ -9,7 +9,6 @@ import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:path/path.dart';
 
 @reflector
@@ -66,11 +65,6 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
     }
     debugPrint(
         "FileReaderObject generated generatedRequiredFields $generatedRequiredFields");
-  }
-
-  @override
-  String getTag(String field) {
-    return super.getTag(field);
   }
 
   @override
@@ -298,7 +292,6 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
     debugPrint('generateExcel Downloaded executed in ${stopwatch.elapsed}');
   }
 
-
   @override
   String? getTableNameApi() => null;
 
@@ -339,7 +332,9 @@ class FileExporterObject extends ViewAbstract<FileExporterObject> {
       FileExporterObject(viewAbstract: viewAbstract);
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return null;
   }
 

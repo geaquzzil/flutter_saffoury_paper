@@ -175,7 +175,9 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("top", SortByType.ASC);
   }
 

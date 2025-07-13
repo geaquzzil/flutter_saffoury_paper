@@ -415,7 +415,9 @@ class CustomerBalanceList
   }
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     // TODO: implement getRequestOption
     throw UnimplementedError();
   }

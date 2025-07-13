@@ -108,7 +108,9 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
   IconData? getMainDrawerGroupIconData() => Icons.credit_card;
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     if (action == ServerActions.list) {
       return RequestOptions(
           sortBy: SortFieldValue(field: "date", type: SortByType.DESC));

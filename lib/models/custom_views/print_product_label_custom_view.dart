@@ -123,7 +123,9 @@ class PrintProductLabelCustomView
   bool getCustomStandAloneWidgetIsPadding() => true;
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return null;
   }
 

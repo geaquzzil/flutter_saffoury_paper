@@ -429,7 +429,9 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       FileReaderObject(viewAbstract: viewAbstract, filePath: filePath);
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return null;
   }
 

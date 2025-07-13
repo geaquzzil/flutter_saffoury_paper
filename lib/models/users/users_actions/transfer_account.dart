@@ -107,7 +107,9 @@ class TransferAccount
   }
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     // TODO: implement getRequestOption
     throw UnimplementedError();
   }
@@ -191,7 +193,6 @@ class TransferAccount
 //         }
 //         return super.onAfterValidate(context);
 //     }
-
 
 //     @Override
 //     public void onDropListItemSelected(Context context, Field field, Object o) {

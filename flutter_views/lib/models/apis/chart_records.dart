@@ -49,7 +49,9 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   }
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     RequestOptions ro = RequestOptions(date: date);
     //TODO   if (customAction != null) "customAction": jsonEncode(customAction)
     return (enteryInteval == EnteryInteval.daily)

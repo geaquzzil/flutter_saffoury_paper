@@ -181,7 +181,9 @@ class CustomsDeclarationImages extends ViewAbstract<CustomsDeclarationImages>
   @override
   bool getPrintableSupportsLabelPrinting() => false;
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("iD", SortByType.DESC);
   }
 

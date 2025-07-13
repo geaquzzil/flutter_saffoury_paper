@@ -112,7 +112,9 @@ abstract class PrintLocalSetting<T> extends ViewAbstract<T> {
   String? getMainDrawerGroupName(BuildContext context) => null;
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return null;
   }
 

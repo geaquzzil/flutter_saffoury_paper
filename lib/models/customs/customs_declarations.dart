@@ -117,7 +117,9 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
       ["employees", "number", "date", "fromCountry", "fromName", "comments"];
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("date", SortByType.DESC);
   }
 

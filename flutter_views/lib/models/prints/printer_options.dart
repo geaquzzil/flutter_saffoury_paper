@@ -119,7 +119,9 @@ class PrinterOptions extends ViewAbstract<PrinterOptions> {
       };
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return null;
   }
 
@@ -127,7 +129,6 @@ class PrinterOptions extends ViewAbstract<PrinterOptions> {
   List<String>? getRequestedForginListOnCall({required ServerActions action}) {
     return null;
   }
-
 
   // @override
   // Map<String, Type> getMirrorFieldsTypeMap() => {

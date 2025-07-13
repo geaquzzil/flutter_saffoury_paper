@@ -3,8 +3,6 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_custom_scroll_widget.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class ProductCalculater extends ViewAbstract<ProductCalculater> {
@@ -63,7 +61,6 @@ class ProductCalculater extends ViewAbstract<ProductCalculater> {
     // TODO: implement getSelfNewInstance
     throw UnimplementedError();
   }
-
 
   @override
   String? getTableNameApi() {
@@ -126,7 +123,9 @@ class ProductCalculater extends ViewAbstract<ProductCalculater> {
   }
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     // TODO: implement getRequestOption
     throw UnimplementedError();
   }

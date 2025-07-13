@@ -127,35 +127,36 @@ class _BaseFilterableMainWidgetState extends State<BaseFilterableMainWidget> {
       child: Scaffold(
         bottomNavigationBar: ValueListenableBuilder(
           valueListenable: _lastData,
-          builder: (context, value, child) =>
-              value == null ? Container() : buildFooter(),
+          //todo if value is null and we return Container then scaffold not showing
+          builder: (context, value, child) => buildFooter(),
         ),
-        backgroundColor: Colors.transparent,
-        body: _lastData.value != null
-            ? getSliverCustomScrollViewBody()
-            : FutureBuilder(
-                future: context
-                    .read<FilterableListApiProvider<FilterableData>>()
-                    .getServerData(widget.viewAbstract, context: context),
-                builder: ((context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.hasData) {
-                      WidgetsBinding.instance.addPostFrameCallback((o) {
-                        _lastData.value = snapshot.data;
-                      });
-                      debugPrint("Filter data");
-                      return getSliverCustomScrollViewBody();
-                    } else {
-                      EmptyWidget.error(
-                        context,
-                        onSubtitleClicked: () {
-                          setState(() {});
-                        },
-                      );
-                    }
-                  }
-                  return const EmptyWidget.loading();
-                })),
+        // backgroundColor: Colors.transparent,
+        body: FutureBuilder(
+            future: context
+                .read<FilterableListApiProvider<FilterableData>>()
+                .getServerData(widget.viewAbstract, context: context),
+            builder: ((context, snapshot) {
+              // debugPrint("Filter data ${snapshot.data}");
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  WidgetsBinding.instance.addPostFrameCallback((o) {
+                    _lastData.value = snapshot.data;
+                  });
+                  debugPrint("Filter data");
+                  return getSliverCustomScrollViewBody();
+                } else {
+                  debugPrint("Filter data error");
+                  return EmptyWidget.error(
+                    context,
+                    onSubtitleClicked: () {
+                      setState(() {});
+                    },
+                  );
+                }
+              }
+              debugPrint("Filter data loading");
+              return const EmptyWidget.loading();
+            })),
       ),
     );
   }

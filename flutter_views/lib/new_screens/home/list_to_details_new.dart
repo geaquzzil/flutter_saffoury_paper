@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filters_and_selection_headers_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/actions/cruds/view.dart';
@@ -10,6 +12,7 @@ import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_components.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
+import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 
 class ListToDetailsSecoundPaneNotifier extends BasePageSecoundPaneNotifier {
@@ -31,6 +34,8 @@ class _ListToDetailsSecoundPaneNotifierState
     with BasePageSecoundPaneNotifierState {
   late ViewAbstract _viewAbstract;
   String? _lastSearchQuery;
+  Map<String, FilterableProviderHelper>? _lastFilterData;
+  SortFieldValue? _lastSortValue;
   final keyList = GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'keyList');
 
   final ValueNotifier<List?> _listNotifier = ValueNotifier(null);
@@ -95,6 +100,14 @@ class _ListToDetailsSecoundPaneNotifierState
       ScrollController? controler,
       TabControllerHelper? tab,
       SecondPaneHelper? valueNotifier}) {
+    List<Widget>? top =
+        ((valueNotifier?.value as ViewAbstract?) ?? _viewAbstract)
+            .getCustomTopWidget(context,
+                action: _lastSearchQuery != null
+                    ? ServerActions.search
+                    : ServerActions.view,
+                isFromFirstAndSecPane: firstPane,
+                extras: _lastSearchQuery);
     if (firstPane) {
       // asda
       debugPrint("getPaneNotifier firstPane $valueNotifier");
@@ -112,6 +125,11 @@ class _ListToDetailsSecoundPaneNotifierState
                 SearchWidgetComponent(
                   viewAbstract: _viewAbstract,
                   onSearchTextChanged: (p0) {
+                    //TODO this is the old way
+                    // notify(SecondPaneHelper(
+                    //     title:
+                    //         AppLocalizations.of(context)!.searchInFormat(p0!),
+                    //     value: p0));
                     setState(() {
                       _lastSearchQuery = p0;
                     });
@@ -125,6 +143,23 @@ class _ListToDetailsSecoundPaneNotifierState
                         width: firstPaneWidth,
                         viewAbstract: _viewAbstract,
                         valueNotifer: _listNotifier,
+                        filterInitial: _lastFilterData,
+                        sortInitial: _lastSortValue,
+                        onDoneFilter: (value) {
+                          setState(() {
+                            _lastFilterData = (value is bool)
+                                ? value
+                                    ? null
+                                    : _lastFilterData
+                                : value;
+                          });
+                        },
+                        onDoneSort: (sort) {
+                          setState(() {
+                            _lastSortValue = sort;
+                          });
+                        },
+                        // onDoneFilter: ,
                         secPaneNotifer: getSecoundPaneHelper(),
                       );
                     })
@@ -150,6 +185,7 @@ class _ListToDetailsSecoundPaneNotifierState
         //             )));
         //   },
         // ),
+        if (top != null) ...top,
         SliverApiMixinViewAbstractWidget(
           valueListProviderNotifier: _listNotifier,
           key: keyList,
@@ -173,6 +209,7 @@ class _ListToDetailsSecoundPaneNotifierState
           scrollDirection: Axis.vertical,
           enableSelection: true,
           scrollController: controler,
+          filterData: _lastFilterData,
           searchString: _lastSearchQuery,
           // hasCustomSeperater: Divider(),
           isSliver: true,
@@ -183,8 +220,12 @@ class _ListToDetailsSecoundPaneNotifierState
           //     item: cutRequest,
           //   );
           // },
+          copyWithRequestOption: _lastSortValue == null
+              ? null
+              : RequestOptions()
+                  .addSortBy(_lastSortValue!.field, _lastSortValue!.type),
           toListObject: _viewAbstract,
-        )
+        ),
       ];
     }
     if (valueNotifier == null) {
@@ -195,7 +236,6 @@ class _ListToDetailsSecoundPaneNotifierState
       ];
     }
     debugPrint("${valueNotifier.value}");
-
     if (valueNotifier.value is BasePage) {
       return [
         // if (top != null)
@@ -209,8 +249,7 @@ class _ListToDetailsSecoundPaneNotifierState
         )
       ];
     }
-    List<Widget>? top = (valueNotifier.value as ViewAbstract)
-        .getCustomTopWidget(context, action: ServerActions.view);
+
     return [
       // if (top != null)
       //   ...top.map((p) => SliverToBoxAdapter(

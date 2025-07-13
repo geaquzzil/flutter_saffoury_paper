@@ -202,7 +202,9 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   IconData getMainIconData() => Icons.list;
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("iD", SortByType.DESC);
   }
 

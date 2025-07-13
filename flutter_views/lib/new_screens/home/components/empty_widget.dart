@@ -73,9 +73,8 @@ class EmptyWidget extends StatelessWidget {
     this.onSubtitleClicked,
     this.expand = true,
   })  : subtitle = AppLocalizations.of(context)!.cantConnectConnectToRetry,
-        lottiUrl =
-            "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-        lottieJson = null,
+        lottieJson = "error_lottie.json",
+        lottiUrl = null,
         title = AppLocalizations.of(context)!.cantConnect;
 
   EmptyWidget.emptyList(

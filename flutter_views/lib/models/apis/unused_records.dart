@@ -26,7 +26,9 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
   UnusedRecords.init(T this.viewAbstract);
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return null;
   }
 

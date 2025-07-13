@@ -171,7 +171,9 @@ class AccountNameType extends ViewAbstract<AccountNameType> {
       AppLocalizations.of(context)!.money_fund;
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("type", SortByType.DESC);
   }
 

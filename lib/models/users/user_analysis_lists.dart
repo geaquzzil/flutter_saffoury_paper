@@ -284,7 +284,8 @@ class UserLists<T> extends AuthUser<T> {
       if ((this as CustomerDashboard).customers?.phone != null)
         InvoiceHeaderTitleAndDescriptionInfo(
           title: AppLocalizations.of(context)!.phone_number,
-          description: (this as CustomerDashboard).customers?.phone ?? "",
+          description:
+              (this as CustomerDashboard).customers?.phone?.toString() ?? "",
           // icon: Icons.phone
         ),
     ];

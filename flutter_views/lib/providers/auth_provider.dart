@@ -192,6 +192,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   Future init({T? newUser}) async {
     _currentUser =
         newUser ?? (await Configurations.get<T>(_initUser, customKey: "USER"));
+    debugPrint("Current user $_currentUser");
     _status = _currentUser != null ? Status.Authenticated : Status.Guest;
     notifyListeners();
   }

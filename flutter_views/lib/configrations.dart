@@ -79,6 +79,11 @@ class Configurations {
     await prefs.remove(key);
   }
 
+  static Future<void> removeAll() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
+
   static void save(String key, dynamic value) async {
     debugPrint("Configrations  save key: $key value:$value");
     final prefs = await SharedPreferences.getInstance();

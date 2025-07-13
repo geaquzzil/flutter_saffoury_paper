@@ -18,7 +18,7 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
   // int? GovernorateID;
 
   String? name;
-  String? phone;
+  int? phone;
   double? maxWeight;
   @JsonKey(fromJson: intFromString)
   String? carNumber;
@@ -39,7 +39,7 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
         "name": "",
-        "phone": "",
+        "phone": 0,
         "maxWeight": 0.0.toDouble(),
         "carNumber": "",
         "governorates": Governorate()
@@ -142,7 +142,9 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
   static String? intFromString(dynamic number) => number?.toString();
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     if (action == ServerActions.list) {
       return RequestOptions().addSortBy("name", SortByType.ASC);
     }

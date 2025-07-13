@@ -45,8 +45,10 @@ class GSM extends ViewAbstract<GSM> {
       SliverApiMixinViewAbstractWidget(
           isGridView: true,
           scrollDirection: Axis.horizontal,
-          toListObject: Product().getSelfInstanceWithSimilarOption(context: context,
-              obj: this, copyWith: RequestOptions(countPerPage: 5))),
+          toListObject: Product().getSelfInstanceWithSimilarOption(
+              context: context,
+              obj: this,
+              copyWith: RequestOptions(countPerPage: 5))),
     ];
   }
 
@@ -184,7 +186,9 @@ class GSM extends ViewAbstract<GSM> {
   }
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("gsm", SortByType.ASC);
   }
 

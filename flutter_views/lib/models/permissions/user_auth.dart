@@ -89,7 +89,9 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
   }
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("name", SortByType.ASC);
   }
 
@@ -153,7 +155,7 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
 
 @JsonSerializable(explicitToJson: true)
 class AuthUser<T> extends ViewAbstract<AuthUser> {
-  String? phone;
+  int? phone;
   String? password;
   String? token;
 
@@ -210,7 +212,7 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "phone": "",
+        "phone": 0,
         "password": "",
         "token": "",
         "userlevels": PermissionLevelAbstract(),
@@ -330,7 +332,9 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   }
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("phone", SortByType.ASC);
   }
 

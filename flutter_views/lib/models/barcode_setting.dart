@@ -226,7 +226,9 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
       getMainHeaderLabelTextOnly(context);
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("table_name", SortByType.DESC);
   }
 

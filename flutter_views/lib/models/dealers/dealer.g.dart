@@ -76,7 +76,7 @@ DealersPhone _$DealersPhoneFromJson(Map<String, dynamic> json) => DealersPhone()
   ..dealers = json['dealers'] == null
       ? null
       : Dealers.fromJson(json['dealers'] as Map<String, dynamic>)
-  ..phone = json['phone'] as String?;
+  ..phone = (json['phone'] as num?)?.toInt();
 
 Map<String, dynamic> _$DealersPhoneToJson(DealersPhone instance) =>
     <String, dynamic>{

@@ -119,7 +119,9 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
           option: getSimilarCustomParams(context: context));
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     if (action == ServerActions.list) {
       return RequestOptions(
           sortBy: SortFieldValue(field: "name", type: SortByType.DESC));

@@ -3,7 +3,6 @@ import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -18,7 +17,7 @@ class CustomerContacts extends ViewAbstract<CustomerContacts> {
   Customer? customers;
 
   String? name; // varchare 50
-  String? phone; // varchasre 20
+  int? phone; // varchasre 20
 
   CustomerContacts() : super();
 
@@ -68,13 +67,6 @@ class CustomerContacts extends ViewAbstract<CustomerContacts> {
     // TODO: implement getMainIconData
     throw UnimplementedError();
   }
-
-  @override
-  String? getSortByInitialFieldName() {
-    // TODO: implement getSortByFieldName
-    throw UnimplementedError();
-  }
-
 
   @override
   String? getTableNameApi() {
@@ -144,10 +136,12 @@ class CustomerContacts extends ViewAbstract<CustomerContacts> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      {"customers": Customer(), "name": "", "phone": ""};
+      {"customers": Customer(), "name": "", "phone": 0};
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     // TODO: implement getRequestOption
     throw UnimplementedError();
   }

@@ -134,7 +134,9 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action,
       ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
-      ValueNotifier<SecondPaneHelper?>? onClick}) {
+      ValueNotifier<SecondPaneHelper?>? onClick,
+      bool? isFromFirstAndSecPane,
+      dynamic extras}) {
     if (isNew()) {
       if (parent is CutRequest) {
         if ((parent as CutRequest).products == null) {
@@ -194,7 +196,9 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
   int get hashCode => sizes?.width.hashCode ?? super.hashCode;
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("iD", SortByType.ASC);
   }
 

@@ -144,6 +144,7 @@ class Product extends ViewAbstract<Product>
   Grades? grades;
   ProductsColor? products_colors;
   List<Stocks>? inventory;
+  int? inventory_count;
 
   Product? products;
 
@@ -460,14 +461,14 @@ class Product extends ViewAbstract<Product>
                   "status",
                   ProductStatus.NONE,
                   singleChoiceIfList: true),
-              CustomFilterableField(this, "width", Icons.border_left_outlined,
-                  "width", "width", "",
-                  type: const TextInputType.numberWithOptions(
-                      decimal: false, signed: false)),
-              CustomFilterableField(this, "length", Icons.border_top_outlined,
-                  "length", "length", "",
-                  type: const TextInputType.numberWithOptions(
-                      decimal: false, signed: false)),
+              // CustomFilterableField(this, "width", Icons.border_left_outlined,
+              //     "width", "width", "",
+              //     type: const TextInputType.numberWithOptions(
+              //         decimal: false, signed: false)),
+              // CustomFilterableField(this, "length", Icons.border_top_outlined,
+              //     "length", "length", "",
+              //     type: const TextInputType.numberWithOptions(
+              //         decimal: false, signed: false)),
             ]
           : []);
   }
@@ -927,9 +928,16 @@ class Product extends ViewAbstract<Product>
     return "${getIDFormat(context)} /${getQuantityStringFormat(context: context)}";
   }
 
-  RequestOptions getSimilarWithSameSize(BuildContext context) {
-    RequestOptions op = _getOnlyInventory()
-        .setBetween("SizeID", sizes?.getListOfSizesWithMaxWaste(maxWaste: 20));
+  RequestOptions getSimilarWithSameSize(BuildContext context,
+      {int? width, int? maxWaste}) {
+    ProductSize? customSize = width == null
+        ? sizes
+        : (ProductSize()
+          ..width = width.toNonNullable()
+          ..length = 0);
+
+    RequestOptions op = _getOnlyInventory().setBetween("SizeID",
+        customSize?.getListOfSizesWithMaxWaste(maxWaste: maxWaste ?? 20));
 
     return !isGeneralEmployee(context)
         ? op.addSearchByField("status", "NONE")
@@ -1030,11 +1038,46 @@ class Product extends ViewAbstract<Product>
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action,
       ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
-      ValueNotifier<SecondPaneHelper?>? onClick}) {
-    Color primary = Theme.of(context).colorScheme.primary;
+      ValueNotifier<SecondPaneHelper?>? onClick,
+      bool? isFromFirstAndSecPane,
+      dynamic extras}) {
+    debugPrint(
+        "getCustomTopWidg4et asd sad assd from $isFromFirstAndSecPane extras $extras action:$action");
+
+    if (isFromFirstAndSecPane != null) {
+      if (isFromFirstAndSecPane == true && action == ServerActions.search) {
+        int? val = int.tryParse(extras);
+        if (val == null) return null;
+        return [
+          HeaderDescription(
+            isSliver: true,
+            title: AppLocalizations.of(context)!.simialrProducts,
+            // trailing:
+          ),
+          SliverApiMixinViewAbstractWidget(
+            toListObject: Product().setRequestOption(
+                option: getSimilarWithSameSize(context,
+                    width: val * 2, maxWaste: 50)),
+            isGridView: true,
+            isSliver: true,
+            scrollDirection: Axis.horizontal,
+          ),
+          HeaderDescription(
+            isSliver: true,
+
+            ///todo translate
+            title: "seaerch resulkt",
+          ),
+        ];
+      }
+    } else {
+      return null;
+    }
+    return null;
     return [
-      if (action != ServerActions.edit)
-        ProductTopWidget(product: this, valueNotifier: onClick),
+      if (action == ServerActions.view)
+        SliverFillRemaining(
+            child: ProductTopWidget(product: this, valueNotifier: onClick)),
       // if (isRollCut())
       //   FixedTimeline.tileBuilder(
       //     theme: TimelineTheme.of(context).copyWith(
@@ -1640,11 +1683,14 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     if (action == ServerActions.list) {
       return _getOnlyInventory();
     } else if (action == ServerActions.search) {
-      return _getOnlyInventory();
+      RequestOptions ro = _getOnlyInventory();
+      return ro;
     }
     return null;
   }

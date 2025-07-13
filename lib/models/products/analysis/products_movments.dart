@@ -71,7 +71,9 @@ class ProductMovments
   String? getCustomAction() => "products/movements";
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSearchByField("ProductID", iD);
   }
 
@@ -288,8 +290,7 @@ class ProductMovments
   ResponseType getCustomStandAloneResponseType() => ResponseType.SINGLE;
 
   @override
-  void onCustomViewCardClicked(BuildContext context, ProductMovments istem) {
-  }
+  void onCustomViewCardClicked(BuildContext context, ProductMovments istem) {}
 
   @override
   Widget getCustomStandAloneWidget(BuildContext context) {

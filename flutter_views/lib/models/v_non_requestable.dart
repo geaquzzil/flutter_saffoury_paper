@@ -7,7 +7,9 @@ abstract class VNonRequestable<T> extends ViewAbstract<T> {
   VNonRequestable() : super();
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return null;
   }
 

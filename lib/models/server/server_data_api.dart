@@ -44,7 +44,24 @@ class FilterableDataApi extends FilterableData<FilterableDataApi> {
   List<Manufacture>? manufactures;
 
   FilterableDataApi() : super();
-
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+        "products_types": List<ProductType>.empty(),
+        "qualities": List<Quality>.empty(),
+        "grades": List<Grades>.empty(),
+        "customs_declarations": List<CustomsDeclaration>.empty(),
+        "gsms": List<GSM>.empty(),
+        "cargo_transporters": List<CargoTransporter>.empty(),
+        "governorates": List<Governorate>.empty(),
+        "account_names_types": List<AccountNameType>.empty(),
+        "account_names": List<AccountName>.empty(),
+        "currency": List<Currency>.empty(),
+        "customers": List<Customer>.empty(),
+        "employees": List<Employee>.empty(),
+        "warehouse": List<Warehouse>.empty(),
+        "countries": List<Country>.empty(),
+        "manufactures": List<Manufacture>.empty(),
+      };
   @override
   FilterableDataApi getSelfNewInstance() {
     return FilterableDataApi();
@@ -86,11 +103,5 @@ class FilterableDataApi extends FilterableData<FilterableDataApi> {
           "searchForValue getValue => ${viewAbstract.getTableNameApi()} list is null skipped ");
     }
     return null;
-  }
-
-  @override
-  Map<String, dynamic> getMirrorFieldsMapNewInstance() {
-    // TODO: implement getMirrorFieldsMapNewInstance
-    throw UnimplementedError();
   }
 }

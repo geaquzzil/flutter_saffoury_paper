@@ -58,8 +58,7 @@ class UserToken extends ViewAbstractApi<UserToken> {
   }
 
   factory UserToken.fromMap(Map<String, dynamic> map) {
-    return UserToken(
-    );
+    return UserToken();
   }
 
   String toJson() => json.encode(toMap());
@@ -75,7 +74,9 @@ class UserToken extends ViewAbstractApi<UserToken> {
   Map<String, dynamic> toJsonViewAbstract() => toMap();
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return null;
   }
 

@@ -165,7 +165,9 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
   String? getTableNameApi() => action;
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     // TODO: implement getRequestOption
     throw UnimplementedError();
   }

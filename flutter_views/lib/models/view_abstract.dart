@@ -312,7 +312,9 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   List<Widget>? getCustomTopWidget(BuildContext context,
       {ServerActions? action,
       ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
-      ValueNotifier<SecondPaneHelper?>? onClick}) {
+      ValueNotifier<SecondPaneHelper?>? onClick,
+      bool ? isFromFirstAndSecPane,
+      dynamic extras}) {
     return null;
   }
 

@@ -119,7 +119,9 @@ class Equalities extends ViewAbstract<Equalities> {
   Map<String, double> getTextInputMaxValidateMap() => {};
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("date", SortByType.DESC);
   }
 

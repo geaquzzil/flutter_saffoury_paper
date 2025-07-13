@@ -297,7 +297,9 @@ class ProductType extends ViewAbstract<ProductType>
   }
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     return RequestOptions().addSortBy("name", SortByType.ASC);
   }
 

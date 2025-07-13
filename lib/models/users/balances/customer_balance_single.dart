@@ -63,7 +63,7 @@ class CustomerBalanceSingle extends Customer
       {
         AppLocalizations.of(context)!.description: name ?? "",
         AppLocalizations.of(context)!.addressInfo: address ?? "",
-        AppLocalizations.of(context)!.phone_number: phone ?? "",
+        AppLocalizations.of(context)!.phone_number: phone?.toString() ?? "",
         AppLocalizations.of(context)!.credits:
             getTotalCredits().toStringAsFixed(2),
         AppLocalizations.of(context)!.debits:
@@ -74,7 +74,7 @@ class CustomerBalanceSingle extends Customer
   factory CustomerBalanceSingle.fromJson(Map<String, dynamic> json) =>
       CustomerBalanceSingle()
         ..iD = json['iD'] as int
-        ..phone = json['phone'] as String?
+        ..phone = json['phone'] as int?
         ..name = json['name'] as String?
         ..email = json['email'] as String?
         ..token = json['token'] as String?

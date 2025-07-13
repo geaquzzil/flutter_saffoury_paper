@@ -14,9 +14,11 @@ class SliverApiMixinViewAbstractWidget
       super.requiresFullFetsh,
       super.isGridView = false,
       super.hasCustomCardBuilder,
+      super.customRequestOption,
       super.hasCustomSeperater,
       super.enableSelection,
       required super.toListObject,
+      super.copyWithRequestOption,
       super.filterData,
       super.valueListProviderNotifier,
       super.searchString});
@@ -32,7 +34,11 @@ class _SliverApiMixinAutoRestState
   @override
   String getListProviderKey() {
     String key = (widget.toListObject as ViewAbstract).getListableKey();
-    key = key + (getSearchString ?? "") + (getFilterData.toString());
+    key = key +
+        (getSearchString ?? "") +
+        (getFilterData.toString()) +
+        (getCopyWithCustomRequestOptions?.getKey() ?? "");
+    (getCustomRequestOptions?.getKey() ?? "");
     debugPrint("SliverApiWithStaticMixin===> getListProviderKey $key");
     return key;
   }

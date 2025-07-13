@@ -53,6 +53,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..inventory = (json['inventory'] as List<dynamic>?)
       ?.map((e) => Stocks.fromJson(e as Map<String, dynamic>))
       .toList()
+  ..inventory_count = (json['inventory_count'] as num?)?.toInt()
   ..products = json['products'] == null
       ? null
       : Product.fromJson(json['products'] as Map<String, dynamic>)
@@ -128,6 +129,7 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'grades': instance.grades?.toJson(),
       'products_colors': instance.products_colors?.toJson(),
       'inventory': instance.inventory?.map((e) => e.toJson()).toList(),
+      'inventory_count': instance.inventory_count,
       'products': instance.products?.toJson(),
       'cut_requests': instance.cut_requests?.map((e) => e.toJson()).toList(),
       'cut_requests_count': instance.cut_requests_count,

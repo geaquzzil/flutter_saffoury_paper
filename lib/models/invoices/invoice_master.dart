@@ -792,7 +792,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         if (customers?.phone != null)
           InvoiceHeaderTitleAndDescriptionInfo(
             title: AppLocalizations.of(context)!.phone_number,
-            description: customers?.phone ?? "",
+            description: customers?.phone.toString() ?? "",
             // icon: Icons.phone
           ),
     ];
@@ -916,8 +916,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
-            autoRest: ChartRecordAnalysis.init(
-                this, DateObject())),
+            autoRest: ChartRecordAnalysis.init(this, DateObject())),
       ),
     ];
   }
@@ -1189,7 +1188,9 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action}) {
+  RequestOptions? getRequestOption(
+      {required ServerActions action,
+      RequestOptions? generatedOptionFromListCall}) {
     if (action == ServerActions.list) {
       return RequestOptions().addSortBy("date", SortByType.DESC);
     }

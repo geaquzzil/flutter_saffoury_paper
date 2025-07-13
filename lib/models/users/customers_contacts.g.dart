@@ -15,7 +15,7 @@ CustomerContacts _$CustomerContactsFromJson(Map<String, dynamic> json) =>
           ? null
           : Customer.fromJson(json['customers'] as Map<String, dynamic>)
       ..name = json['name'] as String?
-      ..phone = json['phone'] as String?;
+      ..phone = (json['phone'] as num?)?.toInt();
 
 Map<String, dynamic> _$CustomerContactsToJson(CustomerContacts instance) =>
     <String, dynamic>{

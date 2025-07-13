@@ -59,6 +59,8 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   ///when scrollDirection is horizontal grid view well build instaed  and override the [isGridView] even when its true
   Axis scrollDirection;
   bool isGridView;
+  RequestOptions? customRequestOption;
+  RequestOptions? copyWithRequestOption;
 
   SliverApiMixinWithStaticStateful(
       {super.key,
@@ -73,9 +75,11 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
       this.filterData,
       this.requiresFullFetsh = false,
       this.isCardRequestApi = false,
+      this.copyWithRequestOption,
       this.enableSelection = true,
       this.isSliver = true,
       this.hasCustomSeperater,
+      this.customRequestOption,
       this.valueListProviderNotifier,
       this.setParentForChildCardItem});
 }
@@ -86,6 +90,9 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   late _ObjectType _toListObjectType;
   ViewAbstract? _setParentForChildCardItem;
   String? _searchString;
+  RequestOptions? _customRequestOptions;
+  RequestOptions? _copyWithRequestOption;
+
   Map<String, FilterableProviderHelper>? _filterData;
   final ValueNotifier<bool> _valueNotifierHover = ValueNotifier<bool>(false);
   late String _lastKey;
@@ -113,6 +120,9 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       ValueNotifier<ExpandType>(ExpandType.HALF_EXPANDED);
 
   String? get getSearchString => this._searchString;
+  RequestOptions? get getCustomRequestOptions => this._customRequestOptions;
+  RequestOptions? get getCopyWithCustomRequestOptions =>
+      this._copyWithRequestOption;
 
   Map<String, FilterableProviderHelper>? get getFilterData => this._filterData;
 
@@ -224,6 +234,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
     _searchString = widget.searchString;
     _filterData = widget.filterData;
+    _customRequestOptions = widget.customRequestOption;
+    _copyWithRequestOption = widget.copyWithRequestOption;
 
     ///override the gride view when the scroll axis is horizontal
     valueNotifierGrid = ValueNotifier<bool>(widget.isGridView);
@@ -252,6 +264,12 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     _ObjectType lastUpdated = getToListObjectType();
     if (_filterData != widget.filterData) {
       _filterData = widget.filterData;
+    }
+    if (_customRequestOptions != widget.customRequestOption) {
+      _customRequestOptions = widget.customRequestOption;
+    }
+    if (_copyWithRequestOption != widget.copyWithRequestOption) {
+      _copyWithRequestOption = widget.copyWithRequestOption;
     }
     if (_searchString != widget.searchString) {
       _searchString = widget.searchString;
@@ -291,22 +309,19 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   @override
   Widget build(BuildContext context) {
-    return getListSelector();
-  }
-
-  Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>> getListSelector() {
     return Selector<ListMultiKeyProvider, Tuple3<bool, int, bool>>(
       builder: (context, value, child) {
         bool isLoading = value.item1;
         int count = value.item2;
         bool isError = value.item3;
         String key = getListProviderKey();
-        debugPrint("ListToDet=>$count count");
+        debugPrint(
+            "ListToDet=>count $count isLoading $isLoading   isError $isError key $key  ");
         WidgetsBinding.instance.addPostFrameCallback((_) {
           widget.valueListProviderNotifier?.value =
               widget.valueListProviderNotifier?.value != null
                   ? List.from(widget.valueListProviderNotifier!.value!)
-                  : [getListProvider(), getListProviderKey(), count];
+                  : [getListProvider(), key, count];
         });
 
         // .withItem1(getListProvider());
@@ -472,6 +487,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         padding: defaultSliverListPadding,
         sliver: SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
+          debugPrint("SliverApi getSliverList count $count index $index");
           return getListItem(index, count, isLoading);
         }, childCount: count + (isLoading ? 8 : 0))));
 
@@ -671,6 +687,11 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   Widget getEmptyWidget({bool isError = false}) {
     if (widget.isSliver) {
+      if (widget.scrollDirection == Axis.horizontal) {
+        return SliverToBoxAdapter(
+          child: _getEmptyWidget(isError, expand: false),
+        );
+      }
       return SliverFillRemaining(
         child: _getEmptyWidget(isError),
       );
@@ -678,8 +699,9 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     return _getEmptyWidget(isError);
   }
 
-  EmptyWidget _getEmptyWidget(bool isError) {
+  EmptyWidget _getEmptyWidget(bool isError, {bool expand = true}) {
     return EmptyWidget(
+        expand: expand,
         onSubtitleClicked: isError
             ? () {
                 fetshList();
@@ -753,10 +775,11 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
           viewAbstract: getToListObjectCastAutoRestNullIfNot()?.obj ??
               getToListObjectCastViewAbstractNullIfNot(),
           autoRest: getToListObjectCastAutoRestNullIfNot(),
-          options: RequestOptions(
-            filterMap: _filterData ?? {},
-            searchQuery: _searchString,
-          ),
+          options: _customRequestOptions ??
+              RequestOptions(
+                filterMap: _filterData ?? {},
+                searchQuery: _searchString,
+              ).copyWithObjcet(option: getCopyWithCustomRequestOptions),
           requiresFullFetsh: widget.requiresFullFetsh);
     }
   }
@@ -835,7 +858,10 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   List<E> getList<E>() {
-    return listProvider.getList<E>(getListProviderKey());
+    List<E> l = listProvider.getList<E>(getListProviderKey());
+    debugPrint(
+        "SliverApi getList for ${getListProviderKey()} count ${l.length} ");
+    return l;
   }
 
   void addAnimatedListItem(ViewAbstract view) {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_determine_screen_page.dart';
-import 'package:flutter_view_controller/new_screens/authentecation/components/loading_auth.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/network_faild_auth.dart';
 import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -24,6 +23,8 @@ class _BaseAuthenticatingScreenState extends State<BaseAuthenticatingScreen> {
   @override
   void initState() {
     authProvider = Provider.of<AuthProvider<AuthUser>>(context, listen: false);
+    // Configurations.removeAll();
+
     onStartUp();
 
     super.initState();
@@ -35,9 +36,7 @@ class _BaseAuthenticatingScreenState extends State<BaseAuthenticatingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return EmptyWidget(
-      lottieJson: "loading_lottie.json",
-    );
+    return EmptyWidget.loading();
     // switch (authProvider.getStatus) {
     //   case Status.Initialization:
     //     return getLoadingWidget();

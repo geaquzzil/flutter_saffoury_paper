@@ -2,14 +2,15 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_list_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/export_icon.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/filter_icon.dart';
 import 'package:flutter_view_controller/new_components/lists/headers/print_icon.dart';
@@ -31,6 +32,10 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
   final double? width;
   final ValueNotifier<List?> valueNotifer;
   final SecoundPaneHelperWithParentValueNotifier? secPaneNotifer;
+  final Map<String, FilterableProviderHelper>? filterInitial;
+  final SortFieldValue? sortInitial;
+  final Function(dynamic value)? onDoneFilter;
+  final Function(SortFieldValue?)? onDoneSort;
 
   final iconSize = 20;
   final spacing = kDefaultPadding * .25;
@@ -40,6 +45,10 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
       required this.valueNotifer,
       required this.viewAbstract,
       this.secPaneNotifer,
+      this.onDoneFilter,
+      this.sortInitial,
+      this.filterInitial,
+      this.onDoneSort,
       this.width});
 
   @override
@@ -95,11 +104,13 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
           children: [
             FilterIcon(
               viewAbstract: viewAbstract,
-              onDoneClickedPopResults: (value) {},
+              onDoneClickedPopResults: onDoneFilter,
+              initialData: filterInitial,
             ),
             SortIcon(
               viewAbstract: viewAbstract,
-              onChange: (val) {},
+              initialValue: sortInitial,
+              onChange: onDoneSort,
             ),
             Spacer(),
             if (canTakeUpToFour) _getAddButton(context),
