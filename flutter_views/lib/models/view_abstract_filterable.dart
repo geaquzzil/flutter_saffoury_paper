@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_lists.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/theming/text_field_theming.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -18,10 +19,7 @@ class SortFieldValue {
   String field;
   SortByType type;
 
-  SortFieldValue({
-    required this.field,
-    required this.type,
-  });
+  SortFieldValue({required this.field, required this.type});
 
   @override
   String toString() => getMap().toString();
@@ -30,11 +28,14 @@ class SortFieldValue {
   }
 
   DropdownStringListItem? getDropdownStringListItem(
-      BuildContext context, ViewAbstract parent) {
+    BuildContext context,
+    ViewAbstract parent,
+  ) {
     return DropdownStringListItem(
-        label: parent.getFieldLabel(context, field),
-        icon: parent.getFieldIconData(field),
-        value: field);
+      label: parent.getFieldLabel(context, field),
+      icon: parent.getFieldIconData(field),
+      value: field,
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -48,8 +49,9 @@ class SortFieldValue {
 
   factory SortFieldValue.fromMap(Map<String, dynamic> map) {
     return SortFieldValue(
-        field: map['field'] ?? '',
-        type: $enumDecode(_$SortByType, map['type']));
+      field: map['field'] ?? '',
+      type: $enumDecode(_$SortByType, map['type']),
+    );
   }
 
   String toJson() => json.encode(toMap());
@@ -70,9 +72,9 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
     return "iD";
   }
 
-  Map<String, FilterableProviderHelper>? getLastFilterableMap(
-          {ServerActions action = ServerActions.list}) =>
-      getRequestOption(action: action)?.filterMap;
+  Map<String, FilterableProviderHelper>? getLastFilterableMap({
+    ServerActions action = ServerActions.list,
+  }) => getRequestOption(action: action)?.filterMap;
 
   bool isSortAvailable() =>
       getRequestOption(action: ServerActions.list)?.sortBy != null;
@@ -82,13 +84,14 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
   List<CustomFilterableField> getCustomFilterableFields(BuildContext context) =>
       [
         CustomFilterableField(
-            this as ViewAbstract,
-            AppLocalizations.of(context)!.date,
-            Icons.date_range,
-            "date",
-            "date",
-            "",
-            type: TextInputType.datetime)
+          this as ViewAbstract,
+          AppLocalizations.of(context)!.date,
+          Icons.date_range,
+          "date",
+          "date",
+          "",
+          type: TextInputType.datetime,
+        ),
       ];
 
   String getFilterableFieldNameApi(String field) {
@@ -107,8 +110,8 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
     return "${getTableNameApi()}listAPI${getRequestOptionFromParamOrAbstract(action: ServerActions.list)?.filterMap}";
   }
 
-  String getListableKey() {
-    return "${getTableNameApi()}listAPI${getRequestOptionFromParamOrAbstract(action: ServerActions.list)?.getKey() ?? ""}";
+  String getListableKey({SliverMixinObjectType? type}) {
+    return "${getCustomAction()}-${getTableNameApi()}-$type-${getRequestOptionFromParamOrAbstract(action: ServerActions.list)?.getKey() ?? ""}";
   }
 }
 
@@ -117,10 +120,7 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
 //   ASC,
 //   @JsonValue("DESC")
 //   DESC }
-const _$SortByType = {
-  SortByType.ASC: 'ASC',
-  SortByType.DESC: 'DESC',
-};
+const _$SortByType = {SortByType.ASC: 'ASC', SortByType.DESC: 'DESC'};
 
 enum SortByType implements ViewAbstractEnum<SortByType> {
   ASC,
@@ -169,10 +169,16 @@ class CustomFilterableField {
   dynamic object;
   TextInputType? type;
   bool? singleChoiceIfList;
-  CustomFilterableField(this.parent, this.title, this.icon, this.field,
-      this.fieldNameApi, this.object,
-      {this.type, this.singleChoiceIfList})
-      : theme = TextFieldTheming(lableText: title, icon: icon);
+  CustomFilterableField(
+    this.parent,
+    this.title,
+    this.icon,
+    this.field,
+    this.fieldNameApi,
+    this.object, {
+    this.type,
+    this.singleChoiceIfList,
+  }) : theme = TextFieldTheming(lableText: title, icon: icon);
 }
 // class FilterableProviderHelperListItem {
 //   //The field Label

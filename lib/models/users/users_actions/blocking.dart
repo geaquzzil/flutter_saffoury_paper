@@ -29,21 +29,28 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
   }
 
   @override
-  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      {"blockMood": BlockMood.block, "user": User(), "block": false};
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+    "blockMood": BlockMood.block,
+    "user": User(),
+    "block": false,
+  };
   @override
   Map<String, IconData> getFieldIconDataMap() => {"block": Icons.block};
 
   @override
-  Map<String, String> getFieldLabelMap(BuildContext context) =>
-      {"block": AppLocalizations.of(context)!.block};
+  Map<String, String> getFieldLabelMap(BuildContext context) => {
+    "block": AppLocalizations.of(context)!.block,
+  };
 
   @override
   String? getMainDrawerGroupName(BuildContext context) => null;
 
   @override
-  List<String> getMainFields({BuildContext? context}) =>
-      ["user", "blockMood", "block"];
+  List<String> getMainFields({BuildContext? context}) => [
+    "user",
+    "blockMood",
+    "block",
+  ];
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
@@ -59,10 +66,10 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
   IconData getMainIconData() => Icons.block;
 
   @override
-  String? getCustomAction() {
+  List<String>? getCustomAction() {
     String tableName = user.getTableNameApi()!;
-    String id = iD == -1 ? "" : "/$iD";
-    return "${blockMood.name}/$tableName$id";
+    String? id = iD == -1 ? null : "$iD";
+    return [blockMood.name, tableName, ?id];
   }
 
   @override
@@ -70,9 +77,9 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
 
   @override
   Blocking fromJsonViewAbstract(Map<String, dynamic> json) => Blocking(
-        Customer.fromJson(json['user']),
-        $enumDecodeNullable(_$BlockMood, json['blockMood']) ?? BlockMood.block,
-      );
+    Customer.fromJson(json['user']),
+    $enumDecodeNullable(_$BlockMood, json['blockMood']) ?? BlockMood.block,
+  );
 
   @override
   ResponseType getCustomStandAloneResponseType() {
@@ -95,9 +102,10 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
   }
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     // TODO: implement getRequestOption
     throw UnimplementedError();
   }
@@ -113,15 +121,11 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
   }
 }
 
-const _$BlockMood = {
-  BlockMood.block: 'block',
-  BlockMood.unblock: 'unblock',
-};
+const _$BlockMood = {BlockMood.block: 'block', BlockMood.unblock: 'unblock'};
 
 enum BlockMood implements ViewAbstractEnum<BlockMood> {
   block,
-  unblock,
-  ;
+  unblock;
 
   @override
   IconData getMainIconData() {

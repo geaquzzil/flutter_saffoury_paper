@@ -35,9 +35,9 @@ class CustomerBalanceSingle extends Customer
   @override
   String? getTableNameApi() => null;
 
+  //todo api
   @override
-  String? getCustomAction() => "list_customers_balances";
-
+  List<String>? getCustomAction() => ["list_customers_balances"];
   @override
   Map<String, dynamic> toJsonViewAbstract() => {};
   double getTotalCredits() {
@@ -59,17 +59,16 @@ class CustomerBalanceSingle extends Customer
 
   @override
   Map<String, String> getPrintableInvoiceTableHeaderAndContent(
-          BuildContext context, PrintCustomerBalances? pca) =>
-      {
-        AppLocalizations.of(context)!.description: name ?? "",
-        AppLocalizations.of(context)!.addressInfo: address ?? "",
-        AppLocalizations.of(context)!.phone_number: phone?.toString() ?? "",
-        AppLocalizations.of(context)!.credits:
-            getTotalCredits().toStringAsFixed(2),
-        AppLocalizations.of(context)!.debits:
-            getTotalDebits().toStringAsFixed(2),
-        AppLocalizations.of(context)!.total: balance?.toStringAsFixed(2) ?? "0",
-      };
+    BuildContext context,
+    PrintCustomerBalances? pca,
+  ) => {
+    AppLocalizations.of(context)!.description: name ?? "",
+    AppLocalizations.of(context)!.addressInfo: address ?? "",
+    AppLocalizations.of(context)!.phone_number: phone?.toString() ?? "",
+    AppLocalizations.of(context)!.credits: getTotalCredits().toStringAsFixed(2),
+    AppLocalizations.of(context)!.debits: getTotalDebits().toStringAsFixed(2),
+    AppLocalizations.of(context)!.total: balance?.toStringAsFixed(2) ?? "0",
+  };
 
   factory CustomerBalanceSingle.fromJson(Map<String, dynamic> json) =>
       CustomerBalanceSingle()
@@ -102,15 +101,18 @@ class CustomerBalanceSingle extends Customer
 
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-      BuildContext context, PrintLocalSetting? dashboardSetting) {
+    BuildContext context,
+    PrintLocalSetting? dashboardSetting,
+  ) {
     return null;
   }
 
   @override
   pdf.Widget getPrintableDetailPageIfLabel(
-      BuildContext context,
-      PrintCustomerBalances? pca,
-      PrintableInvoiceInterface<PrintLocalSetting> parent) {
+    BuildContext context,
+    PrintCustomerBalances? pca,
+    PrintableInvoiceInterface<PrintLocalSetting> parent,
+  ) {
     // TODO: implement getPrintableDetailPageIfLabel
     throw UnimplementedError();
   }

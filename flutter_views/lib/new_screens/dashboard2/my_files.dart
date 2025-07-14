@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/size_config.dart';
 
 import '../../interfaces/dashable_interface.dart';
@@ -21,10 +21,7 @@ class MyFiles extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (dgh.title != null)
-              Text(
-                dgh.title!,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
+              Text(dgh.title!, style: Theme.of(context).textTheme.titleMedium),
             ElevatedButton.icon(
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(
@@ -53,7 +50,7 @@ class MyFiles extends StatelessWidget {
             childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
           ),
         ),
-        const SizedBox(height: kDefaultPadding)
+        const SizedBox(height: kDefaultPadding),
       ],
     );
   }
@@ -72,72 +69,76 @@ class _TestExpandedState extends State<TestExpanded> {
   @override
   Widget build(BuildContext context) {
     return StaggeredGridTile.count(
-        crossAxisCellCount: length,
-        mainAxisCellCount: width,
-        child: Card(
-          elevation: 0,
-          shape: const RoundedRectangleBorder(
-            side: BorderSide(
-                // color: Theme.of(context).colorScheme.outline,
-                ),
-            borderRadius: BorderRadius.all(Radius.circular(12)),
+      crossAxisCellCount: length,
+      mainAxisCellCount: width,
+      child: Card(
+        elevation: 0,
+        shape: const RoundedRectangleBorder(
+          side: BorderSide(
+            // color: Theme.of(context).colorScheme.outline,
           ),
-          child: Container(
-            padding: const EdgeInsets.all(defaultPadding),
-            decoration: const BoxDecoration(
-              // color: secondaryColor,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                        padding: const EdgeInsets.all(defaultPadding / 8),
-                        height: 10,
-                        width: 10,
-                        decoration: const BoxDecoration(
-                          // color: Colors.orange.withOpacity(0.1),
-                          // color: info.color!.withOpacity(0.1),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        child: const Icon(Icons.file_copy)),
-                    IconButton(
-                      icon: const Icon(Icons.file_copy),
-                      onPressed: () => setState(() {
-                        width = width == 4 ? 1 : 4;
-                        length = length == 2 ? 1 : 2;
-                      }),
-                    )
-                  ],
-                ),
-                Text(
-                  "TITLdfscsdfdsE",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodySmall!,
-                ),
-                Text(
-                  "Descriptiewwasdsdsasfdsdsfdson",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleLarge!,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("32%", style: Theme.of(context).textTheme.bodySmall!),
-                    Text("Since last month",
-                        style: Theme.of(context).textTheme.bodySmall!),
-                  ],
-                )
-              ],
-            ),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(defaultPadding),
+          decoration: const BoxDecoration(
+            // color: secondaryColor,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-        ));
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(defaultPadding / 8),
+                    height: 10,
+                    width: 10,
+                    decoration: const BoxDecoration(
+                      // color: Colors.orange.withOpacity(0.1),
+                      // color: info.color!.withOpacity(0.1),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: const Icon(Icons.file_copy),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.file_copy),
+                    onPressed: () => setState(() {
+                      width = width == 4 ? 1 : 4;
+                      length = length == 2 ? 1 : 2;
+                    }),
+                  ),
+                ],
+              ),
+              Text(
+                "TITLdfscsdfdsE",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodySmall!,
+              ),
+              Text(
+                "Descriptiewwasdsdsasfdsdsfdson",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleLarge!,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("32%", style: Theme.of(context).textTheme.bodySmall!),
+                  Text(
+                    "Since last month",
+                    style: Theme.of(context).textTheme.bodySmall!,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -147,16 +148,21 @@ class FileInfoStaggerdGridView extends StatelessWidget {
   ///int 1: is crossCount
   ///int 2: is suggested crossCount for StraggeredGrid
   ///int 3: is suggested crossCountMod
-  List<StaggeredGridTile> Function(int crossAxisCount, int crossCountFundCalc,
-      int crossAxisCountMod, num heightMainAxisCellCount)? builder;
+  List<StaggeredGridTile> Function(
+    int crossAxisCount,
+    int crossCountFundCalc,
+    int crossAxisCountMod,
+    num heightMainAxisCellCount,
+  )?
+  builder;
   bool wrapWithCard;
-  FileInfoStaggerdGridView(
-      {super.key,
-      this.childAspectRatio = 1,
-      this.wrapWithCard = false,
-      this.builder,
-      this.list})
-      : assert(list != null || builder != null);
+  FileInfoStaggerdGridView({
+    super.key,
+    this.childAspectRatio = 1,
+    this.wrapWithCard = false,
+    this.builder,
+    this.list,
+  }) : assert(list != null || builder != null);
 
   final double childAspectRatio;
 
@@ -164,7 +170,7 @@ class FileInfoStaggerdGridView extends StatelessWidget {
     if (width < 500 && width > 0) {
       return 2;
     } else if (width < 1000 && width > 500) {
-      return 4;
+      return 3;
     } else {
       int val = ((width / 300)).toInt();
       debugPrint("getCrossAxisCount val   $val");
@@ -188,37 +194,39 @@ class FileInfoStaggerdGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     debugPrint("FileInfoStaggerdGridView====> wrapWithCard $wrapWithCard");
-    return LayoutBuilder(builder: (context, constraints) {
-      int crossAxisCount = getCrossAxisCount(constraints.maxWidth);
-      bool isMezouj = crossAxisCount % 2 == 0;
-      double pixel = View.of(context).devicePixelRatio;
-      debugPrint(
-          "FileInfoStaggerdGridView====> width:${constraints.maxWidth} height:${constraints.maxHeight} getHeightMainAxisCellCount ${getHeightMainAxisCellCount(constraints.maxHeight)} isMezouj: $isMezouj   crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4} ");
-      int crossCountFund = crossAxisCount ~/ 4;
-      int crossAxisCountMod = crossAxisCount % 4;
-      int crossCountFundCalc = crossAxisCountMod == 0 ? crossCountFund : 1;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        int crossAxisCount = getCrossAxisCount(constraints.maxWidth);
+        bool isMezouj = crossAxisCount % 2 == 0;
+        double pixel = View.of(context).devicePixelRatio;
+        debugPrint(
+          "FileInfoStaggerdGridView====> width:${constraints.maxWidth} height:${constraints.maxHeight} getHeightMainAxisCellCount ${getHeightMainAxisCellCount(constraints.maxHeight)} isMezouj: $isMezouj   crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4} ",
+        );
+        int crossCountFund = crossAxisCount ~/ 4;
+        int crossAxisCountMod = crossAxisCount % 4;
+        int crossCountFundCalc = crossAxisCountMod == 0 ? crossCountFund : 1;
 
-      debugPrint(
-          "FileInfoStaggerdGridView====> isMezouj: $isMezouj  crossCountFundCalc $crossCountFundCalc crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc + crossAxisCountMod =${crossCountFundCalc + crossAxisCountMod}");
-      if (builder != null) {
-        list = builder!.call(
+        debugPrint(
+          "FileInfoStaggerdGridView====> isMezouj: $isMezouj  crossCountFundCalc $crossCountFundCalc crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc + crossAxisCountMod =${crossCountFundCalc + crossAxisCountMod}",
+        );
+        if (builder != null) {
+          list = builder!.call(
             crossAxisCount,
             crossCountFundCalc,
             crossAxisCountMod,
-            getHeightMainAxisCellCount(constraints.maxHeight));
-      }
-      return StaggeredGrid.count(
+            getHeightMainAxisCellCount(constraints.maxHeight),
+          );
+        }
+        return StaggeredGrid.count(
           crossAxisCount: crossAxisCount,
           mainAxisSpacing: 2,
           crossAxisSpacing: 2,
           children: wrapWithCard
-              ? list!
-                  .map((e) => Card(
-                        child: e,
-                      ))
-                  .toList()
-              : list!);
-    });
+              ? list!.map((e) => Card(child: e)).toList()
+              : list!,
+        );
+      },
+    );
   }
 }
 

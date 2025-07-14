@@ -71,7 +71,7 @@ class PermissionLevelAbstract extends ViewAbstract<PermissionLevelAbstract> {
       return null;
     }
     ViewAbstract viewAbstract = toDo;
-    return viewAbstract.getTableNameApi() ?? getCustomAction();
+    return viewAbstract.getTableNameApi() ?? getCustomAction()?.last;
   }
 
   String? findCurrentTableNmeFromObject(dynamic toDo) {

@@ -47,7 +47,6 @@ abstract class ViewAbstractStandAloneCustomView<T>
     throw UnimplementedError();
   }
 
-
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() {
     // TODO: implement getTextInputIsAutoCompleteMap
@@ -100,9 +99,7 @@ abstract class ViewAbstractStandAloneCustomView<T>
   String? getTableNameApi() => null;
 
   @override
-  String? getCustomAction() => null;
-  @override
-  Map<String, String> get getCustomMap => {};
+  List<String>? getCustomAction() => null;
 
   @override
   Map<String, dynamic> toJsonViewAbstract() => {};

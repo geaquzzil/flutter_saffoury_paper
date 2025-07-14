@@ -55,15 +55,21 @@ class ProductType extends ViewAbstract<ProductType>
   ProductType.init(this.requestAvailablity);
 
   @override
-  ProductType? getSelfNewInstanceFileImporter(
-      {required BuildContext context, String? field, value}) {
+  ProductType? getSelfNewInstanceFileImporter({
+    required BuildContext context,
+    String? field,
+    value,
+  }) {
     debugPrint("getSelfNewInstanceFileImporter $runtimeType value=>$value");
-    FilterableDataApi? filterData = context
-        .read<FilterableListApiProvider<FilterableData>>()
-        .getLastFilterableData() as FilterableDataApi?;
+    FilterableDataApi? filterData =
+        context
+                .read<FilterableListApiProvider<FilterableData>>()
+                .getLastFilterableData()
+            as FilterableDataApi?;
     if (value == null) {
       throw Exception(
-          "${getMainHeaderLabelTextOnly(context)}: Cannot be empty");
+        "${getMainHeaderLabelTextOnly(context)}: Cannot be empty",
+      );
     }
     if (filterData != null) {
       ProductType? getSearchedValue = filterData.searchForValue(
@@ -77,13 +83,16 @@ class ProductType extends ViewAbstract<ProductType>
       }
     }
     throw Exception(
-        "${getMainHeaderLabelTextOnly(context)}: not found for value => $value");
+      "${getMainHeaderLabelTextOnly(context)}: not found for value => $value",
+    );
   }
 
   @override
-  List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+  List<Widget>? getCustomBottomWidget(
+    BuildContext context, {
+    ServerActions? action,
+    ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+  }) {
     if (action == ServerActions.add ||
         action == ServerActions.edit ||
         action == ServerActions.list) {
@@ -91,12 +100,14 @@ class ProductType extends ViewAbstract<ProductType>
     }
     return [
       SliverApiMixinViewAbstractWidget(
-          isGridView: true,
-          scrollDirection: Axis.horizontal,
-          toListObject: Product().getSelfInstanceWithSimilarOption(
-              context: context,
-              obj: this,
-              copyWith: RequestOptions(countPerPage: 5))),
+        isGridView: true,
+        scrollDirection: Axis.horizontal,
+        toListObject: Product().getSelfInstanceWithSimilarOption(
+          context: context,
+          obj: this,
+          copyWith: RequestOptions(countPerPage: 5),
+        ),
+      ),
     ];
   }
 
@@ -115,27 +126,28 @@ class ProductType extends ViewAbstract<ProductType>
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "name": "",
-        "unit": ProductTypeUnit.KG,
-        "purchasePrice": 0,
-        "sellPrice": 0,
-        "image": "",
-        "comments": "",
-        "availability": 0,
-        "grades": Grades(),
-        "products": List<Product>.empty(),
-        "products_count": 0
-      };
+    "name": "",
+    "unit": ProductTypeUnit.KG,
+    "purchasePrice": 0,
+    "sellPrice": 0,
+    "image": "",
+    "comments": "",
+    "availability": 0,
+    "grades": Grades(),
+    "products": List<Product>.empty(),
+    "products_count": 0,
+  };
 
   @override
   String getForeignKeyName() {
     return "ProductTypeID";
   }
 
+  //tODO api
   @override
-  String? getCustomAction() {
+  List<String>? getCustomAction() {
     if (requestAvailablity) {
-      return "available_product_type";
+      return ["available_product_type"];
     }
     return null;
   }
@@ -179,24 +191,30 @@ class ProductType extends ViewAbstract<ProductType>
       "sellPrice",
       "image",
       "comments",
-      "unit"
+      "unit",
     ];
   }
 
   @override
-  Map<String, bool> isFieldRequiredMap() =>
-      {"name": true, "sellPrice": true, "purchasePrice": true};
+  Map<String, bool> isFieldRequiredMap() => {
+    "name": true,
+    "sellPrice": true,
+    "purchasePrice": true,
+  };
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "name": TextInputType.text,
-        "sellPrice": TextInputType.number,
-        "purchasePrice": TextInputType.number,
-        "comments": TextInputType.multiline,
-      };
+    "name": TextInputType.text,
+    "sellPrice": TextInputType.number,
+    "purchasePrice": TextInputType.number,
+    "comments": TextInputType.multiline,
+  };
   @override
-  Map<String, int> getTextInputMaxLengthMap() =>
-      {"name": 50, "sellPrice": 8, "purchasePrice": 8};
+  Map<String, int> getTextInputMaxLengthMap() => {
+    "name": 50,
+    "sellPrice": 8,
+    "purchasePrice": 8,
+  };
   @override
   bool hasImageLoadButton() {
     return true;
@@ -216,28 +234,29 @@ class ProductType extends ViewAbstract<ProductType>
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {
-        "name": Icons.text_fields,
-        "sellPrice": Icons.price_change,
-        "purchasePrice": Icons.price_change,
-        "image": Icons.image,
-        "comments": Icons.notes,
-      };
+    "name": Icons.text_fields,
+    "sellPrice": Icons.price_change,
+    "purchasePrice": Icons.price_change,
+    "image": Icons.image,
+    "comments": Icons.notes,
+  };
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "name": AppLocalizations.of(context)!.name,
-        "sellPrice": AppLocalizations.of(context)!.sellPrice,
-        "purchasePrice": AppLocalizations.of(context)!.purchases_price,
-        "image": AppLocalizations.of(context)!.loadImage,
-        "comments": AppLocalizations.of(context)!.comments,
-      };
+    "name": AppLocalizations.of(context)!.name,
+    "sellPrice": AppLocalizations.of(context)!.sellPrice,
+    "purchasePrice": AppLocalizations.of(context)!.purchases_price,
+    "image": AppLocalizations.of(context)!.loadImage,
+    "comments": AppLocalizations.of(context)!.comments,
+  };
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() =>
-      {"name": true};
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {
+    "name": true,
+  };
 
   @override
   Map<String, double> getTextInputMaxValidateMap() => {};
@@ -267,8 +286,10 @@ class ProductType extends ViewAbstract<ProductType>
 
   @override
   ViewAbstract? getWebCategoryGridableIsMasterToList(BuildContext context) {
-    return Product()
-        .getSelfInstanceWithSimilarOption(context: context, obj: this);
+    return Product().getSelfInstanceWithSimilarOption(
+      context: context,
+      obj: this,
+    );
   }
 
   @override
@@ -297,9 +318,10 @@ class ProductType extends ViewAbstract<ProductType>
   }
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return RequestOptions().addSortBy("name", SortByType.ASC);
   }
 

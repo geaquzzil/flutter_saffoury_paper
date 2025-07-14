@@ -22,10 +22,7 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
   AuthUserLogin() : super(setPassword: false);
   @override
   List<String> getMainFields({BuildContext? context}) {
-    return [
-      "phone",
-      "password",
-    ];
+    return ["phone", "password"];
   }
 
   @override
@@ -35,9 +32,9 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "phone": AppLocalizations.of(context)!.user_name,
-        "password": AppLocalizations.of(context)!.password,
-      };
+    "phone": AppLocalizations.of(context)!.user_name,
+    "password": AppLocalizations.of(context)!.password,
+  };
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
@@ -45,15 +42,15 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
   Map<String, int> getTextInputMaxLengthMap() => {};
 
   @override
-  String? getCustomAction() {
-    return "login";
+  List<String>? getCustomAction() {
+    return ["login"];
   }
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {
-        "phone": Icons.radio_button_unchecked_sharp,
-        "password": Icons.password,
-      };
+    "phone": Icons.radio_button_unchecked_sharp,
+    "password": Icons.password,
+  };
 
   @override
   String getMainHeaderTextOnly(BuildContext context) => "";
@@ -69,15 +66,12 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "phone": TextInputType.text,
-        "password": TextInputType.none,
-      };
+    "phone": TextInputType.text,
+    "password": TextInputType.none,
+  };
 
   @override
-  Map<String, bool> isFieldRequiredMap() => {
-        "phone": true,
-        "password": true,
-      };
+  Map<String, bool> isFieldRequiredMap() => {"phone": true, "password": true};
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
@@ -89,9 +83,10 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
   }
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return RequestOptions().addSortBy("name", SortByType.ASC);
   }
 
@@ -212,28 +207,33 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "phone": 0,
-        "password": "",
-        "token": "",
-        "userlevels": PermissionLevelAbstract(),
-        "setting": Setting()
-      };
+    "phone": 0,
+    "password": "",
+    "token": "",
+    "userlevels": PermissionLevelAbstract(),
+    "setting": Setting(),
+  };
 
   void setRandomPassword() {
     const alphabet =
         "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890";
     Random r = Random();
-    password = String.fromCharCodes(Iterable.generate(
-        8, (_) => alphabet.codeUnitAt(r.nextInt(alphabet.length))));
+    password = String.fromCharCodes(
+      Iterable.generate(
+        8,
+        (_) => alphabet.codeUnitAt(r.nextInt(alphabet.length)),
+      ),
+    );
   }
 
   factory AuthUser.fromJson(Map<String, dynamic> data) =>
       _$AuthUserFromJson(data);
 
   Map<String, dynamic> toJson() => _$AuthUserToJson(this);
+
   @override
-  String? getCustomAction() {
-    return "login";
+  List<String>? getCustomAction() {
+    return ["login"];
   }
 
   @override
@@ -332,9 +332,10 @@ class AuthUser<T> extends ViewAbstract<AuthUser> {
   }
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return RequestOptions().addSortBy("phone", SortByType.ASC);
   }
 

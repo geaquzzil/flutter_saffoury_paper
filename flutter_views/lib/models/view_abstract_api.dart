@@ -34,9 +34,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   static Map<String, List<ViewAbstract?>>? _lastListReduseSizeViewAbstract;
 
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall});
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  });
   Map<ServerActions, RequestOptions> getRequestOptionMap() {
     return _requestOption;
   }
@@ -52,47 +53,58 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   final List<SearchCache> _searchCache = [];
 
   @Deprecated("dont use new self")
-  T getSelfInstanceWithSimilarOption(
-      {required BuildContext context,
-      ServerActions action = ServerActions.list,
-      ViewAbstract? obj,
-      RequestOptions? copyWith}) {
-    RequestOptions? o = obj?.getSimilarCustomParams(context: context) ??
+  T getSelfInstanceWithSimilarOption({
+    required BuildContext context,
+    ServerActions action = ServerActions.list,
+    ViewAbstract? obj,
+    RequestOptions? copyWith,
+  }) {
+    RequestOptions? o =
+        obj?.getSimilarCustomParams(context: context) ??
         this.getSimilarCustomParams(context: context);
 
     debugPrint(
-        "getSelfInstanceWithSimilarOption getSimilarCustomParams ====> ${o.getKey()}");
+      "getSelfInstanceWithSimilarOption getSimilarCustomParams ====> ${o.getKey()}",
+    );
 
     return setRequestOption(
-        action: action, option: o.copyWithObjcet(option: copyWith));
+      action: action,
+      option: o.copyWithObjcet(option: copyWith),
+    );
   }
 
   RequestOptions getSimilarCustomParams({required BuildContext context}) {
-    return RequestOptions()
-        .addSearchByField(castViewAbstract().getForeignKeyName(), "$iD");
+    return RequestOptions().addSearchByField(
+      castViewAbstract().getForeignKeyName(),
+      "$iD",
+    );
   }
 
-  T setRequestOption(
-      {ServerActions action = ServerActions.list,
-      required RequestOptions option}) {
+  T setRequestOption({
+    ServerActions action = ServerActions.list,
+    required RequestOptions option,
+  }) {
     _requestOption[action] = option;
     return this as T;
   }
 
-  T setRequestOptionMap(
-      {required Map<ServerActions, RequestOptions> requestOption}) {
+  T setRequestOptionMap({
+    required Map<ServerActions, RequestOptions> requestOption,
+  }) {
     _requestOption = requestOption;
     return this as T;
   }
 
-  SortFieldValue? getSortByInitialType(
-      {ServerActions action = ServerActions.list}) {
+  SortFieldValue? getSortByInitialType({
+    ServerActions action = ServerActions.list,
+  }) {
     return getRequestOption(action: action)?.sortBy;
   }
 
-  RequestOptions? getRequestOptionFromParamOrAbstract(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOptionFromParamOrAbstract({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     if (_requestOption.isNotEmpty) {
       // debugPrint(
       //     "_getRequestOptionFromParamOrAbstract is Not empty ${_requestOption.toString()}");
@@ -107,18 +119,21 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   dynamic getListSearchViewByTextInputList(String field, String fieldValue) {
     debugPrint(
-        "getListSearchViewByTextInputList list=>$getLastSearchViewByTextInputList");
+      "getListSearchViewByTextInputList list=>$getLastSearchViewByTextInputList",
+    );
     debugPrint(
-        "getListSearchViewByTextInputList value=>$fieldValue field $field");
-    return getLastSearchViewByTextInputList?.firstWhereOrNull((element) =>
-        (element as ViewAbstract)
-            .getFieldValue(field)
-            .toString()
-            .toLowerCase()
-            .contains(fieldValue.toLowerCase()));
+      "getListSearchViewByTextInputList value=>$fieldValue field $field",
+    );
+    return getLastSearchViewByTextInputList?.firstWhereOrNull(
+      (element) => (element as ViewAbstract)
+          .getFieldValue(field)
+          .toString()
+          .toLowerCase()
+          .contains(fieldValue.toLowerCase()),
+    );
   }
 
-  String? getCustomAction() {
+  List<String>? getCustomAction() {
     return null;
   }
 
@@ -144,19 +159,20 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   Uri _getUrl({int? iD, Map<String, dynamic>? params}) {
-    String? customAction = getCustomAction();
+    List<String>? customAction = getCustomAction();
     String? tableName = getTableNameApi();
     debugPrint("_getUrl params ===>$params");
     var url = Uri(
-        scheme: "http",
-        queryParameters: params,
-        host: URLS.getBaseUrl(),
-        pathSegments: [
-          ...URLS.getBasePath(),
-          if (customAction != null || tableName != null)
-            (customAction ?? tableName) ?? "",
-          if (iD != null) "$iD"
-        ]);
+      scheme: "http",
+      queryParameters: params,
+      host: URLS.getBaseUrl(),
+      pathSegments: [
+        ...URLS.getBasePath(),
+        ?tableName,
+        ...?customAction,
+        if (iD != null) "$iD",
+      ],
+    );
     return url;
   }
 
@@ -165,92 +181,96 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
     if (requiredList == null) return false;
     if (requiredList.isNotEmpty) {
-      List l = requiredList.where(
-        (element) {
-          int? count = getFieldValue("${element}_count");
-          List? list = getFieldValue(element);
-          if (count == null && list == null) return true;
-          debugPrint(
-              "checkListToRequest field:$element count:$count list:${list?.length}");
-          return count != list?.length;
-        },
-      ).toList();
+      List l = requiredList.where((element) {
+        int? count = getFieldValue("${element}_count");
+        List? list = getFieldValue(element);
+        if (count == null && list == null) return true;
+        debugPrint(
+          "checkListToRequest field:$element count:$count list:${list?.length}",
+        );
+        return count != list?.length;
+      }).toList();
       debugPrint("checkListToRequest list $l");
       return l.isEmpty ? false : l;
     }
     return false;
   }
 
-  Future<Response?> _getListResponse(
-      {required BuildContext context, RequestOptions? option}) async {
+  Future<Response?> _getListResponse({
+    required BuildContext context,
+    RequestOptions? option,
+  }) async {
     return getHttp().get(
-        _getUrl(
-            params: getRequestOptionFromParamOrAbstract(
-                    action: option?.getServerAction() ?? ServerActions.list,
-                    generatedOptionFromListCall: option)
+      _getUrl(
+        params:
+            getRequestOptionFromParamOrAbstract(
+                  action: option?.getServerAction() ?? ServerActions.list,
+                  generatedOptionFromListCall: option,
+                )
                 ?.copyWithObjcet(option: option)
                 .copyWith(requestLists: _checkListToRequest(ServerActions.list))
-                .getRequestParams()),
-        headers: await getHeaders(context));
+                .getRequestParams(),
+      ),
+      headers: await getHeaders(context),
+    );
   }
 
-  Future<Response?> _getViewResponse(
-      {required BuildContext context,
-      int? customID,
-      ServerActions? customAction}) async {
-    return await getHttp().get(
-        _getUrl(
-          iD: customID == null ? customID : (isNew() ? null : iD),
-          params: getRequestOptionFromParamOrAbstract(
-                  action: customAction ?? ServerActions.view)
-              ?.copyWith(
-                  requestLists:
-                      _checkListToRequest(customAction ?? ServerActions.view))
-              .getRequestParams(),
-        ),
-        headers: await getHeaders(context));
-  }
-
-  Future<Response?> _getEditResponse({
+  Future<Response?> _getViewResponse({
     required BuildContext context,
+    int? customID,
+    ServerActions? customAction,
   }) async {
+    return await getHttp().get(
+      _getUrl(
+        iD: customID == null ? customID : (isNew() ? null : iD),
+        params:
+            getRequestOptionFromParamOrAbstract(
+                  action: customAction ?? ServerActions.view,
+                )
+                ?.copyWith(
+                  requestLists: _checkListToRequest(
+                    customAction ?? ServerActions.view,
+                  ),
+                )
+                .getRequestParams(),
+      ),
+      headers: await getHeaders(context),
+    );
+  }
+
+  Future<Response?> _getEditResponse({required BuildContext context}) async {
     var headers = await getHeaders(context);
     return await getHttp().put(
-        _getUrl(
-          iD: iD,
-        ),
-        headers: headers,
-        body: toJsonString());
+      _getUrl(iD: iD),
+      headers: headers,
+      body: toJsonString(),
+    );
   }
 
-  Future<Response?> _getAddResponse({
-    required BuildContext context,
-  }) async {
+  Future<Response?> _getAddResponse({required BuildContext context}) async {
     var headers = await getHeaders(context);
-    return await getHttp()
-        .post(_getUrl(), headers: headers, body: toJsonString());
+    return await getHttp().post(
+      _getUrl(),
+      headers: headers,
+      body: toJsonString(),
+    );
   }
 
-  Future<Response?> _getDeleteResponse({
-    required BuildContext context,
-  }) async {
+  Future<Response?> _getDeleteResponse({required BuildContext context}) async {
     var headers = await getHeaders(context);
-    return await getHttp().delete(
-        _getUrl(
-          iD: iD,
-        ),
-        headers: headers);
+    return await getHttp().delete(_getUrl(iD: iD), headers: headers);
   }
 
   T onResponse200K(T oldValue) {
     return this as T;
   }
 
-  Future<List<T>?> listCall<T>(
-      {required BuildContext context,
-      RequestOptions? option,
-      OnResponseCallback? onResponse,
-      ServerActions? customAction}) async {
+  Future<List<T>?> listCall<T>({
+    required BuildContext context,
+    RequestOptions? option,
+    OnResponseCallback? onResponse,
+    ServerActions? customAction,
+  }) async {
     try {
       var response = await _getListResponse(context: context, option: option);
       if (response == null) return null;
@@ -266,7 +286,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         return [];
       } else {
         onCallCheckError(
-            onResponse: onResponse, response: response, context: context);
+          onResponse: onResponse,
+          response: response,
+          context: context,
+        );
         return null;
       }
     } on Exception catch (e, s) {
@@ -285,16 +308,19 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }) async {
     try {
       debugPrint("viewCall is Called");
-      dynamic isRequireList =
-          _checkListToRequest(customAction ?? ServerActions.view);
+      dynamic isRequireList = _checkListToRequest(
+        customAction ?? ServerActions.view,
+      );
       if (customID == null) {
         if (isRequireList == false && !isNew()) {
-          debugPrint("viewCall returning this");
+          debugPrint("viewCall $T returning this");
           return this as T;
         }
       }
-      var response =
-          await _getViewResponse(context: context, customID: customID);
+      var response = await _getViewResponse(
+        context: context,
+        customID: customID,
+      );
       // debugPrint("viewCall  resp ${response?.body}");
       if (response == null) return null;
       if (response.statusCode == 200) {
@@ -326,7 +352,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         return fromJsonViewAbstract(convert.jsonDecode(response.body));
       } else {
         onCallCheckError(
-            onResponse: onResponse, response: response, context: context);
+          onResponse: onResponse,
+          response: response,
+          context: context,
+        );
         return null;
       }
     } catch (e) {
@@ -346,7 +375,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         return fromJsonViewAbstract(convert.jsonDecode(response.body));
       } else {
         onCallCheckError(
-            onResponse: onResponse, response: response, context: context);
+          onResponse: onResponse,
+          response: response,
+          context: context,
+        );
         return null;
       }
     } catch (e) {
@@ -365,15 +397,17 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   // }
 
-  Future<List<String>> searchByFieldName(
-      {required String field,
-      required String searchQuery,
-      OnResponseCallback? onResponse,
-      required BuildContext context}) async {
+  Future<List<String>> searchByFieldName({
+    required String field,
+    required String searchQuery,
+    OnResponseCallback? onResponse,
+    required BuildContext context,
+  }) async {
     var response = await listCall(
-        onResponse: onResponse,
-        context: context,
-        option: RequestOptions(searchQuery: searchQuery));
+      onResponse: onResponse,
+      context: context,
+      option: RequestOptions(searchQuery: searchQuery),
+    );
     if (response != null) {
       return response
           .map((e) => (e as ViewAbstract).getFieldValue(field).toString())
@@ -388,7 +422,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
     } catch (e) {
       debugPrint(
-          "ViewAbstractApi ViewAbstractApi listCallFake ${e.toString()}");
+        "ViewAbstractApi ViewAbstractApi listCallFake ${e.toString()}",
+      );
     }
     return null;
   }
@@ -407,22 +442,26 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
-  void onCallCheckError(
-      {OnResponseCallback? onResponse,
-      dynamic response,
-      required BuildContext context}) {
+  void onCallCheckError({
+    OnResponseCallback? onResponse,
+    dynamic response,
+    required BuildContext context,
+  }) {
     if (response is Response) {
       if (onResponse == null) {
         debugPrint(
-            "ViewAbstractApi onCallCheckError====> called but no response callback registered");
+          "ViewAbstractApi onCallCheckError====> called but no response callback registered",
+        );
         return;
       }
       int statusCode = response.statusCode;
       if (statusCode >= 400 && statusCode <= 500) {
-        ServerResponse serverResponse =
-            ServerResponse.fromJson(convert.jsonDecode(response.body));
+        ServerResponse serverResponse = ServerResponse.fromJson(
+          convert.jsonDecode(response.body),
+        );
         debugPrint(
-            "ViewAbstractApi onCallCheckError====> called code:$statusCode  message : ${serverResponse.toJson()}");
+          "ViewAbstractApi onCallCheckError====> called code:$statusCode  message : ${serverResponse.toJson()}",
+        );
         if (statusCode == 401) {
           onResponse.onEmailOrPassword?.call();
           //Invalid user and password
@@ -434,8 +473,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         } else if (statusCode == 405 || statusCode == 406) {
           onResponse.onAuthRequired?.call(statusCode == 405);
         } else {
-          onResponse.onServerFailureResponse
-              ?.call((serverResponse.message ?? " unkown exceptions"));
+          onResponse.onServerFailureResponse?.call(
+            (serverResponse.message ?? " unkown exceptions"),
+          );
         }
       }
     }
@@ -452,47 +492,59 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return !hasErrorOnDelete();
   }
 
-  void onCallCheck200Response(
-      {required BuildContext context,
-      required List list,
-      required ServerActions action,
-      required OnResponseCallback onResponse}) {
+  void onCallCheck200Response({
+    required BuildContext context,
+    required List list,
+    required ServerActions action,
+    required OnResponseCallback onResponse,
+  }) {
     int faildCount = list.where((i) => i.hasErrorOnDelete()).length;
     bool allSuccess = faildCount == 0;
     bool allFaild = faildCount == list.length;
     //TODO translate
     if (allSuccess) {
-      onResponse.onServerResponse
-          ?.call(AppLocalizations.of(context)!.successDeleted);
+      onResponse.onServerResponse?.call(
+        AppLocalizations.of(context)!.successDeleted,
+      );
     } else if (allFaild) {
-      onResponse.onServerFailureResponse
-          ?.call("ALL ${AppLocalizations.of(context)!.errOperationFailed}");
+      onResponse.onServerFailureResponse?.call(
+        "ALL ${AppLocalizations.of(context)!.errOperationFailed}",
+      );
     } else {
       onResponse.onServerFailureResponse?.call(
-          "${AppLocalizations.of(context)!.errOperationFailed}: $faildCount");
+        "${AppLocalizations.of(context)!.errOperationFailed}: $faildCount",
+      );
     }
   }
 
-  void deleteCall(BuildContext context,
-      {required OnResponseCallback onResponse}) async {
+  void deleteCall(
+    BuildContext context, {
+    required OnResponseCallback onResponse,
+  }) async {
     debugPrint("ViewAbstractApi deleteCall iD=> $iD ");
     try {
       var response = await _getDeleteResponse(context: context);
       if (response == null) return null;
       if (response.statusCode == 200) {
-        ServerResponse serverResponse =
-            ServerResponse.fromJson(convert.jsonDecode(response.body));
+        ServerResponse serverResponse = ServerResponse.fromJson(
+          convert.jsonDecode(response.body),
+        );
 
         if (serverResponse.serverStatus == false) {
-          onResponse.onServerFailureResponse
-              ?.call("ALL ${AppLocalizations.of(context)!.errOperationFailed}");
+          onResponse.onServerFailureResponse?.call(
+            "ALL ${AppLocalizations.of(context)!.errOperationFailed}",
+          );
         } else {
-          onResponse.onServerResponse
-              ?.call(AppLocalizations.of(context)!.successDeleted);
+          onResponse.onServerResponse?.call(
+            AppLocalizations.of(context)!.successDeleted,
+          );
         }
       } else {
         onCallCheckError(
-            onResponse: onResponse, response: response, context: context);
+          onResponse: onResponse,
+          response: response,
+          context: context,
+        );
       }
     } catch (e) {
       onResponse.onFlutterClientFailure?.call(e);
@@ -508,16 +560,18 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return jsonEncode(list.map((i) => i.toJson()).toList()).toString();
   }
 
-  Future<List<T>> listCallNotNull(
-      {required BuildContext context,
-      RequestOptions? option,
-      OnResponseCallback? onResponse,
-      ServerActions? customAction}) async {
+  Future<List<T>> listCallNotNull({
+    required BuildContext context,
+    RequestOptions? option,
+    OnResponseCallback? onResponse,
+    ServerActions? customAction,
+  }) async {
     var response = await listCall(
-        context: context,
-        customAction: customAction,
-        onResponse: onResponse,
-        option: option);
+      context: context,
+      customAction: customAction,
+      onResponse: onResponse,
+      option: option,
+    );
     if (response == null) return [];
     return response.cast();
   }
@@ -532,10 +586,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   HttpWithMiddleware getHttp() {
     return HttpWithMiddleware.build(
-        requestTimeout: const Duration(seconds: 60),
-        middlewares: [
-          HttpLogger(logLevel: LogLevel.HEADERS),
-        ]);
+      requestTimeout: const Duration(seconds: 60),
+      middlewares: [HttpLogger(logLevel: LogLevel.HEADERS)],
+    );
   }
 
   void setLastSearchViewAbstractByTextInputList(List<T>? lastList) {
@@ -547,7 +600,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   void setListReduseSizeViewAbstract(
-      String field, List<ViewAbstract> lastList) {
+    String field,
+    List<ViewAbstract> lastList,
+  ) {
     _lastListReduseSizeViewAbstract ??= {};
     _lastListReduseSizeViewAbstract!["$T$field"] = lastList;
   }
@@ -562,14 +617,16 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   Map<String, dynamic> toJsonViewAbstract();
 
   Map<String, dynamic> toJsonViewAbstractForAutoCompleteField(
-      BuildContext context) {
+    BuildContext context,
+  ) {
     Map<String, dynamic> map = toJsonViewAbstract();
 
     for (var element in map.entries) {
       if (element.value == null) continue;
       if (isViewAbstract(element.key)) {
-        map[element.key] = getMirrorNewInstanceViewAbstract(element.key)
-            .fromJsonViewAbstract(element.value);
+        map[element.key] = getMirrorNewInstanceViewAbstract(
+          element.key,
+        ).fromJsonViewAbstract(element.value);
         continue;
       }
       if (element.value is List) {
@@ -579,8 +636,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         continue;
       }
 
-      FormFieldControllerType type =
-          castViewAbstract().getInputType(element.key);
+      FormFieldControllerType type = castViewAbstract().getInputType(
+        element.key,
+      );
       if (type == FormFieldControllerType.COLOR_PICKER) {
         map[element.key] = (element.value as String).fromHex();
       } else if (type == FormFieldControllerType.DATE_TIME) {
@@ -622,7 +680,8 @@ class ResultsParser<T> {
   Future<void> _decodeAndParseJson(SendPort p) async {
     Iterable l = convert.jsonDecode(encodedJson);
     List<T> t = List<T>.from(
-        l.map((model) => viewAbstract.fromJsonViewAbstract(model)));
+      l.map((model) => viewAbstract.fromJsonViewAbstract(model)),
+    );
     Isolate.exit(p, t);
   }
 }
@@ -631,12 +690,12 @@ class ResultsParser<T> {
 class SearchCache {
   String query;
   List? response;
-  SearchCache({
-    required this.query,
-    this.response,
-  });
+  SearchCache({required this.query, this.response});
   static List getResultAndAdd(
-      String query, List response, List<SearchCache> list) {
+    String query,
+    List response,
+    List<SearchCache> list,
+  ) {
     SearchCache? search = getResult(query, list);
     if (search == null) {
       list.add(SearchCache(query: query, response: response));

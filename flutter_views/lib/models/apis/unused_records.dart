@@ -26,9 +26,10 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
   UnusedRecords.init(T this.viewAbstract);
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return null;
   }
 
@@ -38,7 +39,10 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
   }
 
   @override
-  String? getCustomAction() => "${viewAbstract!.getTableNameApi()}/not_used";
+  List<String>? getCustomAction() {
+    return [?viewAbstract?.getTableNameApi(), "not_used"];
+  }
+
   @override
   String? getTableNameApi() => null;
 
@@ -73,16 +77,19 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
 
   @override
   Widget? getCustomViewListResponseWidget(
-      BuildContext context, List<UnusedRecords> item) {
+    BuildContext context,
+    List<UnusedRecords> item,
+  ) {
     return null;
   }
 
   @override
   Widget? getCustomViewSingleResponseWidget(BuildContext context) {
     return CardBackgroundWithTitle(
-        title: AppLocalizations.of(context)!.unUsed,
-        leading: Icons.info_outline,
-        child: getDecription(context, this));
+      title: AppLocalizations.of(context)!.unUsed,
+      leading: Icons.info_outline,
+      child: getDecription(context, this),
+    );
   }
 
   Widget? getLeading(BuildContext context) {
@@ -112,9 +119,10 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
           // style: TextStyle(fontWeight: FontWeight.bold),
           children: <TextSpan>[
             TextSpan(
-                text:
-                    " ${item.list.length} ${AppLocalizations.of(context)!.unUsed}",
-                style: const TextStyle(fontWeight: FontWeight.bold)),
+              text:
+                  " ${item.list.length} ${AppLocalizations.of(context)!.unUsed}",
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
             // TextSpan(text: ' world!'),
           ],
         ),
@@ -131,7 +139,9 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
 
   @override
   Widget? getCustomViewTitleWidget(
-      BuildContext context, ValueNotifier valueNotifier) {
+    BuildContext context,
+    ValueNotifier valueNotifier,
+  ) {
     return null;
   }
 
@@ -143,7 +153,8 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
 
   @override
   Widget? getCustomViewOnResponseAddWidget(
-      UnusedRecords<ViewAbstract> response) {
+    UnusedRecords<ViewAbstract> response,
+  ) {
     // TODO: implement getCustomViewOnResponseAddWidget
     throw UnimplementedError();
   }

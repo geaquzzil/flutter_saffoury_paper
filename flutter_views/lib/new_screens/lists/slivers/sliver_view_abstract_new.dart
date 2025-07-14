@@ -5,26 +5,27 @@ import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_mas
 class SliverApiMixinViewAbstractWidget
     extends SliverApiMixinWithStaticStateful {
   /// [toListObject] could be String [tableName] or [ViewAbstract]
-  SliverApiMixinViewAbstractWidget(
-      {super.key,
-      super.scrollController,
-      super.scrollDirection,
-      super.hasCustomWidgetBuilder,
-      super.isSliver,
-      super.requiresFullFetsh,
-      super.enableSelection,
-      super.onClickForCard,
-      super.isSelectForCard,
-      // super.
-      super.isGridView = false,
-      super.hasCustomCardBuilder,
-      super.customRequestOption,
-      super.hasCustomSeperater,
-      required super.toListObject,
-      super.copyWithRequestOption,
-      super.filterData,
-      super.valueListProviderNotifier,
-      super.searchString});
+  SliverApiMixinViewAbstractWidget({
+    super.key,
+    super.scrollController,
+    super.scrollDirection,
+    super.hasCustomWidgetBuilder,
+    super.isSliver,
+    super.requiresFullFetsh,
+    super.enableSelection,
+    super.onClickForCard,
+    super.isSelectForCard,
+    // super.
+    super.isGridView = false,
+    super.hasCustomCardBuilder,
+    super.customRequestOption,
+    super.hasCustomSeperater,
+    required super.toListObject,
+    super.copyWithRequestOption,
+    super.filterData,
+    super.valueListProviderNotifier,
+    super.searchString,
+  });
 
   @override
   State<SliverApiMixinViewAbstractWidget> createState() =>
@@ -36,8 +37,11 @@ class _SliverApiMixinAutoRestState
     with SliverApiWithStaticMixin {
   @override
   String getListProviderKey() {
-    String key = (widget.toListObject as ViewAbstract).getListableKey();
-    key = key +
+    String key = (widget.toListObject as ViewAbstract).getListableKey(
+      type: getToListObjectType(),
+    );
+    key =
+        key +
         (getSearchString ?? "") +
         (getFilterData.toString()) +
         (getCopyWithCustomRequestOptions?.getKey() ?? "");

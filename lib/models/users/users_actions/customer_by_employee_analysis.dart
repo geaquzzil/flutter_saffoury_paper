@@ -68,24 +68,30 @@ class CustomerByEmployeeAnanlysis
   @override
   IconData getMainIconData() => Icons.analytics;
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     // TODO: implement getRequestOption
     throw UnimplementedError();
   }
 
   @override
   String? getTableNameApi() => null;
+  
   @override
-  String? getCustomAction() => "view_customer_statment_by_employee";
+  List<String>? getCustomAction() {
+    return ["view_customer_statment_by_employee"];
+  }
 
   @override
   Map<String, String> get getCustomMap => {
-        "<iD>": iD.toString(),
-        "date": jsonEncode(dateObject?.toJson() ??
-            DateObject(from: "2022-09-01", to: "2022-11-01").toJson()),
-      };
+    "<iD>": iD.toString(),
+    "date": jsonEncode(
+      dateObject?.toJson() ??
+          DateObject(from: "2022-09-01", to: "2022-11-01").toJson(),
+    ),
+  };
 
   @override
   double? getCustomViewHeight() => null;
@@ -97,12 +103,13 @@ class CustomerByEmployeeAnanlysis
   ResponseType getCustomViewResponseType() => ResponseType.SINGLE;
   @override
   ResponseType getCustomStandAloneResponseType() => ResponseType.SINGLE;
-  Widget wrapContainer(
-      {required String title,
-      required String description,
-      Color? color,
-      String? footer,
-      String? footerRight}) {
+  Widget wrapContainer({
+    required String title,
+    required String description,
+    Color? color,
+    String? footer,
+    String? footerRight,
+  }) {
     return Container(
       // color: color,
       child: ChartCardItemCustom(
@@ -126,12 +133,16 @@ class CustomerByEmployeeAnanlysis
           yValueMapper: (item, n) => item.total,
         ),
         StorageInfoCardCustom(
-            title: AppLocalizations.of(context)!.total,
-            description:
-                GrowthRate.getTotal(ordersAnalysisGeneral).toCurrencyFormat(),
-            trailing:
-                GrowthRate.getGrowthRateText(context, ordersAnalysisGeneral),
-            svgSrc: Icons.monitor_weight),
+          title: AppLocalizations.of(context)!.total,
+          description: GrowthRate.getTotal(
+            ordersAnalysisGeneral,
+          ).toCurrencyFormat(),
+          trailing: GrowthRate.getGrowthRateText(
+            context,
+            ordersAnalysisGeneral,
+          ),
+          svgSrc: Icons.monitor_weight,
+        ),
         // ExpansionTile(
         //   initiallyExpanded: true,
         //   title: TitleText(
@@ -253,44 +264,49 @@ class CustomerByEmployeeAnanlysis
 
   @override
   void onCustomViewCardClicked(
-      BuildContext context, CustomerByEmployeeAnanlysis istem) {
+    BuildContext context,
+    CustomerByEmployeeAnanlysis istem,
+  ) {
     // TODO: implement onCustomViewCardClicked
   }
   @override
   Map<String, dynamic> toJsonViewAbstract() => {};
 
   @override
-  CustomerByEmployeeAnanlysis fromJsonViewAbstract(Map<String, dynamic> json) =>
-      CustomerByEmployeeAnanlysis()
-        ..customers = (json['customers'] as List<dynamic>?)
-            ?.map((e) => Customer.fromJson(e as Map<String, dynamic>))
+  CustomerByEmployeeAnanlysis fromJsonViewAbstract(
+    Map<String, dynamic> json,
+  ) => CustomerByEmployeeAnanlysis()
+    ..customers = (json['customers'] as List<dynamic>?)
+        ?.map((e) => Customer.fromJson(e as Map<String, dynamic>))
+        .toList()
+    ..creditsAnalysisGeneral =
+        (json['creditsAnalysisGeneral'] as List<dynamic>?)
+            ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
             .toList()
-        ..creditsAnalysisGeneral =
-            (json['creditsAnalysisGeneral'] as List<dynamic>?)
-                ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
-                .toList()
-        ..debitsAnalysisGeneral =
-            (json['debitsAnalysisGeneral'] as List<dynamic>?)
-                ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
-                .toList()
-        ..purchasesAnalysisGeneral =
-            (json['purchasesAnalysisGeneral'] as List<dynamic>?)
-                ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
-                .toList()
-        ..ordersAnalysisGeneral =
-            (json['ordersAnalysisGeneral'] as List<dynamic>?)
-                ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
-                .toList();
+    ..debitsAnalysisGeneral = (json['debitsAnalysisGeneral'] as List<dynamic>?)
+        ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+        .toList()
+    ..purchasesAnalysisGeneral =
+        (json['purchasesAnalysisGeneral'] as List<dynamic>?)
+            ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+            .toList()
+    ..ordersAnalysisGeneral = (json['ordersAnalysisGeneral'] as List<dynamic>?)
+        ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
+        .toList();
 
   @override
   Widget? getCustomViewListResponseWidget(
-      BuildContext context, List<CustomerByEmployeeAnanlysis> item) {
+    BuildContext context,
+    List<CustomerByEmployeeAnanlysis> item,
+  ) {
     return null;
   }
 
   @override
   Widget? getCustomViewTitleWidget(
-      BuildContext context, ValueNotifier valueNotifier) {
+    BuildContext context,
+    ValueNotifier valueNotifier,
+  ) {
     return null;
   }
 
@@ -307,7 +323,8 @@ class CustomerByEmployeeAnanlysis
 
   @override
   Widget? getCustomViewOnResponseAddWidget(
-      CustomerByEmployeeAnanlysis response) {
+    CustomerByEmployeeAnanlysis response,
+  ) {
     // TODO: implement getCustomViewOnResponseAddWidget
     throw UnimplementedError();
   }

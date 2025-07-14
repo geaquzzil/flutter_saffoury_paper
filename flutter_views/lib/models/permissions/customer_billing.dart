@@ -67,7 +67,7 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
   @override
   Map<int, List<String>> getMainFieldsHorizontalGroups(BuildContext context) =>
       {
-        0: ["year", "month", "day"]
+        0: ["year", "month", "day"],
       };
 
   @override
@@ -77,46 +77,46 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "name": AppLocalizations.of(context)!.name,
-        "phone": AppLocalizations.of(context)!.phone_number,
-        "password": AppLocalizations.of(context)!.password,
-        "birthday": AppLocalizations.of(context)!.date,
-        "email": AppLocalizations.of(context)!.email,
-        "city": AppLocalizations.of(context)!.city,
-        "address": AppLocalizations.of(context)!.address1,
-        "comments": AppLocalizations.of(context)!.comments,
-        "day": AppLocalizations.of(context)!.day,
-        "month": AppLocalizations.of(context)!.month,
-        "year": AppLocalizations.of(context)!.year
-      };
+    "name": AppLocalizations.of(context)!.name,
+    "phone": AppLocalizations.of(context)!.phone_number,
+    "password": AppLocalizations.of(context)!.password,
+    "birthday": AppLocalizations.of(context)!.date,
+    "email": AppLocalizations.of(context)!.email,
+    "city": AppLocalizations.of(context)!.city,
+    "address": AppLocalizations.of(context)!.address1,
+    "comments": AppLocalizations.of(context)!.comments,
+    "day": AppLocalizations.of(context)!.day,
+    "month": AppLocalizations.of(context)!.month,
+    "year": AppLocalizations.of(context)!.year,
+  };
 
-//todo ON VALDATION NOT APPLIED TO FIELD WITH AUTO COMPLETE
+  //todo ON VALDATION NOT APPLIED TO FIELD WITH AUTO COMPLETE
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
   @override
   Map<String, int> getTextInputMaxLengthMap() => {
-        "name": 100,
-        "phone": 10,
-        "password": 10,
-        "email": 50,
-        "city": 20,
-      };
+    "name": 100,
+    "phone": 10,
+    "password": 10,
+    "email": 50,
+    "city": 20,
+  };
 
   @override
-  String? getCustomAction() {
+  List<String>? getCustomAction() {
     return null;
   }
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {
-        "name": getMainIconData(),
-        "phone": Icons.phone,
-        "birthday": Icons.date_range,
-        "password": Icons.password,
-        "email": Icons.email,
-        "city": Icons.location_city,
-        "address": Icons.map,
-      };
+    "name": getMainIconData(),
+    "phone": Icons.phone,
+    "birthday": Icons.date_range,
+    "password": Icons.password,
+    "email": Icons.email,
+    "city": Icons.location_city,
+    "address": Icons.map,
+  };
 
   @override
   String getMainHeaderTextOnly(BuildContext context) => name ?? "";
@@ -131,7 +131,8 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
   Map<String, double> getTextInputMinValidateMap() => {};
   @override
   Map<String, List> getTextInputIsAutoCompleteCustomListMap(
-      BuildContext context) {
+    BuildContext context,
+  ) {
     List<String> list = List.empty(growable: true);
     for (int i = 1900; i <= DateTime.now().year; i++) {
       list.add("$i");
@@ -139,13 +140,17 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
     return {
       "year": list.reversed.toList(),
       "month": List.generate(11, (index) => "${index + 1}"),
-      "day": daysInMonth
+      "day": daysInMonth,
     };
   }
 
   @override
-  void onDropdownChanged(BuildContext context, String field, value,
-      {GlobalKey<FormBuilderState>? formKey}) {
+  void onDropdownChanged(
+    BuildContext context,
+    String field,
+    value, {
+    GlobalKey<FormBuilderState>? formKey,
+  }) {
     super.onDropdownChanged(context, field, value);
     if (field == "month") {
       month = value.toString();
@@ -158,41 +163,44 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
     } else {
       setFieldValue(field, value);
     }
-    birthday = DateTime(int.tryParse(year) ?? 0, int.tryParse(month) ?? 0,
-            int.tryParse(day) ?? 0)
-        .toDateTimeStringOnlyDate();
+    birthday = DateTime(
+      int.tryParse(year) ?? 0,
+      int.tryParse(month) ?? 0,
+      int.tryParse(day) ?? 0,
+    ).toDateTimeStringOnlyDate();
     debugPrint("birthday now is $birthday");
   }
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "name": TextInputType.name,
-        "phone": TextInputType.phone,
-        "birthday": TextInputType.datetime,
-        "password": TextInputType.visiblePassword,
-        "email": TextInputType.emailAddress,
-        "address": TextInputType.streetAddress,
-        "city": TextInputType.text,
-        "comments": TextInputType.multiline
-      };
+    "name": TextInputType.name,
+    "phone": TextInputType.phone,
+    "birthday": TextInputType.datetime,
+    "password": TextInputType.visiblePassword,
+    "email": TextInputType.emailAddress,
+    "address": TextInputType.streetAddress,
+    "city": TextInputType.text,
+    "comments": TextInputType.multiline,
+  };
 
   @override
   Map<String, bool> isFieldRequiredMap() => {
-        "name": true,
-        "phone": true,
-        "password": true,
-        "address": true,
-        "city": true,
-        "email": true,
-        "month": true,
-        "year": true,
-        "day": true,
-      };
+    "name": true,
+    "phone": true,
+    "password": true,
+    "address": true,
+    "city": true,
+    "email": true,
+    "month": true,
+    "year": true,
+    "day": true,
+  };
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return RequestOptions().addSortBy("name", SortByType.ASC);
   }
 
@@ -217,22 +225,21 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      super.getMirrorFieldsMapNewInstance()
-        ..addAll({
-          "name": "",
-          "email": "",
-          "token": "",
-          "month": "1",
-          "year": "1900",
-          "day": "1",
-          "activated": 0,
-          "birthday": "",
-          "city": "",
-          "address": "",
-          "profile": "",
-          "comments": "",
-          "cash": 0
-        });
+      super.getMirrorFieldsMapNewInstance()..addAll({
+        "name": "",
+        "email": "",
+        "token": "",
+        "month": "1",
+        "year": "1900",
+        "day": "1",
+        "activated": 0,
+        "birthday": "",
+        "city": "",
+        "address": "",
+        "profile": "",
+        "comments": "",
+        "cash": 0,
+      });
 
   @override
   IconData getMainIconData() {

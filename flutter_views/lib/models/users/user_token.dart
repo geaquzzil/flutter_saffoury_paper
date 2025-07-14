@@ -18,8 +18,8 @@ class UserToken extends ViewAbstractApi<UserToken> {
   UserToken() : super();
 
   @override
-  String? getCustomAction() {
-    return "${auth!.getTableNameApi()}/token";
+  List<String>? getCustomAction() {
+    return [?auth?.getTableNameApi(), "token"];
   }
 
   @override
@@ -74,9 +74,10 @@ class UserToken extends ViewAbstractApi<UserToken> {
   Map<String, dynamic> toJsonViewAbstract() => toMap();
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return null;
   }
 

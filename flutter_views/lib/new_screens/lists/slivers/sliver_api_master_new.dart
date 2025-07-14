@@ -26,7 +26,7 @@ import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:tuple/tuple.dart';
 
-enum _ObjectType {
+enum SliverMixinObjectType {
   AUTO_REST,
   VIEW_ABSTRACT,
   STRING,
@@ -93,7 +93,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
 mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     on State<T> {
   late Object _toListObject;
-  late _ObjectType _toListObjectType;
+  late SliverMixinObjectType _toListObjectType;
   ViewAbstract? _setParentForChildCardItem;
   String? _searchString;
   RequestOptions? _customRequestOptions;
@@ -175,7 +175,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   List? getToListObjectCastList() {
-    if (_toListObjectType != _ObjectType.CUSTOM_LIST) return null;
+    if (_toListObjectType != SliverMixinObjectType.CUSTOM_LIST) return null;
     return _toListObject as List;
   }
 
@@ -188,31 +188,33 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   AutoRest? getToListObjectCastAutoRestNullIfNot() {
-    if (_toListObjectType != _ObjectType.AUTO_REST) return null;
+    if (_toListObjectType != SliverMixinObjectType.AUTO_REST) return null;
     return _toListObject as AutoRest;
   }
 
   ViewAbstract? getToListObjectCastViewAbstractNullIfNot() {
-    if (_toListObjectType == _ObjectType.VIEW_ABSTRACT ||
-        _toListObjectType == _ObjectType.STRING) {
+    if (_toListObjectType == SliverMixinObjectType.VIEW_ABSTRACT ||
+        _toListObjectType == SliverMixinObjectType.STRING) {
       return _toListObject as ViewAbstract;
     }
     return null;
   }
 
-  _ObjectType getToListObjectType() {
+  SliverMixinObjectType getToListObjectType() {
     if (widget.isCardRequestApi) {
-      return _ObjectType.FROM_CARD_API;
+      return SliverMixinObjectType.FROM_CARD_API;
     } else if (widget.toListObject is String) {
-      return _ObjectType.STRING;
+      return SliverMixinObjectType.STRING;
+    } else if (widget.toListObject is CustomViewHorizontalListResponse) {
+      return SliverMixinObjectType.CUSTOM_VIEW_RESPONSE;
     } else if (widget.toListObject is ViewAbstract) {
-      return _ObjectType.VIEW_ABSTRACT;
+      return SliverMixinObjectType.VIEW_ABSTRACT;
     } else if (widget.toListObject is List) {
-      return _ObjectType.CUSTOM_LIST;
+      return SliverMixinObjectType.CUSTOM_LIST;
     } else if (widget.toListObject is AutoRest) {
-      return _ObjectType.AUTO_REST;
+      return SliverMixinObjectType.AUTO_REST;
     } else {
-      return _ObjectType.CUSTOM_VIEW_RESPONSE;
+      return SliverMixinObjectType.CUSTOM_VIEW_RESPONSE;
 
       ///this is a  CustomViewHorizontalListResponse
     }
@@ -222,7 +224,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     ///TODO check for overriding setttings
   }
   Object checkToInitToListObject() {
-    if (_toListObjectType == _ObjectType.STRING) {
+    if (_toListObjectType == SliverMixinObjectType.STRING) {
       return context.read<AuthProvider<AuthUser>>().getNewInstance(
         widget.toListObject as String,
       )!;
@@ -272,7 +274,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     if (valueNotifierGrid.value != widget.isGridView) {
       valueNotifierGrid.value = widget.isGridView;
     }
-    _ObjectType lastUpdated = getToListObjectType();
+    SliverMixinObjectType lastUpdated = getToListObjectType();
     if (_filterData != widget.filterData) {
       _filterData = widget.filterData;
     }
@@ -287,12 +289,12 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     }
     bool shouldFetsh = false;
     if (_lastKey != getListProviderKey()) {
-      shouldFetsh = lastUpdated != _ObjectType.CUSTOM_LIST;
+      shouldFetsh = lastUpdated != SliverMixinObjectType.CUSTOM_LIST;
       _lastKey = getListProviderKey();
 
       _toListObject = widget.toListObject;
       _toListObjectType = lastUpdated;
-      if (lastUpdated == _ObjectType.CUSTOM_LIST) {
+      if (lastUpdated == SliverMixinObjectType.CUSTOM_LIST) {
         List? customList = getToListObjectCastList();
         if (customList != null) {
           listProvider.initCustomList(_lastKey, customList.cast());
@@ -357,15 +359,30 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         //   _isScrollable = _scrollController.position.maxScrollExtent > 0;
         //   debugPrint("_onScrollable $_isScrollable");
         // }
-        return widget.hasCustomWidgetBuilder != null
-            ? widget.hasCustomWidgetBuilder!.call(getList())
-            : getListValueListenableIsGrid(count: count, isLoading: isLoading);
+        return getAutoDetermineWidget(count, isLoading);
       },
       selector: (p0, p1) {
         String key = getListProviderKey();
         return Tuple3(p1.isLoading(key), p1.getCount(key), p1.isHasError(key));
       },
     );
+  }
+
+  Widget getAutoDetermineWidget(int count, bool isLoading) {
+    if (getToListObjectType() == SliverMixinObjectType.CUSTOM_VIEW_RESPONSE) {
+      if (isLoading) {
+        Widget w = EmptyWidget.loading(expand: true);
+        return widget.isSliver ? SliverFillRemaining(child: w) : w;
+      } else {
+        Widget w =
+            getList()[0].getCustomViewSingleResponseWidget(context) ??
+            SizedBox();
+        return widget.isSliver ? SliverFillRemaining(child: w) : w;
+      }
+    }
+    return widget.hasCustomWidgetBuilder != null
+        ? widget.hasCustomWidgetBuilder!.call(getList())
+        : getListValueListenableIsGrid(count: count, isLoading: isLoading);
   }
 
   ValueListenableBuilder<bool> getListValueListenableIsGrid({
@@ -420,7 +437,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     va.setParent(_setParentForChildCardItem);
     Widget w;
     debugPrint("SliverApiWithStaticMixin $_toListObjectType");
-    if (_toListObjectType == _ObjectType.FROM_CARD_API) {
+    if (_toListObjectType == SliverMixinObjectType.FROM_CARD_API) {
       debugPrint("SliverApiWithStaticMixin is From card api");
       w = _selectMood
           ? ListCardItemSelected(
@@ -764,8 +781,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   bool canFetshList() {
-    if (_toListObjectType == _ObjectType.FROM_CARD_API ||
-        _toListObjectType == _ObjectType.CUSTOM_LIST) {
+    if (_toListObjectType == SliverMixinObjectType.FROM_CARD_API ||
+        _toListObjectType == SliverMixinObjectType.CUSTOM_LIST) {
       return false;
     }
     return true;
@@ -774,7 +791,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   void fetshList({bool notifyNotSearchable = false}) {
     if (!canFetshList()) return;
     String customKey = getListProviderKey();
-    if (_toListObjectType == _ObjectType.CUSTOM_VIEW_RESPONSE) {
+    debugPrint("fetshList object type $_toListObjectType");
+    if (_toListObjectType == SliverMixinObjectType.CUSTOM_VIEW_RESPONSE) {
       CustomViewHorizontalListResponse c =
           getToListObjectHorizontalListResponse();
       switch (c.getCustomViewResponseType()) {
@@ -919,8 +937,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   void addAnimatedListItem(ViewAbstract view) {
-    _ObjectType type = getToListObjectType();
-    if (type == _ObjectType.FROM_CARD_API) {
+    SliverMixinObjectType type = getToListObjectType();
+    if (type == SliverMixinObjectType.FROM_CARD_API) {
       listProvider.addCardToRequest(_lastKey, view);
     } else {
       listProvider.addCardToRequest(_lastKey, view);

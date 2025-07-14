@@ -77,8 +77,11 @@ class TransferAccount
   @override
   String? getTableNameApi() => null;
 
+  //todo api
   @override
-  String? getCustomAction() => "action_transfer_account";
+  List<String>? getCustomAction() {
+    return ["action_transfer_account"];
+  }
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
@@ -107,9 +110,10 @@ class TransferAccount
   }
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     // TODO: implement getRequestOption
     throw UnimplementedError();
   }

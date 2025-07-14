@@ -1877,12 +1877,21 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   }
 
   Widget getScaffoldBodyForPane({required bool firstPane}) {
+    List<TabControllerHelper>? tabs = getPaneTabControllerHelper(
+      firstPane: firstPane,
+    );
+    if (tabs != null) {
+      tabs = [
+        TabControllerHelper(AppLocalizations.of(context)!.home, isMain: true),
+        ...tabs,
+      ];
+    }
     return SliverCustomScrollViewDraggable(
       onRefresh: getPaneIsRefreshIndicator(firstPane: firstPane),
       physics: const AlwaysScrollableScrollPhysics(),
       forceHeaderToCollapse: widget.forceHeaderToCollapse,
       scrollKey: getScrollKey(firstPane: firstPane),
-      tabs: getPaneTabControllerHelper(firstPane: firstPane),
+      tabs: tabs,
       actions: getAppbarActions(firstPane: firstPane),
       appBarLeading: getAppbarLeading(firstPane: firstPane),
       title: getAppbarTitle(firstPane: firstPane),
@@ -1893,13 +1902,28 @@ abstract class BasePageState<T extends BasePage> extends State<T>
         return SliverCustomScrollViewDraggableHelper(
           widget: beforeGetPaneWidget(
             firstPane: firstPane,
-            tab: tab,
+            tab: tab == null
+                ? null
+                : tab.isMain
+                ? null
+                : tab,
             controler: scrollController,
           )!,
-          headerWidget: getPaneDraggableHeader(firstPane: firstPane, tab: tab),
+          headerWidget: getPaneDraggableHeader(
+            firstPane: firstPane,
+            tab: tab == null
+                ? null
+                : tab.isMain
+                ? null
+                : tab,
+          ),
           expandHeaderWidget: getPaneDraggableExpandedHeader(
             firstPane: firstPane,
-            tab: tab,
+            tab: tab == null
+                ? null
+                : tab.isMain
+                ? null
+                : tab,
           ),
         );
       },

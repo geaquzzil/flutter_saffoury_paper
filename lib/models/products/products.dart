@@ -1339,7 +1339,7 @@ class Product extends ViewAbstract<Product>
     return [
       if (action == ServerActions.view)
         ProductTopWidget(product: this, valueNotifier: onClick),
-      if (parents!=null)
+      if (parents != null)
         FixedTimeline.tileBuilder(
           theme: TimelineTheme.of(context).copyWith(
             connectorTheme: ConnectorThemeData(
@@ -1396,8 +1396,9 @@ class Product extends ViewAbstract<Product>
           ),
           isResponsiveIsSliver: true,
           // extras: ,
-          widget: ListHorizontalCustomViewApiAutoRestWidget(
-            autoRest: ProductMovments.init(iD),
+          widget: SliverApiMixinViewAbstractWidget(
+            toListObject: ProductMovments.init(iD),
+            isSliver: true,
           ),
         ),
       // TabControllerHelper(

@@ -507,7 +507,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
         tryToSetToSecoundPane: false)) {
       context.goNamed(printRouteName,
           pathParameters: {
-            "tableName": getTableNameApi() ?? getCustomAction() ?? "-",
+            "tableName": getTableNameApi() ?? getCustomAction()?.last ?? "-",
             "type": typeString
           },
           queryParameters: {

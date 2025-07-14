@@ -30,8 +30,12 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   Map<String, dynamic>? customAction;
   ChartRecordAnalysis() : super();
 
-  ChartRecordAnalysis.init(this.viewAbstract, DateObject this.date,
-      {this.enteryInteval = EnteryInteval.monthy, this.customAction});
+  ChartRecordAnalysis.init(
+    this.viewAbstract,
+    DateObject this.date, {
+    this.enteryInteval = EnteryInteval.monthy,
+    this.customAction,
+  });
   @override
   ChartRecordAnalysis getSelfNewInstance() {
     return ChartRecordAnalysis();
@@ -49,9 +53,10 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   }
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     RequestOptions ro = RequestOptions(date: date);
     //TODO   if (customAction != null) "customAction": jsonEncode(customAction)
     return (enteryInteval == EnteryInteval.daily)
@@ -60,7 +65,9 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   }
 
   @override
-  String? getCustomAction() => "${viewAbstract?.getTableNameApi()}/dashit";
+  List<String>? getCustomAction() {
+    return [?viewAbstract?.getTableNameApi(), "dashit"];
+  }
 
   @override
   String? getTableNameApi() => null;
@@ -91,20 +98,25 @@ class ChartRecordAnalysis<T extends ViewAbstract>
 
   @override
   void onCustomViewCardClicked(
-      BuildContext context, ChartRecordAnalysis istem) {
+    BuildContext context,
+    ChartRecordAnalysis istem,
+  ) {
     debugPrint("onCustomViewCardClicked=> $istem");
   }
 
   @override
   Widget? getCustomViewListResponseWidget(
-      BuildContext context, List<ChartRecordAnalysis> item) {
+    BuildContext context,
+    List<ChartRecordAnalysis> item,
+  ) {
     return null;
   }
 
   @override
   Widget? getCustomViewSingleResponseWidget(BuildContext context) {
     debugPrint(
-        "getCustomViewSingleResponseWidget ${responseListAnalysis?.length}");
+      "getCustomViewSingleResponseWidget ${responseListAnalysis?.length}",
+    );
     return LineChartItem<GrowthRate, DateTime>(
       title:
           "${AppLocalizations.of(context)!.total}: ${responseListAnalysis?.length} ",
@@ -152,18 +164,23 @@ class ChartRecordAnalysis<T extends ViewAbstract>
 
   @override
   Widget? getCustomViewTitleWidget(
-      BuildContext context, ValueNotifier valueNotifier) {
+    BuildContext context,
+    ValueNotifier valueNotifier,
+  ) {
     Widget? dropDownTile;
     Widget? dateWidget;
     dropDownTile = DropdownEnumControllerListenerByIcon<EnteryInteval>(
-        viewAbstractEnum: EnteryInteval.monthy,
-        onSelected: (obj) {
-          if (obj == null) return;
-          if (obj == enteryInteval) return;
-          valueNotifier.value = ChartRecordAnalysis.init(
-              viewAbstract, date ?? DateObject.initFirstDateOfYear(),
-              enteryInteval: obj);
-        });
+      viewAbstractEnum: EnteryInteval.monthy,
+      onSelected: (obj) {
+        if (obj == null) return;
+        if (obj == enteryInteval) return;
+        valueNotifier.value = ChartRecordAnalysis.init(
+          viewAbstract,
+          date ?? DateObject.initFirstDateOfYear(),
+          enteryInteval: obj,
+        );
+      },
+    );
     // dateWidget = DropdownDateControllerListener(
     //   viewAbstractEnum: DateEnum.this_year,
     //   onSelected: (o) {},
@@ -203,7 +220,8 @@ class ChartRecordAnalysis<T extends ViewAbstract>
 
   @override
   Widget? getCustomViewOnResponseAddWidget(
-      ChartRecordAnalysis<ViewAbstract> response) {
+    ChartRecordAnalysis<ViewAbstract> response,
+  ) {
     // TODO: implement getCustomViewOnResponseAddWidget
     throw UnimplementedError();
   }

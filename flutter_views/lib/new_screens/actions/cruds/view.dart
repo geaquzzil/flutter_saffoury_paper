@@ -261,7 +261,7 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
     SecondPaneHelper? valueNotifier,
   }) {
     if (tab != null) {
-      return [SliverFillRemaining(child: tab.widget)];
+      return [?tab.widget];
     }
     if (firstPane) {
       final fields = getExtrasCast()

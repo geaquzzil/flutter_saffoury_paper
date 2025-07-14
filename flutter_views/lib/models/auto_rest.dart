@@ -27,12 +27,13 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
   ResponseType responseType;
   Map<String, String>? customMap;
   String key;
-  AutoRestCustom(
-      {this.customMap,
-      required this.action,
-      required this.key,
-      required this.responseObjcect,
-      required this.responseType});
+  AutoRestCustom({
+    this.customMap,
+    required this.action,
+    required this.key,
+    required this.responseObjcect,
+    required this.responseType,
+  });
   ResponseType getCustomViewResponseType() {
     return responseType;
   }
@@ -97,8 +98,8 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
   // }
 
   @override
-  String? getCustomAction() {
-    return action;
+  List<String>? getCustomAction() {
+    return [action];
   }
 
   // @override
@@ -165,9 +166,10 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
   String? getTableNameApi() => action;
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     // TODO: implement getRequestOption
     throw UnimplementedError();
   }
@@ -183,7 +185,9 @@ abstract class CustomViewHorizontalListResponse<T extends ViewAbstract> {
   Widget? getCustomViewListResponseWidget(BuildContext context, List<T> item);
   Widget? getCustomViewSingleResponseWidget(BuildContext context);
   Widget? getCustomViewTitleWidget(
-      BuildContext context, ValueNotifier valueNotifier);
+    BuildContext context,
+    ValueNotifier valueNotifier,
+  );
   void onCustomViewCardClicked(BuildContext context, T istem);
   double? getCustomViewHeight();
   ResponseType getCustomViewResponseType();
@@ -193,8 +197,4 @@ abstract class CustomViewHorizontalListResponse<T extends ViewAbstract> {
   Widget? getCustomViewOnResponseAddWidget(T response);
 }
 
-enum ResponseType {
-  SINGLE,
-  LIST,
-  NONE_RESPONSE_TYPE,
-}
+enum ResponseType { SINGLE, LIST, NONE_RESPONSE_TYPE }

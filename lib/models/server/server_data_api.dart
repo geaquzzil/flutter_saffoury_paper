@@ -46,22 +46,22 @@ class FilterableDataApi extends FilterableData<FilterableDataApi> {
   FilterableDataApi() : super();
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "products_types": List<ProductType>.empty(),
-        "qualities": List<Quality>.empty(),
-        "grades": List<Grades>.empty(),
-        "customs_declarations": List<CustomsDeclaration>.empty(),
-        "gsms": List<GSM>.empty(),
-        "cargo_transporters": List<CargoTransporter>.empty(),
-        "governorates": List<Governorate>.empty(),
-        "account_names_types": List<AccountNameType>.empty(),
-        "account_names": List<AccountName>.empty(),
-        "currency": List<Currency>.empty(),
-        "customers": List<Customer>.empty(),
-        "employees": List<Employee>.empty(),
-        "warehouse": List<Warehouse>.empty(),
-        "countries": List<Country>.empty(),
-        "manufactures": List<Manufacture>.empty(),
-      };
+    "products_types": List<ProductType>.empty(),
+    "qualities": List<Quality>.empty(),
+    "grades": List<Grades>.empty(),
+    "customs_declarations": List<CustomsDeclaration>.empty(),
+    "gsms": List<GSM>.empty(),
+    "cargo_transporters": List<CargoTransporter>.empty(),
+    "governorates": List<Governorate>.empty(),
+    "account_names_types": List<AccountNameType>.empty(),
+    "account_names": List<AccountName>.empty(),
+    "currency": List<Currency>.empty(),
+    "customers": List<Customer>.empty(),
+    "employees": List<Employee>.empty(),
+    "warehouse": List<Warehouse>.empty(),
+    "countries": List<Country>.empty(),
+    "manufactures": List<Manufacture>.empty(),
+  };
   @override
   FilterableDataApi getSelfNewInstance() {
     return FilterableDataApi();
@@ -81,26 +81,35 @@ class FilterableDataApi extends FilterableData<FilterableDataApi> {
 
   @override
   String? getTableNameApi() => null;
+
   @override
-  String? getCustomAction() => "server_data";
+  List<String>? getCustomAction() {
+    return ["server_data"];
+  }
 
   T? searchForValue<T extends ViewAbstract>(
-      T viewAbstract, dynamic value, bool Function(T) test) {
+    T viewAbstract,
+    dynamic value,
+    bool Function(T) test,
+  ) {
     if (value == null) return null;
 
     List<T?>? list = getFieldValue(viewAbstract.getTableNameApi()!);
     if (list != null) {
       debugPrint(
-          "searchForValue getValue => ${viewAbstract.getTableNameApi()} list is ${list.length}");
+        "searchForValue getValue => ${viewAbstract.getTableNameApi()} list is ${list.length}",
+      );
       T? getSearchedValue = list.firstWhereOrNull(test);
       debugPrint(
-          "searchForValue searchForValue search for $value =>founded value is $getSearchedValue ");
+        "searchForValue searchForValue search for $value =>founded value is $getSearchedValue ",
+      );
       if (getSearchedValue != null) {
         return getSearchedValue;
       }
     } else {
       debugPrint(
-          "searchForValue getValue => ${viewAbstract.getTableNameApi()} list is null skipped ");
+        "searchForValue getValue => ${viewAbstract.getTableNameApi()} list is null skipped ",
+      );
     }
     return null;
   }

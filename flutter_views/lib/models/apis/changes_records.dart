@@ -22,7 +22,8 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   String? fieldToSumBy;
   bool? pieChartEnabled = false;
   @Deprecated(
-      "this field is already can calculate from totalGrouped.total and its do sql query twice")
+    "this field is already can calculate from totalGrouped.total and its do sql query twice",
+  )
   int? total;
   List<ChangesRecordGroup>? totalGrouped = [];
   ChangesRecords() : super();
@@ -40,19 +41,26 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
     return totalGrouped ?? [];
   }
 
-  ChangesRecords.init(T this.viewAbstract, String this.fieldToGroupBy,
-      {this.fieldToSumBy, this.pieChartEnabled = false});
+  ChangesRecords.init(
+    T this.viewAbstract,
+    String this.fieldToGroupBy, {
+    this.fieldToSumBy,
+    this.pieChartEnabled = false,
+  });
 
   @override
   String? getTableNameApi() => null;
 
   @override
-  String? getCustomAction() =>
-      "${viewAbstract?.getTableNameApi()}/changed_records";
+  List<String>? getCustomAction() {
+    return [?viewAbstract?.getTableNameApi(), "changed_records"];
+  }
 
   @override
-  RequestOptions? getRequestOption({required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return RequestOptions().addGroupBy(fieldToGroupBy).addSumBy(fieldToSumBy);
   }
 
@@ -87,7 +95,9 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
 
   @override
   Widget getCustomViewListResponseWidget(
-      BuildContext context, List<ChangesRecords> item) {
+    BuildContext context,
+    List<ChangesRecords> item,
+  ) {
     // TODO: implement getCustomViewListResponseWidget
     throw UnimplementedError();
   }
@@ -130,23 +140,26 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
 
   @override
   Widget? getCustomViewTitleWidget(
-      BuildContext context, ValueNotifier valueNotifier) {
+    BuildContext context,
+    ValueNotifier valueNotifier,
+  ) {
     Widget? dropDownTile;
     if (viewAbstract != null) {
       dropDownTile = DropdownStringListControllerListenerByIcon(
-          icon: Icons.sort_by_alpha,
-          hint: AppLocalizations.of(context)!.sortBy,
-          list: viewAbstract!.getMainFieldsIconsAndValues(context),
-          onSelected: (obj) {
-            if (obj == null) return;
+        icon: Icons.sort_by_alpha,
+        hint: AppLocalizations.of(context)!.sortBy,
+        list: viewAbstract!.getMainFieldsIconsAndValues(context),
+        onSelected: (obj) {
+          if (obj == null) return;
 
-            debugPrint("obj selected is ${obj.value}");
-            valueNotifier.value = ChangesRecords.init(
-                viewAbstract!,
-                viewAbstract!
-                    .getFieldValueFromDropDownString(obj.value.toString()),
-                fieldToSumBy: fieldToSumBy);
-          });
+          debugPrint("obj selected is ${obj.value}");
+          valueNotifier.value = ChangesRecords.init(
+            viewAbstract!,
+            viewAbstract!.getFieldValueFromDropDownString(obj.value.toString()),
+            fieldToSumBy: fieldToSumBy,
+          );
+        },
+      );
     }
 
     return HeaderDescription(
@@ -163,7 +176,8 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
 
   @override
   Widget? getCustomViewOnResponseAddWidget(
-      ChangesRecords<ViewAbstract> response) {
+    ChangesRecords<ViewAbstract> response,
+  ) {
     // TODO: implement getCustomViewOnResponseAddWidget
     throw UnimplementedError();
   }

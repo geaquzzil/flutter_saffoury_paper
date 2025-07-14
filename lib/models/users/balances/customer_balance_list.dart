@@ -62,8 +62,9 @@ class CustomerBalanceList
         ..termsBreakCount = json['termsBreakCount'] as int?
         ..nextPaymentCount = json['nextPaymentCount'] as int?
         ..customers = (json['customers'] as List<dynamic>?)
-            ?.map((e) =>
-                CustomerBalanceSingle.fromJson(e as Map<String, dynamic>))
+            ?.map(
+              (e) => CustomerBalanceSingle.fromJson(e as Map<String, dynamic>),
+            )
             .toList();
 
   @override
@@ -80,18 +81,22 @@ class CustomerBalanceList
   List<String> getMainFields({BuildContext? context}) => [];
 
   @override
-  Widget? getDashboardAppbar(BuildContext context,
-      {bool? firstPane,
-      GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab}) {
+  Widget? getDashboardAppbar(
+    BuildContext context, {
+    bool? firstPane,
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+  }) {
     return null;
   }
 
   @override
-  getDashboardShouldWaitBeforeRequest(BuildContext context,
-      {bool? firstPane,
-      GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab}) {
+  getDashboardShouldWaitBeforeRequest(
+    BuildContext context, {
+    bool? firstPane,
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+  }) {
     return null;
   }
 
@@ -105,43 +110,49 @@ class CustomerBalanceList
 
   @override
   IconData getMainIconData() => Icons.balance;
-
   @override
-  String? getCustomAction() => "customers/balance";
+  List<String>? getCustomAction() {
+    return ["customers", "balance"];
+  }
 
   @override
   Map<String, dynamic> toJsonViewAbstract() => {};
 
   @override
   List<InvoiceHeaderTitleAndDescriptionInfo>
-      getPrintableInvoiceAccountInfoInBottom(
-              BuildContext context, PrintCustomerBalances? pca) =>
-          [];
+  getPrintableInvoiceAccountInfoInBottom(
+    BuildContext context,
+    PrintCustomerBalances? pca,
+  ) => [];
 
   @override
   List<PrintableInvoiceInterfaceDetails<PrintLocalSetting>>
-      getPrintableInvoiceDetailsList() {
+  getPrintableInvoiceDetailsList() {
     return customers ?? [];
   }
 
   @override
   List<List<InvoiceHeaderTitleAndDescriptionInfo>> getPrintableInvoiceInfo(
-          BuildContext context, PrintCustomerBalances? pca) =>
-      [];
+    BuildContext context,
+    PrintCustomerBalances? pca,
+  ) => [];
   @override
   String getPrintableInvoiceTitle(
-          BuildContext context, PrintCustomerBalances? pca) =>
-      getMainHeaderLabelTextOnly(context);
+    BuildContext context,
+    PrintCustomerBalances? pca,
+  ) => getMainHeaderLabelTextOnly(context);
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotal(
-          BuildContext context, PrintCustomerBalances? pca) =>
-      [];
+    BuildContext context,
+    PrintCustomerBalances? pca,
+  ) => [];
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotalDescripton(
-          BuildContext context, PrintCustomerBalances? pca) =>
-      [];
+    BuildContext context,
+    PrintCustomerBalances? pca,
+  ) => [];
 
   @override
   String getPrintablePrimaryColor(PrintCustomerBalances? setting) =>
@@ -173,8 +184,10 @@ class CustomerBalanceList
         ),
         onSearchTextChanged: (query) =>
             customers
-                ?.where((element) =>
-                    element.name?.toLowerCase().contains(query) ?? false)
+                ?.where(
+                  (element) =>
+                      element.name?.toLowerCase().contains(query) ?? false,
+                )
                 .toList() ??
             [],
       ),
@@ -184,53 +197,66 @@ class CustomerBalanceList
   Widget getHeaderWidget(BuildContext context) {
     return Card(
       margin: const EdgeInsets.all(20),
-      child: Column(children: [
-        Row(
-          children: [
-            const Spacer(),
-            Text(
-              DateTime.now().toDateTimeString(),
-              style: const TextStyle(fontWeight: FontWeight.w200),
-            )
-          ],
-        ),
-        Text(
-          AppLocalizations.of(context)!.balance,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        Text(
-          totalBalance?.toCurrencyFormat() ?? "0",
-          style: const TextStyle(
-              fontWeight: FontWeight.w900, color: Colors.orange, fontSize: 32),
-        ),
-        Row(
-          children: [
-            Expanded(
-                child: getListTile(context,
-                    color: Colors.green,
-                    icon: Icons.trending_up_rounded,
-                    title: AppLocalizations.of(context)!.incomes,
-                    subtitle: "213,232 SYP")),
-            Expanded(
-                child: getListTile(context,
-                    icon: Icons.trending_down_rounded,
-                    color: Colors.red,
-                    title: AppLocalizations.of(context)!.spendings,
-                    subtitle: "231,332 SYP")),
-          ],
-        )
-      ]),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              const Spacer(),
+              Text(
+                DateTime.now().toDateTimeString(),
+                style: const TextStyle(fontWeight: FontWeight.w200),
+              ),
+            ],
+          ),
+          Text(
+            AppLocalizations.of(context)!.balance,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Text(
+            totalBalance?.toCurrencyFormat() ?? "0",
+            style: const TextStyle(
+              fontWeight: FontWeight.w900,
+              color: Colors.orange,
+              fontSize: 32,
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: getListTile(
+                  context,
+                  color: Colors.green,
+                  icon: Icons.trending_up_rounded,
+                  title: AppLocalizations.of(context)!.incomes,
+                  subtitle: "213,232 SYP",
+                ),
+              ),
+              Expanded(
+                child: getListTile(
+                  context,
+                  icon: Icons.trending_down_rounded,
+                  color: Colors.red,
+                  title: AppLocalizations.of(context)!.spendings,
+                  subtitle: "231,332 SYP",
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
-  Widget getListTile(BuildContext context,
-      {IconData? icon, String? title, String? subtitle, Color? color}) {
+  Widget getListTile(
+    BuildContext context, {
+    IconData? icon,
+    String? title,
+    String? subtitle,
+    Color? color,
+  }) {
     // return Text(title ?? "");
     return ListTile(
-      leading: Icon(
-        icon,
-        color: color,
-      ),
+      leading: Icon(icon, color: color),
       title: Text(title ?? ""),
       subtitle: Text(subtitle ?? ""),
     );
@@ -241,10 +267,12 @@ class CustomerBalanceList
     debugPrint("getCustomeStandAloneSideWidget ${toString()}");
     return [
       ExpansionTile(
-          title: TitleText(
-              text: AppLocalizations.of(context)!.balance,
-              fontWeight: FontWeight.bold),
-          children: [getHeaderWidget(context)]),
+        title: TitleText(
+          text: AppLocalizations.of(context)!.balance,
+          fontWeight: FontWeight.bold,
+        ),
+        children: [getHeaderWidget(context)],
+      ),
       // CirculeChartItem<CustomerBalanceSingle, String>(
       //   title: "${AppLocalizations.of(context)!.balance}: $totalBalance ",
       //   list: customers ?? [],
@@ -254,8 +282,9 @@ class CustomerBalanceList
       ExpansionTile(
         initiallyExpanded: true,
         title: TitleText(
-            text: AppLocalizations.of(context)!.mostPopular,
-            fontWeight: FontWeight.bold),
+          text: AppLocalizations.of(context)!.mostPopular,
+          fontWeight: FontWeight.bold,
+        ),
         children: [
           ListStaticWidget<CustomerBalanceSingle>(
             list: customers?.sublist(0, 10) ?? [],
@@ -265,9 +294,9 @@ class CustomerBalanceList
               title: Text(item.name ?? ""),
               subtitle: Text(item.balance.toCurrencyFormat()),
             ),
-          )
+          ),
         ],
-      )
+      ),
     ];
 
     // return Expanded(
@@ -306,14 +335,20 @@ class CustomerBalanceList
     return true;
   }
 
-  WidgetGridHelper getWidget(StaggeredGridTile gride,
-      {WidgetDashboardType type = WidgetDashboardType.NORMAL}) {
+  WidgetGridHelper getWidget(
+    StaggeredGridTile gride, {
+    WidgetDashboardType type = WidgetDashboardType.NORMAL,
+  }) {
     return WidgetGridHelper(widget: gride, widgetDashboardType: type);
   }
 
   @override
-  getDashboardSectionsFirstPane(BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageStateWithApi>? globalKey, TabControllerHelper? tab}) {
+  getDashboardSectionsFirstPane(
+    BuildContext context,
+    int crossAxisCount, {
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+  }) {
     return [
       SliverFillRemaining(
         child: ListStaticSearchableWidget<CustomerBalanceSingle>(
@@ -327,17 +362,22 @@ class CustomerBalanceList
                   ?.findExtrasViaType(CustomerDashboard().runtimeType);
               debugPrint("_tabController value $value");
               if (value == null) return;
-              int index = globalKey.currentState!
-                  .findExtrasIndexFromTab(CustomerDashboard().runtimeType);
+              int index = globalKey.currentState!.findExtrasIndexFromTab(
+                CustomerDashboard().runtimeType,
+              );
               if (index == -1) return;
               CustomerDashboard newCustomerDashboard = CustomerDashboard();
               newCustomerDashboard.iD = item.iD;
               //todo change date
-              newCustomerDashboard.dateObject =
-                  DateObject(from: "2020-01-01", to: "2023-01-01");
+              newCustomerDashboard.dateObject = DateObject(
+                from: "2020-01-01",
+                to: "2023-01-01",
+              );
               value.extras = newCustomerDashboard;
-              globalKey.currentState
-                  ?.refresh(extras: newCustomerDashboard, tab: value);
+              globalKey.currentState?.refresh(
+                extras: newCustomerDashboard,
+                tab: value,
+              );
 
               globalKey.currentState?.changeTabIndex(index);
             },
@@ -347,8 +387,10 @@ class CustomerBalanceList
           ),
           onSearchTextChanged: (query) =>
               customers
-                  ?.where((element) =>
-                      element.name?.toLowerCase().contains(query) ?? false)
+                  ?.where(
+                    (element) =>
+                        element.name?.toLowerCase().contains(query) ?? false,
+                  )
                   .toList() ??
               [],
         ),
@@ -358,44 +400,54 @@ class CustomerBalanceList
 
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
-      BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab,
-      TabControllerHelper? tabSecondPane}) {
+    BuildContext context,
+    int crossAxisCount, {
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+    TabControllerHelper? tabSecondPane,
+  }) {
     return [
       DashableGridHelper(
-          title: AppLocalizations.of(context)!.overview,
-          widgets: [
-            getWidget(StaggeredGridTile.count(
-                crossAxisCellCount: crossAxisCount,
-                mainAxisCellCount: 2,
-                child: getHeaderWidget(context))),
-            // ...getInvoicesWidgets(context)
-          ]),
+        title: AppLocalizations.of(context)!.overview,
+        widgets: [
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: crossAxisCount,
+              mainAxisCellCount: 2,
+              child: getHeaderWidget(context),
+            ),
+          ),
+          // ...getInvoicesWidgets(context)
+        ],
+      ),
       DashableGridHelper(
-          title: AppLocalizations.of(context)!.overview,
-          widgets: [
-            getWidget(StaggeredGridTile.count(
-                crossAxisCellCount: crossAxisCount,
-                mainAxisCellCount: 1,
-                child: ListStaticWidget<CustomerBalanceSingle>(
-                  list: customers?.sublist(0, 10) ?? [],
-                  emptyWidget: const Text("null"),
-                  listItembuilder: (item) => ListTile(
-                    leading: item.getCardLeading(context),
-                    title: Text(item.name ?? ""),
-                    subtitle: Text(item.balance.toCurrencyFormat()),
-                  ),
-                ))),
-            // ...getInvoicesWidgets(context)
-          ]),
+        title: AppLocalizations.of(context)!.overview,
+        widgets: [
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: crossAxisCount,
+              mainAxisCellCount: 1,
+              child: ListStaticWidget<CustomerBalanceSingle>(
+                list: customers?.sublist(0, 10) ?? [],
+                emptyWidget: const Text("null"),
+                listItembuilder: (item) => ListTile(
+                  leading: item.getCardLeading(context),
+                  title: Text(item.name ?? ""),
+                  subtitle: Text(item.balance.toCurrencyFormat()),
+                ),
+              ),
+            ),
+          ),
+          // ...getInvoicesWidgets(context)
+        ],
+      ),
     ];
   }
 
   @override
   List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
-          BuildContext context) =>
-      null;
+    BuildContext context,
+  ) => null;
 
   @override
   void setDate(DateObject? date) {
@@ -410,14 +462,17 @@ class CustomerBalanceList
 
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-      BuildContext context, PrintLocalSetting? dashboardSetting) {
+    BuildContext context,
+    PrintLocalSetting? dashboardSetting,
+  ) {
     return null;
   }
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     // TODO: implement getRequestOption
     throw UnimplementedError();
   }

@@ -124,7 +124,9 @@ class Dashboard extends UserLists<Dashboard>
   @override
   bool getPrintableSupportsLabelPrinting() => false;
   @override
-  String? getCustomAction() => "list_dashboard";
+  List<String>? getCustomAction() {
+    return ["list_dashboard"];
+  }
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
@@ -136,9 +138,9 @@ class Dashboard extends UserLists<Dashboard>
 
   @override
   Map<String, String> get getCustomMap => {
-        "date": jsonEncode(date?.toJson() ?? DateObject().toJson()),
-        if (setInterval()) "interval": "daily"
-      };
+    "date": jsonEncode(date?.toJson() ?? DateObject().toJson()),
+    if (setInterval()) "interval": "daily",
+  };
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
@@ -158,10 +160,16 @@ class Dashboard extends UserLists<Dashboard>
       Dashboard.fromJson(json);
 
   String getTotalPreviousBalance({int? cashBoxID}) {
-    var incomes = getMapPlus(previouscreditsDue, previousincomesDue,
-        cashBoxID: cashBoxID);
-    var spendings = getMapPlus(previousdebitsDue, previousspendingsDue,
-        cashBoxID: cashBoxID);
+    var incomes = getMapPlus(
+      previouscreditsDue,
+      previousincomesDue,
+      cashBoxID: cashBoxID,
+    );
+    var spendings = getMapPlus(
+      previousdebitsDue,
+      previousspendingsDue,
+      cashBoxID: cashBoxID,
+    );
 
     debugPrint("getTotalPreviousBalance getTotoC $incomes $spendings");
 
@@ -178,370 +186,417 @@ class Dashboard extends UserLists<Dashboard>
   }
 
   String getTotalTodayBalance({int? cashBoxID}) {
-    var incomes = getMapPlus(creditsBalanceToday, incomesBalanceToday,
-        cashBoxID: cashBoxID);
-    var spendings = getMapPlus(debitsBalanceToday, spendingsBalanceToday,
-        cashBoxID: cashBoxID);
+    var incomes = getMapPlus(
+      creditsBalanceToday,
+      incomesBalanceToday,
+      cashBoxID: cashBoxID,
+    );
+    var spendings = getMapPlus(
+      debitsBalanceToday,
+      spendingsBalanceToday,
+      cashBoxID: cashBoxID,
+    );
 
     return getTotalGroupedFormattedText(getMapMinus(incomes, spendings));
   }
 
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
-          BuildContext context, int crossAxisCount,
-          {GlobalKey<BasePageStateWithApi>? globalKey,
-          TabControllerHelper? tab}) =>
-      [
-        DashableGridHelper(
-            sectionsListToTabbar: getListOfTabbarFunds(),
-            headerListToAdd: [Credits(), Debits(), Spendings(), Incomes()],
-            title: AppLocalizations.of(context)!.overview,
-            widgets: [
-              ...getFundWidgets(context, crossAxisCount, globalKey: globalKey),
-              // ...getInvoicesWidgets(context)
-            ]),
-        DashableGridHelper(
-            title: AppLocalizations.of(context)!.invoice,
-            headerListToAdd: [
-              Order(),
-              Purchases(),
-              CutRequest(),
-              Transfers(),
-              ProductInput(),
-              ProductOutput(),
-              ReservationInvoice()
-            ],
-            widgets: [
-              ...getInvoicesWidgets(context, crossAxisCount,
-                  globalKey: globalKey)
-            ]),
-        DashableGridHelper(
-            title: AppLocalizations.of(context)!.pendingFormat(
-                AppLocalizations.of(context)!.orders.toLowerCase()),
-            headerListToAdd: [
-              Order(),
-            ],
-            widgets: [
-              getWidget(
-                StaggeredGridTile.count(
-                  crossAxisCellCount: crossAxisCount,
-                  mainAxisCellCount: 1.2,
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height -
-                        MediaQuery.of(context).size.height * .2,
-                    child: ListHorizontalApiAutoRestWidget(
-                      isSliver: true,
+    BuildContext context,
+    int crossAxisCount, {
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+  }) => [
+    DashableGridHelper(
+      sectionsListToTabbar: getListOfTabbarFunds(),
+      headerListToAdd: [Credits(), Debits(), Spendings(), Incomes()],
+      title: AppLocalizations.of(context)!.overview,
+      widgets: [
+        ...getFundWidgets(context, crossAxisCount, globalKey: globalKey),
+        // ...getInvoicesWidgets(context)
+      ],
+    ),
+    DashableGridHelper(
+      title: AppLocalizations.of(context)!.invoice,
+      headerListToAdd: [
+        Order(),
+        Purchases(),
+        CutRequest(),
+        Transfers(),
+        ProductInput(),
+        ProductOutput(),
+        ReservationInvoice(),
+      ],
+      widgets: [
+        ...getInvoicesWidgets(context, crossAxisCount, globalKey: globalKey),
+      ],
+    ),
+    DashableGridHelper(
+      title: AppLocalizations.of(
+        context,
+      )!.pendingFormat(AppLocalizations.of(context)!.orders.toLowerCase()),
+      headerListToAdd: [Order()],
+      widgets: [
+        getWidget(
+          StaggeredGridTile.count(
+            crossAxisCellCount: crossAxisCount,
+            mainAxisCellCount: 1.2,
+            child: SizedBox(
+              height:
+                  MediaQuery.of(context).size.height -
+                  MediaQuery.of(context).size.height * .2,
+              child: ListHorizontalApiAutoRestWidget(
+                isSliver: true,
 
-                      // titleString: "Today",
-                      // listItembuilder: (v) => SizedBox(
-                      //     width: 100, height: 100, child: POSListCardItem(object: v)),
-                      autoRest: AutoRest<Order>(
-                          obj: Order().setRequestOption(
-                              option: RequestOptions()
-                                  .addSearchByField("status", "PENDING")),
-                          key: "Order<status>PENDING"),
+                // titleString: "Today",
+                // listItembuilder: (v) => SizedBox(
+                //     width: 100, height: 100, child: POSListCardItem(object: v)),
+                autoRest: AutoRest<Order>(
+                  obj: Order().setRequestOption(
+                    option: RequestOptions().addSearchByField(
+                      "status",
+                      "PENDING",
                     ),
                   ),
+                  key: "Order<status>PENDING",
                 ),
               ),
-            ]),
-        if (checkList(pending_cut_requests))
-          DashableGridHelper(
-              title: AppLocalizations.of(context)!.pendingCutRequest,
-              widgets: [
-                getWidget(StaggeredGridTile.count(
-                    crossAxisCellCount: crossAxisCount,
-                    mainAxisCellCount: 1.2,
-                    child: ListHorizontalApiAutoRestWidget(
-                      isSliver: true,
-                      // titleString: "Pending",
-                      list: pending_cut_requests,
-                      // listItembuilder: (v) =>
-                      //     ListItemProductTypeCategory(productType: v as ProductType),
-                      // autoRest: AutoRest<CutRequest>(
-                      //     obj: CutRequest()
-                      //       ..setCustomMap({"<cut_status>": "PENDING"}),
-                      //     key: "CutRequest<Pending>"),
-                    ))),
+            ),
+          ),
+        ),
+      ],
+    ),
+    if (checkList(pending_cut_requests))
+      DashableGridHelper(
+        title: AppLocalizations.of(context)!.pendingCutRequest,
+        widgets: [
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: crossAxisCount,
+              mainAxisCellCount: 1.2,
+              child: ListHorizontalApiAutoRestWidget(
+                isSliver: true,
+                // titleString: "Pending",
+                list: pending_cut_requests,
+                // listItembuilder: (v) =>
+                //     ListItemProductTypeCategory(productType: v as ProductType),
+                // autoRest: AutoRest<CutRequest>(
+                //     obj: CutRequest()
+                //       ..setCustomMap({"<cut_status>": "PENDING"}),
+                //     key: "CutRequest<Pending>"),
+              ),
+            ),
+          ),
 
-                //                  return LineChartItem<ChangesRecordGroup, String>(
-                //   title: "${AppLocalizations.of(context)!.total}: ${totalGrouped?.length} ",
-                //   list: totalGrouped ?? [],
-                //   xValueMapper: (item, value) => "${item.groupBy}",
-                //   yValueMapper: (item, n) => item.count,
-                // );
-                // getWidget(
-                //     StaggeredGridTile.count(
-                //         crossAxisCellCount: 2,
-                //         mainAxisCellCount: 1.5,
-                //         child: LineChartItem<GrowthRate, String>(
-                //           list: cut_requestsAnalysis ?? [],
-                //           // title:
-                //           //     CutRequest().getMainHeaderLabelTextOnly(context),
-                //           dataLabelMapper: (item, idx) => item.total
-                //               .toCurrencyFormat(
-                //                   symbol: AppLocalizations.of(context)!.kg),
-                //           xValueMapper: (item, value) {
-                //             // debugPrint("ChartItem $item");
-                //             return DateFormat.MMM().format(DateTime(
-                //                 item.year!, item.month!, item.day ?? 1));
-                //           },
-                //           yValueMapper: (item, n) => item.total,
-                //         )),
-                //     type: WidgetDashboardType.CHART),
-              ]),
-        if (checkList(pending_reservation_invoice))
-          DashableGridHelper(
-              title: AppLocalizations.of(context)!.pendingReservationInvoices,
-              widgets: [
-                getWidget(StaggeredGridTile.count(
-                    crossAxisCellCount: crossAxisCount,
-                    mainAxisCellCount: 1.2,
-                    child: ListHorizontalApiAutoRestWidget(
-                      isSliver: true,
-                      list: pending_reservation_invoice,
-                    ))),
-              ])
-        // ...getInvoicesWidgets(context)
-        ,
-        if (checkList(overdue_reservation_invoice))
-          DashableGridHelper(
-              title: AppLocalizations.of(context)!.overDueFormat(
-                  AppLocalizations.of(context)!
-                      .reservationInvoice
-                      .toLowerCase()),
-              widgets: [
-                getWidget(StaggeredGridTile.count(
-                    crossAxisCellCount: crossAxisCount,
-                    mainAxisCellCount: 1.2,
-                    child: ListHorizontalApiAutoRestWidget(
-                      isSliver: true,
-                      // titleString: "Pending",
-                      list: overdue_reservation_invoice,
-                      // listItembuilder: (v) =>
-                      //     ListItemProductTypeCategory(productType: v as ProductType),
-                      // autoRest: AutoRest<CutRequest>(
-                      //     obj: CutRequest()
-                      //       ..setCustomMap({"<cut_status>": "PENDING"}),
-                      //     key: "CutRequest<Pending>"),
-                    ))),
-              ])
-      ];
+          //                  return LineChartItem<ChangesRecordGroup, String>(
+          //   title: "${AppLocalizations.of(context)!.total}: ${totalGrouped?.length} ",
+          //   list: totalGrouped ?? [],
+          //   xValueMapper: (item, value) => "${item.groupBy}",
+          //   yValueMapper: (item, n) => item.count,
+          // );
+          // getWidget(
+          //     StaggeredGridTile.count(
+          //         crossAxisCellCount: 2,
+          //         mainAxisCellCount: 1.5,
+          //         child: LineChartItem<GrowthRate, String>(
+          //           list: cut_requestsAnalysis ?? [],
+          //           // title:
+          //           //     CutRequest().getMainHeaderLabelTextOnly(context),
+          //           dataLabelMapper: (item, idx) => item.total
+          //               .toCurrencyFormat(
+          //                   symbol: AppLocalizations.of(context)!.kg),
+          //           xValueMapper: (item, value) {
+          //             // debugPrint("ChartItem $item");
+          //             return DateFormat.MMM().format(DateTime(
+          //                 item.year!, item.month!, item.day ?? 1));
+          //           },
+          //           yValueMapper: (item, n) => item.total,
+          //         )),
+          //     type: WidgetDashboardType.CHART),
+        ],
+      ),
+    if (checkList(pending_reservation_invoice))
+      DashableGridHelper(
+        title: AppLocalizations.of(context)!.pendingReservationInvoices,
+        widgets: [
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: crossAxisCount,
+              mainAxisCellCount: 1.2,
+              child: ListHorizontalApiAutoRestWidget(
+                isSliver: true,
+                list: pending_reservation_invoice,
+              ),
+            ),
+          ),
+        ],
+      ),
+    // ...getInvoicesWidgets(context)
+    if (checkList(overdue_reservation_invoice))
+      DashableGridHelper(
+        title: AppLocalizations.of(context)!.overDueFormat(
+          AppLocalizations.of(context)!.reservationInvoice.toLowerCase(),
+        ),
+        widgets: [
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: crossAxisCount,
+              mainAxisCellCount: 1.2,
+              child: ListHorizontalApiAutoRestWidget(
+                isSliver: true,
+                // titleString: "Pending",
+                list: overdue_reservation_invoice,
+                // listItembuilder: (v) =>
+                //     ListItemProductTypeCategory(productType: v as ProductType),
+                // autoRest: AutoRest<CutRequest>(
+                //     obj: CutRequest()
+                //       ..setCustomMap({"<cut_status>": "PENDING"}),
+                //     key: "CutRequest<Pending>"),
+              ),
+            ),
+          ),
+        ],
+      ),
+  ];
 
   @override
-  getDashboardSectionsSecoundPane(BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab,
-      TabControllerHelper? tabSecondPane}) {
+  getDashboardSectionsSecoundPane(
+    BuildContext context,
+    int crossAxisCount, {
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+    TabControllerHelper? tabSecondPane,
+  }) {
     // return [];
     if (tabSecondPane != null && tabSecondPane.extras != null) {
       return [
         // LineChartItem(list: , xValueMapper: xValueMapper, yValueMapper: yValueMapper)
-        getSliverListFromExtrasTabbar(context, tabSecondPane)
+        getSliverListFromExtrasTabbar(context, tabSecondPane),
       ];
     }
     return [
       DashableGridHelper(
-          title: AppLocalizations.of(context)!.chart,
-          wrapWithCard: false,
+        title: AppLocalizations.of(context)!.chart,
+        wrapWithCard: false,
+        widgets: [
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1.5,
+              child: MultiLineChartItem<GrowthRate, DateTime>(
+                title: "T",
+                list: getAnalysisChartFunds(),
+                titles: getAnalysisChartFundsTitle(context),
+                dataLabelMapper: (item, idx) => item.total.toCurrencyFormat(),
+                xValueMapper: (item, value, indexInsideList) => DateTime(
+                  value.year ?? 2022,
+                  value.month ?? 1,
+                  value.day ?? 1,
+                ),
+                yValueMapper: (item, n, indexInsideList) => n.total,
+              ),
+            ),
+            type: WidgetDashboardType.CHART,
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: .75,
+              child: ChartCardItemCustom(
+                color: Colors.blue,
+                icon: Icons.today,
+                title: AppLocalizations.of(context)!.this_day,
+                description: getTotalTodayBalance(),
+                // footer: incomes?.length.toString(),
+                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+              ),
+            ),
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: .75,
+              child: ChartCardItemCustom(
+                icon: Icons.balance,
+                color: Colors.orange,
+                title: AppLocalizations.of(context)!.previousBalance,
+                description: getTotalPreviousBalance(),
+                // footer: incomes?.length.toString(),
+                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+              ),
+            ),
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: .75,
+              child: ChartCardItemCustom(
+                icon: Icons.account_balance,
+                title: AppLocalizations.of(context)!.balance_due,
+                description: getTotalDueBalance(),
+                // footer: incomes?.length.toString(),
+                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+              ),
+            ),
+          ),
+
+          // getWidget(
+          //   StaggeredGridTile.count(
+          //     crossAxisCellCount: 2,
+          //     mainAxisCellCount: 2,
+          //     child: SizedBox(
+          //       height: MediaQuery.of(context).size.height -
+          //           MediaQuery.of(context).size.height * .2,
+          //       child: ListHorizontalCustomViewApiAutoRestWidget(
+          //           onResponseAddWidget: ((response) {
+          //             ChangesRecords i = response as ChangesRecords;
+          //             return Column(
+          //               children: [
+          //                 // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
+          //                 //     titleString: "TEST1 ",
+          //                 //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
+          //                 OutlinedCard(
+          //                     child: ListTile(
+          //                   title: Text(AppLocalizations.of(context)!.total),
+          //                   subtitle: Text(i.total.toCurrencyFormat()),
+          //                   leading: const Icon(Icons.monitor_weight),
+          //                   trailing: const Text("SYP"),
+          //                 )),
+          //                 OutlinedCard(
+          //                     child: ListTile(
+          //                   title: Text(AppLocalizations.of(context)!.total),
+          //                   subtitle: Text(i.total.toCurrencyFormat()),
+          //                   leading: const Icon(Icons.monitor_weight),
+          //                   trailing: const Text("SYP"),
+          //                 )),
+          //                 OutlinedCard(
+          //                     child: ListTile(
+          //                   title: Text(AppLocalizations.of(context)!.total),
+          //                   subtitle: Text(i.total.toCurrencyFormat()),
+          //                   leading: const Icon(Icons.monitor_weight),
+          //                   trailing: const Text("SYP"),
+          //                 )),
+          //                 OutlinedCard(
+          //                     child: ListTile(
+          //                   title: Text(AppLocalizations.of(context)!.total),
+          //                   subtitle: Text(i.total.toCurrencyFormat()),
+          //                   leading: const Icon(Icons.monitor_weight),
+          //                   trailing: const Text("SYP"),
+          //                 )),
+          //                 StorageInfoCardCustom(
+          //                     title: AppLocalizations.of(context)!.total,
+          //                     description: i.total.toCurrencyFormat(),
+          //                     trailing: const Text("SYP"),
+          //                     svgSrc: Icons.monitor_weight),
+          //                 StorageInfoCardCustom(
+          //                     title: AppLocalizations.of(context)!.balance,
+          //                     description: "0",
+          //                     trailing: const Text("trailing"),
+          //                     svgSrc: Icons.balance),
+          //               ],
+          //             );
+          //           }),
+          //           autoRest: ChangesRecords.init(Spendings(), "NameID",
+          //               fieldToSumBy: "value", pieChartEnabled: true)),
+          //     ),
+          //   ),
+          //   type: WidgetDashboardType.CHART,
+          // ),
+
+          // getWidget(
+          //   StaggeredGridTile.count(
+          //       crossAxisCellCount: 1,
+          //       mainAxisCellCount: 1.5,
+          //       child: CirculeChartItem<GrowthRate, DateTime>(
+          //         title: "T",
+          //         list: getAnalysisChartFunds(),
+          //         // titles: getAnalysisChartFundsTitle(context),
+          //         // dataLabelMapper: (item, idx) =>
+          //         //     item.total.toCurrencyFormat(),
+          //         xValueMapper: (item, value, indexInsideList) => DateTime(
+          //             value.year ?? 2022, value.month ?? 1, value.day ?? 1),
+          //         yValueMapper: (item, n, indexInsideList) => n.total,
+          //       )),
+          //   type: WidgetDashboardType.CHART,
+          // ),
+          // getWidget(
+          //   StaggeredGridTile.count(
+          //       crossAxisCellCount: 2,
+          //       mainAxisCellCount: 1.5,
+          //       child: MultiLineChartItem<GrowthRate, DateTime>(
+          //         title: "T",
+          //         list: getAnalysisChartFunds(),
+          //         titles: getAnalysisChartFundsTitle(context),
+          //         dataLabelMapper: (item, idx) =>
+          //             item.total.toCurrencyFormat(),
+          //         xValueMapper: (item, value, indexInsideList) => DateTime(
+          //             value.year ?? 2022, value.month ?? 1, value.day ?? 1),
+          //         yValueMapper: (item, n, indexInsideList) => n.total,
+          //       )),
+          //   type: WidgetDashboardType.CHART,
+          // ),
+          // getWidget(
+          //   StaggeredGridTile.count(
+          //       crossAxisCellCount: 2,
+          //       mainAxisCellCount: 1.5,
+          //       child: MultiLineChartItem<GrowthRate, DateTime>(
+          //         title: "T",
+          //         list: getAnalysisChart(),
+          //         titles: getAnalysisChartTitle(context),
+          //         dataLabelMapper: (item, idx) =>
+          //             item.total.toCurrencyFormat(),
+          //         xValueMapper: (item, value, indexInsideList) => DateTime(
+          //             value.year ?? 2022, value.month ?? 1, value.day ?? 1),
+          //         yValueMapper: (item, n, indexInsideList) => n.total,
+          //       )),
+          // ),
+          // ...getInvoicesWidgets(context)
+        ],
+      ),
+      if (checkList(customerToPayNext))
+        DashableGridHelper(
+          title: AppLocalizations.of(context)!.customer,
           widgets: [
             getWidget(
               StaggeredGridTile.count(
-                  crossAxisCellCount: 2,
-                  mainAxisCellCount: 1.5,
-                  child: MultiLineChartItem<GrowthRate, DateTime>(
-                    title: "T",
-                    list: getAnalysisChartFunds(),
-                    titles: getAnalysisChartFundsTitle(context),
-                    dataLabelMapper: (item, idx) =>
-                        item.total.toCurrencyFormat(),
-                    xValueMapper: (item, value, indexInsideList) => DateTime(
-                        value.year ?? 2022, value.month ?? 1, value.day ?? 1),
-                    yValueMapper: (item, n, indexInsideList) => n.total,
-                  )),
-              type: WidgetDashboardType.CHART,
+                crossAxisCellCount: crossAxisCount,
+                mainAxisCellCount: 2,
+                child: Card(
+                  child: ViewableTableViewAbstractWidget(
+                    usePag: true,
+                    buildActions: false,
+                    viewAbstract: [...customerToPayNext ?? [], ...debits ?? []],
+                  ),
+                ),
+              ),
             ),
-            getWidget(StaggeredGridTile.count(
-                crossAxisCellCount: 2,
-                mainAxisCellCount: .75,
-                child: ChartCardItemCustom(
-                  color: Colors.blue,
-                  icon: Icons.today,
-                  title: AppLocalizations.of(context)!.this_day,
-                  description: getTotalTodayBalance(),
-                  // footer: incomes?.length.toString(),
-                  // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-                ))),
-            getWidget(StaggeredGridTile.count(
-                crossAxisCellCount: 1,
-                mainAxisCellCount: .75,
-                child: ChartCardItemCustom(
-                  icon: Icons.balance,
-                  color: Colors.orange,
-                  title: AppLocalizations.of(context)!.previousBalance,
-                  description: getTotalPreviousBalance(),
-                  // footer: incomes?.length.toString(),
-                  // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-                ))),
-            getWidget(StaggeredGridTile.count(
-                crossAxisCellCount: 1,
-                mainAxisCellCount: .75,
-                child: ChartCardItemCustom(
-                  icon: Icons.account_balance,
-                  title: AppLocalizations.of(context)!.balance_due,
-                  description: getTotalDueBalance(),
-                  // footer: incomes?.length.toString(),
-                  // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-                ))),
-
-            // getWidget(
-            //   StaggeredGridTile.count(
-            //     crossAxisCellCount: 2,
-            //     mainAxisCellCount: 2,
-            //     child: SizedBox(
-            //       height: MediaQuery.of(context).size.height -
-            //           MediaQuery.of(context).size.height * .2,
-            //       child: ListHorizontalCustomViewApiAutoRestWidget(
-            //           onResponseAddWidget: ((response) {
-            //             ChangesRecords i = response as ChangesRecords;
-            //             return Column(
-            //               children: [
-            //                 // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
-            //                 //     titleString: "TEST1 ",
-            //                 //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
-            //                 OutlinedCard(
-            //                     child: ListTile(
-            //                   title: Text(AppLocalizations.of(context)!.total),
-            //                   subtitle: Text(i.total.toCurrencyFormat()),
-            //                   leading: const Icon(Icons.monitor_weight),
-            //                   trailing: const Text("SYP"),
-            //                 )),
-            //                 OutlinedCard(
-            //                     child: ListTile(
-            //                   title: Text(AppLocalizations.of(context)!.total),
-            //                   subtitle: Text(i.total.toCurrencyFormat()),
-            //                   leading: const Icon(Icons.monitor_weight),
-            //                   trailing: const Text("SYP"),
-            //                 )),
-            //                 OutlinedCard(
-            //                     child: ListTile(
-            //                   title: Text(AppLocalizations.of(context)!.total),
-            //                   subtitle: Text(i.total.toCurrencyFormat()),
-            //                   leading: const Icon(Icons.monitor_weight),
-            //                   trailing: const Text("SYP"),
-            //                 )),
-            //                 OutlinedCard(
-            //                     child: ListTile(
-            //                   title: Text(AppLocalizations.of(context)!.total),
-            //                   subtitle: Text(i.total.toCurrencyFormat()),
-            //                   leading: const Icon(Icons.monitor_weight),
-            //                   trailing: const Text("SYP"),
-            //                 )),
-            //                 StorageInfoCardCustom(
-            //                     title: AppLocalizations.of(context)!.total,
-            //                     description: i.total.toCurrencyFormat(),
-            //                     trailing: const Text("SYP"),
-            //                     svgSrc: Icons.monitor_weight),
-            //                 StorageInfoCardCustom(
-            //                     title: AppLocalizations.of(context)!.balance,
-            //                     description: "0",
-            //                     trailing: const Text("trailing"),
-            //                     svgSrc: Icons.balance),
-            //               ],
-            //             );
-            //           }),
-            //           autoRest: ChangesRecords.init(Spendings(), "NameID",
-            //               fieldToSumBy: "value", pieChartEnabled: true)),
-            //     ),
-            //   ),
-            //   type: WidgetDashboardType.CHART,
-            // ),
-
-            // getWidget(
-            //   StaggeredGridTile.count(
-            //       crossAxisCellCount: 1,
-            //       mainAxisCellCount: 1.5,
-            //       child: CirculeChartItem<GrowthRate, DateTime>(
-            //         title: "T",
-            //         list: getAnalysisChartFunds(),
-            //         // titles: getAnalysisChartFundsTitle(context),
-            //         // dataLabelMapper: (item, idx) =>
-            //         //     item.total.toCurrencyFormat(),
-            //         xValueMapper: (item, value, indexInsideList) => DateTime(
-            //             value.year ?? 2022, value.month ?? 1, value.day ?? 1),
-            //         yValueMapper: (item, n, indexInsideList) => n.total,
-            //       )),
-            //   type: WidgetDashboardType.CHART,
-            // ),
-            // getWidget(
-            //   StaggeredGridTile.count(
-            //       crossAxisCellCount: 2,
-            //       mainAxisCellCount: 1.5,
-            //       child: MultiLineChartItem<GrowthRate, DateTime>(
-            //         title: "T",
-            //         list: getAnalysisChartFunds(),
-            //         titles: getAnalysisChartFundsTitle(context),
-            //         dataLabelMapper: (item, idx) =>
-            //             item.total.toCurrencyFormat(),
-            //         xValueMapper: (item, value, indexInsideList) => DateTime(
-            //             value.year ?? 2022, value.month ?? 1, value.day ?? 1),
-            //         yValueMapper: (item, n, indexInsideList) => n.total,
-            //       )),
-            //   type: WidgetDashboardType.CHART,
-            // ),
-            // getWidget(
-            //   StaggeredGridTile.count(
-            //       crossAxisCellCount: 2,
-            //       mainAxisCellCount: 1.5,
-            //       child: MultiLineChartItem<GrowthRate, DateTime>(
-            //         title: "T",
-            //         list: getAnalysisChart(),
-            //         titles: getAnalysisChartTitle(context),
-            //         dataLabelMapper: (item, idx) =>
-            //             item.total.toCurrencyFormat(),
-            //         xValueMapper: (item, value, indexInsideList) => DateTime(
-            //             value.year ?? 2022, value.month ?? 1, value.day ?? 1),
-            //         yValueMapper: (item, n, indexInsideList) => n.total,
-            //       )),
-            // ),
-            // ...getInvoicesWidgets(context)
-          ]),
-      if (checkList(customerToPayNext))
-        DashableGridHelper(
-            title: AppLocalizations.of(context)!.customer,
-            widgets: [
-              getWidget(StaggeredGridTile.count(
-                  crossAxisCellCount: crossAxisCount,
-                  mainAxisCellCount: 2,
-                  child: Card(
-                    child: ViewableTableViewAbstractWidget(
-                        usePag: true,
-                        buildActions: false,
-                        viewAbstract: [
-                          ...customerToPayNext ?? [],
-                          ...debits ?? []
-                        ]),
-                  )))
-            ]),
+          ],
+        ),
       if (checkList(notPayedCustomers))
         DashableGridHelper(
-            title: AppLocalizations.of(context)!.customer,
-            widgets: [
-              getWidget(StaggeredGridTile.count(
-                  crossAxisCellCount: crossAxisCount,
-                  mainAxisCellCount: 2,
-                  child: Card(
-                    child: ViewableTableViewAbstractWidget(
-                        usePag: true, viewAbstract: [...notPayedCustomers!]),
-                  )))
-            ]),
+          title: AppLocalizations.of(context)!.customer,
+          widgets: [
+            getWidget(
+              StaggeredGridTile.count(
+                crossAxisCellCount: crossAxisCount,
+                mainAxisCellCount: 2,
+                child: Card(
+                  child: ViewableTableViewAbstractWidget(
+                    usePag: true,
+                    viewAbstract: [...notPayedCustomers!],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
     ];
   }
 
   @override
   List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
-          BuildContext context) =>
-      getTabBarSecondPane(context);
+    BuildContext context,
+  ) => getTabBarSecondPane(context);
 
   @override
   void setDate(DateObject? date) {
@@ -560,10 +615,12 @@ class Dashboard extends UserLists<Dashboard>
   }
 
   @override
-  Widget? getDashboardAppbar(BuildContext context,
-      {bool? firstPane,
-      GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab}) {
+  Widget? getDashboardAppbar(
+    BuildContext context, {
+    bool? firstPane,
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+  }) {
     if (firstPane == false) return null;
     return DashboardHeader(
       object: this,
@@ -581,76 +638,97 @@ class Dashboard extends UserLists<Dashboard>
   }
 
   @override
-  getDashboardShouldWaitBeforeRequest(BuildContext context,
-      {bool? firstPane,
-      GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab}) {
+  getDashboardShouldWaitBeforeRequest(
+    BuildContext context, {
+    bool? firstPane,
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+  }) {
     return null;
   }
 
   @override
   List<InvoiceHeaderTitleAndDescriptionInfo>
-      getPrintableDashboardAccountInfoInBottom(
-          BuildContext context, PrintDashboardSetting? pca) {
+  getPrintableDashboardAccountInfoInBottom(
+    BuildContext context,
+    PrintDashboardSetting? pca,
+  ) {
     // TODO: implement getPrintableDashboardAccountInfoInBottom
     return [];
   }
 
   @override
   pdf.Widget? getPrintableDashboardCustomWidgetBottom(
-          BuildContext context,
-          PrintDashboardSetting? pca,
-          PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
-                  PrintLocalSetting>
-              generator) =>
-      null;
+    BuildContext context,
+    PrintDashboardSetting? pca,
+    PdfDashnoardApi<
+      PrintableDashboardInterface<PrintLocalSetting>,
+      PrintLocalSetting
+    >
+    generator,
+  ) => null;
 
   @override
   pdf.Widget? getPrintableDashboardCustomWidgetTop(
-          BuildContext context,
-          PrintDashboardSetting? pca,
-          PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
-                  PrintLocalSetting>
-              generator) =>
-      null;
+    BuildContext context,
+    PrintDashboardSetting? pca,
+    PdfDashnoardApi<
+      PrintableDashboardInterface<PrintLocalSetting>,
+      PrintLocalSetting
+    >
+    generator,
+  ) => null;
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableDashboardFooterTotal(
-          BuildContext context, PrintDashboardSetting? pca) =>
-      [];
+    BuildContext context,
+    PrintDashboardSetting? pca,
+  ) => [];
 
   @override
   List<List<InvoiceHeaderTitleAndDescriptionInfo>>
-      getPrintableDashboardHeaderInfo(
-          BuildContext context, PrintDashboardSetting? pca) {
-    List<InvoiceHeaderTitleAndDescriptionInfo>? first =
-        getInvoicDesFirstRow(context, pca);
-    List<InvoiceHeaderTitleAndDescriptionInfo>? sec =
-        getInvoiceDesSecRow(context, pca);
-    List<InvoiceHeaderTitleAndDescriptionInfo>? therd =
-        getInvoiceDesTherdRow(context, pca);
+  getPrintableDashboardHeaderInfo(
+    BuildContext context,
+    PrintDashboardSetting? pca,
+  ) {
+    List<InvoiceHeaderTitleAndDescriptionInfo>? first = getInvoicDesFirstRow(
+      context,
+      pca,
+    );
+    List<InvoiceHeaderTitleAndDescriptionInfo>? sec = getInvoiceDesSecRow(
+      context,
+      pca,
+    );
+    List<InvoiceHeaderTitleAndDescriptionInfo>? therd = getInvoiceDesTherdRow(
+      context,
+      pca,
+    );
 
     return [
       if (first != null) first,
       if (sec != null) sec,
-      if (therd != null) therd
+      if (therd != null) therd,
     ];
   }
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo>
-      getPrintableDashboardTotalDescripton(
-              BuildContext context, PrintDashboardSetting? pca) =>
-          [];
+  getPrintableDashboardTotalDescripton(
+    BuildContext context,
+    PrintDashboardSetting? pca,
+  ) => [];
 
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-          BuildContext context, PrintLocalSetting? dashboardSetting) =>
-      null;
+    BuildContext context,
+    PrintLocalSetting? dashboardSetting,
+  ) => null;
 
   @override
   String getPrintableInvoiceTitle(
-      BuildContext context, PrintDashboardSetting? pca) {
+    BuildContext context,
+    PrintDashboardSetting? pca,
+  ) {
     if (pca?.dashboardPrintType == PrintDashboardType.MONEY_FUND_ONLY) {
       return AppLocalizations.of(context)!.money_fund;
     } else if (pca?.dashboardPrintType ==
@@ -709,35 +787,39 @@ class Dashboard extends UserLists<Dashboard>
 
   @override
   List<PrintableMaster<PrintLocalSetting>>
-      getPrintableRecieptMasterDashboardLists(
-              BuildContext context, PrintDashboardSetting? pca) =>
-          [
-            if (shouldViewMoney(pca)) ...getList(credits, pca),
-            if (shouldViewMoney(pca)) ...getList(debits, pca),
-            if (shouldViewMoney(pca)) ...getList(incomes, pca),
-            if (shouldViewMoney(pca)) ...getList(spendings, pca),
+  getPrintableRecieptMasterDashboardLists(
+    BuildContext context,
+    PrintDashboardSetting? pca,
+  ) => [
+    if (shouldViewMoney(pca)) ...getList(credits, pca),
+    if (shouldViewMoney(pca)) ...getList(debits, pca),
+    if (shouldViewMoney(pca)) ...getList(incomes, pca),
+    if (shouldViewMoney(pca)) ...getList(spendings, pca),
 
-            if (shouldViewInvoice(pca)) ...orders?.cast() ?? [],
-            if (shouldViewInvoice(pca)) ...purchases?.cast() ?? [],
-            if (shouldViewInvoice(pca)) ...orders_refunds?.cast() ?? [],
-            if (shouldViewInvoice(pca)) ...purchases_refunds?.cast() ?? [],
-            if (shouldViewInvoice(pca)) ...cut_requests?.cast() ?? []
+    if (shouldViewInvoice(pca)) ...orders?.cast() ?? [],
+    if (shouldViewInvoice(pca)) ...purchases?.cast() ?? [],
+    if (shouldViewInvoice(pca)) ...orders_refunds?.cast() ?? [],
+    if (shouldViewInvoice(pca)) ...purchases_refunds?.cast() ?? [],
+    if (shouldViewInvoice(pca)) ...cut_requests?.cast() ?? [],
 
-            // if (debits?.isNotEmpty ?? false) debits!,
-            // if (spendings?.isNotEmpty ?? false) spendings!,
-            // if (incomes?.isNotEmpty ?? false) incomes!,
-          ];
+    // if (debits?.isNotEmpty ?? false) debits!,
+    // if (spendings?.isNotEmpty ?? false) spendings!,
+    // if (incomes?.isNotEmpty ?? false) incomes!,
+  ];
 
   @override
   pdf.Widget? getPrintableWatermark(d.PdfPageFormat? format) => null;
 
   @override
   List<String> getPrintableDashboardTableHeaders(
-      BuildContext context,
-      PrintDashboardSetting? pca,
-      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
-              PrintLocalSetting>
-          generator) {
+    BuildContext context,
+    PrintDashboardSetting? pca,
+    PdfDashnoardApi<
+      PrintableDashboardInterface<PrintLocalSetting>,
+      PrintLocalSetting
+    >
+    generator,
+  ) {
     if (pca?.dashboardPrintType == PrintDashboardType.MONEY_FUND_ONLY) {
       return [
         AppLocalizations.of(context)!.date,
@@ -768,9 +850,7 @@ class Dashboard extends UserLists<Dashboard>
     }
   }
 
-  int getPrintableDashboardDebitIndex(
-    PrintDashboardSetting? pca,
-  ) {
+  int getPrintableDashboardDebitIndex(PrintDashboardSetting? pca) {
     if (pca?.hideCurrency == false) {
       return 4;
     } else {
@@ -801,9 +881,11 @@ class Dashboard extends UserLists<Dashboard>
   DashboardContentItem? getPrintableDashboardFirstRowContentItem(
     BuildContext context,
     PrintDashboardSetting? pca,
-    PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
-            PrintLocalSetting>
-        generator,
+    PdfDashnoardApi<
+      PrintableDashboardInterface<PrintLocalSetting>,
+      PrintLocalSetting
+    >
+    generator,
   ) {
     if (pca?.includePreviousBalance == true) {
       return DashboardContentItem(
@@ -818,12 +900,15 @@ class Dashboard extends UserLists<Dashboard>
 
   @override
   List<String> getPrintableDashboardRowContentConverter(
-      BuildContext context,
-      PrintDashboardSetting? pca,
-      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
-              PrintLocalSetting>
-          generator,
-      DashboardContentItem dynamicList) {
+    BuildContext context,
+    PrintDashboardSetting? pca,
+    PdfDashnoardApi<
+      PrintableDashboardInterface<PrintLocalSetting>,
+      PrintLocalSetting
+    >
+    generator,
+    DashboardContentItem dynamicList,
+  ) {
     double? debitsDouble;
     double? creditsDouble;
     debitsDouble = dynamicList.debit;

@@ -25,17 +25,16 @@ class User<T> extends UserLists<T> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      super.getMirrorFieldsMapNewInstance()
-        ..addAll({
-          "name": "",
-          "email": "",
-          "activated": 0,
-          "date": "",
-          "city": "",
-          "address": "",
-          "profile": "",
-          "comments": "",
-        });
+      super.getMirrorFieldsMapNewInstance()..addAll({
+        "name": "",
+        "email": "",
+        "activated": 0,
+        "date": "",
+        "city": "",
+        "address": "",
+        "profile": "",
+        "comments": "",
+      });
   User() : super() {
     date = "".toDateTimeNowString();
   }
@@ -49,7 +48,7 @@ class User<T> extends UserLists<T> {
       "email",
       "city",
       "address",
-      "comments"
+      "comments",
     ];
   }
 
@@ -60,66 +59,81 @@ class User<T> extends UserLists<T> {
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "name": getMainHeaderLabelTextOnly(context),
-        "phone": AppLocalizations.of(context)!.phone_number,
-        "password": AppLocalizations.of(context)!.password,
-        "date": AppLocalizations.of(context)!.date,
-        "email": AppLocalizations.of(context)!.email,
-        "city": AppLocalizations.of(context)!.city,
-        "address": AppLocalizations.of(context)!.address1,
-        "comments": AppLocalizations.of(context)!.comments,
-        "balance": AppLocalizations.of(context)!.balance,
-        "totalCredits": AppLocalizations.of(context)!.credits,
-        "totalDebits": AppLocalizations.of(context)!.debits,
-        "totalOrders": AppLocalizations.of(context)!.orders,
-        "totalPurchases": AppLocalizations.of(context)!.purchases,
-        "termsDate": AppLocalizations.of(context)!.termsDate,
-      };
+    "name": getMainHeaderLabelTextOnly(context),
+    "phone": AppLocalizations.of(context)!.phone_number,
+    "password": AppLocalizations.of(context)!.password,
+    "date": AppLocalizations.of(context)!.date,
+    "email": AppLocalizations.of(context)!.email,
+    "city": AppLocalizations.of(context)!.city,
+    "address": AppLocalizations.of(context)!.address1,
+    "comments": AppLocalizations.of(context)!.comments,
+    "balance": AppLocalizations.of(context)!.balance,
+    "totalCredits": AppLocalizations.of(context)!.credits,
+    "totalDebits": AppLocalizations.of(context)!.debits,
+    "totalOrders": AppLocalizations.of(context)!.orders,
+    "totalPurchases": AppLocalizations.of(context)!.purchases,
+    "termsDate": AppLocalizations.of(context)!.termsDate,
+  };
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteMap() =>
-      {"email": true, "city": true, "address": true};
+  Map<String, bool> getTextInputIsAutoCompleteMap() => {
+    "email": true,
+    "city": true,
+    "address": true,
+  };
   @override
   Map<String, int> getTextInputMaxLengthMap() => {
-        "name": 100,
-        "phone": 10,
-        "password": 10,
-        "email": 50,
-        "city": 20,
-      };
+    "name": 100,
+    "phone": 10,
+    "password": 10,
+    "email": 50,
+    "city": 20,
+  };
 
   @override
-  String? getCustomAction() {
+  List<String>? getCustomAction() {
     return null;
   }
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {
-        "name": getMainIconData(),
-        "phone": Icons.phone,
-        "date": Icons.date_range,
-        "password": Icons.password,
-        "email": Icons.email,
-        "city": Icons.location_city,
-        "address": Icons.map,
-        "comments": Icons.comment
-      };
+    "name": getMainIconData(),
+    "phone": Icons.phone,
+    "date": Icons.date_range,
+    "password": Icons.password,
+    "email": Icons.email,
+    "city": Icons.location_city,
+    "address": Icons.map,
+    "comments": Icons.comment,
+  };
 
   @override
   String getMainHeaderTextOnly(BuildContext context) => name ?? "";
   @override
   FutureOr<List>? getTextInputValidatorIsUnique(
-      BuildContext context, String field, String? currentText) {
+    BuildContext context,
+    String field,
+    String? currentText,
+  ) {
     if (getParent == null) {
       if (field == 'email') {
         return searchByFieldName(
-            context: context, field: 'email', searchQuery: currentText ?? "");
+          context: context,
+          field: 'email',
+          searchQuery: currentText ?? "",
+        );
       } else if (field == 'phone') {
         return searchByFieldName(
-            context: context, field: 'phone', searchQuery: currentText ?? "");
+          context: context,
+          field: 'phone',
+          searchQuery: currentText ?? "",
+        );
       } else if (field == 'name') {
         return searchByFieldName(
-            context: context, field: 'name', searchQuery: currentText ?? "");
+          context: context,
+          field: 'name',
+          searchQuery: currentText ?? "",
+        );
       }
     }
     return super.getTextInputValidatorIsUnique(context, field, currentText);
@@ -139,8 +153,9 @@ class User<T> extends UserLists<T> {
   }
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() =>
-      {"name": true};
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {
+    "name": true,
+  };
 
   @override
   Map<String, double> getTextInputMaxValidateMap() => {};
@@ -150,30 +165,34 @@ class User<T> extends UserLists<T> {
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "name": TextInputType.text,
-        "phone": TextInputType.phone,
-        "date": TextInputType.datetime,
-        "password": TextInputType.visiblePassword,
-        "email": TextInputType.emailAddress,
-        "address": TextInputType.streetAddress,
-        "city": TextInputType.text,
-        "comments": TextInputType.multiline,
-        "balance": TextInputType.number,
-        "totalCredits": TextInputType.number,
-        "totalDebits": TextInputType.number,
-        "totalOrders": TextInputType.number,
-        "totalPurchases": TextInputType.number,
-        "termsDate": TextInputType.datetime,
-      };
+    "name": TextInputType.text,
+    "phone": TextInputType.phone,
+    "date": TextInputType.datetime,
+    "password": TextInputType.visiblePassword,
+    "email": TextInputType.emailAddress,
+    "address": TextInputType.streetAddress,
+    "city": TextInputType.text,
+    "comments": TextInputType.multiline,
+    "balance": TextInputType.number,
+    "totalCredits": TextInputType.number,
+    "totalDebits": TextInputType.number,
+    "totalOrders": TextInputType.number,
+    "totalPurchases": TextInputType.number,
+    "termsDate": TextInputType.datetime,
+  };
 
   @override
-  Map<String, bool> isFieldRequiredMap() =>
-      {"name": true, "phone": true, "password": true};
+  Map<String, bool> isFieldRequiredMap() => {
+    "name": true,
+    "phone": true,
+    "password": true,
+  };
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return RequestOptions().addSortBy("name", SortByType.ASC);
   }
 

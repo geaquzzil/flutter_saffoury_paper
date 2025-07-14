@@ -90,7 +90,9 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   String? getTableNameApi() => "list_sales";
 
   @override
-  String? getCustomAction() => "list_sales";
+  List<String>? getCustomAction() {
+    return ["list_sales"];
+  }
 
   SalesAnalysisDashboard.init({this.dateObject});
 
@@ -114,8 +116,8 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
 
   @override
   Map<String, String> get getCustomMap => {
-        "date": jsonEncode(dateObject?.toJson() ?? DateObject().toJson()),
-      };
+    "date": jsonEncode(dateObject?.toJson() ?? DateObject().toJson()),
+  };
 
   // @override
   // Future<SalesAnalysisDashboard?> callApi() async {
@@ -134,10 +136,12 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   Map<String, dynamic> toJsonViewAbstract() => toJson();
 
   @override
-  getDashboardShouldWaitBeforeRequest(BuildContext context,
-      {bool? firstPane,
-      GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab}) {
+  getDashboardShouldWaitBeforeRequest(
+    BuildContext context, {
+    bool? firstPane,
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+  }) {
     return null;
   }
 
@@ -147,244 +151,277 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
 
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
-      BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageStateWithApi>? globalKey, TabControllerHelper? tab}) {
+    BuildContext context,
+    int crossAxisCount, {
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+  }) {
     return [
       DashableGridHelper(
-          title: AppLocalizations.of(context)!.profit_analysis,
-          widgets: [
-            getWidget(StaggeredGridTile.count(
-                crossAxisCellCount: 2,
-                mainAxisCellCount: heightSmall,
-                child: ChartCardItemCustom(
-                  // list: incomesDue,
-                  listGrowthRate: totalSalesPrice,
-                  icon: Icons.monetization_on,
-                  title:
-                      AppLocalizations.of(context)!.total_sales.toUpperCase(),
-                  description: totalSalesPrice.getTotalTextFromSetting(context),
-                  footer: totalSalesQuantity.getTotalText(
-                      symple: AppLocalizations.of(context)!.quantity),
-                  footerRightWidget: totalSalesPrice.getGrowthRateText(context),
-                ))),
-            getWidget(StaggeredGridTile.count(
-                crossAxisCellCount: 1,
-                mainAxisCellCount: heightLarge,
-                child: ChartCardItemCustom(
-                  // list: incomesDue,
-                  listGrowthRate: incomesAnalysis,
-                  icon: Icons.arrow_back_sharp,
-                  title:
-                      AppLocalizations.of(context)!.total_incomes.toUpperCase(),
-                  description: incomesAnalysis.getTotalTextFromSetting(context),
-                  // footer: credits?.length.toString(),
-                  footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-                ))),
-            getWidget(StaggeredGridTile.count(
-                crossAxisCellCount: 1,
-                mainAxisCellCount: heightLarge,
-                child: ChartCardItemCustom(
-                  // list: spendingsDue,
-                  icon: Icons.arrow_forward,
-                  listGrowthRate: spendingsAnalysis,
+        title: AppLocalizations.of(context)!.profit_analysis,
+        widgets: [
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: heightSmall,
+              child: ChartCardItemCustom(
+                // list: incomesDue,
+                listGrowthRate: totalSalesPrice,
+                icon: Icons.monetization_on,
+                title: AppLocalizations.of(context)!.total_sales.toUpperCase(),
+                description: totalSalesPrice.getTotalTextFromSetting(context),
+                footer: totalSalesQuantity.getTotalText(
+                  symple: AppLocalizations.of(context)!.quantity,
+                ),
+                footerRightWidget: totalSalesPrice.getGrowthRateText(context),
+              ),
+            ),
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: heightLarge,
+              child: ChartCardItemCustom(
+                // list: incomesDue,
+                listGrowthRate: incomesAnalysis,
+                icon: Icons.arrow_back_sharp,
+                title: AppLocalizations.of(
+                  context,
+                )!.total_incomes.toUpperCase(),
+                description: incomesAnalysis.getTotalTextFromSetting(context),
+                // footer: credits?.length.toString(),
+                footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+              ),
+            ),
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: heightLarge,
+              child: ChartCardItemCustom(
+                // list: spendingsDue,
+                icon: Icons.arrow_forward,
+                listGrowthRate: spendingsAnalysis,
 
-                  color: Theme.of(context).colorScheme.error,
-                  title: AppLocalizations.of(context)!
-                      .total_expenses
-                      .toUpperCase(),
-                  description:
-                      spendingsAnalysis.getTotalTextFromSetting(context),
-                  // footer: credits?.length.toString(),
-                  footerRightWidget: spendingsAnalysis
-                      .getGrowthRateText(context, reverseTheme: true),
-                ))),
-            getWidget(StaggeredGridTile.count(
-                crossAxisCellCount: 2,
-                mainAxisCellCount: 3.5,
-                child: ChartCardItemCustom(
-                  // list: incomesDue,
-                  // listGrowthRate: spendingsAnalysis,
-                  icon: Icons.monetization_on,
-                  title: AppLocalizations.of(context)!
-                      .total_net_profit
-                      .toUpperCase(),
-                  description: "TODO total_net_profit ",
-                  footer: spendingsAnalysis?.length.toString(),
-                  footerRightWidget:
-                      spendingsAnalysis.getGrowthRateText(context),
-                ))),
-            getWidget(StaggeredGridTile.count(
-                crossAxisCellCount: 2,
-                mainAxisCellCount: heightSmall,
-                child: ChartCardItemCustom(
-                  // list: spendingsDue,
-                  listGrowthRate: profitsByOrder,
-                  icon: Icons.currency_exchange_sharp,
-                  title: AppLocalizations.of(context)!
-                      .total_sales_Revenue
-                      .toUpperCase(),
-                  description: profitsByOrder.getTotalTextFromSetting(context),
-                  footer: profitsByOrder.getLastRecordTextFromSetting(context),
-                  footerRightWidget: profitsByOrder.getGrowthRateText(context),
-                ))),
-            getWidget(
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 2,
-                  mainAxisCellCount: heightLarge,
-                  child: ChartCardItemCustom(
-                    // list: spendingsDue,
-                    listGrowthRate: profitsByCutRequests,
-                    icon: Icons.shopping_cart,
-                    title:
-                        AppLocalizations.of(context)!.cutRequest.toUpperCase(),
-                    description:
-                        profitsByCutRequests.getTotalTextFromSetting(context),
-                    footer: profitsByCutRequests
-                        .getLastRecordTextFromSetting(context),
-                    footerRightWidget:
-                        profitsByCutRequests.getGrowthRateText(context),
-                  )),
+                color: Theme.of(context).colorScheme.error,
+                title: AppLocalizations.of(
+                  context,
+                )!.total_expenses.toUpperCase(),
+                description: spendingsAnalysis.getTotalTextFromSetting(context),
+                // footer: credits?.length.toString(),
+                footerRightWidget: spendingsAnalysis.getGrowthRateText(
+                  context,
+                  reverseTheme: true,
+                ),
+              ),
             ),
-            getWidget(
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 2,
-                  mainAxisCellCount: heightLarge,
-                  child: ChartCardItemCustom(
-                    // list: spendingsDue,
-                    color: Theme.of(context).colorScheme.error,
-                    listGrowthRate: wastesByCutRequests,
-                    icon: Icons.delete,
-                    title:
-                        AppLocalizations.of(context)!.totalWaste.toUpperCase(),
-                    description:
-                        wastesByCutRequests.getTotalTextFromSetting(context),
-                    footer: wastesByCutRequests
-                        .getLastRecordTextFromSetting(context),
-                    footerRightWidget: wastesByCutRequests
-                        .getGrowthRateText(context, reverseTheme: true),
-                  )),
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 3.5,
+              child: ChartCardItemCustom(
+                // list: incomesDue,
+                // listGrowthRate: spendingsAnalysis,
+                icon: Icons.monetization_on,
+                title: AppLocalizations.of(
+                  context,
+                )!.total_net_profit.toUpperCase(),
+                description: "TODO total_net_profit ",
+                footer: spendingsAnalysis?.length.toString(),
+                footerRightWidget: spendingsAnalysis.getGrowthRateText(context),
+              ),
             ),
-          ])
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: heightSmall,
+              child: ChartCardItemCustom(
+                // list: spendingsDue,
+                listGrowthRate: profitsByOrder,
+                icon: Icons.currency_exchange_sharp,
+                title: AppLocalizations.of(
+                  context,
+                )!.total_sales_Revenue.toUpperCase(),
+                description: profitsByOrder.getTotalTextFromSetting(context),
+                footer: profitsByOrder.getLastRecordTextFromSetting(context),
+                footerRightWidget: profitsByOrder.getGrowthRateText(context),
+              ),
+            ),
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: heightLarge,
+              child: ChartCardItemCustom(
+                // list: spendingsDue,
+                listGrowthRate: profitsByCutRequests,
+                icon: Icons.shopping_cart,
+                title: AppLocalizations.of(context)!.cutRequest.toUpperCase(),
+                description: profitsByCutRequests.getTotalTextFromSetting(
+                  context,
+                ),
+                footer: profitsByCutRequests.getLastRecordTextFromSetting(
+                  context,
+                ),
+                footerRightWidget: profitsByCutRequests.getGrowthRateText(
+                  context,
+                ),
+              ),
+            ),
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: heightLarge,
+              child: ChartCardItemCustom(
+                // list: spendingsDue,
+                color: Theme.of(context).colorScheme.error,
+                listGrowthRate: wastesByCutRequests,
+                icon: Icons.delete,
+                title: AppLocalizations.of(context)!.totalWaste.toUpperCase(),
+                description: wastesByCutRequests.getTotalTextFromSetting(
+                  context,
+                ),
+                footer: wastesByCutRequests.getLastRecordTextFromSetting(
+                  context,
+                ),
+                footerRightWidget: wastesByCutRequests.getGrowthRateText(
+                  context,
+                  reverseTheme: true,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     ];
   }
 
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
-      BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab,
-      TabControllerHelper? tabSecondPane}) {
+    BuildContext context,
+    int crossAxisCount, {
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+    TabControllerHelper? tabSecondPane,
+  }) {
     debugPrint("getDashboardSectionsSecoundPane $this");
     return [
       // if (checkList(profits))
       DashableGridHelper(
-          title: AppLocalizations.of(context)!.sales_analysis,
-          widgets: [
-            getWidget(
-                StaggeredGridTile.count(
-                    crossAxisCellCount: 2,
-                    mainAxisCellCount: heightLarge,
-                    child: LineChartItem<GrowthRate, String>(
-                      list: wastesByCutRequests ?? [],
-                      // title:
-                      //     CutRequest().getMainHeaderLabelTextOnly(context),
-                      dataLabelMapper: (item, idx) => item.total
-                          ?.toCurrencyFormat(
-                              symbol: AppLocalizations.of(context)!.kg),
-                      xValueMapper: (item, value) {
-                        // debugPrint("ChartItem $item");
-                        return DateFormat.MMM().format(
-                            DateTime(item.year!, item.month!, item.day ?? 1));
-                      },
-                      yValueMapper: (item, n) => item.total,
-                    )),
-                type: WidgetDashboardType.CHART),
-            getWidget(
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 1,
-                  mainAxisCellCount: heightSmall,
-                  child: ChartCardItemCustom(
-                    // list: spendingsDue,
-                    listGrowthRate: orders_offline_count,
-                    icon: Icons.shopping_cart,
-                    title: AppLocalizations.of(context)!
-                        .offlineOrder
-                        .toUpperCase(),
-                    description: AppLocalizations.of(context)!
-                        .itemsFormat(orders_offline_count.getTotalText())
-                        .toUpperCase(),
-                    // footer: orders_offline_count?.length.toString(),
-                    footerRightWidget:
-                        orders_offline_count.getGrowthRateText(context),
-                  )),
+        title: AppLocalizations.of(context)!.sales_analysis,
+        widgets: [
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: heightLarge,
+              child: LineChartItem<GrowthRate, String>(
+                list: wastesByCutRequests ?? [],
+                // title:
+                //     CutRequest().getMainHeaderLabelTextOnly(context),
+                dataLabelMapper: (item, idx) => item.total?.toCurrencyFormat(
+                  symbol: AppLocalizations.of(context)!.kg,
+                ),
+                xValueMapper: (item, value) {
+                  // debugPrint("ChartItem $item");
+                  return DateFormat.MMM().format(
+                    DateTime(item.year!, item.month!, item.day ?? 1),
+                  );
+                },
+                yValueMapper: (item, n) => item.total,
+              ),
             ),
-            getWidget(
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 1,
-                  mainAxisCellCount: heightSmall,
-                  child: ChartCardItemCustom(
-                    // list: spendingsDue,
-                    listGrowthRate: orders_online_count,
-                    icon: Icons.shopping_cart,
-                    title:
-                        AppLocalizations.of(context)!.onlineOrder.toUpperCase(),
+            type: WidgetDashboardType.CHART,
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: heightSmall,
+              child: ChartCardItemCustom(
+                // list: spendingsDue,
+                listGrowthRate: orders_offline_count,
+                icon: Icons.shopping_cart,
+                title: AppLocalizations.of(context)!.offlineOrder.toUpperCase(),
+                description: AppLocalizations.of(context)!
+                    .itemsFormat(orders_offline_count.getTotalText())
+                    .toUpperCase(),
+                // footer: orders_offline_count?.length.toString(),
+                footerRightWidget: orders_offline_count.getGrowthRateText(
+                  context,
+                ),
+              ),
+            ),
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: heightSmall,
+              child: ChartCardItemCustom(
+                // list: spendingsDue,
+                listGrowthRate: orders_online_count,
+                icon: Icons.shopping_cart,
+                title: AppLocalizations.of(context)!.onlineOrder.toUpperCase(),
 
-                    description: AppLocalizations.of(context)!
-                        .itemsFormat(orders_online_count.getTotalText())
-                        .toUpperCase(),
-                    // footer: orders_offline_count?.length.toString(),
-                    footerRightWidget:
-                        orders_online_count.getGrowthRateText(context),
-                  )),
+                description: AppLocalizations.of(context)!
+                    .itemsFormat(orders_online_count.getTotalText())
+                    .toUpperCase(),
+                // footer: orders_offline_count?.length.toString(),
+                footerRightWidget: orders_online_count.getGrowthRateText(
+                  context,
+                ),
+              ),
             ),
-            getWidget(
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 1,
-                  mainAxisCellCount: heightSmall,
-                  child: ChartCardItemCustom(
-                    // list: spendingsDue,
-                    listGrowthRate: customers_count,
-                    icon: Icons.shopping_cart,
-                    title: AppLocalizations.of(context)!
-                        .totalFormat(AppLocalizations.of(context)!.customers)
-                        .toUpperCase(),
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: heightSmall,
+              child: ChartCardItemCustom(
+                // list: spendingsDue,
+                listGrowthRate: customers_count,
+                icon: Icons.shopping_cart,
+                title: AppLocalizations.of(context)!
+                    .totalFormat(AppLocalizations.of(context)!.customers)
+                    .toUpperCase(),
 
-                    description: AppLocalizations.of(context)!
-                        .itemsFormat(customers_count.getTotalText())
-                        .toUpperCase(),
-                    // footer: orders_offline_count?.length.toString(),
-                    footerRightWidget:
-                        customers_count.getGrowthRateText(context),
-                  )),
+                description: AppLocalizations.of(
+                  context,
+                )!.itemsFormat(customers_count.getTotalText()).toUpperCase(),
+                // footer: orders_offline_count?.length.toString(),
+                footerRightWidget: customers_count.getGrowthRateText(context),
+              ),
             ),
-            getWidget(
-              StaggeredGridTile.count(
-                  crossAxisCellCount: 1,
-                  mainAxisCellCount: heightSmall,
-                  child: ChartCardItemCustom(
-                    // list: spendingsDue,
-                    listGrowthRate: products,
-                    icon: Icons.shopping_cart,
-                    title: AppLocalizations.of(context)!
-                        .totalFormat(AppLocalizations.of(context)!.products)
-                        .toUpperCase(),
-                    description: AppLocalizations.of(context)!
-                        .itemsFormat(products.getTotalText())
-                        .toUpperCase(),
-                    // footer: orders_offline_count?.length.toString(),
-                    footerRightWidget: products.getGrowthRateText(context),
-                  )),
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: heightSmall,
+              child: ChartCardItemCustom(
+                // list: spendingsDue,
+                listGrowthRate: products,
+                icon: Icons.shopping_cart,
+                title: AppLocalizations.of(context)!
+                    .totalFormat(AppLocalizations.of(context)!.products)
+                    .toUpperCase(),
+                description: AppLocalizations.of(
+                  context,
+                )!.itemsFormat(products.getTotalText()).toUpperCase(),
+                // footer: orders_offline_count?.length.toString(),
+                footerRightWidget: products.getGrowthRateText(context),
+              ),
             ),
-          ])
+          ),
+        ],
+      ),
     ];
   }
 
   @override
   List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
-          BuildContext context) =>
-      null;
-
-
+    BuildContext context,
+  ) => null;
 
   @override
   void setDate(DateObject? date) {
@@ -406,10 +443,12 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   List<String> getMainFields({BuildContext? context}) => [];
 
   @override
-  Widget? getDashboardAppbar(BuildContext context,
-      {bool? firstPane,
-      GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab}) {
+  Widget? getDashboardAppbar(
+    BuildContext context, {
+    bool? firstPane,
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+  }) {
     if (firstPane == false) return null;
     return DashboardHeader(
       date: dateObject ?? DateObject(),

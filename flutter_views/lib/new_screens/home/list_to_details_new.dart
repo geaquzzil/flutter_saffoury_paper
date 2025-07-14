@@ -117,17 +117,19 @@ class _ListToDetailsSecoundPaneNotifierState
     TabControllerHelper? tab,
     SecondPaneHelper? valueNotifier,
   }) {
-    List<Widget>? top =
-        ((valueNotifier?.value as ViewAbstract?) ?? _viewAbstract)
-            .getCustomTopWidget(
-              context,
-              action: _lastSearchQuery != null
-                  ? ServerActions.search
-                  : ServerActions.view,
-              basePage: this,
-              isFromFirstAndSecPane: firstPane,
-              extras: _lastSearchQuery,
-            );
+    List<Widget>? top;
+    if (valueNotifier?.value is ViewAbstract) {
+      top = ((valueNotifier?.value as ViewAbstract?) ?? _viewAbstract)
+          .getCustomTopWidget(
+            context,
+            action: _lastSearchQuery != null
+                ? ServerActions.search
+                : ServerActions.view,
+            basePage: this,
+            isFromFirstAndSecPane: firstPane,
+            extras: _lastSearchQuery,
+          );
+    }
     if (firstPane) {
       // asda
       debugPrint("getPaneNotifier firstPane $valueNotifier");
@@ -212,7 +214,11 @@ class _ListToDetailsSecoundPaneNotifierState
           key: keyList,
 
           isSelectForCard: (object) {
-            return (lastSecondPaneItem?.value?.isEquals(object) ?? false);
+            if (lastSecondPaneItem?.value is ViewAbstract) {
+              return (lastSecondPaneItem?.value?.isEquals(object) ?? false);
+            } else {
+              return false;
+            }
           },
           onClickForCard: (object) {
             // debugPrint("getPaneNotifier onClick $v");

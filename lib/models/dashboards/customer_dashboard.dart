@@ -93,7 +93,9 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   }
 
   @override
-  String? getCustomAction() => "customers/statement/$iD";
+  List<String>? getCustomAction() {
+    return ["customers", "statement", "$iD"];
+  }
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
@@ -104,9 +106,10 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
       AppLocalizations.of(context)!.customer;
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return RequestOptions()
         .addDate(dateObject ?? DateObject())
         .addSearchByField("withAnalysis", true);
@@ -126,52 +129,60 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
 
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
-      BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageStateWithApi>? globalKey, TabControllerHelper? tab}) {
+    BuildContext context,
+    int crossAxisCount, {
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+  }) {
     return [
       DashableGridHelper(
-          sectionsListToTabbar: getListOfTabbarFunds(),
-          headerListToAdd: [Credits(), Debits(), Spendings(), Incomes()],
-          title: AppLocalizations.of(context)!.overview,
-          widgets: [
-            ...getFundWidgets(context, crossAxisCount, checkForEmpty: false),
-            // ...getInvoicesWidgets(context)
-          ]),
+        sectionsListToTabbar: getListOfTabbarFunds(),
+        headerListToAdd: [Credits(), Debits(), Spendings(), Incomes()],
+        title: AppLocalizations.of(context)!.overview,
+        widgets: [
+          ...getFundWidgets(context, crossAxisCount, checkForEmpty: false),
+          // ...getInvoicesWidgets(context)
+        ],
+      ),
       DashableGridHelper(
-          title: AppLocalizations.of(context)!.invoice,
-          headerListToAdd: [
-            Order(),
-            Purchases(),
-            CutRequest(),
-            Transfers(),
-            ProductInput(),
-            ProductOutput(),
-            ReservationInvoice()
-          ],
-          widgets: [
-            ...getInvoicesWidgets(context, crossAxisCount)
-          ]),
+        title: AppLocalizations.of(context)!.invoice,
+        headerListToAdd: [
+          Order(),
+          Purchases(),
+          CutRequest(),
+          Transfers(),
+          ProductInput(),
+          ProductOutput(),
+          ReservationInvoice(),
+        ],
+        widgets: [...getInvoicesWidgets(context, crossAxisCount)],
+      ),
     ];
   }
 
   @override
   bool getPrintableSupportsLabelPrinting() => false;
   @override
-  getDashboardSectionsSecoundPane(BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab,
-      TabControllerHelper? tabSecondPane}) {
+  getDashboardSectionsSecoundPane(
+    BuildContext context,
+    int crossAxisCount, {
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+    TabControllerHelper? tabSecondPane,
+  }) {
     if (tabSecondPane != null && tabSecondPane.extras != null) {
       return [
         // LineChartItem(list: , xValueMapper: xValueMapper, yValueMapper: yValueMapper)
-        getSliverListFromExtrasTabbar(context, tabSecondPane)
+        getSliverListFromExtrasTabbar(context, tabSecondPane),
       ];
     }
 
     return [
-      DashableGridHelper(title: AppLocalizations.of(context)!.total, widgets: [
-        getWidget(
-          StaggeredGridTile.count(
+      DashableGridHelper(
+        title: AppLocalizations.of(context)!.total,
+        widgets: [
+          getWidget(
+            StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: 1.5,
               child: MultiLineChartItem<GrowthRate, DateTime>(
@@ -179,55 +190,71 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
                 list: [...getAnalysisChartFunds(), ...getAnalysisChart()],
                 titles: [
                   ...getAnalysisChartFundsTitle(context),
-                  ...getAnalysisChartTitle(context)
+                  ...getAnalysisChartTitle(context),
                 ],
                 dataLabelMapper: (item, idx) => item.total.toCurrencyFormat(),
                 xValueMapper: (item, value, indexInsideList) => DateTime(
-                    value.year ?? 2022, value.month ?? 1, value.day ?? 1),
+                  value.year ?? 2022,
+                  value.month ?? 1,
+                  value.day ?? 1,
+                ),
                 yValueMapper: (item, n, indexInsideList) => n.total,
-              )),
-          type: WidgetDashboardType.CHART,
-        ),
-        getWidget(StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: .75,
-            child: ChartCardItemCustom(
+              ),
+            ),
+            type: WidgetDashboardType.CHART,
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: .75,
+              child: ChartCardItemCustom(
                 color: Colors.blue,
                 icon: Icons.credit_card,
                 title: AppLocalizations.of(context)!.totalFormat(
-                    AppLocalizations.of(context)!.credits.toLowerCase()),
-                description: creditsAnalysis.getTotalTextFromSetting(context)
+                  AppLocalizations.of(context)!.credits.toLowerCase(),
+                ),
+                description: creditsAnalysis.getTotalTextFromSetting(context),
                 // footer: incomes?.length.toString(),
                 // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-                ))),
-        getWidget(StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: .75,
-            child: ChartCardItemCustom(
+              ),
+            ),
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: .75,
+              child: ChartCardItemCustom(
                 color: Colors.red,
                 icon: Icons.arrow_back,
                 title: AppLocalizations.of(context)!.totalFormat(
-                    AppLocalizations.of(context)!.debits.toLowerCase()),
-                description: debitsAnalysis.getTotalTextFromSetting(context)
+                  AppLocalizations.of(context)!.debits.toLowerCase(),
+                ),
+                description: debitsAnalysis.getTotalTextFromSetting(context),
                 // footer: incomes?.length.toString(),
                 // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-                ))),
+              ),
+            ),
+          ),
 
-        getWidget(StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: .75,
-            child: ChartCardItemCustom(
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: .75,
+              child: ChartCardItemCustom(
                 color: Colors.orange,
                 icon: Icons.arrow_back,
                 title: AppLocalizations.of(context)!.balance_due,
-                description: balance.toCurrencyFormatFromSetting(context)
+                description: balance.toCurrencyFormatFromSetting(context),
                 // footer: incomes?.length.toString(),
                 // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-                ))),
-        getWidget(StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: 1,
-            child: ListHorizontalCustomViewCustomApiAutoRestWidget(
+              ),
+            ),
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: ListHorizontalCustomViewCustomApiAutoRestWidget(
                 onResponse: (g) {
                   List<GrowthRate> growthList = List.castFrom(g);
                   return ChartCardItemCustom(
@@ -238,47 +265,61 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
 
                     description: growthList.getTotalTextFromSetting(context),
                     // footer: incomes?.length.toString(),
-                    footerRightWidget:
-                        incomesAnalysis.getGrowthRateText(context),
+                    footerRightWidget: incomesAnalysis.getGrowthRateText(
+                      context,
+                    ),
                   );
                 },
                 autoRest: AutoRestCustom<GrowthRate>(
-                    responseType: ResponseType.LIST,
-                    customMap: {
-                      "iD": "${customers!.iD}",
-                      "date": jsonEncode(
-                          dateObject?.toJson() ?? DateObject().toJson()),
-                    },
-                    action: "list_customers_profit",
-                    key: "list_customers_profit${customers!.iD}",
-                    responseObjcect: GrowthRate())))),
-        getWidget(StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: ListHorizontalCustomViewCustomApiAutoRestWidget(
+                  responseType: ResponseType.LIST,
+                  customMap: {
+                    "iD": "${customers!.iD}",
+                    "date": jsonEncode(
+                      dateObject?.toJson() ?? DateObject().toJson(),
+                    ),
+                  },
+                  action: "list_customers_profit",
+                  key: "list_customers_profit${customers!.iD}",
+                  responseObjcect: GrowthRate(),
+                ),
+              ),
+            ),
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: ListHorizontalCustomViewCustomApiAutoRestWidget(
                 onResponse: (g) {
                   List<CustomerTerms> growthList = List.castFrom(g);
                   return ChartCardItemCustom(
                     icon: Icons.broken_image,
                     title: AppLocalizations.of(context)!.termsAndConitions,
-                    description: AppLocalizations.of(context)!
-                        .totalFormat(growthList.length),
+                    description: AppLocalizations.of(
+                      context,
+                    )!.totalFormat(growthList.length),
                   );
                 },
                 autoRest: AutoRestCustom<CustomerTerms>(
-                    responseType: ResponseType.LIST,
-                    customMap: {
-                      "iD": "${customers!.iD}",
-                    },
-                    action: "list_customers_terms",
-                    key: "list_customers_terms${customers!.iD}",
-                    responseObjcect: CustomerTerms())))),
-        getWidget(StaggeredGridTile.count(
-            crossAxisCellCount: crossAxisCount,
-            mainAxisCellCount: 3,
-            child: BaseViewNewPage(viewAbstract: customers!)))
-        // ...getInvoicesWidgets(context)
-      ]),
+                  responseType: ResponseType.LIST,
+                  customMap: {"iD": "${customers!.iD}"},
+                  action: "list_customers_terms",
+                  key: "list_customers_terms${customers!.iD}",
+                  responseObjcect: CustomerTerms(),
+                ),
+              ),
+            ),
+          ),
+          getWidget(
+            StaggeredGridTile.count(
+              crossAxisCellCount: crossAxisCount,
+              mainAxisCellCount: 3,
+              child: BaseViewNewPage(viewAbstract: customers!),
+            ),
+          ),
+          // ...getInvoicesWidgets(context)
+        ],
+      ),
     ];
   }
 
@@ -301,10 +342,12 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   List<String> getMainFields({BuildContext? context}) => [];
 
   @override
-  getDashboardShouldWaitBeforeRequest(BuildContext context,
-      {bool? firstPane,
-      GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab}) {
+  getDashboardShouldWaitBeforeRequest(
+    BuildContext context, {
+    bool? firstPane,
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+  }) {
     debugPrint("getDashboardShouldWaitBefore $iD");
     firstPane = firstPane ?? false;
     if (iD == -1) {
@@ -313,13 +356,15 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
           SliverFillRemaining(
             child: BaseEditWidget(
               currentScreenSize: findCurrentScreenSize(context),
-              viewAbstract: CustomerDashboardSelector(), isTheFirst: true,
+              viewAbstract: CustomerDashboardSelector(),
+              isTheFirst: true,
               onValidate: (v) {
                 if (v == null) return;
 
                 CustomerDashboardSelector cds = v as CustomerDashboardSelector;
                 debugPrint(
-                    "refresh customerr ${cds.customer?.iD} date ${cds.date} ");
+                  "refresh customerr ${cds.customer?.iD} date ${cds.date} ",
+                );
                 iD = cds.customer!.iD;
                 dateObject = DateObject(from: cds.date!, to: cds.date!);
                 globalKey?.currentState?.refresh(extras: this, tab: tab);
@@ -331,12 +376,13 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
           SliverFillRemaining(
             child: Center(
               child: EmptyWidget(
-                  lottiUrl:
-                      "https://lottie.host/901033cb-134b-423b-a08a-42be30e6a1e4/BT8QbFb23s.json",
-                  title: AppLocalizations.of(context)!.pleaseSelect,
-                  subtitle: AppLocalizations.of(context)!.no_content),
+                lottiUrl:
+                    "https://lottie.host/901033cb-134b-423b-a08a-42be30e6a1e4/BT8QbFb23s.json",
+                title: AppLocalizations.of(context)!.pleaseSelect,
+                subtitle: AppLocalizations.of(context)!.no_content,
+              ),
             ),
-          )
+          ),
       ];
     } else {
       return null;
@@ -344,10 +390,12 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   }
 
   @override
-  Widget? getDashboardAppbar(BuildContext context,
-      {bool? firstPane,
-      GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab}) {
+  Widget? getDashboardAppbar(
+    BuildContext context, {
+    bool? firstPane,
+    GlobalKey<BasePageStateWithApi>? globalKey,
+    TabControllerHelper? tab,
+  }) {
     if (iD == -1 || firstPane == false) {
       return null;
     }
@@ -364,21 +412,22 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
       },
     );
     return HeaderText(
-        fontSize: 15,
-        useRespnosiveLayout: false,
-        text: "Search results: “${customers?.name}",
-        description: Html(
-          data:
-              "Search results may appear roughly depending on the user's input and may take some time, so please be patient :)",
-        ));
+      fontSize: 15,
+      useRespnosiveLayout: false,
+      text: "Search results: “${customers?.name}",
+      description: Html(
+        data:
+            "Search results may appear roughly depending on the user's input and may take some time, so please be patient :)",
+      ),
+    );
 
     return null;
   }
 
   @override
   List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
-          BuildContext context) =>
-      getTabBarSecondPane(context);
+    BuildContext context,
+  ) => getTabBarSecondPane(context);
 
   @override
   String getModifiableMainGroupName(BuildContext context) =>
@@ -394,7 +443,8 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
 
   @override
   PrintCustomerDashboardSetting getModifibleSettingObject(
-      BuildContext context) {
+    BuildContext context,
+  ) {
     return PrintCustomerDashboardSetting();
   }
 
@@ -404,8 +454,10 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
 
   @override
   List<InvoiceHeaderTitleAndDescriptionInfo>
-      getPrintableDashboardAccountInfoInBottom(
-          BuildContext context, PrintCustomerDashboardSetting? pca) {
+  getPrintableDashboardAccountInfoInBottom(
+    BuildContext context,
+    PrintCustomerDashboardSetting? pca,
+  ) {
     return [
       if (customers != null)
         InvoiceHeaderTitleAndDescriptionInfo(
@@ -424,84 +476,107 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
 
   @override
   pdf.Widget? getPrintableDashboardCustomWidgetBottom(
-          BuildContext context,
-          PrintCustomerDashboardSetting? pca,
-          PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
-                  PrintLocalSetting>
-              generator) =>
-      null;
+    BuildContext context,
+    PrintCustomerDashboardSetting? pca,
+    PdfDashnoardApi<
+      PrintableDashboardInterface<PrintLocalSetting>,
+      PrintLocalSetting
+    >
+    generator,
+  ) => null;
 
   @override
   pdf.Widget? getPrintableDashboardCustomWidgetTop(
-          BuildContext context,
-          PrintCustomerDashboardSetting? pca,
-          PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
-                  PrintLocalSetting>
-              generator) =>
-      null;
+    BuildContext context,
+    PrintCustomerDashboardSetting? pca,
+    PdfDashnoardApi<
+      PrintableDashboardInterface<PrintLocalSetting>,
+      PrintLocalSetting
+    >
+    generator,
+  ) => null;
 
   @override
   DashboardContentItem? getPrintableDashboardFirstRowContentItem(
-      BuildContext context,
-      PrintCustomerDashboardSetting? pca,
-      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
-              PrintLocalSetting>
-          generator) {
+    BuildContext context,
+    PrintCustomerDashboardSetting? pca,
+    PdfDashnoardApi<
+      PrintableDashboardInterface<PrintLocalSetting>,
+      PrintLocalSetting
+    >
+    generator,
+  ) {
     // TODO: implement previous balance
     if (pca?.includePreviousBalance == true) {
       return DashboardContentItem(
-          shouldAddToBalance: true,
-          showDebitAndCredit: false,
-          date: dateObject?.from,
-          description: AppLocalizations.of(context)!.previousBalance,
-          credit: previousBalance.toNonNullable() > 0 ? 0 : previousBalance,
-          debit: previousBalance.toNonNullable() > 0 ? previousBalance : 0);
+        shouldAddToBalance: true,
+        showDebitAndCredit: false,
+        date: dateObject?.from,
+        description: AppLocalizations.of(context)!.previousBalance,
+        credit: previousBalance.toNonNullable() > 0 ? 0 : previousBalance,
+        debit: previousBalance.toNonNullable() > 0 ? previousBalance : 0,
+      );
     }
     return null;
   }
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableDashboardFooterTotal(
-          BuildContext context, PrintCustomerDashboardSetting? pca) =>
-      [];
+    BuildContext context,
+    PrintCustomerDashboardSetting? pca,
+  ) => [];
 
   @override
   List<List<InvoiceHeaderTitleAndDescriptionInfo>>
-      getPrintableDashboardHeaderInfo(
-          BuildContext context, PrintCustomerDashboardSetting? pca) {
-    List<InvoiceHeaderTitleAndDescriptionInfo>? first =
-        getInvoicDesFirstRow(context, pca);
-    List<InvoiceHeaderTitleAndDescriptionInfo>? sec =
-        getInvoiceDesSecRow(context, pca);
-    List<InvoiceHeaderTitleAndDescriptionInfo>? therd =
-        getInvoiceDesTherdRow(context, pca);
+  getPrintableDashboardHeaderInfo(
+    BuildContext context,
+    PrintCustomerDashboardSetting? pca,
+  ) {
+    List<InvoiceHeaderTitleAndDescriptionInfo>? first = getInvoicDesFirstRow(
+      context,
+      pca,
+    );
+    List<InvoiceHeaderTitleAndDescriptionInfo>? sec = getInvoiceDesSecRow(
+      context,
+      pca,
+    );
+    List<InvoiceHeaderTitleAndDescriptionInfo>? therd = getInvoiceDesTherdRow(
+      context,
+      pca,
+    );
 
     return [
       if (first != null) first,
       if (sec != null) sec,
-      if (therd != null) therd
+      if (therd != null) therd,
     ];
   }
 
   @override
   List<String> getPrintableDashboardRowContentConverter(
-      BuildContext context,
-      PrintCustomerDashboardSetting? pca,
-      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
-              PrintLocalSetting>
-          generator,
-      DashboardContentItem dynamicList) {
+    BuildContext context,
+    PrintCustomerDashboardSetting? pca,
+    PdfDashnoardApi<
+      PrintableDashboardInterface<PrintLocalSetting>,
+      PrintLocalSetting
+    >
+    generator,
+    DashboardContentItem dynamicList,
+  ) {
     // TODO: implement getPrintableDashboardRowContentConverter
     throw UnimplementedError();
   }
 
   @override
   List<String> getPrintableDashboardTableHeaders(
-      BuildContext context,
-      PrintCustomerDashboardSetting? pca,
-      PdfDashnoardApi<PrintableDashboardInterface<PrintLocalSetting>,
-              PrintLocalSetting>
-          generator) {
+    BuildContext context,
+    PrintCustomerDashboardSetting? pca,
+    PdfDashnoardApi<
+      PrintableDashboardInterface<PrintLocalSetting>,
+      PrintLocalSetting
+    >
+    generator,
+  ) {
     return [
       AppLocalizations.of(context)!.date,
       AppLocalizations.of(context)!.description,
@@ -516,21 +591,25 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo>
-      getPrintableDashboardTotalDescripton(
-          BuildContext context, PrintCustomerDashboardSetting? pca) {
+  getPrintableDashboardTotalDescripton(
+    BuildContext context,
+    PrintCustomerDashboardSetting? pca,
+  ) {
     // TODO: implement getPrintableDashboardTotalDescripton
     throw UnimplementedError();
   }
 
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-          BuildContext context, PrintLocalSetting? dashboardSetting) =>
-      null;
+    BuildContext context,
+    PrintLocalSetting? dashboardSetting,
+  ) => null;
 
   @override
   String getPrintableInvoiceTitle(
-          BuildContext context, PrintCustomerDashboardSetting? pca) =>
-      AppLocalizations.of(context)!.accountStatement;
+    BuildContext context,
+    PrintCustomerDashboardSetting? pca,
+  ) => AppLocalizations.of(context)!.accountStatement;
   @override
   String getPrintableSecondaryColor(PrintCustomerDashboardSetting? pca) =>
       Colors.orangeAccent.toHex();
@@ -543,7 +622,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
     var q = QRCodeID(
       iD: customers?.iD ?? -1,
       extra: dateObject?.toJson().toString(),
-      action: getCustomAction() ?? "",
+      action: getCustomAction()?.last ?? "",
     );
     return q.getQrCode();
   }
@@ -553,8 +632,10 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
 
   @override
   List<PrintableMaster<PrintLocalSetting>>
-      getPrintableRecieptMasterDashboardLists(
-          BuildContext context, PrintCustomerDashboardSetting? pca) {
+  getPrintableRecieptMasterDashboardLists(
+    BuildContext context,
+    PrintCustomerDashboardSetting? pca,
+  ) {
     return [];
   }
 
@@ -573,9 +654,9 @@ class CustomerDashboardSelector
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "date": "",
-        "customer": Customer(),
-      };
+    "date": "",
+    "customer": Customer(),
+  };
 
   @override
   CustomerDashboardSelector fromJsonViewAbstract(Map<String, dynamic> json) {
@@ -601,14 +682,12 @@ class CustomerDashboardSelector
   Map<String, dynamic> toJson() => _$CustomerDashboardSelectorToJson(this);
 
   @override
-  Map<String, IconData> getFieldIconDataMap() => {
-        "date": Icons.date_range,
-      };
+  Map<String, IconData> getFieldIconDataMap() => {"date": Icons.date_range};
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "date": AppLocalizations.of(context)!.date,
-      };
+    "date": AppLocalizations.of(context)!.date,
+  };
 
   @override
   String? getMainDrawerGroupName(BuildContext context) => null;
@@ -651,20 +730,24 @@ class CustomerDashboardSelector
   Map<String, double> getTextInputMinValidateMap() => {};
 
   @override
-  Map<String, TextInputType?> getTextInputTypeMap() =>
-      {"date": TextInputType.datetime};
+  Map<String, TextInputType?> getTextInputTypeMap() => {
+    "date": TextInputType.datetime,
+  };
 
   @override
-  Map<String, bool> isFieldCanBeNullableMap() =>
-      {"date": false, "customer": false};
+  Map<String, bool> isFieldCanBeNullableMap() => {
+    "date": false,
+    "customer": false,
+  };
 
   @override
   Map<String, bool> isFieldRequiredMap() => {"date": true, "customer": true};
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return null;
   }
 

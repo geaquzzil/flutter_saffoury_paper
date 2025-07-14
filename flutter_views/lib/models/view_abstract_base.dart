@@ -45,9 +45,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return getMainFields(context: context);
   }
 
-  List<TabControllerHelper> getCustomTabList(BuildContext context,
-          {ServerActions? action}) =>
-      List<TabControllerHelper>.empty();
+  List<TabControllerHelper> getCustomTabList(
+    BuildContext context, {
+    ServerActions? action,
+  }) => List<TabControllerHelper>.empty();
 
   IconData getFieldIconData(String field) {
     dynamic value = getMirrorNewInstance(field);
@@ -85,12 +86,15 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   Text getMainHeaderLabelWithTextWidgt({required BuildContext context}) {
-    return Text(getMainHeaderLabelWithText(context),
-        style: Theme.of(context).textTheme.bodySmall!);
+    return Text(
+      getMainHeaderLabelWithText(context),
+      style: Theme.of(context).textTheme.bodySmall!,
+    );
   }
 
   String getLabelWithTextFromField(BuildContext context, String field) {
-    String label = getFieldLabelMap(context)[field] ??
+    String label =
+        getFieldLabelMap(context)[field] ??
         getMirrorViewAbstractLabelText(context, field);
     String value = getFieldValueCheckType(context, field);
     return "$label: $value";
@@ -100,12 +104,18 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return "$label: $text";
   }
 
-  Text getLabelWithTextWidget(String label, String text,
-      {required BuildContext context, Color? color}) {
-    return Text(getLabelWithText(label, text),
-        style: color != null
-            ? Theme.of(context).textTheme.bodySmall!.copyWith(color: color)
-            : Theme.of(context).textTheme.bodySmall!);
+  Text getLabelWithTextWidget(
+    String label,
+    String text, {
+    required BuildContext context,
+    Color? color,
+  }) {
+    return Text(
+      getLabelWithText(label, text),
+      style: color != null
+          ? Theme.of(context).textTheme.bodySmall!.copyWith(color: color)
+          : Theme.of(context).textTheme.bodySmall!,
+    );
   }
 
   ViewAbstract? getFieldValueCastViewAbstract(String field) {
@@ -121,13 +131,13 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   Icon getIcon({double? size}) {
-    return Icon(
-      getMainIconData(),
-      size: size,
-    );
+    return Icon(getMainIconData(), size: size);
   }
 
-  Widget? getMainSubtitleHeaderText(BuildContext context,{String? searchQuery}) {
+  Widget? getMainSubtitleHeaderText(
+    BuildContext context, {
+    String? searchQuery,
+  }) {
     return Text(
       getMainHeaderLabelTextOnly(context),
       style: Theme.of(context).textTheme.bodySmall,
@@ -143,18 +153,18 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   Widget getMainHeaderTextOnEdit(BuildContext context) {
-    return Text(isNull
-            ? AppLocalizations.of(context)!.undefined.toUpperCase()
-            : getMainHeaderTextOnly(context).toUpperCase()
-        // style: const TextStyle(color: kTextLightColor)
-        );
+    return Text(
+      isNull
+          ? AppLocalizations.of(context)!.undefined.toUpperCase()
+          : getMainHeaderTextOnly(context).toUpperCase(),
+      // style: const TextStyle(color: kTextLightColor)
+    );
   }
 
-  Widget getMainHeaderText(BuildContext context,{String? searchQuery}) {
+  Widget getMainHeaderText(BuildContext context, {String? searchQuery}) {
     return Text(
-      getMainHeaderTextOnly(context)
+      getMainHeaderTextOnly(context),
       // style: const TextStyle(color: kTextLightColor)
-      ,
       style: Theme.of(context).textTheme.bodyMedium,
     );
   }
@@ -185,15 +195,19 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
               color: animatedColor != null
                   ? animatedColor.value
                   : color != null
-                      ? color.darkMutedColor?.color
-                      : Theme.of(context).colorScheme.onPrimaryContainer)
+                  ? color.darkMutedColor?.color
+                  : Theme.of(context).colorScheme.onPrimaryContainer,
+            )
           : Theme.of(context).textTheme.bodySmall,
       // style: const TextStyle(color: kTextLightColor)
     );
   }
 
-  Widget getHorizontalCardTitle(BuildContext context,
-      {bool isImageAsBackground = false, PaletteGenerator? color}) {
+  Widget getHorizontalCardTitle(
+    BuildContext context, {
+    bool isImageAsBackground = false,
+    PaletteGenerator? color,
+  }) {
     return Column(
       // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -204,7 +218,8 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
                   fontWeight: FontWeight.bold,
                   color: color != null
                       ? color.lightMutedColor?.color
-                      : Theme.of(context).colorScheme.onPrimaryContainer)
+                      : Theme.of(context).colorScheme.onPrimaryContainer,
+                )
               : Theme.of(context).textTheme.bodySmall,
           // style: const TextStyle(color: kTextLightColor)
         ),
@@ -214,9 +229,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
               ? Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: color != null
                       ? color.lightMutedColor?.color
-                      : Theme.of(context).colorScheme.onPrimaryContainer)
+                      : Theme.of(context).colorScheme.onPrimaryContainer,
+                )
               : Theme.of(context).textTheme.bodySmall,
-        )
+        ),
       ],
     );
   }
@@ -230,10 +246,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   Widget getHorizontalCardSubtitle(BuildContext context) {
     return getMainSubtitleHeaderText(context) ??
-        AutoSizeText(
-          "",
-          style: Theme.of(context).textTheme.bodySmall,
-        );
+        AutoSizeText("", style: Theme.of(context).textTheme.bodySmall);
   }
 
   Text getMainLabelText(BuildContext context) {
@@ -253,8 +266,9 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   Color getColor(BuildContext context) => Colors.red;
 
   Widget? generateCardLeadingBottomIcon(BuildContext context) {
-    dynamic iconOnButton =
-        (this as ViewAbstract).getCardLeadingBottomIcon(context);
+    dynamic iconOnButton = (this as ViewAbstract).getCardLeadingBottomIcon(
+      context,
+    );
     if (iconOnButton == null) return null;
     if (iconOnButton is IconData) {
       return Icon(iconOnButton);
@@ -263,8 +277,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     }
   }
 
-  Widget? getCardTrailing(BuildContext context,
-      {SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) {
+  Widget? getCardTrailing(
+    BuildContext context, {
+    SecoundPaneHelperWithParentValueNotifier? secPaneHelper,
+  }) {
     ViewAbstract viewAbstract = this as ViewAbstract;
     Widget? iconOnButton = generateCardLeadingBottomIcon(context);
     debugPrint("getCardTrailing sec ${secPaneHelper == null}");
@@ -275,8 +291,11 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         children: [
           if (iconOnButton != null) (iconOnButton),
           viewAbstract.getFBIcon(secPaneHelper: secPaneHelper) ??
-              viewAbstract.getPopupMenuActionWidget(context, ServerActions.list,
-                  secPaneHelper: secPaneHelper)
+              viewAbstract.getPopupMenuActionWidget(
+                context,
+                ServerActions.list,
+                secPaneHelper: secPaneHelper,
+              ),
         ],
       );
     }
@@ -291,8 +310,11 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return null;
   }
 
-  Widget? getCustomImage(BuildContext context,
-      {double size = 50, bool isGrid = false}) {
+  Widget? getCustomImage(
+    BuildContext context, {
+    double size = 50,
+    bool isGrid = false,
+  }) {
     return null;
   }
 
@@ -303,8 +325,9 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   String getAddToFormat(BuildContext context) {
-    return AppLocalizations.of(context)!
-        .addToFormat(getMainHeaderLabelTextOnly(context).toLowerCase());
+    return AppLocalizations.of(
+      context,
+    )!.addToFormat(getMainHeaderLabelTextOnly(context).toLowerCase());
   }
 
   String getIDFormat(BuildContext context) {
@@ -359,19 +382,20 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return "is New ${getMainHeaderLabelTextOnly(context)}";
   }
 
-  List<Widget>? getAppBarActionsEdit(BuildContext context) =>
-      [IconButton(icon: const Icon(Icons.save_outlined), onPressed: () {})];
+  List<Widget>? getAppBarActionsEdit(BuildContext context) => [
+    IconButton(icon: const Icon(Icons.save_outlined), onPressed: () {}),
+  ];
 
   List<Widget>? getAppBarActionsView(BuildContext context) => null;
 
-  List<Widget> getTabsViewGenerator(BuildContext context,
-      {List<TabControllerHelper>? tabs}) {
+  List<Widget> getTabsViewGenerator(
+    BuildContext context, {
+    List<TabControllerHelper>? tabs,
+  }) {
     List<TabControllerHelper> tabsList = tabs ?? getTabs(context);
     return tabsList.map((e) {
       if (e.autoRest != null) {
-        return ListApiAutoRestWidget(
-          autoRest: e.autoRest!,
-        );
+        return ListApiAutoRestWidget(autoRest: e.autoRest!);
       }
       if (e.widget != null) {
         return SingleChildScrollView(child: e.widget!);
@@ -384,8 +408,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return null;
   }
 
-  List<TabControllerHelper> getTabs(BuildContext context,
-      {ServerActions? action}) {
+  List<TabControllerHelper> getTabs(
+    BuildContext context, {
+    ServerActions? action,
+  }) {
     return [
       TabControllerHelper(
         getMainHeaderTextOnly(context),
@@ -393,7 +419,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
         //     getTabControllerFirstHeaderWidget(context),
         // getMainIconData(),
       ),
-      ...getCustomTabList(context)
+      ...getCustomTabList(context),
     ];
   }
 
@@ -469,7 +495,9 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   List<DropdownStringListItem?> generateListFromViewAbstract(
-      BuildContext context, List<ViewAbstract?> list) {
+    BuildContext context,
+    List<ViewAbstract?> list,
+  ) {
     return list.map((o) {
       return DropdownStringListItem(
         label: o == null
@@ -482,14 +510,18 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }
 
   List<DropdownStringListItem> getMainFieldsIconsAndValues(
-      BuildContext context) {
+    BuildContext context,
+  ) {
     return getMainFields(context: context)
-        .map((e) => DropdownStringListItem(
+        .map(
+          (e) => DropdownStringListItem(
             icon: getFieldIconData(e),
             label: getFieldLabel(context, e),
             value: isViewAbstract(e)
                 ? getMirrorNewInstanceViewAbstract(e).getForeignKeyName()
-                : e))
+                : e,
+          ),
+        )
         .toList();
   }
 
@@ -502,8 +534,10 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     }
   }
 
-  String getBaseActionText(BuildContext context,
-      {ServerActions? serverAction}) {
+  String getBaseActionText(
+    BuildContext context, {
+    ServerActions? serverAction,
+  }) {
     if (serverAction != null) {
       switch (serverAction) {
         case ServerActions.add:
@@ -532,8 +566,11 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     return "";
   }
 
-  String getBaseTitle(BuildContext context,
-      {ServerActions? serverAction, bool descriptionIsId = false}) {
+  String getBaseTitle(
+    BuildContext context, {
+    ServerActions? serverAction,
+    bool descriptionIsId = false,
+  }) {
     String descripon = "";
     if (descriptionIsId) {
       descripon = getIDFormat(context);
@@ -568,7 +605,9 @@ class TabControllerHelper extends Tab {
   ///
   ///
   ///
-
+  ///
+  ///
+  bool isMain;
   String? fieldThatHasList;
 
   ///Auto get the field list from the api object;
@@ -597,22 +636,24 @@ class TabControllerHelper extends Tab {
   final ScrollController scrollFirstPaneController = ScrollController();
   final ScrollController scrollSecoundPaneController = ScrollController();
 
-  TabControllerHelper(String title,
-      {super.key,
-      super.icon,
-      this.fieldThatHasList,
-      this.autoRest,
-      this.slivers,
-      this.iD,
-      this.tableName,
-      this.autoRestWidgetBuilder,
-      this.extras,
-      this.draggableHeaderWidget,
-      this.draggableExtendedWidget,
-      this.draggableSwithHeaderFromAppbarToScrollAlignment =
-          AlignmentDirectional.topCenter,
-      this.draggableSwithHeaderFromAppbarToScroll,
-      this.isResponsiveIsSliver = false,
-      this.widget})
-      : super(text: title);
+  TabControllerHelper(
+    String title, {
+    super.key,
+    super.icon,
+    this.fieldThatHasList,
+    this.autoRest,
+    this.slivers,
+    this.isMain = false,
+    this.iD,
+    this.tableName,
+    this.autoRestWidgetBuilder,
+    this.extras,
+    this.draggableHeaderWidget,
+    this.draggableExtendedWidget,
+    this.draggableSwithHeaderFromAppbarToScrollAlignment =
+        AlignmentDirectional.topCenter,
+    this.draggableSwithHeaderFromAppbarToScroll,
+    this.isResponsiveIsSliver = false,
+    this.widget,
+  }) : super(text: title);
 }

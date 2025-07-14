@@ -35,12 +35,13 @@ class MoneyFundDashbaord extends Dashboard {
 
   MoneyFundDashbaord() : super();
 
-
+  //todo api
   @override
-  String? getCustomAction() => "list_fund";
+  List<String>? getCustomAction() {
+    return ["list_fund"];
+  }
 
-
-   factory MoneyFundDashbaord.fromJson(Map<String, dynamic> data) =>
+  factory MoneyFundDashbaord.fromJson(Map<String, dynamic> data) =>
       _$MoneyFundDashbaordFromJson(data);
 
   @override

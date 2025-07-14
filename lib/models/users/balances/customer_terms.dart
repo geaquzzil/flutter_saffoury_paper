@@ -17,8 +17,8 @@ class CustomerTerms extends Customer
         CustomViewHorizontalListResponse<CustomerTerms>,
         JsonHelper<CustomerTerms> {
   //FIX ME ITS ALSOW declares on Customer
-//    @com.saffoury.viewgenerator.Annotations.View(Type = Enums.ViewType.VIEW_TEXT, Priority = 0, MasterOnList = true)
-//     int termsBreakCount;
+  //    @com.saffoury.viewgenerator.Annotations.View(Type = Enums.ViewType.VIEW_TEXT, Priority = 0, MasterOnList = true)
+  //     int termsBreakCount;
   int? OrderID;
 
   String? termsDate;
@@ -40,9 +40,9 @@ class CustomerTerms extends Customer
   }
 
   @override
-  String? getCustomAction() => "list_customers_terms";
-  @override
-  Map<String, String> get getCustomMap => {"iD": iD.toString()};
+  List<String>? getCustomAction() => ["list_customers_terms"];
+  // @override
+  // Map<String, String> get getCustomMap => {"iD": iD.toString()};
 
   @override
   CustomerTerms fromJsonViewAbstract(Map<String, dynamic> json) =>
@@ -83,12 +83,15 @@ class CustomerTerms extends Customer
 
   @override
   Widget? getCustomViewListResponseWidget(
-      BuildContext context, List<CustomerTerms> item) {
+    BuildContext context,
+    List<CustomerTerms> item,
+  ) {
     return StorageInfoCardCustom(
-        title: AppLocalizations.of(context)!.overDue,
-        description: "${item.length}",
-        trailing: const Text("Times"),
-        svgSrc: Icons.date_range);
+      title: AppLocalizations.of(context)!.overDue,
+      description: "${item.length}",
+      trailing: const Text("Times"),
+      svgSrc: Icons.date_range,
+    );
   }
 
   @override
@@ -107,7 +110,9 @@ class CustomerTerms extends Customer
 
   @override
   Widget? getCustomViewTitleWidget(
-      BuildContext context, ValueNotifier valueNotifier) {
+    BuildContext context,
+    ValueNotifier valueNotifier,
+  ) {
     return null;
   }
 
