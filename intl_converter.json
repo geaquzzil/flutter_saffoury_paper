@@ -1,6 +1,0 @@
-{
-  "scan-dir": "assets\\i18n",
-  "out-dir": "lib\\i18n\\gen",
-  "gen-class": "app_ar",
-  "dev-locale": "en"
-}
