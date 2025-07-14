@@ -1,0 +1,71 @@
+   @Override
+    public List<ViewAbstractHeader> getHomeWelcome(Context context) {
+        List<ViewAbstractHeader> headers = new ArrayList<>();
+        headers.add(
+                new ViewAbstractHeader() {
+                    @Override
+                    public Spanned getHeaderText(Context context) {
+                        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(context.getString(R.string.hi).toUpperCase());
+                        Spannable customerName;
+
+                        if (Product.this.isGuest()) {
+                            customerName = new SpannableString(getHtmlFormat(String.format("&nbsp;%s,", context.getString(R.string.there).toUpperCase())));
+                        } else {
+                            customerName = new SpannableString(getHtmlFormat(String.format("&nbsp;%s,", GlobalVariables.getUserName(context).toUpperCase())));
+                        }
+                        customerName.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorAccent)),
+                                0, customerName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        spannableStringBuilder.append(customerName);
+                        spannableStringBuilder.append(getHtmlFormat("<br>"));
+                        spannableStringBuilder.append(getHtmlFormat(String.format("<small>%s</small>", context.getString(R.string.dashboard_and_repCheck))));
+
+                        return spannableStringBuilder;
+                    }
+
+                    @Override
+                    public MaterialDrawableBuilder.IconValue getHeaderEndIcon(Context context) {
+                        return isArabic(context) ? MaterialDrawableBuilder.IconValue.ARROW_LEFT : MaterialDrawableBuilder.IconValue.ARROW_RIGHT;
+                    }
+
+                    @Override
+                    public MaterialDrawableBuilder.IconValue getHeaderStartIcon(Context context) {
+                        return MaterialDrawableBuilder.IconValue.VIEW_DASHBOARD;
+                    }
+
+                    @Override
+                    public void onHeaderEndIconClicked(Context context, android.view.View itemView) {
+                        Dashboard dashboard = new Dashboard();
+                        dashboard.setLoadFromServer(true);
+                        showViewObject(context, dashboard, itemView);
+                    }
+
+                    @Override
+                    public void onHeaderStartIconClicked(Context context, android.view.View itemView) {
+
+                    }
+
+                });
+        return headers;
+    }
+
+        @Override
+    public List<Object> getHomeObjectList(Context context) {
+        List<Object> objects = super.getHomeObjectList(context);
+        objects.add(new ViewRecyclerServerRequester(new ChangesRecords(this, getChangedRecordsGroupedByFieldName())));
+        return objects;
+    }
+@Override
+    public List<Object> getHomeObjectList(Context context) {
+        List<Object> objects = super.getHomeObjectList(context);
+        if (hasNotUsedRecords()) {
+            objects.add(new ViewRecyclerServerRequester(new UnusedRecords(this)));
+        }
+        if (hasChangedRecords()) {
+            objects.add(new ViewRecyclerServerRequester(new ChangesRecords(this, getChangedRecordsGroupedByFieldName())));
+        }
+        if (isOrdering())
+            objects.add(new ViewRecyclerServerRequester(new InvoicesOverdues()));
+
+//        objects.add(new ViewRecyclerServerRequester(new CustomerBalancesDashboardItem()));
+        return objects;
+    }

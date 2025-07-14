@@ -1,0 +1,84 @@
+
+
+// class SearchWidgetApi extends StatelessWidget {
+//   String? _searchQuery;
+
+//   SearchWidgetApi({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     ViewAbstract viewAbstract =
+//         context.read<DrawerMenuControllerProvider>().getObjectCastViewAbstract;
+//     return Container(
+//         width: double.infinity,
+//         padding: const EdgeInsets.all(20),
+//         decoration: BoxDecoration(
+//           // color: Colors.white,
+//           borderRadius: BorderRadius.circular(5),
+//         ),
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.start,
+//           children: [
+//             Container(
+//               alignment: Alignment.topCenter,
+//               child: SizedBox(
+//                 width: MediaQuery.of(context).size.width * .99,
+//                 child: PaginatedSearchBar<dynamic>(
+//                   containerDecoration: const BoxDecoration(
+//                     boxShadow: [
+//                       // BoxShadow(
+//                       //   color: Colors.black.withOpacity(0.16),
+//                       //   offset: const Offset(0, 3),
+//                       //   blurRadius: 12,
+//                       // )
+//                     ],
+//                     // color: Colors.white,
+//                     borderRadius: BorderRadius.all(Radius.circular(16.0)),
+//                   ),
+//                   padding:
+//                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+//                   maxHeight: 300,
+//                   hintText:
+//                       'Search in ${viewAbstract.getMainHeaderLabelTextOnly(context)}',
+//                   emptyBuilder: (context) {
+//                     return const Text("I'm an empty state!");
+//                   },
+//                   paginationDelegate: EndlessPaginationDelegate(
+//                     pageSize: 20,
+//                     maxPages: 3,
+//                   ),
+//                   onSearch: ({
+//                     required pageIndex,
+//                     required pageSize,
+//                     required searchQuery,
+//                   }) async {
+//                     _searchQuery = searchQuery;
+//                     if (_searchQuery == null) {
+//                       return [];
+//                     }
+//                     if (_searchQuery == "") {
+//                       return [];
+//                     }
+
+//                     // return await viewAbstract.search(5, pageIndex, searchQuery);
+//                     return Future.delayed(const Duration(milliseconds: 1000),
+//                         () => viewAbstract.listCall(
+//                           option: RequestOptions(countPerPage: 5,page: pageIndex,searchQuery: searchQuery),context: context));
+                          
+//                   },
+//                   itemBuilder: (
+//                     context, {
+//                     required item,
+//                     required index,
+//                   }) {
+//                     return SearchCardItem(
+//                         viewAbstract: item as ViewAbstract,
+//                         searchQuery: _searchQuery ?? "");
+//                   },
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ));
+//   }
+// }
