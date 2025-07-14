@@ -29,6 +29,8 @@ migrate_working_dir/
 .packages
 build/
 .vscode
+android/local.properties
+android\local.properties
 flutter_views/.dart_tool/
 flutter_views/.packages/
 flutter_views/build/
@@ -36,3 +38,4 @@ flutter_views/.vscode/
 .flutter-plugins-dependencies
 .flutter-plugins
 build/.last_build_id
+pubspec.lock  # Except for application packages
