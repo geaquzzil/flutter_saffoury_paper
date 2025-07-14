@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
 import 'package:flutter_view_controller/encyptions/compressions.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
@@ -21,8 +21,11 @@ import 'package:provider/provider.dart';
 class SearchWidgetWebComponent extends StatelessWidget {
   final ValueNotifier<double> scrollvalueNofifier;
   Function(String v)? onSearchTextChanged;
-  SearchWidgetWebComponent(
-      {super.key, this.onSearchTextChanged, required this.scrollvalueNofifier});
+  SearchWidgetWebComponent({
+    super.key,
+    this.onSearchTextChanged,
+    required this.scrollvalueNofifier,
+  });
   Widget getSearchTitleEditable(BuildContext context) {
     return TextField(
       textInputAction: TextInputAction.search,
@@ -40,9 +43,7 @@ class SearchWidgetWebComponent extends StatelessWidget {
   Widget? getLeadingWidget(BuildContext context) {
     // if (SizeConfig.isLargeScreen(context)) return null;
     Widget icon = IconButton(
-      icon: const Icon(
-        Icons.menu,
-      ),
+      icon: const Icon(Icons.menu),
       onPressed: () {
         context.read<DrawerMenuControllerProvider>().controlStartDrawerMenu();
       },
@@ -64,16 +65,18 @@ class SearchWidgetWebComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-          top: kDefaultPadding / 2,
-          left: kDefaultPadding / 2,
-          right: kDefaultPadding / 2),
+        top: kDefaultPadding / 2,
+        left: kDefaultPadding / 2,
+        right: kDefaultPadding / 2,
+      ),
       child: CardCorner(
         // elevation: 3,
         // color: Theme.of(context).colorScheme.primary,
         child: ListTile(
-            leading: getLeadingWidget(context),
-            title: getSearchTitleEditable(context),
-            trailing: Wrap(children: [
+          leading: getLeadingWidget(context),
+          title: getSearchTitleEditable(context),
+          trailing: Wrap(
+            children: [
               // const Spacer(),
               ValueListenableBuilder<double>(
                 valueListenable: scrollvalueNofifier,
@@ -92,25 +95,29 @@ class SearchWidgetWebComponent extends StatelessWidget {
                 },
               ),
               IconButton(
-                  onPressed: () async {
-                    await ProductWebPage.showFilterDialog(
-                            context,
-                            context
-                                .read<AuthProvider<AuthUser>>()
-                                .getWebCategories()[0]
-                                .getNewInstance())
-                        .then((value) {
-                      if (value == null) return;
-                      String compressed = Compression.compress(value);
-                      debugPrint("Compressing $compressed");
-                      context.goNamed(indexWebOurProducts, queryParameters: {
-                        "filter": Compression.compress(value)
-                      });
-                      // context.read<DrawerMenuControllerProvider>().changeWithFilterable(context, v);
-                    });
-                  },
-                  icon: const Icon(Icons.filter_alt)),
-            ])),
+                onPressed: () async {
+                  await ProductWebPage.showFilterDialog(
+                    context,
+                    context
+                        .read<AuthProvider<AuthUser>>()
+                        .getWebCategories()[0]
+                        .getNewInstance(),
+                  ).then((value) {
+                    if (value == null) return;
+                    String compressed = Compression.compress(value);
+                    debugPrint("Compressing $compressed");
+                    context.goNamed(
+                      indexWebOurProducts,
+                      queryParameters: {"filter": Compression.compress(value)},
+                    );
+                    // context.read<DrawerMenuControllerProvider>().changeWithFilterable(context, v);
+                  });
+                },
+                icon: const Icon(Icons.filter_alt),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -123,14 +130,15 @@ class SearchWidgetComponent extends StatefulWidget {
   ValueNotifier<String?>? onSearchTextChangedValueNotifier;
   ValueNotifier<ExpandType>? appBardExpandType;
   CurrentScreenSize? currentScreenSize;
-  SearchWidgetComponent(
-      {super.key,
-      this.heroTag = "/search",
-      this.appBardExpandType,
-      this.currentScreenSize,
-      required this.viewAbstract,
-      this.onSearchTextChangedValueNotifier,
-      this.onSearchTextChanged});
+  SearchWidgetComponent({
+    super.key,
+    this.heroTag = "/search",
+    this.appBardExpandType,
+    this.currentScreenSize,
+    required this.viewAbstract,
+    this.onSearchTextChangedValueNotifier,
+    this.onSearchTextChanged,
+  });
 
   @override
   State<SearchWidgetComponent> createState() => _SearchWidgetComponentState();
@@ -148,9 +156,12 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
   @override
   void initState() {
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 450));
+      vsync: this,
+      duration: const Duration(milliseconds: 450),
+    );
     _animationController.forward();
-    isEditText = widget.onSearchTextChanged != null ||
+    isEditText =
+        widget.onSearchTextChanged != null ||
         widget.onSearchTextChangedValueNotifier != null;
     _textEditingController.addListener(onTextEditingChanged);
     _viewAbstract = widget.viewAbstract;
@@ -159,7 +170,8 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
 
   @override
   void didUpdateWidget(covariant SearchWidgetComponent oldWidget) {
-    isEditText = widget.onSearchTextChanged != null ||
+    isEditText =
+        widget.onSearchTextChanged != null ||
         widget.onSearchTextChangedValueNotifier != null;
     if (_viewAbstract.runtimeType != widget.viewAbstract.runtimeType) {
       _viewAbstract = widget.viewAbstract;
@@ -187,20 +199,24 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
         // elevation: 3,
         // color: Theme.of(context).colorScheme.primary,
         child: (hoverd) => ListTile(
-          leading:
-              isEditText ? const Icon(Icons.search) : getLeadingWidget(context),
+          leading: isEditText
+              ? const Icon(Icons.search)
+              : getLeadingWidget(context),
           onTap: isEditText
               ? null
-              : () => context.goNamed(searchRouteName, queryParameters: {
-                    "query": "q"
-                  }, pathParameters: {
+              : () => context.goNamed(
+                  searchRouteName,
+                  queryParameters: {"query": "q"},
+                  pathParameters: {
                     "tableName": context
                         .read<DrawerMenuControllerProvider>()
                         .getObjectCastViewAbstract
-                        .getTableNameApi()!
-                  }),
-          title:
-              isEditText ? getSearchTitleEditable() : getSearchTitleClickable(),
+                        .getTableNameApi()!,
+                  },
+                ),
+          title: isEditText
+              ? getSearchTitleEditable()
+              : getSearchTitleClickable(),
           trailing: isEditText
               ? getTrailingLargeScreen()
               : CartIconWidget(
@@ -227,10 +243,9 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
       decoration: InputDecoration.collapsed(
         border: InputBorder.none,
 
-        hintStyle: Theme.of(context)
-            .textTheme
-            .bodyLarge
-            ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+        hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
         hintText: getSearchHint(widget.viewAbstract),
         // focusColor: Theme.of(context).colorScheme.surfaceContainerHigh,
       ),
@@ -245,8 +260,9 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
   }
 
   String getSearchHint(ViewAbstract value) {
-    return AppLocalizations.of(context)!
-        .searchInFormat(value.getMainHeaderLabelTextOnly(context));
+    return AppLocalizations.of(
+      context,
+    )!.searchInFormat(value.getMainHeaderLabelTextOnly(context));
   }
 
   Widget getSearchTitleClickable() {
@@ -255,10 +271,9 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
       builder: (context, value, child) {
         return Text(
           getSearchHint(value),
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         );
       },
       selector: (p0, p1) => p1.getObjectCastViewAbstract,
@@ -315,45 +330,64 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
   }
 
   OnHoverWidget buildColapsedIcon(
-      BuildContext context, IconData data, VoidCallback? onPress) {
+    BuildContext context,
+    IconData data,
+    VoidCallback? onPress,
+  ) {
     return OnHoverWidget(
-        scale: false,
-        builder: (onHover) {
-          return IconButton(
-              // padding: EdgeInsets.all(4),
-              onPressed: onPress,
-              iconSize: 25,
-              icon: Icon(data),
-              color: onHover
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.secondary);
-        });
+      scale: false,
+      builder: (onHover) {
+        return IconButton(
+          // padding: EdgeInsets.all(4),
+          onPressed: onPress,
+          iconSize: 25,
+          icon: Icon(data),
+          color: onHover
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.secondary,
+        );
+      },
+    );
   }
 
   Widget getTrailingLargeScreen() {
-    return ValueListenableBuilder(
-        valueListenable: _valueNotifierOnTextChange,
-        builder: (context, value, w) {
-          return AnimatedOpacity(
-            duration: const Duration(milliseconds: 250),
-            opacity: value == null ? 0 : 1,
-            child: AnimatedScale(
-              duration: const Duration(microseconds: 250),
-              scale: value == null ? 0 : 1,
-              child: IconButton(
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ValueListenableBuilder(
+          valueListenable: _valueNotifierOnTextChange,
+          builder: (context, value, w) {
+            return AnimatedOpacity(
+              duration: const Duration(milliseconds: 250),
+              opacity: value == null ? 0 : 1,
+              child: AnimatedScale(
+                duration: const Duration(microseconds: 250),
+                scale: value == null ? 0 : 1,
+                child: IconButton(
                   onPressed: () {
                     _textEditingController.clear();
                     callDebouncer(null);
                   },
-                  icon: const Icon(Icons.close)),
-            ),
-          );
-        });
+                  icon: const Icon(Icons.close),
+                ),
+              ),
+            );
+          },
+        ),
+        // Text("s"),
+        CartIconWidget(
+          onPressed: () {
+            context.read<DrawerMenuControllerProvider>().controlEndDrawerMenu();
+          },
+        ),
+      ],
+    );
   }
 
   void onTextEditingChanged() {
     String value = _textEditingController.value.text;
-    _valueNotifierOnTextChange.value =
-        (value.isEmpty || value == "") ? null : value;
+    _valueNotifierOnTextChange.value = (value.isEmpty || value == "")
+        ? null
+        : value;
   }
 }

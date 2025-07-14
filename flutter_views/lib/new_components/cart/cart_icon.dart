@@ -24,7 +24,8 @@ class CartIconWidget extends StatelessWidget {
                   label: Text(
                     "$value",
                     style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary),
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
                   ),
                   // badgeColor: Theme.of(context).colorScheme.primary,
                   // badgeContent: Text(
@@ -40,11 +41,13 @@ class CartIconWidget extends StatelessWidget {
                   // animationDuration: const Duration(milliseconds: 50),
                   // showBadge: value > 0,
                   child: IconButton(
-                      // padding: EdgeInsets.all(4),
-                      onPressed: onPressed,
-                      iconSize: 25,
-                      icon: const Icon(Icons.shopping_cart_rounded),
-                      color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                    // padding: EdgeInsets.all(4),
+                    onPressed: onPressed,
+                    // iconSize: 25,
+                    icon: const Icon(Icons.shopping_cart_rounded),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
         );
       }),
       selector: (p0, p1) => p1.getCount,
