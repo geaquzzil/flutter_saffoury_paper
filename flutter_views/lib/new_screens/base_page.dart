@@ -162,10 +162,7 @@ mixin BasePageWithTicker<T extends BasePage> on BasePageState<T> {
     debugPrint("BasePageActionOnToolbarMixin getWidgetFromBase");
     ValueNotifierPane pane = getTickerPane();
     if (pane == ValueNotifierPane.NONE) {
-      return getWidget(
-        firstPane,
-        tab: tab,
-      );
+      return getWidget(firstPane, tab: tab);
     }
     if (pane == ValueNotifierPane.BOTH) {
       return getValueListenableBuilder(firstPane, tab);
@@ -174,36 +171,31 @@ mixin BasePageWithTicker<T extends BasePage> on BasePageState<T> {
       if (pane == ValueNotifierPane.FIRST) {
         return getValueListenableBuilder(firstPane, tab);
       } else {
-        return getWidget(
-          firstPane,
-          tab: tab,
-        );
+        return getWidget(firstPane, tab: tab);
       }
     } else {
       if (pane == ValueNotifierPane.SECOND) {
         return getValueListenableBuilder(firstPane, tab);
       } else {
-        return getWidget(
-          firstPane,
-          tab: tab,
-        );
+        return getWidget(firstPane, tab: tab);
       }
     }
   }
 
   Widget getValueListenableBuilder(bool firstPane, TabControllerHelper? tab) {
     return ValueListenableBuilder(
-        valueListenable: firstPane ? valueFirstPane : valueSecondPane,
-        builder: (context, value, child) {
-          return getWidget(
-            firstPane,
-            tab: tab,
-          );
-        });
+      valueListenable: firstPane ? valueFirstPane : valueSecondPane,
+      builder: (context, value, child) {
+        return getWidget(firstPane, tab: tab);
+      },
+    );
   }
 
-  Widget getWidget(bool firstPane,
-      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+  Widget getWidget(
+    bool firstPane, {
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  }) {
     return getTickerPaneWidget(
       firstPane: firstPane,
       tab: tab,
@@ -211,8 +203,11 @@ mixin BasePageWithTicker<T extends BasePage> on BasePageState<T> {
     );
   }
 }
-mixin BasePageWithThirdPaneMixinStatic<T extends BasePage,
-    E extends ListToDetailsSecoundPaneHelper> on BasePageState<T> {
+mixin BasePageWithThirdPaneMixinStatic<
+  T extends BasePage,
+  E extends ListToDetailsSecoundPaneHelper
+>
+    on BasePageState<T> {
   @override
   double getCustomPaneProportion() {
     return getThirdPane() == null ? .5 : 1 / 3;
@@ -232,8 +227,11 @@ mixin BasePageWithThirdPaneMixinStatic<T extends BasePage,
     );
   }
 }
-mixin BasePageWithThirdPaneMixin<T extends BasePage,
-    E extends ListToDetailsSecoundPaneHelper> on BasePageState<T> {
+mixin BasePageWithThirdPaneMixin<
+  T extends BasePage,
+  E extends ListToDetailsSecoundPaneHelper
+>
+    on BasePageState<T> {
   final ValueNotifier<E?> _valueNotifierSecondToThird = ValueNotifier(null);
 
   List<E> listOfStackedObject = [];
@@ -259,7 +257,8 @@ mixin BasePageWithThirdPaneMixin<T extends BasePage,
     if (lastPane == null) return null;
     int idx = listOfStackedObject.indexOf(lastPane);
     debugPrint(
-        "BasePageWithThirdPaneMixin====> getPreviousPane total: ${listOfStackedObject.length} currentIndex: $idx previousIndex: ${idx - 1} ");
+      "BasePageWithThirdPaneMixin====> getPreviousPane total: ${listOfStackedObject.length} currentIndex: $idx previousIndex: ${idx - 1} ",
+    );
     if (listOfStackedObject.length <= (idx - 1)) {
       return listOfStackedObject[idx - 1];
     }
@@ -292,20 +291,24 @@ mixin BasePageWithThirdPaneMixin<T extends BasePage,
       leading: getAppBarLeading(selectedItem),
       title: Text(selectedItem?.actionTitle ?? ""),
       //todo this flow not working
-      actions:
-          selectedItem?.getKey?.currentState?.getAppbarActionsWhenThirdPane(),
+      actions: selectedItem?.getKey?.currentState
+          ?.getAppbarActionsWhenThirdPane(),
     );
   }
 
-  Widget wrapScaffoldInThirdPane(
-      {TabControllerHelper? tab,
-      ListToDetailsSecoundPaneHelper? selectedItem}) {
+  Widget wrapScaffoldInThirdPane({
+    TabControllerHelper? tab,
+    ListToDetailsSecoundPaneHelper? selectedItem,
+  }) {
     Widget widget = getWidgetFromListToDetailsSecoundPaneHelper(
-        selectedItem: selectedItem, tab: tab);
+      selectedItem: selectedItem,
+      tab: tab,
+    );
 
     return Scaffold(
-        appBar: getAppBarForThirdPane(selectedItem as E?, widget),
-        body: widget);
+      appBar: getAppBarForThirdPane(selectedItem as E?, widget),
+      body: widget,
+    );
   }
 
   void checkValueToAddToList(E? value) {
@@ -330,7 +333,8 @@ mixin BasePageWithThirdPaneMixin<T extends BasePage,
     return LayoutBuilder(
       builder: (context, constraints) {
         debugPrint(
-            "BasePageWithThirdPaneMixin constraints width : ${constraints.maxWidth} height: ${constraints.maxHeight}");
+          "BasePageWithThirdPaneMixin constraints width : ${constraints.maxWidth} height: ${constraints.maxHeight}",
+        );
         return ValueListenableBuilder(
           valueListenable: _valueNotifierSecondToThird,
           builder: (context, value, child) {
@@ -349,11 +353,12 @@ mixin BasePageWithThirdPaneMixin<T extends BasePage,
               child: Row(
                 children: [
                   AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      curve: Curves.linear,
-                      height: constraints.maxHeight,
-                      width: width,
-                      child: _secondWidget),
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.linear,
+                    height: constraints.maxHeight,
+                    width: width,
+                    child: _secondWidget,
+                  ),
                   !showThirdPane
                       ? const SizedBox.shrink()
                       : FutureBuilder(
@@ -366,19 +371,19 @@ mixin BasePageWithThirdPaneMixin<T extends BasePage,
                               duration: const Duration(milliseconds: 500),
                               opacity: showThirdPane ? 1 : 0,
                               key: UniqueKey(),
-                              child: const VerticalDivider(
-                                width: 1,
-                              ),
+                              child: const VerticalDivider(width: 1),
                             );
                           },
-                          future:
-                              Future.delayed(const Duration(milliseconds: 300)),
+                          future: Future.delayed(
+                            const Duration(milliseconds: 300),
+                          ),
                         ),
                   !showThirdPane
                       ? const SizedBox.shrink()
                       : FutureBuilder(
-                          future:
-                              Future.delayed(const Duration(milliseconds: 300)),
+                          future: Future.delayed(
+                            const Duration(milliseconds: 300),
+                          ),
                           builder: (c, d) {
                             if (d.connectionState != ConnectionState.done) {
                               return const SizedBox.shrink();
@@ -397,13 +402,14 @@ mixin BasePageWithThirdPaneMixin<T extends BasePage,
                                   // delay: Duration(milliseconds: 1000),
                                   curve: Curves.fastLinearToSlowEaseIn,
                                   child: wrapScaffoldInThirdPane(
-                                      // tab:tab,
-                                      selectedItem: value),
+                                    // tab:tab,
+                                    selectedItem: value,
+                                  ),
                                 ),
                               ),
                             );
                           },
-                        )
+                        ),
                 ],
               ),
             );
@@ -446,7 +452,10 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
 
   SecoundPaneHelperWithParentValueNotifier getSecoundPaneHelper() {
     return SecoundPaneHelperWithParentValueNotifier(
-        onBuild: onBuild, parent: this, secPaneNotifier: getSecondPaneNotifier);
+      onBuild: onBuild,
+      parent: this,
+      secPaneNotifier: getSecondPaneNotifier,
+    );
   }
 
   String onActionInitial();
@@ -601,11 +610,12 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
     );
   }
 
-  List<Widget>? getPaneNotifier(
-      {required bool firstPane,
-      ScrollController? controler,
-      TabControllerHelper? tab,
-      SecondPaneHelper? valueNotifier});
+  List<Widget>? getPaneNotifier({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+    SecondPaneHelper? valueNotifier,
+  });
 
   @override
   void initState() {
@@ -681,7 +691,9 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
   }
 
   List<Widget>? getCustomViewWhenSecondPaneIsEmpty(
-      ScrollController? controler, TabControllerHelper? tab) {
+    ScrollController? controler,
+    TabControllerHelper? tab,
+  ) {
     return null;
   }
 
@@ -690,16 +702,19 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
   }
 
   @override
-  List<Widget>? getPane(
-      {required bool firstPane,
-      ScrollController? controler,
-      TabControllerHelper? tab}) {
+  List<Widget>? getPane({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+  }) {
     if (enableAutomaticFirstPaneNullDetector() &&
         isSecPane(firstPane: firstPane) &&
         !hasNotifierValue() &&
         tab == null) {
-      List<Widget>? widgets =
-          getCustomViewWhenSecondPaneIsEmpty(controler, tab);
+      List<Widget>? widgets = getCustomViewWhenSecondPaneIsEmpty(
+        controler,
+        tab,
+      );
       if (widgets != null) return widgets;
 
       return [SliverFillRemaining(child: EmptyWidget.emptyPage(context))];
@@ -707,15 +722,18 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
 
     if (isMobileFromWidth(getWidth) && hasNotifierValue()) {
       return getPaneNotifier(
-          firstPane: false,
-          controler: controler,
-          tab: tab,
-          valueNotifier: _lastSecondPaneItem);
+        firstPane: false,
+        controler: controler,
+        tab: tab,
+        valueNotifier: _lastSecondPaneItem,
+      );
     }
     if (firstPane) {
       if (isMobileFromWidth(getWidth)) {
-        List<Widget>? widgets =
-            getCustomViewWhenSecondPaneIsEmpty(controler, tab);
+        List<Widget>? widgets = getCustomViewWhenSecondPaneIsEmpty(
+          controler,
+          tab,
+        );
 
         return [
           ...getPaneNotifier(
@@ -724,17 +742,21 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
                 tab: tab,
               ) ??
               [],
-          if (widgets != null) ...widgets
+          if (widgets != null) ...widgets,
         ];
       }
       return getPaneNotifier(
-          firstPane: firstPane, controler: controler, tab: tab);
-    }
-    return getPaneNotifier(
         firstPane: firstPane,
         controler: controler,
         tab: tab,
-        valueNotifier: _lastSecondPaneItem);
+      );
+    }
+    return getPaneNotifier(
+      firstPane: firstPane,
+      controler: controler,
+      tab: tab,
+      valueNotifier: _lastSecondPaneItem,
+    );
   }
 }
 mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
@@ -766,7 +788,8 @@ mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
     if (lastPane == null) return null;
     int idx = listOfStackedObject.indexOf(lastPane);
     debugPrint(
-        "BasePageWithThirdPaneMixin====> getPreviousPane total: ${listOfStackedObject.length} currentIndex: $idx previousIndex: ${idx - 1} ");
+      "BasePageWithThirdPaneMixin====> getPreviousPane total: ${listOfStackedObject.length} currentIndex: $idx previousIndex: ${idx - 1} ",
+    );
     if (listOfStackedObject.length <= (idx - 1)) {
       return listOfStackedObject[idx - 1];
     }
@@ -795,7 +818,9 @@ mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
   }
 
   AppBar getAppBarForThirdPane(
-      ThirdToSecondPaneHelper? selectedItem, Widget widget) {
+    ThirdToSecondPaneHelper? selectedItem,
+    Widget widget,
+  ) {
     return AppBar(
       leading: getAppBarLeading(selectedItem),
       title: Text(selectedItem?.title ?? ""),
@@ -805,13 +830,17 @@ mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
     );
   }
 
-  Widget wrapScaffoldInThirdPane(
-      {TabControllerHelper? tab, ThirdToSecondPaneHelper? selectedItem}) {
+  Widget wrapScaffoldInThirdPane({
+    TabControllerHelper? tab,
+    ThirdToSecondPaneHelper? selectedItem,
+  }) {
     // Widget widget = getWidgetFromListToDetailsSecoundPaneHelper(
     //     selectedItem: selectedItem, tab: tab);
 
     return Scaffold(
-        appBar: getAppBarForThirdPane(selectedItem, widget), body: widget);
+      appBar: getAppBarForThirdPane(selectedItem, widget),
+      body: widget,
+    );
   }
 
   void checkValueToAddToList(ThirdToSecondPaneHelper? value) {
@@ -837,7 +866,8 @@ mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
     return LayoutBuilder(
       builder: (context, constraints) {
         debugPrint(
-            "BasePageWithThirdPaneMixin constraints width : ${constraints.maxWidth} height: ${constraints.maxHeight}");
+          "BasePageWithThirdPaneMixin constraints width : ${constraints.maxWidth} height: ${constraints.maxHeight}",
+        );
         return ValueListenableBuilder(
           valueListenable: _valueNotifierSecondToThird,
           builder: (context, value, child) {
@@ -856,11 +886,12 @@ mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
               child: Row(
                 children: [
                   AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      curve: Curves.linear,
-                      height: constraints.maxHeight,
-                      width: width,
-                      child: _secondWidget),
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.linear,
+                    height: constraints.maxHeight,
+                    width: width,
+                    child: _secondWidget,
+                  ),
                   !showThirdPane
                       ? const SizedBox.shrink()
                       : FutureBuilder(
@@ -873,19 +904,19 @@ mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
                               duration: const Duration(milliseconds: 500),
                               opacity: showThirdPane ? 1 : 0,
                               key: UniqueKey(),
-                              child: const VerticalDivider(
-                                width: 1,
-                              ),
+                              child: const VerticalDivider(width: 1),
                             );
                           },
-                          future:
-                              Future.delayed(const Duration(milliseconds: 300)),
+                          future: Future.delayed(
+                            const Duration(milliseconds: 300),
+                          ),
                         ),
                   !showThirdPane
                       ? const SizedBox.shrink()
                       : FutureBuilder(
-                          future:
-                              Future.delayed(const Duration(milliseconds: 300)),
+                          future: Future.delayed(
+                            const Duration(milliseconds: 300),
+                          ),
                           builder: (c, d) {
                             if (d.connectionState != ConnectionState.done) {
                               return const SizedBox.shrink();
@@ -904,13 +935,14 @@ mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
                                   // delay: Duration(milliseconds: 1000),
                                   curve: Curves.fastLinearToSlowEaseIn,
                                   child: wrapScaffoldInThirdPane(
-                                      // tab:tab,
-                                      selectedItem: value),
+                                    // tab:tab,
+                                    selectedItem: value,
+                                  ),
                                 ),
                               ),
                             );
                           },
-                        )
+                        ),
                 ],
               ),
             );
@@ -930,16 +962,17 @@ abstract class BasePageSecoundPaneNotifier<T> extends BasePage {
   @Deprecated("")
   ValueNotifier<SecondPaneHelper?>? valueNotifierIfThirdPane;
 
-  BasePageSecoundPaneNotifier(
-      {super.buildDrawer,
-      super.buildSecondPane,
-      super.isFirstToSecOrThirdPane,
-      this.setToShowThirdPaneIfCan = false,
-      super.parent,
-      super.forceHeaderToCollapse,
-      this.valueNotifierIfThirdPane,
-      super.onBuild,
-      super.key});
+  BasePageSecoundPaneNotifier({
+    super.buildDrawer,
+    super.buildSecondPane,
+    super.isFirstToSecOrThirdPane,
+    this.setToShowThirdPaneIfCan = false,
+    super.parent,
+    super.forceHeaderToCollapse,
+    this.valueNotifierIfThirdPane,
+    super.onBuild,
+    super.key,
+  });
 }
 
 abstract class BasePage extends StatefulWidget {
@@ -1031,8 +1064,8 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   @override
   void initState() {
-    _drawerMenuControllerProvider =
-        context.read<DrawerMenuControllerProvider>();
+    _drawerMenuControllerProvider = context
+        .read<DrawerMenuControllerProvider>();
     buildDrawer = widget.buildDrawer;
     _buildSecoundPane = widget.buildSecondPane;
     // _connectionListener.init(
@@ -1068,20 +1101,18 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     ScrollController? controler,
     TabControllerHelper? tab,
   });
-  Widget? getPaneDraggableHeader(
-      {required bool firstPane, TabControllerHelper? tab});
-
-  Widget? getPaneDraggableExpandedHeader(
-      {required bool firstPane, TabControllerHelper? tab});
-
-  Widget? getFloatingActionButton({
-    bool? firstPane,
+  Widget? getPaneDraggableHeader({
+    required bool firstPane,
     TabControllerHelper? tab,
   });
-  Widget? getBottomNavigationBar({
-    bool? firstPane,
+
+  Widget? getPaneDraggableExpandedHeader({
+    required bool firstPane,
     TabControllerHelper? tab,
-  }) {
+  });
+
+  Widget? getFloatingActionButton({bool? firstPane, TabControllerHelper? tab});
+  Widget? getBottomNavigationBar({bool? firstPane, TabControllerHelper? tab}) {
     return null;
   }
 
@@ -1112,8 +1143,10 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   bool isDesktopPlatform() => isDesktop(context);
 
-  List<TabControllerHelper>? initTabBarList(
-      {bool? firstPane, TabControllerHelper? tab}) {
+  List<TabControllerHelper>? initTabBarList({
+    bool? firstPane,
+    TabControllerHelper? tab,
+  }) {
     return null;
   }
 
@@ -1132,17 +1165,18 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     }
 
     return TabBar(
-        controller: _tabBaseController,
-        dividerColor: Colors.transparent,
-        indicatorSize: TabBarIndicatorSize.tab,
-        indicator: BoxDecoration(
-          borderRadius: BorderRadius.circular(80.0),
-          color: Theme.of(context).colorScheme.onSecondary,
-        ),
-        // labelPadding: EdgeInsets.symmetric(horizontal: 5.0),
-        isScrollable: true,
-        //  firstPane != null,
-        tabs: _getTabBarList());
+      controller: _tabBaseController,
+      dividerColor: Colors.transparent,
+      indicatorSize: TabBarIndicatorSize.tab,
+      indicator: BoxDecoration(
+        borderRadius: BorderRadius.circular(80.0),
+        color: Theme.of(context).colorScheme.onSecondary,
+      ),
+      // labelPadding: EdgeInsets.symmetric(horizontal: 5.0),
+      isScrollable: true,
+      //  firstPane != null,
+      tabs: _getTabBarList(),
+    );
   }
 
   ///set padding to content view pased on the screen size
@@ -1193,12 +1227,10 @@ abstract class BasePageState<T extends BasePage> extends State<T>
           return .5;
         }
 
-        double sss = max(
-          defualtWidth - _width,
-          _width - defualtWidth,
-        );
+        double sss = max(defualtWidth - _width, _width - defualtWidth);
         debugPrint(
-            " current width $_width  defualt width $defualtWidth   VALUE=$sss  ");
+          " current width $_width  defualt width $defualtWidth   VALUE=$sss  ",
+        );
 
         return sss > 250 ? 0.3 : 0.5;
       }
@@ -1226,31 +1258,32 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     bool isEmpty = forceDisabledActions() || actions?.isEmpty == true;
     if (actions == null && title == null) return null;
     return AppBar(
-        surfaceTintColor: Colors.transparent,
-        // elevation: 10,
-        // toolbarHeight: 100,
-        forceMaterialTransparency: true,
-        actions: isEmpty || widget.isFirstToSecOrThirdPane
-            ? [Container()]
-            : [...actions ?? [], ...getSharedAppBarActions],
-        automaticallyImplyLeading: false,
+      surfaceTintColor: Colors.transparent,
+      // elevation: 10,
+      // toolbarHeight: 100,
+      forceMaterialTransparency: true,
+      actions: isEmpty || widget.isFirstToSecOrThirdPane
+          ? [Container()]
+          : [...actions ?? [], ...getSharedAppBarActions],
+      automaticallyImplyLeading: false,
 
-        // backgroundColor: ElevationOverlay.overlayColor(context, 1),
-        title: Padding(
-          padding: const EdgeInsets.all(kDefaultPadding),
-          child: title,
-        ),
-        leading: widget.isFirstToSecOrThirdPane
-            ? null
-            : hideHamburger(context)
-                ? null
-                : IconButton(
-                    icon: const Icon(Icons.menu),
-                    onPressed: () {
-                      _drawerMenuControllerProvider.controlStartDrawerMenu();
-                    },
-                  ),
-        bottom: getTabBarWidget());
+      // backgroundColor: ElevationOverlay.overlayColor(context, 1),
+      title: Padding(
+        padding: const EdgeInsets.all(kDefaultPadding),
+        child: title,
+      ),
+      leading: widget.isFirstToSecOrThirdPane
+          ? null
+          : hideHamburger(context)
+          ? null
+          : IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                _drawerMenuControllerProvider.controlStartDrawerMenu();
+              },
+            ),
+      bottom: getTabBarWidget(),
+    );
   }
 
   List<Widget> get getSharedAppBarActions {
@@ -1258,17 +1291,11 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       if (context.read<AuthProvider<AuthUser>>().hasNotificationWidget())
         NotificationPopupWidget(),
       if (context.read<AuthProvider<AuthUser>>().hasNotificationWidget())
-        const SizedBox(
-          width: kDefaultPadding / 2,
-        ),
+        const SizedBox(width: kDefaultPadding / 2),
       const DrawerLanguageButton(),
-      const SizedBox(
-        width: kDefaultPadding / 2,
-      ),
+      const SizedBox(width: kDefaultPadding / 2),
       const ProfilePicturePopupMenu(),
-      const SizedBox(
-        width: kDefaultPadding / 2,
-      ),
+      const SizedBox(width: kDefaultPadding / 2),
       ElevatedButton.icon(
         // statesController: WidgetStatesController(),
         label: const Icon(Icons.settings),
@@ -1278,12 +1305,13 @@ abstract class BasePageState<T extends BasePage> extends State<T>
         icon: const Icon(Icons.settings),
         onPressed: () {
           context.read<DrawerMenuControllerProvider>().change(
-              context,
-              SettingPageNew(),
-              // SettingAndProfileWeb(),
-              DrawerMenuControllerProviderAction.custom_widget);
+            context,
+            SettingPageNew(),
+            // SettingAndProfileWeb(),
+            DrawerMenuControllerProviderAction.custom_widget,
+          );
         },
-      )
+      ),
     ];
   }
 
@@ -1296,17 +1324,23 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   }
 
   ///by default this is hidden when scrolling
-  Widget getSliverAppBar(Widget widget,
-      {bool pinned = false,
-      bool floating = true,
-      double height = kDefualtAppBar}) {
+  Widget getSliverAppBar(
+    Widget widget, {
+    bool pinned = false,
+    bool floating = true,
+    double height = kDefualtAppBar,
+  }) {
     return SliverPersistentHeader(
-        pinned: pinned,
-        floating: floating,
-        delegate: SliverAppBarDelegatePreferedSize(
-            shouldRebuildWidget: true,
-            child: PreferredSize(
-                preferredSize: Size.fromHeight(height), child: widget)));
+      pinned: pinned,
+      floating: floating,
+      delegate: SliverAppBarDelegatePreferedSize(
+        shouldRebuildWidget: true,
+        child: PreferredSize(
+          preferredSize: Size.fromHeight(height),
+          child: widget,
+        ),
+      ),
+    );
   }
 
   // Widget checkTogetTabbarSliver(bool firstPane) {
@@ -1435,11 +1469,13 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   Widget _getBorderDecoration(Widget widget) {
     return Container(
-        decoration: BoxDecoration(
-            border: Border(
-                right: BorderSide(
-                    width: .5, color: Theme.of(context).dividerColor))),
-        child: widget);
+      decoration: BoxDecoration(
+        border: Border(
+          right: BorderSide(width: .5, color: Theme.of(context).dividerColor),
+        ),
+      ),
+      child: widget,
+    );
   }
 
   void _initBaseTab() {
@@ -1494,43 +1530,45 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     _initBaseTab();
 
     return ScreenHelperSliver(
-        forceSmallView:
-            !_buildSecoundPane || widget.fillFirstPaneToAnimateTheThirdPane,
-        requireAutoPadding: setMainPageSuggestionPadding(),
-        onChangeLayout: (w, h, c) {
-          debugPrint("ScreenHelperSliver build width:$w");
-          reset();
-          _width = w;
-          _height = h;
-          _currentScreenSize = c;
-          if (canBuildDrawer()) {
-            _drawerWidget = _generateCustomDrawer() ??
-                DrawerLargeScreens(
-                  size: _currentScreenSize,
-                );
-          }
-          _firstPaneWidth = (reverseCustomPane()
-                  ? 1 - getCustomPaneProportion()
-                  : getCustomPaneProportion()) *
-              _width;
+      forceSmallView:
+          !_buildSecoundPane || widget.fillFirstPaneToAnimateTheThirdPane,
+      requireAutoPadding: setMainPageSuggestionPadding(),
+      onChangeLayout: (w, h, c) {
+        debugPrint("ScreenHelperSliver build width:$w");
+        reset();
+        _width = w;
+        _height = h;
+        _currentScreenSize = c;
+        if (canBuildDrawer()) {
+          _drawerWidget =
+              _generateCustomDrawer() ??
+              DrawerLargeScreens(size: _currentScreenSize);
+        }
+        _firstPaneWidth =
+            (reverseCustomPane()
+                ? 1 - getCustomPaneProportion()
+                : getCustomPaneProportion()) *
+            _width;
 
-          _secPaneWidth = _width - _firstPaneWidth;
+        _secPaneWidth = _width - _firstPaneWidth;
 
-          debugPrint(
-              "BasePage firstPane is w=>$_firstPaneWidth  h=> $_secPaneWidth");
-        },
-        mobile: (w, h) {
-          return getOnlyFirstPage();
-        },
-        smallTablet: (w, h) {
-          return _getMainWidget();
-        },
-        largeTablet: (w, h) {
-          return _getMainWidget();
-        },
-        desktop: (w, h) {
-          return _getMainWidget();
-        });
+        debugPrint(
+          "BasePage firstPane is w=>$_firstPaneWidth  h=> $_secPaneWidth",
+        );
+      },
+      mobile: (w, h) {
+        return getOnlyFirstPage();
+      },
+      smallTablet: (w, h) {
+        return _getMainWidget();
+      },
+      largeTablet: (w, h) {
+        return _getMainWidget();
+      },
+      desktop: (w, h) {
+        return _getMainWidget();
+      },
+    );
   }
 
   Widget getOnlyFirstPage() {
@@ -1538,17 +1576,20 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     return _firstWidget;
   }
 
-  Widget getWidgetFromListToDetailsSecoundPaneHelper(
-      {TabControllerHelper? tab,
-      ListToDetailsSecoundPaneHelper? selectedItem}) {
+  Widget getWidgetFromListToDetailsSecoundPaneHelper({
+    TabControllerHelper? tab,
+    ListToDetailsSecoundPaneHelper? selectedItem,
+  }) {
     if (selectedItem == null) {
-      return ListView(children: [
-        // EditNew(
-        //   viewAbstract: context
-        //       .read<DrawerMenuControllerProvider>()
-        //       .getObjectCastViewAbstract,
-        // )
-      ]);
+      return ListView(
+        children: [
+          // EditNew(
+          //   viewAbstract: context
+          //       .read<DrawerMenuControllerProvider>()
+          //       .getObjectCastViewAbstract,
+          // )
+        ],
+      );
       // return const Padding(
       //   padding: EdgeInsets.all(20),
       //   child: Column(
@@ -1573,13 +1614,16 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     int iD = selectedItem.viewAbstract?.iD ?? -1;
     String tableName = selectedItem.viewAbstract?.getTableNameApi() ?? "";
     debugPrint(
-        "ListToDetailsSecoundPane is _isInitialization $_isInitialization");
+      "ListToDetailsSecoundPane is _isInitialization $_isInitialization",
+    );
     Widget currentWidget;
     if (!_isInitialization) {
       debugPrint("ListToDetailsSecoundPane is initial call addAction");
       if (this is BasePageActionOnToolbarMixin) {
-        (this as BasePageActionOnToolbarMixin)
-            .addAction(selectedItem, notifyListener: false);
+        (this as BasePageActionOnToolbarMixin).addAction(
+          selectedItem,
+          notifyListener: false,
+        );
       }
     } else {
       _isInitialization = false;
@@ -1590,10 +1634,11 @@ abstract class BasePageState<T extends BasePage> extends State<T>
         break;
       case ServerActions.add:
         currentWidget = BaseEditNewPage(
-            viewAbstract: context
-                .read<DrawerMenuControllerProvider>()
-                .getObjectCastViewAbstract
-                .getNewInstance());
+          viewAbstract: context
+              .read<DrawerMenuControllerProvider>()
+              .getObjectCastViewAbstract
+              .getNewInstance(),
+        );
         break;
       case ServerActions.edit:
         currentWidget = BaseEditNewPage(
@@ -1648,7 +1693,8 @@ abstract class BasePageState<T extends BasePage> extends State<T>
         ?.whereType<SliverFillRemaining>()
         .map((l) {
           debugPrint(
-              "BasePage setChilds =>where type is SliverFillRemaining child=> runtimeType ${l.child.runtimeType}");
+            "BasePage setChilds =>where type is SliverFillRemaining child=> runtimeType ${l.child.runtimeType}",
+          );
           if (l.child is BasePage) {
             debugPrint("BasePage setChilds => setting custom and parent");
             if ((l.child as BasePage).getKey != null) {
@@ -1789,8 +1835,9 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     bool isLarge = isLargeScreenFromScreenSize(getCurrentScreenSize());
     double width = isLarge ? MediaQuery.of(context).size.width * .4 : 500;
     return SizedBox(
-        width: width,
-        child: Card(child: customEnd ?? const WebShoppingCartDrawer()));
+      width: width,
+      child: Card(child: customEnd ?? const WebShoppingCartDrawer()),
+    );
   }
 
   Map<String, List<DrawerMenuItem>>? getCustomDrawer() {
@@ -1807,8 +1854,9 @@ abstract class BasePageState<T extends BasePage> extends State<T>
           );
   }
 
-  List<TabControllerHelper>? getPaneTabControllerHelper(
-      {required bool firstPane}) {
+  List<TabControllerHelper>? getPaneTabControllerHelper({
+    required bool firstPane,
+  }) {
     return null;
   }
 
@@ -1843,25 +1891,28 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       slivers: const [],
       builder: (scrollController, tab) {
         return SliverCustomScrollViewDraggableHelper(
-            widget: beforeGetPaneWidget(
-                firstPane: firstPane, tab: tab, controler: scrollController)!,
-            headerWidget:
-                getPaneDraggableHeader(firstPane: firstPane, tab: tab),
-            expandHeaderWidget:
-                getPaneDraggableExpandedHeader(firstPane: firstPane, tab: tab));
+          widget: beforeGetPaneWidget(
+            firstPane: firstPane,
+            tab: tab,
+            controler: scrollController,
+          )!,
+          headerWidget: getPaneDraggableHeader(firstPane: firstPane, tab: tab),
+          expandHeaderWidget: getPaneDraggableExpandedHeader(
+            firstPane: firstPane,
+            tab: tab,
+          ),
+        );
       },
     );
   }
 
   Widget? getScaffoldForPane({required bool firstPane}) {
     Widget scaffold = Scaffold(
-      backgroundColor: isPaneScaffoldOverlayColord(
-        firstPane,
-      )
+      backgroundColor: isPaneScaffoldOverlayColord(firstPane)
           ? ElevationOverlay.overlayColor(context, 4)
           : firstPane
-              ? Theme.of(context).colorScheme.surface
-              : null,
+          ? Theme.of(context).colorScheme.surface
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       floatingActionButton: getFloatingActionButton(firstPane: firstPane),
@@ -1872,7 +1923,8 @@ abstract class BasePageState<T extends BasePage> extends State<T>
                 horizontal: kDefaultPadding / 2,
                 vertical: setPaneBodyPaddingVertical(firstPane)
                     ? kDefaultPadding / 2
-                    : 0)
+                    : 0,
+              )
             : EdgeInsets.zero,
         child: getScaffoldBodyForPane(firstPane: firstPane),
       ),
@@ -1891,44 +1943,45 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   }
 
   Widget _getMainWidget() {
-    bool isLarge = isDesktop(context, maxWidth: getWidth) ||
+    bool isLarge =
+        isDesktop(context, maxWidth: getWidth) ||
         isTablet(context, maxWidth: getWidth);
     bool isCustomDrawer = getCustomDrawer() != null;
 
     Widget body = Scaffold(
-        endDrawer: getEndDrawer(),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        floatingActionButton: getFloatingActionButton(
-          firstPane: null,
-          tab: null,
-        ),
-        bottomNavigationBar: getBottomNavigationBar(),
-        key: widget.isFirstToSecOrThirdPane
-            ? null
-            : _drawerMenuControllerProvider.getStartDrawableKey,
-        drawer: canBuildDrawer() ? _drawerWidget : null,
-        appBar: generateBaseAppbar(),
-        body: (isCustomDrawer)
-            ? Selector<DrawerMenuControllerProvider, DrawerMenuItem?>(
-                builder: (__, v, ___) {
-                  lastDrawerItemSelected = v;
-                  return getMainPanes();
-                },
-                selector: (p0, p1) => p1.getLastDrawerMenuItemClicked,
-              )
-            : getMainPanes());
+      endDrawer: getEndDrawer(),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      floatingActionButton: getFloatingActionButton(firstPane: null, tab: null),
+      bottomNavigationBar: getBottomNavigationBar(),
+      key: widget.isFirstToSecOrThirdPane
+          ? null
+          : _drawerMenuControllerProvider.getStartDrawableKey,
+      drawer: canBuildDrawer() ? _drawerWidget : null,
+      appBar: generateBaseAppbar(),
+      body: (isCustomDrawer)
+          ? Selector<DrawerMenuControllerProvider, DrawerMenuItem?>(
+              builder: (__, v, ___) {
+                lastDrawerItemSelected = v;
+                return getMainPanes();
+              },
+              selector: (p0, p1) => p1.getLastDrawerMenuItemClicked,
+            )
+          : getMainPanes(),
+    );
 
     if ((isLarge && buildDrawer) || (isLarge && isCustomDrawer)) {
-      body = Row(children: [
-        _drawerWidget!,
-        // const VerticalDivider(
-        //   width: 1,
-        //   thickness: 1,
-        // ),
-        Expanded(child: body)
-      ]);
+      body = Row(
+        children: [
+          _drawerWidget!,
+          // const VerticalDivider(
+          //   width: 1,
+          //   thickness: 1,
+          // ),
+          Expanded(child: body),
+        ],
+      );
     }
 
     if (setClipRect(null)) {
@@ -1967,14 +2020,16 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       builder: (__, isOpen, ___) {
         debugPrint("drawer selector $isOpen");
         return AnimatedContainer(
-            key: UniqueKey(),
-            height: _height,
-            width: (_width -
-                    (isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer)
-                        .toNonNullable()) -
-                0,
-            duration: const Duration(milliseconds: 100),
-            child: currentWidget);
+          key: UniqueKey(),
+          height: _height,
+          width:
+              (_width -
+                  (isOpen ? kDrawerOpenWidth : kDefaultClosedDrawer)
+                      .toNonNullable()) -
+              0,
+          duration: const Duration(milliseconds: 100),
+          child: currentWidget,
+        );
       },
       selector: (p0, p1) => p1.getSideMenuIsOpen,
     );
@@ -2015,15 +2070,17 @@ enum ConnectionStateExtension {
   error;
 
   ConnectionStateExtension? getFromConnectionState(ConnectionState c) {
-    return ConnectionStateExtension.values
-        .firstWhereOrNull((n) => c.name == n.name);
+    return ConnectionStateExtension.values.firstWhereOrNull(
+      (n) => c.name == n.name,
+    );
   }
 }
 
 extension Connection on ConnectionState {
   ConnectionStateExtension? getFromConnectionState() {
-    return ConnectionStateExtension.values
-        .firstWhereOrNull((n) => name == n.name);
+    return ConnectionStateExtension.values.firstWhereOrNull(
+      (n) => name == n.name,
+    );
   }
 }
 
@@ -2048,7 +2105,8 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
       _connectionState;
 
   ConnectionStateExtension? overrideConnectionState(
-      BasePageWithApiConnection type) {
+    BasePageWithApiConnection type,
+  ) {
     return null;
   }
 
@@ -2057,11 +2115,13 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     _iD = widget.iD;
     _tableName = widget.tableName;
     _extras = widget.extras;
-    _extras ??=
-        context.read<AuthProvider<AuthUser>>().getNewInstance(_tableName ?? "");
+    _extras ??= context.read<AuthProvider<AuthUser>>().getNewInstance(
+      _tableName ?? "",
+    );
     _connectionState = ValueNotifier(
-        overrideConnectionState(BasePageWithApiConnection.init) ??
-            ConnectionStateExtension.none);
+      overrideConnectionState(BasePageWithApiConnection.init) ??
+          ConnectionStateExtension.none,
+    );
     super.initState();
   }
 
@@ -2071,23 +2131,28 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     _tableName = widget.tableName;
     _extras = widget.extras;
 
-    _extras ??=
-        context.read<AuthProvider<AuthUser>>().getNewInstance(_tableName ?? "");
+    _extras ??= context.read<AuthProvider<AuthUser>>().getNewInstance(
+      _tableName ?? "",
+    );
     _connectionState = ValueNotifier(
-        overrideConnectionState(BasePageWithApiConnection.didUpdate) ??
-            ConnectionStateExtension.none);
+      overrideConnectionState(BasePageWithApiConnection.didUpdate) ??
+          ConnectionStateExtension.none,
+    );
     super.didUpdateWidget(oldWidget);
   }
 
-  Future<dynamic> getCallApiFunctionIfNull(BuildContext context,
-      {TabControllerHelper? tab});
+  Future<dynamic> getCallApiFunctionIfNull(
+    BuildContext context, {
+    TabControllerHelper? tab,
+  });
   ServerActions getServerActions();
 
   dynamic getExtras({TabControllerHelper? tab}) {
     if (_hasTabBarList()) {
       if (tab != null) {
         dynamic result = _getTabBarList().firstWhere(
-            (element) => element.extras.runtimeType == tab.extras.runtimeType);
+          (element) => element.extras.runtimeType == tab.extras.runtimeType,
+        );
         if (result == null) {
           throw Exception("Could not find tab");
         }
@@ -2098,8 +2163,10 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     return _extras;
   }
 
-  TabControllerHelper? findExtrasViaTypeList(List<TabControllerHelper>? list,
-      bool Function(TabControllerHelper) test) {
+  TabControllerHelper? findExtrasViaTypeList(
+    List<TabControllerHelper>? list,
+    bool Function(TabControllerHelper) test,
+  ) {
     if (list != null) {
       return list.firstWhereOrNull(test);
     } else {
@@ -2107,8 +2174,10 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     }
   }
 
-  int findExtrasIndexFromTabList(List<TabControllerHelper>? list,
-      bool Function(TabControllerHelper) test) {
+  int findExtrasIndexFromTabList(
+    List<TabControllerHelper>? list,
+    bool Function(TabControllerHelper) test,
+  ) {
     if (list != null) {
       return list.indexWhere(test);
     } else {
@@ -2120,7 +2189,9 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   TabControllerHelper? findExtrasViaType(Type extra) {
     if (_hasTabBarList()) {
       return findExtrasViaTypeList(
-          _getTabBarList(), (e) => e.extras.runtimeType == extra);
+        _getTabBarList(),
+        (e) => e.extras.runtimeType == extra,
+      );
     } else {
       return _extras;
     }
@@ -2129,7 +2200,9 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   int findExtrasIndexFromTab(Type extra) {
     if (_hasTabBarList()) {
       return findExtrasIndexFromTabList(
-          _getTabBarList(), (element) => element.extras.runtimeType == extra);
+        _getTabBarList(),
+        (element) => element.extras.runtimeType == extra,
+      );
     } else {
       return -1;
     }
@@ -2138,7 +2211,9 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   int findExtrasIndexFromTabSecoundPane(Type extra) {
     if (_hasTabBarList()) {
       return findExtrasIndexFromTabList(
-          _getTabBarList(), (element) => element.extras.runtimeType == extra);
+        _getTabBarList(),
+        (element) => element.extras.runtimeType == extra,
+      );
     } else {
       return -1;
     }
@@ -2156,8 +2231,12 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     return getExtras(tab: tab) as ViewAbstract;
   }
 
-  void setExtras(
-      {int? iD, String? tableName, dynamic ex, TabControllerHelper? tabH}) {
+  void setExtras({
+    int? iD,
+    String? tableName,
+    dynamic ex,
+    TabControllerHelper? tabH,
+  }) {
     _isLoading = false;
     if (_hasTabBarList()) {
       TabControllerHelper tab = tabH ?? _getTabBarList()[currentBaseTabIndex];
@@ -2165,8 +2244,11 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
       tab.iD = iD;
       tab.tableName = tableName;
       if (tabH != null) {
-        _getTabBarList()[_getTabBarList().indexWhere((element) =>
-            element.extras.runtimeType == tabH.extras.runtimeType)] = tab;
+        _getTabBarList()[_getTabBarList().indexWhere(
+              (element) =>
+                  element.extras.runtimeType == tabH.extras.runtimeType,
+            )] =
+            tab;
       } else {
         _getTabBarList()[currentBaseTabIndex] = tab;
       }
@@ -2177,8 +2259,12 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     }
   }
 
-  void refresh(
-      {int? iD, String? tableName, dynamic extras, TabControllerHelper? tab}) {
+  void refresh({
+    int? iD,
+    String? tableName,
+    dynamic extras,
+    TabControllerHelper? tab,
+  }) {
     debugPrint("refresh basePage");
     setExtras(iD: iD, tableName: tableName, ex: extras, tabH: tab);
     setState(() {});
@@ -2191,15 +2277,13 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   //   }
   //   return super.generateToolbar(customAppBar: customAppBar);
   // }
-  List<SliverFillRemaining> getLoadingWidget(bool firstPane,
-      {TabControllerHelper? tab}) {
+  List<SliverFillRemaining> getLoadingWidget(
+    bool firstPane, {
+    TabControllerHelper? tab,
+  }) {
     Widget loading = const Center(child: CircularProgressIndicator());
 
-    return [
-      SliverFillRemaining(
-        child: loading,
-      )
-    ];
+    return [SliverFillRemaining(child: loading)];
   }
 
   @override
@@ -2212,10 +2296,12 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     var shouldWaitWidget;
     if (isExtrasIsDashboard()) {
       shouldWaitWidget = getExtrasCastDashboard(tab: tab)
-          .getDashboardShouldWaitBeforeRequest(context,
-              globalKey: globalKeyBasePageWithApi,
-              firstPane: firstPane,
-              tab: tab);
+          .getDashboardShouldWaitBeforeRequest(
+            context,
+            globalKey: globalKeyBasePageWithApi,
+            firstPane: firstPane,
+            tab: tab,
+          );
     }
     return shouldWaitWidget ??
         super.beforeGetPaneWidget(
@@ -2235,7 +2321,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     if (ex != null && !_isLoading) {
       _connectionState.value =
           overrideConnectionState(BasePageWithApiConnection.build) ??
-              ConnectionStateExtension.none;
+          ConnectionStateExtension.none;
       initStateAfterApiCalled();
       return super.getMainPanes();
     }
@@ -2244,8 +2330,8 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
       builder: (context, snapshot) {
         _connectionState.value =
             overrideConnectionState(BasePageWithApiConnection.future) ??
-                (snapshot.connectionState.getFromConnectionState()) ??
-                ConnectionStateExtension.error;
+            (snapshot.connectionState.getFromConnectionState()) ??
+            ConnectionStateExtension.error;
 
         debugPrint("BasePageApi FutureBuilder started");
         if (snapshot.hasError) {
@@ -2253,12 +2339,11 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
           return getErrorWidget();
         } else if (snapshot.connectionState == ConnectionState.done) {
           debugPrint(
-              "BasePageApi FutureBuilder done snape data ${snapshot.data.runtimeType}");
+            "BasePageApi FutureBuilder done snape data ${snapshot.data.runtimeType}",
+          );
           _isLoading = false;
           if (snapshot.data != null) {
-            setExtras(
-              ex: snapshot.data,
-            );
+            setExtras(ex: snapshot.data);
             initStateAfterApiCalled();
             if (ex is ViewAbstract) {
               // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -2290,12 +2375,13 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   Widget getErrorWidget() {
     _isLoading = false;
     return EmptyWidget(
-        lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-        onSubtitleClicked: () {
-          setState(() {});
-        },
-        title: AppLocalizations.of(context)!.cantConnect,
-        subtitle: AppLocalizations.of(context)!.cantConnectRetry);
+      lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+      onSubtitleClicked: () {
+        setState(() {});
+      },
+      title: AppLocalizations.of(context)!.cantConnect,
+      subtitle: AppLocalizations.of(context)!.cantConnectRetry,
+    );
   }
 }
 

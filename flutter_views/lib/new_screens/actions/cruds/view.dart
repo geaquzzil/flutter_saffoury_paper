@@ -19,17 +19,18 @@ class ViewNew extends BasePageApi {
   bool overrideTrailingToNull;
 
   ///[key] is required for navigation header
-  ViewNew(
-      {super.key,
-      super.buildSecondPane,
-      super.iD,
-      super.tableName,
-      super.extras,
-      this.overrideTrailingToNull = false,
-      super.forceHeaderToCollapse = true,
-      super.isFirstToSecOrThirdPane = true,
-      super.onBuild,
-      super.parent});
+  ViewNew({
+    super.key,
+    super.buildSecondPane,
+    super.iD,
+    super.tableName,
+    super.extras,
+    this.overrideTrailingToNull = false,
+    super.forceHeaderToCollapse = true,
+    super.isFirstToSecOrThirdPane = true,
+    super.onBuild,
+    super.parent,
+  });
 
   @override
   State<ViewNew> createState() {
@@ -45,34 +46,38 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
     dynamic fieldValue = getExtrasCast().getFieldValue(field);
     if (fieldValue == null) {
       return ViewCardItem(
-          // secNotifier: getSecondPaneNotifier,
-          title: field,
-          description: "null",
-          icon: Icons.abc,
-          overrideTrailingToNull: widget.overrideTrailingToNull);
+        // secNotifier: getSecondPaneNotifier,
+        title: field,
+        description: "null",
+        icon: Icons.abc,
+        overrideTrailingToNull: widget.overrideTrailingToNull,
+      );
     } else if (fieldValue is ViewAbstract) {
       return ViewCardItem(
-          secNotifier: getSecondPaneNotifier,
-          title: "",
-          description: "",
-          icon: Icons.abc,
-          object: fieldValue,
-          overrideTrailingToNull: widget.overrideTrailingToNull);
+        secNotifier: getSecondPaneNotifier,
+        title: "",
+        description: "",
+        icon: Icons.abc,
+        object: fieldValue,
+        overrideTrailingToNull: widget.overrideTrailingToNull,
+      );
     } else if (fieldValue is ViewAbstractEnum) {
       return ViewCardItem(
-          // secNotifier: getSecondPaneNotifier,
-          title: fieldValue.getMainLabelText(context),
-          description: fieldValue.getFieldLabelString(context, fieldValue),
-          icon: fieldValue.getFieldLabelIconData(context, fieldValue),
-          overrideTrailingToNull: widget.overrideTrailingToNull,
-          object: null);
+        // secNotifier: getSecondPaneNotifier,
+        title: fieldValue.getMainLabelText(context),
+        description: fieldValue.getFieldLabelString(context, fieldValue),
+        icon: fieldValue.getFieldLabelIconData(context, fieldValue),
+        overrideTrailingToNull: widget.overrideTrailingToNull,
+        object: null,
+      );
     } else {
       return ViewCardItem(
-          // secNotifier: getSecondPaneNotifier,
-          overrideTrailingToNull: widget.overrideTrailingToNull,
-          title: getExtrasCast().getFieldLabel(context, field),
-          description: fieldValue.toString(),
-          icon: getExtrasCast().getFieldIconData(field));
+        // secNotifier: getSecondPaneNotifier,
+        overrideTrailingToNull: widget.overrideTrailingToNull,
+        title: getExtrasCast().getFieldLabel(context, field),
+        description: fieldValue.toString(),
+        icon: getExtrasCast().getFieldIconData(field),
+      );
     }
   }
 
@@ -96,53 +101,49 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
 
   @override
   List<Widget>? getCustomViewWhenSecondPaneIsEmpty(
-      ScrollController? controler, TabControllerHelper? tab) {
+    ScrollController? controler,
+    TabControllerHelper? tab,
+  ) {
     return [
-      if (getExtrasCast().getCustomTopWidget(context,
-              action: ServerActions.view, onClick: getSecondPaneNotifier) !=
+      if (getExtrasCast().getCustomTopWidget(
+            context,
+            action: ServerActions.view,
+            onClick: getSecondPaneNotifier,
+          ) !=
           null)
         MultiSliver(
           children: [
             ...getExtrasCast()
-                .getCustomTopWidget(context,
-                    action: ServerActions.view, onClick: getSecondPaneNotifier)!
-                .map(
-                  (e) => SliverToBoxAdapter(
-                    child: e,
-                  ),
-                )
+                .getCustomTopWidget(
+                  context,
+                  action: ServerActions.view,
+                  onClick: getSecondPaneNotifier,
+                )!
+                .map((e) => SliverToBoxAdapter(child: e)),
           ],
         ),
-      SliverToBoxAdapter(
-        child: SizedBox(
-          height: kDefaultPadding,
-        ),
-      ),
+      SliverToBoxAdapter(child: SizedBox(height: kDefaultPadding)),
       ...getExtrasCast().getCustomBottomWidget(
             context,
             action: ServerActions.view,
           ) ??
-          []
+          [],
     ];
   }
 
   @override
-  List<TabControllerHelper>? getPaneTabControllerHelper(
-      {required bool firstPane}) {
-    return null;
-    if (!firstPane) {
-      return [
-        TabControllerHelper(
-          icon: Icon(Icons.safety_check),
-          "Test",
-          widget: Text("dsa"),
-        ),
-        TabControllerHelper(
-          icon: Icon(Icons.abc),
-          "Test23",
-          widget: Text("dsa"),
-        )
-      ];
+  List<TabControllerHelper>? getPaneTabControllerHelper({
+    required bool firstPane,
+  }) {
+    // return null;
+    if (firstPane == false) {
+      dynamic val = getExtras();
+      debugPrint("getPaneTabControllerHelper firstPane=false");
+      if (val is ViewAbstract) {
+        debugPrint("getPaneTabControllerHelper");
+        return val.getCustomTabList(context, action: ServerActions.view);
+      }
+      return null;
     }
     return super.getPaneTabControllerHelper(firstPane: firstPane);
   }
@@ -165,14 +166,18 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
   }
 
   @override
-  Widget? getAppbarTitle(
-      {bool? firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
+  Widget? getAppbarTitle({
+    bool? firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  }) {
     if (firstPane == true) {
       return Text(
-        getExtrasCast().getBaseTitle(context,
-            descriptionIsId: true, serverAction: ServerActions.view),
+        getExtrasCast().getBaseTitle(
+          context,
+          descriptionIsId: true,
+          serverAction: ServerActions.view,
+        ),
       );
     }
     if (firstPane == false) {
@@ -182,10 +187,11 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
   }
 
   @override
-  Widget? getFloatingActionButton(
-      {bool? firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
+  Widget? getFloatingActionButton({
+    bool? firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  }) {
     // if (isSecPane(firstPane: firstPane)) {
     //   if (geSelectedValue() is BarcodeSetting ||
     //       (geSelectedValue() is PrinterDefaultSetting)) {
@@ -204,14 +210,18 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
   }
 
   @override
-  Widget? getPaneDraggableExpandedHeader(
-      {required bool firstPane, TabControllerHelper? tab}) {
+  Widget? getPaneDraggableExpandedHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) {
     return null;
   }
 
   @override
-  Widget? getPaneDraggableHeader(
-      {required bool firstPane, TabControllerHelper? tab}) {
+  Widget? getPaneDraggableHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) {
     return null;
   }
 
@@ -235,19 +245,24 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
               //       topRight: Radius.circular(25)),
               // )),
               child: BottomWidgetOnViewIfCartable(
-                  viewAbstract:
-                      getExtrasCast() as CartableProductItemInterface))
+                viewAbstract: getExtrasCast() as CartableProductItemInterface,
+              ),
+            )
           : null;
     }
     return null;
   }
 
   @override
-  List<Widget>? getPaneNotifier(
-      {required bool firstPane,
-      ScrollController? controler,
-      TabControllerHelper? tab,
-      SecondPaneHelper? valueNotifier}) {
+  List<Widget>? getPaneNotifier({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+    SecondPaneHelper? valueNotifier,
+  }) {
+    if (tab != null) {
+      return [SliverFillRemaining(child: tab.widget)];
+    }
     if (firstPane) {
       final fields = getExtrasCast()
           .getMainFields(context: context)
@@ -255,22 +270,21 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
           .toList();
       return [
         SliverToBoxAdapter(
-          child: getExtrasCast()
-              .getImageWithRoundedCorner(context, size: getHeight * .25),
-        ),
-        SliverList(
-            delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            return buildItem(context, fields[index]);
-          },
-          // 40 list items
-          childCount: fields.length,
-        )),
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: 80,
+          child: getExtrasCast().getImageWithRoundedCorner(
+            context,
+            size: getHeight * .25,
           ),
         ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return buildItem(context, fields[index]);
+            },
+            // 40 list items
+            childCount: fields.length,
+          ),
+        ),
+        SliverToBoxAdapter(child: SizedBox(height: 80)),
       ];
     } else {
       // return [const SliverToBoxAdapter(child: Text("S"))];
@@ -287,7 +301,7 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
               key: kk,
               parent: this,
             ),
-          )
+          ),
       ];
     }
   }
@@ -319,10 +333,15 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
   }
 
   @override
-  Future getCallApiFunctionIfNull(BuildContext context,
-      {TabControllerHelper? tab}) {
-    return (getExtras()).viewCallGetFirstFromList((getExtras()).iD,
-        context: context) as Future<ViewAbstract?>;
+  Future getCallApiFunctionIfNull(
+    BuildContext context, {
+    TabControllerHelper? tab,
+  }) {
+    return (getExtras()).viewCallGetFirstFromList(
+          (getExtras()).iD,
+          context: context,
+        )
+        as Future<ViewAbstract?>;
   }
 
   @override

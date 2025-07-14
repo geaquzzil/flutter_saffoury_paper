@@ -16,12 +16,13 @@ import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.da
 
 class ListToDetailsSecoundPaneNotifier extends BasePageSecoundPaneNotifier {
   ViewAbstract viewAbstract;
-  ListToDetailsSecoundPaneNotifier(
-      {super.key,
-      super.forceHeaderToCollapse = true,
-      super.buildDrawer = false,
-      required this.viewAbstract,
-      super.isFirstToSecOrThirdPane});
+  ListToDetailsSecoundPaneNotifier({
+    super.key,
+    super.forceHeaderToCollapse = true,
+    super.buildDrawer = false,
+    required this.viewAbstract,
+    super.isFirstToSecOrThirdPane,
+  });
 
   @override
   State<ListToDetailsSecoundPaneNotifier> createState() =>
@@ -41,13 +42,26 @@ class _ListToDetailsSecoundPaneNotifierState
   final kk = GlobalKey<BasePageSecoundPaneNotifierState>();
 
   @override
+  List<TabControllerHelper>? initTabBarList({
+    bool? firstPane,
+    TabControllerHelper? tab,
+  }) {
+    if (firstPane == false) {
+      dynamic val = getSecondPaneNotifier.value;
+      if (val is ViewAbstract) {
+        return val.getCustomTabList(context, action: ServerActions.view);
+      }
+      return null;
+    }
+    return super.initTabBarList(firstPane: firstPane, tab: tab);
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _viewAbstract = widget.viewAbstract;
-    _listNotifier.addListener(
-      () => debugPrint("ListToDet=> isNotifie"),
-    );
+    _listNotifier.addListener(() => debugPrint("ListToDet=> isNotifie"));
   }
 
   @override
@@ -62,19 +76,22 @@ class _ListToDetailsSecoundPaneNotifierState
   Widget? getAppbarTitle({bool? firstPane, TabControllerHelper? tab}) => null;
 
   @override
-  Widget? getFloatingActionButton(
-          {bool? firstPane, TabControllerHelper? tab}) =>
-      null;
+  Widget? getFloatingActionButton({
+    bool? firstPane,
+    TabControllerHelper? tab,
+  }) => null;
 
   @override
-  Widget? getPaneDraggableExpandedHeader(
-          {required bool firstPane, TabControllerHelper? tab}) =>
-      null;
+  Widget? getPaneDraggableExpandedHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) => null;
 
   @override
-  Widget? getPaneDraggableHeader(
-          {required bool firstPane, TabControllerHelper? tab}) =>
-      null;
+  Widget? getPaneDraggableHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) => null;
 
   @override
   Future<void>? getPaneIsRefreshIndicator({required bool firstPane}) {
@@ -94,20 +111,23 @@ class _ListToDetailsSecoundPaneNotifierState
   }
 
   @override
-  List<Widget>? getPaneNotifier(
-      {required bool firstPane,
-      ScrollController? controler,
-      TabControllerHelper? tab,
-      SecondPaneHelper? valueNotifier}) {
+  List<Widget>? getPaneNotifier({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+    SecondPaneHelper? valueNotifier,
+  }) {
     List<Widget>? top =
         ((valueNotifier?.value as ViewAbstract?) ?? _viewAbstract)
-            .getCustomTopWidget(context,
-                action: _lastSearchQuery != null
-                    ? ServerActions.search
-                    : ServerActions.view,
-                basePage: this,
-                isFromFirstAndSecPane: firstPane,
-                extras: _lastSearchQuery);
+            .getCustomTopWidget(
+              context,
+              action: _lastSearchQuery != null
+                  ? ServerActions.search
+                  : ServerActions.view,
+              basePage: this,
+              isFromFirstAndSecPane: firstPane,
+              extras: _lastSearchQuery,
+            );
     if (firstPane) {
       // asda
       debugPrint("getPaneNotifier firstPane $valueNotifier");
@@ -136,33 +156,34 @@ class _ListToDetailsSecoundPaneNotifierState
                   },
                 ),
                 ValueListenableBuilder(
-                    valueListenable: _listNotifier,
-                    builder: (context, value, child) {
-                      debugPrint("ListToDet=> fff $value");
-                      return FiltersAndSelectionListHeaderValueNotifier(
-                        width: firstPaneWidth,
-                        viewAbstract: _viewAbstract,
-                        valueNotifer: _listNotifier,
-                        filterInitial: _lastFilterData,
-                        sortInitial: _lastSortValue,
-                        onDoneFilter: (value) {
-                          setState(() {
-                            _lastFilterData = (value is bool)
-                                ? value
+                  valueListenable: _listNotifier,
+                  builder: (context, value, child) {
+                    debugPrint("ListToDet=> fff $value");
+                    return FiltersAndSelectionListHeaderValueNotifier(
+                      width: firstPaneWidth,
+                      viewAbstract: _viewAbstract,
+                      valueNotifer: _listNotifier,
+                      filterInitial: _lastFilterData,
+                      sortInitial: _lastSortValue,
+                      onDoneFilter: (value) {
+                        setState(() {
+                          _lastFilterData = (value is bool)
+                              ? value
                                     ? null
                                     : _lastFilterData
-                                : value;
-                          });
-                        },
-                        onDoneSort: (sort) {
-                          setState(() {
-                            _lastSortValue = sort;
-                          });
-                        },
-                        // onDoneFilter: ,
-                        secPaneNotifer: getSecoundPaneHelper(),
-                      );
-                    })
+                              : value;
+                        });
+                      },
+                      onDoneSort: (sort) {
+                        setState(() {
+                          _lastSortValue = sort;
+                        });
+                      },
+                      // onDoneFilter: ,
+                      secPaneNotifer: getSecoundPaneHelper(),
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -195,8 +216,12 @@ class _ListToDetailsSecoundPaneNotifierState
           },
           onClickForCard: (object) {
             // debugPrint("getPaneNotifier onClick $v");
-            notify(SecondPaneHelper(
-                title: object.getMainHeaderTextOnly(context), value: object));
+            notify(
+              SecondPaneHelper(
+                title: object.getMainHeaderTextOnly(context),
+                value: object,
+              ),
+            );
           },
 
           isGridView: false,
@@ -216,18 +241,16 @@ class _ListToDetailsSecoundPaneNotifierState
           // },
           copyWithRequestOption: _lastSortValue == null
               ? null
-              : RequestOptions()
-                  .addSortBy(_lastSortValue!.field, _lastSortValue!.type),
+              : RequestOptions().addSortBy(
+                  _lastSortValue!.field,
+                  _lastSortValue!.type,
+                ),
           toListObject: _viewAbstract,
         ),
       ];
     }
     if (valueNotifier == null) {
-      return [
-        const SliverFillRemaining(
-          child: Text("valueNotifer==null"),
-        )
-      ];
+      return [const SliverFillRemaining(child: Text("valueNotifer==null"))];
     }
     debugPrint("${valueNotifier.value}");
     if (valueNotifier.value is BasePage) {
@@ -240,7 +263,7 @@ class _ListToDetailsSecoundPaneNotifierState
           child: (valueNotifier.value as BasePage)
             ..setParent = this
             ..setParentOnBuild = onBuild,
-        )
+        ),
       ];
     }
 

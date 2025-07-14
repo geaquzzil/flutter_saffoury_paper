@@ -80,7 +80,7 @@ dependencies:
   stack_trace: ^1.11.1
   web_socket_channel: ^3.0.1
   rxdart: ^0.27.7
-  flutter_local_notifications: ^19.2.1
+  # flutter_local_notifications: ^19.2.1
   sliver_tools: ^0.2.12
   reactive_forms: ^17.0.1
   user_avatar_generator: ^0.0.4
