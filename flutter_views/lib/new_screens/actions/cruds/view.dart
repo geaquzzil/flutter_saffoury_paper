@@ -284,7 +284,7 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
             childCount: fields.length,
           ),
         ),
-        SliverToBoxAdapter(child: SizedBox(height: 80)),
+        // SliverToBoxAdapter(child: SizedBox(height: 80)),
       ];
     } else {
       // return [const SliverToBoxAdapter(child: Text("S"))];

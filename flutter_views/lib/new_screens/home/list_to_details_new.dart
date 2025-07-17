@@ -111,6 +111,14 @@ class _ListToDetailsSecoundPaneNotifierState
   }
 
   @override
+  List<Widget>? getCustomViewWhenSecondPaneIsEmpty(
+    ScrollController? controler,
+    TabControllerHelper? tab,
+  ) {
+    return _viewAbstract.getHomeListHeaderWidgetList(context);
+  }
+
+  @override
   List<Widget>? getPaneNotifier({
     required bool firstPane,
     ScrollController? controler,

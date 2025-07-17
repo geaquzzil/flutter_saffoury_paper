@@ -75,8 +75,6 @@ class CustomerTerms extends Customer
   @override
   Map<String, dynamic> toJson() => {};
 
-  @override
-  double getCustomViewHeight() => 200;
 
   @override
   String getCustomViewKey() => "customer_terms$iD";
@@ -98,7 +96,7 @@ class CustomerTerms extends Customer
   ResponseType getCustomViewResponseType() => ResponseType.LIST;
 
   @override
-  Widget? getCustomViewSingleResponseWidget(BuildContext context) {
+  Widget? getCustomViewResponseWidget(BuildContext context) {
     // TODO: implement getCustomViewSingleResponseWidget
     throw UnimplementedError();
   }

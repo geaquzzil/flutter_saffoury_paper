@@ -1883,6 +1883,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     if (tabs != null) {
       tabs = [
         TabControllerHelper(AppLocalizations.of(context)!.home, isMain: true),
+        
         ...tabs,
       ];
     }

@@ -609,6 +609,7 @@ class TabControllerHelper extends Tab {
   ///
   bool isMain;
   String? fieldThatHasList;
+  String? viewAbstractGeneratedKey;
 
   ///Auto get the field list from the api object;
   AutoRest? autoRest;
@@ -639,6 +640,7 @@ class TabControllerHelper extends Tab {
   TabControllerHelper(
     String title, {
     super.key,
+    this.viewAbstractGeneratedKey,
     super.icon,
     this.fieldThatHasList,
     this.autoRest,

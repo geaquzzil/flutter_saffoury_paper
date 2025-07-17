@@ -81,15 +81,19 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
   int testId = 0;
   double testQuantity = 100;
   int testBarCode = 1000;
-  final keyInventory =
-      GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'invontery');
+  final keyInventory = GlobalKey<SliverApiWithStaticMixin>(
+    debugLabel: 'invontery',
+  );
 
-  final keyInventoryFilterList =
-      GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'invonteryfilter');
-  final keyToImportFrom =
-      GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'import');
-  final keyToExportTo =
-      GlobalKey<SliverApiWithStaticMixin>(debugLabel: 'export');
+  final keyInventoryFilterList = GlobalKey<SliverApiWithStaticMixin>(
+    debugLabel: 'invonteryfilter',
+  );
+  final keyToImportFrom = GlobalKey<SliverApiWithStaticMixin>(
+    debugLabel: 'import',
+  );
+  final keyToExportTo = GlobalKey<SliverApiWithStaticMixin>(
+    debugLabel: 'export',
+  );
   Warehouse? _selectedWarehouse;
   final ValueNotifier<List<ViewAbstract>?> _notifier =
       ValueNotifier<List<ViewAbstract>?>(null);
@@ -160,69 +164,84 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
     return {
       "Details": [
         DrawerMenuItem(
-            title: AppLocalizations.of(context)!.inventoryprocess,
-            icon: Icons.inventory),
+          title: AppLocalizations.of(context)!.inventoryprocess,
+          icon: Icons.inventory,
+        ),
         DrawerMenuItem(
-            title: AppLocalizations.of(context)!.purchaseVe,
-            icon: Icons.document_scanner),
-      ]
+          title: AppLocalizations.of(context)!.purchaseVe,
+          icon: Icons.document_scanner,
+        ),
+      ],
     };
   }
 
   ListTile getHeaderWidgetForPurchuses() {
     return ListTile(
       leading: const Icon(Icons.import_export_sharp),
-      title: Text(AppLocalizations.of(context)!.startByImportFormat(
-          AppLocalizations.of(context)!.product.toLowerCase())),
+      title: Text(
+        AppLocalizations.of(context)!.startByImportFormat(
+          AppLocalizations.of(context)!.product.toLowerCase(),
+        ),
+      ),
       trailing: ElevatedButton(
-          onPressed: () async {
-            final p = Product();
-            List<ViewAbstract<dynamic>>? l = await context.pushNamed(
-                importRouteName,
-                pathParameters: {"tableName": p.getTableNameApi()!},
-                extra: p);
-            debugPrint("list is $l");
-            if (l != null) {
-              if (mounted) {
-                final scaffold = ScaffoldMessenger.of(context);
-                scaffold.showSnackBar(SnackBar(
-                    action: SnackBarAction(
-                        label: AppLocalizations.of(context)!.ok,
-                        onPressed: scaffold.hideCurrentSnackBar),
-                    content: Text(AppLocalizations.of(context)!
-                        .itemsImportedFormat(l.length.toString()))));
+        onPressed: () async {
+          final p = Product();
+          List<ViewAbstract<dynamic>>? l = await context.pushNamed(
+            importRouteName,
+            pathParameters: {"tableName": p.getTableNameApi()!},
+            extra: p,
+          );
+          debugPrint("list is $l");
+          if (l != null) {
+            if (mounted) {
+              final scaffold = ScaffoldMessenger.of(context);
+              scaffold.showSnackBar(
+                SnackBar(
+                  action: SnackBarAction(
+                    label: AppLocalizations.of(context)!.ok,
+                    onPressed: scaffold.hideCurrentSnackBar,
+                  ),
+                  content: Text(
+                    AppLocalizations.of(
+                      context,
+                    )!.itemsImportedFormat(l.length.toString()),
+                  ),
+                ),
+              );
 
-                // scaffold.showMaterialBanner(MaterialBanner(
+              // scaffold.showMaterialBanner(MaterialBanner(
 
-                //     content: const Text('Hello, I am Material Banner!'),
-                //     contentTextStyle: const TextStyle(
-                //         color: Colors.black, fontSize: 30),
-                //     backgroundColor: Colors.yellow,
-                //     leadingPadding: const EdgeInsets.only(right: 30),
-                //     leading: const Icon(
-                //       Icons.info,
-                //       size: 32,
-                //     ),
-                //     actions: [
-                //       TextButton(
-                //           onPressed: () {},
-                //           child: const Text('Dismiss')),
-                //       TextButton(
-                //           onPressed: () {},
-                //           child: const Text('Continue')),
-                //     ]));
-              }
+              //     content: const Text('Hello, I am Material Banner!'),
+              //     contentTextStyle: const TextStyle(
+              //         color: Colors.black, fontSize: 30),
+              //     backgroundColor: Colors.yellow,
+              //     leadingPadding: const EdgeInsets.only(right: 30),
+              //     leading: const Icon(
+              //       Icons.info,
+              //       size: 32,
+              //     ),
+              //     actions: [
+              //       TextButton(
+              //           onPressed: () {},
+              //           child: const Text('Dismiss')),
+              //       TextButton(
+              //           onPressed: () {},
+              //           child: const Text('Continue')),
+              //     ]));
             }
-          },
-          child: Text(AppLocalizations.of(context)!.importFile)),
+          }
+        },
+        child: Text(AppLocalizations.of(context)!.importFile),
+      ),
     );
   }
 
   @override
-  Widget? getAppbarTitle(
-      {bool? firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
+  Widget? getAppbarTitle({
+    bool? firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  }) {
     if (firstPane == null) {
       return findCurrentScreenSize(context) == CurrentScreenSize.MOBILE
           ? null
@@ -259,8 +278,11 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
   }
 
   @override
-  List<Widget>? getAppbarActions(
-      {bool? firstPane, TabControllerHelper? tab, TabControllerHelper? sec}) {
+  List<Widget>? getAppbarActions({
+    bool? firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? sec,
+  }) {
     if (isMobile(context) && firstPane == true) {
       return [getFilterIcon()];
     }
@@ -275,7 +297,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
                 onChange: (o) {
                   debugPrint("onChange $o");
                 },
-              )
+              ),
             ];
     }
     if (!firstPane) return [const Icon(Icons.refresh)];
@@ -286,14 +308,10 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
     if (isMobile(context)) {
       return Padding(
         padding: const EdgeInsets.all(kDefaultPadding),
-        child: Column(
-          children: [...getHeaderInvonteryControlls],
-        ),
+        child: Column(children: [...getHeaderInvonteryControlls]),
       );
     }
-    return TodayTextTicker(
-      requireTime: true,
-    );
+    return TodayTextTicker(requireTime: true);
   }
 
   List<Widget> get getHeaderInvonteryControlls {
@@ -315,10 +333,11 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
   }
 
   @override
-  List<Widget>? getPane(
-      {required bool firstPane,
-      ScrollController? controler,
-      TabControllerHelper? tab}) {
+  List<Widget>? getPane({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+  }) {
     return firstPane
         ? getDesktopFirstPane(tab: tab)
         : [
@@ -338,33 +357,39 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
                 scrollController: controler,
                 requiresFullFetsh: true,
                 key: keyInventoryFilterList,
-                hasCustomWidgetBuilder: (response) {
+                hasCustomWidgetOnResponseBuilder: (response) {
                   return SliverFillRemaining(
                     child: Product().getSummary(
-                        context: context,
-                        productList: response.cast(),
-                        customKey: filterData.toString()),
+                      context: context,
+                      productList: response.cast(),
+                      customKey: filterData.toString(),
+                    ),
                   );
                 },
                 filterData: filterData,
-              )
+              ),
           ];
   }
 
   Widget getMobileToSecPane() {
     if (filterData == null) {
       return SliverToBoxAdapter(
-        child:
-            inventoryProduct.getSummaryTotal(context: context, productList: []),
+        child: inventoryProduct.getSummaryTotal(
+          context: context,
+          productList: [],
+        ),
       );
     }
     return SliverApiMixinViewAbstractWidget(
       toListObject: Product.inventoryWorker(),
       requiresFullFetsh: true,
-      hasCustomWidgetBuilder: (response) {
+      hasCustomWidgetOnResponseBuilder: (response) {
         return SliverToBoxAdapter(
-            child: inventoryProduct.getSummaryTotal(
-                context: context, productList: response.cast()));
+          child: inventoryProduct.getSummaryTotal(
+            context: context,
+            productList: response.cast(),
+          ),
+        );
       },
       filterData: filterData,
     );
@@ -372,7 +397,8 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
 
   List<Widget> getDesktopFirstPane({TabControllerHelper? tab}) {
     debugPrint(
-        "getDesktopFirstPane lastDrawerItem ${lastDrawerItemSelected?.title}");
+      "getDesktopFirstPane lastDrawerItem ${lastDrawerItemSelected?.title}",
+    );
     return [
       if (isMobile(context)) getMobileToSecPane(),
       if (filterData != null)
@@ -391,7 +417,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
           key: keyInventory,
           isSliver: true,
           toListObject: Product(),
-          hasCustomCardBuilder: (idx, item) {
+          hasCustomCardItemBuilder: (idx, item) {
             return GoodsInventoryListCard(
               product: item as Product,
               selectedWarehouse: _selectedWarehouse,
@@ -404,17 +430,15 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
           key: keyToExportTo,
           isSliver: true,
           list: exportedList,
-          hasCustomCardBuilder: (idx, item) {
+          hasCustomCardItemBuilder: (idx, item) {
             return getListItemForPurchasesCheck(idx, item, context);
           },
-        )
+        ),
     ];
   }
 
   Center getMobileFirstPaneWidget(TabControllerHelper tab) {
-    return Center(
-      child: Text(tab.text!),
-    );
+    return Center(child: Text(tab.text!));
   }
 
   Widget getSummary() {
@@ -423,17 +447,17 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
     double getTotalImportedFromFile = productList == null
         ? 0
         : productList
-                .map((e) => e.qrQuantity)
-                .reduce((value, element) => (value ?? 0) + (element ?? 0)) ??
-            0;
+                  .map((e) => e.qrQuantity)
+                  .reduce((value, element) => (value ?? 0) + (element ?? 0)) ??
+              0;
     productList = keyToExportTo.currentState?.getList<Product>();
-    double getTotalImportedFromBarcode = productList == null ||
-            productList.isEmpty
+    double getTotalImportedFromBarcode =
+        productList == null || productList.isEmpty
         ? 0
         : productList
-                .map((e) => e.qrQuantity)
-                .reduce((value, element) => (value ?? 0) + (element ?? 0)) ??
-            0;
+                  .map((e) => e.qrQuantity)
+                  .reduce((value, element) => (value ?? 0) + (element ?? 0)) ??
+              0;
     double getTotalRemainingImported =
         getTotalImportedFromFile - getTotalImportedFromBarcode;
 
@@ -447,45 +471,52 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
       builder: (crossAxisCount, crossCountFundCalc, crossAxisCountMod, h) {
         return [
           StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: ChartCardItemCustom(
-                color: Colors.blue,
-                icon: Icons.list,
+            crossAxisCellCount: 2,
+            mainAxisCellCount: 1,
+            child: ChartCardItemCustom(
+              color: Colors.blue,
+              icon: Icons.list,
 
-                title: AppLocalizations.of(context)!.totalImported,
-                description: getTotalImportedFromFile.toCurrencyFormat(
-                    symbol: AppLocalizations.of(context)!.kg),
-                footer: totalImportedLength.toCurrencyFormat(),
+              title: AppLocalizations.of(context)!.totalImported,
+              description: getTotalImportedFromFile.toCurrencyFormat(
+                symbol: AppLocalizations.of(context)!.kg,
+              ),
+              footer: totalImportedLength.toCurrencyFormat(),
 
-                // footer: incomes?.length.toString(),
-                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-              )),
+              // footer: incomes?.length.toString(),
+              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+            ),
+          ),
           StaggeredGridTile.count(
-              crossAxisCellCount: 2,
-              mainAxisCellCount: 1,
-              child: ChartCardItemCustom(
-                color: const Color.fromARGB(255, 243, 82, 33),
-                icon: Icons.barcode_reader,
-                title: AppLocalizations.of(context)!.totalScaned,
-                description: getTotalImportedFromBarcode.toCurrencyFormat(
-                    symbol: AppLocalizations.of(context)!.kg),
-                footer: totalImportedBarcodeLength.toCurrencyFormat(),
-                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-              )),
+            crossAxisCellCount: 2,
+            mainAxisCellCount: 1,
+            child: ChartCardItemCustom(
+              color: const Color.fromARGB(255, 243, 82, 33),
+              icon: Icons.barcode_reader,
+              title: AppLocalizations.of(context)!.totalScaned,
+              description: getTotalImportedFromBarcode.toCurrencyFormat(
+                symbol: AppLocalizations.of(context)!.kg,
+              ),
+              footer: totalImportedBarcodeLength.toCurrencyFormat(),
+              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+            ),
+          ),
           StaggeredGridTile.count(
-              crossAxisCellCount: crossAxisCount + crossAxisCountMod,
-              mainAxisCellCount: 1,
-              child: ChartCardItemCustom(
-                color: Colors.blue,
-                title: AppLocalizations.of(context)!.totalFormat(
-                    AppLocalizations.of(context)!.remaning.toLowerCase()),
-                description: getTotalRemainingImported.toCurrencyFormat(
-                    symbol: AppLocalizations.of(context)!.kg),
-                footer: totalRemainingLength.toCurrencyFormat(),
-                // footer: incomes?.length.toString(),
-                // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-              )),
+            crossAxisCellCount: crossAxisCount + crossAxisCountMod,
+            mainAxisCellCount: 1,
+            child: ChartCardItemCustom(
+              color: Colors.blue,
+              title: AppLocalizations.of(context)!.totalFormat(
+                AppLocalizations.of(context)!.remaning.toLowerCase(),
+              ),
+              description: getTotalRemainingImported.toCurrencyFormat(
+                symbol: AppLocalizations.of(context)!.kg,
+              ),
+              footer: totalRemainingLength.toCurrencyFormat(),
+              // footer: incomes?.length.toString(),
+              // footerRightWidget: incomesAnalysis.getGrowthRateText(context),
+            ),
+          ),
         ];
       },
       wrapWithCard: false,
@@ -495,15 +526,20 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
     );
   }
 
-  List<Widget> getDesktopSecondPane(
-      {TabControllerHelper? tab, TabControllerHelper? secoundTab}) {
+  List<Widget> getDesktopSecondPane({
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  }) {
     if (isPurchuses()) {
       return [
         if (_importedList != null)
           SliverToBoxAdapter(
             child: ListTile(
-              title: Text(AppLocalizations.of(context)!
-                  .reImportFormat(AppLocalizations.of(context)!.xsl)),
+              title: Text(
+                AppLocalizations.of(
+                  context,
+                )!.reImportFormat(AppLocalizations.of(context)!.xsl),
+              ),
               trailing: ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -514,15 +550,13 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
               ),
             ),
           ),
+        if (_importedList != null) SliverToBoxAdapter(child: getSummary()),
         if (_importedList != null)
           SliverToBoxAdapter(
-            child: getSummary(),
-          ),
-        if (_importedList != null)
-          SliverToBoxAdapter(
-            child: Text(AppLocalizations.of(context)!.details,
-                    style: Theme.of(context).textTheme.titleMedium)
-                .padding(),
+            child: Text(
+              AppLocalizations.of(context)!.details,
+              style: Theme.of(context).textTheme.titleMedium,
+            ).padding(),
           ),
         if (_importedList == null)
           SliverFillRemaining(
@@ -541,20 +575,18 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
             isSliver: true,
             enableSelection: false,
             key: keyToImportFrom,
-            hasCustomCardBuilder: (i, v) =>
+            hasCustomCardItemBuilder: (i, v) =>
                 getListItemForPurchasesCheck(i, v, context),
           ),
       ];
     }
 
     return [
-      const SliverToBoxAdapter(
-        child: Text(""),
-      ),
+      const SliverToBoxAdapter(child: Text("")),
       SliverApiMixinViewAbstractWidget(
         toListObject: Product(),
         filterData: filterData,
-      )
+      ),
       // FutureBuilder(
       //     future: inventoryProduct.listCall(count: 1, page: 0),
       //     builder: (context, snapshot) {
@@ -567,7 +599,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
       //             list: snapshot.data!,
       //             isSliver: true,
       //             enableSelection: false,
-      //             hasCustomCardBuilder: (i, v) =>
+      //             hasCustomCardItemBuilder: (i, v) =>
       //                 getListItemForPurchasesCheck(i, v, context),
       //           );
       //         } else {
@@ -599,33 +631,37 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
   }
 
   Widget getListItemForPurchasesCheck(
-      int i, ViewAbstract<dynamic> v, BuildContext context) {
+    int i,
+    ViewAbstract<dynamic> v,
+    BuildContext context,
+  ) {
     return Card(
       child: ExpansionTile(
         leading: Text("${i + 1}"),
         trailing: Text(
-          (v as Product)
-              .qrQuantity
-              .toCurrencyFormat(symbol: AppLocalizations.of(context)!.kg),
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: Theme.of(context).colorScheme.tertiary),
+          (v as Product).qrQuantity.toCurrencyFormat(
+            symbol: AppLocalizations.of(context)!.kg,
+          ),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Theme.of(context).colorScheme.tertiary,
+          ),
         ),
         title: (v.getMainHeaderText(context)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             v.gsms?.getLabelWithTextWidget(
-                    context: context,
-                    AppLocalizations.of(context)!.gsm,
-                    v.gsms?.gsm.toNonNullable().toString() ?? "") ??
+                  context: context,
+                  AppLocalizations.of(context)!.gsm,
+                  v.gsms?.gsm.toNonNullable().toString() ?? "",
+                ) ??
                 const Text(""),
             v.getLabelWithTextWidget(
-                context: context,
-                AppLocalizations.of(context)!.barcode,
-                color: Theme.of(context).colorScheme.tertiary,
-                v.barcode ?? "-"),
+              context: context,
+              AppLocalizations.of(context)!.barcode,
+              color: Theme.of(context).colorScheme.tertiary,
+              v.barcode ?? "-",
+            ),
           ],
         ),
         children: [v.getFullDescription()],
@@ -654,8 +690,10 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
   }
 
   @override
-  Widget? getPaneDraggableExpandedHeader(
-      {required bool firstPane, TabControllerHelper? tab}) {
+  Widget? getPaneDraggableExpandedHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) {
     return isDesktopPlatform()
         ? null
         : QrCodeReader(
@@ -666,8 +704,10 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
   }
 
   @override
-  Widget? getPaneDraggableHeader(
-      {required bool firstPane, TabControllerHelper? tab}) {
+  Widget? getPaneDraggableHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) {
     if (isLargeScreenFromCurrentScreenSize(context)) {
       return null;
     }
@@ -682,10 +722,11 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
   }
 
   @override
-  Widget? getFloatingActionButton(
-      {bool? firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
+  Widget? getFloatingActionButton({
+    bool? firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  }) {
     if (firstPane != null) {
       if (firstPane) {
         return Row(
@@ -700,49 +741,55 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
                   //todo
 
                   inventoryProduct.setRequestOption(
-                      option: RequestOptions(filterMap: filterData ?? {}));
-                  inventoryProduct.setComparedList =
-                      (keyInventoryFilterList.currentState?.getList());
-                  inventoryProduct.printDialog(context,
-                      list: l.cast(), isSelfListPrint: true, standAlone: true);
+                    option: RequestOptions(filterMap: filterData ?? {}),
+                  );
+                  inventoryProduct.setComparedList = (keyInventoryFilterList
+                      .currentState
+                      ?.getList());
+                  inventoryProduct.printDialog(
+                    context,
+                    list: l.cast(),
+                    isSelfListPrint: true,
+                    standAlone: true,
+                  );
                 }
               },
               child: const Icon(Icons.print),
             ),
-            const SizedBox(
-              width: kDefaultPadding / 2,
-            ),
+            const SizedBox(width: kDefaultPadding / 2),
             FloatingActionButton.extended(
-                onPressed: () {
-                  if (!isPurchuses()) {
-                    Product p = Product();
-                    p.qrQuantity = testQuantity + 100;
-                    p.iD = 2405 + testId;
-                    testId = testId + 1;
-                    testQuantity = testQuantity + 100;
-                    keyInventory.currentState?.addAnimatedListItem(p);
-                  } else {
-                    Product? t = keyToImportFrom.currentState
-                        ?.searchForItem<Product>((t) {
-                      debugPrint(
-                          "found product barcode: ${t.barcode} testBarcode: ${testBarCode.toString()}");
-                      return t.barcode == ((testBarCode)).toString();
-                    });
+              onPressed: () {
+                if (!isPurchuses()) {
+                  Product p = Product();
+                  p.qrQuantity = testQuantity + 100;
+                  p.iD = 2405 + testId;
+                  testId = testId + 1;
+                  testQuantity = testQuantity + 100;
+                  keyInventory.currentState?.addAnimatedListItem(p);
+                } else {
+                  Product?
+                  t = keyToImportFrom.currentState?.searchForItem<Product>((t) {
+                    debugPrint(
+                      "found product barcode: ${t.barcode} testBarcode: ${testBarCode.toString()}",
+                    );
+                    return t.barcode == ((testBarCode)).toString();
+                  });
 
-                    debugPrint("found product founded $t");
-                    if (t != null) {
-                      testBarCode = testBarCode + 1;
-                      keyToExportTo.currentState?.addAnimatedListItem(t);
-                      keyToImportFrom.currentState?.removeByValue(t);
-                      setState(() {});
-                    } else {
-                      context
-                          .read<DrawerMenuControllerProvider>()
-                          .controlEndDrawerMenu();
-                    }
+                  debugPrint("found product founded $t");
+                  if (t != null) {
+                    testBarCode = testBarCode + 1;
+                    keyToExportTo.currentState?.addAnimatedListItem(t);
+                    keyToImportFrom.currentState?.removeByValue(t);
+                    setState(() {});
+                  } else {
+                    context
+                        .read<DrawerMenuControllerProvider>()
+                        .controlEndDrawerMenu();
                   }
-                },
-                label: const Icon(Icons.add)),
+                }
+              },
+              label: const Icon(Icons.add),
+            ),
           ],
         );
       }

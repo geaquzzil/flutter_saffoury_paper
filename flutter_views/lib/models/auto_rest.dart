@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 
 import 'view_abstract_api.dart';
 
@@ -182,19 +183,20 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
 }
 
 abstract class CustomViewHorizontalListResponse<T extends ViewAbstract> {
-  Widget? getCustomViewListResponseWidget(BuildContext context, List<T> item);
-  Widget? getCustomViewSingleResponseWidget(BuildContext context);
-  Widget? getCustomViewTitleWidget(
-    BuildContext context,
-    ValueNotifier valueNotifier,
-  );
+  // Widget? getCustomViewListResponseWidget(BuildContext context, List<T> item);
+  dynamic getCustomViewResponseWidget(BuildContext context,{required   SliverApiWithStaticMixin state,List<T>? items});
+  // Widget? getCustomViewTitleWidget(
+  //   BuildContext context,
+  //   SliverApiWithStaticMixin state,
+  // );
   void onCustomViewCardClicked(BuildContext context, T istem);
-  double? getCustomViewHeight();
+  // double? getCustomViewHeight();
   ResponseType getCustomViewResponseType();
+
   String getCustomViewKey();
 
-  Widget? getCustomViewOnResponse(T response);
-  Widget? getCustomViewOnResponseAddWidget(T response);
+  // Widget? getCustomViewOnResponse(T response);
+  // dynamic getCustomViewOnResponseAddWidget(T response);
 }
 
 enum ResponseType { SINGLE, LIST, NONE_RESPONSE_TYPE }

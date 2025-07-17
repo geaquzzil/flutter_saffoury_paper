@@ -31,8 +31,8 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   ChartRecordAnalysis() : super();
 
   ChartRecordAnalysis.init(
-    this.viewAbstract,
-    DateObject this.date, {
+    this.viewAbstract, {
+    this.date,
     this.enteryInteval = EnteryInteval.monthy,
     this.customAction,
   });
@@ -83,7 +83,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
       ..responseListAnalysis = (json['responseListAnalysis'] as List<dynamic>?)
           ?.map((e) => GrowthRate.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..date = DateObject.fromJson(json['date']);
+      ..date = json['date'] == null ? null : DateObject.fromJson(json['date']);
   }
 
   @override
@@ -113,7 +113,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   }
 
   @override
-  Widget? getCustomViewSingleResponseWidget(BuildContext context) {
+  Widget? getCustomViewResponseWidget(BuildContext context) {
     debugPrint(
       "getCustomViewSingleResponseWidget ${responseListAnalysis?.length}",
     );
@@ -159,8 +159,6 @@ class ChartRecordAnalysis<T extends ViewAbstract>
     // );
   }
 
-  @override
-  double? getCustomViewHeight() => 600;
 
   @override
   Widget? getCustomViewTitleWidget(
@@ -176,7 +174,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
         if (obj == enteryInteval) return;
         valueNotifier.value = ChartRecordAnalysis.init(
           viewAbstract,
-          date ?? DateObject.initFirstDateOfYear(),
+          date: date ?? DateObject.initFirstDateOfYear(),
           enteryInteval: obj,
         );
       },

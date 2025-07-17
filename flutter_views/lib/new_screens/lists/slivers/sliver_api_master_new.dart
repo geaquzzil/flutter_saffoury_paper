@@ -41,19 +41,20 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   ViewAbstract? setParentForChildCardItem;
   ValueNotifier<List<ViewAbstract>>? onSeletedListItemsChanged;
   ScrollController? scrollController;
+  final bool hideOnEmpty;
+  @Deprecated("use RequestOptions")
   String? searchString;
+  @Deprecated("use RequestOptions")
   Map<String, FilterableProviderHelper>? filterData;
   bool isSliver;
   bool enableSelection;
   bool isCardRequestApi;
-
-  Widget Function(List response)? hasCustomWidgetBuilder;
-
-  Widget Function(int idx, ViewAbstract item)? hasCustomCardBuilder;
-  bool requiresFullFetsh;
+  Widget Function(List response)? hasCustomWidgetOnResponseBuilder;
+  Widget Function(int idx, ViewAbstract item)? hasCustomCardItemBuilder;
+  Function(dynamic object)? onClickForCard;
+  bool Function(dynamic object)? isSelectForCard;
   Widget? hasCustomSeperater;
   Widget? hasCustomLoadingItem;
-
   final ValueNotifier<List?>? valueListProviderNotifier;
 
   ///when scrollDirection is horizontal grid view well build instaed  and override the [isGridView] even when its true
@@ -61,9 +62,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   bool isGridView;
   RequestOptions? customRequestOption;
   RequestOptions? copyWithRequestOption;
-
-  bool Function(dynamic object)? isSelectForCard;
-  Function(dynamic object)? onClickForCard;
+  bool requiresFullFetsh;
 
   SliverApiMixinWithStaticStateful({
     super.key,
@@ -71,13 +70,14 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
     this.isGridView = true,
     this.scrollDirection = Axis.vertical,
     this.onSeletedListItemsChanged,
-    this.hasCustomCardBuilder,
+    this.hasCustomCardItemBuilder,
     this.scrollController,
     this.searchString,
-    this.hasCustomWidgetBuilder,
+    this.hasCustomWidgetOnResponseBuilder,
     this.filterData,
     this.isSelectForCard,
     this.onClickForCard,
+    this.hideOnEmpty = false,
     this.requiresFullFetsh = false,
     this.isCardRequestApi = false,
     this.copyWithRequestOption,
@@ -380,8 +380,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         return widget.isSliver ? SliverFillRemaining(child: w) : w;
       }
     }
-    return widget.hasCustomWidgetBuilder != null
-        ? widget.hasCustomWidgetBuilder!.call(getList())
+    return widget.hasCustomWidgetOnResponseBuilder != null
+        ? widget.hasCustomWidgetOnResponseBuilder!.call(getList())
         : getListValueListenableIsGrid(count: count, isLoading: isLoading);
   }
 
@@ -453,10 +453,10 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
               state: this,
               hasCustomLoadingWidget: widget.hasCustomLoadingItem,
               hasCustomCardBuilderOnResponse:
-                  widget.hasCustomCardBuilder == null
+                  widget.hasCustomCardItemBuilder == null
                   ? null
                   : (item) {
-                      return widget.hasCustomCardBuilder!.call(-1, item);
+                      return widget.hasCustomCardItemBuilder!.call(-1, item);
                     },
             );
     } else {
@@ -469,8 +469,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
               searchQuery: _searchString,
               object: va,
             )
-          : widget.hasCustomCardBuilder != null
-          ? widget.hasCustomCardBuilder!.call(index, va)
+          : widget.hasCustomCardItemBuilder != null
+          ? widget.hasCustomCardItemBuilder!.call(index, va)
           : ListCardItem(
               searchQuery: _searchString,
               isSelected: widget.isSelectForCard?.call(va) ?? false,
@@ -573,8 +573,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   Widget getGridItem(e) {
-    if (widget.hasCustomCardBuilder != null) {
-      return widget.hasCustomCardBuilder!.call(-1, e);
+    if (widget.hasCustomCardItemBuilder != null) {
+      return widget.hasCustomCardItemBuilder!.call(-1, e);
     }
     return WebGridViewItem(
       isSelectMood: _selectMood,
@@ -746,14 +746,24 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   Widget getEmptyWidget({bool isError = false}) {
     if (widget.isSliver) {
+      Widget w;
       if (widget.scrollDirection == Axis.horizontal) {
-        return SliverToBoxAdapter(
-          child: _getEmptyWidget(isError, expand: false),
-        );
+        w = SliverToBoxAdapter(child: _getEmptyWidget(isError, expand: false));
+      } else {
+        w = SliverFillRemaining(child: _getEmptyWidget(isError));
       }
-      return SliverFillRemaining(child: _getEmptyWidget(isError));
+      if (widget.hideOnEmpty) {
+        return SliverVisibility(sliver: w, visible: false);
+      }
+      return w;
+    } else {
+      Widget w = _getEmptyWidget(isError);
+      if (widget.hideOnEmpty) {
+        return Visibility(visible: false, child: w);
+      } else {
+        return w;
+      }
     }
-    return _getEmptyWidget(isError);
   }
 
   EmptyWidget _getEmptyWidget(bool isError, {bool expand = true}) {

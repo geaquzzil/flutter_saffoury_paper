@@ -133,7 +133,7 @@ class Order extends InvoiceMaster<Order>
               ],
             );
           }),
-          autoRest: ChartRecordAnalysis.init(Order(), DateObject(),
+          autoRest: ChartRecordAnalysis.init(Order(),
               enteryInteval: obj ?? EnteryInteval.monthy,
               customAction: {"CustomerID": customers?.iD})),
     );

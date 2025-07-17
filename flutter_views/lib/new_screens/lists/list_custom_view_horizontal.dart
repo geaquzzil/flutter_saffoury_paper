@@ -7,18 +7,20 @@ import '../../models/auto_rest.dart';
 import '../../new_components/loading_shimmer.dart';
 
 ///no scroll controller for now
+@Deprecated("use SliverMixin")
 class ListHorizontalCustomViewWidget<T extends CustomViewHorizontalListResponse>
     extends StatefulWidget {
   T autoRest;
   Widget? title;
   String? titleString;
   Function(dynamic response)? onResponse;
-  ListHorizontalCustomViewWidget(
-      {super.key,
-      required this.autoRest,
-      this.title,
-      this.titleString,
-      this.onResponse});
+  ListHorizontalCustomViewWidget({
+    super.key,
+    required this.autoRest,
+    this.title,
+    this.titleString,
+    this.onResponse,
+  });
 
   @override
   State<ListHorizontalCustomViewWidget> createState() =>
@@ -45,12 +47,18 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
       if (listProvider.getCount(key) == 0) {
         switch (widget.autoRest.getCustomViewResponseType()) {
           case ResponseType.LIST:
-            listProvider.fetchList(key,
-                viewAbstract: widget.autoRest as ViewAbstract,context:context);
+            listProvider.fetchList(
+              key,
+              viewAbstract: widget.autoRest as ViewAbstract,
+              context: context,
+            );
             break;
           case ResponseType.SINGLE:
-            listProvider.fetchView(key,
-                viewAbstract: widget.autoRest as ViewAbstract,context:context);
+            listProvider.fetchView(
+              key,
+              viewAbstract: widget.autoRest as ViewAbstract,
+              context: context,
+            );
             break;
           case ResponseType.NONE_RESPONSE_TYPE:
             break;
@@ -70,17 +78,17 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
     return ChangeNotifierProvider.value(
       value: listProvider,
       child: Consumer<ListMultiKeyProvider>(
-          builder: (context, provider, listTile) {
-        if (provider.getCount(key) == 0) {
-          return wrapHeader(
+        builder: (context, provider, listTile) {
+          if (provider.getCount(key) == 0) {
+            return wrapHeader(
               context,
-              const CircularProgressIndicator(
-                strokeWidth: 2,
-              ));
-        }
-        debugPrint("List api provider loaded ${listProvider.isLoading}");
-        return wrapHeader(context, getWidget(listProvider));
-      }),
+              const CircularProgressIndicator(strokeWidth: 2),
+            );
+          }
+          debugPrint("List api provider loaded ${listProvider.isLoading}");
+          return wrapHeader(context, getWidget(listProvider));
+        },
+      ),
     );
   }
 
@@ -100,8 +108,9 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
     if (widget.onResponse != null) {
       widget.onResponse!(listProvider.getList(key)[0]);
     }
-    return (listProvider.getList(key)[0] as T)
-            .getCustomViewSingleResponseWidget(context) ??
+    return (listProvider.getList(key)[0] as T).getCustomViewResponseWidget(
+          context,
+        ) ??
         const Text("Not emplemented getCustomViewSingleResponseWidget");
   }
 
@@ -110,27 +119,35 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
       widget.onResponse!(listProvider.getList(key));
     }
     return widget.autoRest.getCustomViewListResponseWidget(
-            context, listProvider.getList(key)) ??
+          context,
+          listProvider.getList(key),
+        ) ??
         const Text("Not emplemented getCustomViewListToSingle");
   }
 
   Widget wrapHeader(BuildContext context, Widget child) {
     return SizedBox(
-        width: MediaQuery.of(context).size.width - 80,
-        height: widget.autoRest.getCustomViewHeight() ??
-            MediaQuery.of(context).size.height,
-        child: Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [buildHeader(context), Expanded(child: child)],
-          ),
-        ));
+      width: MediaQuery.of(context).size.width - 80,
+      height:
+          widget.autoRest.getCustomViewHeight() ??
+          MediaQuery.of(context).size.height,
+      child: Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildHeader(context),
+            Expanded(child: child),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget buildHeader(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
-      child: widget.title ??
+      child:
+          widget.title ??
           Text(
             widget.titleString ?? "NONT",
             style: const TextStyle(fontWeight: FontWeight.w200),
@@ -142,19 +159,15 @@ class _ListHorizontalApiWidgetState<T extends CustomViewHorizontalListResponse>
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 10,
-          itemBuilder: (ctx, i) {
-            return const Column(
-              children: [
-                ShimmerLoadingList(),
-                SizedBox(
-                  height: 10,
-                )
-              ],
-            );
-          }),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 10,
+        itemBuilder: (ctx, i) {
+          return const Column(
+            children: [ShimmerLoadingList(), SizedBox(height: 10)],
+          );
+        },
+      ),
     );
   }
 }

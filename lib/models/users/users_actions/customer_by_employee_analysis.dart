@@ -78,7 +78,7 @@ class CustomerByEmployeeAnanlysis
 
   @override
   String? getTableNameApi() => null;
-  
+
   @override
   List<String>? getCustomAction() {
     return ["view_customer_statment_by_employee"];
@@ -93,8 +93,6 @@ class CustomerByEmployeeAnanlysis
     ),
   };
 
-  @override
-  double? getCustomViewHeight() => null;
 
   @override
   String getCustomViewKey() => "customer_by_employee$iD";
@@ -122,7 +120,7 @@ class CustomerByEmployeeAnanlysis
   }
 
   @override
-  Widget? getCustomViewSingleResponseWidget(BuildContext context) {
+  Widget? getCustomViewResponseWidget(BuildContext context) {
     return Column(
       children: [
         LineChartItem<GrowthRate, DateTime>(

@@ -69,10 +69,9 @@ import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_auto_rest_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_card_item_square.dart';
@@ -993,10 +992,72 @@ class Product extends ViewAbstract<Product>
   List<Widget>? getHomeListHeaderWidgetList(BuildContext context) {
     // TODO: implement getHomeListHeaderWidgetList
     return [
-      SliverApiMixinAutoRestWidget(
-        autoRest: AutoRest<ProductType>(
-          obj: ProductType.init(true),
-          key: "ProductType<Category>",
+      // HeaderDescription(
+      //   isSliver: true,
+      //   title: AppLocalizations.of(context)!.type,
+      // ),
+      // SliverApiMixinAutoRestWidget(
+      //   autoRest: AutoRest<ProductType>(
+      //     obj: ProductType.init(true),
+      //     key: "ProductType<Category>",
+      //   ),
+      // ),
+      // HeaderDescription(
+      //   isSliver: true,
+      //   title: AppLocalizations.of(context)!.type,
+      // ),
+      // SliverApiMixinViewAbstractWidget(
+      //   isGridView: true,
+      //   scrollDirection: Axis.horizontal,
+      //   toListObject: ProductType.init(true),
+      // ),
+      HeaderDescription(
+        isSliver: true,
+        title: AppLocalizations.of(context)!.unUsed,
+      ),
+      SliverApiMixinViewAbstractWidget(
+        isGridView: true,
+        scrollDirection: Axis.horizontal,
+        toListObject: UnusedRecords.init(Product()),
+      ),
+      HeaderDescription(
+        isSliver: true,
+        title: AppLocalizations.of(context)!.changeChart,
+      ),
+      SliverApiMixinViewAbstractWidget(
+        isGridView: true,
+        scrollDirection: Axis.horizontal,
+        toListObject: ChangesRecords.init(Product(), "status"),
+      ),
+      HeaderDescription(
+        isSliver: true,
+        title: AppLocalizations.of(context)!.orders,
+      ),
+      SliverApiMixinViewAbstractWidget(
+        isGridView: true,
+        scrollDirection: Axis.horizontal,
+        toListObject: ChartRecordAnalysis.init(Order()),
+      ),
+      HeaderDescription(
+        isSliver: true,
+        title: AppLocalizations.of(context)!.today,
+      ),
+      SliverApiMixinViewAbstractWidget(
+        isGridView: true,
+        scrollDirection: Axis.horizontal,
+        toListObject: Product().setRequestOption(
+          option: _getOnlyInventory().addDate(DateObject.today()),
+        ),
+      ),
+      HeaderDescription(
+        isSliver: true,
+        title: AppLocalizations.of(context)!.thisWeek,
+      ),
+      SliverApiMixinViewAbstractWidget(
+        isGridView: true,
+        scrollDirection: Axis.horizontal,
+        toListObject: Product().setRequestOption(
+          option: _getOnlyInventory().addDate(DateObject.initThisWeek()),
         ),
       ),
     ];
@@ -1036,75 +1097,6 @@ class Product extends ViewAbstract<Product>
       mainAxisType: MainAxisType.ListHorizontal,
     );
     return [
-      StaggeredGridTile.count(
-        crossAxisCellCount: 2,
-        mainAxisCellCount: mainAxisCellCountList,
-        child: ListHorizontalApiAutoRestWidget(
-          isSliver: true,
-          titleString: "Category",
-
-          // listItembuilder: (v) =>
-          //     ListItemProductTypeCategory(productType: v as ProductType),
-          autoRest: AutoRest<ProductType>(
-            obj: ProductType.init(true),
-            key: "ProductType<Category>",
-          ),
-        ),
-      ),
-      StaggeredGridTile.count(
-        crossAxisCellCount: 2,
-        mainAxisCellCount: mainAxisCellCount / 2,
-        child: ListHorizontalCustomViewApiAutoRestWidget(
-          autoRest: UnusedRecords.init(Product()),
-        ),
-      ),
-      StaggeredGridTile.count(
-        crossAxisCellCount: 2,
-        mainAxisCellCount: mainAxisCellCount,
-        child: ListHorizontalCustomViewApiAutoRestWidget(
-          autoRest: ChangesRecords.init(Product(), "status"),
-        ),
-      ),
-      StaggeredGridTile.count(
-        crossAxisCellCount: 2,
-        mainAxisCellCount: mainAxisCellCount,
-        child: ListHorizontalCustomViewApiAutoRestWidget(
-          autoRest: ChartRecordAnalysis.init(Order(), DateObject()),
-        ),
-      ),
-
-      StaggeredGridTile.count(
-        crossAxisCellCount: 2,
-        mainAxisCellCount: mainAxisCellCountList,
-        child: ListHorizontalApiAutoRestWidget(
-          isSliver: true,
-          //todo translate
-          titleString: "Today",
-          // listItembuilder: (v) => SizedBox(
-          //     width: 100, height: 100, child: POSListCardItem(object: v)),
-          autoRest: AutoRest<Product>(
-            obj: Product().setRequestOption(
-              option: _getOnlyInventory().addDate(DateObject.today()),
-            ),
-            key: "productsByType<dateEnum>thisDay",
-          ),
-        ),
-      ),
-      StaggeredGridTile.count(
-        crossAxisCellCount: 2,
-        mainAxisCellCount: mainAxisCellCountList,
-        child: ListHorizontalApiAutoRestWidget(
-          isSliver: true,
-          titleString: "This week",
-          autoRest: AutoRest<Product>(
-            obj: Product().setRequestOption(
-              option: _getOnlyInventory().addDate(DateObject.initThisWeek()),
-            ),
-            key: "productsByType<dateEnum>thisWeek",
-          ),
-        ),
-      ),
-
       // ListHorizontalCustomViewApiAutoRestWidget(
       //     titleString: "TEST1 ", autoRest: UnusedRecords.init(Product())),
       // ListHorizontalApiAutoRestWidget(
@@ -1384,6 +1376,7 @@ class Product extends ViewAbstract<Product>
     ServerActions? action,
   }) {
     if (action == ServerActions.list) return [];
+    final mov = ProductMovments.init(iD);
     return [
       if (isEditing())
         TabControllerHelper(
@@ -1395,9 +1388,12 @@ class Product extends ViewAbstract<Product>
             ),
           ),
           isResponsiveIsSliver: true,
+          viewAbstractGeneratedKey: mov.getListableKey(
+            type: SliverMixinObjectType.CUSTOM_VIEW_RESPONSE,
+          ),
           // extras: ,
           widget: SliverApiMixinViewAbstractWidget(
-            toListObject: ProductMovments.init(iD),
+            toListObject: mov,
             isSliver: true,
           ),
         ),

@@ -84,7 +84,7 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
   }
 
   @override
-  Widget? getCustomViewSingleResponseWidget(BuildContext context) {
+  Widget? getCustomViewResponseWidget(BuildContext context) {
     return CardBackgroundWithTitle(
       title: AppLocalizations.of(context)!.unUsed,
       leading: Icons.info_outline,
@@ -134,8 +134,6 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
     return Text(AppLocalizations.of(context)!.unUsed);
   }
 
-  @override
-  double? getCustomViewHeight() => 200;
 
   @override
   Widget? getCustomViewTitleWidget(

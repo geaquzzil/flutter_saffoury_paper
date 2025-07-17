@@ -9,7 +9,7 @@ class SliverApiMixinViewAbstractWidget
     super.key,
     super.scrollController,
     super.scrollDirection,
-    super.hasCustomWidgetBuilder,
+    super.hasCustomWidgetOnResponseBuilder,
     super.isSliver,
     super.requiresFullFetsh,
     super.enableSelection,
@@ -17,7 +17,7 @@ class SliverApiMixinViewAbstractWidget
     super.isSelectForCard,
     // super.
     super.isGridView = false,
-    super.hasCustomCardBuilder,
+    super.hasCustomCardItemBuilder,
     super.customRequestOption,
     super.hasCustomSeperater,
     required super.toListObject,

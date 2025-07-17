@@ -4,18 +4,19 @@ import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_mas
 class SliverApiMixinViewAbstractCardApiWidget
     extends SliverApiMixinWithStaticStateful {
   /// [toListObject] could be String [tableName] or [ViewAbstract]
-  SliverApiMixinViewAbstractCardApiWidget(
-      {super.key,
-      super.scrollDirection,
-      super.scrollController,
-      super.isSliver,
-      super.isGridView = false,
-      super.hasCustomCardBuilder,
-      super.hasCustomSeperater,
-      super.isCardRequestApi=true,
-      super.enableSelection,
-      required super.toListObject,
-      super.searchString});
+  SliverApiMixinViewAbstractCardApiWidget({
+    super.key,
+    super.scrollDirection,
+    super.scrollController,
+    super.isSliver,
+    super.isGridView = false,
+    super.hasCustomCardItemBuilder,
+    super.hasCustomSeperater,
+    super.isCardRequestApi = true,
+    super.enableSelection,
+    required super.toListObject,
+    super.searchString,
+  });
 
   @override
   State<SliverApiMixinViewAbstractCardApiWidget> createState() =>

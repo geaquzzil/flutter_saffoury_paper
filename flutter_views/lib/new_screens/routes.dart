@@ -161,16 +161,20 @@ class RouteGenerator {
     //todo permission cheking here when go to import or export or any other
     // final isGoingToOnboard = state.path == onboardLocation;
     debugPrint(
-        "getRouterAuth: isGoingToLogin: isGoingToInit: isLogedIn: $isLogedIn isInitialized: $isInitialized appService.getStatus :${appService.getStatus} ");
+      "getRouterAuth: isGoingToLogin: isGoingToInit: isLogedIn: $isLogedIn isInitialized: $isInitialized appService.getStatus :${appService.getStatus} ",
+    );
 
     if (isInitialized) {
+      debugPrint("getRouterAuth: isInitialized ");
       return splashLocation;
       // If not onboard and not going to onboard redirect to OnBoarding
     } else if (!isLogedIn) {
+      debugPrint("getRouterAuth: !isLogedIn ");
       return loginLocation;
     } else if (isLogedIn && !isFinishedInitialization) {
       debugPrint(
-          "getRouterAuth: userPermissionID ${appService.getPermissions?.iD}");
+        "getRouterAuth: userPermissionID ${appService.getPermissions?.iD}",
+      );
       appService.isInitialized = true;
       AuthProvider authProvider = context.read<AuthProvider>();
       if (authProvider.isGoodsInventory(context)) {
@@ -193,8 +197,9 @@ class RouteGenerator {
     //   return homeLocation;
     // }
     else {
+      debugPrint("getRouterAuth: null ");
       // Else Don't do anything
-      return null;
+      return homeLocation;
     }
     // if (!isInitialized && !isGoingToInit) {
     //   return splashLocation;
@@ -220,282 +225,292 @@ class RouteGenerator {
     redirect: !kIsWeb
         ? (context, state) async {
             debugPrint(
-                "GoRouter isWeb===>$kIsWeb\npath===>${state.fullPath}\npathParams===>${state.pathParameters}\nqueryParams===>${state.uri.queryParameters}");
+              "GoRouter isWeb===>$kIsWeb\npath===>${state.fullPath}\npathParams===>${state.pathParameters}\nqueryParams===>${state.uri.queryParameters}",
+            );
             return getRouterAuth(state);
           }
         : (context, state) async {
             debugPrint(
-                "GoRouter isWeb===>$kIsWeb\npath===>${state.fullPath}\npathParams===>${state.pathParameters}\nqueryParams===>${state.uri.queryParameters}");
+              "GoRouter isWeb===>$kIsWeb\npath===>${state.fullPath}\npathParams===>${state.pathParameters}\nqueryParams===>${state.uri.queryParameters}",
+            );
             return getRouterAuthWeb(state);
           },
     errorPageBuilder: (context, state) {
       debugPrint("GoRouter errorPageBuilder ${state.fullPath}");
-      return MaterialPage(
-        key: state.pageKey,
-        child: getErrorPage(),
-      );
+      return MaterialPage(key: state.pageKey, child: getErrorPage());
     },
     // redirect: (context, state) {
 
     // },
     routes: <RouteBase>[
       GoRoute(
-          path: "/index",
-          name: indexWebRouteName,
-          pageBuilder: (context, state) =>
-              MaterialPage(key: state.pageKey, child: HomeWebPage()),
-          routes: [
-            GoRoute(
-              name: indexWebSignIn,
-              path: indexWebSignIn,
-              pageBuilder: (context, state) {
-                return MaterialPage(key: state.pageKey, child: SignInPage());
-              },
-            ),
-            GoRoute(
-              path: IndexWebRegister,
-              name: IndexWebRegister,
-              pageBuilder: (context, state) {
-                return MaterialPage(
-                    key: state.pageKey, child: RegisterWebPage());
-              },
-            ),
-            GoRoute(
-              path: indexWebSettingAndAccount,
-              name: indexWebSettingAndAccount,
-              pageBuilder: (context, state) {
-                return MaterialPage(
-                    key: state.pageKey,
-                    child: SettingAndProfileWebPage(
-                      currentSetting: state.pathParameters["action"],
-                    ));
-              },
-            ),
-            GoRoute(
-              path: indexReturnPrivecyPolicy,
-              name: indexReturnPrivecyPolicy,
-              pageBuilder: (context, state) {
-                return MaterialPage(
-                    key: state.pageKey, child: ReturnPrivecyPolicyWebPage());
-              },
-            ),
-            GoRoute(
-              path: indexWebContactUs,
-              name: indexWebContactUs,
-              pageBuilder: (context, state) {
-                return MaterialPage(
-                    key: state.pageKey, child: ContactUsWebPage());
-              },
-            ),
-            GoRoute(
-              path: "about-us",
-              name: indexWebAboutUs,
-              pageBuilder: (context, state) {
-                return MaterialPage(
-                    key: state.pageKey, child: AboutUsWebPage());
-              },
-            ),
-            GoRoute(
-              path: indexWebCheckout,
-              name: indexWebCheckout,
-              pageBuilder: (context, state) {
-                return MaterialPage(key: state.pageKey, child: CheckoutWeb());
-              },
-            ),
-            GoRoute(
-              name: indexWebView,
-              path: "v/:tableName/:id",
-              pageBuilder: (context, state) {
-                return MaterialPage(
-                    key: state.pageKey,
-                    child: WebProductView(
-                      iD: int.parse(state.pathParameters['id']!),
-                      tableName: state.pathParameters['tableName']!,
-                      extras: state.extra as ViewAbstract?,
-                    ));
-              },
-            ),
-            GoRoute(
-              name: indexWebMasterToList,
-              path: "list/:tableName",
-              pageBuilder: (context, state) {
-                return MaterialPage(
-                    key: state.pageKey,
-                    child: WebMasterToList(
-                      iD: int.parse(state.uri.queryParameters['id']!),
-                      tableName: state.pathParameters['tableName']!,
-                      extras: state.extra as ViewAbstract?,
-                    ));
-              },
-            ),
-            GoRoute(
-              path: indexWebTermsAndConditions,
-              name: indexWebTermsAndConditions,
-              pageBuilder: (context, state) {
-                return MaterialPage(child: TermsWebPage());
-              },
-            ),
-            GoRoute(
-              path: "products",
-              name: indexWebOurProducts,
-              pageBuilder: (context, state) {
-                return MaterialPage(
-                    child: ProductWebPage(
+        path: "/index",
+        name: indexWebRouteName,
+        pageBuilder: (context, state) =>
+            MaterialPage(key: state.pageKey, child: HomeWebPage()),
+        routes: [
+          GoRoute(
+            name: indexWebSignIn,
+            path: indexWebSignIn,
+            pageBuilder: (context, state) {
+              return MaterialPage(key: state.pageKey, child: SignInPage());
+            },
+          ),
+          GoRoute(
+            path: IndexWebRegister,
+            name: IndexWebRegister,
+            pageBuilder: (context, state) {
+              return MaterialPage(key: state.pageKey, child: RegisterWebPage());
+            },
+          ),
+          GoRoute(
+            path: indexWebSettingAndAccount,
+            name: indexWebSettingAndAccount,
+            pageBuilder: (context, state) {
+              return MaterialPage(
+                key: state.pageKey,
+                child: SettingAndProfileWebPage(
+                  currentSetting: state.pathParameters["action"],
+                ),
+              );
+            },
+          ),
+          GoRoute(
+            path: indexReturnPrivecyPolicy,
+            name: indexReturnPrivecyPolicy,
+            pageBuilder: (context, state) {
+              return MaterialPage(
+                key: state.pageKey,
+                child: ReturnPrivecyPolicyWebPage(),
+              );
+            },
+          ),
+          GoRoute(
+            path: indexWebContactUs,
+            name: indexWebContactUs,
+            pageBuilder: (context, state) {
+              return MaterialPage(
+                key: state.pageKey,
+                child: ContactUsWebPage(),
+              );
+            },
+          ),
+          GoRoute(
+            path: "about-us",
+            name: indexWebAboutUs,
+            pageBuilder: (context, state) {
+              return MaterialPage(key: state.pageKey, child: AboutUsWebPage());
+            },
+          ),
+          GoRoute(
+            path: indexWebCheckout,
+            name: indexWebCheckout,
+            pageBuilder: (context, state) {
+              return MaterialPage(key: state.pageKey, child: CheckoutWeb());
+            },
+          ),
+          GoRoute(
+            name: indexWebView,
+            path: "v/:tableName/:id",
+            pageBuilder: (context, state) {
+              return MaterialPage(
+                key: state.pageKey,
+                child: WebProductView(
+                  iD: int.parse(state.pathParameters['id']!),
+                  tableName: state.pathParameters['tableName']!,
+                  extras: state.extra as ViewAbstract?,
+                ),
+              );
+            },
+          ),
+          GoRoute(
+            name: indexWebMasterToList,
+            path: "list/:tableName",
+            pageBuilder: (context, state) {
+              return MaterialPage(
+                key: state.pageKey,
+                child: WebMasterToList(
+                  iD: int.parse(state.uri.queryParameters['id']!),
+                  tableName: state.pathParameters['tableName']!,
+                  extras: state.extra as ViewAbstract?,
+                ),
+              );
+            },
+          ),
+          GoRoute(
+            path: indexWebTermsAndConditions,
+            name: indexWebTermsAndConditions,
+            pageBuilder: (context, state) {
+              return MaterialPage(child: TermsWebPage());
+            },
+          ),
+          GoRoute(
+            path: "products",
+            name: indexWebOurProducts,
+            pageBuilder: (context, state) {
+              return MaterialPage(
+                child: ProductWebPage(
                   searchQuery: state.uri.queryParameters["search"],
                   customFilter: state.uri.queryParameters['filter'],
-                ));
-              },
-            ),
-            GoRoute(
-              path: "services",
-              name: indexWebServices,
-              pageBuilder: (context, state) {
-                return MaterialPage(child: ServicesWebPage());
-              },
-            )
-          ]),
+                ),
+              );
+            },
+          ),
+          GoRoute(
+            path: "services",
+            name: indexWebServices,
+            pageBuilder: (context, state) {
+              return MaterialPage(child: ServicesWebPage());
+            },
+          ),
+        ],
+      ),
 
       GoRoute(
-          name: homeRouteName,
-          path: '/',
-          pageBuilder: (BuildContext context, GoRouterState state) {
-            return MaterialPage(
-                child: SafeArea(child: BaseDeterminePageState()));
-          },
-          routes: [
-            // GoRoute(
-            //   name: "listable",
-            //   path: ":tableName",
-            //   pageBuilder: (context, state) {
-            //     return MaterialPage(
-            //         key: state.pageKey,
-            //         child: WebMasterToList(
-            //           iD: int.parse(state.uri.queryParameters['id']!),
-            //           tableName: state.pathParameters['tableName']!,
-            //           extras: state.extra as ViewAbstract?,
-            //         ));
-            //   },
-            // ),
-            GoRoute(
-              name: editRouteName,
-              path: "edit/:tableName/:id",
-              pageBuilder: (context, state) {
-                return MaterialPage(
-                    key: state.pageKey,
-                    child: BaseEditNewPage(
-                      viewAbstract: state.extra as ViewAbstract,
-                    ));
-              },
-            ),
-            GoRoute(
-              name: addRouteName,
-              path: "add/:tableName",
-              pageBuilder: (context, state) {
-                return MaterialPage(
-                    key: state.pageKey,
-                    child: BaseEditNewPage(
-                      viewAbstract: state.extra as ViewAbstract,
-                    ));
-              },
-            ),
-            GoRoute(
-              name: viewRouteName,
-              path: "view/:tableName/:id",
-              pageBuilder: (context, state) {
-                return MaterialPage(
-                    key: state.pageKey,
-                    child: BaseViewNewPage(
-                      viewAbstract: state.extra as ViewAbstract,
-                    ));
-              },
-            ),
-            GoRoute(
-              name: importRouteName,
-              path: "import/:tableName",
-              pageBuilder: (context, state) {
-                var ex = state.extra;
-                ex ??= context
-                    .read<AuthProvider<AuthUser>>()
-                    .getNewInstance(state.pathParameters["tableName"]!);
+        name: homeRouteName,
+        path: '/',
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return MaterialPage(child: SafeArea(child: BaseDeterminePageState()));
+        },
+        routes: [
+          // GoRoute(
+          //   name: "listable",
+          //   path: ":tableName",
+          //   pageBuilder: (context, state) {
+          //     return MaterialPage(
+          //         key: state.pageKey,
+          //         child: WebMasterToList(
+          //           iD: int.parse(state.uri.queryParameters['id']!),
+          //           tableName: state.pathParameters['tableName']!,
+          //           extras: state.extra as ViewAbstract?,
+          //         ));
+          //   },
+          // ),
+          GoRoute(
+            name: editRouteName,
+            path: "edit/:tableName/:id",
+            pageBuilder: (context, state) {
+              return MaterialPage(
+                key: state.pageKey,
+                child: BaseEditNewPage(
+                  viewAbstract: state.extra as ViewAbstract,
+                ),
+              );
+            },
+          ),
+          GoRoute(
+            name: addRouteName,
+            path: "add/:tableName",
+            pageBuilder: (context, state) {
+              return MaterialPage(
+                key: state.pageKey,
+                child: BaseEditNewPage(
+                  viewAbstract: state.extra as ViewAbstract,
+                ),
+              );
+            },
+          ),
+          GoRoute(
+            name: viewRouteName,
+            path: "view/:tableName/:id",
+            pageBuilder: (context, state) {
+              return MaterialPage(
+                key: state.pageKey,
+                child: BaseViewNewPage(
+                  viewAbstract: state.extra as ViewAbstract,
+                ),
+              );
+            },
+          ),
+          GoRoute(
+            name: importRouteName,
+            path: "import/:tableName",
+            pageBuilder: (context, state) {
+              var ex = state.extra;
+              ex ??= context.read<AuthProvider<AuthUser>>().getNewInstance(
+                state.pathParameters["tableName"]!,
+              );
 
-                return MaterialPage(
-                    key: state.pageKey,
-                    child: FileReaderPage(
-                      buildToolbar: true,
-                      viewAbstract: ex as ViewAbstract,
-                    ));
-              },
-            ),
-            GoRoute(
-              name: exportRouteName,
-              path: "export/:tableName/:type",
-              pageBuilder: (context, state) {
-                String? type = state.pathParameters["type"];
-                if (type == null) {
-                  //TODO redirect to 404 not found
-                }
-                //todo when type is list then queryParams has data:[List]
-                Widget w;
-                if (type == FileExporterPageType.LIST.toString()) {
-                  var ex = getRouterStateList(state, context);
-                  w = FileExporterPage(
-                    viewAbstract: context
-                        .read<AuthProvider<AuthUser>>()
-                        .getNewInstance(state.pathParameters["tableName"]!)!,
-                    list: (ex as List).cast(),
-                  );
-                } else {
-                  //todo get from api
-                  w = FileExporterPage(
-                    viewAbstract: state.extra as ViewAbstract,
-                  );
-                }
-                return MaterialPage(key: state.pageKey, child: w);
-              },
-            ),
-            GoRoute(
-              name: printRouteName,
-              path: "print/:tableName/:type",
-              pageBuilder: (context, state) {
-                String? type = state.pathParameters["type"];
-                Widget w = PdfPageNew<PrintLocalSetting>(
-                  buildDrawer: true,
-                  type: PrintPageType.values
-                      .firstWhereOrNull((o) => o.toString() == type),
-                  iD: int.tryParse(state.uri.queryParameters['id'] ?? "-"),
-                  asList: getRouterStateList(state, context)?.cast(),
-                  tableName: state.pathParameters['tableName'],
-                  extras: state.extra as PrintableMaster?,
+              return MaterialPage(
+                key: state.pageKey,
+                child: FileReaderPage(
+                  buildToolbar: true,
+                  viewAbstract: ex as ViewAbstract,
+                ),
+              );
+            },
+          ),
+          GoRoute(
+            name: exportRouteName,
+            path: "export/:tableName/:type",
+            pageBuilder: (context, state) {
+              String? type = state.pathParameters["type"];
+              if (type == null) {
+                //TODO redirect to 404 not found
+              }
+              //todo when type is list then queryParams has data:[List]
+              Widget w;
+              if (type == FileExporterPageType.LIST.toString()) {
+                var ex = getRouterStateList(state, context);
+                w = FileExporterPage(
+                  viewAbstract: context
+                      .read<AuthProvider<AuthUser>>()
+                      .getNewInstance(state.pathParameters["tableName"]!)!,
+                  list: (ex as List).cast(),
                 );
+              } else {
+                //todo get from api
+                w = FileExporterPage(viewAbstract: state.extra as ViewAbstract);
+              }
+              return MaterialPage(key: state.pageKey, child: w);
+            },
+          ),
+          GoRoute(
+            name: printRouteName,
+            path: "print/:tableName/:type",
+            pageBuilder: (context, state) {
+              String? type = state.pathParameters["type"];
+              Widget w = PdfPageNew<PrintLocalSetting>(
+                buildDrawer: true,
+                type: PrintPageType.values.firstWhereOrNull(
+                  (o) => o.toString() == type,
+                ),
+                iD: int.tryParse(state.uri.queryParameters['id'] ?? "-"),
+                asList: getRouterStateList(state, context)?.cast(),
+                tableName: state.pathParameters['tableName'],
+                extras: state.extra as PrintableMaster?,
+              );
 
-                return MaterialPage(key: state.pageKey, child: w);
-              },
-            ),
-            // GoRoute(
-            //   name: searchRouteName,
-            //   path: "search/:tableName",
-            //   pageBuilder: (context, state) {
-            //     return MaterialPage(
-            //         key: state.pageKey,
-            //         child: SearchPage(
-            //           // heroTag: (state.extra as List)[1],
-            //           tableName: state.pathParameters["tableName"],
-            //           viewAbstract: null,
-            //           // viewAbstract: (state.extra as List)[0],
-            //         ));
-            //   },
-            // ),
-          ]),
+              return MaterialPage(key: state.pageKey, child: w);
+            },
+          ),
+          // GoRoute(
+          //   name: searchRouteName,
+          //   path: "search/:tableName",
+          //   pageBuilder: (context, state) {
+          //     return MaterialPage(
+          //         key: state.pageKey,
+          //         child: SearchPage(
+          //           // heroTag: (state.extra as List)[1],
+          //           tableName: state.pathParameters["tableName"],
+          //           viewAbstract: null,
+          //           // viewAbstract: (state.extra as List)[0],
+          //         ));
+          //   },
+          // ),
+        ],
+      ),
       GoRoute(
         name: dashboardRouteName,
         path: "/dashboard/list/:tableName",
         pageBuilder: (context, state) {
           return MaterialPage(
-              key: state.pageKey,
-              child: DashboardListDetails(
-                list: (state.extra as List)[1],
-                header: (state.extra as List)[0],
-              ));
+            key: state.pageKey,
+            child: DashboardListDetails(
+              list: (state.extra as List)[1],
+              header: (state.extra as List)[0],
+            ),
+          );
         },
       ),
 
@@ -511,7 +526,9 @@ class RouteGenerator {
         path: "/splash",
         name: "splash",
         pageBuilder: (context, state) => MaterialPage(
-            key: state.pageKey, child: const BaseAuthenticatingScreen()),
+          key: state.pageKey,
+          child: const BaseAuthenticatingScreen(),
+        ),
       ),
       GoRoute(
         name: loginRouteName,
@@ -526,10 +543,9 @@ class RouteGenerator {
         pageBuilder: (context, state) {
           String? page = state.uri.queryParameters["page"];
           return MaterialPage(
-              key: state.pageKey,
-              child: SettingPageNew(
-                currentSettingPage: page,
-              ));
+            key: state.pageKey,
+            child: SettingPageNew(currentSettingPage: page),
+          );
         },
       ),
       GoRoute(
@@ -537,11 +553,13 @@ class RouteGenerator {
         path: "/notification",
         pageBuilder: (context, state) {
           return MaterialPage(
-              key: state.pageKey, child: HomeNotificationPage());
+            key: state.pageKey,
+            child: HomeNotificationPage(),
+          );
         },
       ),
       if (addonRoutes != null)
-        ...addonRoutes!.where((test) => test != null).toList().cast()
+        ...addonRoutes!.where((test) => test != null).toList().cast(),
     ],
   );
 
@@ -554,10 +572,12 @@ class RouteGenerator {
     }
     String? tableName = state.pathParameters["tableName"];
     dynamic extra = state.extra;
-    extra ??=
-        context.read<AuthProvider<AuthUser>>().getNewInstance(tableName ?? "");
-    return extra
-        ?.fromJsonViewAbstractList(state.uri.queryParameters["data"] ?? "");
+    extra ??= context.read<AuthProvider<AuthUser>>().getNewInstance(
+      tableName ?? "",
+    );
+    return extra?.fromJsonViewAbstractList(
+      state.uri.queryParameters["data"] ?? "",
+    );
   }
 
   static dynamic getFromExtra(Map<String, dynamic> extra) {
@@ -565,9 +585,7 @@ class RouteGenerator {
   }
 
   static Widget getErrorPage() {
-    return ErrorWebPage(
-      errorMessage: "404 not found!",
-    );
+    return ErrorWebPage(errorMessage: "404 not found!");
   }
 
   @Deprecated("")
@@ -585,85 +603,103 @@ class RouteGenerator {
       //  case "/print":
       //     return MaterialPageRoute(builder: (context) => const SignInPage());
       case "/settings":
-        return MaterialPageRoute(builder: (context) {
-          return const SettingPage();
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return const SettingPage();
+          },
+        );
       case "/dashboard":
-        return MaterialPageRoute(builder: (context) {
-          return DashboardPage(
-            dashboard: args as DashableInterface,
-          );
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return DashboardPage(dashboard: args as DashableInterface);
+          },
+        );
       case "/print":
-        return MaterialPageRoute(builder: (context) {
-          if (args == null) {
-            return Lottie.network(
-                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
-          } else if (args is ViewAbstract) {
-            return PdfPage(
-              iD: null,
-              tableName: null,
-              invoiceObj: args as PrintableMaster,
-            );
-          } else {
-            return Lottie.network(
-                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
-          }
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            if (args == null) {
+              return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json",
+              );
+            } else if (args is ViewAbstract) {
+              return PdfPage(
+                iD: null,
+                tableName: null,
+                invoiceObj: args as PrintableMaster,
+              );
+            } else {
+              return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json",
+              );
+            }
+          },
+        );
 
       case "/view":
-        return MaterialPageRoute(builder: (context) {
-          if (args == null) {
-            return Lottie.network(
-                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
-          } else if (args is ViewAbstract) {
-            return BaseViewNewPage(viewAbstract: args);
-          } else {
-            return Lottie.network(
-                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
-          }
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            if (args == null) {
+              return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json",
+              );
+            } else if (args is ViewAbstract) {
+              return BaseViewNewPage(viewAbstract: args);
+            } else {
+              return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json",
+              );
+            }
+          },
+        );
       case "/edit":
       case "/add":
-        return MaterialPageRoute(builder: (context) {
-          if (args == null) {
-            return Lottie.network(
-                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
-          } else if (args is ViewAbstract) {
-            return BaseEditNewPage(viewAbstract: args);
-          } else {
-            return Lottie.network(
-                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
-          }
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            if (args == null) {
+              return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json",
+              );
+            } else if (args is ViewAbstract) {
+              return BaseEditNewPage(viewAbstract: args);
+            } else {
+              return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json",
+              );
+            }
+          },
+        );
       case "/import":
-        return MaterialPageRoute(builder: (context) {
-          if (args == null) {
-            return Lottie.network(
-                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
-          } else if (args is ViewAbstract) {
-            return FileReaderPage(
-              viewAbstract: args,
-            );
-          } else {
-            return Lottie.network(
-                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
-          }
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            if (args == null) {
+              return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json",
+              );
+            } else if (args is ViewAbstract) {
+              return FileReaderPage(viewAbstract: args);
+            } else {
+              return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json",
+              );
+            }
+          },
+        );
       case "/export":
-        return MaterialPageRoute(builder: (context) {
-          if (args == null) {
-            return Lottie.network(
-                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
-          } else if (args is ViewAbstract) {
-            return FileExporterPage(
-              viewAbstract: args,
-            );
-          } else {
-            return Lottie.network(
-                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json");
-          }
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            if (args == null) {
+              return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json",
+              );
+            } else if (args is ViewAbstract) {
+              return FileExporterPage(viewAbstract: args);
+            } else {
+              return Lottie.network(
+                "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json",
+              );
+            }
+          },
+        );
     }
     return _errorRoute();
   }
@@ -690,52 +726,43 @@ class RouteGenerator {
   }
 
   static Route<dynamic> _errorRoute() {
-    return MaterialPageRoute(builder: (_) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Error'),
-        ),
-        body: const Center(
-          child: Text('ERROR'),
-        ),
-      );
-    });
+    return MaterialPageRoute(
+      builder: (_) {
+        return Scaffold(
+          appBar: AppBar(title: const Text('Error')),
+          body: const Center(child: Text('ERROR')),
+        );
+      },
+    );
   }
 }
 
 class HeroPageRoute extends PageRouteBuilder {
   final String tag;
   final Widget child;
-  HeroPageRoute({
-    required this.tag,
-    required this.child,
-  }) : super(
-          transitionDuration: const Duration(milliseconds: 1000),
-          reverseTransitionDuration: const Duration(milliseconds: 1000),
-          pageBuilder: (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-          ) {
-            return Hero(
-              tag: tag,
-              createRectTween: (Rect? begin, Rect? end) {
-                return CurvedRectArcTween(begin: begin, end: end);
-              },
-              child: PageRouteTransition(
-                animation: animation,
-                child: child,
-              ),
-            );
-          },
-        );
+  HeroPageRoute({required this.tag, required this.child})
+    : super(
+        transitionDuration: const Duration(milliseconds: 1000),
+        reverseTransitionDuration: const Duration(milliseconds: 1000),
+        pageBuilder:
+            (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) {
+              return Hero(
+                tag: tag,
+                createRectTween: (Rect? begin, Rect? end) {
+                  return CurvedRectArcTween(begin: begin, end: end);
+                },
+                child: PageRouteTransition(animation: animation, child: child),
+              );
+            },
+      );
 }
 
 class CurvedRectArcTween extends MaterialRectArcTween {
-  CurvedRectArcTween({
-    super.begin,
-    super.end,
-  });
+  CurvedRectArcTween({super.begin, super.end});
   @override
   Rect lerp(double t) {
     Cubic easeInOut = const Cubic(0.42, 0.0, 0.58, 1.0);
@@ -766,10 +793,7 @@ class PageRouteTransition extends AnimatedWidget {
       clipBehavior: Clip.antiAlias,
       elevation: elevationTween.evaluate(animation),
       borderRadius: borderRadiusTween.evaluate(animation),
-      child: Opacity(
-        opacity: opacityTween.evaluate(animation),
-        child: child,
-      ),
+      child: Opacity(opacity: opacityTween.evaluate(animation), child: child),
     );
   }
 }

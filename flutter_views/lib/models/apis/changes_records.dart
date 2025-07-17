@@ -106,7 +106,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   ResponseType getCustomViewResponseType() => ResponseType.SINGLE;
 
   @override
-  Widget? getCustomViewSingleResponseWidget(BuildContext context) {
+  Widget? getCustomViewResponseWidget(BuildContext context) {
     debugPrint("getCustomViewSingleResponseWidget $totalGrouped");
     if (pieChartEnabled == false) {
       return LineChartItem<ChangesRecordGroup, String>(
@@ -135,8 +135,6 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
     // TODO: implement onCustomViewCardClicked
   }
 
-  @override
-  double? getCustomViewHeight() => 200;
 
   @override
   Widget? getCustomViewTitleWidget(
@@ -175,9 +173,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   }
 
   @override
-  Widget? getCustomViewOnResponseAddWidget(
-    ChangesRecords<ViewAbstract> response,
-  ) {
+  getCustomViewOnResponseAddWidget(ChangesRecords<ViewAbstract> response) {
     // TODO: implement getCustomViewOnResponseAddWidget
     throw UnimplementedError();
   }

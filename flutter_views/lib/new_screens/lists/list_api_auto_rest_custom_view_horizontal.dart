@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 ///no scroll controller for now
 @Deprecated("Use Mixin")
-class ListHorizontalCustomViewApiAutoRestWidget<E extends ViewAbstract,
-    T extends CustomViewHorizontalListResponse<E>> extends StatefulWidget {
+class ListHorizontalCustomViewApiAutoRestWidget<
+  E extends ViewAbstract,
+  T extends CustomViewHorizontalListResponse<E>
+>
+    extends StatefulWidget {
   T autoRest;
   @Deprecated("Use CustomViewHorizontalListResponse override instead")
   Widget Function(dynamic response)? onResponse;
@@ -19,19 +22,22 @@ class ListHorizontalCustomViewApiAutoRestWidget<E extends ViewAbstract,
   @Deprecated("Use CustomViewHorizontalListResponse override instead")
   Widget? Function(dynamic response)? onResponseAddWidget;
 
-  ListHorizontalCustomViewApiAutoRestWidget(
-      {super.key,
-      required this.autoRest,
-      this.onResponse,
-      this.onResponseAddWidget});
+  ListHorizontalCustomViewApiAutoRestWidget({
+    super.key,
+    required this.autoRest,
+    this.onResponse,
+    this.onResponseAddWidget,
+  });
 
   @override
   State<ListHorizontalCustomViewApiAutoRestWidget> createState() =>
       _ListHorizontalApiWidgetState<E, T>();
 }
 
-class _ListHorizontalApiWidgetState<E extends ViewAbstract,
-        T extends CustomViewHorizontalListResponse<E>>
+class _ListHorizontalApiWidgetState<
+  E extends ViewAbstract,
+  T extends CustomViewHorizontalListResponse<E>
+>
     extends State<ListHorizontalCustomViewApiAutoRestWidget<E, T>> {
   final _scrollController = ScrollController();
   late ListMultiKeyProvider listProvider;
@@ -62,12 +68,18 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
     if (listProvider.getCount(key) == 0) {
       switch (widget.autoRest.getCustomViewResponseType()) {
         case ResponseType.LIST:
-          listProvider.fetchList(key,
-              viewAbstract: widget.autoRest as ViewAbstract, context: context);
+          listProvider.fetchList(
+            key,
+            viewAbstract: widget.autoRest as ViewAbstract,
+            context: context,
+          );
           break;
         case ResponseType.SINGLE:
-          listProvider.fetchView(key,
-              viewAbstract: autoRest as ViewAbstract, context: context);
+          listProvider.fetchView(
+            key,
+            viewAbstract: autoRest as ViewAbstract,
+            context: context,
+          );
           break;
 
         case ResponseType.NONE_RESPONSE_TYPE:
@@ -78,7 +90,8 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
 
   @override
   void didUpdateWidget(
-      covariant ListHorizontalCustomViewApiAutoRestWidget<E, T> oldWidget) {
+    covariant ListHorizontalCustomViewApiAutoRestWidget<E, T> oldWidget,
+  ) {
     super.didUpdateWidget(oldWidget);
     debugPrint("ListHorizontalCustomViewApiAutoRestWidget didUpdateWidget");
     if (key != autoRest.getCustomViewKey()) {
@@ -91,18 +104,19 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
 
   Widget getEmptyWidget(BuildContext context, {bool isError = false}) {
     return EmptyWidget(
-        onSubtitleClicked: isError
-            ? () {
-                fetshList();
-              }
-            : null,
-        lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-        title: isError
-            ? AppLocalizations.of(context)!.cantConnect
-            : AppLocalizations.of(context)!.noItems,
-        subtitle: isError
-            ? AppLocalizations.of(context)!.cantConnectConnectToRetry
-            : AppLocalizations.of(context)!.no_content);
+      onSubtitleClicked: isError
+          ? () {
+              fetshList();
+            }
+          : null,
+      lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+      title: isError
+          ? AppLocalizations.of(context)!.cantConnect
+          : AppLocalizations.of(context)!.noItems,
+      subtitle: isError
+          ? AppLocalizations.of(context)!.cantConnectConnectToRetry
+          : AppLocalizations.of(context)!.no_content,
+    );
   }
 
   @override
@@ -116,12 +130,18 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
         if (isLoading) {
           if (count == 0) {
             return wrapHeader(
-                context, const CircularProgressIndicator(), listProvider);
+              context,
+              const CircularProgressIndicator(),
+              listProvider,
+            );
           }
         } else {
           if (count == 0 && isError) {
             return wrapHeader(
-                context, getEmptyWidget(context, isError: true), listProvider);
+              context,
+              getEmptyWidget(context, isError: true),
+              listProvider,
+            );
           } else if (count == 0) {
             return wrapHeader(context, getEmptyWidget(context), listProvider);
           }
@@ -151,7 +171,7 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
       return widget.onResponse!(listProvider.getList(key)[0]);
     }
     return (listProvider.getList(key)[0] as CustomViewHorizontalListResponse<E>)
-            .getCustomViewSingleResponseWidget(context) ??
+            .getCustomViewResponseWidget(context) ??
         const Text("Not emplemented getCustomViewSingleResponseWidget");
   }
 
@@ -160,12 +180,17 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
       return widget.onResponse!(listProvider.getList(key) as List<T>);
     }
     return autoRest.getCustomViewListResponseWidget(
-            context, listProvider.getList(key).cast()) ??
+          context,
+          listProvider.getList(key).cast(),
+        ) ??
         const Text("Not emplemented getCustomViewListToSingle");
   }
 
   Widget wrapHeader(
-      BuildContext context, Widget child, ListMultiKeyProvider listProvider) {
+    BuildContext context,
+    Widget child,
+    ListMultiKeyProvider listProvider,
+  ) {
     Widget? custom;
     if (child is CircularProgressIndicator) {
       return Center(child: child);
@@ -183,12 +208,15 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
       return Column(
         children: [
           Expanded(
-              child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
-            child: child,
-          )),
-          if (custom != null) custom
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: kDefaultPadding,
+                vertical: kDefaultPadding / 2,
+              ),
+              child: child,
+            ),
+          ),
+          if (custom != null) custom,
         ],
       );
     }
@@ -196,11 +224,12 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
       children: [
         header!,
         Expanded(
-            child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-          child: child,
-        )),
-        if (custom != null) custom
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+            child: child,
+          ),
+        ),
+        if (custom != null) custom,
       ],
     );
   }
@@ -232,7 +261,8 @@ class _ListHorizontalApiWidgetState<E extends ViewAbstract,
 
   void onValueChanged() {
     debugPrint(
-        "ListHorizontalCustomViewApiAutoRestWidget onValueNotifierChanged");
+      "ListHorizontalCustomViewApiAutoRestWidget onValueNotifierChanged",
+    );
     setState(() {
       autoRest = valueNotifier.value;
       key = autoRest.getCustomViewKey();

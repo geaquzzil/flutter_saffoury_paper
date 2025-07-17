@@ -916,7 +916,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
-            autoRest: ChartRecordAnalysis.init(this, DateObject())),
+            autoRest: ChartRecordAnalysis.init(this)),
       ),
     ];
   }

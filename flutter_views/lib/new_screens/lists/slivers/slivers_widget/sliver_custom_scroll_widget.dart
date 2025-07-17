@@ -43,6 +43,7 @@ class _SliverCustomScrollViewDraggableState
   List<TabControllerHelper>? _tabs;
   late ScrollController _scrollController;
   late String bucketOffsetKey;
+  String? _lastTabsKey;
 
   final BehaviorSubject<bool> isFullyExpanded = BehaviorSubject<bool>.seeded(
     false,
@@ -56,10 +57,19 @@ class _SliverCustomScrollViewDraggableState
   late double expandedHeight;
 
   static const double headerExpandedHeight = .7;
+
+  String? getTabKey() {
+    return widget.tabs
+        ?.map((e) => e.viewAbstractGeneratedKey ?? "_")
+        .toList()
+        .join("-");
+  }
+
   @override
   void initState() {
     _scrollController = widget.scrollController ?? ScrollController();
     bucketOffsetKey = widget.scrollKey ?? "scrollKey";
+    _lastTabsKey = getTabKey();
     if (widget.tabs != null) {
       onTabSelectedValueNotifier = ValueNotifier<int>(0);
       _tabs = <TabControllerHelper>[];
@@ -86,7 +96,16 @@ class _SliverCustomScrollViewDraggableState
     //     }
     //   }
     // });
+
+    // debugPrint("_SliverCustomScrollViewDraggableState  last $_lastTabsKey");
+    if (_lastTabsKey == getTabKey()) {
+      // if (widget.tabs != null) {
+      //   onTabSelectedValueNotifier.value = 0;
+      // }
+      return;
+    }
     if (widget.tabs != null) {
+      _lastTabsKey = getTabKey();
       _tabs = <TabControllerHelper>[];
       _tabs!.clear();
       _tabs!.addAll(widget.tabs!);
@@ -94,7 +113,10 @@ class _SliverCustomScrollViewDraggableState
       _tabController?.dispose();
       _tabController = TabController(length: _tabs!.length, vsync: this)
         ..addListener(onTabSelected);
+
+      onTabSelectedValueNotifier.value = 0;
     }
+
     super.didUpdateWidget(oldWidget);
   }
 

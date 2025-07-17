@@ -166,7 +166,7 @@ class ProductMovments
   }
 
   @override
-  Widget? getCustomViewSingleResponseWidget(BuildContext context) {
+  Widget? getCustomViewResponseWidget(BuildContext context,{}) {
     // return Text(products?.getIDFormat(context) ?? " dsa");
     return FileInfoStaggerdGridView(
       builder: (i, i2, i3, h) => getStaggeredGridTileList(context, i2, i3),
@@ -420,8 +420,6 @@ class ProductMovments
   @override
   String? getTableNameApi() => null;
 
-  @override
-  double? getCustomViewHeight() => 700;
 
   @override
   Widget? getCustomViewTitleWidget(

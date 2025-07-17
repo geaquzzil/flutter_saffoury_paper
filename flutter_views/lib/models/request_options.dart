@@ -28,7 +28,8 @@ class BetweenRequest {
     return BetweenRequest(
       field: map['field'] ?? '',
       fromTo: List<FromToBetweenRequest>.from(
-          map['fromTo']?.map((x) => FromToBetweenRequest.fromMap(x))),
+        map['fromTo']?.map((x) => FromToBetweenRequest.fromMap(x)),
+      ),
     );
   }
 
@@ -56,10 +57,7 @@ class FromToBetweenRequest {
   }
 
   factory FromToBetweenRequest.fromMap(Map<String, dynamic> map) {
-    return FromToBetweenRequest(
-      from: map['from'] ?? '',
-      to: map['to'] ?? '',
-    );
+    return FromToBetweenRequest(from: map['from'] ?? '', to: map['to'] ?? '');
   }
 
   String toJson() => json.encode(toMap());
@@ -87,92 +85,92 @@ class RequestOptions {
   Map<String, dynamic>? searchByField;
   //#SizeID#
   List<String>? groupBy;
-//&quantity&
+  //&quantity&
   List<String>? sumBy;
   Map<String, FilterableProviderHelper>? filterMap;
 
   dynamic requestObjcets;
   dynamic requestLists;
 
-  RequestOptions(
-      {this.betweenMap,
-      this.countPerPage = 20,
-      this.countPerPageWhenSearch = 20,
-      this.date,
-      this.filterMap,
-      this.groupBy,
-      this.limit,
-      this.page = 0,
-      this.requestLists,
-      this.requestObjcets,
-      this.searchByField,
-      this.searchQuery,
-      this.sortBy,
-      this.sumBy});
+  RequestOptions({
+    this.betweenMap,
+    this.countPerPage = 20,
+    this.countPerPageWhenSearch = 20,
+    this.date,
+    this.filterMap,
+    this.groupBy,
+    this.limit,
+    this.page = 0,
+    this.requestLists,
+    this.requestObjcets,
+    this.searchByField,
+    this.searchQuery,
+    this.sortBy,
+    this.sumBy,
+  });
 
   RequestOptions copyWithObjcet({RequestOptions? option}) {
     return copyWith(
-        betweenMap: option?.betweenMap,
-        countPerPage: option?.countPerPage,
-        countPerPageWhenSearch: option?.countPerPageWhenSearch,
-        date: option?.date,
-        filterMap: option?.filterMap,
-        groupBy: option?.groupBy,
-        limit: option?.limit,
-        page: option?.page,
-        requestLists: option?.requestLists,
-        requestObjcets: option?.requestObjcets,
-        searchByField: option?.searchByField,
-        searchQuery: option?.searchQuery,
-        sortBy: option?.sortBy,
-        sumBy: option?.sumBy);
+      betweenMap: option?.betweenMap,
+      countPerPage: option?.countPerPage,
+      countPerPageWhenSearch: option?.countPerPageWhenSearch,
+      date: option?.date,
+      filterMap: option?.filterMap,
+      groupBy: option?.groupBy,
+      limit: option?.limit,
+      page: option?.page,
+      requestLists: option?.requestLists,
+      requestObjcets: option?.requestObjcets,
+      searchByField: option?.searchByField,
+      searchQuery: option?.searchQuery,
+      sortBy: option?.sortBy,
+      sumBy: option?.sumBy,
+    );
   }
 
-  RequestOptions copyWith(
-      {Map<String, dynamic>? betweenMap,
-      int? countPerPage,
-      int? countPerPageWhenSearch,
-      DateObject? date,
-      Map<String, FilterableProviderHelper>? filterMap,
-      List<String>? groupBy,
-      int? limit,
-      int? page,
-      dynamic requestLists,
-      dynamic requestObjcets,
-      Map<String, dynamic>? searchByField,
-      String? searchQuery,
-      SortFieldValue? sortBy,
-      List<String>? sumBy}) {
+  RequestOptions copyWith({
+    Map<String, dynamic>? betweenMap,
+    int? countPerPage,
+    int? countPerPageWhenSearch,
+    DateObject? date,
+    Map<String, FilterableProviderHelper>? filterMap,
+    List<String>? groupBy,
+    int? limit,
+    int? page,
+    dynamic requestLists,
+    dynamic requestObjcets,
+    Map<String, dynamic>? searchByField,
+    String? searchQuery,
+    SortFieldValue? sortBy,
+    List<String>? sumBy,
+  }) {
     return RequestOptions(
-        betweenMap: betweenMap ?? this.betweenMap,
-        countPerPage: countPerPage ?? this.countPerPage,
-        countPerPageWhenSearch:
-            countPerPageWhenSearch ?? this.countPerPageWhenSearch,
-        date: date ?? this.date,
-        filterMap: filterMap ?? this.filterMap,
-        groupBy: groupBy ?? this.groupBy,
-        limit: limit ?? this.limit,
-        page: page ?? this.page,
-        requestLists: requestLists ?? this.requestLists,
-        requestObjcets: requestObjcets ?? this.requestObjcets,
-        searchByField: searchByField ?? this.searchByField,
-        searchQuery: searchQuery ?? this.searchQuery,
-        sortBy: sortBy ?? this.sortBy,
-        sumBy: sumBy ?? this.sumBy);
+      betweenMap: betweenMap ?? this.betweenMap,
+      countPerPage: countPerPage ?? this.countPerPage,
+      countPerPageWhenSearch:
+          countPerPageWhenSearch ?? this.countPerPageWhenSearch,
+      date: date ?? this.date,
+      filterMap: filterMap ?? this.filterMap,
+      groupBy: groupBy ?? this.groupBy,
+      limit: limit ?? this.limit,
+      page: page ?? this.page,
+      requestLists: requestLists ?? this.requestLists,
+      requestObjcets: requestObjcets ?? this.requestObjcets,
+      searchByField: searchByField ?? this.searchByField,
+      searchQuery: searchQuery ?? this.searchQuery,
+      sortBy: sortBy ?? this.sortBy,
+      sumBy: sumBy ?? this.sumBy,
+    );
   }
 
   Map<String, String> _getGroupBy() {
     if (groupBy == null) return {};
-    return Map.fromEntries(groupBy!.map(
-      (e) => MapEntry('#$e#', "true"),
-    ));
+    return Map.fromEntries(groupBy!.map((e) => MapEntry('#$e#', "true")));
   }
 
   Map<String, String> _getSumBy() {
     if (sumBy == null) return {};
-    return Map.fromEntries(sumBy!.map(
-      (e) => MapEntry('&$e&', "true"),
-    ));
+    return Map.fromEntries(sumBy!.map((e) => MapEntry('&$e&', "true")));
   }
 
   bool isSearchServerAction() {
@@ -213,8 +211,8 @@ class RequestOptions {
     debugPrint("getFilterableMap=> $filterMap");
     Map<String, String> bodyMap = {};
     filterMap?.forEach((key, value) {
-      bodyMap["<${filterMap?[key]!.fieldNameApi}>"] =
-          filterMap?[key]!.getValue();
+      bodyMap["<${filterMap?[key]!.fieldNameApi}>"] = filterMap?[key]!
+          .getValue();
     });
     debugPrint("getFilterableMap bodyMap $bodyMap");
     return bodyMap;
@@ -244,7 +242,7 @@ class RequestOptions {
         'countPerPage': countPerPageWhenSearch != null
             ? "$countPerPageWhenSearch"
             : "$countPerPage",
-      if (date != null) 'date': date.toString(),
+      if (date != null) 'date': date!.toJson(),
       if (sortBy != null) ...sortBy!.getMap(),
       if (searchQuery != null) "searchQuery": searchQuery,
       ...getRequestParamsOnlyForings(),
@@ -252,7 +250,7 @@ class RequestOptions {
       ..._getSumBy(),
       if (betweenMap != null) ...betweenMap!,
       if (searchByField != null) ...searchByField!,
-      ...getFilterableMap()
+      ...getFilterableMap(),
     };
   }
 
@@ -327,11 +325,15 @@ class RequestOptions {
       betweenMap?[key] = list.map((e) => e.toJson()).toList();
     }
     // if (value is List<List<BetweenRequest>>) {
-    String jsonString = jsonEncode(value
-        .map((innerList) => innerList
-            .map((item) => item is BetweenRequest ? item.toMap() : item)
-            .toList())
-        .toList());
+    String jsonString = jsonEncode(
+      value
+          .map(
+            (innerList) => innerList
+                .map((item) => item is BetweenRequest ? item.toMap() : item)
+                .toList(),
+          )
+          .toList(),
+    );
 
     betweenMap?[key] = jsonString;
     return this;
@@ -394,8 +396,9 @@ class RequestOptions {
       limit: map['limit']?.toInt(),
       searchQuery: map['searchQuery'],
       date: map['date'] != null ? DateObject.fromMap(map['date']) : null,
-      sortBy:
-          map['sortBy'] != null ? SortFieldValue.fromMap(map['sortBy']) : null,
+      sortBy: map['sortBy'] != null
+          ? SortFieldValue.fromMap(map['sortBy'])
+          : null,
       betweenMap: Map<String, dynamic>.from(map['betweenMap']),
       searchByField: Map<String, dynamic>.from(map['searchByField']),
       groupBy: List<String>.from(map['groupBy']),

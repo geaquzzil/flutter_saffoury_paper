@@ -127,7 +127,7 @@ class CutRequest extends ViewAbstract<CutRequest>
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
-            autoRest: ChartRecordAnalysis.init(CutRequest(), DateObject())),
+            autoRest: ChartRecordAnalysis.init(CutRequest())),
       ),
     ];
   }

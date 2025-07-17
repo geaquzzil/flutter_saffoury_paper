@@ -25,8 +25,12 @@ class DateObject {
     from = findFirstDateOfTheMonth(DateTime.now()).toDateTimeStringOnlyDate();
     to = findLastDateOfTheMonth(DateTime.now()).toDateTimeStringOnlyDate();
   }
-  DateObject.initFromDateTime(DateTime date,
-      {DateTime? toDate, this.from = "", this.to = ""}) {
+  DateObject.initFromDateTime(
+    DateTime date, {
+    DateTime? toDate,
+    this.from = "",
+    this.to = "",
+  }) {
     from = date.toDateTimeStringOnlyDate();
     to = toDate?.toDateTimeStringOnlyDate() ?? date.toDateTimeStringOnlyDate();
   }
@@ -47,8 +51,9 @@ class DateObject {
   }
 
   static DateTime findLastDateOfTheWeek(DateTime dateTime) {
-    return dateTime
-        .add(Duration(days: DateTime.daysPerWeek - dateTime.weekday));
+    return dateTime.add(
+      Duration(days: DateTime.daysPerWeek - dateTime.weekday),
+    );
   }
 
   static DateObject today() {
@@ -75,7 +80,11 @@ class DateObject {
       date = DateFormat.yMMMEd().format(from.toDateTimeOnlyDate());
     } else {
       if (from != "" && to != "") {
-        debugPrint("getDate from != " " && to != " "");
+        debugPrint(
+          "getDate from != "
+          " && to != "
+          "",
+        );
         date =
             "${DateFormat.yMMMEd().format(from.toDateTimeOnlyDate())}\n${DateFormat.yMMMEd().format(to.toDateTimeOnlyDate())}  ";
       } else if (from != "") {
@@ -97,8 +106,8 @@ class DateObject {
   @override
   String toString() => 'DateObject(from: $from, to: $to)';
 
-  Map<String, dynamic> toMap() {
-    final result = <String, dynamic>{};
+  Map<String, String> toMap() {
+    final result = <String, String>{};
 
     result.addAll({'from': from});
     result.addAll({'to': to});
@@ -107,10 +116,7 @@ class DateObject {
   }
 
   factory DateObject.fromMap(Map<String, dynamic> map) {
-    return DateObject(
-      from: map['from'] ?? '',
-      to: map['to'] ?? '',
-    );
+    return DateObject(from: map['from'] ?? '', to: map['to'] ?? '');
   }
 
   String toJson() => json.encode(toMap());
