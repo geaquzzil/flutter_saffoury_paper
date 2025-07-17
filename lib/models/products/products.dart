@@ -1902,7 +1902,7 @@ class Product extends ViewAbstract<Product>
 
     int totalImportedLength = productList.length;
 
-    return FileInfoStaggerdGridView(
+    return StaggerdGridViewWidget(
       childAspectRatio: 16 / 9,
       builder: (crossAxisCount, crossCountFundCalc, crossAxisCountMod, h) {
         return [

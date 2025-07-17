@@ -35,6 +35,8 @@ enum SliverMixinObjectType {
   FROM_CARD_API,
 }
 
+enum CardType { list, grid, staggered }
+
 abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   ///could be [AutoRest] or [ViewAbstract] or String of [tableName] or [List<ViewAbstract>] or [CustomViewHorizontalListResponse]
   Object toListObject;
@@ -57,9 +59,9 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   Widget? hasCustomLoadingItem;
   final ValueNotifier<List?>? valueListProviderNotifier;
 
-  ///when scrollDirection is horizontal grid view well build instaed  and override the [isGridView] even when its true
+  ///when scrollDirection is horizontal grid view well build instaed  and override the [cardType] even when its true
   Axis scrollDirection;
-  bool isGridView;
+  bool cardType;
   RequestOptions? customRequestOption;
   RequestOptions? copyWithRequestOption;
   bool requiresFullFetsh;
@@ -67,7 +69,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   SliverApiMixinWithStaticStateful({
     super.key,
     required this.toListObject,
-    this.isGridView = true,
+    this.cardType = true,
     this.scrollDirection = Axis.vertical,
     this.onSeletedListItemsChanged,
     this.hasCustomCardItemBuilder,
@@ -250,7 +252,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     _copyWithRequestOption = widget.copyWithRequestOption;
 
     ///override the gride view when the scroll axis is horizontal
-    valueNotifierGrid = ValueNotifier<bool>(widget.isGridView);
+    valueNotifierGrid = ValueNotifier<bool>(widget.cardType);
 
     _onSeletedListItemsChanged =
         widget.onSeletedListItemsChanged ?? ValueNotifier([]);
@@ -271,8 +273,8 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   void didUpdateWidget(covariant oldWidget) {
     // _checkToUpdateToListObject();
     _setParentForChildCardItem = widget.setParentForChildCardItem;
-    if (valueNotifierGrid.value != widget.isGridView) {
-      valueNotifierGrid.value = widget.isGridView;
+    if (valueNotifierGrid.value != widget.cardType) {
+      valueNotifierGrid.value = widget.cardType;
     }
     SliverMixinObjectType lastUpdated = getToListObjectType();
     if (_filterData != widget.filterData) {

@@ -9,7 +9,7 @@ class SliverApiMixinViewAbstractCardApiWidget
     super.scrollDirection,
     super.scrollController,
     super.isSliver,
-    super.isGridView = false,
+    super.cardType = false,
     super.hasCustomCardItemBuilder,
     super.hasCustomSeperater,
     super.isCardRequestApi = true,

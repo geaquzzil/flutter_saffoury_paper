@@ -168,7 +168,7 @@ class ProductMovments
   @override
   Widget? getCustomViewResponseWidget(BuildContext context,{}) {
     // return Text(products?.getIDFormat(context) ?? " dsa");
-    return FileInfoStaggerdGridView(
+    return StaggerdGridViewWidget(
       builder: (i, i2, i3, h) => getStaggeredGridTileList(context, i2, i3),
       wrapWithCard: false,
       // crossAxisCount: 2,

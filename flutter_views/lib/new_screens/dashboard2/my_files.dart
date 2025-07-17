@@ -38,14 +38,14 @@ class MyFiles extends StatelessWidget {
         ),
         const SizedBox(height: defaultPadding),
         Responsive(
-          mobile: FileInfoStaggerdGridView(
+          mobile: StaggerdGridViewWidget(
             list: dgh.widgets.map((e) => e.widget).toList(),
             childAspectRatio: size.width < 750 && size.width > 350 ? 1.3 : 1,
           ),
-          tablet: FileInfoStaggerdGridView(
+          tablet: StaggerdGridViewWidget(
             list: dgh.widgets.map((e) => e.widget).toList(),
           ),
-          desktop: FileInfoStaggerdGridView(
+          desktop: StaggerdGridViewWidget(
             list: dgh.widgets.map((e) => e.widget).toList(),
             childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
           ),
@@ -142,7 +142,7 @@ class _TestExpandedState extends State<TestExpanded> {
   }
 }
 
-class FileInfoStaggerdGridView extends StatelessWidget {
+class StaggerdGridViewWidget extends StatelessWidget {
   List<StaggeredGridTile>? list;
 
   ///int 1: is crossCount
@@ -155,12 +155,14 @@ class FileInfoStaggerdGridView extends StatelessWidget {
     num heightMainAxisCellCount,
   )?
   builder;
+  bool isSliver;
   bool wrapWithCard;
-  FileInfoStaggerdGridView({
+  StaggerdGridViewWidget({
     super.key,
     this.childAspectRatio = 1,
     this.wrapWithCard = false,
     this.builder,
+    this.isSliver=false,
     this.list,
   }) : assert(list != null || builder != null);
 
@@ -217,6 +219,7 @@ class FileInfoStaggerdGridView extends StatelessWidget {
             getHeightMainAxisCellCount(constraints.maxHeight),
           );
         }
+
         return StaggeredGrid.count(
           crossAxisCount: crossAxisCount,
           mainAxisSpacing: 2,

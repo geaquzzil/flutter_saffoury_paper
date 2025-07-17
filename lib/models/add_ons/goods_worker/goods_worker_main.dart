@@ -466,7 +466,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
     int totalImportedBarcodeLength =
         keyToExportTo.currentState?.getList().length ?? 0;
     int totalRemainingLength = totalImportedLength - totalImportedBarcodeLength;
-    return FileInfoStaggerdGridView(
+    return StaggerdGridViewWidget(
       childAspectRatio: 16 / 9,
       builder: (crossAxisCount, crossCountFundCalc, crossAxisCountMod, h) {
         return [

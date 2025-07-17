@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/color_tabbar.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -41,44 +41,49 @@ class _BaseDashboardState extends State<BaseDashboard>
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-              getAppBar(context, innerBoxIsScrolled),
-              // SliverPersistentHeader(
-              //     pinned: true,
-              //     delegate: SliverAppBarDelegate(
-              //         child:  DashboardHeader(
-              //             current_screen_size: CurrentScreenSize.DESKTOP),
-              //         minHeight: 70,
-              //         maxHeight: 80)),
-              SliverPersistentHeader(
-                  pinned: true,
-                  delegate: SliverAppBarDelegatePreferedSize(
-                    child: ColoredTabBar(
-                      color: Theme.of(context).colorScheme.surface,
-                      child: TabBar(
-                        // labelColor: Colors.black,
-                        tabs: _tabs,
-                        controller: _tabController,
-                      ),
-                    ),
-                  ))
-            ],
-        body: SafeArea(
-          child: TabBarView(
-              controller: _tabController,
-              children: _tabs
-                  .map((e) => Builder(builder: (BuildContext context) {
-                        int idex = _tabs.indexOf(e);
-                        return idex == 0
-                            ? getMainBody(context)
-                            : const CustomScrollView(slivers: [
-                                SliverFillRemaining(
-                                  child: Text("TODO"),
-                                )
-                              ]);
-                      }))
-                  .toList()),
-        ));
+      headerSliverBuilder: (context, innerBoxIsScrolled) => [
+        getAppBar(context, innerBoxIsScrolled),
+        // SliverPersistentHeader(
+        //     pinned: true,
+        //     delegate: SliverAppBarDelegate(
+        //         child:  DashboardHeader(
+        //             current_screen_size: CurrentScreenSize.DESKTOP),
+        //         minHeight: 70,
+        //         maxHeight: 80)),
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: SliverAppBarDelegatePreferedSize(
+            child: ColoredTabBar(
+              color: Theme.of(context).colorScheme.surface,
+              child: TabBar(
+                // labelColor: Colors.black,
+                tabs: _tabs,
+                controller: _tabController,
+              ),
+            ),
+          ),
+        ),
+      ],
+      body: SafeArea(
+        child: TabBarView(
+          controller: _tabController,
+          children: _tabs
+              .map(
+                (e) => Builder(
+                  builder: (BuildContext context) {
+                    int idex = _tabs.indexOf(e);
+                    return idex == 0
+                        ? getMainBody(context)
+                        : const CustomScrollView(
+                            slivers: [SliverFillRemaining(child: Text("TODO"))],
+                          );
+                  },
+                ),
+              )
+              .toList(),
+        ),
+      ),
+    );
   }
 
   FlexibleSpaceBar getSilverAppBarBackground(BuildContext context) {
@@ -95,73 +100,74 @@ class _BaseDashboardState extends State<BaseDashboard>
 
   Widget getMainBody(BuildContext context) {
     return ValueListenableBuilder<DateObject?>(
-        valueListenable: selectDateChanged,
-        builder: (context, value, child) {
-          widget.dashboard.setDate(value);
-          init(context);
-          return FutureBuilder(
-            future: viewAbstract.viewCall(context: context),
-            builder: (context, snapshot) {
-              try {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  // debugPrint("DashboardPage ${viewAbstract.runtimeType}");
-                  widget.dashboard = snapshot.data as DashableInterface;
-                  init(context);
-                  setTabbar();
-                  var size = MediaQuery.of(context).size;
-                  List<DashableGridHelper> list = widget.dashboard
-                      .getDashboardSectionsFirstPane(context, 0);
-                  List<Widget> widgets = List.empty(growable: true);
-                  for (var element in list) {
-                    var group = [
-                      // DashableItemHeaderBuilder(
-                      //   dgh: element,
-                      // ),
-                      SliverToBoxAdapter(
-                        child: Responsive(
-                          mobile: FileInfoStaggerdGridView(
-                            list: element.widgets.map((e) => e.widget).toList(),
-                            // crossAxisCount: size.width < 750 ? 2 : 4,
-                            childAspectRatio:
-                                size.width < 750 && size.width > 350 ? 1.3 : 1,
-                          ),
-                          tablet: FileInfoStaggerdGridView(
-                            list: element.widgets.map((e) => e.widget).toList(),
-                          ),
-                          desktop: FileInfoStaggerdGridView(
-                            list: element.widgets.map((e) => e.widget).toList(),
-                            // crossAxisCount: 6,
-                            childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
-                          ),
+      valueListenable: selectDateChanged,
+      builder: (context, value, child) {
+        widget.dashboard.setDate(value);
+        init(context);
+        return FutureBuilder(
+          future: viewAbstract.viewCall(context: context),
+          builder: (context, snapshot) {
+            try {
+              if (snapshot.connectionState == ConnectionState.done) {
+                // debugPrint("DashboardPage ${viewAbstract.runtimeType}");
+                widget.dashboard = snapshot.data as DashableInterface;
+                init(context);
+                setTabbar();
+                var size = MediaQuery.of(context).size;
+                List<DashableGridHelper> list = widget.dashboard
+                    .getDashboardSectionsFirstPane(context, 0);
+                List<Widget> widgets = List.empty(growable: true);
+                for (var element in list) {
+                  var group = [
+                    // DashableItemHeaderBuilder(
+                    //   dgh: element,
+                    // ),
+                    SliverToBoxAdapter(
+                      child: Responsive(
+                        mobile: StaggerdGridViewWidget(
+                          list: element.widgets.map((e) => e.widget).toList(),
+                          // crossAxisCount: size.width < 750 ? 2 : 4,
+                          childAspectRatio: size.width < 750 && size.width > 350
+                              ? 1.3
+                              : 1,
                         ),
-                      )
-                    ];
-                    widgets.addAll(group);
-                  }
-                  return CustomScrollView(
-                    slivers: widgets,
-                  );
+                        tablet: StaggerdGridViewWidget(
+                          list: element.widgets.map((e) => e.widget).toList(),
+                        ),
+                        desktop: StaggerdGridViewWidget(
+                          list: element.widgets.map((e) => e.widget).toList(),
+                          // crossAxisCount: 6,
+                          childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
+                        ),
+                      ),
+                    ),
+                  ];
+                  widgets.addAll(group);
                 }
-                return Center(
-                  child: EmptyWidget(
-                      lottiUrl:
-                          "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json",
-                      title: AppLocalizations.of(context)!.loading,
-                      subtitle: AppLocalizations.of(context)!.pleaseWait),
-                );
-              } catch (e) {
-                snapshot.error.printError();
-                return Text(snapshot.error.toString());
+                return CustomScrollView(slivers: widgets);
               }
-            },
-          );
-        });
+              return Center(
+                child: EmptyWidget(
+                  lottiUrl:
+                      "https://assets5.lottiefiles.com/packages/lf20_t9gkkhz4.json",
+                  title: AppLocalizations.of(context)!.loading,
+                  subtitle: AppLocalizations.of(context)!.pleaseWait,
+                ),
+              );
+            } catch (e) {
+              snapshot.error.printError();
+              return Text(snapshot.error.toString());
+            }
+          },
+        );
+      },
+    );
   }
 
   Widget getFirstPane(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    List<DashableGridHelper> list =
-        widget.dashboard.getDashboardSectionsFirstPane(context, 0);
+    List<DashableGridHelper> list = widget.dashboard
+        .getDashboardSectionsFirstPane(context, 0);
     List<Widget> widgets = List.empty(growable: true);
     // widgets.add(
     //   getAppBar(context),
@@ -174,7 +180,8 @@ class _BaseDashboardState extends State<BaseDashboard>
     //             current_screen_size: CurrentScreenSize.DESKTOP),
     //         minHeight: 70,
     //         maxHeight: 80)));
-    widgets.add(SliverPersistentHeader(
+    widgets.add(
+      SliverPersistentHeader(
         pinned: true,
         delegate: SliverAppBarDelegatePreferedSize(
           child: ColoredTabBar(
@@ -185,7 +192,9 @@ class _BaseDashboardState extends State<BaseDashboard>
               controller: _tabController,
             ),
           ),
-        )));
+        ),
+      ),
+    );
     for (var element in list) {
       var group = [
         // DashableItemHeaderBuilder(
@@ -193,21 +202,21 @@ class _BaseDashboardState extends State<BaseDashboard>
         // ),
         SliverToBoxAdapter(
           child: Responsive(
-            mobile: FileInfoStaggerdGridView(
+            mobile: StaggerdGridViewWidget(
               list: element.widgets.map((e) => e.widget).toList(),
               // crossAxisCount: size.width < 750 ? 2 : 4,
               childAspectRatio: size.width < 750 && size.width > 350 ? 1.3 : 1,
             ),
-            tablet: FileInfoStaggerdGridView(
+            tablet: StaggerdGridViewWidget(
               list: element.widgets.map((e) => e.widget).toList(),
             ),
-            desktop: FileInfoStaggerdGridView(
+            desktop: StaggerdGridViewWidget(
               list: element.widgets.map((e) => e.widget).toList(),
               // crossAxisCount: 6,
               childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
             ),
           ),
-        )
+        ),
         // SliverGrid(
         //     delegate: SliverChildBuilderDelegate(
         //       (context, index) => Container(
@@ -257,18 +266,19 @@ class _BaseDashboardState extends State<BaseDashboard>
 
   Widget getAppBar(BuildContext context, bool innerBoxIsScrolled) {
     return SliverOverlapAbsorber(
-        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-        sliver: SliverAppBar.large(
-          pinned: false,
-          floating: true,
-          elevation: 4,
-          surfaceTintColor: Theme.of(context).colorScheme.surface,
-          // automaticallyImplyLeading: false,
-          actions: [Container()],
-          // leading: SizedBox(),
-          forceElevated: innerBoxIsScrolled,
-          flexibleSpace: getSilverAppBarBackground(context),
-        ));
+      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+      sliver: SliverAppBar.large(
+        pinned: false,
+        floating: true,
+        elevation: 4,
+        surfaceTintColor: Theme.of(context).colorScheme.surface,
+        // automaticallyImplyLeading: false,
+        actions: [Container()],
+        // leading: SizedBox(),
+        forceElevated: innerBoxIsScrolled,
+        flexibleSpace: getSilverAppBarBackground(context),
+      ),
+    );
   }
 
   Widget? getEndPane(BuildContext context) {
@@ -318,18 +328,19 @@ class _BaseDashboardState extends State<BaseDashboard>
         .where((element) => element.sectionsListToTabbar != null)
         .map((e) => e.sectionsListToTabbar)
         .forEach((element) {
-      for (var e in element!) {
-        _tabs.add(TabControllerHelper(
-          e[0].getMainHeaderLabelTextOnly(context),
-          widget: ListStaticSearchableWidget<ViewAbstract>(
-              list: e,
-              onSearchTextChanged: (query) => e,
-              listItembuilder: (v) => ListCardItem(
-                    object: v,
-                  )),
-        ));
-      }
-    });
+          for (var e in element!) {
+            _tabs.add(
+              TabControllerHelper(
+                e[0].getMainHeaderLabelTextOnly(context),
+                widget: ListStaticSearchableWidget<ViewAbstract>(
+                  list: e,
+                  onSearchTextChanged: (query) => e,
+                  listItembuilder: (v) => ListCardItem(object: v),
+                ),
+              ),
+            );
+          }
+        });
 
     _tabController = TabController(length: _tabs.length, vsync: this);
   }
@@ -338,146 +349,155 @@ class _BaseDashboardState extends State<BaseDashboard>
 class SectionItemHeaderI extends MultiSliver {
   bool pinHeader;
   double pinHeaderPrefferedSize;
-  SectionItemHeaderI(
-      {super.key,
-      required BuildContext context,
-      required Widget title,
-      required GlobalKey buttonKey,
-      super.pushPinnedChildren = true,
-      this.pinHeader = true,
-      this.pinHeaderPrefferedSize = 80,
-      Widget? child})
-      : super(
-          children: [
-            if (pinHeader)
-              SliverPinnedHeader(
-                child: Container(
-                    padding: const EdgeInsets.all(kDefaultPadding),
-                    //todo
-                    color: ElevationOverlay.colorWithOverlay(
-                        Theme.of(context).colorScheme.surface,
-                        Theme.of(context).colorScheme.surfaceBright,
-                        10),
-                    child: title),
-              )
-            else
-              SliverPadding(
-                padding: const EdgeInsets.all(kDefaultPadding),
-                sliver: SliverPersistentHeader(
-                    pinned: false,
-                    delegate: SliverAppBarDelegatePreferedSize(
-                        shouldRebuildWidget: true,
-                        child: PreferredSize(
-                            preferredSize:
-                                Size.fromHeight(pinHeaderPrefferedSize),
-                            child: title))),
-              ),
-            SliverToBoxAdapter(
-              child: child,
-            )
-          ],
-        );
+  SectionItemHeaderI({
+    super.key,
+    required BuildContext context,
+    required Widget title,
+    required GlobalKey buttonKey,
+    super.pushPinnedChildren = true,
+    this.pinHeader = true,
+    this.pinHeaderPrefferedSize = 80,
+    Widget? child,
+  }) : super(
+         children: [
+           if (pinHeader)
+             SliverPinnedHeader(
+               child: Container(
+                 padding: const EdgeInsets.all(kDefaultPadding),
+                 //todo
+                 color: ElevationOverlay.colorWithOverlay(
+                   Theme.of(context).colorScheme.surface,
+                   Theme.of(context).colorScheme.surfaceBright,
+                   10,
+                 ),
+                 child: title,
+               ),
+             )
+           else
+             SliverPadding(
+               padding: const EdgeInsets.all(kDefaultPadding),
+               sliver: SliverPersistentHeader(
+                 pinned: false,
+                 delegate: SliverAppBarDelegatePreferedSize(
+                   shouldRebuildWidget: true,
+                   child: PreferredSize(
+                     preferredSize: Size.fromHeight(pinHeaderPrefferedSize),
+                     child: title,
+                   ),
+                 ),
+               ),
+             ),
+           SliverToBoxAdapter(child: child),
+         ],
+       );
 }
 
 class SectionItemHeader extends MultiSliver {
-  SectionItemHeader(
-      {super.key,
-      required BuildContext context,
-      required DashableGridHelper dgh,
-      required GlobalKey buttonKey,
-      Widget? child})
-      : super(
-          pushPinnedChildren: true,
-          children: [
-            if (dgh.title != null)
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
-                sliver: SliverPinnedHeader(
-                    child: Container(
-                        padding: const EdgeInsets.all(kDefaultPadding),
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        child: ListTile(
-                            title: Text(
-                              dgh.title!,
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            trailing: dgh.headerListToAdd == null
-                                ? null
-                                : ElevatedButton.icon(
-                                    key: buttonKey,
-                                    style: TextButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: kDefaultPadding * 1.5,
-                                        vertical: kDefaultPadding / 2,
-                                      ),
-                                    ),
-                                    onPressed: () async {
-                                      if (dgh.headerListToAdd == null) return;
-                                      await showPopupMenu(context, buttonKey,
-                                              list: dgh.headerListToAdd!
-                                                  .map((e) => buildMenuItem(
-                                                      context,
-                                                      MenuItemBuild(
-                                                          e.getMainHeaderLabelTextOnly(
-                                                              context),
-                                                          Icons.add,
-                                                          "")))
-                                                  .toList())
-                                          .then((value) => debugPrint(
-                                              "showPopupMenu $value"));
-                                    },
-                                    icon: const Icon(Icons.add),
-                                    label: Text(
-                                        AppLocalizations.of(context)!.add_new),
-                                  ))
+  SectionItemHeader({
+    super.key,
+    required BuildContext context,
+    required DashableGridHelper dgh,
+    required GlobalKey buttonKey,
+    Widget? child,
+  }) : super(
+         pushPinnedChildren: true,
+         children: [
+           if (dgh.title != null)
+             SliverPadding(
+               padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
+               sliver: SliverPinnedHeader(
+                 child: Container(
+                   padding: const EdgeInsets.all(kDefaultPadding),
+                   color: Theme.of(context).scaffoldBackgroundColor,
+                   child: ListTile(
+                     title: Text(
+                       dgh.title!,
+                       style: Theme.of(context).textTheme.titleLarge,
+                     ),
+                     trailing: dgh.headerListToAdd == null
+                         ? null
+                         : ElevatedButton.icon(
+                             key: buttonKey,
+                             style: TextButton.styleFrom(
+                               padding: const EdgeInsets.symmetric(
+                                 horizontal: kDefaultPadding * 1.5,
+                                 vertical: kDefaultPadding / 2,
+                               ),
+                             ),
+                             onPressed: () async {
+                               if (dgh.headerListToAdd == null) return;
+                               await showPopupMenu(
+                                 context,
+                                 buttonKey,
+                                 list: dgh.headerListToAdd!
+                                     .map(
+                                       (e) => buildMenuItem(
+                                         context,
+                                         MenuItemBuild(
+                                           e.getMainHeaderLabelTextOnly(
+                                             context,
+                                           ),
+                                           Icons.add,
+                                           "",
+                                         ),
+                                       ),
+                                     )
+                                     .toList(),
+                               ).then(
+                                 (value) => debugPrint("showPopupMenu $value"),
+                               );
+                             },
+                             icon: const Icon(Icons.add),
+                             label: Text(AppLocalizations.of(context)!.add_new),
+                           ),
+                   ),
 
-                        //  Column(
-                        //   children: [
-                        //     Row(
-                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //       children: [
-                        //         Text(
-                        //           dgh.title,
-                        //           style: Theme.of(context).textTheme.titleLarge,
-                        //         ),
-                        //         if (dgh.headerListToAdd != null)
-                        //           ElevatedButton.icon(
-                        //             key: buttonKey,
-                        //             style: TextButton.styleFrom(
-                        //               padding: const EdgeInsets.symmetric(
-                        //                 horizontal: kDefaultPadding * 1.5,
-                        //                 vertical: kDefaultPadding / 2,
-                        //               ),
-                        //             ),
-                        //             onPressed: () async {
-                        //               if (dgh.headerListToAdd == null) return;
-                        //               await showPopupMenu(context, buttonKey,
-                        //                       list: dgh.headerListToAdd!
-                        //                           .map((e) => buildMenuItem(
-                        //                               context,
-                        //                               MenuItemBuild(
-                        //                                   e.getMainHeaderLabelTextOnly(
-                        //                                       context),
-                        //                                   Icons.add,
-                        //                                   "")))
-                        //                           .toList())
-                        //                   .then((value) =>
-                        //                       debugPrint("showPopupMenu $value"));
-                        //             },
-                        //             icon: const Icon(Icons.add),
-                        //             label: Text(AppLocalizations.of(context)!.add_new),
-                        //           ),
-                        //       ],
-                        //     ),
-                        //   ],
-                        // ),
-                        )),
-              ),
-            SliverToBoxAdapter(
-              child: child,
-            )
-          ],
-        );
+                   //  Column(
+                   //   children: [
+                   //     Row(
+                   //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   //       children: [
+                   //         Text(
+                   //           dgh.title,
+                   //           style: Theme.of(context).textTheme.titleLarge,
+                   //         ),
+                   //         if (dgh.headerListToAdd != null)
+                   //           ElevatedButton.icon(
+                   //             key: buttonKey,
+                   //             style: TextButton.styleFrom(
+                   //               padding: const EdgeInsets.symmetric(
+                   //                 horizontal: kDefaultPadding * 1.5,
+                   //                 vertical: kDefaultPadding / 2,
+                   //               ),
+                   //             ),
+                   //             onPressed: () async {
+                   //               if (dgh.headerListToAdd == null) return;
+                   //               await showPopupMenu(context, buttonKey,
+                   //                       list: dgh.headerListToAdd!
+                   //                           .map((e) => buildMenuItem(
+                   //                               context,
+                   //                               MenuItemBuild(
+                   //                                   e.getMainHeaderLabelTextOnly(
+                   //                                       context),
+                   //                                   Icons.add,
+                   //                                   "")))
+                   //                           .toList())
+                   //                   .then((value) =>
+                   //                       debugPrint("showPopupMenu $value"));
+                   //             },
+                   //             icon: const Icon(Icons.add),
+                   //             label: Text(AppLocalizations.of(context)!.add_new),
+                   //           ),
+                   //       ],
+                   //     ),
+                   //   ],
+                   // ),
+                 ),
+               ),
+             ),
+           SliverToBoxAdapter(child: child),
+         ],
+       );
 }
 
 // @deprecated

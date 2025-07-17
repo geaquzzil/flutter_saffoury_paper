@@ -16,7 +16,7 @@ class SliverApiMixinViewAbstractWidget
     super.onClickForCard,
     super.isSelectForCard,
     // super.
-    super.isGridView = false,
+    super.cardType = false,
     super.hasCustomCardItemBuilder,
     super.customRequestOption,
     super.hasCustomSeperater,

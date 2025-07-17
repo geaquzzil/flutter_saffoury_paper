@@ -13,7 +13,7 @@ class SliverApiMixinStaticList extends SliverApiMixinWithStaticStateful {
     super.scrollController,
     super.isSliver,
     super.scrollDirection,
-    super.isGridView = false,
+    super.cardType = false,
     this.listKey,
     super.enableSelection = false,
     super.hasCustomCardItemBuilder,
