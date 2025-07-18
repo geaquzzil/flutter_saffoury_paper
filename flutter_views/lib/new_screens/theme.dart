@@ -15,8 +15,10 @@ const kDefaultTextFieldSmall = 56;
 
 ///TODO override [constraints] on TextField
 ///TODO override isLargeOrDesktop to [isDesktopPlatform]
-InputDecorationTheme getMainTheme(BuildContext context,
-    {ColorScheme? colorScheme}) {
+InputDecorationTheme getMainTheme(
+  BuildContext context, {
+  ColorScheme? colorScheme,
+}) {
   ThemeData theme = Theme.of(context);
   colorScheme ??= theme.colorScheme;
   bool isLargeOrDesktop = isLargeScreen(context);
@@ -44,115 +46,119 @@ double getHeightOfHorizontalGridList(BuildContext context) {
   }
 }
 
-ThemeData getThemeData(BuildContext context, bool isDark,
-    ColorScheme colorScheme, CustomColors customColor) {
+ThemeData getThemeData(
+  BuildContext context,
+  bool isDark,
+  ColorScheme colorScheme,
+  CustomColors customColor,
+) {
   return ThemeData(
-      scaffoldBackgroundColor: colorScheme.surface,
-      badgeTheme: getBadgeTheme(context, colorScheme),
-      expansionTileTheme: getExpansionTileTheme(context, colorScheme),
-      colorScheme: colorScheme,
-      cardTheme: getCardTheme(context, colorScheme),
-      visualDensity: isLargeScreen(context)
-          ? const VisualDensity(horizontal: -4, vertical: -4)
-          : VisualDensity.compact,
-      dividerColor: colorScheme.outlineVariant,
-      dividerTheme: DividerThemeData(
-        endIndent: 4,
-        indent: 4,
-        thickness: 1,
-        color: colorScheme.outlineVariant,
+    scaffoldBackgroundColor: colorScheme.surface,
+    badgeTheme: getBadgeTheme(context, colorScheme),
+    expansionTileTheme: getExpansionTileTheme(context, colorScheme),
+    colorScheme: colorScheme,
+    cardTheme: getCardTheme(context, colorScheme),
+    visualDensity: isLargeScreen(context)
+        ? const VisualDensity(horizontal: -4, vertical: -4)
+        : VisualDensity.compact,
+    dividerColor: colorScheme.outlineVariant,
+    dividerTheme: DividerThemeData(
+      endIndent: 4,
+      indent: 4,
+      thickness: 1,
+      color: colorScheme.outlineVariant,
+    ),
+    // scaffoldBackgroundColor: colorScheme.,
+    highlightColor: colorScheme.onSurface.withOpacity(.2),
+    focusColor: colorScheme.secondaryContainer,
+    canvasColor: colorScheme.surfaceContainer,
+    cardColor: colorScheme.surfaceContainerHighest,
+    shadowColor: colorScheme.shadow,
+    tabBarTheme: getTabBarTheme(context, colorScheme),
+
+    // floatingActionButtonTheme: FloatingActionButtonThemeData(highlightElevation: ),
+    // scaffoldBackgroundColor: lightDynamic?.background,
+    // shadowColor: lightDynamic?.shadow,
+    // cardColor: lightDynamic?.surfaceVariant,
+    // scaffoldBackgroundColor: lightDynamic?.background,
+    // shadowColor: lightDynamic?.shadow,
+    // cardColor: lightDynamic?.surfaceVariant,
+    // textTheme: kIsWeb
+    //     ? GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
+    //         .apply()
+    //     : GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
+    //         .apply(fontSizeDelta: .9, fontSizeFactor: .5),
+    textButtonTheme: TextButtonThemeData(
+      style: getButtonStyleIfIcon(context, colorScheme),
+    ),
+    iconButtonTheme: getIconDataTheme(context, colorScheme),
+    elevatedButtonTheme: getElevatedTheme(context, colorScheme),
+    menuTheme: MenuThemeData(
+      style: MenuStyle(backgroundColor: WidgetStateProperty.all(Colors.black)),
+    ),
+    menuButtonTheme: MenuButtonThemeData(
+      style: ButtonStyle(iconColor: WidgetStateProperty.all(Colors.orange)),
+    ),
+    popupMenuTheme: Theme.of(context).popupMenuTheme.copyWith(
+      color: colorScheme.surfaceContainer,
+
+      surfaceTintColor: colorScheme.surfaceTint,
+
+      // elevation: Theme.of(context).ele,
+      elevation: 10,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(kBorderRadius)),
       ),
-      // scaffoldBackgroundColor: colorScheme.,
-      highlightColor: colorScheme.onSurface.withOpacity(.2),
-      focusColor: colorScheme.secondaryContainer,
-      canvasColor: colorScheme.surfaceContainer,
-      cardColor: colorScheme.surfaceContainerHighest,
-      shadowColor: colorScheme.shadow,
-      tabBarTheme: getTabBarTheme(context, colorScheme),
+    ),
+    buttonTheme: const ButtonThemeData(),
+    dropdownMenuTheme: Theme.of(context).dropdownMenuTheme.copyWith(
+      menuStyle: const MenuStyle(visualDensity: VisualDensity.compact),
 
-      // floatingActionButtonTheme: FloatingActionButtonThemeData(highlightElevation: ),
-      // scaffoldBackgroundColor: lightDynamic?.background,
-      // shadowColor: lightDynamic?.shadow,
-      // cardColor: lightDynamic?.surfaceVariant,
-      // scaffoldBackgroundColor: lightDynamic?.background,
-      // shadowColor: lightDynamic?.shadow,
-      // cardColor: lightDynamic?.surfaceVariant,
-      // textTheme: kIsWeb
-      //     ? GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
-      //         .apply()
-      //     : GoogleFonts.robotoTextTheme(Theme.of(context).textTheme)
-      //         .apply(fontSizeDelta: .9, fontSizeFactor: .5),
-
-      textButtonTheme: TextButtonThemeData(
-          style: getButtonStyleIfIcon(context, colorScheme)),
-      iconButtonTheme: getIconDataTheme(context, colorScheme),
-      elevatedButtonTheme: getElevatedTheme(context, colorScheme),
-      menuTheme: MenuThemeData(
-          style: MenuStyle(
-              backgroundColor: WidgetStateProperty.all(Colors.black))),
-      menuButtonTheme: MenuButtonThemeData(
-          style:
-              ButtonStyle(iconColor: WidgetStateProperty.all(Colors.orange))),
-      popupMenuTheme: Theme.of(context).popupMenuTheme.copyWith(
-            color: colorScheme.surfaceContainer,
-
-            surfaceTintColor: colorScheme.surfaceTint,
-
-            // elevation: Theme.of(context).ele,
-            elevation: 10,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(kBorderRadius))),
-          ),
-      buttonTheme: const ButtonThemeData(),
-      dropdownMenuTheme: Theme.of(context).dropdownMenuTheme.copyWith(
-            menuStyle: const MenuStyle(visualDensity: VisualDensity.compact),
-
-            // menuStyle: Theme.of(context).menuTheme.style?.copyWith(
-            //     padding: ),
-            textStyle: Theme.of(context).textTheme.titleLarge,
-            inputDecorationTheme: Theme.of(context)
-                .inputDecorationTheme
-                .copyWith(
-                    filled: true,
-                    // fillColor: darkDynamic?.onPrimary,
-                    isDense: isDesktopPlatform(),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8))),
-          ),
-      textTheme: GoogleFonts.robotoTextTheme(
-          isDark ? ThemeData.dark().textTheme : ThemeData.light().textTheme),
-      listTileTheme: getListTileThemeData(context, colorScheme: colorScheme),
-      iconTheme: getIconThemeData(context, colorScheme: colorScheme),
-      //  ListTileThemeData(
-
-      //     // contentPadding: EdgeInsets.zero,
-      //     dense: isDesktopPlatform()),
-      checkboxTheme: const CheckboxThemeData(
-        // side: BorderSide.none,
-
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        // checkColor: WidgetStateProperty.all(
-        //     darkColorScheme.onPrimaryContainer),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(kBorderRadius))
-            // fillColor: WidgetStateProperty.all(Colors.amberAccent)
-
-            ),
+      // menuStyle: Theme.of(context).menuTheme.style?.copyWith(
+      //     padding: ),
+      textStyle: Theme.of(context).textTheme.titleLarge,
+      inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
+        filled: true,
+        // fillColor: darkDynamic?.onPrimary,
+        isDense: isDesktopPlatform(),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
+    ),
+    textTheme: GoogleFonts.robotoTextTheme(
+      isDark ? ThemeData.dark().textTheme : ThemeData.light().textTheme,
+    ),
+    listTileTheme: getListTileThemeData(context, colorScheme: colorScheme),
+    iconTheme: getIconThemeData(context, colorScheme: colorScheme),
+    //  ListTileThemeData(
 
-      // fontFamily: GoogleFonts.roboto(height: 1.2).fontFamily,
-      inputDecorationTheme: getMainTheme(context, colorScheme: colorScheme),
-      extensions: [customColor],
-      useMaterial3: true,
-      pageTransitionsTheme: const PageTransitionsTheme(
-        builders: {
-          TargetPlatform.android: CustomTransitionBuilder(),
-          TargetPlatform.iOS: CustomTransitionBuilder(),
-          TargetPlatform.macOS: CustomTransitionBuilder(),
-          TargetPlatform.windows: CustomTransitionBuilder(),
-          TargetPlatform.linux: CustomTransitionBuilder(),
-        },
-      ));
+    //     // contentPadding: EdgeInsets.zero,
+    //     dense: isDesktopPlatform()),
+    checkboxTheme: const CheckboxThemeData(
+      // side: BorderSide.none,
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      // checkColor: WidgetStateProperty.all(
+      //     darkColorScheme.onPrimaryContainer),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(kBorderRadius)),
+
+        // fillColor: WidgetStateProperty.all(Colors.amberAccent)
+      ),
+    ),
+
+    // fontFamily: GoogleFonts.roboto(height: 1.2).fontFamily,
+    inputDecorationTheme: getMainTheme(context, colorScheme: colorScheme),
+    extensions: [customColor],
+    useMaterial3: true,
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: CustomTransitionBuilder(),
+        TargetPlatform.iOS: CustomTransitionBuilder(),
+        TargetPlatform.macOS: CustomTransitionBuilder(),
+        TargetPlatform.windows: CustomTransitionBuilder(),
+        TargetPlatform.linux: CustomTransitionBuilder(),
+      },
+    ),
+  );
 }
 
 AppLocalizations? getAppLocal(BuildContext context) {
@@ -194,26 +200,34 @@ BadgeThemeData getBadgeTheme(BuildContext context, ColorScheme colorScheme) {
 }
 
 ExpansionTileThemeData getExpansionTileTheme(
-    BuildContext context, ColorScheme colorScheme) {
+  BuildContext context,
+  ColorScheme colorScheme,
+) {
   return ExpansionTileThemeData(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(kBorderRadius)),
-      backgroundColor: colorScheme.surfaceContainer,
-      collapsedBackgroundColor: colorScheme.surface
-      // backgroundColor: colorScheme.onSurfaceVariant
-      // backgroundColor: ElevationOverlay.overlayColor(context, 2)
-      );
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(kBorderRadius),
+    ),
+    backgroundColor: colorScheme.surfaceContainer,
+    collapsedBackgroundColor: colorScheme.surface,
+    // backgroundColor: colorScheme.onSurfaceVariant
+    // backgroundColor: ElevationOverlay.overlayColor(context, 2)
+  );
 }
 
 IconButtonThemeData getIconDataTheme(
-    BuildContext context, ColorScheme colorSheme) {
+  BuildContext context,
+  ColorScheme colorSheme,
+) {
   return IconButtonThemeData(style: getButtonStyleIfIcon(context, colorSheme));
 }
 
 ElevatedButtonThemeData getElevatedTheme(
-    BuildContext context, ColorScheme colorSheme) {
+  BuildContext context,
+  ColorScheme colorSheme,
+) {
   return ElevatedButtonThemeData(
-      style: getButtonStyleIfIcon(context, colorSheme));
+    style: getButtonStyleIfIcon(context, colorSheme),
+  );
 }
 
 double getSizeOfScalledIcon(BuildContext context, WidgetState state) {
@@ -289,32 +303,42 @@ double getIconSizeOnSub(BuildContext context) {
       : kDefaultSmallScreenIconSize - 5;
 }
 
-IconThemeData getIconThemeData(BuildContext context,
-    {ColorScheme? colorScheme}) {
+IconThemeData getIconThemeData(
+  BuildContext context, {
+  ColorScheme? colorScheme,
+}) {
   ThemeData theme = Theme.of(context);
   colorScheme ??= theme.colorScheme;
   return theme.iconTheme.copyWith(
-      color: colorScheme.onSurfaceVariant, size: getIconSize(context));
+    color: colorScheme.onSurfaceVariant,
+    size: getIconSize(context),
+  );
 }
 
-ListTileThemeData getListTileThemeData(BuildContext context,
-    {ColorScheme? colorScheme}) {
+ListTileThemeData getListTileThemeData(
+  BuildContext context, {
+  ColorScheme? colorScheme,
+}) {
   ThemeData theme = Theme.of(context);
   colorScheme ??= theme.colorScheme;
   bool isLargeOrDesktop = isLargeScreen(context);
   return theme.listTileTheme.copyWith(
-      dense: isLargeOrDesktop,
-      style: ListTileStyle.drawer,
-      contentPadding: EdgeInsets.symmetric(
-          horizontal: 16, vertical: isLargeOrDesktop ? 0 : 8),
-      // minVerticalPadding: 0,
+    dense: isLargeOrDesktop,
+    style: ListTileStyle.drawer,
+    contentPadding: EdgeInsets.symmetric(
+      horizontal: 16,
+      vertical: isLargeOrDesktop ? 0 : 8,
+    ),
+    // minVerticalPadding: 0,
 
-      // horizontalTitleGap: 0,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(kBorderRadius))),
-      // tileColor: Colors.green,
-      selectedColor: colorScheme.onSecondaryContainer,
-      selectedTileColor: colorScheme.secondaryContainer);
+    // horizontalTitleGap: 0,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(kBorderRadius)),
+    ),
+    // tileColor: Colors.green,
+    selectedColor: colorScheme.onSecondaryContainer,
+    selectedTileColor: colorScheme.secondaryContainer,
+  );
 }
 
 InputDecorationTheme getTextDropDownTheme(BuildContext context) {
@@ -340,76 +364,92 @@ InputDecorationTheme getTextFieldTheme(BuildContext context) {
 
 QtyDecorationProps getQtyPlusDecoration(BuildContext context) {
   return QtyDecorationProps(
-      // contentPadding: EdgeInsets.all(kDefaultPadding * .2),
-      border: getThemeBorder(isLargeScreen(context)),
-      errorBorder: getErrorBorder(context, isLargeScreen(context)),
-      fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+    // contentPadding: EdgeInsets.all(kDefaultPadding * .2),
+    border: getThemeBorder(isLargeScreen(context)),
+    errorBorder: getErrorBorder(context, isLargeScreen(context)),
+    fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
 
-      // border: getMainTheme(context),
-      isDense: isLargeScreen(context),
-      plusBtn: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.add,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          )),
-      minusBtn: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Icon(
-            Icons.remove,
-            color: Theme.of(context).colorScheme.error,
-          ),
-        ),
-      ));
-}
-
-QtyFormProps getQtyFormProps(BuildContext context) {
-  return QtyFormProps(
-    style: Theme.of(context).textTheme.titleSmall,
+    // border: getMainTheme(context),
+    isDense: isLargeScreen(context),
+    plusBtn: MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(Icons.add, color: Theme.of(context).colorScheme.primary),
+      ),
+    ),
+    minusBtn: MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(Icons.remove, color: Theme.of(context).colorScheme.error),
+      ),
+    ),
   );
 }
 
-OutlineInputBorder getThemeBorder(bool isLargeOrDesktop,
-    {Color? customColor, bool isErrorBuilder = false}) {
+QtyFormProps getQtyFormProps(BuildContext context) {
+  return QtyFormProps(style: Theme.of(context).textTheme.titleSmall);
+}
+
+OutlineInputBorder getThemeBorder(
+  bool isLargeOrDesktop, {
+  Color? customColor,
+  bool isErrorBuilder = false,
+}) {
   var outlineInputBorder = OutlineInputBorder(
-      gapPadding: isLargeOrDesktop ? 0 : 4,
-      borderSide: getBorderSide(isLargeOrDesktop,
-          customColor: customColor, isErrorBuilder: isErrorBuilder),
-      borderRadius: BorderRadius.all(
-          Radius.circular(isLargeOrDesktop ? kBorderRadius : 4)));
+    gapPadding: isLargeOrDesktop ? 0 : 4,
+    borderSide: getBorderSide(
+      isLargeOrDesktop,
+      customColor: customColor,
+      isErrorBuilder: isErrorBuilder,
+    ),
+    borderRadius: BorderRadius.all(
+      Radius.circular(isLargeOrDesktop ? kBorderRadius : 4),
+    ),
+  );
   return outlineInputBorder;
 }
 
-BorderSide getBorderSide(bool isLargeOrDesktop,
-    {Color? customColor, bool isErrorBuilder = false}) {
+BorderSide getBorderSide(
+  bool isLargeOrDesktop, {
+  Color? customColor,
+  bool isErrorBuilder = false,
+}) {
   // return BorderSide.none;
   return isLargeOrDesktop && !isErrorBuilder
       ? BorderSide.none
       : BorderSide(
-          color: customColor ?? Color(0xFF000000), style: BorderStyle.none);
+          color: customColor ?? Color(0xFF000000),
+          style: BorderStyle.none,
+        );
 }
 
-OutlineInputBorder getErrorBorder(BuildContext context, bool isLargeOrDesktop,
-    {Color? customColor}) {
-  return getThemeBorder(isLargeOrDesktop,
-      customColor: customColor ?? Theme.of(context).colorScheme.error,
-      isErrorBuilder: true);
+OutlineInputBorder getErrorBorder(
+  BuildContext context,
+  bool isLargeOrDesktop, {
+  Color? customColor,
+}) {
+  return getThemeBorder(
+    isLargeOrDesktop,
+    customColor: customColor ?? Theme.of(context).colorScheme.error,
+    isErrorBuilder: true,
+  );
 }
 
 OutlineInputBorder _getFocusBorder(
-    bool isLargeOrDesktop, ColorScheme colorScheme) {
+  bool isLargeOrDesktop,
+  ColorScheme colorScheme,
+) {
   return OutlineInputBorder(
-      gapPadding: isLargeOrDesktop ? 0 : 4,
-      borderSide: isLargeOrDesktop
-          ? BorderSide.none
-          : BorderSide(color: colorScheme.outline, width: 2.0),
-      borderRadius: BorderRadius.all(
-          Radius.circular(isLargeOrDesktop ? kBorderRadius : 4)));
+    gapPadding: isLargeOrDesktop ? 0 : 4,
+    borderSide: isLargeOrDesktop
+        ? BorderSide.none
+        : BorderSide(color: colorScheme.outline, width: 2.0),
+    borderRadius: BorderRadius.all(
+      Radius.circular(isLargeOrDesktop ? kBorderRadius : 4),
+    ),
+  );
 }
 
 InputDecorationTheme getTextPopMenuTheme(BuildContext context) {
@@ -445,65 +485,116 @@ Color getBackgroundColorOnCard(BuildContext context, CardType type) {
   }
 }
 
-Widget getElevatedCard(BuildContext context, Widget child,
-    {bool isHoverd = false, Function()? onPress}) {
+Widget getElevatedCard(
+  BuildContext context,
+  Widget child, {
+  bool isHoverd = false,
+  Function()? onPress,
+  Color? colorWithOverlay,
+}) {
   return Card(
-      shadowColor: Theme.of(context).colorScheme.shadow,
-      surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
-      color: Theme.of(context).colorScheme.surfaceContainerLow,
-      elevation: isHoverd ? 4 : 1,
-      child: onPress == null
-          ? child
-          : InkWell(onTap: () => onPress(), child: child));
+    shadowColor: Theme.of(context).colorScheme.shadow,
+    surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+
+    color: colorWithOverlay != null
+        ? ElevationOverlay.colorWithOverlay(
+            Theme.of(context).colorScheme.surfaceContainerLow,
+            colorWithOverlay,
+            1,
+          )
+        : Theme.of(context).colorScheme.surfaceContainerLow,
+    elevation: isHoverd ? 4 : 1,
+    child: onPress == null
+        ? child
+        : InkWell(onTap: () => onPress(), child: child),
+  );
 }
 
-Widget getOutlineCard(BuildContext context, Widget child,
-    {bool isHoverd = false, Function()? onPress}) {
+Widget getOutlineCard(
+  BuildContext context,
+  Widget child, {
+  bool isHoverd = false,
+  Function()? onPress,
+  Color? colorWithOverlay,
+}) {
   return Card(
-      shape: RoundedRectangleBorder(
-        side: BorderSide(
-          width: 1,
-          color: Theme.of(context).colorScheme.outlineVariant,
-        ),
-        borderRadius: const BorderRadius.all(Radius.circular(kBorderRadius)),
+    shape: RoundedRectangleBorder(
+      side: BorderSide(
+        width: 1,
+        color: Theme.of(context).colorScheme.outlineVariant,
       ),
-      shadowColor: Theme.of(context).colorScheme.shadow,
-      surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
-      color: Theme.of(context).colorScheme.surface,
-      elevation: isHoverd ? 4 : 0,
-      child: onPress == null
-          ? child
-          : InkWell(onTap: () => onPress(), child: child));
+      borderRadius: const BorderRadius.all(Radius.circular(kBorderRadius)),
+    ),
+    shadowColor: Theme.of(context).colorScheme.shadow,
+    surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+    color: colorWithOverlay != null
+        ? ElevationOverlay.colorWithOverlay(
+            Theme.of(context).colorScheme.surface,
+            colorWithOverlay,
+            1,
+          )
+        : Theme.of(context).colorScheme.surface,
+    elevation: isHoverd ? 4 : 0,
+    child: onPress == null
+        ? child
+        : InkWell(onTap: () => onPress(), child: child),
+  );
 }
 
-Widget getFilledCardWithOutline(BuildContext context, Widget child,
-    {bool isHoverd = false, Function()? onPress}) {
+Widget getFilledCardWithOutline(
+  BuildContext context,
+  Widget child, {
+  bool isHoverd = false,
+  Function()? onPress,
+  Color? colorWithOverlay,
+}) {
   return Card(
-      shape: RoundedRectangleBorder(
-        side: BorderSide(
-          width: 1,
-          color: Theme.of(context).colorScheme.outlineVariant,
-        ),
-        borderRadius: const BorderRadius.all(Radius.circular(kBorderRadius)),
+    shape: RoundedRectangleBorder(
+      side: BorderSide(
+        width: 1,
+        color: Theme.of(context).colorScheme.outlineVariant,
       ),
-      shadowColor: Theme.of(context).colorScheme.shadow,
-      surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
-      color: Theme.of(context).colorScheme.surfaceContainerHighest,
-      elevation: isHoverd ? 4 : 0,
-      child: onPress == null
-          ? child
-          : InkWell(onTap: () => onPress(), child: child));
+      borderRadius: const BorderRadius.all(Radius.circular(kBorderRadius)),
+    ),
+    shadowColor: Theme.of(context).colorScheme.shadow,
+    surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+    color: colorWithOverlay != null
+        ? ElevationOverlay.colorWithOverlay(
+            Theme.of(context).colorScheme.surfaceContainerHighest,
+            colorWithOverlay,
+            1,
+          )
+        : Theme.of(context).colorScheme.surfaceContainerHighest,
+
+    elevation: isHoverd ? 4 : 0,
+    child: onPress == null
+        ? child
+        : InkWell(onTap: () => onPress(), child: child),
+  );
 }
 
-Widget getFilledCard(BuildContext context, Widget child,
-    {bool isHoverd = false, Function()? onPress}) {
+Widget getFilledCard(
+  BuildContext context,
+  Widget child, {
+  bool isHoverd = false,
+  Function()? onPress,
+  Color? colorWithOverlay,
+}) {
   return Card(
-      shadowColor: Theme.of(context).colorScheme.shadow,
-      surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
-      color: Theme.of(context).colorScheme.surfaceContainerHighest,
-      elevation: isHoverd ? 4 : 0,
-      child: onPress == null
-          ? child
-          : InkWell(onTap: () => onPress(), child: child));
+    shadowColor: Theme.of(context).colorScheme.shadow,
+    surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+    color: colorWithOverlay != null
+        ? ElevationOverlay.colorWithOverlay(
+            Theme.of(context).colorScheme.surfaceContainerHighest,
+            colorWithOverlay,
+            1,
+          )
+        : Theme.of(context).colorScheme.surfaceContainerHighest,
+    elevation: isHoverd ? 4 : 0,
+    child: onPress == null
+        ? child
+        : InkWell(onTap: () => onPress(), child: child),
+  );
 }
+
 // ButtonStyle getButtonStyle(BuildContext context) {}

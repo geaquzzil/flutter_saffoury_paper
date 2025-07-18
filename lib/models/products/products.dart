@@ -13,6 +13,8 @@ import 'package:flutter_saffoury_paper/models/invoices/priceless_invoices/reserv
 import 'package:flutter_saffoury_paper/models/invoices/refund_invoices/orders_refunds.dart';
 import 'package:flutter_saffoury_paper/models/prints/print_product.dart';
 import 'package:flutter_saffoury_paper/models/prints/printable_product_label_widgets.dart';
+import 'package:flutter_saffoury_paper/models/products/analysis/products_expected_to_buy.dart';
+import 'package:flutter_saffoury_paper/models/products/analysis/products_most_popular.dart';
 import 'package:flutter_saffoury_paper/models/products/analysis/products_movments.dart';
 import 'package:flutter_saffoury_paper/models/products/grades.dart';
 import 'package:flutter_saffoury_paper/models/products/gsms.dart';
@@ -40,7 +42,6 @@ import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceA
 import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
-import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/apis/unused_records.dart';
@@ -992,10 +993,25 @@ class Product extends ViewAbstract<Product>
   List<Widget>? getHomeListHeaderWidgetList(BuildContext context) {
     // TODO: implement getHomeListHeaderWidgetList
     return [
-      // HeaderDescription(
-      //   isSliver: true,
-      //   title: AppLocalizations.of(context)!.type,
-      // ),
+      SliverApiMixinViewAbstractWidget(
+        cardType: CardItemType.grid,
+        isSliver: true,
+        header: HeaderDescription(
+          isSliver: true,
+          title: AppLocalizations.of(context)!.mostPopular,
+        ),
+        scrollDirection: Axis.horizontal,
+        toListObject: ProductsMostPopular(),
+      ),
+
+      SliverApiMixinViewAbstractWidget(
+        cardType: CardItemType.grid,
+        hideOnEmpty: true,
+        isSliver: true,
+        header: HeaderDescription(isSliver: true, title: "Expected To buy"),
+        scrollDirection: Axis.horizontal,
+        toListObject: ProductsExcpectedToBuy(),
+      ),
       // SliverApiMixinAutoRestWidget(
       //   autoRest: AutoRest<ProductType>(
       //     obj: ProductType.init(true),
@@ -1011,55 +1027,74 @@ class Product extends ViewAbstract<Product>
       //   scrollDirection: Axis.horizontal,
       //   toListObject: ProductType.init(true),
       // ),
-      HeaderDescription(
-        isSliver: true,
-        title: AppLocalizations.of(context)!.unUsed,
-      ),
       SliverApiMixinViewAbstractWidget(
-        isGridView: true,
+        // cardType: CardType.grid,
+        isSliver: true,
         scrollDirection: Axis.horizontal,
         toListObject: UnusedRecords.init(Product()),
       ),
-      HeaderDescription(
-        isSliver: true,
-        title: AppLocalizations.of(context)!.changeChart,
-      ),
+
+      // HeaderDescription(
+      //   isSliver: true,
+      //   title: AppLocalizations.of(context)!.changeChart,
+      // ),
+      // SliverApiMixinViewAbstractWidget(
+      //   cardType: CardType.grid,
+      //   scrollDirection: Axis.horizontal,
+      //   toListObject: ChangesRecords.init(Product(), "status"),
+      // ),
+      // HeaderDescription(
+      //   isSliver: true,
+      //   title: AppLocalizations.of(context)!.orders,
+      // ),
       SliverApiMixinViewAbstractWidget(
-        isGridView: true,
+        cardType: CardItemType.grid,
         scrollDirection: Axis.horizontal,
-        toListObject: ChangesRecords.init(Product(), "status"),
-      ),
-      HeaderDescription(
-        isSliver: true,
-        title: AppLocalizations.of(context)!.orders,
-      ),
-      SliverApiMixinViewAbstractWidget(
-        isGridView: true,
-        scrollDirection: Axis.horizontal,
+        header: HeaderDescription(
+          title: AppLocalizations.of(context)!.orders,
+          isSliver: true,
+        ),
         toListObject: ChartRecordAnalysis.init(Order()),
       ),
-      HeaderDescription(
-        isSliver: true,
-        title: AppLocalizations.of(context)!.today,
-      ),
+      // HeaderDescription(
+      //   isSliver: true,
+      //   title: AppLocalizations.of(context)!.today,
+      // ),
       SliverApiMixinViewAbstractWidget(
-        isGridView: true,
+        cardType: CardItemType.grid,
+        header: HeaderDescription(
+          isSliver: true,
+          title: AppLocalizations.of(context)!.today,
+        ),
         scrollDirection: Axis.horizontal,
+        hideOnEmpty: true,
         toListObject: Product().setRequestOption(
           option: _getOnlyInventory().addDate(DateObject.today()),
         ),
       ),
-      HeaderDescription(
-        isSliver: true,
-        title: AppLocalizations.of(context)!.thisWeek,
-      ),
       SliverApiMixinViewAbstractWidget(
-        isGridView: true,
+        cardType: CardItemType.grid,
+        header: HeaderDescription(
+          isSliver: true,
+          title: AppLocalizations.of(context)!.thisWeek,
+        ),
         scrollDirection: Axis.horizontal,
+        hideOnEmpty: true,
         toListObject: Product().setRequestOption(
           option: _getOnlyInventory().addDate(DateObject.initThisWeek()),
         ),
       ),
+      // HeaderDescription(
+      //   isSliver: true,
+      //   title: AppLocalizations.of(context)!.thisWeek,
+      // ),
+      // SliverApiMixinViewAbstractWidget(
+      //   cardType: CardType.grid,
+      //   scrollDirection: Axis.horizontal,
+      //   toListObject: Product().setRequestOption(
+      //     option: _getOnlyInventory().addDate(DateObject.initThisWeek()),
+      //   ),
+      // ),
     ];
   }
 
@@ -1233,7 +1268,7 @@ class Product extends ViewAbstract<Product>
         )!.simialrProducts,
       ),
       SliverApiMixinViewAbstractWidget(
-        isGridView: true,
+        cardType: CardItemType.grid,
         scrollDirection: Axis.horizontal,
         toListObject: Product().setRequestOption(
           option: getSimilarWithSameAndTypeSize(context),
@@ -1244,7 +1279,7 @@ class Product extends ViewAbstract<Product>
         title: AppLocalizations.of(context)!.productsWithSimilarSize,
       ),
       SliverApiMixinViewAbstractWidget(
-        isGridView: true,
+        cardType: CardItemType.grid,
         scrollDirection: Axis.horizontal,
         toListObject: Product().setRequestOption(
           option: getSimilarWithSameSize(context),
@@ -1272,7 +1307,7 @@ class Product extends ViewAbstract<Product>
     debugPrint(
       "getCustomTopWidg4et asd sad assd from $isFromFirstAndSecPane extras $extras action:$action",
     );
-
+    // return null;
     if (isFromFirstAndSecPane != null) {
       if (isFromFirstAndSecPane == true && action == ServerActions.search) {
         int? val = int.tryParse(extras);
@@ -1293,7 +1328,7 @@ class Product extends ViewAbstract<Product>
                 maxWaste: 50,
               ),
             ),
-            isGridView: true,
+            cardType: CardItemType.grid,
             isSliver: true,
             isSelectForCard: (object) {
               bool res =

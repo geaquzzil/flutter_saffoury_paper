@@ -6,33 +6,39 @@ part of 'cut_requests.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CutRequest _$CutRequestFromJson(Map<String, dynamic> json) => CutRequest()
-  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
-  ..serverStatus = json['serverStatus'] as String?
-  ..fb_edit = json['fb_edit'] as String?
-  ..date = json['date'] as String?
-  ..comments = json['comments'] as String?
-  ..quantity = (json['quantity'] as num?)?.toDouble()
-  ..cut_status = $enumDecodeNullable(_$CutStatusEnumMap, json['cut_status'])
-  ..products = json['products'] == null
-      ? null
-      : Product.fromJson(json['products'] as Map<String, dynamic>)
-  ..customers = json['customers'] == null
-      ? null
-      : Customer.fromJson(json['customers'] as Map<String, dynamic>)
-  ..employees = json['employees'] == null
-      ? null
-      : Employee.fromJson(json['employees'] as Map<String, dynamic>)
-  ..cut_request_results = (json['cut_request_results'] as List<dynamic>?)
-      ?.map((e) => CutRequestResult.fromJson(e as Map<String, dynamic>))
-      .toList()
-  ..cut_request_results_count =
-      (json['cut_request_results_count'] as num?)?.toInt()
-  ..sizes_cut_requests = (json['sizes_cut_requests'] as List<dynamic>?)
-      ?.map((e) => SizesCutRequest.fromJson(e as Map<String, dynamic>))
-      .toList()
-  ..sizes_cut_requests_count =
-      (json['sizes_cut_requests_count'] as num?)?.toInt();
+CutRequest _$CutRequestFromJson(Map<String, dynamic> json) =>
+    CutRequest()
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
+      ..date = json['date'] as String?
+      ..comments = json['comments'] as String?
+      ..quantity = (json['quantity'] as num?)?.toDouble()
+      ..cut_status = $enumDecodeNullable(_$CutStatusEnumMap, json['cut_status'])
+      ..products =
+          json['products'] == null
+              ? null
+              : Product.fromJson(json['products'] as Map<String, dynamic>)
+      ..customers =
+          json['customers'] == null
+              ? null
+              : Customer.fromJson(json['customers'] as Map<String, dynamic>)
+      ..employees =
+          json['employees'] == null
+              ? null
+              : Employee.fromJson(json['employees'] as Map<String, dynamic>)
+      ..cut_request_results =
+          (json['cut_request_results'] as List<dynamic>?)
+              ?.map((e) => CutRequestResult.fromJson(e as Map<String, dynamic>))
+              .toList()
+      ..cut_request_results_count =
+          (json['cut_request_results_count'] as num?)?.toInt()
+      ..sizes_cut_requests =
+          (json['sizes_cut_requests'] as List<dynamic>?)
+              ?.map((e) => SizesCutRequest.fromJson(e as Map<String, dynamic>))
+              .toList()
+      ..sizes_cut_requests_count =
+          (json['sizes_cut_requests_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$CutRequestToJson(CutRequest instance) =>
     <String, dynamic>{

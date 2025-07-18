@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/chart/pie_chart.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_list_icon.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -106,7 +107,11 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   ResponseType getCustomViewResponseType() => ResponseType.SINGLE;
 
   @override
-  Widget? getCustomViewResponseWidget(BuildContext context) {
+  dynamic getCustomViewResponseWidget(
+    BuildContext context, {
+    required SliverApiWithStaticMixin state,
+    List<dynamic>? items,
+  }) {
     debugPrint("getCustomViewSingleResponseWidget $totalGrouped");
     if (pieChartEnabled == false) {
       return LineChartItem<ChangesRecordGroup, String>(
@@ -134,7 +139,6 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   void onCustomViewCardClicked(BuildContext context, ChangesRecords istem) {
     // TODO: implement onCustomViewCardClicked
   }
-
 
   @override
   Widget? getCustomViewTitleWidget(

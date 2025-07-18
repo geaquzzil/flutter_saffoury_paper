@@ -184,7 +184,9 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
 
 abstract class CustomViewHorizontalListResponse<T extends ViewAbstract> {
   // Widget? getCustomViewListResponseWidget(BuildContext context, List<T> item);
-  dynamic getCustomViewResponseWidget(BuildContext context,{required   SliverApiWithStaticMixin state,List<T>? items});
+
+  ///if return is List<Widget> then wrap with SliverList
+  dynamic getCustomViewResponseWidget(BuildContext context,{required   SliverApiWithStaticMixin state,List<dynamic>? items});
   // Widget? getCustomViewTitleWidget(
   //   BuildContext context,
   //   SliverApiWithStaticMixin state,

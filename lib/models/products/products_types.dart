@@ -16,6 +16,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -100,7 +101,7 @@ class ProductType extends ViewAbstract<ProductType>
     }
     return [
       SliverApiMixinViewAbstractWidget(
-        isGridView: true,
+        cardType: CardItemType.grid,
         scrollDirection: Axis.horizontal,
         toListObject: Product().getSelfInstanceWithSimilarOption(
           context: context,

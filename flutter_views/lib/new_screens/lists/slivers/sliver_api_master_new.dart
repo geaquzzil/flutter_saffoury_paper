@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/components/scroll_snap_list.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/draggable_home.dart';
@@ -24,6 +25,7 @@ import 'package:flutter_view_controller/screens/web/components/grid_view_api_cat
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 import 'package:tuple/tuple.dart';
 
 enum SliverMixinObjectType {
@@ -35,7 +37,7 @@ enum SliverMixinObjectType {
   FROM_CARD_API,
 }
 
-enum CardType { list, grid, staggered }
+enum CardItemType { list, grid, staggered }
 
 abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   ///could be [AutoRest] or [ViewAbstract] or String of [tableName] or [List<ViewAbstract>] or [CustomViewHorizontalListResponse]
@@ -59,9 +61,11 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   Widget? hasCustomLoadingItem;
   final ValueNotifier<List?>? valueListProviderNotifier;
 
+  Widget? header;
+
   ///when scrollDirection is horizontal grid view well build instaed  and override the [cardType] even when its true
   Axis scrollDirection;
-  bool cardType;
+  CardItemType cardType;
   RequestOptions? customRequestOption;
   RequestOptions? copyWithRequestOption;
   bool requiresFullFetsh;
@@ -69,7 +73,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   SliverApiMixinWithStaticStateful({
     super.key,
     required this.toListObject,
-    this.cardType = true,
+    this.cardType = CardItemType.list,
     this.scrollDirection = Axis.vertical,
     this.onSeletedListItemsChanged,
     this.hasCustomCardItemBuilder,
@@ -77,6 +81,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
     this.searchString,
     this.hasCustomWidgetOnResponseBuilder,
     this.filterData,
+    this.header,
     this.isSelectForCard,
     this.onClickForCard,
     this.hideOnEmpty = false,
@@ -106,7 +111,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   late String _lastKey;
   late final ScrollController _scrollController;
   late ListMultiKeyProvider listProvider;
-  late ValueNotifier<bool> valueNotifierGrid;
+  late ValueNotifier<CardItemType> valueNotifierGrid;
   late ValueNotifier<List<ViewAbstract>>? _onSeletedListItemsChanged;
   final double horizontalGridSpacing = 10;
   final double verticalGridSpacing = 10;
@@ -252,7 +257,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     _copyWithRequestOption = widget.copyWithRequestOption;
 
     ///override the gride view when the scroll axis is horizontal
-    valueNotifierGrid = ValueNotifier<bool>(widget.cardType);
+    valueNotifierGrid = ValueNotifier<CardItemType>(widget.cardType);
 
     _onSeletedListItemsChanged =
         widget.onSeletedListItemsChanged ?? ValueNotifier([]);
@@ -376,28 +381,59 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         Widget w = EmptyWidget.loading(expand: true);
         return widget.isSliver ? SliverFillRemaining(child: w) : w;
       } else {
-        Widget w =
-            getList()[0].getCustomViewSingleResponseWidget(context) ??
-            SizedBox();
-        return widget.isSliver ? SliverFillRemaining(child: w) : w;
+        dynamic w = (getList()[0] as CustomViewHorizontalListResponse)
+            .getCustomViewResponseWidget(
+              context,
+              state: this,
+              items: getList(),
+            );
+
+        if (w == null) {
+          return getEmptyWidget();
+        } else if (w is List) {
+          return widget.isSliver
+              ? MultiSliver(children: [?widget.header, ...w.cast()])
+              : Column(children: w.cast());
+        } else {
+          return widget.isSliver
+              ? MultiSliver(children: [?widget.header, w])
+              : w;
+        }
       }
     }
-    return widget.hasCustomWidgetOnResponseBuilder != null
+    Widget w = widget.hasCustomWidgetOnResponseBuilder != null
         ? widget.hasCustomWidgetOnResponseBuilder!.call(getList())
         : getListValueListenableIsGrid(count: count, isLoading: isLoading);
+
+    if (widget.header != null) {
+      return MultiSliver(children: [widget.header!, w]);
+    } else {
+      return w;
+    }
   }
 
-  ValueListenableBuilder<bool> getListValueListenableIsGrid({
+  Widget getCustomListResponseWidget(
+    CustomViewHorizontalListResponse response,
+  ) {
+    return Text("S");
+  }
+
+  ValueListenableBuilder<CardItemType> getListValueListenableIsGrid({
     required int count,
     required bool isLoading,
   }) {
-    return ValueListenableBuilder<bool>(
+    return ValueListenableBuilder<CardItemType>(
       valueListenable: valueNotifierGrid,
       builder: (context, value, child) {
-        if (value) {
+        if (value == CardItemType.grid) {
           return widget.isSliver
               ? getSliverGridList(count: count, isLoading: isLoading)
               : getNonSliverGridList(count: count, isLoading: isLoading);
+        } else if (value == CardItemType.staggered) {
+          return Text("TODO");
+          // return widget.isSliver
+          //     ? getSliverStaggeredList(count: count, isLoading: isLoading)
+          //     : getNonSliverStaggeredList(count: count, isLoading: isLoading);
         } else {
           return widget.isSliver
               ? getSliverList(count, isLoading)
@@ -611,6 +647,13 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     );
   }
 
+  Widget getSliverStaggeredList({required int count, required bool isLoading}) {
+    return SliverPadding(
+      padding: defaultSliverGridPadding,
+      sliver: getStaggeredViewWhenAxisIsSliver(count, isLoading),
+    );
+  }
+
   ///TODO not working because [ScrollSnapList] is not Sliver
   Widget getGridViewWhenAxisIsHorizontal(int count, bool isLoading) {
     return SliverToBoxAdapter(
@@ -684,6 +727,29 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     );
   }
 
+  Widget getStaggeredViewWhenAxisIsSliver(int count, bool isLoading) {
+    return SliverGrid(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) =>
+            Container(color: Colors.cyanAccent, child: Text("$index")),
+        childCount: 44,
+      ),
+      gridDelegate: SliverQuiltedGridDelegate(
+        crossAxisCount: 3,
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        repeatPattern: QuiltedGridRepeatPattern.inverted,
+        pattern: const [
+          QuiltedGridTile(2, 1),
+          QuiltedGridTile(2, 2),
+          QuiltedGridTile(1, 1),
+          QuiltedGridTile(1, 1),
+          QuiltedGridTile(1, 1),
+        ],
+      ),
+    );
+  }
+
   Widget getGridViewWhenAxisIsVertical(int count, bool isLoading) {
     return ResponsiveSliverGridList(
       horizontalGridSpacing:
@@ -696,8 +762,9 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       minItemsPerRow:
           minItemsPerRow, // The minimum items to show in a single row. Takes precedence over minItemWidth
       maxItemsPerRow:
-          maxItemsPerRow, // The maximum items to show in a single row. Can be useful on large screens
+          maxItemsPerRow, // The maximum items to show in a single rwow. Can be useful on large screens
       sliverChildBuilderDelegateOptions: SliverChildBuilderDelegateOptions(),
+
       minItemWidth: minGridItemSize,
       children: getGridList(count: count, isLoading: isLoading),
     );

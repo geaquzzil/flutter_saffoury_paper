@@ -14,6 +14,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -35,8 +36,11 @@ class ProductSize extends ViewAbstract<ProductSize> {
   }
 
   @override
-  ProductSize? getSelfNewInstanceFileImporter(
-      {required BuildContext context, String? field, value}) {
+  ProductSize? getSelfNewInstanceFileImporter({
+    required BuildContext context,
+    String? field,
+    value,
+  }) {
     debugPrint("getSelfNewInstanceFileImporter $runtimeType value=>$value");
     if (value is Map) {
       int? isIntWidth = value is int ? value['width'] : null;
@@ -47,31 +51,42 @@ class ProductSize extends ViewAbstract<ProductSize> {
 
       if (lengthMap == null && widthMap == null) {
         throw Exception(
-            "${getMainHeaderLabelTextOnly(context)}: Cannot convert the value of length to =${value['length']} and the value of width to =${value['width']} to a number");
+          "${getMainHeaderLabelTextOnly(context)}: Cannot convert the value of length to =${value['length']} and the value of width to =${value['width']} to a number",
+        );
       } else if (lengthMap == null) {
         throw Exception(
-            "${getMainHeaderLabelTextOnly(context)}: Cannot convert the value of length to =${value['length']} to a number");
+          "${getMainHeaderLabelTextOnly(context)}: Cannot convert the value of length to =${value['length']} to a number",
+        );
       } else if (widthMap == null) {
         throw Exception(
-            "${getMainHeaderLabelTextOnly(context)}: Cannot convert the value of length to =${value['widthMap']} to a number");
+          "${getMainHeaderLabelTextOnly(context)}: Cannot convert the value of length to =${value['widthMap']} to a number",
+        );
       } else {
         width = widthMap;
         length = lengthMap;
 
-        String? errorInWidth =
-            getTextInputValidator(context, "width", width.toString());
-        String? errorInLength =
-            getTextInputValidator(context, "length", length.toString());
+        String? errorInWidth = getTextInputValidator(
+          context,
+          "width",
+          width.toString(),
+        );
+        String? errorInLength = getTextInputValidator(
+          context,
+          "length",
+          length.toString(),
+        );
 
         if (errorInLength != null || errorInWidth != null) {
           throw Exception(
-              "${getMainHeaderLabelTextOnly(context)}: error on validate one or more field(s)=> $errorInLength , $errorInWidth");
+            "${getMainHeaderLabelTextOnly(context)}: error on validate one or more field(s)=> $errorInLength , $errorInWidth",
+          );
         }
         return this;
       }
     } else {
       throw Exception(
-          "${getMainHeaderLabelTextOnly(context)}: ProductSize.getSelfNewInstance is not a Map");
+        "${getMainHeaderLabelTextOnly(context)}: ProductSize.getSelfNewInstance is not a Map",
+      );
     }
   }
 
@@ -86,9 +101,11 @@ class ProductSize extends ViewAbstract<ProductSize> {
   }
 
   @override
-  List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+  List<Widget>? getCustomBottomWidget(
+    BuildContext context, {
+    ServerActions? action,
+    ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+  }) {
     if (action == ServerActions.add ||
         action == ServerActions.edit ||
         action == ServerActions.list) {
@@ -96,12 +113,14 @@ class ProductSize extends ViewAbstract<ProductSize> {
     }
     return [
       SliverApiMixinViewAbstractWidget(
-          isGridView: true,
-          scrollDirection: Axis.horizontal,
-          toListObject: Product().getSelfInstanceWithSimilarOption(
-              context: context,
-              obj: this,
-              copyWith: RequestOptions(countPerPage: 5))),
+        cardType: CardItemType.grid,
+        scrollDirection: Axis.horizontal,
+        toListObject: Product().getSelfInstanceWithSimilarOption(
+          context: context,
+          obj: this,
+          copyWith: RequestOptions(countPerPage: 5),
+        ),
+      ),
     ];
   }
 
@@ -139,12 +158,15 @@ class ProductSize extends ViewAbstract<ProductSize> {
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "width": TextInputType.number,
-        "length": TextInputType.number,
-      };
+    "width": TextInputType.number,
+    "length": TextInputType.number,
+  };
   @override
-  Map<String, int> getTextInputMaxLengthMap() =>
-      {"width": 4, "length": 4, "purchasePrice": 8};
+  Map<String, int> getTextInputMaxLengthMap() => {
+    "width": 4,
+    "length": 4,
+    "purchasePrice": 8,
+  };
 
   @override
   String? getImageUrl(BuildContext context) {
@@ -158,15 +180,15 @@ class ProductSize extends ViewAbstract<ProductSize> {
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {
-        "width": Icons.border_left,
-        "length": Icons.border_top,
-      };
+    "width": Icons.border_left,
+    "length": Icons.border_top,
+  };
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "width": AppLocalizations.of(context)!.width,
-        "length": AppLocalizations.of(context)!.length,
-      };
+    "width": AppLocalizations.of(context)!.width,
+    "length": AppLocalizations.of(context)!.length,
+  };
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
@@ -241,45 +263,54 @@ class ProductSize extends ViewAbstract<ProductSize> {
     }
   }
 
-  pdf.Widget getSizeTextRichWidget(BuildContext context,
-      {String? fiberLines, pdf2.PdfPageFormat? format}) {
+  pdf.Widget getSizeTextRichWidget(
+    BuildContext context, {
+    String? fiberLines,
+    pdf2.PdfPageFormat? format,
+  }) {
     bool isArabic = Globals.isArabic(context);
     bool isLabel = printableIsLabel(format: format);
     String? length = isRoll()
         ? null
         : isArabic
-            ? "${getLength(fibrelines: fiberLines)} X "
-            : getLength(fibrelines: fiberLines);
+        ? "${getLength(fibrelines: fiberLines)} X "
+        : getLength(fibrelines: fiberLines);
 
     String width = isArabic
         ? getWidth(fibrelines: fiberLines)
         : isRoll()
-            ? getWidth(fibrelines: fiberLines)
-            : "${getWidth(fibrelines: fiberLines)} X ";
+        ? getWidth(fibrelines: fiberLines)
+        : "${getWidth(fibrelines: fiberLines)} X ";
 
     return pdf.RichText(
       text: pdf.TextSpan(
         text: width,
         style: pdf.TextStyle(
-            fontWeight: pdf.FontWeight.bold,
-            fontSize: printableFindTextSize(format: format)),
+          fontWeight: pdf.FontWeight.bold,
+          fontSize: printableFindTextSize(format: format),
+        ),
         children: length == null
             ? null
             : <pdf.TextSpan>[
                 pdf.TextSpan(
-                    text: length,
-                    style: pdf.TextStyle(
-                        fontWeight: pdf.FontWeight.bold,
-                        fontSize: printableFindTextSize(format: format) +
-                            (isLabel ? 5 : 10))),
+                  text: length,
+                  style: pdf.TextStyle(
+                    fontWeight: pdf.FontWeight.bold,
+                    fontSize:
+                        printableFindTextSize(format: format) +
+                        (isLabel ? 5 : 10),
+                  ),
+                ),
                 // TextSpan(text: ' world!'),
               ],
       ),
     );
   }
 
-  Widget getSizeHtmlFormatStringRichText(BuildContext context,
-      {String? fiberLines}) {
+  Widget getSizeHtmlFormatStringRichText(
+    BuildContext context, {
+    String? fiberLines,
+  }) {
     int widthNon = width.toNonNullable();
     int lengthNon = length.toNonNullable();
     if (length.toNonNullable() == 0) {
@@ -289,23 +320,24 @@ class ProductSize extends ViewAbstract<ProductSize> {
       text: TextSpan(
         // Note: Styles for TextSpans must be explicitly defined.
         // Child text spans will inherit styles from parent
-
         children: <TextSpan>[
           TextSpan(
-              text: '$widthNon',
-              style: fiberLines == null
-                  ? null
-                  : fiberLines == "Width"
-                      ? TextStyle(fontWeight: FontWeight.bold)
-                      : null),
+            text: '$widthNon',
+            style: fiberLines == null
+                ? null
+                : fiberLines == "Width"
+                ? TextStyle(fontWeight: FontWeight.bold)
+                : null,
+          ),
           TextSpan(text: " X "),
           TextSpan(
-              text: '$lengthNon',
-              style: fiberLines == null
-                  ? null
-                  : fiberLines == "Length"
-                      ? TextStyle(fontWeight: FontWeight.bold)
-                      : null)
+            text: '$lengthNon',
+            style: fiberLines == null
+                ? null
+                : fiberLines == "Length"
+                ? TextStyle(fontWeight: FontWeight.bold)
+                : null,
+          ),
         ],
       ),
     );
@@ -333,14 +365,14 @@ class ProductSize extends ViewAbstract<ProductSize> {
   }
 
   Html getSizeHtmlFormat(BuildContext context, {String? fiberLines}) {
-    return Html(
-      data: getSizeHtmlFormatString(context, fiberLines: fiberLines),
-    );
+    return Html(data: getSizeHtmlFormatString(context, fiberLines: fiberLines));
   }
 
   @override
-  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      {"width": 0, "length": 0};
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+    "width": 0,
+    "length": 0,
+  };
 
   @override
   List<String>? getRequestedForginListOnCall({required ServerActions action}) {
@@ -348,15 +380,20 @@ class ProductSize extends ViewAbstract<ProductSize> {
   }
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return RequestOptions(
-        sortBy: SortFieldValue(field: "width", type: SortByType.ASC));
+      sortBy: SortFieldValue(field: "width", type: SortByType.ASC),
+    );
   }
 
-  Map<int, FromToBetweenRequest> _generate(int initialValue,
-      {int maxWaste = 100, int maxMin = 20}) {
+  Map<int, FromToBetweenRequest> _generate(
+    int initialValue, {
+    int maxWaste = 100,
+    int maxMin = 20,
+  }) {
     var list = List<int>.empty(growable: true);
     Map<int, FromToBetweenRequest> map = {};
 
@@ -368,7 +405,9 @@ class ProductSize extends ViewAbstract<ProductSize> {
       list.add(w - maxMin);
 
       map[idx] = FromToBetweenRequest(
-          from: w.toString(), to: (w + maxWaste).toString());
+        from: w.toString(),
+        to: (w + maxWaste).toString(),
+      );
       sugg = w;
       idx = idx + 1;
     } while (sugg < 3000);
@@ -376,41 +415,54 @@ class ProductSize extends ViewAbstract<ProductSize> {
     return map;
   }
 
-  List<List<BetweenRequest>> getListOfSizesWithMaxWaste(
-      {ProductSize? customSize, int maxWaste = 100, int maxMin = 20}) {
+  List<List<BetweenRequest>> getListOfSizesWithMaxWaste({
+    ProductSize? customSize,
+    int maxWaste = 100,
+    int maxMin = 20,
+  }) {
     List<List<BetweenRequest>> main = List.empty(growable: true);
     var lengthList = isRoll()
         ? {}
-        : _generate(customSize?.length ?? length.toNonNullable(),
-            maxWaste: maxWaste, maxMin: maxMin);
-    var widthList = _generate(customSize?.width ?? width.toNonNullable(),
-        maxWaste: maxWaste, maxMin: maxMin);
+        : _generate(
+            customSize?.length ?? length.toNonNullable(),
+            maxWaste: maxWaste,
+            maxMin: maxMin,
+          );
+    var widthList = _generate(
+      customSize?.width ?? width.toNonNullable(),
+      maxWaste: maxWaste,
+      maxMin: maxMin,
+    );
 
-    widthList.forEach(
-      (key, value) {
-        bool containsLength = false;
-        List<BetweenRequest> v = List.empty(growable: true);
-        v.add(BetweenRequest(field: "width", fromTo: [value]));
-        if (lengthList.containsKey(key)) {
-          containsLength = true;
-          v.add(BetweenRequest(field: "length", fromTo: [lengthList[key]]));
-        } else {
-          v.add(BetweenRequest(
-              field: "length",
-              fromTo: [FromToBetweenRequest(from: "0", to: "0")]));
-        }
+    widthList.forEach((key, value) {
+      bool containsLength = false;
+      List<BetweenRequest> v = List.empty(growable: true);
+      v.add(BetweenRequest(field: "width", fromTo: [value]));
+      if (lengthList.containsKey(key)) {
+        containsLength = true;
+        v.add(BetweenRequest(field: "length", fromTo: [lengthList[key]]));
+      } else {
+        v.add(
+          BetweenRequest(
+            field: "length",
+            fromTo: [FromToBetweenRequest(from: "0", to: "0")],
+          ),
+        );
+      }
 
-        main.add(v);
-        if (containsLength) {
-          main.add(List.of([
+      main.add(v);
+      if (containsLength) {
+        main.add(
+          List.of([
             BetweenRequest(field: "width", fromTo: [value]),
             BetweenRequest(
-                field: "length",
-                fromTo: [FromToBetweenRequest(from: "0", to: "0")])
-          ]));
-        }
-      },
-    );
+              field: "length",
+              fromTo: [FromToBetweenRequest(from: "0", to: "0")],
+            ),
+          ]),
+        );
+      }
+    });
     debugPrint(main.toString());
     return main;
   }

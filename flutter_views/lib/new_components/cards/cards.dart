@@ -8,11 +8,13 @@ class Cards extends StatelessWidget {
   final Function()? onPress;
   final bool toScaleDown;
   final bool enableScaling;
+  final Color? colorWithOverlay;
   const Cards({
     super.key,
     required this.type,
     required this.child,
     this.onPress,
+    this.colorWithOverlay,
     this.toScaleDown = false,
     this.enableScaling = false,
   });
@@ -23,27 +25,49 @@ class Cards extends StatelessWidget {
       return _getCard(context, child.call(false));
     }
     return OnHoverWidget(
-        scale: true,
-        scaleDown: toScaleDown,
-        scaleValue: .02,
-        builder: (isHoverd) {
-          return _getCard(context, child.call(isHoverd));
-        });
+      scale: true,
+      scaleDown: toScaleDown,
+      scaleValue: .02,
+      builder: (isHoverd) {
+        return _getCard(context, child.call(isHoverd));
+      },
+    );
   }
 
   Widget _getCard(BuildContext context, Widget child) {
     switch (type) {
       case CardType.normal:
-        return getElevatedCard(context, child,
-            isHoverd: false, onPress: onPress);
+        return getElevatedCard(
+          context,
+          child,
+          isHoverd: false,
+          onPress: onPress,
+          colorWithOverlay: colorWithOverlay,
+        );
       case CardType.filled:
-        return getFilledCard(context, child, isHoverd: false, onPress: onPress);
+        return getFilledCard(
+          context,
+          child,
+          isHoverd: false,
+          onPress: onPress,
+          colorWithOverlay: colorWithOverlay,
+        );
       case CardType.filled_outline:
-        return getFilledCardWithOutline(context, child,
-            isHoverd: false, onPress: onPress);
+        return getFilledCardWithOutline(
+          context,
+          child,
+          isHoverd: false,
+          onPress: onPress,
+          colorWithOverlay: colorWithOverlay,
+        );
       case CardType.outline:
-        return getOutlineCard(context, child,
-            isHoverd: false, onPress: onPress);
+        return getOutlineCard(
+          context,
+          child,
+          isHoverd: false,
+          onPress: onPress,
+          colorWithOverlay: colorWithOverlay,
+        );
     }
   }
 }

@@ -13,9 +13,10 @@ ProductPrintObject _$ProductPrintObjectFromJson(Map<String, dynamic> json) =>
       ..fb_edit = json['fb_edit'] as String?
       ..description = json['description'] as String
       ..gsm = (json['gsm'] as num).toInt()
-      ..size = json['size'] == null
-          ? null
-          : ProductSize.fromJson(json['size'] as Map<String, dynamic>)
+      ..size =
+          json['size'] == null
+              ? null
+              : ProductSize.fromJson(json['size'] as Map<String, dynamic>)
       ..comments = json['comments'] as String
       ..customer = json['customer'] as String
       ..quantity = (json['quantity'] as num).toDouble()

@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -27,10 +28,7 @@ class Quality extends BaseWithNameString<Quality> {
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
       super.getMirrorFieldsMapNewInstance()
-        ..addAll({
-          "products": List<Product>.empty(),
-          "products_count": 0,
-        });
+        ..addAll({"products": List<Product>.empty(), "products_count": 0});
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) {
     return AppLocalizations.of(context)!.quality;
@@ -69,9 +67,11 @@ class Quality extends BaseWithNameString<Quality> {
   }
 
   @override
-  List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+  List<Widget>? getCustomBottomWidget(
+    BuildContext context, {
+    ServerActions? action,
+    ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+  }) {
     if (action == ServerActions.add ||
         action == ServerActions.edit ||
         action == ServerActions.list) {
@@ -79,12 +79,14 @@ class Quality extends BaseWithNameString<Quality> {
     }
     return [
       SliverApiMixinViewAbstractWidget(
-          isGridView: true,
-          scrollDirection: Axis.horizontal,
-          toListObject: Product().getSelfInstanceWithSimilarOption(
-              context: context,
-              obj: this,
-              copyWith: RequestOptions(countPerPage: 5))),
+        cardType: CardItemType.grid,
+        scrollDirection: Axis.horizontal,
+        toListObject: Product().getSelfInstanceWithSimilarOption(
+          context: context,
+          obj: this,
+          copyWith: RequestOptions(countPerPage: 5),
+        ),
+      ),
     ];
   }
 }

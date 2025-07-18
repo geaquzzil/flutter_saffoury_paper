@@ -11,17 +11,24 @@ CutRequestResult _$CutRequestResultFromJson(Map<String, dynamic> json) =>
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
-      ..cut_requests = json['cut_requests'] == null
-          ? null
-          : CutRequest.fromJson(json['cut_requests'] as Map<String, dynamic>)
-      ..products_inputs = json['products_inputs'] == null
-          ? null
-          : ProductInput.fromJson(
-              json['products_inputs'] as Map<String, dynamic>)
-      ..products_outputs = json['products_outputs'] == null
-          ? null
-          : ProductOutput.fromJson(
-              json['products_outputs'] as Map<String, dynamic>);
+      ..cut_requests =
+          json['cut_requests'] == null
+              ? null
+              : CutRequest.fromJson(
+                json['cut_requests'] as Map<String, dynamic>,
+              )
+      ..products_inputs =
+          json['products_inputs'] == null
+              ? null
+              : ProductInput.fromJson(
+                json['products_inputs'] as Map<String, dynamic>,
+              )
+      ..products_outputs =
+          json['products_outputs'] == null
+              ? null
+              : ProductOutput.fromJson(
+                json['products_outputs'] as Map<String, dynamic>,
+              );
 
 Map<String, dynamic> _$CutRequestResultToJson(CutRequestResult instance) =>
     <String, dynamic>{

@@ -19,6 +19,7 @@ import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 
 import '../../invoices/orders.dart';
 import '../../invoices/priceless_invoices/transfers.dart';
@@ -166,13 +167,17 @@ class ProductMovments
   }
 
   @override
-  Widget? getCustomViewResponseWidget(BuildContext context,{}) {
+  dynamic getCustomViewResponseWidget(
+    BuildContext context, {
+    required SliverApiWithStaticMixin state,
+    List<dynamic>? items,
+  }) {
     // return Text(products?.getIDFormat(context) ?? " dsa");
     return StaggerdGridViewWidget(
       builder: (i, i2, i3, h) => getStaggeredGridTileList(context, i2, i3),
       wrapWithCard: false,
       // crossAxisCount: 2,
-      childAspectRatio: 1.2,
+      childAspectRatio: 1,
 
       // width < 1400 ? 1.1 : 1.4,
     );
@@ -214,7 +219,7 @@ class ProductMovments
       if (purchases?.isNotEmpty ?? false)
         StaggeredGridTile.count(
           crossAxisCellCount: calc,
-          mainAxisCellCount: .5,
+          mainAxisCellCount: .75,
           child: wrapContainer(
             context: context,
             listGrowthRate: purchasesAnalysis,
@@ -226,7 +231,7 @@ class ProductMovments
       if (purchases_refunds?.isNotEmpty ?? false)
         StaggeredGridTile.count(
           crossAxisCellCount: calc,
-          mainAxisCellCount: .5,
+          mainAxisCellCount: 1,
           child: wrapContainer(
             context: context,
             listGrowthRate: purchases_refundsAnalysis,
@@ -238,7 +243,7 @@ class ProductMovments
       if (orders?.isNotEmpty ?? false)
         StaggeredGridTile.count(
           crossAxisCellCount: calc,
-          mainAxisCellCount: .5,
+          mainAxisCellCount: 1,
           child: wrapContainer(
             context: context,
             listGrowthRate: ordersAnalysis,
@@ -253,7 +258,7 @@ class ProductMovments
       if (orders_refunds?.isNotEmpty ?? false)
         StaggeredGridTile.count(
           crossAxisCellCount: calc,
-          mainAxisCellCount: .5,
+          mainAxisCellCount: 1,
           child: wrapContainer(
             context: context,
             listGrowthRate: orders_refundsAnalysis,
@@ -265,7 +270,7 @@ class ProductMovments
       if (products_inputs?.isNotEmpty ?? false)
         StaggeredGridTile.count(
           crossAxisCellCount: calc,
-          mainAxisCellCount: .5,
+          mainAxisCellCount: 1,
           child: wrapContainer(
             context: context,
             listGrowthRate: products_inputsAnalysis,
@@ -277,7 +282,7 @@ class ProductMovments
       if (products_outputs?.isNotEmpty ?? false)
         StaggeredGridTile.count(
           crossAxisCellCount: calc,
-          mainAxisCellCount: .5,
+          mainAxisCellCount: 1,
           child: wrapContainer(
             context: context,
             listGrowthRate: products_outputsAnalysis,
@@ -289,7 +294,7 @@ class ProductMovments
       if (transfers?.isNotEmpty ?? false)
         StaggeredGridTile.count(
           crossAxisCellCount: calc,
-          mainAxisCellCount: .5,
+          mainAxisCellCount: 1,
           child: wrapContainer(
             context: context,
             listGrowthRate: transfersAnalysis,
@@ -301,7 +306,7 @@ class ProductMovments
       if (cut_requests?.isNotEmpty ?? false)
         StaggeredGridTile.count(
           crossAxisCellCount: calc,
-          mainAxisCellCount: .5,
+          mainAxisCellCount: 1,
           child: wrapContainer(
             context: context,
             listGrowthRate: cut_requestsAnalysis,
@@ -313,7 +318,7 @@ class ProductMovments
       if (reservation_invoice?.isNotEmpty ?? false)
         StaggeredGridTile.count(
           crossAxisCellCount: calc,
-          mainAxisCellCount: .5,
+          mainAxisCellCount: 1,
           child: wrapContainer(
             context: context,
             listGrowthRate: reservation_invoiceAnalysis,
@@ -419,7 +424,6 @@ class ProductMovments
   IconData getMainIconData() => Icons.move_down;
   @override
   String? getTableNameApi() => null;
-
 
   @override
   Widget? getCustomViewTitleWidget(

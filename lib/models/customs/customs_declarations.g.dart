@@ -18,18 +18,26 @@ CustomsDeclaration _$CustomsDeclarationFromJson(Map<String, dynamic> json) =>
       ..comments = json['comments'] as String?
       ..customs_declarations_images =
           (json['customs_declarations_images'] as List<dynamic>?)
-              ?.map((e) =>
-                  CustomsDeclarationImages.fromJson(e as Map<String, dynamic>))
+              ?.map(
+                (e) => CustomsDeclarationImages.fromJson(
+                  e as Map<String, dynamic>,
+                ),
+              )
               .toList()
       ..customs_declarations_images_count =
           (json['customs_declarations_images_count'] as num?)?.toInt()
-      ..employees = json['employees'] == null
-          ? null
-          : Employee.fromJson(json['employees'] as Map<String, dynamic>)
-      ..deletedList = (json['deletedList'] as List<dynamic>?)
-          ?.map((e) =>
-              CustomsDeclarationImages.fromJson(e as Map<String, dynamic>))
-          .toList();
+      ..employees =
+          json['employees'] == null
+              ? null
+              : Employee.fromJson(json['employees'] as Map<String, dynamic>)
+      ..deletedList =
+          (json['deletedList'] as List<dynamic>?)
+              ?.map(
+                (e) => CustomsDeclarationImages.fromJson(
+                  e as Map<String, dynamic>,
+                ),
+              )
+              .toList();
 
 Map<String, dynamic> _$CustomsDeclarationToJson(CustomsDeclaration instance) =>
     <String, dynamic>{

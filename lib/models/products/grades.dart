@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -64,9 +65,11 @@ class Grades extends BaseWithNameString<Grades> {
       AppLocalizations.of(context)!.product;
 
   @override
-  List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+  List<Widget>? getCustomBottomWidget(
+    BuildContext context, {
+    ServerActions? action,
+    ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+  }) {
     if (action == ServerActions.add ||
         action == ServerActions.edit ||
         action == ServerActions.list) {
@@ -74,12 +77,14 @@ class Grades extends BaseWithNameString<Grades> {
     }
     return [
       SliverApiMixinViewAbstractWidget(
-          isGridView: true,
-          scrollDirection: Axis.horizontal,
-          toListObject: Product().getSelfInstanceWithSimilarOption(
-              context: context,
-              obj: this,
-              copyWith: RequestOptions(countPerPage: 5))),
+        cardType: CardItemType.grid,
+        scrollDirection: Axis.horizontal,
+        toListObject: Product().getSelfInstanceWithSimilarOption(
+          context: context,
+          obj: this,
+          copyWith: RequestOptions(countPerPage: 5),
+        ),
+      ),
     ];
   }
 }

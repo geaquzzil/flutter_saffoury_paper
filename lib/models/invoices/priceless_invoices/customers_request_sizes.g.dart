@@ -16,64 +16,73 @@ CustomerRequestSize _$CustomerRequestSizeFromJson(Map<String, dynamic> json) =>
       ..date = json['date'] as String?
       ..billNo = InvoiceMaster.intFromString(json['billNo'])
       ..comments = json['comments'] as String?
-      ..employees = json['employees'] == null
-          ? null
-          : Employee.fromJson(json['employees'] as Map<String, dynamic>)
-      ..customers = json['customers'] == null
-          ? null
-          : Customer.fromJson(json['customers'] as Map<String, dynamic>)
-      ..cargo_transporters = json['cargo_transporters'] == null
-          ? null
-          : CargoTransporter.fromJson(
-              json['cargo_transporters'] as Map<String, dynamic>)
+      ..employees =
+          json['employees'] == null
+              ? null
+              : Employee.fromJson(json['employees'] as Map<String, dynamic>)
+      ..customers =
+          json['customers'] == null
+              ? null
+              : Customer.fromJson(json['customers'] as Map<String, dynamic>)
+      ..cargo_transporters =
+          json['cargo_transporters'] == null
+              ? null
+              : CargoTransporter.fromJson(
+                json['cargo_transporters'] as Map<String, dynamic>,
+              )
       ..status = $enumDecodeNullable(_$InvoiceStatusEnumMap, json['status'])
       ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
       ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
       ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
-      ..extendedRefundPrice =
-          InvoiceMaster.convertToDouble(json['extendedRefundPrice'])
-      ..extendedDiscount =
-          InvoiceMaster.convertToDouble(json['extendedDiscount'])
-      ..extendedNetPrice =
-          InvoiceMaster.convertToDouble(json['extendedNetPrice'])
-      ..extendedNetQuantity =
-          InvoiceMaster.convertToDouble(json['extendedNetQuantity'])
+      ..extendedRefundPrice = InvoiceMaster.convertToDouble(
+        json['extendedRefundPrice'],
+      )
+      ..extendedDiscount = InvoiceMaster.convertToDouble(
+        json['extendedDiscount'],
+      )
+      ..extendedNetPrice = InvoiceMaster.convertToDouble(
+        json['extendedNetPrice'],
+      )
+      ..extendedNetQuantity = InvoiceMaster.convertToDouble(
+        json['extendedNetQuantity'],
+      )
       ..customers_request_sizes_details =
           (json['customers_request_sizes_details'] as List<dynamic>?)
-              ?.map((e) => CustomerRequestSizeDetails.fromJson(
-                  e as Map<String, dynamic>))
+              ?.map(
+                (e) => CustomerRequestSizeDetails.fromJson(
+                  e as Map<String, dynamic>,
+                ),
+              )
               .toList()
       ..customers_request_sizes_details_count =
           (json['customers_request_sizes_details_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$CustomerRequestSizeToJson(
-        CustomerRequestSize instance) =>
-    <String, dynamic>{
-      'iD': instance.iD,
-      'delete': instance.delete,
-      'terms': _$TermsEnumMap[instance.terms],
-      'TermsID': instance.TermsID,
-      'date': instance.date,
-      'billNo': instance.billNo,
-      'comments': instance.comments,
-      'employees': instance.employees?.toJson(),
-      'customers': instance.customers?.toJson(),
-      'cargo_transporters': instance.cargo_transporters?.toJson(),
-      'status': _$InvoiceStatusEnumMap[instance.status],
-      'quantity': instance.quantity,
-      'extendedPrice': instance.extendedPrice,
-      'refundQuantity': instance.refundQuantity,
-      'extendedRefundPrice': instance.extendedRefundPrice,
-      'extendedDiscount': instance.extendedDiscount,
-      'extendedNetPrice': instance.extendedNetPrice,
-      'extendedNetQuantity': instance.extendedNetQuantity,
-      'customers_request_sizes_details': instance
-          .customers_request_sizes_details
-          ?.map((e) => e.toJson())
-          .toList(),
-      'customers_request_sizes_details_count':
-          instance.customers_request_sizes_details_count,
-    };
+  CustomerRequestSize instance,
+) => <String, dynamic>{
+  'iD': instance.iD,
+  'delete': instance.delete,
+  'terms': _$TermsEnumMap[instance.terms],
+  'TermsID': instance.TermsID,
+  'date': instance.date,
+  'billNo': instance.billNo,
+  'comments': instance.comments,
+  'employees': instance.employees?.toJson(),
+  'customers': instance.customers?.toJson(),
+  'cargo_transporters': instance.cargo_transporters?.toJson(),
+  'status': _$InvoiceStatusEnumMap[instance.status],
+  'quantity': instance.quantity,
+  'extendedPrice': instance.extendedPrice,
+  'refundQuantity': instance.refundQuantity,
+  'extendedRefundPrice': instance.extendedRefundPrice,
+  'extendedDiscount': instance.extendedDiscount,
+  'extendedNetPrice': instance.extendedNetPrice,
+  'extendedNetQuantity': instance.extendedNetQuantity,
+  'customers_request_sizes_details':
+      instance.customers_request_sizes_details?.map((e) => e.toJson()).toList(),
+  'customers_request_sizes_details_count':
+      instance.customers_request_sizes_details_count,
+};
 
 const _$TermsEnumMap = {
   Terms.none: '0',
@@ -96,44 +105,50 @@ const _$InvoiceStatusEnumMap = {
 };
 
 CustomerRequestSizeDetails _$CustomerRequestSizeDetailsFromJson(
-        Map<String, dynamic> json) =>
+  Map<String, dynamic> json,
+) =>
     CustomerRequestSizeDetails()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
-      ..products = json['products'] == null
-          ? null
-          : Product.fromJson(json['products'] as Map<String, dynamic>)
-      ..warehouse = json['warehouse'] == null
-          ? null
-          : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>)
+      ..products =
+          json['products'] == null
+              ? null
+              : Product.fromJson(json['products'] as Map<String, dynamic>)
+      ..warehouse =
+          json['warehouse'] == null
+              ? null
+              : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>)
       ..quantity = (json['quantity'] as num?)?.toDouble()
       ..unitPrice = (json['unitPrice'] as num?)?.toDouble()
       ..discount = (json['discount'] as num?)?.toDouble()
       ..price = (json['price'] as num?)?.toDouble()
       ..comments = json['comments'] as String?
-      ..customers_request_sizes = json['customers_request_sizes'] == null
-          ? null
-          : CustomerRequestSize.fromJson(
-              json['customers_request_sizes'] as Map<String, dynamic>)
-      ..sizes = json['sizes'] == null
-          ? null
-          : ProductSize.fromJson(json['sizes'] as Map<String, dynamic>)
+      ..customers_request_sizes =
+          json['customers_request_sizes'] == null
+              ? null
+              : CustomerRequestSize.fromJson(
+                json['customers_request_sizes'] as Map<String, dynamic>,
+              )
+      ..sizes =
+          json['sizes'] == null
+              ? null
+              : ProductSize.fromJson(json['sizes'] as Map<String, dynamic>)
       ..date = json['date'] as String?;
 
 Map<String, dynamic> _$CustomerRequestSizeDetailsToJson(
-        CustomerRequestSizeDetails instance) =>
-    <String, dynamic>{
-      'iD': instance.iD,
-      'delete': instance.delete,
-      'products': instance.products?.toJson(),
-      'warehouse': instance.warehouse?.toJson(),
-      'quantity': instance.quantity,
-      'unitPrice': instance.unitPrice,
-      'discount': instance.discount,
-      'price': instance.price,
-      'comments': instance.comments,
-      'customers_request_sizes': instance.customers_request_sizes?.toJson(),
-      'sizes': instance.sizes?.toJson(),
-      'date': instance.date,
-    };
+  CustomerRequestSizeDetails instance,
+) => <String, dynamic>{
+  'iD': instance.iD,
+  'delete': instance.delete,
+  'products': instance.products?.toJson(),
+  'warehouse': instance.warehouse?.toJson(),
+  'quantity': instance.quantity,
+  'unitPrice': instance.unitPrice,
+  'discount': instance.discount,
+  'price': instance.price,
+  'comments': instance.comments,
+  'customers_request_sizes': instance.customers_request_sizes?.toJson(),
+  'sizes': instance.sizes?.toJson(),
+  'date': instance.date,
+};

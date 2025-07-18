@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_enum_icon.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../v_non_view_object.dart';
@@ -113,7 +114,11 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   }
 
   @override
-  Widget? getCustomViewResponseWidget(BuildContext context) {
+  dynamic getCustomViewResponseWidget(
+    BuildContext context, {
+    required SliverApiWithStaticMixin state,
+    List<dynamic>? items,
+  }) {
     debugPrint(
       "getCustomViewSingleResponseWidget ${responseListAnalysis?.length}",
     );
@@ -158,7 +163,6 @@ class ChartRecordAnalysis<T extends ViewAbstract>
     //   ],
     // );
   }
-
 
   @override
   Widget? getCustomViewTitleWidget(

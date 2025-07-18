@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -33,9 +34,11 @@ class GSM extends ViewAbstract<GSM> {
   }
 
   @override
-  List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+  List<Widget>? getCustomBottomWidget(
+    BuildContext context, {
+    ServerActions? action,
+    ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+  }) {
     if (action == ServerActions.add ||
         action == ServerActions.edit ||
         action == ServerActions.list) {
@@ -43,22 +46,29 @@ class GSM extends ViewAbstract<GSM> {
     }
     return [
       SliverApiMixinViewAbstractWidget(
-          isGridView: true,
-          scrollDirection: Axis.horizontal,
-          toListObject: Product().getSelfInstanceWithSimilarOption(
-              context: context,
-              obj: this,
-              copyWith: RequestOptions(countPerPage: 5))),
+        cardType: CardItemType.grid,
+        scrollDirection: Axis.horizontal,
+        toListObject: Product().getSelfInstanceWithSimilarOption(
+          context: context,
+          obj: this,
+          copyWith: RequestOptions(countPerPage: 5),
+        ),
+      ),
     ];
   }
 
   @override
-  GSM? getSelfNewInstanceFileImporter(
-      {required BuildContext context, String? field, value}) {
+  GSM? getSelfNewInstanceFileImporter({
+    required BuildContext context,
+    String? field,
+    value,
+  }) {
     if (value == null) return null;
-    FilterableDataApi? filterData = context
-        .read<FilterableListApiProvider<FilterableData>>()
-        .getLastFilterableData() as FilterableDataApi?;
+    FilterableDataApi? filterData =
+        context
+                .read<FilterableListApiProvider<FilterableData>>()
+                .getLastFilterableData()
+            as FilterableDataApi?;
     if (value == null) {
       return null;
     }
@@ -79,13 +89,17 @@ class GSM extends ViewAbstract<GSM> {
       return this;
     } else {
       throw Exception(
-          "${getMainHeaderLabelTextOnly(context)}: Cannot convert value of gsm to => $value to a number");
+        "${getMainHeaderLabelTextOnly(context)}: Cannot convert value of gsm to => $value to a number",
+      );
     }
   }
 
   @override
-  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      {"products": List<Product>.empty(), "products_count": 0, "gsm": 0};
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+    "products": List<Product>.empty(),
+    "products_count": 0,
+    "gsm": 0,
+  };
 
   @override
   String getForeignKeyName() {
@@ -122,8 +136,8 @@ class GSM extends ViewAbstract<GSM> {
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "gsm": TextInputType.number,
-      };
+    "gsm": TextInputType.number,
+  };
   @override
   Map<String, int> getTextInputMaxLengthMap() => {"gsm": 4};
 
@@ -138,14 +152,12 @@ class GSM extends ViewAbstract<GSM> {
   }
 
   @override
-  Map<String, IconData> getFieldIconDataMap() => {
-        "gsm": Icons.line_weight,
-      };
+  Map<String, IconData> getFieldIconDataMap() => {"gsm": Icons.line_weight};
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "gsm": AppLocalizations.of(context)!.gsm,
-      };
+    "gsm": AppLocalizations.of(context)!.gsm,
+  };
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
@@ -159,8 +171,9 @@ class GSM extends ViewAbstract<GSM> {
   }
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() =>
-      {"gsm": true};
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {
+    "gsm": true,
+  };
 
   @override
   Map<String, double> getTextInputMaxValidateMap() => {};
@@ -186,9 +199,10 @@ class GSM extends ViewAbstract<GSM> {
   }
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return RequestOptions().addSortBy("gsm", SortByType.ASC);
   }
 

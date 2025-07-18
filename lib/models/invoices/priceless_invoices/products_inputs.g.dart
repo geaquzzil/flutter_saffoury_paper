@@ -6,44 +6,58 @@ part of 'products_inputs.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ProductInput _$ProductInputFromJson(Map<String, dynamic> json) => ProductInput()
-  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
-  ..serverStatus = json['serverStatus'] as String?
-  ..fb_edit = json['fb_edit'] as String?
-  ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
-  ..TermsID = (json['TermsID'] as num?)?.toInt()
-  ..date = json['date'] as String?
-  ..billNo = InvoiceMaster.intFromString(json['billNo'])
-  ..comments = json['comments'] as String?
-  ..employees = json['employees'] == null
-      ? null
-      : Employee.fromJson(json['employees'] as Map<String, dynamic>)
-  ..customers = json['customers'] == null
-      ? null
-      : Customer.fromJson(json['customers'] as Map<String, dynamic>)
-  ..cargo_transporters = json['cargo_transporters'] == null
-      ? null
-      : CargoTransporter.fromJson(
-          json['cargo_transporters'] as Map<String, dynamic>)
-  ..status = $enumDecodeNullable(_$InvoiceStatusEnumMap, json['status'])
-  ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
-  ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
-  ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
-  ..extendedRefundPrice =
-      InvoiceMaster.convertToDouble(json['extendedRefundPrice'])
-  ..extendedDiscount = InvoiceMaster.convertToDouble(json['extendedDiscount'])
-  ..extendedNetPrice = InvoiceMaster.convertToDouble(json['extendedNetPrice'])
-  ..extendedNetQuantity =
-      InvoiceMaster.convertToDouble(json['extendedNetQuantity'])
-  ..products_inputs_details =
-      (json['products_inputs_details'] as List<dynamic>?)
-          ?.map((e) => ProductInputDetails.fromJson(e as Map<String, dynamic>))
-          .toList()
-  ..products_inputs_details_count =
-      (json['products_inputs_details_count'] as num?)?.toInt()
-  ..warehouse = json['warehouse'] == null
-      ? null
-      : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>);
+ProductInput _$ProductInputFromJson(Map<String, dynamic> json) =>
+    ProductInput()
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
+      ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
+      ..TermsID = (json['TermsID'] as num?)?.toInt()
+      ..date = json['date'] as String?
+      ..billNo = InvoiceMaster.intFromString(json['billNo'])
+      ..comments = json['comments'] as String?
+      ..employees =
+          json['employees'] == null
+              ? null
+              : Employee.fromJson(json['employees'] as Map<String, dynamic>)
+      ..customers =
+          json['customers'] == null
+              ? null
+              : Customer.fromJson(json['customers'] as Map<String, dynamic>)
+      ..cargo_transporters =
+          json['cargo_transporters'] == null
+              ? null
+              : CargoTransporter.fromJson(
+                json['cargo_transporters'] as Map<String, dynamic>,
+              )
+      ..status = $enumDecodeNullable(_$InvoiceStatusEnumMap, json['status'])
+      ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
+      ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
+      ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
+      ..extendedRefundPrice = InvoiceMaster.convertToDouble(
+        json['extendedRefundPrice'],
+      )
+      ..extendedDiscount = InvoiceMaster.convertToDouble(
+        json['extendedDiscount'],
+      )
+      ..extendedNetPrice = InvoiceMaster.convertToDouble(
+        json['extendedNetPrice'],
+      )
+      ..extendedNetQuantity = InvoiceMaster.convertToDouble(
+        json['extendedNetQuantity'],
+      )
+      ..products_inputs_details =
+          (json['products_inputs_details'] as List<dynamic>?)
+              ?.map(
+                (e) => ProductInputDetails.fromJson(e as Map<String, dynamic>),
+              )
+              .toList()
+      ..products_inputs_details_count =
+          (json['products_inputs_details_count'] as num?)?.toInt()
+      ..warehouse =
+          json['warehouse'] == null
+              ? null
+              : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$ProductInputToJson(ProductInput instance) =>
     <String, dynamic>{
@@ -96,33 +110,37 @@ ProductInputDetails _$ProductInputDetailsFromJson(Map<String, dynamic> json) =>
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
-      ..products = json['products'] == null
-          ? null
-          : Product.fromJson(json['products'] as Map<String, dynamic>)
-      ..warehouse = json['warehouse'] == null
-          ? null
-          : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>)
+      ..products =
+          json['products'] == null
+              ? null
+              : Product.fromJson(json['products'] as Map<String, dynamic>)
+      ..warehouse =
+          json['warehouse'] == null
+              ? null
+              : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>)
       ..quantity = (json['quantity'] as num?)?.toDouble()
       ..unitPrice = (json['unitPrice'] as num?)?.toDouble()
       ..discount = (json['discount'] as num?)?.toDouble()
       ..price = (json['price'] as num?)?.toDouble()
       ..comments = json['comments'] as String?
-      ..products_inputs = json['products_inputs'] == null
-          ? null
-          : ProductInput.fromJson(
-              json['products_inputs'] as Map<String, dynamic>);
+      ..products_inputs =
+          json['products_inputs'] == null
+              ? null
+              : ProductInput.fromJson(
+                json['products_inputs'] as Map<String, dynamic>,
+              );
 
 Map<String, dynamic> _$ProductInputDetailsToJson(
-        ProductInputDetails instance) =>
-    <String, dynamic>{
-      'iD': instance.iD,
-      'delete': instance.delete,
-      'products': instance.products?.toJson(),
-      'warehouse': instance.warehouse?.toJson(),
-      'quantity': instance.quantity,
-      'unitPrice': instance.unitPrice,
-      'discount': instance.discount,
-      'price': instance.price,
-      'comments': instance.comments,
-      'products_inputs': instance.products_inputs?.toJson(),
-    };
+  ProductInputDetails instance,
+) => <String, dynamic>{
+  'iD': instance.iD,
+  'delete': instance.delete,
+  'products': instance.products?.toJson(),
+  'warehouse': instance.warehouse?.toJson(),
+  'quantity': instance.quantity,
+  'unitPrice': instance.unitPrice,
+  'discount': instance.discount,
+  'price': instance.price,
+  'comments': instance.comments,
+  'products_inputs': instance.products_inputs?.toJson(),
+};

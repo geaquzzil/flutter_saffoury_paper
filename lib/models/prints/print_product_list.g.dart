@@ -11,14 +11,18 @@ PrintProductList _$PrintProductListFromJson(Map<String, dynamic> json) =>
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
-      ..printerOptions = json['printerOptions'] == null
-          ? null
-          : PrinterOptions.fromJson(
-              json['printerOptions'] as Map<String, dynamic>)
-      ..reportOptions = json['reportOptions'] == null
-          ? null
-          : ReportOptions.fromJson(
-              json['reportOptions'] as Map<String, dynamic>)
+      ..printerOptions =
+          json['printerOptions'] == null
+              ? null
+              : PrinterOptions.fromJson(
+                json['printerOptions'] as Map<String, dynamic>,
+              )
+      ..reportOptions =
+          json['reportOptions'] == null
+              ? null
+              : ReportOptions.fromJson(
+                json['reportOptions'] as Map<String, dynamic>,
+              )
       ..hideQrCode = json['hideQrCode'] as bool?
       ..primaryColor = json['primaryColor'] as String?
       ..secondaryColor = json['secondaryColor'] as String?
@@ -36,8 +40,10 @@ PrintProductList _$PrintProductListFromJson(Map<String, dynamic> json) =>
       ..hideUnitPriceAndTotalPrice = json['hideUnitPriceAndTotalPrice'] as bool?
       ..sortByField = json['sortByField'] as String?
       ..groupedByField = json['groupedByField'] as String?
-      ..sortByType =
-          $enumDecodeNullable(_$SortByTypeEnumMap, json['sortByType']);
+      ..sortByType = $enumDecodeNullable(
+        _$SortByTypeEnumMap,
+        json['sortByType'],
+      );
 
 Map<String, dynamic> _$PrintProductListToJson(PrintProductList instance) =>
     <String, dynamic>{
@@ -65,7 +71,4 @@ Map<String, dynamic> _$PrintProductListToJson(PrintProductList instance) =>
       'sortByType': _$SortByTypeEnumMap[instance.sortByType],
     };
 
-const _$SortByTypeEnumMap = {
-  SortByType.ASC: 'ASC',
-  SortByType.DESC: 'DESC',
-};
+const _$SortByTypeEnumMap = {SortByType.ASC: 'ASC', SortByType.DESC: 'DESC'};

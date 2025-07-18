@@ -11,12 +11,16 @@ SizesCutRequest _$SizesCutRequestFromJson(Map<String, dynamic> json) =>
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
-      ..cut_requests = json['cut_requests'] == null
-          ? null
-          : CutRequest.fromJson(json['cut_requests'] as Map<String, dynamic>)
-      ..sizes = json['sizes'] == null
-          ? null
-          : ProductSize.fromJson(json['sizes'] as Map<String, dynamic>)
+      ..cut_requests =
+          json['cut_requests'] == null
+              ? null
+              : CutRequest.fromJson(
+                json['cut_requests'] as Map<String, dynamic>,
+              )
+      ..sizes =
+          json['sizes'] == null
+              ? null
+              : ProductSize.fromJson(json['sizes'] as Map<String, dynamic>)
       ..quantity = (json['quantity'] as num?)?.toDouble();
 
 Map<String, dynamic> _$SizesCutRequestToJson(SizesCutRequest instance) =>

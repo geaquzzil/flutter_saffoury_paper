@@ -11,12 +11,14 @@ WarehouseEmployee _$WarehouseEmployeeFromJson(Map<String, dynamic> json) =>
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
-      ..warehouse = json['warehouse'] == null
-          ? null
-          : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>)
-      ..employees = json['employees'] == null
-          ? null
-          : Employee.fromJson(json['employees'] as Map<String, dynamic>);
+      ..warehouse =
+          json['warehouse'] == null
+              ? null
+              : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>)
+      ..employees =
+          json['employees'] == null
+              ? null
+              : Employee.fromJson(json['employees'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$WarehouseEmployeeToJson(WarehouseEmployee instance) =>
     <String, dynamic>{

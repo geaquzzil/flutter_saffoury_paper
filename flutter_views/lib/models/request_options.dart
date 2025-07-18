@@ -91,7 +91,7 @@ class RequestOptions {
 
   dynamic requestObjcets;
   dynamic requestLists;
-
+  bool disablePaging;
   RequestOptions({
     this.betweenMap,
     this.countPerPage = 20,
@@ -101,6 +101,7 @@ class RequestOptions {
     this.groupBy,
     this.limit,
     this.page = 0,
+    this.disablePaging = false,
     this.requestLists,
     this.requestObjcets,
     this.searchByField,
@@ -125,6 +126,7 @@ class RequestOptions {
       searchQuery: option?.searchQuery,
       sortBy: option?.sortBy,
       sumBy: option?.sumBy,
+      disablePaging: option?.disablePaging,
     );
   }
 
@@ -143,6 +145,7 @@ class RequestOptions {
     String? searchQuery,
     SortFieldValue? sortBy,
     List<String>? sumBy,
+    bool? disablePaging,
   }) {
     return RequestOptions(
       betweenMap: betweenMap ?? this.betweenMap,
@@ -160,7 +163,17 @@ class RequestOptions {
       searchQuery: searchQuery ?? this.searchQuery,
       sortBy: sortBy ?? this.sortBy,
       sumBy: sumBy ?? this.sumBy,
+      disablePaging: disablePaging ?? this.disablePaging,
     );
+  }
+
+  bool isPagingDisabled() {
+    return disablePaging;
+  }
+
+  RequestOptions setDisablePaging({bool? val}) {
+    disablePaging = val ?? true;
+    return this;
   }
 
   Map<String, String> _getGroupBy() {
@@ -236,9 +249,10 @@ class RequestOptions {
 
   Map<String, dynamic> getRequestParams() {
     return {
-      if (page != null) 'page': "$page",
-      if (limit != null) 'limit': "$limit",
-      if (countPerPage != null || countPerPageWhenSearch != null)
+      if (!disablePaging && page != null) 'page': "$page",
+      if (!disablePaging && limit != null) 'limit': "$limit",
+      if (!disablePaging &&
+          (countPerPage != null || countPerPageWhenSearch != null))
         'countPerPage': countPerPageWhenSearch != null
             ? "$countPerPageWhenSearch"
             : "$countPerPage",

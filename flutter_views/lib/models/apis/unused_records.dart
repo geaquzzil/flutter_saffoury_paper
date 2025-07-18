@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/models/v_non_view_object.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/buttons/api_button.dart';
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 //todo let api changed from [ids] to list:[ids]
@@ -23,14 +24,16 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
     return UnusedRecords();
   }
 
-  UnusedRecords.init(T this.viewAbstract);
+  UnusedRecords.init(T this.viewAbstract, {this.listObjects});
 
   @override
   RequestOptions? getRequestOption({
     required ServerActions action,
     RequestOptions? generatedOptionFromListCall,
   }) {
-    return null;
+    return RequestOptions()
+        .addSearchByField("requireObjcets", "true")
+        .setDisablePaging();
   }
 
   @override
@@ -54,9 +57,10 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
   @override
   UnusedRecords fromJsonViewAbstract(Map<String, dynamic> json) {
     return UnusedRecords()
-      ..listObjects = (json['listObjects'] as List<ViewAbstract<T>>?)
+      ..listObjects = (json['listObjects'] as List<dynamic>?)
           ?.map((e) => e.fromJsonViewAbstract(e as Map<String, dynamic>))
           .toList()
+          .cast()
       ..list = List.from(json['list']);
   }
 
@@ -84,11 +88,17 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
   }
 
   @override
-  Widget? getCustomViewResponseWidget(BuildContext context) {
-    return CardBackgroundWithTitle(
-      title: AppLocalizations.of(context)!.unUsed,
-      leading: Icons.info_outline,
-      child: getDecription(context, this),
+  dynamic getCustomViewResponseWidget(
+    BuildContext context, {
+    required SliverApiWithStaticMixin state,
+    List<dynamic>? items,
+  }) {
+    return SliverToBoxAdapter(
+      child: CardBackgroundWithTitle(
+        title: AppLocalizations.of(context)!.unUsed,
+        leading: Icons.info_outline,
+        child: getDecription(context, this),
+      ),
     );
   }
 
@@ -133,7 +143,6 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
   Widget getTitle(BuildContext context) {
     return Text(AppLocalizations.of(context)!.unUsed);
   }
-
 
   @override
   Widget? getCustomViewTitleWidget(

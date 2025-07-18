@@ -7,6 +7,7 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/today_text.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/components/search_componenets_editable.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 
 class CutRequestWorker extends CutRequest {
@@ -24,15 +25,14 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage> {
   String? _searchQuery;
 
   @override
-  Widget? getAppbarTitle(
-      {bool? firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
+  Widget? getAppbarTitle({
+    bool? firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  }) {
     if (firstPane == null) {
       return ListTile(
-        leading: TodayTextTicker(
-          requireTime: true,
-        ),
+        leading: TodayTextTicker(requireTime: true),
         title: Card(
           child: SearchWidgetComponentEditable(
             initialSearch: _searchQuery,
@@ -62,10 +62,9 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage> {
   Widget getPrimaryText(String text, {withPadding = true}) {
     Widget t = Text(
       text,
-      style: Theme.of(context)
-          .textTheme
-          .bodyLarge!
-          .copyWith(color: Theme.of(context).colorScheme.secondary),
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+        color: Theme.of(context).colorScheme.secondary,
+      ),
     );
     if (withPadding) {
       return t.padding();
@@ -89,53 +88,59 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage> {
   bool setClipRect(bool? firstPane) => false;
 
   @override
-  Widget? getFloatingActionButton(
-      {bool? firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
+  Widget? getFloatingActionButton({
+    bool? firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  }) {
     return null;
   }
 
   @override
-  Widget? getPaneDraggableExpandedHeader(
-      {required bool firstPane, TabControllerHelper? tab}) {
+  Widget? getPaneDraggableExpandedHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) {
     return null;
   }
 
   @override
-  Widget? getPaneDraggableHeader(
-      {required bool firstPane, TabControllerHelper? tab}) {
+  Widget? getPaneDraggableHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) {
     return null;
   }
 
   @override
-  List<Widget>? getPane(
-      {required bool firstPane,
-      ScrollController? controler,
-      TabControllerHelper? tab}) {
+  List<Widget>? getPane({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+  }) {
     if (firstPane) {
       return [
         SliverToBoxAdapter(
           //todo translate
           child: getPrimaryText(
-              "PENDING CUT REQUEST\n SCAN WITH Code Scanner to begin progress "),
+            "PENDING CUT REQUEST\n SCAN WITH Code Scanner to begin progress ",
+          ),
         ),
         SliverApiMixinViewAbstractWidget(
-            isGridView: false,
-            scrollDirection: Axis.vertical,
-            enableSelection: false,
-            // hasCustomSeperater: Divider(),
-            isSliver: true,
-            searchString: _searchQuery,
-            hasCustomCardBuilder: (index, item) {
-              CutRequest cutRequest = item as CutRequest;
-              return CutRequestListCard(
-                item: cutRequest,
-              );
-            },
-            toListObject: CutRequestWorker().setRequestOption(
-                option: RequestOptions()
-                    .addSearchByField("cut_status", "PENDING"))),
+          cardType: CardItemType.list,
+          scrollDirection: Axis.vertical,
+          enableSelection: false,
+          // hasCustomSeperater: Divider(),
+          isSliver: true,
+          searchString: _searchQuery,
+          hasCustomCardItemBuilder: (index, item) {
+            CutRequest cutRequest = item as CutRequest;
+            return CutRequestListCard(item: cutRequest);
+          },
+          toListObject: CutRequestWorker().setRequestOption(
+            option: RequestOptions().addSearchByField("cut_status", "PENDING"),
+          ),
+        ),
       ];
     }
     return [
@@ -148,28 +153,36 @@ class _CutWorkerPageState extends BasePageState<CutWorkerPage> {
             Expanded(
               child: Card(
                 child: SliverApiMixinViewAbstractWidget(
-                    searchString: _searchQuery,
-                    isSliver: false,
-                    scrollDirection: Axis.vertical,
-                    toListObject: CutRequestWorker().setRequestOption(
-                        option: RequestOptions()
-                            .addSearchByField("cut_status", "PROCESSING"))),
+                  searchString: _searchQuery,
+                  isSliver: false,
+                  scrollDirection: Axis.vertical,
+                  toListObject: CutRequestWorker().setRequestOption(
+                    option: RequestOptions().addSearchByField(
+                      "cut_status",
+                      "PROCESSING",
+                    ),
+                  ),
+                ),
               ),
             ),
             //todo translate
             getPrimaryText("COMPLETED WITH IN A WEEK"),
             Expanded(
               child: SliverApiMixinViewAbstractWidget(
-                  searchString: _searchQuery,
-                  isSliver: false,
-                  scrollDirection: Axis.vertical,
-                  toListObject: CutRequestWorker().setRequestOption(
-                      option: RequestOptions()
-                          .addSearchByField("cut_status", "COMPLETED"))),
+                searchString: _searchQuery,
+                isSliver: false,
+                scrollDirection: Axis.vertical,
+                toListObject: CutRequestWorker().setRequestOption(
+                  option: RequestOptions().addSearchByField(
+                    "cut_status",
+                    "COMPLETED",
+                  ),
+                ),
+              ),
             ),
           ],
         ),
-      )
+      ),
     ];
   }
 }

@@ -149,7 +149,7 @@ class StaggerdGridViewWidget extends StatelessWidget {
   ///int 2: is suggested crossCount for StraggeredGrid
   ///int 3: is suggested crossCountMod
   List<StaggeredGridTile> Function(
-    int crossAxisCount,
+    int fullCrossAxisCount,
     int crossCountFundCalc,
     int crossAxisCountMod,
     num heightMainAxisCellCount,
@@ -162,7 +162,7 @@ class StaggerdGridViewWidget extends StatelessWidget {
     this.childAspectRatio = 1,
     this.wrapWithCard = false,
     this.builder,
-    this.isSliver=false,
+    this.isSliver = false,
     this.list,
   }) : assert(list != null || builder != null);
 
@@ -170,7 +170,7 @@ class StaggerdGridViewWidget extends StatelessWidget {
 
   int getCrossAxisCount(double width) {
     if (width < 500 && width > 0) {
-      return 2;
+      return 1;
     } else if (width < 1000 && width > 500) {
       return 3;
     } else {
@@ -182,7 +182,7 @@ class StaggerdGridViewWidget extends StatelessWidget {
 
   num getHeightMainAxisCellCount(double height) {
     if (height < 500 && height > 0) {
-      return 1;
+      return .5;
     } else if (height < 1000 && height > 500) {
       return 1;
     } else {
@@ -219,11 +219,14 @@ class StaggerdGridViewWidget extends StatelessWidget {
             getHeightMainAxisCellCount(constraints.maxHeight),
           );
         }
-
+        if (isSliver) {
+          //  vcbx
+        }
         return StaggeredGrid.count(
           crossAxisCount: crossAxisCount,
           mainAxisSpacing: 2,
           crossAxisSpacing: 2,
+          // axisDirection: AxisDirection.down,
           children: wrapWithCard
               ? list!.map((e) => Card(child: e)).toList()
               : list!,

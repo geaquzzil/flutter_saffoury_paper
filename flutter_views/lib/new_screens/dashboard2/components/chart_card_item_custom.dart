@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/details/list_details.dart';
 import 'package:intl/intl.dart';
@@ -25,21 +26,21 @@ class ChartCardItemCustom extends StatelessWidget {
   final OverlayPortalController _tooltipController = OverlayPortalController();
 
   void Function()? onTap;
-  ChartCardItemCustom(
-      {this.color,
-      required this.title,
-      required this.description,
-      this.icon,
-      this.footer,
-      this.animation,
-      this.list,
-      this.listGrowthRate,
-      this.isSmall = true,
-      this.footerRight,
-      this.footerWidget,
-      this.onTap,
-      this.footerRightWidget})
-      : super(key: ValueKey(title + description));
+  ChartCardItemCustom({
+    this.color,
+    required this.title,
+    required this.description,
+    this.icon,
+    this.footer,
+    this.animation,
+    this.list,
+    this.listGrowthRate,
+    this.isSmall = true,
+    this.footerRight,
+    this.footerWidget,
+    this.onTap,
+    this.footerRightWidget,
+  }) : super(key: ValueKey(title + description));
 
   // final CloudStorageInfo info;
   Widget _animationWidget({required Widget child}) {
@@ -47,10 +48,14 @@ class ChartCardItemCustom extends StatelessWidget {
         ? FadeTransition(
             opacity: animation!,
             child: SizeTransition(
-                axisAlignment: 1.0, sizeFactor: animation!, child: child))
+              axisAlignment: 1.0,
+              sizeFactor: animation!,
+              child: child,
+            ),
+          )
         : !isSmall
-            ? child
-            : Container();
+        ? child
+        : Container();
   }
 
   @override
@@ -92,6 +97,7 @@ class ChartCardItemCustom extends StatelessWidget {
     if (onTap != null) {
       return InkWell(onTap: onTap, child: card);
     }
+    // return card;
     return CustomPopupMenu(
       pressType: PressType.singleClick,
       position: PreferredPosition.bottom,
@@ -212,14 +218,21 @@ class ChartCardItemCustom extends StatelessWidget {
   }
 
   Widget getBody(BuildContext context) {
-    return Card(
-      color: color == null
-          ? null
-          : ElevationOverlay.colorWithOverlay(
-              Theme.of(context).colorScheme.surface, color!, 3),
+    return Cards(
+      type: CardType.normal,
+      enableScaling: true,
+      toScaleDown: true,
+      colorWithOverlay: color,
+      // color: color == null
+      //     ? null
+      //     : ElevationOverlay.colorWithOverlay(
+      //         Theme.of(context).colorScheme.surface,
+      //         color!,
+      //         3,
+      //       ),
 
       // color?.withOpacity(0.2),
-      child: Container(
+      child: (b) => Container(
         padding: const EdgeInsets.all(defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,8 +267,9 @@ class ChartCardItemCustom extends StatelessWidget {
                 dataLabelMapper: (item, idx) => item.total?.toCurrencyFormat(),
                 xValueMapper: (item, value) {
                   // debugPrint("ChartItem $item");
-                  return DateFormat.yMMM()
-                      .format(DateTime(item.year!, item.month!, item.day ?? 1));
+                  return DateFormat.yMMM().format(
+                    DateTime(item.year!, item.month!, item.day ?? 1),
+                  );
                 },
                 yValueMapper: (item, n) => item.total,
               ),
@@ -264,13 +278,18 @@ class ChartCardItemCustom extends StatelessWidget {
               children: [
                 if (footerWidget != null) footerWidget!,
                 if (footer != null)
-                  Text(footer!,
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Theme.of(context).colorScheme.secondary)),
+                  Text(
+                    footer!,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
                 if (footerRight != null)
-                  Text(footerRight!,
-                      style: Theme.of(context).textTheme.bodySmall!),
-                if (footerRightWidget != null) footerRightWidget!
+                  Text(
+                    footerRight!,
+                    style: Theme.of(context).textTheme.bodySmall!,
+                  ),
+                if (footerRightWidget != null) footerRightWidget!,
               ],
             ),
             // if (!isSmall)

@@ -14,7 +14,7 @@ import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
-import 'package:flutter_view_controller/models/apis/date_object.dart';
+import 'package:flutter_view_controller/models/apis/unused_records.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -26,6 +26,7 @@ import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_m
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
@@ -59,13 +60,12 @@ class Order extends InvoiceMaster<Order>
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      super.getMirrorFieldsMapNewInstance()
-        ..addAll({
-          "order_details": List<OrderDetails>.empty(),
-          "orders_details_count": 0,
-          "orders_refunds": List<OrderRefund>.empty(),
-          "orders_refunds_count": 0
-        });
+      super.getMirrorFieldsMapNewInstance()..addAll({
+        "order_details": List<OrderDetails>.empty(),
+        "orders_details_count": 0,
+        "orders_refunds": List<OrderRefund>.empty(),
+        "orders_refunds_count": 0,
+      });
 
   @override
   String? getTableNameApi() => "orders";
@@ -82,17 +82,23 @@ class Order extends InvoiceMaster<Order>
   Map<String, dynamic> toJsonViewAbstract() => toJson();
 
   @override
-  List<TabControllerHelper> getCustomTabList(BuildContext context,
-      {ServerActions? action}) {
+  List<TabControllerHelper> getCustomTabList(
+    BuildContext context, {
+    ServerActions? action,
+  }) {
     return [
       TabControllerHelper(
         AppLocalizations.of(context)!.findSimilar,
         widget: ListApiAutoRestWidget(
           autoRest: AutoRest<Order>(
-              obj: Order().setRequestOption(
-                  option: RequestOptions()
-                      .addSearchByField("CustomerID", customers?.iD)),
-              key: "CustomerByOrder${customers?.iD}"),
+            obj: Order().setRequestOption(
+              option: RequestOptions().addSearchByField(
+                "CustomerID",
+                customers?.iD,
+              ),
+            ),
+            key: "CustomerByOrder${customers?.iD}",
+          ),
         ),
       ),
       TabControllerHelper(
@@ -112,30 +118,35 @@ class Order extends InvoiceMaster<Order>
     return ChartDateChooser<EnteryInteval>(
       obj: EnteryInteval.monthy,
       onSelected: (obj) => ListHorizontalCustomViewApiAutoRestWidget(
-          onResponseAddWidget: ((response) {
-            ChartRecordAnalysis i = response as ChartRecordAnalysis;
-            double total = i.getTotalListAnalysis();
-            return Column(
-              children: [
-                // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
-                //     titleString: "TEST1 ",
-                //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
-                StorageInfoCardCustom(
-                    title: AppLocalizations.of(context)!.total,
-                    description: total.toCurrencyFormat(),
-                    trailing: const Text("kg"),
-                    svgSrc: Icons.monitor_weight),
-                StorageInfoCardCustom(
-                    title: AppLocalizations.of(context)!.balance,
-                    description: customers?.balance?.toCurrencyFormat() ?? "0",
-                    trailing: const Text("trailing"),
-                    svgSrc: Icons.balance),
-              ],
-            );
-          }),
-          autoRest: ChartRecordAnalysis.init(Order(),
-              enteryInteval: obj ?? EnteryInteval.monthy,
-              customAction: {"CustomerID": customers?.iD})),
+        onResponseAddWidget: ((response) {
+          ChartRecordAnalysis i = response as ChartRecordAnalysis;
+          double total = i.getTotalListAnalysis();
+          return Column(
+            children: [
+              // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
+              //     titleString: "TEST1 ",
+              //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
+              StorageInfoCardCustom(
+                title: AppLocalizations.of(context)!.total,
+                description: total.toCurrencyFormat(),
+                trailing: const Text("kg"),
+                svgSrc: Icons.monitor_weight,
+              ),
+              StorageInfoCardCustom(
+                title: AppLocalizations.of(context)!.balance,
+                description: customers?.balance?.toCurrencyFormat() ?? "0",
+                trailing: const Text("trailing"),
+                svgSrc: Icons.balance,
+              ),
+            ],
+          );
+        }),
+        autoRest: ChartRecordAnalysis.init(
+          Order(),
+          enteryInteval: obj ?? EnteryInteval.monthy,
+          customAction: {"CustomerID": customers?.iD},
+        ),
+      ),
     );
   }
 
@@ -144,7 +155,8 @@ class Order extends InvoiceMaster<Order>
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getCartableInvoiceSummary(
-      BuildContext context) {
+    BuildContext context,
+  ) {
     double? totalPrice = getTotalPriceFromList();
     double? totalDiscount = getTotalDiscountFromList();
     double? totalQuantity = getTotalQuantityFromList();
@@ -153,19 +165,36 @@ class Order extends InvoiceMaster<Order>
     // [this].getTotalQuantityGroupedFormattedText(context);
     return [
       InvoiceTotalTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
-          description: totalPrice?.toCurrencyFormatFromSetting(context) ?? "0"),
+        title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
+        description: totalPrice?.toCurrencyFormatFromSetting(context) ?? "0",
+      ),
       InvoiceTotalTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.discount.toUpperCase(),
-          description: totalDiscount?.toStringAsFixed(2) ?? "0"),
+        title: AppLocalizations.of(context)!.discount.toUpperCase(),
+        description: totalDiscount?.toStringAsFixed(2) ?? "0",
+      ),
       InvoiceTotalTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.quantity.toUpperCase(),
-          description:
-              orders_details.getTotalQuantityGroupedFormattedText(context)),
+        title: AppLocalizations.of(context)!.quantity.toUpperCase(),
+        description: orders_details.getTotalQuantityGroupedFormattedText(
+          context,
+        ),
+      ),
       InvoiceTotalTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
-          description: totalNetPrice.toCurrencyFormatFromSetting(context),
-          hexColor: getPrintablePrimaryColor(null)),
+        title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
+        description: totalNetPrice.toCurrencyFormatFromSetting(context),
+        hexColor: getPrintablePrimaryColor(null),
+      ),
+    ];
+  }
+
+  @override
+  List<Widget>? getHomeListHeaderWidgetList(BuildContext context) {
+    return [
+      SliverApiMixinViewAbstractWidget(
+        // cardType: CardType.grid,
+        isSliver: true,
+        scrollDirection: Axis.horizontal,
+        toListObject: UnusedRecords.init(this),
+      ),
     ];
   }
 
@@ -176,13 +205,18 @@ class Order extends InvoiceMaster<Order>
 
   @override
   Widget onCartCheckout(
-      BuildContext context, List<CartableProductItemInterface> details) {
+    BuildContext context,
+    List<CartableProductItemInterface> details,
+  ) {
     return BaseEditNewPage(viewAbstract: this);
   }
 
   @override
   void onCartItemChanged(
-      BuildContext context, int index, CartableInvoiceDetailsInterface cii) {
+    BuildContext context,
+    int index,
+    CartableInvoiceDetailsInterface cii,
+  ) {
     if (index != -1) {
       orders_details![index] = cii as OrderDetails;
     }
@@ -196,29 +230,42 @@ class Order extends InvoiceMaster<Order>
 
   @override
   void onCartItemRemoved(
-      BuildContext context, int index, CartableInvoiceDetailsInterface cii) {
+    BuildContext context,
+    int index,
+    CartableInvoiceDetailsInterface cii,
+  ) {
     if (index != -1) {
       orders_details?.removeAt(index);
     }
     try {
-      orders_details?.removeWhere((element) =>
-          element.products?.iD == (cii as OrderDetails).products?.iD);
+      orders_details?.removeWhere(
+        (element) => element.products?.iD == (cii as OrderDetails).products?.iD,
+      );
     } catch (e) {}
   }
 
   @override
   CartableInvoiceDetailsInterface getCartableNewInstance(
-      BuildContext context, CartableProductItemInterface product) {
+    BuildContext context,
+    CartableProductItemInterface product,
+  ) {
     return OrderDetails()..setProduct(context, product as Product);
   }
 
   @override
   void onCartItemAdded(
-      BuildContext context, int index, CartableProductItemInterface cii,
-      {double? quantiy}) {
-    orders_details?.add(OrderDetails()
-      ..setProduct(context, cii as Product,
-          quantity: quantiy ?? (cii).getCartableProductQuantity()));
+    BuildContext context,
+    int index,
+    CartableProductItemInterface cii, {
+    double? quantiy,
+  }) {
+    orders_details?.add(
+      OrderDetails()..setProduct(
+        context,
+        cii as Product,
+        quantity: quantiy ?? (cii).getCartableProductQuantity(),
+      ),
+    );
   }
 
   @override
@@ -251,10 +298,7 @@ class OrderDetails extends InvoiceMasterDetails<OrderDetails>
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      super.getMirrorFieldsMapNewInstance()
-        ..addAll({
-          "orders": Order(),
-        });
+      super.getMirrorFieldsMapNewInstance()..addAll({"orders": Order()});
   @override
   String? getTableNameApi() => "orders_details";
 
@@ -272,35 +316,41 @@ class OrderDetails extends InvoiceMasterDetails<OrderDetails>
 
   @override
   Map<String, DataTableContent> getCartInvoiceTableHeaderAndContent(
-          BuildContext context) =>
-      {
-        "description": DataTableContent(
-            title: AppLocalizations.of(context)!.description,
-            value: products?.getMainHeaderTextOnly(context) ?? "",
-            canEdit: false),
-        if (!kIsWeb)
-          "gsm": DataTableContent(
-              title: AppLocalizations.of(context)!.gsm,
-              value: products?.gsms?.gsm ?? 0,
-              canEdit: false),
-        "quantity": DataTableContent(
-            title: AppLocalizations.of(context)!.quantity,
-            value: quantity ?? 0,
-            canEdit: true),
-        "unitPrice": DataTableContent(
-            title: AppLocalizations.of(context)!.unit_price,
-            value: unitPrice ?? 0,
-            canEdit: true),
-        if (!kIsWeb)
-          "discount": DataTableContent(
-              title: AppLocalizations.of(context)!.discount,
-              value: discount ?? 0,
-              canEdit: true),
-        "price": DataTableContent(
-            title: AppLocalizations.of(context)!.total_price,
-            value: price ?? 0,
-            canEdit: true),
-      };
+    BuildContext context,
+  ) => {
+    "description": DataTableContent(
+      title: AppLocalizations.of(context)!.description,
+      value: products?.getMainHeaderTextOnly(context) ?? "",
+      canEdit: false,
+    ),
+    if (!kIsWeb)
+      "gsm": DataTableContent(
+        title: AppLocalizations.of(context)!.gsm,
+        value: products?.gsms?.gsm ?? 0,
+        canEdit: false,
+      ),
+    "quantity": DataTableContent(
+      title: AppLocalizations.of(context)!.quantity,
+      value: quantity ?? 0,
+      canEdit: true,
+    ),
+    "unitPrice": DataTableContent(
+      title: AppLocalizations.of(context)!.unit_price,
+      value: unitPrice ?? 0,
+      canEdit: true,
+    ),
+    if (!kIsWeb)
+      "discount": DataTableContent(
+        title: AppLocalizations.of(context)!.discount,
+        value: discount ?? 0,
+        canEdit: true,
+      ),
+    "price": DataTableContent(
+      title: AppLocalizations.of(context)!.total_price,
+      value: price ?? 0,
+      canEdit: true,
+    ),
+  };
 
   @override
   bool isCartEquals(CartableInvoiceDetailsInterface other) {
@@ -309,7 +359,11 @@ class OrderDetails extends InvoiceMasterDetails<OrderDetails>
 
   @override
   void getCartableEditableOnChange(
-      BuildContext context, int idx, String field, value) {
+    BuildContext context,
+    int idx,
+    String field,
+    value,
+  ) {
     debugPrint("getCartableEditableOnChange field=> $field value => $value");
     setFieldValue(field, double.tryParse(value) ?? 0);
     if (field == "quantity") {
@@ -326,7 +380,9 @@ class OrderDetails extends InvoiceMasterDetails<OrderDetails>
 
   @override
   String? Function(dynamic) getCartableEditableValidateItemCell(
-      BuildContext context, String field) {
+    BuildContext context,
+    String field,
+  ) {
     return getTextInputValidatorCompose(context, field);
   }
 

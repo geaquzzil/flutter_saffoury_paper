@@ -6,15 +6,18 @@ part of 'account_names.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-AccountName _$AccountNameFromJson(Map<String, dynamic> json) => AccountName()
-  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
-  ..serverStatus = json['serverStatus'] as String?
-  ..fb_edit = json['fb_edit'] as String?
-  ..name = BaseWithNameString.intFromString(json['name'])
-  ..account_names_types = json['account_names_types'] == null
-      ? null
-      : AccountNameType.fromJson(
-          json['account_names_types'] as Map<String, dynamic>);
+AccountName _$AccountNameFromJson(Map<String, dynamic> json) =>
+    AccountName()
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
+      ..name = BaseWithNameString.intFromString(json['name'])
+      ..account_names_types =
+          json['account_names_types'] == null
+              ? null
+              : AccountNameType.fromJson(
+                json['account_names_types'] as Map<String, dynamic>,
+              );
 
 Map<String, dynamic> _$AccountNameToJson(AccountName instance) =>
     <String, dynamic>{
@@ -31,9 +34,10 @@ AccountNameType _$AccountNameTypeFromJson(Map<String, dynamic> json) =>
       ..fb_edit = json['fb_edit'] as String?
       ..type = json['type'] as String?
       ..typeAr = json['typeAr'] as String?
-      ..account_names = (json['account_names'] as List<dynamic>?)
-          ?.map((e) => AccountName.fromJson(e as Map<String, dynamic>))
-          .toList()
+      ..account_names =
+          (json['account_names'] as List<dynamic>?)
+              ?.map((e) => AccountName.fromJson(e as Map<String, dynamic>))
+              .toList()
       ..account_names_count = (json['account_names_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$AccountNameTypeToJson(AccountNameType instance) =>

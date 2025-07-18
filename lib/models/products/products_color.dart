@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -26,8 +27,11 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
-  ProductsColor? getSelfNewInstanceFileImporter(
-      {required BuildContext context, String? field, value}) {
+  ProductsColor? getSelfNewInstanceFileImporter({
+    required BuildContext context,
+    String? field,
+    value,
+  }) {
     if (value == null) return null;
     if (value is Map) {
       String hexValidation = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\$";
@@ -38,7 +42,8 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
       int? widthMap = int.tryParse(value['width']);
       if (topHex == false || middleHex == false || bottomHex == false) {
         throw Exception(
-            "${getMainHeaderLabelTextOnly(context)}: Cannot convert the value of top to =${value['top']} or the value of middle to =${value['middle']}  or the value of back to =${value['back']} to a hex color \nex:#f2f4f2");
+          "${getMainHeaderLabelTextOnly(context)}: Cannot convert the value of top to =${value['top']} or the value of middle to =${value['middle']}  or the value of back to =${value['back']} to a hex color \nex:#f2f4f2",
+        );
       } else {
         top = value['top'];
         middle = value['middle'];
@@ -47,7 +52,8 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
       }
     } else {
       throw Exception(
-          "${getMainHeaderLabelTextOnly(context)}: ProductsColor.getSelfNewInstance is not a Map");
+        "${getMainHeaderLabelTextOnly(context)}: ProductsColor.getSelfNewInstance is not a Map",
+      );
     }
   }
 
@@ -57,8 +63,11 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
-  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      {"top": "", "middle": "", "back": ""};
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+    "top": "",
+    "middle": "",
+    "back": "",
+  };
   @override
   String? getMainDrawerGroupName(BuildContext context) {
     return AppLocalizations.of(context)!.product;
@@ -85,18 +94,24 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
-  Map<String, bool> isFieldRequiredMap() =>
-      {"top": true, 'middle': true, 'back': true};
+  Map<String, bool> isFieldRequiredMap() => {
+    "top": true,
+    'middle': true,
+    'back': true,
+  };
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "top": TextInputType.text,
-        'middle': TextInputType.text,
-        'back': TextInputType.text
-      };
+    "top": TextInputType.text,
+    'middle': TextInputType.text,
+    'back': TextInputType.text,
+  };
   @override
-  Map<String, int> getTextInputMaxLengthMap() =>
-      {"top": 6, 'middle': 6, 'back': 6};
+  Map<String, int> getTextInputMaxLengthMap() => {
+    "top": 6,
+    'middle': 6,
+    'back': 6,
+  };
 
   @override
   String? getImageUrl(BuildContext context) {
@@ -114,15 +129,18 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
-  Map<String, IconData> getFieldIconDataMap() =>
-      {"top": Icons.colorize, 'middle': Icons.colorize, 'back': Icons.colorize};
+  Map<String, IconData> getFieldIconDataMap() => {
+    "top": Icons.colorize,
+    'middle': Icons.colorize,
+    'back': Icons.colorize,
+  };
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "top": AppLocalizations.of(context)!.top,
-        "middle": AppLocalizations.of(context)!.middle,
-        "back": AppLocalizations.of(context)!.back,
-      };
+    "top": AppLocalizations.of(context)!.top,
+    "middle": AppLocalizations.of(context)!.middle,
+    "back": AppLocalizations.of(context)!.back,
+  };
 
   @override
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
@@ -155,9 +173,11 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
   }
 
   @override
-  List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+  List<Widget>? getCustomBottomWidget(
+    BuildContext context, {
+    ServerActions? action,
+    ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+  }) {
     if (action == ServerActions.add ||
         action == ServerActions.edit ||
         action == ServerActions.list) {
@@ -165,19 +185,22 @@ class ProductsColor extends ViewAbstract<ProductsColor> {
     }
     return [
       SliverApiMixinViewAbstractWidget(
-          isGridView: true,
-          scrollDirection: Axis.horizontal,
-          toListObject: Product().getSelfInstanceWithSimilarOption(
-              context: context,
-              obj: this,
-              copyWith: RequestOptions(countPerPage: 5))),
+        cardType: CardItemType.grid,
+        scrollDirection: Axis.horizontal,
+        toListObject: Product().getSelfInstanceWithSimilarOption(
+          context: context,
+          obj: this,
+          copyWith: RequestOptions(countPerPage: 5),
+        ),
+      ),
     ];
   }
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return RequestOptions().addSortBy("top", SortByType.ASC);
   }
 

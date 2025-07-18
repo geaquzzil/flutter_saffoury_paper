@@ -12,6 +12,7 @@ import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 
 import '../customers.dart';
 
@@ -93,7 +94,6 @@ class CustomerByEmployeeAnanlysis
     ),
   };
 
-
   @override
   String getCustomViewKey() => "customer_by_employee$iD";
 
@@ -120,7 +120,11 @@ class CustomerByEmployeeAnanlysis
   }
 
   @override
-  Widget? getCustomViewResponseWidget(BuildContext context) {
+  dynamic getCustomViewResponseWidget(
+    BuildContext context, {
+    required SliverApiWithStaticMixin state,
+    List<dynamic>? items,
+  }) {
     return Column(
       children: [
         LineChartItem<GrowthRate, DateTime>(

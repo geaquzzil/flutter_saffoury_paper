@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/extensions.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 
 class CutRequestListCard extends StatelessWidget {
@@ -15,9 +16,7 @@ class CutRequestListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       // color: Colors.white70,
       elevation: 10,
       child: getCard(context),
@@ -39,32 +38,36 @@ class CutRequestListCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-              width: 144,
-              height: 300,
-              child: Container(
-                padding: const EdgeInsets.only(bottom: kDefaultPadding),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    // color: Colors.green,
-                    borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                      opacity: .5,
-                      scale: 2,
-                      image: FastCachedImageProvider(
-                          item.getImageUrl(context) ?? "",
-                          scale: 2),
-                      fit: BoxFit.cover,
-                    )),
-              )),
+            width: 144,
+            height: 300,
+            child: Container(
+              padding: const EdgeInsets.only(bottom: kDefaultPadding),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                // color: Colors.green,
+                borderRadius: BorderRadius.circular(10),
+                image: DecorationImage(
+                  opacity: .5,
+                  scale: 2,
+                  image: FastCachedImageProvider(
+                    item.getImageUrl(context) ?? "",
+                    scale: 2,
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(8.0),
               decoration: const BoxDecoration(
-                  color: Colors.cyanAccent,
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  )),
+                color: Colors.cyanAccent,
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+              ),
               child: const Row(
                 children: [
                   Expanded(
@@ -92,70 +95,72 @@ class CutRequestListCard extends StatelessWidget {
       title: (item.products?.getMainHeaderText(context)),
       subtitle: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          item.getWebListTileItemSubtitle(context)!,
-          const SizedBox(
-            height: 20,
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            item.getWebListTileItemSubtitle(context)!,
+            const SizedBox(height: 20),
 
-          // item.getListableList().forEach((item){
-          //   return Text("");
-          // })
-          SliverApiMixinStaticList(
-            isSliver: false,
-            list: item.getListableList(),
-            enableSelection: false,
-            hasCustomSeperater: const Divider(),
-            hasCustomCardBuilder: (index, size) {
-              return ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Text(
-                  "${index + 1}",
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                title: (size as SizesCutRequest)
-                    .getTitleTextHtml(context, item, withProductType: false),
-                subtitle: (size).getQunaityWithSheets(context, item),
-              );
-            },
-          )
-          // getPrimaryText(AppLocalizations.of(context)!.details),
-          // ...item.getListableInterface().getListableList().map(
-          //     (toElement) => ListTile(
-          //         // selected: isSelected,
-          //         // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-          //         // onTap: onTap,
-          //         // onLongPress: onLongTap,
-          //         leading: getPrimaryText(
-          //             "${item.getListableInterface().getListableList().indexOf(toElement) + 1}",
-          //             withPadding: false),
-          //         title: (toElement as SizesCutRequest)
-          //             .getTitleTextHtml(
-          //                 context, item as CutRequest),
-          //         trailing: SizedBox(
-          //             width: 200,
-          //             child: toElement.getQunaityWithSheets(
-          //                 context, item))
+            // item.getListableList().forEach((item){
+            //   return Text("");
+            // })
+            SliverApiMixinStaticList(
+              isSliver: false,
+              list: item.getListableList(),
+              enableSelection: false,
+              hasCustomSeperater: const Divider(),
+              hasCustomCardItemBuilder: (index, size) {
+                return ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Text(
+                    "${index + 1}",
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  title: (size as SizesCutRequest).getTitleTextHtml(
+                    context,
+                    item,
+                    withProductType: false,
+                  ),
+                  subtitle: (size).getQunaityWithSheets(context, item),
+                );
+              },
+            ),
+            // getPrimaryText(AppLocalizations.of(context)!.details),
+            // ...item.getListableInterface().getListableList().map(
+            //     (toElement) => ListTile(
+            //         // selected: isSelected,
+            //         // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+            //         // onTap: onTap,
+            //         // onLongPress: onLongTap,
+            //         leading: getPrimaryText(
+            //             "${item.getListableInterface().getListableList().indexOf(toElement) + 1}",
+            //             withPadding: false),
+            //         title: (toElement as SizesCutRequest)
+            //             .getTitleTextHtml(
+            //                 context, item as CutRequest),
+            //         trailing: SizedBox(
+            //             width: 200,
+            //             child: toElement.getQunaityWithSheets(
+            //                 context, item))
 
-          //         // leading: toElement.getWebListTileItemLeading(context),
-          //         // trailing: object.getCardTrailing(context)
-          //         ))
+            //         // leading: toElement.getWebListTileItemLeading(context),
+            //         // trailing: object.getCardTrailing(context)
+            //         ))
 
-          // ListStaticWidget<ViewAbstract>(
-          //     list: item!.getListableInterface().getListableList(),
-          //     emptyWidget: const Text("null"),
-          //     listItembuilder: (item) => ListCardItemWeb(
-          //           object: item,
-          //         )),
-        ]),
+            // ListStaticWidget<ViewAbstract>(
+            //     list: item!.getListableInterface().getListableList(),
+            //     emptyWidget: const Text("null"),
+            //     listItembuilder: (item) => ListCardItemWeb(
+            //           object: item,
+            //         )),
+          ],
+        ),
       ),
     );
   }
 
   Widget getTrailing(BuildContext context) {
-    return DateTimeWidget(
-      date: item.date!,
-    );
+    return DateTimeWidget(date: item.date!);
   }
 
   Widget getLeading(BuildContext context) {
@@ -178,16 +183,21 @@ class CutRequestListCard extends StatelessWidget {
       child: Container(
         // height: 500,
         decoration: BoxDecoration(
-            // color: Colors.green,
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
-            image: DecorationImage(
-              opacity: .5,
+          // color: Colors.green,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
+          ),
+          image: DecorationImage(
+            opacity: .5,
+            scale: 2,
+            image: FastCachedImageProvider(
+              item.getImageUrl(context) ?? "",
               scale: 2,
-              image: FastCachedImageProvider(item.getImageUrl(context) ?? "",
-                  scale: 2),
-              fit: BoxFit.cover,
-            )),
+            ),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
           children: [
             Text(
@@ -195,9 +205,7 @@ class CutRequestListCard extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const Spacer(),
-            DateTimeWidget(
-              date: item.date!,
-            )
+            DateTimeWidget(date: item.date!),
           ],
         ),
       ),
@@ -217,18 +225,21 @@ class CutRequestListCard extends StatelessWidget {
           ),
           child: Container(
             decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.onPrimary,
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10)),
-                image: DecorationImage(
-                  opacity: .1,
+              color: Theme.of(context).colorScheme.onPrimary,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10),
+                bottomLeft: Radius.circular(10),
+              ),
+              image: DecorationImage(
+                opacity: .1,
+                scale: 2,
+                image: FastCachedImageProvider(
+                  item.getImageUrl(context) ?? "",
                   scale: 2,
-                  image: FastCachedImageProvider(
-                      item.getImageUrl(context) ?? "",
-                      scale: 2),
-                  fit: BoxFit.cover,
-                )),
+                ),
+                fit: BoxFit.cover,
+              ),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(kDefaultPadding),
               child: Column(
@@ -237,46 +248,40 @@ class CutRequestListCard extends StatelessWidget {
                 children: [
                   Text(
                     item.getIDFormat(context),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontWeight: FontWeight.w500),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   Text(
                     item.products?.getMainHeaderTextOnly(context) ?? "",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontWeight: FontWeight.w500),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                  const SizedBox(
-                    height: kDefaultPadding,
+                  const SizedBox(height: kDefaultPadding),
+                  Text(
+                    AppLocalizations.of(context)!.requrestedQuanty,
+                    style: Theme.of(context).textTheme.titleSmall!,
                   ),
-                  Text(AppLocalizations.of(context)!.requrestedQuanty,
-                      style: Theme.of(context).textTheme.titleSmall!),
                   Text(
                     item.quantity?.toCurrencyFormat(symbol: 'KG') ?? "",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontWeight: FontWeight.w500),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                  const SizedBox(
-                    height: kDefaultPadding,
+                  const SizedBox(height: kDefaultPadding),
+                  Text(
+                    AppLocalizations.of(context)!.customer,
+                    style: Theme.of(context).textTheme.titleSmall!,
                   ),
-                  Text(AppLocalizations.of(context)!.customer,
-                      style: Theme.of(context).textTheme.titleSmall!),
                   Text(
                     item.customers?.getMainHeaderTextOnly(context) ?? "",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontWeight: FontWeight.w500),
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   const Spacer(),
-                  DateTimeWidget(
-                    date: item.date!,
-                  )
+                  DateTimeWidget(date: item.date!),
                 ],
               ),
             ),
@@ -313,26 +318,33 @@ class CutRequestListCard extends StatelessWidget {
                 width: double.maxFinite,
                 child: SliverApiMixinStaticList(
                   list: item.getListableList(),
-                  hasCustomCardBuilder: (i, c) {
+                  hasCustomCardItemBuilder: (i, c) {
                     return ListTile(
-                        // selected: isSelected,
-                        // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
-                        // onTap: onTap,
-                        // onLongPress: onLongTap,
-                        leading: getPrimaryText(context, "${i + 1}",
-                            withPadding: false),
-                        title: (c as SizesCutRequest)
-                            .getTitleTextHtml(context, item),
-                        trailing: SizedBox(
-                            width: 200,
-                            child: (c).getQunaityWithSheets(context, item)));
+                      // selected: isSelected,
+                      // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+                      // onTap: onTap,
+                      // onLongPress: onLongTap,
+                      leading: getPrimaryText(
+                        context,
+                        "${i + 1}",
+                        withPadding: false,
+                      ),
+                      title: (c as SizesCutRequest).getTitleTextHtml(
+                        context,
+                        item,
+                      ),
+                      trailing: SizedBox(
+                        width: 200,
+                        child: (c).getQunaityWithSheets(context, item),
+                      ),
+                    );
                   },
                   enableSelection: false,
                   isSliver: false,
-                  isGridView: false,
+                  cardType: CardItemType.list,
                   hasCustomSeperater: const Divider(),
                 ),
-              )
+              ),
               // Container(
               //   width: double.maxFinite,
               //   child: Text(
@@ -356,7 +368,7 @@ class DateTimeWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(date.toDateTimeOnlyMonthAndDayString()),
-        Text(date.toDateTimeOnlyTimeString())
+        Text(date.toDateTimeOnlyTimeString()),
       ],
     );
   }

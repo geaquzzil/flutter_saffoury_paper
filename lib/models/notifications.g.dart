@@ -16,11 +16,11 @@ NotificationsClinet _$NotificationsClinetFromJson(Map<String, dynamic> json) =>
       ..date = json['date'] as String?;
 
 Map<String, dynamic> _$NotificationsClinetToJson(
-        NotificationsClinet instance) =>
-    <String, dynamic>{
-      'iD': instance.iD,
-      'delete': instance.delete,
-      'json': instance.json,
-      'tokens': instance.tokens,
-      'date': instance.date,
-    };
+  NotificationsClinet instance,
+) => <String, dynamic>{
+  'iD': instance.iD,
+  'delete': instance.delete,
+  'json': instance.json,
+  'tokens': instance.tokens,
+  'date': instance.date,
+};

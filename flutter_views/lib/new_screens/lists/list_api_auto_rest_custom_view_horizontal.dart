@@ -170,20 +170,22 @@ class _ListHorizontalApiWidgetState<
     if (widget.onResponse != null) {
       return widget.onResponse!(listProvider.getList(key)[0]);
     }
-    return (listProvider.getList(key)[0] as CustomViewHorizontalListResponse<E>)
-            .getCustomViewResponseWidget(context) ??
-        const Text("Not emplemented getCustomViewSingleResponseWidget");
+    return Text("Not emplemented getCustomViewSingleResponseWidget");
+    // return (listProvider.getList(key)[0] as CustomViewHorizontalListResponse<E>)
+    //         .getCustomViewResponseWidget(context) ??
+    //     const Text("Not emplemented getCustomViewSingleResponseWidget");
   }
 
   Widget getListWidget(ListMultiKeyProvider listProvider) {
     if (widget.onResponse != null) {
       return widget.onResponse!(listProvider.getList(key) as List<T>);
     }
-    return autoRest.getCustomViewListResponseWidget(
-          context,
-          listProvider.getList(key).cast(),
-        ) ??
-        const Text("Not emplemented getCustomViewListToSingle");
+    // return autoRest.getCustomViewListResponseWidget(
+    //       context,
+    //       listProvider.getList(key).cast(),
+    //     ) ??
+    //     const Text("Not emplemented getCustomViewListToSingle");
+    return Text("Not emplemented getCustomViewListToSingle");
   }
 
   Widget wrapHeader(
@@ -203,7 +205,7 @@ class _ListHorizontalApiWidgetState<
         custom = widget.onResponseAddWidget!(obj);
       }
     }
-    header ??= autoRest.getCustomViewTitleWidget(context, valueNotifier);
+    header ??= null;
     if (header == null) {
       return Column(
         children: [

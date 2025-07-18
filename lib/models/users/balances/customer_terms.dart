@@ -3,6 +3,7 @@ import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 
 import '../customers.dart';
 
@@ -75,7 +76,6 @@ class CustomerTerms extends Customer
   @override
   Map<String, dynamic> toJson() => {};
 
-
   @override
   String getCustomViewKey() => "customer_terms$iD";
 
@@ -96,7 +96,11 @@ class CustomerTerms extends Customer
   ResponseType getCustomViewResponseType() => ResponseType.LIST;
 
   @override
-  Widget? getCustomViewResponseWidget(BuildContext context) {
+  dynamic getCustomViewResponseWidget(
+    BuildContext context, {
+    required SliverApiWithStaticMixin state,
+    List<dynamic>? items,
+  }) {
     // TODO: implement getCustomViewSingleResponseWidget
     throw UnimplementedError();
   }

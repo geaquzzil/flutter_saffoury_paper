@@ -6,71 +6,88 @@ part of 'transfers.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Transfers _$TransfersFromJson(Map<String, dynamic> json) => Transfers()
-  ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
-  ..serverStatus = json['serverStatus'] as String?
-  ..fb_edit = json['fb_edit'] as String?
-  ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
-  ..TermsID = (json['TermsID'] as num?)?.toInt()
-  ..date = json['date'] as String?
-  ..billNo = InvoiceMaster.intFromString(json['billNo'])
-  ..comments = json['comments'] as String?
-  ..employees = json['employees'] == null
-      ? null
-      : Employee.fromJson(json['employees'] as Map<String, dynamic>)
-  ..customers = json['customers'] == null
-      ? null
-      : Customer.fromJson(json['customers'] as Map<String, dynamic>)
-  ..cargo_transporters = json['cargo_transporters'] == null
-      ? null
-      : CargoTransporter.fromJson(
-          json['cargo_transporters'] as Map<String, dynamic>)
-  ..status = $enumDecodeNullable(_$InvoiceStatusEnumMap, json['status'])
-  ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
-  ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
-  ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
-  ..extendedRefundPrice =
-      InvoiceMaster.convertToDouble(json['extendedRefundPrice'])
-  ..extendedDiscount = InvoiceMaster.convertToDouble(json['extendedDiscount'])
-  ..extendedNetPrice = InvoiceMaster.convertToDouble(json['extendedNetPrice'])
-  ..extendedNetQuantity =
-      InvoiceMaster.convertToDouble(json['extendedNetQuantity'])
-  ..fromWarehouse = json['fromWarehouse'] == null
-      ? null
-      : Warehouse.fromJson(json['fromWarehouse'] as Map<String, dynamic>)
-  ..toWarehouse = json['toWarehouse'] == null
-      ? null
-      : Warehouse.fromJson(json['toWarehouse'] as Map<String, dynamic>)
-  ..transfers_details = (json['transfers_details'] as List<dynamic>?)
-      ?.map((e) => TransfersDetails.fromJson(e as Map<String, dynamic>))
-      .toList()
-  ..trasfers_details_count = (json['trasfers_details_count'] as num?)?.toInt();
+Transfers _$TransfersFromJson(Map<String, dynamic> json) =>
+    Transfers()
+      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..serverStatus = json['serverStatus'] as String?
+      ..fb_edit = json['fb_edit'] as String?
+      ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
+      ..TermsID = (json['TermsID'] as num?)?.toInt()
+      ..date = json['date'] as String?
+      ..billNo = InvoiceMaster.intFromString(json['billNo'])
+      ..comments = json['comments'] as String?
+      ..employees =
+          json['employees'] == null
+              ? null
+              : Employee.fromJson(json['employees'] as Map<String, dynamic>)
+      ..customers =
+          json['customers'] == null
+              ? null
+              : Customer.fromJson(json['customers'] as Map<String, dynamic>)
+      ..cargo_transporters =
+          json['cargo_transporters'] == null
+              ? null
+              : CargoTransporter.fromJson(
+                json['cargo_transporters'] as Map<String, dynamic>,
+              )
+      ..status = $enumDecodeNullable(_$InvoiceStatusEnumMap, json['status'])
+      ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
+      ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
+      ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
+      ..extendedRefundPrice = InvoiceMaster.convertToDouble(
+        json['extendedRefundPrice'],
+      )
+      ..extendedDiscount = InvoiceMaster.convertToDouble(
+        json['extendedDiscount'],
+      )
+      ..extendedNetPrice = InvoiceMaster.convertToDouble(
+        json['extendedNetPrice'],
+      )
+      ..extendedNetQuantity = InvoiceMaster.convertToDouble(
+        json['extendedNetQuantity'],
+      )
+      ..fromWarehouse =
+          json['fromWarehouse'] == null
+              ? null
+              : Warehouse.fromJson(
+                json['fromWarehouse'] as Map<String, dynamic>,
+              )
+      ..toWarehouse =
+          json['toWarehouse'] == null
+              ? null
+              : Warehouse.fromJson(json['toWarehouse'] as Map<String, dynamic>)
+      ..transfers_details =
+          (json['transfers_details'] as List<dynamic>?)
+              ?.map((e) => TransfersDetails.fromJson(e as Map<String, dynamic>))
+              .toList()
+      ..trasfers_details_count =
+          (json['trasfers_details_count'] as num?)?.toInt();
 
 Map<String, dynamic> _$TransfersToJson(Transfers instance) => <String, dynamic>{
-      'iD': instance.iD,
-      'delete': instance.delete,
-      'terms': _$TermsEnumMap[instance.terms],
-      'TermsID': instance.TermsID,
-      'date': instance.date,
-      'billNo': instance.billNo,
-      'comments': instance.comments,
-      'employees': instance.employees?.toJson(),
-      'customers': instance.customers?.toJson(),
-      'cargo_transporters': instance.cargo_transporters?.toJson(),
-      'status': _$InvoiceStatusEnumMap[instance.status],
-      'quantity': instance.quantity,
-      'extendedPrice': instance.extendedPrice,
-      'refundQuantity': instance.refundQuantity,
-      'extendedRefundPrice': instance.extendedRefundPrice,
-      'extendedDiscount': instance.extendedDiscount,
-      'extendedNetPrice': instance.extendedNetPrice,
-      'extendedNetQuantity': instance.extendedNetQuantity,
-      'fromWarehouse': instance.fromWarehouse?.toJson(),
-      'toWarehouse': instance.toWarehouse?.toJson(),
-      'transfers_details':
-          instance.transfers_details?.map((e) => e.toJson()).toList(),
-      'trasfers_details_count': instance.trasfers_details_count,
-    };
+  'iD': instance.iD,
+  'delete': instance.delete,
+  'terms': _$TermsEnumMap[instance.terms],
+  'TermsID': instance.TermsID,
+  'date': instance.date,
+  'billNo': instance.billNo,
+  'comments': instance.comments,
+  'employees': instance.employees?.toJson(),
+  'customers': instance.customers?.toJson(),
+  'cargo_transporters': instance.cargo_transporters?.toJson(),
+  'status': _$InvoiceStatusEnumMap[instance.status],
+  'quantity': instance.quantity,
+  'extendedPrice': instance.extendedPrice,
+  'refundQuantity': instance.refundQuantity,
+  'extendedRefundPrice': instance.extendedRefundPrice,
+  'extendedDiscount': instance.extendedDiscount,
+  'extendedNetPrice': instance.extendedNetPrice,
+  'extendedNetQuantity': instance.extendedNetQuantity,
+  'fromWarehouse': instance.fromWarehouse?.toJson(),
+  'toWarehouse': instance.toWarehouse?.toJson(),
+  'transfers_details':
+      instance.transfers_details?.map((e) => e.toJson()).toList(),
+  'trasfers_details_count': instance.trasfers_details_count,
+};
 
 const _$TermsEnumMap = {
   Terms.none: '0',
@@ -97,20 +114,23 @@ TransfersDetails _$TransfersDetailsFromJson(Map<String, dynamic> json) =>
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
-      ..products = json['products'] == null
-          ? null
-          : Product.fromJson(json['products'] as Map<String, dynamic>)
-      ..warehouse = json['warehouse'] == null
-          ? null
-          : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>)
+      ..products =
+          json['products'] == null
+              ? null
+              : Product.fromJson(json['products'] as Map<String, dynamic>)
+      ..warehouse =
+          json['warehouse'] == null
+              ? null
+              : Warehouse.fromJson(json['warehouse'] as Map<String, dynamic>)
       ..quantity = (json['quantity'] as num?)?.toDouble()
       ..unitPrice = (json['unitPrice'] as num?)?.toDouble()
       ..discount = (json['discount'] as num?)?.toDouble()
       ..price = (json['price'] as num?)?.toDouble()
       ..comments = json['comments'] as String?
-      ..transfers = json['transfers'] == null
-          ? null
-          : Transfers.fromJson(json['transfers'] as Map<String, dynamic>);
+      ..transfers =
+          json['transfers'] == null
+              ? null
+              : Transfers.fromJson(json['transfers'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$TransfersDetailsToJson(TransfersDetails instance) =>
     <String, dynamic>{

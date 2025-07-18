@@ -20,8 +20,8 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..parents = (json['parents'] as List<dynamic>?)
       ?.map((e) => Product.fromJson(e as Map<String, dynamic>))
       .toList()
-  ..pending_reservation_invoice =
-      (json['pending_reservation_invoice'] as num?)?.toDouble()
+  ..pending_reservation_invoice = (json['pending_reservation_invoice'] as num?)
+      ?.toDouble()
   ..pending_cut_requests = (json['pending_cut_requests'] as num?)?.toDouble()
   ..cut_request_quantity = (json['cut_request_quantity'] as num?)?.toDouble()
   ..products_types = json['products_types'] == null
@@ -30,11 +30,13 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..customs_declarations = json['customs_declarations'] == null
       ? null
       : CustomsDeclaration.fromJson(
-          json['customs_declarations'] as Map<String, dynamic>)
+          json['customs_declarations'] as Map<String, dynamic>,
+        )
   ..countries_manufactures = json['countries_manufactures'] == null
       ? null
       : CountryManufacture.fromJson(
-          json['countries_manufactures'] as Map<String, dynamic>)
+          json['countries_manufactures'] as Map<String, dynamic>,
+        )
   ..sizes = json['sizes'] == null
       ? null
       : ProductSize.fromJson(json['sizes'] as Map<String, dynamic>)
@@ -90,15 +92,18 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..purchases_refunds_purchases_details =
       (json['purchases_refunds_purchases_details'] as List<dynamic>?)
           ?.map(
-              (e) => PurchasesRefundDetails.fromJson(e as Map<String, dynamic>))
+            (e) => PurchasesRefundDetails.fromJson(e as Map<String, dynamic>),
+          )
           .toList()
   ..purchases_refunds_purchases_details_count =
       (json['purchases_refunds_purchases_details_count'] as num?)?.toInt()
-  ..reservation_invoice_details = (json['reservation_invoice_details']
-          as List<dynamic>?)
-      ?.map(
-          (e) => ReservationInvoiceDetails.fromJson(e as Map<String, dynamic>))
-      .toList()
+  ..reservation_invoice_details =
+      (json['reservation_invoice_details'] as List<dynamic>?)
+          ?.map(
+            (e) =>
+                ReservationInvoiceDetails.fromJson(e as Map<String, dynamic>),
+          )
+          .toList()
   ..reservation_invoice_details_count =
       (json['reservation_invoice_details_count'] as num?)?.toInt()
   ..transfers_details = (json['transfers_details'] as List<dynamic>?)
@@ -108,61 +113,66 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product()
   ..qrQuantity = (json['qrQuantity'] as num?)?.toDouble();
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
-      'iD': instance.iD,
-      'delete': instance.delete,
-      'status': _$ProductStatusEnumMap[instance.status],
-      'date': instance.date,
-      'sheets': instance.sheets,
-      'barcode': instance.barcode,
-      'fiberLines': instance.fiberLines,
-      'comments': instance.comments,
-      'parents': instance.parents?.map((e) => e.toJson()).toList(),
-      'pending_reservation_invoice': instance.pending_reservation_invoice,
-      'pending_cut_requests': instance.pending_cut_requests,
-      'cut_request_quantity': instance.cut_request_quantity,
-      'products_types': instance.products_types?.toJson(),
-      'customs_declarations': instance.customs_declarations?.toJson(),
-      'countries_manufactures': instance.countries_manufactures?.toJson(),
-      'sizes': instance.sizes?.toJson(),
-      'gsms': instance.gsms?.toJson(),
-      'qualities': instance.qualities?.toJson(),
-      'grades': instance.grades?.toJson(),
-      'products_colors': instance.products_colors?.toJson(),
-      'inventory': instance.inventory?.map((e) => e.toJson()).toList(),
-      'inventory_count': instance.inventory_count,
-      'products': instance.products?.toJson(),
-      'cut_requests': instance.cut_requests?.map((e) => e.toJson()).toList(),
-      'cut_requests_count': instance.cut_requests_count,
-      'order_refunds_order_details':
-          instance.order_refunds_order_details?.map((e) => e.toJson()).toList(),
-      'order_refunds_order_details_count':
-          instance.order_refunds_order_details_count,
-      'orders_details':
-          instance.orders_details?.map((e) => e.toJson()).toList(),
-      'orders_details_count': instance.orders_details_count,
-      'products_inputs_details':
-          instance.products_inputs_details?.map((e) => e.toJson()).toList(),
-      'products_inputs_details_count': instance.products_inputs_details_count,
-      'products_outputs_details':
-          instance.products_outputs_details?.map((e) => e.toJson()).toList(),
-      'products_outputs_details_count': instance.products_outputs_details_count,
-      'purchases_details':
-          instance.purchases_details?.map((e) => e.toJson()).toList(),
-      'purchases_details_count': instance.purchases_details_count,
-      'purchases_refunds_purchases_details': instance
-          .purchases_refunds_purchases_details
-          ?.map((e) => e.toJson())
-          .toList(),
-      'purchases_refunds_purchases_details_count':
-          instance.purchases_refunds_purchases_details_count,
-      'reservation_invoice_details':
-          instance.reservation_invoice_details?.map((e) => e.toJson()).toList(),
-      'reservation_invoice_details_count':
-          instance.reservation_invoice_details_count,
-      'transfers_details':
-          instance.transfers_details?.map((e) => e.toJson()).toList(),
-      'transfers_details_count': instance.transfers_details_count,
-    };
+  'iD': instance.iD,
+  'delete': instance.delete,
+  'status': _$ProductStatusEnumMap[instance.status],
+  'date': instance.date,
+  'sheets': instance.sheets,
+  'barcode': instance.barcode,
+  'fiberLines': instance.fiberLines,
+  'comments': instance.comments,
+  'parents': instance.parents?.map((e) => e.toJson()).toList(),
+  'pending_reservation_invoice': instance.pending_reservation_invoice,
+  'pending_cut_requests': instance.pending_cut_requests,
+  'cut_request_quantity': instance.cut_request_quantity,
+  'products_types': instance.products_types?.toJson(),
+  'customs_declarations': instance.customs_declarations?.toJson(),
+  'countries_manufactures': instance.countries_manufactures?.toJson(),
+  'sizes': instance.sizes?.toJson(),
+  'gsms': instance.gsms?.toJson(),
+  'qualities': instance.qualities?.toJson(),
+  'grades': instance.grades?.toJson(),
+  'products_colors': instance.products_colors?.toJson(),
+  'inventory': instance.inventory?.map((e) => e.toJson()).toList(),
+  'inventory_count': instance.inventory_count,
+  'products': instance.products?.toJson(),
+  'cut_requests': instance.cut_requests?.map((e) => e.toJson()).toList(),
+  'cut_requests_count': instance.cut_requests_count,
+  'order_refunds_order_details': instance.order_refunds_order_details
+      ?.map((e) => e.toJson())
+      .toList(),
+  'order_refunds_order_details_count':
+      instance.order_refunds_order_details_count,
+  'orders_details': instance.orders_details?.map((e) => e.toJson()).toList(),
+  'orders_details_count': instance.orders_details_count,
+  'products_inputs_details': instance.products_inputs_details
+      ?.map((e) => e.toJson())
+      .toList(),
+  'products_inputs_details_count': instance.products_inputs_details_count,
+  'products_outputs_details': instance.products_outputs_details
+      ?.map((e) => e.toJson())
+      .toList(),
+  'products_outputs_details_count': instance.products_outputs_details_count,
+  'purchases_details': instance.purchases_details
+      ?.map((e) => e.toJson())
+      .toList(),
+  'purchases_details_count': instance.purchases_details_count,
+  'purchases_refunds_purchases_details': instance
+      .purchases_refunds_purchases_details
+      ?.map((e) => e.toJson())
+      .toList(),
+  'purchases_refunds_purchases_details_count':
+      instance.purchases_refunds_purchases_details_count,
+  'reservation_invoice_details': instance.reservation_invoice_details
+      ?.map((e) => e.toJson())
+      .toList(),
+  'reservation_invoice_details_count':
+      instance.reservation_invoice_details_count,
+  'transfers_details': instance.transfers_details
+      ?.map((e) => e.toJson())
+      .toList(),
+  'transfers_details_count': instance.transfers_details_count,
+};
 
 const _$ProductStatusEnumMap = {
   ProductStatus.NONE: 'NONE',

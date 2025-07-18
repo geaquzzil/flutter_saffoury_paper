@@ -126,18 +126,16 @@ class _ListToDetailsSecoundPaneNotifierState
     SecondPaneHelper? valueNotifier,
   }) {
     List<Widget>? top;
-    if (valueNotifier?.value is ViewAbstract) {
-      top = ((valueNotifier?.value as ViewAbstract?) ?? _viewAbstract)
-          .getCustomTopWidget(
-            context,
-            action: _lastSearchQuery != null
-                ? ServerActions.search
-                : ServerActions.view,
-            basePage: this,
-            isFromFirstAndSecPane: firstPane,
-            extras: _lastSearchQuery,
-          );
-    }
+    top = _viewAbstract.getCustomTopWidget(
+      context,
+      action: _lastSearchQuery != null
+          ? ServerActions.search
+          : ServerActions.view,
+      basePage: this,
+      isFromFirstAndSecPane: firstPane,
+      extras: _lastSearchQuery,
+    );
+
     if (firstPane) {
       // asda
       debugPrint("getPaneNotifier firstPane $valueNotifier");
@@ -238,7 +236,7 @@ class _ListToDetailsSecoundPaneNotifierState
             );
           },
 
-          isGridView: false,
+          cardType: CardItemType.list,
           scrollDirection: Axis.vertical,
           enableSelection: true,
           scrollController: controler,
