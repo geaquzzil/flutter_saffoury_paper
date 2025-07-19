@@ -261,7 +261,7 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
     SecondPaneHelper? valueNotifier,
   }) {
     if (tab != null) {
-      return [?tab.widget];
+      return [if (tab.widget != null) tab.widget!];
     }
     if (firstPane) {
       final fields = getExtrasCast()
@@ -337,10 +337,7 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
     BuildContext context, {
     TabControllerHelper? tab,
   }) {
-    return (getExtras()).viewCallGetFirstFromList(
-          (getExtras()).iD,
-          context: context,
-        )
+    return (getExtrasCast()).viewCall(customID: getID, context: context)
         as Future<ViewAbstract?>;
   }
 

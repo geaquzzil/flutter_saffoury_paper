@@ -13,16 +13,20 @@ BillingCustomer _$BillingCustomerFromJson(Map<String, dynamic> json) =>
       ..fb_edit = json['fb_edit'] as String?
       ..phone = (json['phone'] as num?)?.toInt()
       ..password = json['password'] as String?
-      ..userlevels = json['userlevels'] == null
-          ? null
-          : PermissionLevelAbstract.fromJson(
-              json['userlevels'] as Map<String, dynamic>)
-      ..setting = json['setting'] == null
-          ? null
-          : Setting.fromJson(json['setting'] as Map<String, dynamic>)
-      ..dealers = json['dealers'] == null
-          ? null
-          : Dealers.fromJson(json['dealers'] as Map<String, dynamic>)
+      ..userlevels =
+          json['userlevels'] == null
+              ? null
+              : PermissionLevelAbstract.fromJson(
+                json['userlevels'] as Map<String, dynamic>,
+              )
+      ..setting =
+          json['setting'] == null
+              ? null
+              : Setting.fromJson(json['setting'] as Map<String, dynamic>)
+      ..dealers =
+          json['dealers'] == null
+              ? null
+              : Dealers.fromJson(json['dealers'] as Map<String, dynamic>)
       ..name = json['name'] as String?
       ..email = json['email'] as String?
       ..token = json['token'] as String?

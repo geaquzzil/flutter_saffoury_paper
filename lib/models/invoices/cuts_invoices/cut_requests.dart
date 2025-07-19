@@ -25,7 +25,6 @@ import 'package:flutter_view_controller/interfaces/web/category_gridable_interfa
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
-import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
@@ -55,8 +54,7 @@ part 'cut_requests.g.dart';
 @JsonSerializable(explicitToJson: true)
 @reflector
 class CutRequest extends ViewAbstract<CutRequest>
-    with
-        ModifiableInterface<PrintCutRequest>
+    with ModifiableInterface<PrintCutRequest>
     implements
         ListableInterface<SizesCutRequest>,
         WebCategoryGridableInterface<CutRequest>,
@@ -87,6 +85,7 @@ class CutRequest extends ViewAbstract<CutRequest>
     sizes_cut_requests = <SizesCutRequest>[];
     cut_status = CutStatus.PENDING;
   }
+
   Widget getPendingCutRequestWidget() {
     return ListHorizontalApiAutoRestWidget(
       isSliver: true,
@@ -95,39 +94,46 @@ class CutRequest extends ViewAbstract<CutRequest>
       // listItembuilder: (v) =>
       //     ListItemProductTypeCategory(productType: v as ProductType),
       autoRest: AutoRest<CutRequest>(
-          obj: CutRequest().setRequestOption(
-              option:
-                  RequestOptions().addSearchByField("cut_status", "PENDING")),
-          key: "CutRequest<Pending>"),
+        obj: CutRequest().setRequestOption(
+          option: RequestOptions().addSearchByField("cut_status", "PENDING"),
+        ),
+        key: "CutRequest<Pending>",
+      ),
     );
   }
 
   @override
   List<Widget>? getHomeListHeaderWidgetList(BuildContext context) {
+    return null;
     return [getPendingCutRequestWidget()];
   }
 
   @override
   List<StaggeredGridTile> getHomeHorizotalList(BuildContext context) {
     num mainAxisCellCount = SizeConfig.getMainAxisCellCount(context);
-    num mainAxisCellCountList = SizeConfig.getMainAxisCellCount(context,
-        mainAxisType: MainAxisType.ListHorizontal);
+    num mainAxisCellCountList = SizeConfig.getMainAxisCellCount(
+      context,
+      mainAxisType: MainAxisType.ListHorizontal,
+    );
     return [
       StaggeredGridTile.count(
-          crossAxisCellCount: 2,
-          mainAxisCellCount: mainAxisCellCountList,
-          child: getPendingCutRequestWidget()),
-      StaggeredGridTile.count(
         crossAxisCellCount: 2,
-        mainAxisCellCount: mainAxisCellCount,
-        child: ListHorizontalCustomViewApiAutoRestWidget(
-            autoRest: ChangesRecords.init(getSelfNewInstance(), "cut_status")),
+        mainAxisCellCount: mainAxisCellCountList,
+        child: getPendingCutRequestWidget(),
       ),
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
-            autoRest: ChartRecordAnalysis.init(CutRequest())),
+          autoRest: ChangesRecords.init(getSelfNewInstance(), "cut_status"),
+        ),
+      ),
+      StaggeredGridTile.count(
+        crossAxisCellCount: 2,
+        mainAxisCellCount: mainAxisCellCount,
+        child: ListHorizontalCustomViewApiAutoRestWidget(
+          autoRest: ChartRecordAnalysis.init(CutRequest()),
+        ),
       ),
     ];
   }
@@ -153,11 +159,15 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   String? getTextInputValidatorOnAutocompleteSelected(
-      BuildContext context, String field, ViewAbstract value) {
+    BuildContext context,
+    String field,
+    ViewAbstract value,
+  ) {
     if (field == "products") {
       if (!(value as Product).isRoll()) {
-        return AppLocalizations.of(context)!
-            .errFieldNotSelected(Product().getMainHeaderLabelTextOnly(context));
+        return AppLocalizations.of(
+          context,
+        )!.errFieldNotSelected(Product().getMainHeaderLabelTextOnly(context));
       }
     } else {
       return null;
@@ -166,8 +176,12 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
-  void onTextChangeListener(BuildContext context, String field, String? value,
-      {GlobalKey<FormBuilderState>? formKey}) {
+  void onTextChangeListener(
+    BuildContext context,
+    String field,
+    String? value, {
+    GlobalKey<FormBuilderState>? formKey,
+  }) {
     super.onTextChangeListener(context, field, value);
     if (field == "quantity") {
       setFieldValue(field, double.tryParse(value ?? "0") ?? 0);
@@ -192,24 +206,11 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
-  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "date": "",
-        "comments": "",
-        "quantity": 0.toDouble(),
-        "cut_status": CutStatus.PENDING,
-        "products": Product.initOnlyReelsCustomParams(),
-        "customers": Customer(),
-        "employees": Employee(),
-        "cut_request_results": List<CutRequestResult>.empty(),
-        "cut_request_results_count": 0,
-        "sizes_cut_requests": List<SizesCutRequest>.empty(),
-        "sizes_cut_requests_count": 0
-      };
-  @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
-    return RequestOptions().addSortBy("date", SortByType.DESC);
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
+    return RequestOptions().addSortBy("date", SortByType.DESC).addRequestObjcets(true);
   }
 
   @override
@@ -218,7 +219,10 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
-  Widget? getMainSubtitleHeaderText(BuildContext context,{String? searchQuery}) {
+  Widget? getMainSubtitleHeaderText(
+    BuildContext context, {
+    String? searchQuery,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -227,14 +231,19 @@ class CutRequest extends ViewAbstract<CutRequest>
         if (customers != null)
           customers!.getMainHeaderLabelWithTextWidgt(context: context),
         getSpace(height: 4),
-        getLabelWithTextWidget(AppLocalizations.of(context)!.quantity,
-            quantity.toCurrencyFormat(symbol: AppLocalizations.of(context)!.kg),
-            context: context),
+        getLabelWithTextWidget(
+          AppLocalizations.of(context)!.quantity,
+          quantity.toCurrencyFormat(symbol: AppLocalizations.of(context)!.kg),
+          context: context,
+        ),
         getSpace(height: 4),
         if (cut_status != null)
-          getLabelWithTextWidget(cut_status!.getMainLabelText(context),
-              cut_status!.getFieldLabelString(context, cut_status!),
-              color: getCutStatusColor(), context: context),
+          getLabelWithTextWidget(
+            cut_status!.getMainLabelText(context),
+            cut_status!.getFieldLabelString(context, cut_status!),
+            color: getCutStatusColor(),
+            context: context,
+          ),
       ],
     );
   }
@@ -246,8 +255,12 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
-  void onAutoComplete(BuildContext context, String field, value,
-      {GlobalKey<FormBuilderState>? formKey}) {
+  void onAutoComplete(
+    BuildContext context,
+    String field,
+    value, {
+    GlobalKey<FormBuilderState>? formKey,
+  }) {
     super.onAutoComplete(context, field, value);
     if (field == "products") {
       if (value != null) {
@@ -258,43 +271,45 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   List<String> getMainFields({BuildContext? context}) => [
-        "customers",
-        "employees",
-        "products",
-        "date",
-        "quantity",
-        "cut_status",
-        "comments"
-      ];
+    "products",
+    "date",
+    "quantity",
+    "cut_status",
+    "comments",
+    "customers",
+    "employees",
+  ];
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {
-        "date": Icons.date_range,
-        "quantity": Icons.scale,
-        "cut_status": Icons.reorder,
-        "comments": Icons.comment
-      };
+    "date": Icons.date_range,
+    "quantity": Icons.scale,
+    "cut_status": Icons.reorder,
+    "comments": Icons.comment,
+  };
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "date": AppLocalizations.of(context)!.date,
-        "quantity": AppLocalizations.of(context)!.quantity,
-        "cut_status": AppLocalizations.of(context)!.status,
-        "comments": AppLocalizations.of(context)!.comments,
-      };
+    "date": AppLocalizations.of(context)!.date,
+    "quantity": AppLocalizations.of(context)!.quantity,
+    "cut_status": AppLocalizations.of(context)!.status,
+    "comments": AppLocalizations.of(context)!.comments,
+  };
   @override
   String? getImageUrl(BuildContext context) {
     return products?.getImageUrl(context);
   }
 
   @override
-  List<Widget>? getCustomTopWidget(BuildContext context,
-      {ServerActions? action,
-      BasePageSecoundPaneNotifierState? basePage,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
-      ValueNotifier<SecondPaneHelper?>? onClick,
-      bool? isFromFirstAndSecPane,
-      dynamic extras}) {
+  List<Widget>? getCustomTopWidget(
+    BuildContext context, {
+    ServerActions? action,
+    BasePageSecoundPaneNotifierState? basePage,
+    ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+    ValueNotifier<SecondPaneHelper?>? onClick,
+    bool? isFromFirstAndSecPane,
+    dynamic extras,
+  }) {
     if ((action == ServerActions.view || action == ServerActions.edit) &&
         products != null &&
         cut_status == CutStatus.COMPLETED) {
@@ -307,10 +322,14 @@ class CutRequest extends ViewAbstract<CutRequest>
     return products?.getSheetWeight(customSize: size.sizes) ?? 0;
   }
 
-  String getSheetWeightStirngFormat(
-      {required BuildContext context, required SizesCutRequest size}) {
+  String getSheetWeightStirngFormat({
+    required BuildContext context,
+    required SizesCutRequest size,
+  }) {
     return products?.getSheetWeightStringFormat(
-            context: context, customSize: size.sizes) ??
+          context: context,
+          customSize: size.sizes,
+        ) ??
         "-";
   }
 
@@ -318,16 +337,22 @@ class CutRequest extends ViewAbstract<CutRequest>
     return products?.getOneSheetPrice(customSize: size.sizes) ?? 0;
   }
 
-  String getOnSheetPriceSringFormat(
-      {required BuildContext context, required SizesCutRequest size}) {
+  String getOnSheetPriceSringFormat({
+    required BuildContext context,
+    required SizesCutRequest size,
+  }) {
     return products?.getOneSheetPriceStringFormat(
-            context: context, customSize: size.sizes) ??
+          context: context,
+          customSize: size.sizes,
+        ) ??
         "-";
   }
 
   double getSheetsNumber(SizesCutRequest size) {
     return products?.getSheets(
-            customSize: size.sizes, customQuantity: size.quantity) ??
+          customSize: size.sizes,
+          customQuantity: size.quantity,
+        ) ??
         0;
   }
 
@@ -366,28 +391,37 @@ class CutRequest extends ViewAbstract<CutRequest>
   Map<String, int> getTextInputMaxLengthMap() => {"quantity": 10};
 
   @override
-  Map<String, double> getTextInputMaxValidateMap() =>
-      {"quantity": products?.getQuantity() ?? 1};
+  Map<String, double> getTextInputMaxValidateMap() => {
+    "quantity": products?.getQuantity() ?? 1,
+  };
 
   @override
   Map<String, double> getTextInputMinValidateMap() => {"quantity": 1};
 
   @override
-  List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+  List<Widget>? getCustomBottomWidget(
+    BuildContext context, {
+    ServerActions? action,
+    ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+  }) {
+    return null;
     if (action == ServerActions.view) {
       return [
         ListHorizontalApiAutoRestWidget(
           // customHeight: 250,
-          titleString: (AppLocalizations.of(context)!
-              .moreFromFormat(customers?.name ?? "")),
+          titleString: (AppLocalizations.of(
+            context,
+          )!.moreFromFormat(customers?.name ?? "")),
           autoRest: AutoRest<CutRequest>(
-              obj: CutRequest().setRequestOption(
-                  option: RequestOptions()
-                      .addSearchByField("CustomerID", customers?.iD)),
-              key: "CustomerByCutRequest$iD"),
-        )
+            obj: CutRequest().setRequestOption(
+              option: RequestOptions().addSearchByField(
+                "CustomerID",
+                customers?.iD,
+              ),
+            ),
+            key: "CustomerByCutRequest$iD",
+          ),
+        ),
       ];
     }
     return null;
@@ -400,10 +434,10 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "date": TextInputType.datetime,
-        "quantity": TextInputType.number,
-        "comments": TextInputType.multiline
-      };
+    "date": TextInputType.datetime,
+    "quantity": TextInputType.number,
+    "comments": TextInputType.multiline,
+  };
 
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {"customers": true};
@@ -475,7 +509,8 @@ class CutRequest extends ViewAbstract<CutRequest>
         .toSet()
         .map((e) => e.sizes!.width)
         .reduce(
-            (value, element) => value.toNonNullable() + element.toNonNullable())
+          (value, element) => value.toNonNullable() + element.toNonNullable(),
+        )
         .toNonNullable();
     return valu <= 0 ? 0 : valu;
   }
@@ -483,10 +518,13 @@ class CutRequest extends ViewAbstract<CutRequest>
   double? getTotalRemainingQuantity() {
     if (products == null) return null;
     if (getListableList().isEmpty) return null;
-    double valu = getListableList()
+    double valu =
+        getListableList()
             .map((e) => e.quantity)
-            .reduce((value, element) =>
-                value.toNonNullable() + element.toNonNullable())
+            .reduce(
+              (value, element) =>
+                  value.toNonNullable() + element.toNonNullable(),
+            )
             .toNonNullable() -
         (products?.getQuantity().toNonNullable() ?? 0);
     return valu <= 0 ? 0 : valu;
@@ -503,10 +541,13 @@ class CutRequest extends ViewAbstract<CutRequest>
       try {
         var d = element.products_inputs?.products_inputs_details
             ?.where(
-                (element) => element.products?.status == ProductStatus.WASTED)
+              (element) => element.products?.status == ProductStatus.WASTED,
+            )
             .map((e) => e.quantity)
-            .reduce((value, element) =>
-                value.toNonNullable() + element.toNonNullable());
+            .reduce(
+              (value, element) =>
+                  value.toNonNullable() + element.toNonNullable(),
+            );
         total = total.toNonNullable() + d.toNonNullable();
       } catch (e) {}
     });
@@ -543,10 +584,7 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   String getPrintableQrCode() {
-    var q = QRCodeID(
-      iD: iD,
-      action: getTableNameApi() ?? "",
-    );
+    var q = QRCodeID(iD: iD, action: getTableNameApi() ?? "");
     return q.getQrCode();
   }
 
@@ -581,17 +619,21 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   @override
-  Future<pdf.Document> getPrintableCustomFromPDFPage(BuildContext context,
-      {required pdf.PageTheme theme,
-      required pdf.ThemeData themeData,
-      pdf2.PdfPageFormat? format,
-      PrintCutRequest? setting}) async {
-    CutRequestRecieptPDF productsLabel = CutRequestRecieptPDF(context,
-        cutRequest: this,
-        setting: setting,
-        format: format,
-        themeData: themeData,
-        pageTheme: theme);
+  Future<pdf.Document> getPrintableCustomFromPDFPage(
+    BuildContext context, {
+    required pdf.PageTheme theme,
+    required pdf.ThemeData themeData,
+    pdf2.PdfPageFormat? format,
+    PrintCutRequest? setting,
+  }) async {
+    CutRequestRecieptPDF productsLabel = CutRequestRecieptPDF(
+      context,
+      cutRequest: this,
+      setting: setting,
+      format: format,
+      themeData: themeData,
+      pageTheme: theme,
+    );
 
     return await productsLabel.generate();
   }
@@ -623,14 +665,13 @@ class CutRequest extends ViewAbstract<CutRequest>
     if (products == null) {
       return const Center(child: Text("Select product to show contents"));
     }
-    return CutRequestCustomListableHeader(
-      cutRequest: this,
-    );
+    return CutRequestCustomListableHeader(cutRequest: this);
   }
 
   @override
   List<ViewAbstract> getListableInitialSelectedListPassedByPickedObject(
-      BuildContext context) {
+    BuildContext context,
+  ) {
     if (sizes_cut_requests == null) return [];
     return sizes_cut_requests?.map((e) => e.sizes!).toList() ?? [];
   }
@@ -673,7 +714,9 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   void onListableAddFromManual(
-      BuildContext context, SizesCutRequest addedObject) {
+    BuildContext context,
+    SizesCutRequest addedObject,
+  ) {
     getListableList().add(addedObject);
   }
 
@@ -694,7 +737,9 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   void onListableSelectedListAdded(
-      BuildContext context, List<ViewAbstract> list) {
+    BuildContext context,
+    List<ViewAbstract> list,
+  ) {
     // TODO: implement onListableSelectedListAdded
   }
 
@@ -711,15 +756,18 @@ class CutRequest extends ViewAbstract<CutRequest>
   @override
   pdf.Widget? getPrintableWatermark(pdf2.PdfPageFormat? format) {
     return pdf.FullPage(
-        ignoreMargins: true,
-        child: pdf.Watermark.text('SAFFOURY\n',
-            fit: pdf.BoxFit.scaleDown,
-            // angle: 0,
-            style: pdf.TextStyle.defaultStyle().copyWith(
-              fontSize: 80,
-              color: pdf2.PdfColors.grey400,
-              fontWeight: pdf.FontWeight.bold,
-            )));
+      ignoreMargins: true,
+      child: pdf.Watermark.text(
+        'SAFFOURY\n',
+        fit: pdf.BoxFit.scaleDown,
+        // angle: 0,
+        style: pdf.TextStyle.defaultStyle().copyWith(
+          fontSize: 80,
+          color: pdf2.PdfColors.grey400,
+          fontWeight: pdf.FontWeight.bold,
+        ),
+      ),
+    );
   }
 
   @override
@@ -746,18 +794,21 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-      BuildContext context, PrintLocalSetting? dashboardSetting) {
+    BuildContext context,
+    PrintLocalSetting? dashboardSetting,
+  ) {
     Currency c = Currency.init(context);
     return DashboardContentItem(
-        shouldAddToBalance: false,
-        showDebitAndCredit: false,
-        currency: c.name,
-        currencyId: c.iD,
-        quantity: quantity.toCurrencyFormat(),
-        credit: 0,
-        debit: 0,
-        date: date,
-        description: getMainHeaderTextOnly(context));
+      shouldAddToBalance: false,
+      showDebitAndCredit: false,
+      currency: c.name,
+      currencyId: c.iD,
+      quantity: quantity.toCurrencyFormat(),
+      credit: 0,
+      debit: 0,
+      date: date,
+      description: getMainHeaderTextOnly(context),
+    );
   }
 
   @override
@@ -776,6 +827,21 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   bool getPrintableSupportsLabelPrinting() => true;
+
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+    "customers": Customer(),
+    "date": "",
+    "comments": "",
+    "quantity": 0.toDouble(),
+    "cut_status": CutStatus.PENDING,
+    "products": Product.initOnlyReelsCustomParams(),
+    "employees": Employee(),
+    "cut_request_results": List<CutRequestResult>.empty(),
+    "cut_request_results_count": 0,
+    "sizes_cut_requests": List<SizesCutRequest>.empty(),
+    "sizes_cut_requests_count": 0,
+  };
 }
 
 // enum CutStatus {

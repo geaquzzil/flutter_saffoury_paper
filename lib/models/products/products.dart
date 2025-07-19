@@ -42,6 +42,7 @@ import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceA
 import 'package:flutter_view_controller/interfaces/sharable_interface.dart';
 import 'package:flutter_view_controller/interfaces/web/category_gridable_interface.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/apis/unused_records.dart';
@@ -1038,11 +1039,16 @@ class Product extends ViewAbstract<Product>
       //   isSliver: true,
       //   title: AppLocalizations.of(context)!.changeChart,
       // ),
-      // SliverApiMixinViewAbstractWidget(
-      //   cardType: CardType.grid,
-      //   scrollDirection: Axis.horizontal,
-      //   toListObject: ChangesRecords.init(Product(), "status"),
-      // ),
+      SliverApiMixinViewAbstractWidget(
+        isSliver: true,
+        header: HeaderDescription(
+          isSliver: true,
+          title: AppLocalizations.of(context)!.changeChart,
+        ),
+        cardType: CardItemType.grid,
+        scrollDirection: Axis.horizontal,
+        toListObject: ChangesRecords.init(Product(), "status"),
+      ),
       // HeaderDescription(
       //   isSliver: true,
       //   title: AppLocalizations.of(context)!.orders,
@@ -1401,7 +1407,10 @@ class Product extends ViewAbstract<Product>
     } else if (p.products == null) {
       return list;
     } else {
-      return getParents(p: p.products, list: [...?list, ?p.products]);
+      return getParents(
+        p: p.products,
+        list: [if (list != null) ...list, if (p.products != null) p.products!],
+      );
     }
   }
 

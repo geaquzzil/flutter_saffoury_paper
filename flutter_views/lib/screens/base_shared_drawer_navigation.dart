@@ -14,8 +14,11 @@ import '../providers/actions/action_viewabstract_provider.dart';
 
 enum ValueNotifierPane { FIRST, SECOND, BOTH, NONE }
 
-mixin ActionOnToolbarSubPaneMixin<T extends StatefulWidget,
-    E extends ActionOnToolbarItem> on State<T> {
+mixin ActionOnToolbarSubPaneMixin<
+  T extends StatefulWidget,
+  E extends ActionOnToolbarItem
+>
+    on State<T> {
   ValueNotifier<E?>? getOnActionAdd();
   ValueNotifier? onChangeThatHasToAddAction();
 
@@ -55,8 +58,11 @@ mixin ActionOnToolbarSubPaneMixin<T extends StatefulWidget,
     super.dispose();
   }
 }
-mixin BasePageActionOnToolbarMixin<T extends BasePage,
-    E extends ActionOnToolbarItem> on BasePageState<T> {
+mixin BasePageActionOnToolbarMixin<
+  T extends BasePage,
+  E extends ActionOnToolbarItem
+>
+    on BasePageState<T> {
   GlobalKey<ActionOnToolbarsasState> key = GlobalKey<ActionOnToolbarsasState>();
   ValueNotifier<E?>? _onActionAdd;
 
@@ -94,16 +100,20 @@ mixin BasePageActionOnToolbarMixin<T extends BasePage,
     key.currentState?.add(_onActionAdd?.value);
   }
 
-  Widget getActionPane(
-      {required bool firstPane, TabControllerHelper? tab, E? selectedItem});
+  Widget getActionPane({
+    required bool firstPane,
+    TabControllerHelper? tab,
+    E? selectedItem,
+  });
 
   E onActionInitial();
 
   @override
-  Widget? getAppbarTitle(
-      {bool? firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
+  Widget? getAppbarTitle({
+    bool? firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  }) {
     if (firstPane == null) {
       if (!isLargeScreenFromCurrentScreenSize(context)) return null;
       debugPrint("BasePageActionOnToolbar mixin is called");
@@ -122,11 +132,7 @@ mixin BasePageActionOnToolbarMixin<T extends BasePage,
     ScrollController? controler,
     TabControllerHelper? tab,
   }) {
-    return [
-      SliverFillRemaining(
-        child: getWidgetFromBase(firstPane, tab: tab),
-      )
-    ];
+    return [SliverFillRemaining(child: getWidgetFromBase(firstPane, tab: tab))];
   }
 
   Widget getWidgetFromBase(bool firstPane, {TabControllerHelper? tab}) {
@@ -158,18 +164,21 @@ mixin BasePageActionOnToolbarMixin<T extends BasePage,
       return getWidget(firstPane, tab: tab, item: null);
     }
     return ValueListenableBuilder(
-        valueListenable: _onActionAdd!,
-        builder: (context, value, child) {
-          if (this is BasePageWithThirdPaneMixin) {
-            debugPrint(
-                "BasePageActionOnToolbarMixin is =>> BasePageWithThirdPaneMixin removing third pane");
-
-            (this as BasePageWithThirdPaneMixin).setThirdPane(null);
-          }
+      valueListenable: _onActionAdd!,
+      builder: (context, value, child) {
+        if (this is BasePageWithThirdPaneMixin) {
           debugPrint(
-              "BasePageActionOnToolbarMixin getValueListenableBuilder called value $value");
-          return getWidget(firstPane, tab: tab, item: value);
-        });
+            "BasePageActionOnToolbarMixin is =>> BasePageWithThirdPaneMixin removing third pane",
+          );
+
+          (this as BasePageWithThirdPaneMixin).setThirdPane(null);
+        }
+        debugPrint(
+          "BasePageActionOnToolbarMixin getValueListenableBuilder called value $value",
+        );
+        return getWidget(firstPane, tab: tab, item: value);
+      },
+    );
   }
 
   Widget getWidget(bool firstPane, {TabControllerHelper? tab, E? item}) {
@@ -188,17 +197,21 @@ class ActionOnToolbarItem {
   GestureTapCallback? onPress;
   Object? mainObject;
   Object? subObject;
-  ActionOnToolbarItem(
-      {required this.actionTitle,
-      this.icon,
-      this.path,
-      this.mainObject,
-      this.onPress,
-      this.subObject});
+  ActionOnToolbarItem({
+    required this.actionTitle,
+    this.icon,
+    this.path,
+    this.mainObject,
+    this.onPress,
+    this.subObject,
+  });
 }
 
-class ActionOnToolbarsas<T extends BasePageActionOnToolbarMixin,
-    E extends ActionOnToolbarItem> extends StatefulWidget {
+class ActionOnToolbarsas<
+  T extends BasePageActionOnToolbarMixin,
+  E extends ActionOnToolbarItem
+>
+    extends StatefulWidget {
   List<E> actions;
   T widget;
   ActionOnToolbarsas({required this.widget, required this.actions, super.key});
@@ -208,8 +221,11 @@ class ActionOnToolbarsas<T extends BasePageActionOnToolbarMixin,
       ActionOnToolbarsasState<T, E>();
 }
 
-class ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin,
-    E extends ActionOnToolbarItem> extends State<ActionOnToolbarsas<T, E>> {
+class ActionOnToolbarsasState<
+  T extends BasePageActionOnToolbarMixin,
+  E extends ActionOnToolbarItem
+>
+    extends State<ActionOnToolbarsas<T, E>> {
   late List<E> _actions;
 
   @override
@@ -222,7 +238,8 @@ class ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin,
   @override
   void didUpdateWidget(covariant ActionOnToolbarsas<T, E> oldWidget) {
     debugPrint(
-        "_ActionOnToolbarsasState update new  ${widget.actions[0].actionTitle} current ${_actions[0].actionTitle}");
+      "_ActionOnToolbarsasState update new  ${widget.actions[0].actionTitle} current ${_actions[0].actionTitle}",
+    );
     if (widget.actions[0].actionTitle != _actions[0].actionTitle) {
       _actions = widget.actions;
     }
@@ -255,11 +272,8 @@ class ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin,
     return SizedBox(
       height: kToolbarHeight,
       child: ListView.separated(
-        separatorBuilder: (context, index) => const Center(
-          child: Icon(
-            Icons.arrow_right_outlined,
-          ),
-        ),
+        separatorBuilder: (context, index) =>
+            const Center(child: Icon(Icons.arrow_right_outlined)),
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemCount: _actions.length,
@@ -271,37 +285,44 @@ class ActionOnToolbarsasState<T extends BasePageActionOnToolbarMixin,
 
   Widget getIconWithText(BuildContext context, E item) {
     return InkWell(
-        onTap: () {
-          int idx = _actions.indexWhere(
-              (s) => s.actionTitle == item.actionTitle && s.icon == item.icon);
+      onTap: () {
+        int idx = _actions.indexWhere(
+          (s) => s.actionTitle == item.actionTitle && s.icon == item.icon,
+        );
 
-          debugPrint("_ActionOnToolbarsasState  idx = $idx ");
-          if (idx == _actions.length - 1 ||
-              (idx == 0 && _actions.length == 1)) {
-            debugPrint("_ActionOnToolbarsasState return ");
-            return;
-          }
-          widget.widget.addAction(_actions[idx]);
-          setState(() {
-            _actions = _actions.sublist(0, idx + 1);
-            debugPrint("_ActionOnToolbarsasState  subList = $_actions ");
-          });
-        },
-        child: OnHoverWidget(
-            scale: false,
-            builder: (isHovered) =>
-                getB(item.icon, isHovered, context, item.actionTitle)));
+        debugPrint("_ActionOnToolbarsasState  idx = $idx ");
+        if (idx == _actions.length - 1 || (idx == 0 && _actions.length == 1)) {
+          debugPrint("_ActionOnToolbarsasState return ");
+          return;
+        }
+        widget.widget.addAction(_actions[idx]);
+        setState(() {
+          _actions = _actions.sublist(0, idx + 1);
+          debugPrint("_ActionOnToolbarsasState  subList = $_actions ");
+        });
+      },
+      child: OnHoverWidget(
+        scale: false,
+        builder: (isHovered) =>
+            getB(item.icon, isHovered, context, item.actionTitle),
+      ),
+    );
   }
 
   Widget getB(
-      IconData? icon, bool isHovered, BuildContext context, String title) {
+    IconData? icon,
+    bool isHovered,
+    BuildContext context,
+    String title,
+  ) {
     return Center(
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleLarge!.copyWith(
-            color: isHovered
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.secondary),
+          color: isHovered
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.secondary,
+        ),
       ),
     );
   }
@@ -313,8 +334,9 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<ListToDetailsSecoundPaneHelper?> stack =
-        context.watch<ActionViewAbstractProvider>().getStackedActions;
+    List<ListToDetailsSecoundPaneHelper?> stack = context
+        .watch<ActionViewAbstractProvider>()
+        .getStackedActions;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
@@ -326,33 +348,32 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
           SizedBox(
             height: 40,
             child: ListView.separated(
-                separatorBuilder: (context, index) => const Center(
-                      child: Icon(
-                        Icons.arrow_right_outlined,
-                      ),
-                    ),
-                shrinkWrap: true,
-                physics: const ClampingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                // scrollDirection: Axis.horizontal,
-                itemCount: stack.length,
-                // scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  debugPrint("generate navigate icon index : $index");
-                  dynamic v = stack[index];
-                  if (v == null) {
-                    return getIconWithText(context, Icons.home, "Home");
-                  }
-                  ViewAbstract? viewAbstract = v!.viewAbstract;
-                  if (viewAbstract == null) {
-                    return getIconWithText(context, Icons.home, "Home");
-                  } else {
-                    return getIconWithText(
-                        context,
-                        viewAbstract.getMainIconData(),
-                        viewAbstract.getMainHeaderLabelTextOnly(context));
-                  }
-                }),
+              separatorBuilder: (context, index) =>
+                  const Center(child: Icon(Icons.arrow_right_outlined)),
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              // scrollDirection: Axis.horizontal,
+              itemCount: stack.length,
+              // scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                debugPrint("generate navigate icon index : $index");
+                dynamic v = stack[index];
+                if (v == null) {
+                  return getIconWithText(context, Icons.home, "Home");
+                }
+                ViewAbstract? viewAbstract = v!.viewAbstract;
+                if (viewAbstract == null) {
+                  return getIconWithText(context, Icons.home, "Home");
+                } else {
+                  return getIconWithText(
+                    context,
+                    viewAbstract.getMainIconData(),
+                    viewAbstract.getMainHeaderLabelTextOnly(context),
+                  );
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -363,35 +384,44 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
     return InkWell(
       onTap: () {},
       child: OnHoverWidget(
-          scale: false,
-          builder: (isHovered) => getB(icon, isHovered, context, title)),
+        scale: false,
+        builder: (isHovered) => getB(icon, isHovered, context, title),
+      ),
     );
   }
 
   Widget getB(
-      IconData icon, bool isHovered, BuildContext context, String title) {
+    IconData icon,
+    bool isHovered,
+    BuildContext context,
+    String title,
+  ) {
     return Center(
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleMedium!.copyWith(
-            color: isHovered
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.secondary),
+          color: isHovered
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.secondary,
+        ),
       ),
     );
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.arrow_right_outlined,
-            color: isHovered
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.secondary),
+        Icon(
+          Icons.arrow_right_outlined,
+          color: isHovered
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.secondary,
+        ),
         Text(
           title,
           style: TextStyle(
-              color: isHovered
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.secondary),
+            color: isHovered
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.secondary,
+          ),
         ),
       ],
     );
@@ -400,10 +430,11 @@ class BaseSharedActionDrawerNavigation extends StatelessWidget {
 
 class ThirdToSecondPaneHelper extends SecondPaneHelper {
   bool shouldAddToThirdPaneList;
-  ThirdToSecondPaneHelper(
-      {required this.shouldAddToThirdPaneList,
-      required super.title,
-      super.value});
+  ThirdToSecondPaneHelper({
+    required this.shouldAddToThirdPaneList,
+    required super.title,
+    super.value,
+  });
 }
 
 class SecondPaneHelper {
@@ -429,10 +460,7 @@ class SecoundPaneHelperWithParentValueNotifier {
 class SecoundPaneHelperWithParent {
   GlobalKey<BasePageSecoundPaneNotifierState> state;
   SecondPaneHelper? value;
-  SecoundPaneHelperWithParent({
-    required this.state,
-    this.value,
-  });
+  SecoundPaneHelperWithParent({required this.state, this.value});
 }
 
 class ActionOnToolbar<T extends BasePageSecoundPaneNotifierState>
@@ -441,11 +469,12 @@ class ActionOnToolbar<T extends BasePageSecoundPaneNotifierState>
   SecondPaneHelper? selectedItem;
   T widget;
 
-  ActionOnToolbar(
-      {required this.widget,
-      required this.actions,
-      super.key,
-      this.selectedItem});
+  ActionOnToolbar({
+    required this.widget,
+    required this.actions,
+    super.key,
+    this.selectedItem,
+  });
 
   @override
   State<ActionOnToolbar<T>> createState() => ActionOnToolbarState<T>();
@@ -544,11 +573,16 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
     widget.widget.childs?.forEach((o) {
       debugPrint("_ActionOnToolbarsasState currentState ${o?.currentState}");
       debugPrint(
-          "_ActionOnToolbarsasState curentState ${(o as GlobalKey<BasePageSecoundPaneNotifierState>).currentState?.getSecondPaneNotifier}");
+        "_ActionOnToolbarsasState curentState ${(o as GlobalKey<BasePageSecoundPaneNotifierState>).currentState?.getSecondPaneNotifier}",
+      );
       (o).currentState?.getSecondPaneNotifier.addListener(() {
         debugPrint("_ActionOnToolbarsasState addListinerer");
-        _addSubPane(SecoundPaneHelperWithParent(
-            state: o, value: o.currentState!.getSecondPaneNotifier.value));
+        _addSubPane(
+          SecoundPaneHelperWithParent(
+            state: o,
+            value: o.currentState!.getSecondPaneNotifier.value,
+          ),
+        );
       });
     });
   }
@@ -558,11 +592,8 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
     return SizedBox(
       height: kToolbarHeight,
       child: ListView.separated(
-        separatorBuilder: (context, index) => const Center(
-          child: Icon(
-            Icons.arrow_right_outlined,
-          ),
-        ),
+        separatorBuilder: (context, index) =>
+            const Center(child: Icon(Icons.arrow_right_outlined)),
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemCount: _actions.length,
@@ -575,11 +606,12 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
   GlobalKey<BasePageSecoundPaneNotifierState>? getKey(String? title) {
     if (title == null) return null;
     return widget.widget.childs?.firstWhereOrNull((i) {
-      if (i is GlobalKey<BasePageSecoundPaneNotifierState>) {
-        return i.currentState?.onActionInitial() == title;
-      }
-      return false;
-    }) as GlobalKey<BasePageSecoundPaneNotifierState>;
+          if (i is GlobalKey<BasePageSecoundPaneNotifierState>) {
+            return i.currentState?.onActionInitial() == title;
+          }
+          return false;
+        })
+        as GlobalKey<BasePageSecoundPaneNotifierState>;
   }
 
   ButtonStyle getStyle() {
@@ -602,10 +634,9 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
       // shape:  WidgetStateProperty.all(),
       iconColor: WidgetStateProperty.all(Colors.orange),
       textStyle: WidgetStateProperty.resolveWith((states) {
-        TextStyle? style = Theme.of(context)
-            .textTheme
-            .titleLarge
-            ?.copyWith(color: Theme.of(context).colorScheme.surface);
+        TextStyle? style = Theme.of(context).textTheme.titleLarge?.copyWith(
+          color: Theme.of(context).colorScheme.surface,
+        );
         double? large = Theme.of(context).textTheme.titleLarge?.fontSize;
         if (states.contains(WidgetState.pressed)) {
           return style?.copyWith(fontSize: large == null ? 12 : large - 1);
@@ -620,43 +651,43 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
 
   Widget getIconWithText(BuildContext context, SecondPaneHelper item) {
     return TextButton(
-        style: getStyle(),
-        onPressed: () {
-          int idx = _actions.indexWhere((s) => s.title == item.title);
+      style: getStyle(),
+      onPressed: () {
+        int idx = _actions.indexWhere((s) => s.title == item.title);
 
-          debugPrint("_ActionOnToolbarsasState  idx = $idx ");
-          if (idx == _actions.length - 1 ||
-              (idx == 0 && _actions.length == 1)) {
-            if (idx == _actions.length - 1) {
-              getKey(_actions[idx].title)?.currentState?.notify(null);
-              setState(() {
-                _actions = _actions.sublist(0, idx + 1);
-                debugPrint("_ActionOnToolbarsasState  subList = $_actions ");
-              });
-            }
-
-            debugPrint("_ActionOnToolbarsasState return ");
-            return;
+        debugPrint("_ActionOnToolbarsasState  idx = $idx ");
+        if (idx == _actions.length - 1 || (idx == 0 && _actions.length == 1)) {
+          if (idx == _actions.length - 1) {
+            getKey(_actions[idx].title)?.currentState?.notify(null);
+            setState(() {
+              _actions = _actions.sublist(0, idx + 1);
+              debugPrint("_ActionOnToolbarsasState  subList = $_actions ");
+            });
           }
 
-          if (item.state != null) {
-            debugPrint("_ActionOnToolbarsasState item.state != null");
-            item.state?.currentState?.notify(_actions[idx]);
-          } else {
-            if (idx != 0) {}
-            widget.widget.notify(_actions[idx]);
-          }
-          final key = getKey(_actions[idx].title);
-          if (key != null) {
-            key.currentState?.notify(null);
-            // return;
-          }
+          debugPrint("_ActionOnToolbarsasState return ");
+          return;
+        }
 
-          setState(() {
-            _actions = _actions.sublist(0, idx + 1);
-            debugPrint("_ActionOnToolbarsasState  subList = $_actions ");
-          });
-        },
-        child: Text(item.title));
+        if (item.state != null) {
+          debugPrint("_ActionOnToolbarsasState item.state != null");
+          item.state?.currentState?.notify(_actions[idx]);
+        } else {
+          if (idx != 0) {}
+          widget.widget.notify(_actions[idx]);
+        }
+        final key = getKey(_actions[idx].title);
+        if (key != null) {
+          key.currentState?.notify(null);
+          // return;
+        }
+
+        setState(() {
+          _actions = _actions.sublist(0, idx + 1);
+          debugPrint("_ActionOnToolbarsasState  subList = $_actions ");
+        });
+      },
+      child: Text(item.title),
+    );
   }
 }

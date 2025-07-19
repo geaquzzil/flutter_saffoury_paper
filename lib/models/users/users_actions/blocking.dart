@@ -69,7 +69,7 @@ class Blocking extends ViewAbstractStandAloneCustomViewApi<Blocking> {
   List<String>? getCustomAction() {
     String tableName = user.getTableNameApi()!;
     String? id = iD == -1 ? null : "$iD";
-    return [blockMood.name, tableName, ?id];
+    return [blockMood.name, tableName, if(id!=null)id!];
   }
 
   @override

@@ -15,6 +15,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 import '../view_abstract.dart';
 
+part 'changes_records.g.dart';
+
 class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
     implements CustomViewHorizontalListResponse<ChangesRecords> {
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -54,7 +56,11 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
 
   @override
   List<String>? getCustomAction() {
-    return [?viewAbstract?.getTableNameApi(), "changed_records"];
+    return [
+      if (viewAbstract?.getTableNameApi() != null)
+        viewAbstract!.getTableNameApi()!,
+      "changed_records",
+    ];
   }
 
   @override
@@ -111,8 +117,10 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
     BuildContext context, {
     required SliverApiWithStaticMixin state,
     List<dynamic>? items,
+    required dynamic requestObjcet,
   }) {
     debugPrint("getCustomViewSingleResponseWidget $totalGrouped");
+    return SliverToBoxAdapter(child: Text("saddsa"));
     if (pieChartEnabled == false) {
       return LineChartItem<ChangesRecordGroup, String>(
         title:
@@ -177,7 +185,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
   }
 
   @override
-  getCustomViewOnResponseAddWidget(ChangesRecords<ViewAbstract> response) {
+  void getCustomViewOnResponseAddWidget(ChangesRecords<ViewAbstract> response) {
     // TODO: implement getCustomViewOnResponseAddWidget
     throw UnimplementedError();
   }

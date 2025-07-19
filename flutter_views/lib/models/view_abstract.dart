@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/apis/unused_records.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -37,7 +39,19 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   @Deprecated("could be replaced with getHomeListHeaderWidgetList")
   List<StaggeredGridTile>? getHomeListHeaderWidget(BuildContext context) =>
       null;
-  List<Widget>? getHomeListHeaderWidgetList(BuildContext context) => null;
+  List<Widget>? getHomeListHeaderWidgetList(BuildContext context) {
+    // return null;
+    return [
+      SliverApiMixinViewAbstractWidget(
+        // cardType: CardType.grid,
+        hideOnEmpty: true,
+        isSliver: true,
+        scrollDirection: Axis.horizontal,
+        toListObject: UnusedRecords.init(this),
+      ),
+    ];
+  }
+
   List<StaggeredGridTile> getHomeHorizotalList(BuildContext context) => [];
 
   Widget? getHomeHeaderWidget(BuildContext context) {
@@ -46,11 +60,7 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
 
   Icon? getFBIcon({SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) {
     IconData? ic = getFBEditIconData();
-    return ic == null
-        ? null
-        : Icon(
-            ic,
-          );
+    return ic == null ? null : Icon(ic);
   }
 
   IconData? getFBEditIconData() {
@@ -69,7 +79,8 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
       return false;
     }
     debugPrint(
-        "isEqualsAsType type is $runtimeType object type is ${object.runtimeType}");
+      "isEqualsAsType type is $runtimeType object type is ${object.runtimeType}",
+    );
     return runtimeType == object.runtimeType;
   }
 
@@ -85,7 +96,8 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
 
   T copyWithNewSuggestion(ViewAbstract newValue) {
     newValue.setLastSearchViewAbstractByTextInputList(
-        getLastSearchViewByTextInputList);
+      getLastSearchViewByTextInputList,
+    );
     newValue.setFieldNameFromParent(fieldNameFromParent);
     newValue.setParent(parent);
     return newValue as T;
@@ -102,9 +114,11 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
   T getNewInstance({Map<String, dynamic>? values, String? text}) {
     T ob = ((copyWithNewSuggestion(this) as ViewAbstract)..iD = -1) as T;
 
-    return (ob as ViewAbstract).fromJsonViewAbstract(text != null
-        ? copyWithFormValues(values: getCopyWithFormTextField(text)) ?? {}
-        : copyWithFormValues(values: values) ?? {'iD': -1});
+    return (ob as ViewAbstract).fromJsonViewAbstract(
+      text != null
+          ? copyWithFormValues(values: getCopyWithFormTextField(text)) ?? {}
+          : copyWithFormValues(values: values) ?? {'iD': -1},
+    );
   }
 
   T? onAfterValidate(BuildContext context) {
@@ -126,12 +140,14 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
         } else {
           if ((value as ViewAbstract).isEditing()) {
             debugPrint(
-                "onManuallyValidate called subViewAbstract $T  field=>$element  skipped because subViewAbstract is editing mood");
+              "onManuallyValidate called subViewAbstract $T  field=>$element  skipped because subViewAbstract is editing mood",
+            );
             continue;
           }
           isError = (value).onManuallyValidate(context) == null;
           debugPrint(
-              "onManuallyValidate called subViewAbstract $T  field=>$element  value => $value isError= $isError");
+            "onManuallyValidate called subViewAbstract $T  field=>$element  value => $value isError= $isError",
+          );
           if (isError) return null;
         }
       }
@@ -139,7 +155,8 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
       isError =
           getTextInputValidatorCompose(context, element).call(value) != null;
       debugPrint(
-          "onManuallyValidate called for $T  field=>$element  value => $value isError= $isError");
+        "onManuallyValidate called for $T  field=>$element  value => $value isError= $isError",
+      );
       if (isError) return null;
     }
     return this as T;
@@ -159,7 +176,8 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     (newObject as ViewAbstract).setFieldNameFromParent(fieldNameFromParent);
     (newObject).setParent(parent);
     (newObject).setLastSearchViewAbstractByTextInputList(
-        getLastSearchViewByTextInputList);
+      getLastSearchViewByTextInputList,
+    );
     return newObject;
   }
 
@@ -206,7 +224,8 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     ((newObject as ViewAbstract)).setFieldNameFromParent(fieldNameFromParent);
     (newObject).setParent(parent);
     (newObject).setLastSearchViewAbstractByTextInputList(
-        getLastSearchViewByTextInputList);
+      getLastSearchViewByTextInputList,
+    );
     (newObject).textFieldController = textFieldController;
     (newObject).setRequestOptionMap(requestOption: getRequestOptionMap());
 
@@ -256,7 +275,8 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     ((newObject as ViewAbstract)).setFieldNameFromParent(fieldNameFromParent);
     (newObject).setParent(parent);
     (newObject).setLastSearchViewAbstractByTextInputList(
-        getLastSearchViewByTextInputList);
+      getLastSearchViewByTextInputList,
+    );
     (newObject).textFieldController = textFieldController;
     return newObject;
   }
@@ -273,7 +293,8 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     ((newObject as ViewAbstract)).setFieldNameFromParent(fieldNameFromParent);
     (newObject).setParent(parent);
     (newObject).setLastSearchViewAbstractByTextInputList(
-        getLastSearchViewByTextInputList);
+      getLastSearchViewByTextInputList,
+    );
     (newObject).textFieldController = textFieldController;
     return newObject;
   }
@@ -304,19 +325,23 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     return "${AppLocalizations.of(context)!.add_new} ${getMainHeaderLabelTextOnly(context)}";
   }
 
-  List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+  List<Widget>? getCustomBottomWidget(
+    BuildContext context, {
+    ServerActions? action,
+    ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+  }) {
     return null;
   }
 
-  List<Widget>? getCustomTopWidget(BuildContext context,
-      {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
-      ValueNotifier<SecondPaneHelper?>? onClick,
-      BasePageSecoundPaneNotifierState? basePage,
-      bool? isFromFirstAndSecPane,
-      dynamic extras}) {
+  List<Widget>? getCustomTopWidget(
+    BuildContext context, {
+    ServerActions? action,
+    ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+    ValueNotifier<SecondPaneHelper?>? onClick,
+    BasePageSecoundPaneNotifierState? basePage,
+    bool? isFromFirstAndSecPane,
+    dynamic extras,
+  }) {
     return null;
   }
 

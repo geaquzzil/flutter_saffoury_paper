@@ -22,6 +22,12 @@ class TransferAccount
   }
 
   @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+    "employee": Employee(),
+    "customerFrom": Customer(),
+    "customerTo": Customer(),
+  };
+  @override
   TransferAccount fromJsonViewAbstract(Map<String, dynamic> json) {
     // TODO: implement fromJsonViewAbstract
     throw UnimplementedError();

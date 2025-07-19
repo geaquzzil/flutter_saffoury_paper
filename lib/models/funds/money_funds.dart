@@ -113,8 +113,9 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
       RequestOptions? generatedOptionFromListCall}) {
     if (action == ServerActions.list) {
       return RequestOptions(
-          sortBy: SortFieldValue(field: "date", type: SortByType.DESC));
+          sortBy: SortFieldValue(field: "date", type: SortByType.DESC)).addRequestObjcets(true);
     }
+    
     return null;
   }
 

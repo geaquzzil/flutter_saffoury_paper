@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'invoice_master.dart';
@@ -39,16 +40,17 @@ class Purchases extends InvoiceMaster<Purchases> {
   String getForeignKeyName() {
     return "PurchaseID";
   }
-
+  
   @override
   List<String>? getRequestedForginListOnCall({required ServerActions action}) {
     var list = ["purchases_details"];
+    debugPrint("getRequestedForginListOnCall Purchases action : $action");
     if (action == ServerActions.view ||
         action == ServerActions.add ||
         action == ServerActions.edit) {
       return list;
     }
-    return null;
+    return [""];
   }
 
   @override
@@ -69,13 +71,12 @@ class Purchases extends InvoiceMaster<Purchases> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      super.getMirrorFieldsMapNewInstance()
-        ..addAll({
-          "purchases_details": List<PurchasesDetails>.empty(),
-          "purchases_details_count": 0,
-          "purchases_refunds": List<PurchasesRefund>.empty(),
-          "purchases_refunds_count": 0,
-        });
+      super.getMirrorFieldsMapNewInstance()..addAll({
+        "purchases_details": List<PurchasesDetails>.empty(),
+        "purchases_details_count": 0,
+        "purchases_refunds": List<PurchasesRefund>.empty(),
+        "purchases_refunds_count": 0,
+      });
 
   // @override
   // PrintableInvoiceInterface getModifiablePrintablePdfSetting(
@@ -117,10 +118,7 @@ class PurchasesDetails extends InvoiceMasterDetails<PurchasesDetails> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      super.getMirrorFieldsMapNewInstance()
-        ..addAll({
-          "purchases": Purchases(),
-        });
+      super.getMirrorFieldsMapNewInstance()..addAll({"purchases": Purchases()});
 
   @override
   String? getTableNameApi() => "purchases_details";

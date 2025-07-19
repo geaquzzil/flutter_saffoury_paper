@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
@@ -16,6 +18,7 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -168,12 +171,16 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       host: URLS.getBaseUrl(),
       pathSegments: [
         ...URLS.getBasePath(),
-        ?tableName,
-        ...?customAction,
+        if (tableName != null) tableName,
+        if (customAction != null) ...customAction,
         if (iD != null) "$iD",
       ],
     );
     return url;
+  }
+
+  bool shouldGetFromApi(ServerActions action) {
+    return _checkListToRequest(action) != false;
   }
 
   dynamic _checkListToRequest(ServerActions action) {
@@ -181,12 +188,15 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
     if (requiredList == null) return false;
     if (requiredList.isNotEmpty) {
+      debugPrint(
+        "checkListToRequest action:$action checking $T requiredList :$requiredList",
+      );
       List l = requiredList.where((element) {
         int? count = getFieldValue("${element}_count");
         List? list = getFieldValue(element);
         if (count == null && list == null) return true;
         debugPrint(
-          "checkListToRequest field:$element count:$count list:${list?.length}",
+          "checkListToRequest $T field:$element count:$count list:${list?.length}",
         );
         return count != list?.length;
       }).toList();
@@ -258,7 +268,15 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
 
   Future<Response?> _getDeleteResponse({required BuildContext context}) async {
     var headers = await getHeaders(context);
-    return await getHttp().delete(_getUrl(iD: iD), headers: headers);
+    return await getHttp().delete(
+      _getUrl(
+        iD: iD == -1 ? null : iD,
+        params: getRequestOptionFromParamOrAbstract(
+          action: ServerActions.delete_action,
+        )?.getRequestParams(),
+      ),
+      headers: headers,
+    );
   }
 
   T onResponse200K(T oldValue) {
@@ -311,7 +329,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       dynamic isRequireList = _checkListToRequest(
         customAction ?? ServerActions.view,
       );
-      if (customID == null) {
+      if (customID == null || customID == iD) {
         if (isRequireList == false && !isNew()) {
           debugPrint("viewCall $T returning this");
           return this as T;
@@ -385,6 +403,18 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       onResponse?.onFlutterClientFailure?.call(e);
     }
     return null;
+  }
+
+  void _getSnackbar(BuildContext context, String text) {
+    var snackBar = SnackBar(
+      // width: SizeConfig.,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kBorderRadius),
+      ),
+      content: Text(text),
+      behavior: SnackBarBehavior.floating,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   // Future<E> getServerDataApi<E extends ServerData>(
@@ -464,15 +494,30 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         );
         if (statusCode == 401) {
           onResponse.onEmailOrPassword?.call();
+          _getSnackbar(
+            context,
+            AppLocalizations.of(context)!.error_login_failed,
+          );
           //Invalid user and password
         } else if (statusCode == 402) {
           onResponse.onBlocked?.call();
+          _getSnackbar(
+            context,
+            AppLocalizations.of(context)!.error_login_failed,
+          );
           //BLOCK
         } else if (statusCode == 403) {
           onResponse.onNoPermission?.call();
+          _getSnackbar(context, AppLocalizations.of(context)!.err_permission);
         } else if (statusCode == 405 || statusCode == 406) {
+          //TODO translate
+          _getSnackbar(context, AppLocalizations.of(context)!.error401);
           onResponse.onAuthRequired?.call(statusCode == 405);
         } else {
+          _getSnackbar(
+            context,
+            AppLocalizations.of(context)!.errOperationFailed,
+          );
           onResponse.onServerFailureResponse?.call(
             (serverResponse.message ?? " unkown exceptions"),
           );
@@ -517,14 +562,14 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
   }
 
-  void deleteCall(
+  Future<bool> deleteCall(
     BuildContext context, {
     required OnResponseCallback onResponse,
   }) async {
     debugPrint("ViewAbstractApi deleteCall iD=> $iD ");
     try {
       var response = await _getDeleteResponse(context: context);
-      if (response == null) return null;
+      if (response == null) return false;
       if (response.statusCode == 200) {
         ServerResponse serverResponse = ServerResponse.fromJson(
           convert.jsonDecode(response.body),
@@ -534,10 +579,13 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
           onResponse.onServerFailureResponse?.call(
             "ALL ${AppLocalizations.of(context)!.errOperationFailed}",
           );
+          _getSnackbar(context, AppLocalizations.of(context)!.error401);
+          return false;
         } else {
           onResponse.onServerResponse?.call(
             AppLocalizations.of(context)!.successDeleted,
           );
+          return true;
         }
       } else {
         onCallCheckError(
@@ -545,9 +593,13 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
           response: response,
           context: context,
         );
+        return false;
       }
-    } catch (e) {
+    } on Exception catch (e, s) {
+      debugPrint("viewCall ex ${e.toString()}");
+      debugPrint("viewCall trace ${s.toString()}");
       onResponse.onFlutterClientFailure?.call(e);
+      return false;
     }
   }
 

@@ -67,7 +67,11 @@ class ChartRecordAnalysis<T extends ViewAbstract>
 
   @override
   List<String>? getCustomAction() {
-    return [?viewAbstract?.getTableNameApi(), "dashit"];
+    return [
+      if (viewAbstract?.getTableNameApi() != null)
+        viewAbstract!.getTableNameApi()!,
+      "dashit",
+    ];
   }
 
   @override
@@ -118,6 +122,7 @@ class ChartRecordAnalysis<T extends ViewAbstract>
     BuildContext context, {
     required SliverApiWithStaticMixin state,
     List<dynamic>? items,
+    required dynamic requestObjcet,
   }) {
     debugPrint(
       "getCustomViewSingleResponseWidget ${responseListAnalysis?.length}",

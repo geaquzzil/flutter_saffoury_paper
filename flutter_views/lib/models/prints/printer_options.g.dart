@@ -8,13 +8,17 @@ part of 'printer_options.dart';
 
 PrinterOptions _$PrinterOptionsFromJson(Map<String, dynamic> json) =>
     PrinterOptions(
-      language: $enumDecodeNullable(_$LanguageEnumMap, json['language']) ??
-          Language.English,
-      copies: (json['copies'] as num?)?.toInt() ?? 1,
-      printPaperSize: $enumDecodeNullable(
-              _$PrintPaperSizeEnumMap, json['printPaperSize']) ??
-          PrintPaperSize.Default,
-    )
+        language:
+            $enumDecodeNullable(_$LanguageEnumMap, json['language']) ??
+            Language.English,
+        copies: (json['copies'] as num?)?.toInt() ?? 1,
+        printPaperSize:
+            $enumDecodeNullable(
+              _$PrintPaperSizeEnumMap,
+              json['printPaperSize'],
+            ) ??
+            PrintPaperSize.Default,
+      )
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
@@ -34,10 +38,7 @@ Map<String, dynamic> _$PrinterOptionsToJson(PrinterOptions instance) =>
       'printPaperSize': _$PrintPaperSizeEnumMap[instance.printPaperSize]!,
     };
 
-const _$LanguageEnumMap = {
-  Language.English: 0,
-  Language.Arabic: 1,
-};
+const _$LanguageEnumMap = {Language.English: 0, Language.Arabic: 1};
 
 const _$PrintPaperSizeEnumMap = {
   PrintPaperSize.Default: 0,

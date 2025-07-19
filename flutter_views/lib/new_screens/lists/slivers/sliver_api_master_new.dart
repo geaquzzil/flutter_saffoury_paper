@@ -386,17 +386,25 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
               context,
               state: this,
               items: getList(),
+              requestObjcet: _toListObject,
             );
 
         if (w == null) {
           return getEmptyWidget();
         } else if (w is List) {
           return widget.isSliver
-              ? MultiSliver(children: [?widget.header, ...w.cast()])
+              ? MultiSliver(
+                  children: [
+                    if (widget.header != null) widget.header!,
+                    ...w.cast(),
+                  ],
+                )
               : Column(children: w.cast());
         } else {
           return widget.isSliver
-              ? MultiSliver(children: [?widget.header, w])
+              ? MultiSliver(
+                  children: [if (widget.header != null) widget.header!, w],
+                )
               : w;
         }
       }

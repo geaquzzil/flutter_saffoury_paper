@@ -7,6 +7,7 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/apis/unused_records.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
@@ -100,6 +101,8 @@ class ProductSize extends ViewAbstract<ProductSize> {
     return Icons.type_specimen_outlined;
   }
 
+  
+
   @override
   List<Widget>? getCustomBottomWidget(
     BuildContext context, {
@@ -118,7 +121,7 @@ class ProductSize extends ViewAbstract<ProductSize> {
         toListObject: Product().getSelfInstanceWithSimilarOption(
           context: context,
           obj: this,
-          copyWith: RequestOptions(countPerPage: 5),
+          copyWith: RequestOptions(countPerPage: 5).addRequestObjcets(true),
         ),
       ),
     ];

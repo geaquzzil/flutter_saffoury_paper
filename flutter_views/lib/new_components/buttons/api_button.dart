@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 
 class ApiButton<T> extends StatefulWidget {
   final String title;
-  final Future<T?> futureBuilder;
+  final Future<T?> Function() futureBuilder;
   final IconData? icon;
   final ValueNotifier<T?>? onResult;
   final Function(T? onResult)? onResultFunction;
-  const ApiButton(
-      {super.key,
-      required this.title,
-      this.icon,
-      required this.futureBuilder,
-      this.onResult,
-      this.onResultFunction});
+  const ApiButton({
+    super.key,
+    required this.title,
+    this.icon,
+    required this.futureBuilder,
+    this.onResult,
+    this.onResultFunction,
+  });
 
   @override
   State<ApiButton<T>> createState() => _ApiButtonState<T>();
@@ -23,9 +24,13 @@ class _ApiButtonState<T> extends State<ApiButton<T>> {
       ValueNotifier<ConnectionState>(ConnectionState.none);
 
   late ValueNotifier<T?> onResult;
+
+  late Future<T?> Function() _futureBuilder;
+  bool _isCalled = false;
   @override
   void initState() {
     onResult = widget.onResult ?? ValueNotifier<T?>(null);
+    _futureBuilder = widget.futureBuilder;
     super.initState();
   }
 
@@ -44,10 +49,14 @@ class _ApiButtonState<T> extends State<ApiButton<T>> {
                     onPressed: null,
                     icon: Icon(widget.icon),
                     label: const SizedBox(
-                        width: 60, child: LinearProgressIndicator()),
+                      width: 60,
+                      child: LinearProgressIndicator(),
+                    ),
                   )
-                : ElevatedButton.icon(
-                    onPressed: onButtonPressed,
+                : OutlinedButton.icon(
+                    onPressed: () async {
+                      await onButtonPressed();
+                    },
                     icon: Icon(widget.icon),
                     label: text,
                   ),
@@ -64,11 +73,14 @@ class _ApiButtonState<T> extends State<ApiButton<T>> {
                 ? const ElevatedButton(
                     onPressed: null,
                     child: SizedBox(
-                        width: double.infinity,
-                        child: LinearProgressIndicator()),
+                      width: double.infinity,
+                      child: LinearProgressIndicator(),
+                    ),
                   )
                 : ElevatedButton(
-                    onPressed: onButtonPressed,
+                    onPressed: () async {
+                      await onButtonPressed();
+                    },
                     child: text,
                   ),
           );
@@ -79,14 +91,19 @@ class _ApiButtonState<T> extends State<ApiButton<T>> {
   }
 
   Future<void> onButtonPressed() async {
+    // if (_isCalled) return;
     connectionState.value = ConnectionState.waiting;
     debugPrint("ApiButton onButtonPressed watining");
     // await Future.delayed(const Duration(seconds: 3));
-    T? res = await widget.futureBuilder;
-    debugPrint("ApiButton onButtonPressed done");
+
+    T? res = await _futureBuilder.call();
+
+    debugPrint("ApiButton onButtonPressed done res $res");
     connectionState.value = ConnectionState.done;
     onResult.value = res;
     if (widget.onResultFunction != null) {
+      _isCalled = true;
+
       widget.onResultFunction!(res);
     }
   }

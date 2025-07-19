@@ -512,17 +512,16 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   List<DropdownStringListItem> getMainFieldsIconsAndValues(
     BuildContext context,
   ) {
-    return getMainFields(context: context)
-        .map(
-          (e) => DropdownStringListItem(
-            icon: getFieldIconData(e),
-            label: getFieldLabel(context, e),
-            value: isViewAbstract(e)
-                ? getMirrorNewInstanceViewAbstract(e).getForeignKeyName()
-                : e,
-          ),
-        )
-        .toList();
+    return getMainFields(context: context).map((e) {
+      debugPrint("getMainFieldsIconsAndValues for $T field:$e");
+      return DropdownStringListItem(
+        icon: getFieldIconData(e),
+        label: getFieldLabel(context, e),
+        value: isViewAbstract(e)
+            ? getMirrorNewInstanceViewAbstract(e).getForeignKeyName()
+            : e,
+      );
+    }).toList();
   }
 
   String getFieldValueFromDropDownString(String selectedValue) {

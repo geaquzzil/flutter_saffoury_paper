@@ -339,7 +339,8 @@ class WebGridViewItem extends StatelessWidget {
                   .getCartableProductItemInterface()
                   .getCartableProductQuantity() !=
               0)
-            ?_buildCartIcon(isHovered, context),
+            if (_buildCartIcon(isHovered, context) != null)
+              _buildCartIcon(isHovered, context)!,
         if (hightLightonSelect)
           Selector<ActionViewAbstractProvider, ViewAbstract?>(
             builder: (context, value, child) {

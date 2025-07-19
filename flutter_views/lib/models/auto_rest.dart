@@ -186,7 +186,12 @@ abstract class CustomViewHorizontalListResponse<T extends ViewAbstract> {
   // Widget? getCustomViewListResponseWidget(BuildContext context, List<T> item);
 
   ///if return is List<Widget> then wrap with SliverList
-  dynamic getCustomViewResponseWidget(BuildContext context,{required   SliverApiWithStaticMixin state,List<dynamic>? items});
+  dynamic getCustomViewResponseWidget(
+    BuildContext context, {
+    required SliverApiWithStaticMixin state,
+    List<dynamic>? items,
+    required dynamic requestObjcet,
+  });
   // Widget? getCustomViewTitleWidget(
   //   BuildContext context,
   //   SliverApiWithStaticMixin state,

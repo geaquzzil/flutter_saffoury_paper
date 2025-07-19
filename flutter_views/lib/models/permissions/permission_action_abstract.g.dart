@@ -7,7 +7,8 @@ part of 'permission_action_abstract.dart';
 // **************************************************************************
 
 PermissionActionAbstract _$PermissionActionAbstractFromJson(
-        Map<String, dynamic> json) =>
+  Map<String, dynamic> json,
+) =>
     PermissionActionAbstract()
       ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
@@ -22,16 +23,16 @@ PermissionActionAbstract _$PermissionActionAbstractFromJson(
       ..delete_action = (json['delete_action'] as num?)?.toInt();
 
 Map<String, dynamic> _$PermissionActionAbstractToJson(
-        PermissionActionAbstract instance) =>
-    <String, dynamic>{
-      'iD': instance.iD,
-      'delete': instance.delete,
-      'table_name': instance.table_name,
-      'print': instance.print,
-      'notification': instance.notification,
-      'list': instance.list,
-      'view': instance.view,
-      'add': instance.add,
-      'edit': instance.edit,
-      'delete_action': instance.delete_action,
-    };
+  PermissionActionAbstract instance,
+) => <String, dynamic>{
+  'iD': instance.iD,
+  'delete': instance.delete,
+  'table_name': instance.table_name,
+  'print': instance.print,
+  'notification': instance.notification,
+  'list': instance.list,
+  'view': instance.view,
+  'add': instance.add,
+  'edit': instance.edit,
+  'delete_action': instance.delete_action,
+};

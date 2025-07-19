@@ -7,8 +7,11 @@ import 'package:reflectable/reflectable.dart';
 @GlobalQuantifyCapability(r"^.(SomeClass|SomeEnum)", reflector)
 class Reflector extends Reflectable {
   const Reflector()
-      : super(invokingCapability, declarationsCapability,
-            typeRelationsCapability);
+    : super(
+        invokingCapability,
+        declarationsCapability,
+        typeRelationsCapability,
+      );
   // const Reflector()
   //     : super(
   //         // newInstanceCapability,
@@ -25,8 +28,11 @@ abstract class VMirrors<T> {
   T getSelfNewInstance();
 
   /// value it could be map of (field:vlaue) or it could be field and value
-  T? getSelfNewInstanceFileImporter(
-      {required BuildContext context, String? field, dynamic value}) {
+  T? getSelfNewInstanceFileImporter({
+    required BuildContext context,
+    String? field,
+    dynamic value,
+  }) {
     return getSelfNewInstance();
   }
 
@@ -43,11 +49,7 @@ abstract class VMirrors<T> {
   dynamic getFieldValue(String field, {BuildContext? context}) {
     try {
       dynamic value = getInstanceMirror().invokeGetter(field);
-      debugPrint("getFieldValue field $field from $T value => $value");
-
-      // if (value == null) {
-      //   return getMirrorFieldsMapNewInstance()[field];
-      // }
+      // debugPrint("getFieldValue field $field from $T value => $value");
       return value;
     } catch (e) {
       debugPrint("getFieldValue $e");
@@ -79,7 +81,8 @@ abstract class VMirrors<T> {
       debugPrint("setFieldValue $T  field=$field value=$value");
     } catch (e) {
       debugPrint(
-          "setFieldValue error $T field= $field excepion=${e.toString()}");
+        "setFieldValue error $T field= $field excepion=${e.toString()}",
+      );
     }
   }
 
@@ -148,12 +151,15 @@ abstract class VMirrors<T> {
   }
 
   String getFieldValueCheckTypeChangeToCurrencyFormat(
-      BuildContext context, String field) {
+    BuildContext context,
+    String field,
+  ) {
     // 0.toCurrencyFormat();
     TextInputType? type = (this as ViewAbstract).getTextInputType(field);
 
     debugPrint(
-        "getFieldValueCheckTypeChangeToCurrencyFormat field $field type $type  $type this type $runtimeType");
+      "getFieldValueCheckTypeChangeToCurrencyFormat field $field type $type  $type this type $runtimeType",
+    );
     if (type == null) return getFieldValueCheckType(context, field);
     if (type == TextInputType.number) {
       return (getFieldValue(field, context: context) as double?)
@@ -191,10 +197,14 @@ abstract class VMirrors<T> {
 
   dynamic getMirrorNewInstance(String field) {
     try {
-      return getMirrorFieldsMapNewInstance()[field];
+      // debugPrint("getMirrorFieldsMapNewInstance $T");
+      final v = getMirrorFieldsMapNewInstance();
+      // debugPrint("getMirrorFieldsMapNewInstance $T $v");
+      return v[field];
     } catch (e) {
       throw UnimplementedError(
-          "Could not get field dynamic value for $field from getMirrorFieldsMapNewInstance");
+        "Could not get field dynamic value for from:$T  field:$field from getMirrorNewInstance",
+      );
     }
   }
 
@@ -203,7 +213,8 @@ abstract class VMirrors<T> {
       return getMirrorFieldsMapNewInstance()[field];
     } catch (e) {
       throw UnimplementedError(
-          "Could not get field dynamic value for $field from getMirrorFieldsMapNewInstance");
+        "Could not get field $T dynamic value for $field from getMirrorNewInstanceEnum",
+      );
     }
   }
 
@@ -212,7 +223,8 @@ abstract class VMirrors<T> {
       return getMirrorFieldsMapNewInstance()[field];
     } catch (e) {
       throw UnimplementedError(
-          "Could not get field dynamic value for $field from getMirrorFieldsMapNewInstance");
+        "Could not get field $T dynamic value for $field from getMirrorNewInstanceViewAbstract",
+      );
     }
   }
 

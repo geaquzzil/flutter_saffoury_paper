@@ -10,7 +10,6 @@ import 'package:flutter_view_controller/new_components/cards/card_background_wit
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-//todo let api changed from [ids] to list:[ids]
 class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
     implements CustomViewHorizontalListResponse<UnusedRecords> {
   List<int> list = [];
@@ -31,9 +30,10 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
     required ServerActions action,
     RequestOptions? generatedOptionFromListCall,
   }) {
-    return RequestOptions()
-        .addSearchByField("requireObjcets", "true")
-        .setDisablePaging();
+    RequestOptions rp = RequestOptions().setDisablePaging();
+    return requireObjects == true
+        ? rp.addSearchByField("requireObjcets", "true")
+        : rp;
   }
 
   @override
@@ -43,7 +43,11 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
 
   @override
   List<String>? getCustomAction() {
-    return [?viewAbstract?.getTableNameApi(), "not_used"];
+    return [
+      if (viewAbstract?.getTableNameApi() != null)
+        viewAbstract!.getTableNameApi()!,
+      "not_used",
+    ];
   }
 
   @override
@@ -92,12 +96,13 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
     BuildContext context, {
     required SliverApiWithStaticMixin state,
     List<dynamic>? items,
+    required dynamic requestObjcet,
   }) {
     return SliverToBoxAdapter(
       child: CardBackgroundWithTitle(
         title: AppLocalizations.of(context)!.unUsed,
         leading: Icons.info_outline,
-        child: getDecription(context, this),
+        child: getDecription(context, requestObjcet),
       ),
     );
   }
@@ -117,8 +122,19 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
         ValueNotifier<List<ViewAbstract>>([]);
     return ListTile(
       trailing: ApiButton(
-        onResult: notifier,
-        futureBuilder: Future.delayed(const Duration(milliseconds: 2000)),
+        // onResult: notifier,
+        futureBuilder: () => item.deleteCall(
+          context,
+          onResponse: OnResponseCallback(
+            onServerResponse: (response) {
+              debugPrint("$response");
+            },
+            onServerFailureResponse: (message) {
+              debugPrint(message);
+            },
+          ),
+        ),
+        // futureBuilder: Future.delayed(Durations.extralong4),
         title: AppLocalizations.of(context)!.delete,
         icon: Icons.delete,
         onResultFunction: (onResult) {},
@@ -129,8 +145,7 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
           // style: TextStyle(fontWeight: FontWeight.bold),
           children: <TextSpan>[
             TextSpan(
-              text:
-                  " ${item.list.length} ${AppLocalizations.of(context)!.unUsed}",
+              text: " ${list.length} ${AppLocalizations.of(context)!.unUsed}",
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             // TextSpan(text: ' world!'),

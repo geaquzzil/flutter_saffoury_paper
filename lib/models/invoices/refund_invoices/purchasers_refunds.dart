@@ -44,7 +44,7 @@ class PurchasesRefund extends InvoiceMaster<PurchasesRefund> {
         });
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
-      AppLocalizations.of(context)!.customerRequestSizes;
+      AppLocalizations.of(context)!.purchasesRefund;
 
   @override
   String? getTableNameApi() => "purchasers_refunds";

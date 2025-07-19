@@ -14,9 +14,10 @@ ServerResponse _$ServerResponseFromJson(Map<String, dynamic> json) =>
       ..status = json['status'] as String?
       ..code = (json['code'] as num?)?.toInt()
       ..requestCount = (json['requestCount'] as num?)?.toInt()
-      ..requestIDS = (json['requestIDS'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
-          .toList()
+      ..requestIDS =
+          (json['requestIDS'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .toList()
       ..serverCount = (json['serverCount'] as num?)?.toInt()
       ..serverStatus = json['serverStatus'] as bool?
       ..activated = (json['activated'] as num?)?.toInt()

@@ -6,7 +6,10 @@ import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_api.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+part 'user_token.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @reflector
@@ -19,9 +22,17 @@ class UserToken extends ViewAbstractApi<UserToken> {
 
   @override
   List<String>? getCustomAction() {
-    return [?auth?.getTableNameApi(), "token"];
+    return [
+      if (auth?.getTableNameApi() != null) auth!.getTableNameApi()!,
+      "token",
+    ];
   }
 
+  @override
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
+    "auth": AuthUser(),
+    "token": "",
+  };
   @override
   Map<String, IconData> getFieldIconDataMap() => {};
 

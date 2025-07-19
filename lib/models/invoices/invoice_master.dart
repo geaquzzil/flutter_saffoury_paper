@@ -32,7 +32,6 @@ import 'package:flutter_view_controller/interfaces/web/category_gridable_interfa
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
-import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
@@ -111,23 +110,27 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   Map<String, List> getTextInputIsAutoCompleteCustomListMap(
-          BuildContext context) =>
-      {
-        "TermsID": [
-          AppLocalizations.of(context)!.pay1,
-          AppLocalizations.of(context)!.pay2,
-          AppLocalizations.of(context)!.pay3,
-          AppLocalizations.of(context)!.pay4,
-          AppLocalizations.of(context)!.pay5,
-          AppLocalizations.of(context)!.pay6,
-          AppLocalizations.of(context)!.pay7,
-          AppLocalizations.of(context)!.pay8,
-        ]
-      };
+    BuildContext context,
+  ) => {
+    "TermsID": [
+      AppLocalizations.of(context)!.pay1,
+      AppLocalizations.of(context)!.pay2,
+      AppLocalizations.of(context)!.pay3,
+      AppLocalizations.of(context)!.pay4,
+      AppLocalizations.of(context)!.pay5,
+      AppLocalizations.of(context)!.pay6,
+      AppLocalizations.of(context)!.pay7,
+      AppLocalizations.of(context)!.pay8,
+    ],
+  };
 
   @override
-  void onDropdownChanged(BuildContext context, String field, value,
-      {GlobalKey<FormBuilderState>? formKey}) {
+  void onDropdownChanged(
+    BuildContext context,
+    String field,
+    value, {
+    GlobalKey<FormBuilderState>? formKey,
+  }) {
     super.onDropdownChanged(context, field, value, formKey: formKey);
 
     if (field == "terms") {
@@ -205,52 +208,55 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   IconData? getMainDrawerGroupIconData() => Icons.receipt_long_rounded;
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "employees": Employee(),
-        "customers": Customer(),
-        "cargo_transporters": CargoTransporter(),
-        "date": "",
-        "billNo": "",
-        "status": InvoiceStatus.NONE,
-        "terms": Terms.none,
-        "comments": "",
-      };
+    "employees": Employee(),
+    "customers": Customer(),
+    "cargo_transporters": CargoTransporter(),
+    "date": "",
+    "billNo": "",
+    "status": InvoiceStatus.NONE,
+    "terms": Terms.none,
+    "comments": "",
+  };
   @override
   List<String> getMainFields({BuildContext? context}) => [
-        if (!isCustomerLessInvoice()) "customers",
-        "cargo_transporters",
-        "employees",
-        "date",
-        "billNo",
-        if (isHasStatusInvocie()) "status",
-        if (isTermsInvoice()) "terms",
-        "comments"
-      ];
+    if (!isCustomerLessInvoice()) "customers",
+    "cargo_transporters",
+    "employees",
+    "date",
+    "billNo",
+    if (isHasStatusInvocie()) "status",
+    if (isTermsInvoice()) "terms",
+    "comments",
+  ];
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "date": AppLocalizations.of(context)!.date,
-        "billNo": AppLocalizations.of(context)!.product_bill,
-        "status": AppLocalizations.of(context)!.status,
-        "comments": AppLocalizations.of(context)!.comments
-      };
+    "date": AppLocalizations.of(context)!.date,
+    "billNo": AppLocalizations.of(context)!.product_bill,
+    "status": AppLocalizations.of(context)!.status,
+    "comments": AppLocalizations.of(context)!.comments,
+  };
   @override
   Map<String, IconData> getFieldIconDataMap() => {
-        "date": Icons.date_range,
-        "billNo": Icons.onetwothree,
-        "status": Icons.credit_card,
-        "comments": Icons.comment
-      };
+    "date": Icons.date_range,
+    "billNo": Icons.onetwothree,
+    "status": Icons.credit_card,
+    "comments": Icons.comment,
+  };
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "date": TextInputType.datetime,
-        "billNo": TextInputType.text,
-        "comments": TextInputType.multiline
-      };
+    "date": TextInputType.datetime,
+    "billNo": TextInputType.text,
+    "comments": TextInputType.multiline,
+  };
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
       "${getIDFormat(context)} ${getMainHeaderLabelTextOnly(context)}";
 
   @override
-  Widget? getMainSubtitleHeaderText(BuildContext context,{String? searchQuery}) {
+  Widget? getMainSubtitleHeaderText(
+    BuildContext context, {
+    String? searchQuery,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       // mainAxisAlignment: MainAxisAlignment.start,
@@ -266,11 +272,13 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   List<Product> getProductsFromDetailList() {
     var products = getDetailListFromMaster()
-        .map((e) => e.products!.copyWith({
-              "inStock": List<Stocks>.from([e.getStockFromDetails()])
-                  .map((e) => e.toJson())
-                  .toList()
-            }))
+        .map(
+          (e) => e.products!.copyWith({
+            "inStock": List<Stocks>.from([
+              e.getStockFromDetails(),
+            ]).map((e) => e.toJson()).toList(),
+          }),
+        )
         .toList();
     return products;
   }
@@ -293,9 +301,9 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   Map<String, bool> isFieldRequiredMap() => {"warehouse": true};
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {
-        "cargo_transporters": true,
-        "warehouse": false // if there are warehouse then it cant be null
-      };
+    "cargo_transporters": true,
+    "warehouse": false, // if there are warehouse then it cant be null
+  };
   @override
   FormFieldControllerType getInputType(String field) {
     if (field == "warehouse") {
@@ -315,11 +323,13 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       getMainHeaderLabelTextOnly(context).toUpperCase();
   @override
   List<List<InvoiceHeaderTitleAndDescriptionInfo>> getPrintableInvoiceInfo(
-      BuildContext context, PrintInvoice? pca) {
+    BuildContext context,
+    PrintInvoice? pca,
+  ) {
     return [
       getInvoicDesFirstRow(context, pca),
       getInvoiceDesSecRow(context, pca),
-      getInvoiceDesTherdRow(context, pca)
+      getInvoiceDesTherdRow(context, pca),
     ];
   }
 
@@ -394,9 +404,11 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+  List<Widget>? getCustomBottomWidget(
+    BuildContext context, {
+    ServerActions? action,
+    ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+  }) {
     double? totalPrice = getTotalPriceFromList();
     double? totalDiscount = getTotalDiscountFromList();
     double? totalQuantity = getTotalQuantityFromList();
@@ -404,35 +416,39 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     Widget child = Column(
       children: [
         getListTile(
-            title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
-            description:
-                totalPrice?.toCurrencyFormatFromSetting(context) ?? "0"),
+          title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
+          description: totalPrice?.toCurrencyFormatFromSetting(context) ?? "0",
+        ),
         const Divider(),
         getListTile(
-            title: AppLocalizations.of(context)!.discount.toUpperCase(),
-            description:
-                totalDiscount?.toCurrencyFormatFromSetting(context) ?? "0"),
+          title: AppLocalizations.of(context)!.discount.toUpperCase(),
+          description:
+              totalDiscount?.toCurrencyFormatFromSetting(context) ?? "0",
+        ),
         const Divider(),
         getListTile(
-            title: AppLocalizations.of(context)!.quantity.toUpperCase(),
-            description: getDetailListFromMaster()
-                .cast<InvoiceMasterDetails>()
-                .getTotalQuantityGroupedFormattedText(context)),
+          title: AppLocalizations.of(context)!.quantity.toUpperCase(),
+          description: getDetailListFromMaster()
+              .cast<InvoiceMasterDetails>()
+              .getTotalQuantityGroupedFormattedText(context),
+        ),
         const Divider(),
         getListTile(
-            title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
-            description: totalNetPrice.toCurrencyFormatFromSetting(context)),
+          title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
+          description: totalNetPrice.toCurrencyFormatFromSetting(context),
+        ),
       ],
     );
     return [
       if (kIsWeb)
         SliverToBoxAdapter(
           child: CardBackgroundWithTitle(
-              leading: Icons.summarize,
-              useHorizontalPadding: true,
-              useVerticalPadding: false,
-              title: AppLocalizations.of(context)!.no_summary,
-              child: child),
+            leading: Icons.summarize,
+            useHorizontalPadding: true,
+            useVerticalPadding: false,
+            title: AppLocalizations.of(context)!.no_summary,
+            child: child,
+          ),
         )
       else
         SliverToBoxAdapter(
@@ -442,50 +458,48 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
             title: Text(AppLocalizations.of(context)!.no_summary),
             children: [child],
           ),
-        )
+        ),
     ];
   }
 
   Widget getListTile({required String title, required String description}) {
-    return ListTile(
-      title: Text(title),
-      subtitle: Text(description),
-    );
+    return ListTile(title: Text(title), subtitle: Text(description));
   }
 
   @override
   List<InvoiceHeaderTitleAndDescriptionInfo>
-      getPrintableInvoiceAccountInfoInBottom(
-              BuildContext context, PrintInvoice? pca) =>
-          [
-            if (customers != null)
-              InvoiceHeaderTitleAndDescriptionInfo(
-                title: "${AppLocalizations.of(context)!.iD}: ",
-                description: customers?.iD.toString() ?? "",
-                // icon: Icons.numbers
-              ),
-            if (customers != null)
-              InvoiceHeaderTitleAndDescriptionInfo(
-                title: "${AppLocalizations.of(context)!.name}: ",
-                description: customers?.name ?? "",
-                // icon: Icons.account_circle_rounded
-              ),
-            if ((pca?.hideCargoInfo == false))
-              if (cargo_transporters != null)
-                InvoiceHeaderTitleAndDescriptionInfo(
-                  title: "${AppLocalizations.of(context)!.transfers}: ",
-                  description:
-                      "${cargo_transporters?.name.toString()}\n${cargo_transporters?.carNumber} ${cargo_transporters?.governorates?.name}",
-                  // icon: Icons.numbers
-                ),
-            if ((pca?.hideEmployeeName == false))
-              if (employees != null)
-                InvoiceHeaderTitleAndDescriptionInfo(
-                  title: "${AppLocalizations.of(context)!.employee}: ",
-                  description: "${employees?.name.toString()}",
-                  // icon: Icons.numbers
-                )
-          ];
+  getPrintableInvoiceAccountInfoInBottom(
+    BuildContext context,
+    PrintInvoice? pca,
+  ) => [
+    if (customers != null)
+      InvoiceHeaderTitleAndDescriptionInfo(
+        title: "${AppLocalizations.of(context)!.iD}: ",
+        description: customers?.iD.toString() ?? "",
+        // icon: Icons.numbers
+      ),
+    if (customers != null)
+      InvoiceHeaderTitleAndDescriptionInfo(
+        title: "${AppLocalizations.of(context)!.name}: ",
+        description: customers?.name ?? "",
+        // icon: Icons.account_circle_rounded
+      ),
+    if ((pca?.hideCargoInfo == false))
+      if (cargo_transporters != null)
+        InvoiceHeaderTitleAndDescriptionInfo(
+          title: "${AppLocalizations.of(context)!.transfers}: ",
+          description:
+              "${cargo_transporters?.name.toString()}\n${cargo_transporters?.carNumber} ${cargo_transporters?.governorates?.name}",
+          // icon: Icons.numbers
+        ),
+    if ((pca?.hideEmployeeName == false))
+      if (employees != null)
+        InvoiceHeaderTitleAndDescriptionInfo(
+          title: "${AppLocalizations.of(context)!.employee}: ",
+          description: "${employees?.name.toString()}",
+          // icon: Icons.numbers
+        ),
+  ];
   int getDetailListFromMasterItemsCount() {
     if (runtimeType == Order) {
       return (this as Order).orders_details_count ?? 0;
@@ -624,10 +638,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   String getPrintableQrCode() {
-    var q = QRCodeID(
-      iD: iD,
-      action: getTableNameApi() ?? "",
-    );
+    var q = QRCodeID(iD: iD, action: getTableNameApi() ?? "");
     return q.getQrCode();
   }
 
@@ -685,7 +696,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   bool isPricelessInvoice() {
-    bool result = this is CustomerRequestSize ||
+    bool result =
+        this is CustomerRequestSize ||
         this is ProductInput ||
         this is ProductOutput ||
         this is ReservationInvoice ||
@@ -697,7 +709,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   String getPrintablePrimaryColor(PrintInvoice? setting) {
-    String value = setting?.primaryColor ??
+    String value =
+        setting?.primaryColor ??
         getMainColor()!.value.toRadixString(16).substring(2, 8);
     debugPrint("buildHeader $value");
     return value;
@@ -715,7 +728,9 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesSecRow(
-      BuildContext context, PrintInvoice? pca) {
+    BuildContext context,
+    PrintInvoice? pca,
+  ) {
     return [
       InvoiceHeaderTitleAndDescriptionInfo(
         title: AppLocalizations.of(context)!.iD,
@@ -744,36 +759,40 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoiceDesTherdRow(
-      BuildContext context, PrintInvoice? pca) {
+    BuildContext context,
+    PrintInvoice? pca,
+  ) {
     return [
       if ((pca?.hideUnitPriceAndTotalPrice == false))
         InvoiceHeaderTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.total_price,
-            description: extendedNetPrice?.toCurrencyFormat() ?? "0",
-            hexColor: getPrintablePrimaryColor(pca)
-            // icon: Icons.tag
-            ),
+          title: AppLocalizations.of(context)!.total_price,
+          description: extendedNetPrice?.toCurrencyFormat() ?? "0",
+          hexColor: getPrintablePrimaryColor(pca),
+          // icon: Icons.tag
+        ),
       if (!isPricelessInvoice())
         if ((pca?.hideCustomerBalance == false))
           InvoiceHeaderTitleAndDescriptionInfo(
-              title: AppLocalizations.of(context)!.balance,
-              description: customers?.balance?.toCurrencyFormat() ?? "",
-              hexColor: getPrintablePrimaryColor(pca)
-              // icon: Icons.balance
-              ),
+            title: AppLocalizations.of(context)!.balance,
+            description: customers?.balance?.toCurrencyFormat() ?? "",
+            hexColor: getPrintablePrimaryColor(pca),
+            // icon: Icons.balance
+          ),
       if (!isPricelessInvoice())
         if ((pca?.hideInvoicePaymentMethod == false))
           InvoiceHeaderTitleAndDescriptionInfo(
-              title: AppLocalizations.of(context)!.paymentMethod,
-              description: "payment on advanced",
-              hexColor: getPrintablePrimaryColor(pca)
-              // icon: Icons.credit_card
-              ),
+            title: AppLocalizations.of(context)!.paymentMethod,
+            description: "payment on advanced",
+            hexColor: getPrintablePrimaryColor(pca),
+            // icon: Icons.credit_card
+          ),
     ];
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo> getInvoicDesFirstRow(
-      BuildContext context, PrintInvoice? pca) {
+    BuildContext context,
+    PrintInvoice? pca,
+  ) {
     if (customers == null) return [];
     return [
       InvoiceHeaderTitleAndDescriptionInfo(
@@ -800,18 +819,22 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotalDescripton(
-      BuildContext context, PrintInvoice? pca) {
+    BuildContext context,
+    PrintInvoice? pca,
+  ) {
     var converter = NumberToCharacterConverter('en');
     return [
       InvoiceTotalTitleAndDescriptionInfo(
-          size: 10,
-          title: AppLocalizations.of(context)!.total_quantity.toUpperCase(),
-          description: quantity?.toCurrencyFormat() ?? "0",
-          hexColor: Colors.grey.toHex()),
+        size: 10,
+        title: AppLocalizations.of(context)!.total_quantity.toUpperCase(),
+        description: quantity?.toCurrencyFormat() ?? "0",
+        hexColor: Colors.grey.toHex(),
+      ),
       InvoiceTotalTitleAndDescriptionInfo(
-          size: 8,
-          title: AppLocalizations.of(context)!.invoiceTotalInWords,
-          hexColor: Colors.grey.toHex(leadingHashSign: false)),
+        size: 8,
+        title: AppLocalizations.of(context)!.invoiceTotalInWords,
+        hexColor: Colors.grey.toHex(leadingHashSign: false),
+      ),
       InvoiceTotalTitleAndDescriptionInfo(
         // size: 12,
         title: converter.convertDouble(quantity ?? 0),
@@ -822,23 +845,28 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   List<InvoiceTotalTitleAndDescriptionInfo> getPrintableInvoiceTotal(
-      BuildContext context, PrintInvoice? pca) {
+    BuildContext context,
+    PrintInvoice? pca,
+  ) {
     if ((pca?.hideUnitPriceAndTotalPrice == true)) {
       return [];
     }
     return [
       if (!isPricelessInvoice())
         InvoiceTotalTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
-            description: extendedPrice?.toCurrencyFormat() ?? "0"),
+          title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
+          description: extendedPrice?.toCurrencyFormat() ?? "0",
+        ),
       if (!isPricelessInvoice())
         InvoiceTotalTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.discount.toUpperCase(),
-            description: extendedDiscount?.toCurrencyFormat() ?? "0"),
+          title: AppLocalizations.of(context)!.discount.toUpperCase(),
+          description: extendedDiscount?.toCurrencyFormat() ?? "0",
+        ),
       InvoiceTotalTitleAndDescriptionInfo(
-          title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
-          description: extendedNetPrice?.toCurrencyFormat() ?? "0",
-          hexColor: getPrintablePrimaryColor(pca)),
+        title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
+        description: extendedNetPrice?.toCurrencyFormat() ?? "0",
+        hexColor: getPrintablePrimaryColor(pca),
+      ),
     ];
   }
 
@@ -903,20 +931,24 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   @override
   List<StaggeredGridTile> getHomeHorizotalList(BuildContext context) {
     num mainAxisCellCount = SizeConfig.getMainAxisCellCount(context);
-    num mainAxisCellCountList = SizeConfig.getMainAxisCellCount(context,
-        mainAxisType: MainAxisType.ListHorizontal);
+    num mainAxisCellCountList = SizeConfig.getMainAxisCellCount(
+      context,
+      mainAxisType: MainAxisType.ListHorizontal,
+    );
     return [
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
-            autoRest: ChangesRecords.init(this, "EmployeeID")),
+          autoRest: ChangesRecords.init(this, "EmployeeID"),
+        ),
       ),
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
         child: ListHorizontalCustomViewApiAutoRestWidget(
-            autoRest: ChartRecordAnalysis.init(this)),
+          autoRest: ChartRecordAnalysis.init(this),
+        ),
       ),
     ];
   }
@@ -943,20 +975,23 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  Widget? getCardTrailing(BuildContext context,
-      {SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) {
-    Widget? superWidget =
-        super.getCardTrailing(context, secPaneHelper: secPaneHelper);
+  Widget? getCardTrailing(
+    BuildContext context, {
+    SecoundPaneHelperWithParentValueNotifier? secPaneHelper,
+  }) {
+    Widget? superWidget = super.getCardTrailing(
+      context,
+      secPaneHelper: secPaneHelper,
+    );
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           "items: ${getDetailListFromMasterItemsCount()}",
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall!
-              .copyWith(color: Theme.of(context).colorScheme.primary),
+          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
         if (superWidget != null) superWidget,
       ],
@@ -965,7 +1000,9 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   bool hasPermissionFromParentSelectItem(
-      BuildContext context, ViewAbstract viewAbstract) {
+    BuildContext context,
+    ViewAbstract viewAbstract,
+  ) {
     if (viewAbstract is Product) {
       return viewAbstract.getQuantity() != 0;
     }
@@ -974,13 +1011,16 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   List<ViewAbstract> getListableInitialSelectedListPassedByPickedObject(
-      BuildContext context) {
+    BuildContext context,
+  ) {
     return getProductsFromDetailList();
   }
 
   @override
   void onListableAddFromManual(
-      BuildContext context, InvoiceMasterDetails addedObject) {
+    BuildContext context,
+    InvoiceMasterDetails addedObject,
+  ) {
     getListableList().add(addedObject);
   }
 
@@ -994,8 +1034,9 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     if (view == null) return;
     if (view is Product) {
       if (view.getQuantity() == 0) return;
-      getDetailListFromMaster()
-          .add(getDetailMasterNewInstance()..setProduct(context, view));
+      getDetailListFromMaster().add(
+        getDetailMasterNewInstance()..setProduct(context, view),
+      );
     }
   }
 
@@ -1003,19 +1044,24 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   ///list includes initial selected list
   @override
   void onListableSelectedListAdded(
-      BuildContext context, List<ViewAbstract> list) {
+    BuildContext context,
+    List<ViewAbstract> list,
+  ) {
     List<Product> products = list.cast();
     if (isNew()) {
       for (var element in products) {
-        Product? isFounded = getProductsFromDetailList()
-            .firstWhereOrNull((parent) => parent.isEquals(element));
+        Product? isFounded = getProductsFromDetailList().firstWhereOrNull(
+          (parent) => parent.isEquals(element),
+        );
         if (isFounded != null) continue;
         debugPrint("onListableSelectedListAdded  added ${element.iD}");
-        getDetailListFromMaster()
-            .add(getDetailMasterNewInstance()..setProduct(context, element));
+        getDetailListFromMaster().add(
+          getDetailMasterNewInstance()..setProduct(context, element),
+        );
       }
       debugPrint(
-          "onListableSelectedListAdded  getDetailListFromMaster length= >  ${getDetailListFromMaster().length}");
+        "onListableSelectedListAdded  getDetailListFromMaster length= >  ${getDetailListFromMaster().length}",
+      );
     } else {}
   }
 
@@ -1037,13 +1083,15 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
             //   style: Theme.of(context).textTheme.bodySmall,
             // ),
             Html(
-                shrinkWrap: true,
-                data:
-                    "${AppLocalizations.of(context)!.itemCount}: <strong>${getDetailListFromMasterItemsCount()}</strong>"),
+              shrinkWrap: true,
+              data:
+                  "${AppLocalizations.of(context)!.itemCount}: <strong>${getDetailListFromMasterItemsCount()}</strong>",
+            ),
             Html(
-                shrinkWrap: true,
-                data:
-                    "${AppLocalizations.of(context)!.total_price}: <strong>${extendedNetPrice.toCurrencyFormatFromSetting(context)}</strong>"),
+              shrinkWrap: true,
+              data:
+                  "${AppLocalizations.of(context)!.total_price}: <strong>${extendedNetPrice.toCurrencyFormatFromSetting(context)}</strong>",
+            ),
           ],
         ),
         Row(
@@ -1055,14 +1103,16 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
             //   style: Theme.of(context).textTheme.bodySmall,
             // ),
             Html(
-                shrinkWrap: true,
-                data:
-                    "${AppLocalizations.of(context)!.total_quantity}: <strong>${getListableTotalQuantity(context)}</strong>"),
+              shrinkWrap: true,
+              data:
+                  "${AppLocalizations.of(context)!.total_quantity}: <strong>${getListableTotalQuantity(context)}</strong>",
+            ),
             if (isHasStatusInvocie())
               Html(
-                  shrinkWrap: true,
-                  data:
-                      "${AppLocalizations.of(context)!.status}: <strong>${status?.getFieldLabelString(context, status ?? InvoiceStatus.NONE)}</strong>"),
+                shrinkWrap: true,
+                data:
+                    "${AppLocalizations.of(context)!.status}: <strong>${status?.getFieldLabelString(context, status ?? InvoiceStatus.NONE)}</strong>",
+              ),
           ],
         ),
       ],
@@ -1080,12 +1130,13 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
         //   style: Theme.of(context).textTheme.bodySmall,
         // ),
         Html(
-            shrinkWrap: true,
-            data: "<strong>${getPrintableQrCodeID()}</strong>"),
+          shrinkWrap: true,
+          data: "<strong>${getPrintableQrCodeID()}</strong>",
+        ),
         Text(
           getDateTextOnlyFormat(context) ?? "",
           style: Theme.of(context).textTheme.bodySmall,
-        )
+        ),
       ],
     );
   }
@@ -1115,34 +1166,38 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
 
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-      BuildContext context, PrintLocalSetting? dashboardSetting) {
+    BuildContext context,
+    PrintLocalSetting? dashboardSetting,
+  ) {
     Currency c = Currency.init(context);
     return DashboardContentItem(
-        currency: c.name,
-        currencyId: c.iD,
-        quantity: quantity.toCurrencyFormat(),
-        credit: isPricelessInvoice()
-            ? 0
-            : isCreditInvoice()
-                ? isRefundCreditInvoice()
-                    ? extendedRefundPrice
-                    : extendedPrice
-                : 0,
-        debit: isPricelessInvoice()
-            ? 0
-            : isDebitsInvoice()
-                ? isRefundDebitInvoice()
-                    ? extendedRefundPrice
-                    : extendedPrice
-                : 0,
-        date: date,
-        description: getMainHeaderTextOnly(context));
+      currency: c.name,
+      currencyId: c.iD,
+      quantity: quantity.toCurrencyFormat(),
+      credit: isPricelessInvoice()
+          ? 0
+          : isCreditInvoice()
+          ? isRefundCreditInvoice()
+                ? extendedRefundPrice
+                : extendedPrice
+          : 0,
+      debit: isPricelessInvoice()
+          ? 0
+          : isDebitsInvoice()
+          ? isRefundDebitInvoice()
+                ? extendedRefundPrice
+                : extendedPrice
+          : 0,
+      date: date,
+      description: getMainHeaderTextOnly(context),
+    );
   }
 
   @override
   String getContentSharable(BuildContext context, {ServerActions? action}) {
-    PrintInvoice settings =
-        getModifibleSettingObject(context).copyWithEnableAll();
+    PrintInvoice settings = getModifibleSettingObject(
+      context,
+    ).copyWithEnableAll();
     String content = getPrintableInvoiceTitle(context, settings);
     content = "$content\n\n";
     getInvoicDesFirstRow(context, settings).forEach((action) {
@@ -1157,10 +1212,11 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     content = "$content\n";
 
     String con = getPrintableInvoiceDetailsList().getString(
-        context: context,
-        setting: settings,
-        newLineOnSubDetials: true,
-        requireCommaOnSubDetails: false);
+      context: context,
+      setting: settings,
+      newLineOnSubDetials: true,
+      requireCommaOnSubDetails: false,
+    );
     content = "$content \nDetiasl:\n$con";
     // getPrintableInvoiceDetailsList().forEach((action) {
     //   String d = action
@@ -1188,13 +1244,16 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     if (action == ServerActions.list) {
-      return RequestOptions().addSortBy("date", SortByType.DESC);
+      return RequestOptions()
+          .addSortBy("date", SortByType.DESC)
+          .addRequestObjcets(true);
     }
-    return null;
+    return RequestOptions().addRequestObjcets(true).setDisablePaging();
   }
 }
 

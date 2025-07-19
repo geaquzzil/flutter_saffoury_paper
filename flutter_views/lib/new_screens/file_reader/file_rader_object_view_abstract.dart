@@ -36,7 +36,7 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   List<String> generatedMainFields = [];
 
   FileReaderObject({required this.viewAbstract, required this.filePath})
-      : super() {
+    : super() {
     assert(viewAbstract is ExcelableReaderInterace);
     var bytes = File(filePath).readAsBytesSync();
     excel = Excel.decodeBytes(bytes);
@@ -44,16 +44,17 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
     obj = viewAbstract as ExcelableReaderInterace;
   }
   void init(BuildContext context) {
-    List<String> listOfFields =
-        (viewAbstract as ExcelableReaderInterace).getExcelableFields(context);
+    List<String> listOfFields = (viewAbstract as ExcelableReaderInterace)
+        .getExcelableFields(context);
     refreshDropdownList(context);
     for (var element in listOfFields) {
       if (viewAbstract.isViewAbstract(element)) {
         ViewAbstract view = viewAbstract.getMirrorNewInstance(element);
         String? tableName = view.getTableNameApi();
         if (tableName != null) {
-          generatedFieldsLabels[tableName] =
-              view.getMainHeaderLabelTextOnly(context);
+          generatedFieldsLabels[tableName] = view.getMainHeaderLabelTextOnly(
+            context,
+          );
         }
         generatedMirrorNewInstance.addAll(view.getMirrorFieldsMapNewInstance());
         generatedFieldsIconMap.addAll(view.getFieldIconDataMap());
@@ -65,19 +66,22 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
         }
         int lengthOfChilds = view.getMainFields(context: context).length;
 
-        bool hasViewAbstract = view
+        bool hasViewAbstract =
+            view
                 .getMainFields(context: context)
                 .firstWhereOrNull((p0) => view.isViewAbstract(p0)) !=
             null;
 
         if (!hasViewAbstract && lengthOfChilds > 1) {
           generatedGroupItems[GroupItem(
-                      view.getMainHeaderLabelFileImporter(context),
-                      view.getMainIconData())] =
-                  view.getMainFields(context: context)
-              // .map((e) => element + "_" + e)
-              // .toList()
-              ;
+            view.getMainHeaderLabelFileImporter(context),
+            view.getMainIconData(),
+          )] = view.getMainFields(
+            context: context,
+          )
+          // .map((e) => element + "_" + e)
+          // .toList()
+          ;
           // generatedMainFields.addAll(
           //     view.getMainFields(context: context).map((e) => e).toList());
 
@@ -87,8 +91,10 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
           //     (viewAbstract.isFieldCanBeNullableMap()[element]) == false ??
           //         false;
 
-          bool canBeNull =
-              (viewAbstract.isFieldCanBeNullable(context, element));
+          bool canBeNull = (viewAbstract.isFieldCanBeNullable(
+            context,
+            element,
+          ));
           generatedRequiredFields[element] = canBeNull == false;
 
           generatedMainFields.add(element);
@@ -96,28 +102,35 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
 
         //check that no other view abstract or else
       } else {
-        generatedRequiredFields[element] =
-            viewAbstract.isFieldRequired(element);
+        generatedRequiredFields[element] = viewAbstract.isFieldRequired(
+          element,
+        );
         generatedMainFields.add(element);
-        generatedFieldsLabels[element] =
-            (viewAbstract.getFieldLabel(context, element));
-        generatedFieldsIconMap[element] =
-            viewAbstract.getFieldIconData(element);
+        generatedFieldsLabels[element] = (viewAbstract.getFieldLabel(
+          context,
+          element,
+        ));
+        generatedFieldsIconMap[element] = viewAbstract.getFieldIconData(
+          element,
+        );
 
-        generatedMirrorNewInstance[element] =
-            viewAbstract.getMirrorNewInstance(element);
+        generatedMirrorNewInstance[element] = viewAbstract.getMirrorNewInstance(
+          element,
+        );
       }
     }
     debugPrint(
-        "FileReaderObject generated generatedRequiredFields $generatedRequiredFields");
+      "FileReaderObject generated generatedRequiredFields $generatedRequiredFields",
+    );
   }
 
   @override
   Map<GroupItem, List<String>> getMainFieldsGroups(BuildContext context) =>
       generatedGroupItems;
   @override
-  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {"selectedSheet": ""}
-    ..addAll(viewAbstract.getMirrorFieldsMapNewInstance());
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
+      {"selectedSheet": ""}
+        ..addAll(viewAbstract.getMirrorFieldsMapNewInstance());
 
   @override
   Map<String, IconData> getFieldIconDataMap() {
@@ -164,8 +177,8 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   }
 
   void refreshDropdownList(BuildContext context) {
-    List<String> listOfFields =
-        (viewAbstract as ExcelableReaderInterace).getExcelableFields(context);
+    List<String> listOfFields = (viewAbstract as ExcelableReaderInterace)
+        .getExcelableFields(context);
 
     if (generatedFieldsAutoCompleteCustom.isEmpty) {
       generatedFieldsAutoCompleteCustom = {};
@@ -204,8 +217,12 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   }
 
   @override
-  void onDropdownChanged(BuildContext context, String field, value,
-      {GlobalKey<FormBuilderState>? formKey}) {
+  void onDropdownChanged(
+    BuildContext context,
+    String field,
+    value, {
+    GlobalKey<FormBuilderState>? formKey,
+  }) {
     super.onDropdownChanged(context, field, value);
     if (field == "selectedSheet") {
       debugPrint("onDropdownChanged selectedSheet $value");
@@ -225,7 +242,8 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
 
   @override
   Map<String, List> getTextInputIsAutoCompleteCustomListMap(
-      BuildContext context) {
+    BuildContext context,
+  ) {
     debugPrint("getTextInputIsAutoCompleteCustomListMap");
     Map<String, List> list = {};
     list["selectedSheet"] = fileSheets;
@@ -237,7 +255,8 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
   ViewAbstract getObjectFromRow(BuildContext context, List<Data?> list) {
     ViewAbstract view = viewAbstract.getSelfNewInstance();
     debugPrint(
-        "getDataFromExcelTable getObjectFromRow started with type ${view.runtimeType}");
+      "getDataFromExcelTable getObjectFromRow started with type ${view.runtimeType}",
+    );
     Map<String, dynamic> generatedJsonData = {};
 
     selectedFields.forEach((key, value) {
@@ -245,15 +264,18 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       Data? data = list[index];
       dynamic dataValue = data?.value;
       debugPrint(
-          "getDataFromExcelTable getObjectFromRow selectedKey=>$key rowName:$value index:$index  data:$dataValue type ${dataValue.runtimeType}");
+        "getDataFromExcelTable getObjectFromRow selectedKey=>$key rowName:$value index:$index  data:$dataValue type ${dataValue.runtimeType}",
+      );
       //todo thiss was dataValue.value.isEmpty
       if (dataValue is TextCellValue) {
-        bool res = dataValue.value.text?.isEmpty ??
+        bool res =
+            dataValue.value.text?.isEmpty ??
             false ||
                 dataValue.value.text == "null" ||
                 dataValue.value.text == "";
         debugPrint(
-            "getDataFromExcelTable key : $key dataValue is TextCellValue   dataValue isEmpty =>$res ");
+          "getDataFromExcelTable key : $key dataValue is TextCellValue   dataValue isEmpty =>$res ",
+        );
         dataValue = res ? null : dataValue.value;
       }
       // checking if the main viewAbstract has main field
@@ -264,7 +286,8 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
 
       if (field == null) {
         debugPrint(
-            "getDataFromExcelTable getObjectFromRow field == null searching for main viewAbstract in the subViewAbstract");
+          "getDataFromExcelTable getObjectFromRow field == null searching for main viewAbstract in the subViewAbstract",
+        );
         var obj = view
             .getMainFields()
             .where((element) => view.isViewAbstract(element) == true)
@@ -273,28 +296,37 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
 
         for (var element in obj) {
           debugPrint(
-              "getDataFromExcelTable getObjectFromRow field == null searching for main object from => ${element.runtimeType} for field =>  $key");
+            "getDataFromExcelTable getObjectFromRow field == null searching for main object from => ${element.runtimeType} for field =>  $key",
+          );
 
-          String? field =
-              element.getMainFields().firstWhereOrNull((p0) => p0 == key);
+          String? field = element.getMainFields().firstWhereOrNull(
+            (p0) => p0 == key,
+          );
           if (field != null) {
             debugPrint(
-                "getDataFromExcelTable getObjectFromRow field == null founded main object is => ${element.runtimeType} for field =>  $key");
+              "getDataFromExcelTable getObjectFromRow field == null founded main object is => ${element.runtimeType} for field =>  $key",
+            );
 
             var allFieldsThatFromSameObj = element
                 .getMainFields()
-                .where((element) =>
-                    selectedFields.keys.firstWhereOrNull((k) => k == element) !=
-                    null)
+                .where(
+                  (element) =>
+                      selectedFields.keys.firstWhereOrNull(
+                        (k) => k == element,
+                      ) !=
+                      null,
+                )
                 .toList();
 
             debugPrint(
-                "getDataFromExcelTable getObjectFromRow founded main object is => ${element.runtimeType} for field =>  $key and all the fields that from same object are => $allFieldsThatFromSameObj");
+              "getDataFromExcelTable getObjectFromRow founded main object is => ${element.runtimeType} for field =>  $key and all the fields that from same object are => $allFieldsThatFromSameObj",
+            );
 
             Map<String, dynamic> fieldsValues = {};
             for (var element in allFieldsThatFromSameObj) {
-              var s = selectedFields.entries
-                  .firstWhereOrNull((p0) => p0.key == element);
+              var s = selectedFields.entries.firstWhereOrNull(
+                (p0) => p0.key == element,
+              );
               if (s != null) {
                 int index = fileColumns.indexOf(s.value);
                 Data? data = list[index];
@@ -304,21 +336,25 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
             }
 
             debugPrint(
-                "getDataFromExcelTable getObjectFromRow founded main object is => ${element.runtimeType} for field =>  $key and all the fields values is  => $fieldsValues");
+              "getDataFromExcelTable getObjectFromRow founded main object is => ${element.runtimeType} for field =>  $key and all the fields values is  => $fieldsValues",
+            );
 
             if (fieldsValues.entries.length == 1) {
               generatedJsonData[element.getTableNameApi()!] =
                   ((element.getSelfNewInstanceFileImporter(
-                              context: context,
-                              field: fieldsValues.keys.toList().first,
-                              value: fieldsValues.values.toList().first)
+                            context: context,
+                            field: fieldsValues.keys.toList().first,
+                            value: fieldsValues.values.toList().first,
+                          )
                           as ViewAbstract?)
                       ?.toJsonViewAbstract());
             } else {
               generatedJsonData[element.getTableNameApi()!] =
                   ((element.getSelfNewInstanceFileImporter(
-                          context: context,
-                          value: fieldsValues) as ViewAbstract?)
+                            context: context,
+                            value: fieldsValues,
+                          )
+                          as ViewAbstract?)
                       ?.toJsonViewAbstract());
             }
           }
@@ -330,21 +366,27 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
           generatedJsonData[field] = dataValue == null
               ? null
               : (((view.getMirrorNewInstance(field) as ViewAbstract)
-                      .getSelfNewInstanceFileImporter(
-                          context: context,
-                          field: field,
-                          value: dataValue) as ViewAbstract?)
-                  ?.toJsonViewAbstract());
+                            .getSelfNewInstanceFileImporter(
+                              context: context,
+                              field: field,
+                              value: dataValue,
+                            )
+                        as ViewAbstract?)
+                    ?.toJsonViewAbstract());
           debugPrint(
-              "getDataFromExcelTable getObjectFromRow adding generatedJsonDataisViewAbstract => label:$field value :${view.castFieldValue(field, dataValue)}  type: ${view.getMirrorFieldType(field)}");
+            "getDataFromExcelTable getObjectFromRow adding generatedJsonDataisViewAbstract => label:$field value :${view.castFieldValue(field, dataValue)}  type: ${view.getMirrorFieldType(field)}",
+          );
           debugPrint(
-              "getDataFromExcelTable getObjectFromRow adding generatedJsonDataisViewAbstract => label ${view.getTableNameApi()} value :${generatedJsonData[view.getTableNameApi()!]}");
+            "getDataFromExcelTable getObjectFromRow adding generatedJsonDataisViewAbstract => label ${view.getTableNameApi()} value :${generatedJsonData[view.getTableNameApi()!]}",
+          );
         } else {
           debugPrint(
-              "getDataFromExcelTable getObjectFromRow adding generatedJsonData => label:$field value :${view.castFieldValue(field, dataValue)}  type: ${view.getMirrorFieldType(field)}");
+            "getDataFromExcelTable getObjectFromRow adding generatedJsonData => label:$field value :${view.castFieldValue(field, dataValue)}  type: ${view.getMirrorFieldType(field)}",
+          );
 
-          generatedJsonData[field] =
-              dataValue == null ? null : view.castFieldValue(field, dataValue);
+          generatedJsonData[field] = dataValue == null
+              ? null
+              : view.castFieldValue(field, dataValue);
         }
       }
 
@@ -362,7 +404,8 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       // });
     });
     debugPrint(
-        "getDataFromExcelTable getObjectFromRow finished with json $generatedJsonData");
+      "getDataFromExcelTable getObjectFromRow finished with json $generatedJsonData",
+    );
 
     return (view.fromJsonViewAbstract(generatedJsonData) as ViewAbstract)
         .copyWithSetNewFileReader();
@@ -376,11 +419,13 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
     // //     "getFieldValue from file_reader_objcet field => $field selectedFields=> $selectedFields value => ${value?.value}");
     // if (value != null) return value.value;
     String fieldName = generatedFieldsLabels[field] ?? field;
-    String? findedInTable = fileColumns.firstWhereOrNull((f) =>
-        f.toLowerCase().contains(fieldName.toLowerCase()) ||
-        f.toLowerCase().startsWith(fieldName.toLowerCase()));
-    debugPrint(
-        "getFieldValue from file_reader_objcet field => $field fieldName=>$fieldName   finedeInTable => $findedInTable  => generatedFieldsLabels => $generatedFieldsLabels");
+    String? findedInTable = fileColumns.firstWhereOrNull(
+      (f) =>
+          f.toLowerCase().contains(fieldName.toLowerCase()) ||
+          f.toLowerCase().startsWith(fieldName.toLowerCase()),
+    );
+    // debugPrint(
+    //     "getFieldValue from file_reader_objcet field => $field fieldName=>$fieldName   finedeInTable => $findedInTable  => generatedFieldsLabels => $generatedFieldsLabels");
     if (findedInTable != null) {
       selectedFields[field] = findedInTable;
       return findedInTable;
@@ -429,9 +474,10 @@ class FileReaderObject extends ViewAbstract<FileReaderObject> {
       FileReaderObject(viewAbstract: viewAbstract, filePath: filePath);
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return null;
   }
 

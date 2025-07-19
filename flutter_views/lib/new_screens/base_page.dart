@@ -1883,7 +1883,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     if (tabs != null) {
       tabs = [
         TabControllerHelper(AppLocalizations.of(context)!.home, isMain: true),
-        
+
         ...tabs,
       ];
     }
@@ -2341,17 +2341,17 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   Widget getMainPanes() {
     debugPrint("getBody _getTowPanes TabController ");
     dynamic ex = getExtras();
-    // _isLoading = !getBodyWithoutApi();
-    _isLoading = false;
-    if (ex != null && !_isLoading) {
-      _connectionState.value =
-          overrideConnectionState(BasePageWithApiConnection.build) ??
-          ConnectionStateExtension.none;
-      initStateAfterApiCalled();
-      return super.getMainPanes();
-    }
+    // _isLoading = !getExtrasCast().shouldGetFromApi(ServerActions.view);
+    // debugPrint("getBody _isLoading  $_isLoading ");
+    // if (ex != null && !_isLoading) {
+    //   _connectionState.value =
+    //       overrideConnectionState(BasePageWithApiConnection.build) ??
+    //       ConnectionStateExtension.none;
+    //   initStateAfterApiCalled();
+    //   return super.getMainPanes();
+    // }
     return FutureBuilder<dynamic>(
-      future: getCallApiFunctionIfNull(context),
+      future: getExtrasCast().viewCall(context: context, customID: getID),
       builder: (context, snapshot) {
         _connectionState.value =
             overrideConnectionState(BasePageWithApiConnection.future) ??

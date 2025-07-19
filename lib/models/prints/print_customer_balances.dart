@@ -3,9 +3,7 @@ import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-@JsonSerializable(explicitToJson: true)
 @reflector
 class PrintCustomerBalances extends PrintLocalSetting<PrintCustomerBalances> {
   PrintCustomerBalances() : super();
@@ -17,7 +15,6 @@ class PrintCustomerBalances extends PrintLocalSetting<PrintCustomerBalances> {
 
   @override
   PrintCustomerBalances fromJsonViewAbstract(Map<String, dynamic> json) => this;
-
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {};
@@ -48,7 +45,9 @@ class PrintCustomerBalances extends PrintLocalSetting<PrintCustomerBalances> {
 
   @override
   PrintCustomerBalances onSavedModiablePrintableLoaded(
-      BuildContext context, ViewAbstract viewAbstractThatCalledPDF) {
+    BuildContext context,
+    ViewAbstract viewAbstractThatCalledPDF,
+  ) {
     // TODO: implement onSavedModiablePrintableLoaded
     throw UnimplementedError();
   }

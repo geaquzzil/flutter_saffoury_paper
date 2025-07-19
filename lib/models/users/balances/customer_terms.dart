@@ -100,6 +100,7 @@ class CustomerTerms extends Customer
     BuildContext context, {
     required SliverApiWithStaticMixin state,
     List<dynamic>? items,
+    required dynamic requestObjcet,
   }) {
     // TODO: implement getCustomViewSingleResponseWidget
     throw UnimplementedError();

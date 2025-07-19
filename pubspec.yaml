@@ -34,7 +34,7 @@ dependencies:
   flutter_view_controller:
     path: ./flutter_views
   json_annotation: ^4.7.0
-  reflectable: ^4.0.4
+  reflectable: ^4.0.13
   cupertino_icons: ^1.0.5
   intl: ^0.19.0
   # intl_converter: ^1.0.0
@@ -100,8 +100,8 @@ dependency_overrides:
 #   intl: 0.17.0
 
 dev_dependencies:
-  build_runner: ^2.2.0
-  json_serializable: ^6.3.1
+  build_runner: ^2.4.15
+  json_serializable: ^6.9.5
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

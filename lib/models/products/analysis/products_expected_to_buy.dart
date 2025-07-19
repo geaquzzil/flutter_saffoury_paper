@@ -76,6 +76,7 @@ class ProductsExcpectedToBuy extends Product
     BuildContext context, {
     required SliverApiWithStaticMixin<SliverApiMixinWithStaticStateful> state,
     List? items,
+    required dynamic requestObjcet,
   }) {
     return Padding(
       padding: state.defaultSliverGridPadding,

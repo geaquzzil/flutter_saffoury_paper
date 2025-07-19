@@ -40,15 +40,14 @@ class OrderRefund extends InvoiceMaster<OrderRefund> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      super.getMirrorFieldsMapNewInstance()
-        ..addAll({
-          "orders_refunds_order_details": List<OrderRefundDetails>.empty(),
-          "orders_refunds_order_details_count": 0
-        });
+      super.getMirrorFieldsMapNewInstance()..addAll({
+        "orders_refunds_order_details": List<OrderRefundDetails>.empty(),
+        "orders_refunds_order_details_count": 0,
+      });
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
-      AppLocalizations.of(context)!.customerRequestSizes;
+      AppLocalizations.of(context)!.ordersRefund;
 
   @override
   String? getTableNameApi() => "orders_refunds";
@@ -59,8 +58,13 @@ class OrderRefund extends InvoiceMaster<OrderRefund> {
   }
 
   @override
-  List<String> getMainFields({BuildContext? context}) =>
-      ["orders", "cargo_transporters", "date", "billNo", "comments"];
+  List<String> getMainFields({BuildContext? context}) => [
+    "orders",
+    "cargo_transporters",
+    "date",
+    "billNo",
+    "comments",
+  ];
 
   factory OrderRefund.fromJson(Map<String, dynamic> data) =>
       _$OrderRefundFromJson(data);
@@ -96,12 +100,11 @@ class OrderRefundDetails extends InvoiceMasterDetails<OrderRefundDetails> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      super.getMirrorFieldsMapNewInstance()
-        ..addAll({
-          "orders_refunds": OrderRefund(),
-          "orders": Order(),
-          "orders_details": OrderDetails()
-        });
+      super.getMirrorFieldsMapNewInstance()..addAll({
+        "orders_refunds": OrderRefund(),
+        "orders": Order(),
+        "orders_details": OrderDetails(),
+      });
   OrderRefundDetails setOrder(Order orders) {
     //TODO: implement this
     return this;
@@ -111,8 +114,12 @@ class OrderRefundDetails extends InvoiceMasterDetails<OrderRefundDetails> {
   String? getTableNameApi() => "orders_refunds_order_details";
 
   @override
-  List<String> getMainFields({BuildContext? context}) =>
-      ["products", "warehouse", "quantity", "comments"];
+  List<String> getMainFields({BuildContext? context}) => [
+    "products",
+    "warehouse",
+    "quantity",
+    "comments",
+  ];
 
   factory OrderRefundDetails.fromJson(Map<String, dynamic> data) =>
       _$OrderRefundDetailsFromJson(data);
