@@ -28,6 +28,7 @@ import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.d
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:intl/intl.dart';
 import 'package:number_to_character/number_to_character.dart';
 import 'package:pdf/pdf.dart' as d;
@@ -72,32 +73,56 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
   }
 
   @override
+  Widget? getCardTrailing(
+    BuildContext context, {
+    SecoundPaneHelperWithParentValueNotifier? secPaneHelper,
+  }) {
+    Widget? superWidget = super.getCardTrailing(
+      context,
+      secPaneHelper: secPaneHelper,
+    );
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          equalities?.currency?.name ?? "-",
+          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        if (superWidget != null) superWidget,
+      ],
+    );
+  }
+
+  @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "fromBox": 0.toInt(),
-        "isDirect": 0.toInt(),
-        "date": "",
-        "value": 0.toDouble(),
-        "comments": "",
-        "customers": Customer(),
-        "employees": Employee(),
-        "equalities": Equalities(),
-        "warehouse": Warehouse(),
-        "account_names": AccountName(),
-      };
+    "fromBox": 0.toInt(),
+    "isDirect": 0.toInt(),
+    "date": "",
+    "value": 0.toDouble(),
+    "comments": "",
+    "customers": Customer(),
+    "employees": Employee(),
+    "equalities": Equalities(),
+    "warehouse": Warehouse(),
+    "account_names": AccountName(),
+  };
 
   @override
   Map<String, IconData> getFieldIconDataMap() => {
-        "value": Icons.attach_money_rounded,
-        "date": Icons.date_range,
-        "comments": Icons.notes
-      };
+    "value": Icons.attach_money_rounded,
+    "date": Icons.date_range,
+    "comments": Icons.notes,
+  };
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "value": AppLocalizations.of(context)!.value,
-        "date": AppLocalizations.of(context)!.date,
-        "comments": AppLocalizations.of(context)!.comments
-      };
+    "value": AppLocalizations.of(context)!.value,
+    "date": AppLocalizations.of(context)!.date,
+    "comments": AppLocalizations.of(context)!.comments,
+  };
 
   @override
   String getMainHeaderTextOnly(BuildContext context) {
@@ -108,14 +133,16 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
   IconData? getMainDrawerGroupIconData() => Icons.credit_card;
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     if (action == ServerActions.list) {
       return RequestOptions(
-          sortBy: SortFieldValue(field: "date", type: SortByType.DESC)).addRequestObjcets(true);
+        sortBy: SortFieldValue(field: "date", type: SortByType.DESC),
+      ).addRequestObjcets(true);
     }
-    
+
     return null;
   }
 
@@ -141,11 +168,13 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
 
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "value":
-            const TextInputType.numberWithOptions(decimal: true, signed: false),
-        "date": TextInputType.datetime,
-        "comments": TextInputType.multiline
-      };
+    "value": const TextInputType.numberWithOptions(
+      decimal: true,
+      signed: false,
+    ),
+    "date": TextInputType.datetime,
+    "comments": TextInputType.multiline,
+  };
 
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {};
@@ -190,53 +219,65 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
 
   @override
   pdf.Widget? getPrintableRecieptCustomWidget(
-          BuildContext context, PrintReceipt? pca, PdfReceipt generator) =>
-      null;
+    BuildContext context,
+    PrintReceipt? pca,
+    PdfReceipt generator,
+  ) => null;
   @override
   Map<int, List<RecieptHeaderTitleAndDescriptionInfo>>
-      getPrintableRecieptFooterTitleAndDescription(
-              BuildContext context, PrintReceipt? pca) =>
-          {};
+  getPrintableRecieptFooterTitleAndDescription(
+    BuildContext context,
+    PrintReceipt? pca,
+  ) => {};
   @override
   Map<int, List<RecieptHeaderTitleAndDescriptionInfo>>
-      getPrintableRecieptHeaderTitleAndDescription(
-          BuildContext context, PrintReceipt? pca) {
+  getPrintableRecieptHeaderTitleAndDescription(
+    BuildContext context,
+    PrintReceipt? pca,
+  ) {
     var converter = NumberToCharacterConverter('en');
     return {
       0: [
         RecieptHeaderTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.mr,
-            description: customers?.name ?? ""),
+          title: AppLocalizations.of(context)!.mr,
+          description: customers?.name ?? "",
+        ),
         RecieptHeaderTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.iD,
-            description: "${iD.toString()}\n${date.toString()}"),
+          title: AppLocalizations.of(context)!.iD,
+          description: "${iD.toString()}\n${date.toString()}",
+        ),
       ],
       2: [
         RecieptHeaderTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.payemntAmount,
-            description: value?.toCurrencyFormat() ?? ""),
+          title: AppLocalizations.of(context)!.payemntAmount,
+          description: value?.toCurrencyFormat() ?? "",
+        ),
       ],
       3: [
         RecieptHeaderTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.inWords.toUpperCase(),
-            description: converter.convertDouble(value ?? 0)),
+          title: AppLocalizations.of(context)!.inWords.toUpperCase(),
+          description: converter.convertDouble(value ?? 0),
+        ),
       ],
       4: [
         RecieptHeaderTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.comments,
-            description: comments ?? ""),
+          title: AppLocalizations.of(context)!.comments,
+          description: comments ?? "",
+        ),
       ],
       if ((pca?.hideCustomerBalance == false))
         5: [
           RecieptHeaderTitleAndDescriptionInfo(
-              title: AppLocalizations.of(context)!.balance,
-              description: customers?.balance.toCurrencyFormat() ?? "")
+            title: AppLocalizations.of(context)!.balance,
+            description: customers?.balance.toCurrencyFormat() ?? "",
+          ),
         ],
       if ((pca?.hideEmployeeName == false))
         6: [
           RecieptHeaderTitleAndDescriptionInfo(
-              title: AppLocalizations.of(context)!.employee,
-              description: employees?.name ?? "")
+            title: AppLocalizations.of(context)!.employee,
+            description: employees?.name ?? "",
+          ),
         ],
     };
   }
@@ -248,10 +289,7 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
 
   @override
   String getPrintableQrCode() {
-    var q = QRCodeID(
-      iD: iD,
-      action: getTableNameApi() ?? "",
-    );
+    var q = QRCodeID(iD: iD, action: getTableNameApi() ?? "");
     return q.getQrCode();
   }
 
@@ -366,7 +404,9 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
   }
 
   String getIdWithLabelWithIsDollarForDashboard(
-      BuildContext context, PrintLocalSetting? pca) {
+    BuildContext context,
+    PrintLocalSetting? pca,
+  ) {
     bool isD = isDollar();
     String addOn = "";
     if (!isD) {
@@ -406,7 +446,9 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
 
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-      BuildContext context, PrintLocalSetting? pca) {
+    BuildContext context,
+    PrintLocalSetting? pca,
+  ) {
     return DashboardContentItem()
       ..credit = isIncomes() ? getValueForDashboard(context, pca) : 0
       ..debit = isSpendings() ? getValueForDashboard(context, pca) : 0
@@ -418,9 +460,11 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
   }
 
   @override
-  List<Widget>? getCustomBottomWidget(BuildContext context,
-      {ServerActions? action,
-      ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked}) {
+  List<Widget>? getCustomBottomWidget(
+    BuildContext context, {
+    ServerActions? action,
+    ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+  }) {
     if (action == ServerActions.add ||
         action == ServerActions.edit ||
         action == ServerActions.list) {
@@ -428,10 +472,12 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
     }
     return [
       SliverApiMixinViewAbstractWidget(
-          toListObject: getSelfNewInstance().getSelfInstanceWithSimilarOption(
-              context: context,
-              obj: this,
-              copyWith: RequestOptions(countPerPage: 5))),
+        toListObject: getSelfNewInstance().getSelfInstanceWithSimilarOption(
+          context: context,
+          obj: this,
+          copyWith: RequestOptions(countPerPage: 5),
+        ),
+      ),
     ];
   }
 

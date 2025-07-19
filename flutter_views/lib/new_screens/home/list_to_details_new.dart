@@ -125,6 +125,7 @@ class _ListToDetailsSecoundPaneNotifierState
     TabControllerHelper? tab,
     SecondPaneHelper? valueNotifier,
   }) {
+    
     List<Widget>? top;
     top = _viewAbstract.getCustomTopWidget(
       context,

@@ -1,0 +1,149 @@
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_view_controller/models/menu_item.dart';
+import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
+import 'package:flutter_view_controller/new_screens/theme.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
+
+abstract class ListCardItemMaster<T extends ViewAbstract>
+    extends StatefulWidget {
+  final T object;
+  final String? searchQuery;
+  final void Function()? onTap;
+  final void Function()? onLongTap;
+  final void Function()? onTralingTap;
+  final void Function(MenuItemBuild? item)? onPopMenuTap;
+  final SecoundPaneHelperWithParentValueNotifier? state;
+  final SliverApiWithStaticMixin? stateForToggle;
+  final bool isSelectMoodEnabled;
+  final void Function(T object, bool isSelected)? onSelectedForMoodSelection;
+  final bool Function(T? object)? isSelectForListTile;
+
+  const ListCardItemMaster({
+    super.key,
+    required this.object,
+    this.state,
+    this.stateForToggle,
+    this.searchQuery,
+    this.isSelectForListTile,
+    this.onSelectedForMoodSelection,
+    this.isSelectMoodEnabled = false,
+    this.onTap,
+    this.onLongTap,
+    this.onTralingTap,
+    this.onPopMenuTap,
+  });
+}
+
+abstract class ListCardItemMasterState<
+  T extends ViewAbstract,
+  E extends ListCardItemMaster<T>
+>
+    extends State<E> {
+  late T object;
+  String? _searchQuery;
+
+  bool? _isSelectedForListTile;
+  @override
+  void initState() {
+    super.initState();
+    object = widget.object;
+    _searchQuery = widget.searchQuery;
+    _isSelectedForListTile = widget.isSelectForListTile?.call(object);
+  }
+
+  @override
+  void didUpdateWidget(covariant E oldWidget) {
+    if (widget.object != object) {
+      object = widget.object;
+      _isSelectedForListTile = widget.isSelectForListTile?.call(object);
+    }
+    if (widget.searchQuery != _searchQuery) {
+      _searchQuery = widget.searchQuery;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget cardItem = getListTile();
+    if (widget.isSelectMoodEnabled) {}
+    if (isLargeScreen(context)) {
+      return cardItem;
+    }
+
+    return Dismissible(
+      key: UniqueKey(),
+      direction: object.getDismissibleDirection(),
+      background: object.getDismissibleBackground(context),
+      secondaryBackground: object.getDismissibleSecondaryBackground(context),
+      onDismissed: (direction) =>
+          object.onCardDismissedView(context, direction),
+      child: cardItem,
+    );
+  }
+
+  bool isListTileSelected() {
+    return _isSelectedForListTile ?? false;
+  }
+
+  Widget getSelectMoodWidget() {
+    return CheckboxListTile.adaptive(
+      controlAffinity: ListTileControlAffinity.leading,
+      value: isSelected,
+      onChanged: (value) {
+        debugPrint("CheckboxListTile changed  => $value");
+        if ((widget.object.getParent?.hasPermissionFromParentSelectItem(
+                  context,
+                  widget.object,
+                ) ??
+                true) ==
+            false)
+          return;
+        setState(() {
+          widget.object.isSelected = value ?? false;
+          isSelected = value ?? false;
+        });
+        if (widget.onSelectedForMoodSelection != null) {
+          widget.onSelectedForMoodSelection!(widget.object, value ?? false);
+        }
+      },
+      selected: isSelected,
+      selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+      // onTap: () => widget.object.onCardClicked(context),
+      // onLongPress: () => widget.object.onCardLongClicked(context),
+      title: getListTile()
+    );
+  }
+
+  Widget getListTile() {
+    bool hasThreeLine = object.getMainSubtitleHeaderText(context) is Column;
+    return ListTile(
+      selected: isListTileSelected(),
+      onTap: () {
+        if (widget.onTap != null) {
+          widget.onTap.call();
+        } else {
+          object.onCardClicked(context, secondPaneHelper: widget.state);
+        }
+      },
+      onLongPress: () {
+        if (widget.onLongTap != null) {
+          widget.onLongTap.call();
+        } else {
+          widget.stateForToggle?.toggleSelectedMood();
+        }
+      },
+      title: (object.getMainHeaderText(context, searchQuery: _searchQuery)),
+      subtitle: (object.getMainSubtitleHeaderText(
+        context,
+        searchQuery: _searchQuery,
+      )),
+      // isThreeLine: hasThreeLine,
+      leading: object.getCardLeading(context),
+      trailing: object.getCardTrailing(context, secPaneHelper: widget.state),
+    );
+  }
+}

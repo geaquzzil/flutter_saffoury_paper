@@ -128,8 +128,8 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   }
 
   void onCardClicked(BuildContext context,
-      {bool isMain = true, bool? isSecoundSubPaneView}) {
-    viewPage(context, isSecoundSubPaneView: isSecoundSubPaneView);
+      {bool isMain = true, bool? isSecoundSubPaneView,SecoundPaneHelperWithParentValueNotifier? secondPaneHelper}) {
+    viewPage(context, isSecoundSubPaneView: isSecoundSubPaneView,secondPaneHelper: secondPaneHelper);
   }
 
   String getUriShare({ServerActions? action}) {

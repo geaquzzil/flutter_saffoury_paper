@@ -40,16 +40,17 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
   final iconSize = 20;
   final spacing = kDefaultPadding * .25;
 
-  const FiltersAndSelectionListHeaderValueNotifier(
-      {super.key,
-      required this.valueNotifer,
-      required this.viewAbstract,
-      this.secPaneNotifer,
-      this.onDoneFilter,
-      this.sortInitial,
-      this.filterInitial,
-      this.onDoneSort,
-      this.width});
+  const FiltersAndSelectionListHeaderValueNotifier({
+    super.key,
+    required this.valueNotifer,
+    required this.viewAbstract,
+    this.secPaneNotifer,
+    this.onDoneFilter,
+    this.sortInitial,
+    this.filterInitial,
+    this.onDoneSort,
+    this.width,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -70,20 +71,19 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
         if (width != null) {
           bool canTakeUpToFour = width.toNonNullable() / iconSize > 6;
           debugPrint(
-              "FiltersAndSelectionListHeaderValueNotifier canTakeUpToFour $canTakeUpToFour constraints.maxWidth = ${width.toNonNullable()} to /5 == ${width.toNonNullable() / iconSize} ");
-          return _getMainWidget(
-            canTakeUpToFour,
-            context,
-            listProvider,
-            key,
+            "FiltersAndSelectionListHeaderValueNotifier canTakeUpToFour $canTakeUpToFour constraints.maxWidth = ${width.toNonNullable()} to /5 == ${width.toNonNullable() / iconSize} ",
           );
-        }
-        return LayoutBuilder(builder: (context, cons) {
-          bool canTakeUpToFour = cons.maxWidth / iconSize > 6;
-          debugPrint(
-              "FiltersAndSelectionListHeaderValueNotifier canTakeUpToFour $canTakeUpToFour constraints.maxWidth = ${cons.maxWidth} to /5 == ${cons.maxWidth / iconSize} ");
           return _getMainWidget(canTakeUpToFour, context, listProvider, key);
-        });
+        }
+        return LayoutBuilder(
+          builder: (context, cons) {
+            bool canTakeUpToFour = cons.maxWidth / iconSize > 6;
+            debugPrint(
+              "FiltersAndSelectionListHeaderValueNotifier canTakeUpToFour $canTakeUpToFour constraints.maxWidth = ${cons.maxWidth} to /5 == ${cons.maxWidth / iconSize} ",
+            );
+            return _getMainWidget(canTakeUpToFour, context, listProvider, key);
+          },
+        );
       },
     );
   }
@@ -117,47 +117,59 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
             if (canTakeUpToFour) _getRefreshWidget(context, listProvider, key),
             if (canTakeUpToFour)
               AnimatedScale(
-                  duration: Duration(milliseconds: 200),
-                  scale: listLength > 2 ? 1 : 0,
-                  child: PrintIcon(
-                    viewAbstract: viewAbstract,
-                    list: list,
-                    parent: secPaneNotifer,
-                  )),
+                duration: Duration(milliseconds: 200),
+                scale: listLength > 2 ? 1 : 0,
+                child: PrintIcon(
+                  viewAbstract: viewAbstract,
+                  list: list,
+                  state: secPaneNotifer,
+                ),
+              ),
             if (canTakeUpToFour)
               AnimatedScale(
-                  duration: Duration(milliseconds: 200),
-                  scale: listLength > 2 ? 1 : 0,
-                  child: _getExportButton(context, listProvider, key)),
+                duration: Duration(milliseconds: 200),
+                scale: listLength > 2 ? 1 : 0,
+                child: _getExportButton(context, listProvider, key),
+              ),
           ],
-        )
+        ),
       ],
     );
   }
 
   Widget _getAddButton(BuildContext context) {
     return IconButton(
-        onPressed: () {
-          viewAbstract.onDrawerLeadingItemClicked(context);
-        },
-        icon: const Icon(Icons.add));
+      onPressed: () {
+        viewAbstract.onDrawerLeadingItemClicked(context);
+      },
+      icon: const Icon(Icons.add),
+    );
   }
 
   void _refresh(
-      BuildContext context, ListMultiKeyProvider listProvider, String key) {
+    BuildContext context,
+    ListMultiKeyProvider listProvider,
+    String key,
+  ) {
     listProvider.refresh(key, viewAbstract, context: context);
   }
 
-  Widget _getRefreshWidget(BuildContext context,
-          ListMultiKeyProvider listProvider, String key) =>
-      IconButton(
-          onPressed: () {
-            _refresh(context, listProvider, key);
-          },
-          icon: const Icon(Icons.refresh));
+  Widget _getRefreshWidget(
+    BuildContext context,
+    ListMultiKeyProvider listProvider,
+    String key,
+  ) => IconButton(
+    onPressed: () {
+      _refresh(context, listProvider, key);
+    },
+    icon: const Icon(Icons.refresh),
+  );
 
   Widget? _getExportButton(
-      BuildContext context, ListMultiKeyProvider listProvider, String key) {
+    BuildContext context,
+    ListMultiKeyProvider listProvider,
+    String key,
+  ) {
     var first = viewAbstract;
     if (first is! ExcelableReaderInterace && first is! PrintableMaster) {
       return null;
@@ -175,11 +187,12 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
   String customKey;
   ListMultiKeyProvider listProvider;
 
-  FiltersAndSelectionListHeader(
-      {super.key,
-      required this.viewAbstract,
-      required this.listProvider,
-      required this.customKey});
+  FiltersAndSelectionListHeader({
+    super.key,
+    required this.viewAbstract,
+    required this.listProvider,
+    required this.customKey,
+  });
 
   String findCustomKey() {
     return customKey;
@@ -187,43 +200,44 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int listLength =
-        context.watch<ListMultiKeyProvider>().getList(findCustomKey()).length;
+    int listLength = context
+        .watch<ListMultiKeyProvider>()
+        .getList(findCustomKey())
+        .length;
 
     Widget? printButton = kIsWeb
         ? null
         : (listLength > 2)
-            ? PrintIcon(viewAbstract: viewAbstract, list: getList())
-            : null;
+        ? PrintIcon(viewAbstract: viewAbstract, list: getList())
+        : null;
 
     Widget? filterButton = kIsWeb ? null : getFilterWidget(context);
 
     Widget? exportButton = kIsWeb
         ? null
         : (listLength > 2)
-            ? getExportButton(context)
-            : null;
+        ? getExportButton(context)
+        : null;
     return Container(
       color: kIsWeb ? null : Theme.of(context).colorScheme.surface,
       child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.only(
-                // bottom: kDefaultPadding * .25,
-                top: kDefaultPadding * .25,
-                left: kDefaultPadding / 2,
-                right: kDefaultPadding / 2),
+              // bottom: kDefaultPadding * .25,
+              top: kDefaultPadding * .25,
+              left: kDefaultPadding / 2,
+              right: kDefaultPadding / 2,
+            ),
             child: Row(
               children: [
                 if (filterButton != null) filterButton,
-                SortIcon(
-                  viewAbstract: viewAbstract,
-                ),
+                SortIcon(viewAbstract: viewAbstract),
                 const Spacer(),
                 if (!kIsWeb) getAddBotton(context),
                 getRefreshWidget(context),
                 if (exportButton != null) exportButton,
-                if (printButton != null) printButton
+                if (printButton != null) printButton,
               ],
             ),
           ),
@@ -239,7 +253,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
               );
             },
             selector: (p0, p1) => p1.getCount(),
-          )
+          ),
         ],
       ),
     );
@@ -272,16 +286,18 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
   }
 
   Widget getRefreshWidget(BuildContext context) => IconButton(
-      onPressed: () {
-        _refresh(context);
-      },
-      icon: const Icon(Icons.refresh));
+    onPressed: () {
+      _refresh(context);
+    },
+    icon: const Icon(Icons.refresh),
+  );
 
   Widget getAddBotton(BuildContext context) => IconButton(
-      onPressed: () {
-        viewAbstract.onDrawerLeadingItemClicked(context);
-      },
-      icon: const Icon(Icons.add));
+    onPressed: () {
+      viewAbstract.onDrawerLeadingItemClicked(context);
+    },
+    icon: const Icon(Icons.add),
+  );
   Widget? getFilterWidget(BuildContext context) {
     return FilterIcon(
       viewAbstract: viewAbstract,
@@ -294,10 +310,7 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
     if (first is! ExcelableReaderInterace && first is! PrintableMaster) {
       return null;
     }
-    return ExportIcon(
-      viewAbstract: getFirstObject(),
-      list: getList().cast(),
-    );
+    return ExportIcon(viewAbstract: getFirstObject(), list: getList().cast());
   }
 
   Widget? getPrintWidget(BuildContext context) {
@@ -314,49 +327,61 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
         hint: AppLocalizations.of(context)!.printType,
         list: [
           DropdownStringListItem(
-              icon: Icons.print,
-              label: AppLocalizations.of(context)!
-                  .printAllAs(AppLocalizations.of(context)!.list)),
+            icon: Icons.print,
+            label: AppLocalizations.of(
+              context,
+            )!.printAllAs(AppLocalizations.of(context)!.list),
+          ),
           DropdownStringListItem(
-              icon: Icons.print,
-              label: AppLocalizations.of(context)!.printAllAs(viewAbstract
-                  .getMainHeaderLabelTextOnly(context)
-                  .toLowerCase())),
+            icon: Icons.print,
+            label: AppLocalizations.of(context)!.printAllAs(
+              viewAbstract.getMainHeaderLabelTextOnly(context).toLowerCase(),
+            ),
+          ),
           DropdownStringListItem(
-              icon: Icons.settings,
-              enabled: false,
-              label: AppLocalizations.of(context)!.printerSetting),
+            icon: Icons.settings,
+            enabled: false,
+            label: AppLocalizations.of(context)!.printerSetting,
+          ),
           DropdownStringListItem(icon: Icons.settings, label: printListSetting),
           DropdownStringListItem(
-              icon: Icons.settings, label: printSelfListSetting),
+            icon: Icons.settings,
+            label: printSelfListSetting,
+          ),
         ],
         onSelected: (object) {
           if (object?.label ==
-              AppLocalizations.of(context)!
-                  .printAllAs(AppLocalizations.of(context)!.list)) {
+              AppLocalizations.of(
+                context,
+              )!.printAllAs(AppLocalizations.of(context)!.list)) {
             changeToPrintPdfSelfList(context);
           } else if (object?.label == printListSetting ||
               object?.label == printSelfListSetting) {
-            context.read<ActionViewAbstractProvider>().changeCustomWidget(Card(
-                  child: Container(
-                      key: UniqueKey(),
-                      color: Theme.of(context).colorScheme.surface,
-                      child: BaseEditNewPage(
-                        // isTheFirst: true,
-                        onFabClickedConfirm: (obj) {
-                          debugPrint("onFabClickedConfirm $obj");
-                          context
-                              .read<ActionViewAbstractProvider>()
-                              .changeCustomWidget(PdfSelfListPage(
-                                  setting: obj as PrintLocalSetting,
-                                  list: getList()
-                                      .cast<PrintableSelfListInterface>()));
-                        },
-                        viewAbstract:
-                            (viewAbstract as PrintableSelfListInterface)
-                                .getModifiablePrintableSelfPdfSetting(context),
-                      )),
-                ));
+            context.read<ActionViewAbstractProvider>().changeCustomWidget(
+              Card(
+                child: Container(
+                  key: UniqueKey(),
+                  color: Theme.of(context).colorScheme.surface,
+                  child: BaseEditNewPage(
+                    // isTheFirst: true,
+                    onFabClickedConfirm: (obj) {
+                      debugPrint("onFabClickedConfirm $obj");
+                      context
+                          .read<ActionViewAbstractProvider>()
+                          .changeCustomWidget(
+                            PdfSelfListPage(
+                              setting: obj as PrintLocalSetting,
+                              list: getList()
+                                  .cast<PrintableSelfListInterface>(),
+                            ),
+                          );
+                    },
+                    viewAbstract: (viewAbstract as PrintableSelfListInterface)
+                        .getModifiablePrintableSelfPdfSetting(context),
+                  ),
+                ),
+              ),
+            );
           } else if (object?.label == printSelfListSetting) {
           } else {
             changeToPrintPdfList(context);
@@ -366,37 +391,42 @@ class FiltersAndSelectionListHeader extends StatelessWidget {
     }
     if (first is PrintableMaster) {
       return IconButton(
-          onPressed: () {
-            changeToPrintPdfList(context);
-          },
-          icon: const Icon(Icons.print));
+        onPressed: () {
+          changeToPrintPdfList(context);
+        },
+        icon: const Icon(Icons.print),
+      );
     } else if (first is PrintableSelfListInterface) {
       return IconButton(
-          onPressed: () {
-            changeToPrintPdfSelfList(context);
-          },
-          icon: const Icon(Icons.print));
+        onPressed: () {
+          changeToPrintPdfSelfList(context);
+        },
+        icon: const Icon(Icons.print),
+      );
     } else {
       return null;
     }
   }
 
   void changeToPrintPdfList(BuildContext context) {
-    context.read<ActionViewAbstractProvider>().changeCustomWidget(PdfListPage(
+    context.read<ActionViewAbstractProvider>().changeCustomWidget(
+      PdfListPage(
         list: listProvider
             .getList(findCustomKey())
             .whereType<PrintableMaster>()
-            .toList()));
+            .toList(),
+      ),
+    );
   }
 
   void changeToPrintPdfSelfList(BuildContext context) {
-    context
-        .read<ActionViewAbstractProvider>()
-        .changeCustomWidget(PdfSelfListPage(
-          list: listProvider
-              .getList(findCustomKey())
-              .whereType<PrintableSelfListInterface>()
-              .toList(),
-        ));
+    context.read<ActionViewAbstractProvider>().changeCustomWidget(
+      PdfSelfListPage(
+        list: listProvider
+            .getList(findCustomKey())
+            .whereType<PrintableSelfListInterface>()
+            .toList(),
+      ),
+    );
   }
 }
