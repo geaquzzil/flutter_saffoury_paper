@@ -54,11 +54,12 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     onCardClicked(context);
   }
 
-  void showMenuOn(
-      {required BuildContext context,
-      GlobalKey? clickedWidget,
-      OffsetHelper? position,
-      SliverApiWithStaticMixin? state}) async {
+  void showMenuOn({
+    required BuildContext context,
+    GlobalKey? clickedWidget,
+    OffsetHelper? position,
+    SliverApiWithStaticMixin? state,
+  }) async {
     Offset offset;
     Size size;
     if (position != null) {
@@ -75,7 +76,8 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     debugPrint('onCardLongClicked Size: ${size.width}, ${size.height}');
     debugPrint('onCardLongClicked Offset: ${offset.dx}, ${offset.dy}');
     debugPrint(
-        'onCardLongClicked Position: ${(offset.dx + size.width) / 2}, ${(offset.dy + size.height) / 2}');
+      'onCardLongClicked Position: ${(offset.dx + size.width) / 2}, ${(offset.dy + size.height) / 2}',
+    );
     var list = (this as ViewAbstract).getPopupMenuActionsList(context);
     await showMenu<MenuItemBuild>(
       context: context,
@@ -93,19 +95,22 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     );
   }
 
-  void onCardLongClicked(BuildContext context,
-      {GlobalKey? clickedWidget,
-      OffsetHelper? position,
-      SliverApiWithStaticMixin? state}) async {
+  void onCardLongClicked(
+    BuildContext context, {
+    GlobalKey? clickedWidget,
+    OffsetHelper? position,
+    SliverApiWithStaticMixin? state,
+  }) async {
     debugPrint("onCardLongClicked");
 
     if (isLargeScreenFromCurrentScreenSize(context)) {
       if (clickedWidget == null && position == null) return;
       showMenuOn(
-          context: context,
-          clickedWidget: clickedWidget,
-          position: position,
-          state: state);
+        context: context,
+        clickedWidget: clickedWidget,
+        position: position,
+        state: state,
+      );
       return;
     }
 
@@ -114,22 +119,35 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       withHeightFactor: false,
       context: context,
       builder: (context) => BottomSheetDialogWidget(
-          viewAbstract: this as ViewAbstract, state: state),
+        viewAbstract: this as ViewAbstract,
+        state: state,
+      ),
     );
   }
 
   void onCardClickedView(BuildContext context, {bool? isSecoundSubPaneView}) {
-    onCardClicked(context,
-        isMain: false, isSecoundSubPaneView: isSecoundSubPaneView);
+    onCardClicked(
+      context,
+      isMain: false,
+      isSecoundSubPaneView: isSecoundSubPaneView,
+    );
   }
 
   void onCardClickedFromSearchResult(BuildContext context) {
     onCardClicked(context);
   }
 
-  void onCardClicked(BuildContext context,
-      {bool isMain = true, bool? isSecoundSubPaneView,SecoundPaneHelperWithParentValueNotifier? secondPaneHelper}) {
-    viewPage(context, isSecoundSubPaneView: isSecoundSubPaneView,secondPaneHelper: secondPaneHelper);
+  void onCardClicked(
+    BuildContext context, {
+    bool isMain = true,
+    bool? isSecoundSubPaneView,
+    SecoundPaneHelperWithParentValueNotifier? secondPaneHelper,
+  }) {
+    viewPage(
+      context,
+      isSecoundSubPaneView: isSecoundSubPaneView,
+      secondPaneHelper: secondPaneHelper,
+    );
   }
 
   String getUriShare({ServerActions? action}) {
@@ -152,12 +170,15 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     return "https://saffoury.com/$uri/$tableName/$iD";
   }
 
-  Future<void> sharePage(BuildContext context,
-      {ServerActions? action,
-      SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) async {
+  Future<void> sharePage(
+    BuildContext context, {
+    ServerActions? action,
+    SecoundPaneHelperWithParentValueNotifier? secPaneHelper,
+  }) async {
     try {
-      ViewAbstract? newO =
-          await (this as ViewAbstract).viewCall(context: context);
+      ViewAbstract? newO = await (this as ViewAbstract).viewCall(
+        context: context,
+      );
       if (newO != null) {
         debugPrint("sharePage updated list");
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -169,11 +190,14 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
         return;
       }
       debugPrint("sharePage object is started");
-      String content = (newO as SharableInterface)
-          .getContentSharable(context, action: action);
+      String content = (newO as SharableInterface).getContentSharable(
+        context,
+        action: action,
+      );
       await Share.share(
-          subject: AppLocalizations.of(context)!.shareLabel,
-          "$content\n\n${newO.getUriShare(action: action)}");
+        subject: AppLocalizations.of(context)!.shareLabel,
+        "$content\n\n${newO.getUriShare(action: action)}",
+      );
     } catch (e) {
       //TODO Show the error
       debugPrint("shrePage $e");
@@ -182,52 +206,71 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
 
   ///routes if list is found then extras could be type of [List] and requires [tableName]
   ///routes if viewAbstract then extras is [ViewAbstract] and required [tableName] TODO [iD]
-  void exportPage(BuildContext context,
-      {List<ViewAbstract>? asList,
-      SecoundPaneHelperWithParentValueNotifier? secondPaneHelper}) {
+  void exportPage(
+    BuildContext context, {
+    List<ViewAbstract>? asList,
+    SecoundPaneHelperWithParentValueNotifier? secondPaneHelper,
+  }) {
     if (!setPaneToSecondOrThird(
-        context,
-        ListToDetailsSecoundPaneHelper(
-            actionTitle:
-                getIDWithLabel(context, action: ServerActions.custom_widget),
-            action: ServerActions.custom_widget,
-            customWidget: FileExporterPage(
-              viewAbstract: this as ViewAbstract,
-              list: asList,
-            )),
-        tryToSetToSecoundPane: false)) {
-      context.goNamed(exportRouteName,
-          pathParameters: {
-            "tableName": getTableNameApi()!,
-            "type": asList != null
-                ? FileExporterPageType.LIST.toString()
-                : FileExporterPageType.SINGLE.toString(),
-          },
-          queryParameters: {
-            if (asList != null) "data": toJsonViewAbstractList(asList.cast())
-          },
-          extra: asList ?? this);
+      context,
+      ListToDetailsSecoundPaneHelper(
+        actionTitle: getIDWithLabel(
+          context,
+          action: ServerActions.custom_widget,
+        ),
+        action: ServerActions.custom_widget,
+        customWidget: FileExporterPage(
+          viewAbstract: this as ViewAbstract,
+          list: asList,
+        ),
+      ),
+      tryToSetToSecoundPane: false,
+    )) {
+      context.goNamed(
+        exportRouteName,
+        pathParameters: {
+          "tableName": getTableNameApi()!,
+          "type": asList != null
+              ? FileExporterPageType.LIST.toString()
+              : FileExporterPageType.SINGLE.toString(),
+        },
+        queryParameters: {
+          if (asList != null) "data": toJsonViewAbstractList(asList.cast()),
+        },
+        extra: asList ?? this,
+      );
     }
   }
 
-  void importPage(BuildContext context,
-      {SecoundPaneHelperWithParentValueNotifier? secondPaneHelper}) {
+  void importPage(
+    BuildContext context, {
+    SecoundPaneHelperWithParentValueNotifier? secondPaneHelper,
+  }) {
     if (!setPaneToSecondOrThird(
-        context,
-        ListToDetailsSecoundPaneHelper(
-            actionTitle:
-                getIDWithLabel(context, action: ServerActions.custom_widget),
-            action: ServerActions.custom_widget,
-            customWidget: FileReaderPage(viewAbstract: this as ViewAbstract)),
-        tryToSetToSecoundPane: false)) {
-      context.goNamed(importRouteName,
-          pathParameters: getRoutePathParameters(), extra: this);
+      context,
+      ListToDetailsSecoundPaneHelper(
+        actionTitle: getIDWithLabel(
+          context,
+          action: ServerActions.custom_widget,
+        ),
+        action: ServerActions.custom_widget,
+        customWidget: FileReaderPage(viewAbstract: this as ViewAbstract),
+      ),
+      tryToSetToSecoundPane: false,
+    )) {
+      context.goNamed(
+        importRouteName,
+        pathParameters: getRoutePathParameters(),
+        extra: this,
+      );
     }
   }
 
   bool setPaneToSecondOrThird(
-      BuildContext context, ListToDetailsSecoundPaneHelper l,
-      {bool tryToSetToSecoundPane = true}) {
+    BuildContext context,
+    ListToDetailsSecoundPaneHelper l, {
+    bool tryToSetToSecoundPane = true,
+  }) {
     CurrentScreenSize currentScreenSize = findCurrentScreenSize(context);
     bool isSoLarge = isLargeScreenFromCurrentScreenSize(context);
     bool canSecondPane =
@@ -235,7 +278,8 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     bool canThirdPane = isSoLarge;
 
     debugPrint(
-        "setPaneToSecondOrThird CurrentScreenSize $currentScreenSize canSecondPane $canSecondPane canThirdPane $canThirdPane");
+      "setPaneToSecondOrThird CurrentScreenSize $currentScreenSize canSecondPane $canSecondPane canThirdPane $canThirdPane",
+    );
     if (!canSecondPane) return false;
     if (canThirdPane && !tryToSetToSecoundPane) {
       if (Globals.keyForLargeScreenListable.currentState == null) {
@@ -254,26 +298,32 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     return true;
   }
 
-  Map<String, String> getRoutePathParameters() =>
-      {"tableName": getTableNameApi() ?? "", "id": getIDString()};
+  Map<String, String> getRoutePathParameters() => {
+    "tableName": getTableNameApi() ?? "",
+    "id": getIDString(),
+  };
 
   //TODO isSecoundSubPaneView should i deprecate it ?
-  void viewPage(BuildContext context,
-      {bool? isSecoundSubPaneView,
-      bool disableMasterToListOverride = true,
-      SecoundPaneHelperWithParentValueNotifier? secondPaneHelper}) {
+  void viewPage(
+    BuildContext context, {
+    bool? isSecoundSubPaneView,
+    bool disableMasterToListOverride = true,
+    SecoundPaneHelperWithParentValueNotifier? secondPaneHelper,
+  }) {
     bool setToThirdPane = isSecoundSubPaneView ?? false;
     bool isGridableItem = isGridable();
     ViewAbstract? isMasterToList = isGridableItem
         ? (this as WebCategoryGridableInterface)
-            .getWebCategoryGridableIsMasterToList(context)
+              .getWebCategoryGridableIsMasterToList(context)
         : null;
     isMasterToList = disableMasterToListOverride ? null : isMasterToList;
     //TODO what if master to list  fix this
     if (secondPaneHelper != null) {
       secondPaneHelper.secPaneNotifier?.value = SecondPaneHelper(
-          title: getIDWithLabel(context, action: ServerActions.print),
-          value: getViewPage(context, parent: secondPaneHelper));
+        object: this,
+        title: getIDWithLabel(context, action: ServerActions.view),
+        value: getViewPage(context, parent: secondPaneHelper),
+      );
       return;
     }
     ListToDetailsSecoundPaneHelper l = isMasterToList == null
@@ -282,27 +332,31 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
             actionTitle: getIDWithLabel(context, action: ServerActions.view),
             isSecoundPaneView: isSecoundSubPaneView ?? false,
             action: ServerActions.view,
-            viewAbstract: this as ViewAbstract)
+            viewAbstract: this as ViewAbstract,
+          )
         : ListToDetailsSecoundPaneHelper(
             subObject: isSecoundSubPaneView == true ? this : null,
             actionTitle: getIDWithLabel(context, action: ServerActions.view),
             isSecoundPaneView: isSecoundSubPaneView ?? false,
             action: ServerActions.custom_widget,
-            customWidget: _getMasterToListWidget(context));
-    if (!setPaneToSecondOrThird(context, l,
-        tryToSetToSecoundPane: !setToThirdPane)) {
+            customWidget: _getMasterToListWidget(context),
+          );
+    if (!setPaneToSecondOrThird(
+      context,
+      l,
+      tryToSetToSecoundPane: !setToThirdPane,
+    )) {
       debugPrint("sdsdsds");
       context.pushNamed(
-          isMasterToList == null ? viewRouteName : indexWebMasterToList,
-          pathParameters: getRoutePathParameters(),
-          extra: this);
+        isMasterToList == null ? viewRouteName : indexWebMasterToList,
+        pathParameters: getRoutePathParameters(),
+        extra: this,
+      );
     }
   }
 
   Widget _getMasterToListWidget(BuildContext context) {
-    return const Center(
-      child: Text("_getMasterToListWidget"),
-    );
+    return const Center(child: Text("_getMasterToListWidget"));
     return ListWebApiPage(
       buildFooter: true,
       buildHeader: true,
@@ -332,113 +386,137 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     );
   }
 
-  void editPage(BuildContext context,
-      {SecoundPaneHelperWithParentValueNotifier? secondPaneHelper}) {
+  void editPage(
+    BuildContext context, {
+    SecoundPaneHelperWithParentValueNotifier? secondPaneHelper,
+  }) {
     if (secondPaneHelper != null) {
       secondPaneHelper.secPaneNotifier?.value = SecondPaneHelper(
-          title: getIDWithLabel(context, action: ServerActions.edit),
-          value: getEditPage(context, parent: secondPaneHelper));
+        object: this,
+        title: getIDWithLabel(context, action: ServerActions.edit),
+        value: getEditPage(context, parent: secondPaneHelper),
+      );
       return;
     }
     if (!setPaneToSecondOrThird(
       context,
       ListToDetailsSecoundPaneHelper(
-          actionTitle: getIDWithLabel(context, action: ServerActions.edit),
-          action: ServerActions.edit,
-          viewAbstract: this as ViewAbstract),
+        actionTitle: getIDWithLabel(context, action: ServerActions.edit),
+        action: ServerActions.edit,
+        viewAbstract: this as ViewAbstract,
+      ),
     )) {
-      context.goNamed(editRouteName,
-          pathParameters: getRoutePathParameters(),
-          extra: (this as ViewAbstract).getCopyInstance());
+      context.goNamed(
+        editRouteName,
+        pathParameters: getRoutePathParameters(),
+        extra: (this as ViewAbstract).getCopyInstance(),
+      );
     }
   }
 
-  Future<bool> directPrint(
-      {required BuildContext context,
-      required FutureOr<Uint8List> Function(pdf.PdfPageFormat) onLayout,
-      required pdf.PdfPageFormat format,
-      Printer? printer}) async {
-    PrinterDefaultSetting? p =
-        await Configurations.get(PrinterDefaultSetting());
+  Future<bool> directPrint({
+    required BuildContext context,
+    required FutureOr<Uint8List> Function(pdf.PdfPageFormat) onLayout,
+    required pdf.PdfPageFormat format,
+    Printer? printer,
+  }) async {
+    PrinterDefaultSetting? p = await Configurations.get(
+      PrinterDefaultSetting(),
+    );
     if (p != null) {
       debugPrint("directPrint getting saved value => $p");
-      Printer? result = printer ??
-          await Printing.listPrinters().then((pr) => pr.firstWhereOrNull(
-                (p0) =>
-                    p0.name ==
-                    ((format == roll80)
-                        ? p.defaultLabelPrinter
-                        : p.defaultPrinter),
-              ));
+      Printer? result =
+          printer ??
+          await Printing.listPrinters().then(
+            (pr) => pr.firstWhereOrNull(
+              (p0) =>
+                  p0.name ==
+                  ((format == roll80)
+                      ? p.defaultLabelPrinter
+                      : p.defaultPrinter),
+            ),
+          );
       debugPrint("directPrint result printer $result");
       if (result != null) {
         return await Printing.directPrintPdf(
-            forceCustomPrintPaper: true,
-            printer: result,
-            onLayout: onLayout,
-            format: format);
+          forceCustomPrintPaper: true,
+          printer: result,
+          onLayout: onLayout,
+          format: format,
+        );
       }
     }
     return false;
   }
 
-  Future<void> printDialog(BuildContext context,
-      {bool standAlone = false,
-      List<ViewAbstract>? list,
-      bool? isSelfListPrint}) async {
+  Future<void> printDialog(
+    BuildContext context, {
+    bool standAlone = false,
+    List<ViewAbstract>? list,
+    bool? isSelfListPrint,
+  }) async {
     bool isListPrint = list != null;
     bool isSelfList = isSelfListPrint ?? false;
     PrintPageType type = !isListPrint
         ? PrintPageType.single
         : isSelfList
-            ? PrintPageType.self_list
-            : PrintPageType.list;
+        ? PrintPageType.self_list
+        : PrintPageType.list;
     await showFullScreenDialogExt<ViewAbstract?>(
-        barrierDismissible: true,
-        anchorPoint: const Offset(1000, 1000),
-        context: context,
-        builder: (p0) {
-          return PdfPageNew(
-            buildSecondPane: false,
-            isFirstToSecOrThirdPane: true,
-            asList: list?.cast(),
-            type: type,
-            iD: iD,
-            tableName: getTableNameApi(),
-            extras: this,
-          );
-        });
+      barrierDismissible: true,
+      anchorPoint: const Offset(1000, 1000),
+      context: context,
+      builder: (p0) {
+        return PdfPageNew(
+          buildSecondPane: false,
+          isFirstToSecOrThirdPane: true,
+          asList: list?.cast(),
+          type: type,
+          iD: iD,
+          tableName: getTableNameApi(),
+          extras: this,
+        );
+      },
+    );
   }
 
-  Widget getEditPage(BuildContext context,
-      {SecoundPaneHelperWithParentValueNotifier? parent}) {
+  Widget getEditPage(
+    BuildContext context, {
+    SecoundPaneHelperWithParentValueNotifier? parent,
+  }) {
     debugPrint("EDIODIDIDID");
     return EditNew(
-        key: getKeyForWidget(context, ServerActions.edit),
-        extras: this,
-        iD: iD,
-        tableName: getTableNameApi(),
-        isFirstToSecOrThirdPane: true,
-        onBuild: parent?.onBuild,
-        parent: parent?.parent);
+      key: getKeyForWidget(context, ServerActions.edit),
+      extras: this,
+      iD: iD,
+      tableName: getTableNameApi(),
+      isFirstToSecOrThirdPane: true,
+      onBuild: parent?.onBuild,
+      parent: parent?.parent,
+    );
   }
 
-  Widget getViewPage(BuildContext context,
-      {SecoundPaneHelperWithParentValueNotifier? parent}) {
+  Widget getViewPage(
+    BuildContext context, {
+    SecoundPaneHelperWithParentValueNotifier? parent,
+  }) {
     return ViewNew(
-        key: getKeyForWidget(context, ServerActions.view),
-        extras: this,
-        iD: iD,
-        isFirstToSecOrThirdPane: true,
-        tableName: getTableNameApi(),
-        onBuild: parent?.onBuild,
-        parent: parent?.parent);
+      key: getKeyForWidget(context, ServerActions.view),
+      extras: this,
+      iD: iD,
+      // isFirstToSecOrThirdPane: tdrue,
+      tableName: getTableNameApi(),
+      onBuild: parent?.onBuild,
+      parent: parent?.parent,
+    );
   }
 
-  Widget getPrintPage(BuildContext context,
-      {required PrintPageType type,
-      List? list,
-      SecoundPaneHelperWithParentValueNotifier? parent}) {
+  Widget getPrintPage(
+    BuildContext context, {
+    required PrintPageType type,
+    List? list,
+    SecoundPaneHelperWithParentValueNotifier? parent,
+  }) {
     return PrintNew(
       key: getKeyForWidget(context, ServerActions.print),
       // buildSecondPane: false,
@@ -455,66 +533,75 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
 
   Key getKeyForWidget(BuildContext context, ServerActions action) {
     return GlobalKey<BasePageSecoundPaneNotifierState>(
-        debugLabel:
-            "${getTableNameApi()}-${getIDFormat(context)}-${action.name}");
+      debugLabel: "${getTableNameApi()}-${getIDFormat(context)}-${action.name}",
+    );
   }
 
   Future<void> printDirect(BuildContext context, Uint8List file) async {
     Printer? p = await Printing.pickPrinter(context: context);
     if (p != null) {
-      Printing.directPrintPdf(
-        onLayout: (format) => file,
-        printer: p,
-      );
+      Printing.directPrintPdf(onLayout: (format) => file, printer: p);
     }
   }
 
-  void printPage(BuildContext context,
-      {bool standAlone = false,
-      List<ViewAbstract>? list,
-      bool? isSelfListPrint,
-      SecoundPaneHelperWithParentValueNotifier? secPaneNotifer}) {
+  void printPage(
+    BuildContext context, {
+    bool standAlone = false,
+    List<ViewAbstract>? list,
+    bool? isSelfListPrint,
+    SecoundPaneHelperWithParentValueNotifier? secPaneNotifer,
+  }) {
     bool isListPrint = list != null;
     bool isSelfList = isSelfListPrint ?? false;
     PrintPageType type = !isListPrint
         ? PrintPageType.single
         : isSelfList
-            ? PrintPageType.self_list
-            : PrintPageType.list;
+        ? PrintPageType.self_list
+        : PrintPageType.list;
     final typeString = type.toString();
     if (secPaneNotifer != null) {
       secPaneNotifer.secPaneNotifier?.value = SecondPaneHelper(
-          title: getIDWithLabel(context, action: ServerActions.print),
-          value: getPrintPage(context,
-              type: type, list: list, parent: secPaneNotifer));
+        title: getIDWithLabel(context, action: ServerActions.print),
+        object: this,
+        value: getPrintPage(
+          context,
+          type: type,
+          list: list,
+          parent: secPaneNotifer,
+        ),
+      );
       return;
     }
     if (!setPaneToSecondOrThird(
-        context,
-        ListToDetailsSecoundPaneHelper(
-            actionTitle: getIDWithLabel(context, action: ServerActions.print),
-            action: ServerActions.custom_widget,
-            customWidget: PdfPageNew(
-              buildSecondPane: false,
-              isFirstToSecOrThirdPane: true,
-              asList: list?.cast(),
-              type: type,
-              iD: iD,
-              tableName: getTableNameApi(),
-              extras: this,
-            ),
-            viewAbstract: this as ViewAbstract),
-        tryToSetToSecoundPane: false)) {
-      context.goNamed(printRouteName,
-          pathParameters: {
-            "tableName": getTableNameApi() ?? getCustomAction()?.last ?? "-",
-            "type": typeString
-          },
-          queryParameters: {
-            "id": "$iD",
-            if (list != null) "data": toJsonViewAbstractList(list)
-          },
-          extra: this);
+      context,
+      ListToDetailsSecoundPaneHelper(
+        actionTitle: getIDWithLabel(context, action: ServerActions.print),
+        action: ServerActions.custom_widget,
+        customWidget: PdfPageNew(
+          buildSecondPane: false,
+          isFirstToSecOrThirdPane: true,
+          asList: list?.cast(),
+          type: type,
+          iD: iD,
+          tableName: getTableNameApi(),
+          extras: this,
+        ),
+        viewAbstract: this as ViewAbstract,
+      ),
+      tryToSetToSecoundPane: false,
+    )) {
+      context.goNamed(
+        printRouteName,
+        pathParameters: {
+          "tableName": getTableNameApi() ?? getCustomAction()?.last ?? "-",
+          "type": typeString,
+        },
+        queryParameters: {
+          "id": "$iD",
+          if (list != null) "data": toJsonViewAbstractList(list),
+        },
+        extra: this,
+      );
 
       // if (standAlone) {
       //   context.pushNamed(printRouteName,
@@ -536,24 +623,30 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     }
   }
 
-  void onDrawerLeadingItemClicked(BuildContext context,
-      {ViewAbstract? clickedObject}) {
+  void onDrawerLeadingItemClicked(
+    BuildContext context, {
+    ViewAbstract? clickedObject,
+  }) {
     debugPrint(
-        'onDrawerLeadingItemClicked=> ${getMainHeaderTextOnly(context)}');
+      'onDrawerLeadingItemClicked=> ${getMainHeaderTextOnly(context)}',
+    );
     if (isLargeScreenFromCurrentScreenSize(context)) {
-      Globals.keyForLargeScreenListable.currentState
-          ?.setSecoundPane(ListToDetailsSecoundPaneHelper(
-        actionTitle: getIDWithLabel(context, action: ServerActions.edit),
-        action: ServerActions.edit,
-        viewAbstract:
-            clickedObject ?? (this as ViewAbstract).getSelfNewInstance(),
-      ));
+      Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
+        ListToDetailsSecoundPaneHelper(
+          actionTitle: getIDWithLabel(context, action: ServerActions.edit),
+          action: ServerActions.edit,
+          viewAbstract:
+              clickedObject ?? (this as ViewAbstract).getSelfNewInstance(),
+        ),
+      );
 
       return;
     } else {
-      context.goNamed(editRouteName,
-          pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
-          extra: (this as ViewAbstract).getSelfNewInstance());
+      context.goNamed(
+        editRouteName,
+        pathParameters: {"tableName": getTableNameApi()!, "id": "$iD"},
+        extra: (this as ViewAbstract).getSelfNewInstance(),
+      );
     }
   }
 
@@ -576,10 +669,13 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
         getDrawerMenuControllerProviderAction();
 
     debugPrint(
-        'onDrawerItemClicked=> ${getMainHeaderTextOnly(context)} action => $action');
-    context
-        .read<DrawerMenuControllerProvider>()
-        .change(context, getSelfNewInstance() as ViewAbstract, action);
+      'onDrawerItemClicked=> ${getMainHeaderTextOnly(context)} action => $action',
+    );
+    context.read<DrawerMenuControllerProvider>().change(
+      context,
+      getSelfNewInstance() as ViewAbstract,
+      action,
+    );
   }
 
   ListTile getDrawerListTitle(BuildContext context) {

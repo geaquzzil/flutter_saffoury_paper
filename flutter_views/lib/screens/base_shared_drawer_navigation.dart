@@ -442,8 +442,10 @@ class SecondPaneHelper {
 
   ///Value could be A dynamic object or [List<Widget>] or [BasePage] please make sure to pass the currect values
   dynamic value;
+  dynamic object;
+
   GlobalKey<BasePageSecoundPaneNotifierState>? state;
-  SecondPaneHelper({required this.title, this.value, this.state});
+  SecondPaneHelper({required this.title, this.value, this.state, this.object});
 }
 
 class SecoundPaneHelperWithParentValueNotifier {

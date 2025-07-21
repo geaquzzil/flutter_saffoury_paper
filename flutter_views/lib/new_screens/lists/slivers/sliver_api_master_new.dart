@@ -10,9 +10,8 @@ import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
-import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item_api_request.dart';
-import 'package:flutter_view_controller/new_components/lists/list_card_item_selected.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item_master.dart';
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_components/lists/slivers/sliver_animated_card.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -20,6 +19,7 @@ import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -60,7 +60,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   Widget? hasCustomSeperater;
   Widget? hasCustomLoadingItem;
   final ValueNotifier<List?>? valueListProviderNotifier;
-
+  final SecoundPaneHelperWithParentValueNotifier? state;
   Widget? header;
 
   ///when scrollDirection is horizontal grid view well build instaed  and override the [cardType] even when its true
@@ -82,6 +82,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
     this.hasCustomWidgetOnResponseBuilder,
     this.filterData,
     this.header,
+    this.state,
     this.isSelectForCard,
     this.onClickForCard,
     this.hideOnEmpty = false,
@@ -481,53 +482,45 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     }
     ViewAbstract va = getList()[index];
     va.setParent(_setParentForChildCardItem);
-    Widget w;
-    debugPrint("SliverApiWithStaticMixin $_toListObjectType");
-    if (_toListObjectType == SliverMixinObjectType.FROM_CARD_API) {
-      debugPrint("SliverApiWithStaticMixin is From card api");
-      w = _selectMood
-          ? ListCardItemSelected(
-              onClick: widget.onClickForCard,
-              isSelectForListTile: widget.isSelectForCard,
-              isSelected: _isSelectedItem(va),
-              onSelected: _onSelectedItem,
-              searchQuery: _searchString,
-              object: va,
-            )
-          : ListCardItemApi(
-              viewAbstract: va,
-              state: this,
-              hasCustomLoadingWidget: widget.hasCustomLoadingItem,
-              hasCustomCardBuilderOnResponse:
-                  widget.hasCustomCardItemBuilder == null
-                  ? null
-                  : (item) {
-                      return widget.hasCustomCardItemBuilder!.call(-1, item);
-                    },
-            );
-    } else {
-      w = _selectMood
-          ? ListCardItemSelected(
-              onClick: widget.onClickForCard,
-              isSelectForListTile: widget.isSelectForCard,
-              isSelected: _isSelectedItem(va),
-              onSelected: _onSelectedItem,
-              searchQuery: _searchString,
-              object: va,
-            )
-          : widget.hasCustomCardItemBuilder != null
-          ? widget.hasCustomCardItemBuilder!.call(index, va)
-          : ListCardItem(
-              searchQuery: _searchString,
-              isSelected: widget.isSelectForCard?.call(va) ?? false,
-              onClick: widget.onClickForCard,
-
-              // onSelectedItem: ,
-              state: this,
-              object: va,
-            );
+    if (widget.hasCustomCardItemBuilder != null) {
+      if ((_toListObjectType != SliverMixinObjectType.FROM_CARD_API)) {
+        return ListCardItemApi(
+          viewAbstract: va,
+          state: this,
+          hasCustomLoadingWidget: widget.hasCustomLoadingItem,
+          hasCustomCardBuilderOnResponse:
+              widget.hasCustomCardItemBuilder == null
+              ? null
+              : (item) {
+                  return widget.hasCustomCardItemBuilder!.call(-1, item);
+                },
+        );
+      }
+      return widget.hasCustomCardItemBuilder!.call(index, va);
     }
-    return w;
+    if (_toListObjectType != SliverMixinObjectType.FROM_CARD_API) {
+      return ListCardItemMaster(
+        object: va,
+        isSelectForListTile: widget.isSelectForCard,
+        isSelectMoodEnabled: _selectMood,
+        onTap: widget.onClickForCard,
+        searchQuery: _searchString,
+        state: widget.state,
+        stateForToggle: this,
+        isSelectForSelection: _onSelectedItem,
+      );
+    } else {
+      return ListCardItemApi(
+        viewAbstract: va,
+        state: this,
+        hasCustomLoadingWidget: widget.hasCustomLoadingItem,
+        hasCustomCardBuilderOnResponse: widget.hasCustomCardItemBuilder == null
+            ? null
+            : (item) {
+                return widget.hasCustomCardItemBuilder!.call(-1, item);
+              },
+      );
+    }
   }
 
   Widget getNonSliverList(int count, bool isLoading) {

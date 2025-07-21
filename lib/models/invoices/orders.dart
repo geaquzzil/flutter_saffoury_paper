@@ -15,7 +15,6 @@ import 'package:flutter_view_controller/interfaces/printable/printable_invoice_i
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
 import 'package:flutter_view_controller/models/apis/unused_records.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
@@ -24,7 +23,6 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest.dart';
 import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
@@ -89,15 +87,12 @@ class Order extends InvoiceMaster<Order>
     return [
       TabControllerHelper(
         AppLocalizations.of(context)!.findSimilar,
-        widget: ListApiAutoRestWidget(
-          autoRest: AutoRest<Order>(
-            obj: Order().setRequestOption(
-              option: RequestOptions().addSearchByField(
-                "CustomerID",
-                customers?.iD,
-              ),
+        widget: SliverApiMixinViewAbstractWidget(
+          toListObject: Order().setRequestOption(
+            option: RequestOptions().addSearchByField(
+              "CustomerID",
+              customers?.iD,
             ),
-            key: "CustomerByOrder${customers?.iD}",
           ),
         ),
       ),
@@ -115,36 +110,38 @@ class Order extends InvoiceMaster<Order>
   }
 
   Widget getTabControllerChartWidget(BuildContext context) {
-    return ChartDateChooser<EnteryInteval>(
-      obj: EnteryInteval.monthy,
-      onSelected: (obj) => ListHorizontalCustomViewApiAutoRestWidget(
-        onResponseAddWidget: ((response) {
-          ChartRecordAnalysis i = response as ChartRecordAnalysis;
-          double total = i.getTotalListAnalysis();
-          return Column(
-            children: [
-              // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
-              //     titleString: "TEST1 ",
-              //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
-              StorageInfoCardCustom(
-                title: AppLocalizations.of(context)!.total,
-                description: total.toCurrencyFormat(),
-                trailing: const Text("kg"),
-                svgSrc: Icons.monitor_weight,
-              ),
-              StorageInfoCardCustom(
-                title: AppLocalizations.of(context)!.balance,
-                description: customers?.balance?.toCurrencyFormat() ?? "0",
-                trailing: const Text("trailing"),
-                svgSrc: Icons.balance,
-              ),
-            ],
-          );
-        }),
-        autoRest: ChartRecordAnalysis.init(
-          Order(),
-          enteryInteval: obj ?? EnteryInteval.monthy,
-          customAction: {"CustomerID": customers?.iD},
+    return SliverFillRemaining(
+      child: ChartDateChooser<EnteryInteval>(
+        obj: EnteryInteval.monthy,
+        onSelected: (obj) => ListHorizontalCustomViewApiAutoRestWidget(
+          onResponseAddWidget: ((response) {
+            ChartRecordAnalysis i = response as ChartRecordAnalysis;
+            double total = i.getTotalListAnalysis();
+            return Column(
+              children: [
+                // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
+                //     titleString: "TEST1 ",
+                //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
+                StorageInfoCardCustom(
+                  title: AppLocalizations.of(context)!.total,
+                  description: total.toCurrencyFormat(),
+                  trailing: const Text("kg"),
+                  svgSrc: Icons.monitor_weight,
+                ),
+                StorageInfoCardCustom(
+                  title: AppLocalizations.of(context)!.balance,
+                  description: customers?.balance?.toCurrencyFormat() ?? "0",
+                  trailing: const Text("trailing"),
+                  svgSrc: Icons.balance,
+                ),
+              ],
+            );
+          }),
+          autoRest: ChartRecordAnalysis.init(
+            Order(),
+            enteryInteval: obj ?? EnteryInteval.monthy,
+            customAction: {"CustomerID": customers?.iD},
+          ),
         ),
       ),
     );

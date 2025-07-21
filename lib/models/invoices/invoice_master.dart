@@ -440,6 +440,17 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       ],
     );
     return [
+      SliverToBoxAdapter(
+        child: CardBackgroundWithTitle(
+          leading: Icons.summarize,
+          useHorizontalPadding: true,
+          useVerticalPadding: false,
+          title: AppLocalizations.of(context)!.no_summary,
+          child: child,
+        ),
+      ),
+    ];
+    return [
       if (kIsWeb)
         SliverToBoxAdapter(
           child: CardBackgroundWithTitle(

@@ -125,7 +125,6 @@ class _ListToDetailsSecoundPaneNotifierState
     TabControllerHelper? tab,
     SecondPaneHelper? valueNotifier,
   }) {
-    
     List<Widget>? top;
     top = _viewAbstract.getCustomTopWidget(
       context,
@@ -217,26 +216,27 @@ class _ListToDetailsSecoundPaneNotifierState
         // ),
         if (top != null) ...top,
         SliverApiMixinViewAbstractWidget(
+          state: getSecoundPaneHelper(),
           valueListProviderNotifier: _listNotifier,
           key: keyList,
-
           isSelectForCard: (object) {
-            if (lastSecondPaneItem?.value is ViewAbstract) {
-              return (lastSecondPaneItem?.value?.isEquals(object) ?? false);
+            if (lastSecondPaneItem?.object is ViewAbstract) {
+              debugPrint("sdsa");
+              return (lastSecondPaneItem?.object?.isEquals(object) ?? false);
             } else {
               return false;
             }
           },
-          onClickForCard: (object) {
-            // debugPrint("getPaneNotifier onClick $v");
-            notify(
-              SecondPaneHelper(
-                title: object.getMainHeaderTextOnly(context),
-                value: object,
-              ),
-            );
-          },
 
+          // onClickForCard: (object) {
+          //   // debugPrint("getPaneNotifier onClick $v");
+          //   notify(
+          //     SecondPaneHelper(
+          //       title: object.getMainHeaderTextOnly(context),
+          //       value: object,
+          //     ),
+          //   );
+          // },
           cardType: CardItemType.list,
           scrollDirection: Axis.vertical,
           enableSelection: true,

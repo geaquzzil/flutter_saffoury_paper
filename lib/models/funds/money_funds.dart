@@ -86,6 +86,13 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
+          value.toCurrencyFormat(),
+          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        SizedBox(width: 4),
+        Text(
           equalities?.currency?.name ?? "-",
           style: Theme.of(context).textTheme.bodySmall!.copyWith(
             color: Theme.of(context).colorScheme.primary,

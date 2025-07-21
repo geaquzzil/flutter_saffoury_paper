@@ -16,6 +16,7 @@ class SliverApiMixinViewAbstractWidget
     super.onClickForCard,
     super.isSelectForCard,
     super.header,
+    super.state,
     super.hideOnEmpty,
     // super.
     super.cardType = CardItemType.list,

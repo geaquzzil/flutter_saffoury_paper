@@ -1,5 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
@@ -7,18 +5,17 @@ import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_mas
 import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 
-abstract class ListCardItemMaster<T extends ViewAbstract>
-    extends StatefulWidget {
+class ListCardItemMaster<T extends ViewAbstract> extends StatefulWidget {
   final T object;
   final String? searchQuery;
-  final void Function()? onTap;
+  final void Function(T object)? onTap;
   final void Function()? onLongTap;
   final void Function()? onTralingTap;
   final void Function(MenuItemBuild? item)? onPopMenuTap;
   final SecoundPaneHelperWithParentValueNotifier? state;
   final SliverApiWithStaticMixin? stateForToggle;
-  final bool isSelectMoodEnabled;
-  final void Function(T object, bool isSelected)? onSelectedForMoodSelection;
+  final bool? isSelectMoodEnabled;
+  final void Function(T object, bool isSelected)? isSelectForSelection;
   final bool Function(T? object)? isSelectForListTile;
 
   const ListCardItemMaster({
@@ -28,16 +25,20 @@ abstract class ListCardItemMaster<T extends ViewAbstract>
     this.stateForToggle,
     this.searchQuery,
     this.isSelectForListTile,
-    this.onSelectedForMoodSelection,
-    this.isSelectMoodEnabled = false,
+    this.isSelectMoodEnabled,
+    this.isSelectForSelection,
     this.onTap,
     this.onLongTap,
     this.onTralingTap,
     this.onPopMenuTap,
   });
+
+  @override
+  State<StatefulWidget> createState() =>
+      ListCardItemMasterState<T, ListCardItemMaster<T>>();
 }
 
-abstract class ListCardItemMasterState<
+class ListCardItemMasterState<
   T extends ViewAbstract,
   E extends ListCardItemMaster<T>
 >
@@ -46,6 +47,7 @@ abstract class ListCardItemMasterState<
   String? _searchQuery;
 
   bool? _isSelectedForListTile;
+
   @override
   void initState() {
     super.initState();
@@ -56,9 +58,9 @@ abstract class ListCardItemMasterState<
 
   @override
   void didUpdateWidget(covariant E oldWidget) {
+    _isSelectedForListTile = widget.isSelectForListTile?.call(object);
     if (widget.object != object) {
       object = widget.object;
-      _isSelectedForListTile = widget.isSelectForListTile?.call(object);
     }
     if (widget.searchQuery != _searchQuery) {
       _searchQuery = widget.searchQuery;
@@ -69,7 +71,9 @@ abstract class ListCardItemMasterState<
   @override
   Widget build(BuildContext context) {
     Widget cardItem = getListTile();
-    if (widget.isSelectMoodEnabled) {}
+    if (widget.isSelectMoodEnabled ?? false) {
+      return getSelectMoodWidget();
+    }
     if (isLargeScreen(context)) {
       return cardItem;
     }
@@ -92,7 +96,7 @@ abstract class ListCardItemMasterState<
   Widget getSelectMoodWidget() {
     return CheckboxListTile.adaptive(
       controlAffinity: ListTileControlAffinity.leading,
-      value: isSelected,
+      value: object.selected,
       onChanged: (value) {
         debugPrint("CheckboxListTile changed  => $value");
         if ((widget.object.getParent?.hasPermissionFromParentSelectItem(
@@ -100,21 +104,20 @@ abstract class ListCardItemMasterState<
                   widget.object,
                 ) ??
                 true) ==
-            false)
+            false) {
           return;
+        }
+        widget.isSelectForSelection?.call(widget.object, value ?? false);
         setState(() {
           widget.object.isSelected = value ?? false;
-          isSelected = value ?? false;
         });
-        if (widget.onSelectedForMoodSelection != null) {
-          widget.onSelectedForMoodSelection!(widget.object, value ?? false);
-        }
       },
-      selected: isSelected,
-      selectedTileColor: Theme.of(context).colorScheme.onSecondary,
+      selected: object.isSelected,
+      //todo set tile color on theme
+      // selectedTileColor: Theme.of(context).colorScheme.onSecondary,
       // onTap: () => widget.object.onCardClicked(context),
       // onLongPress: () => widget.object.onCardLongClicked(context),
-      title: getListTile()
+      title: getListTile(),
     );
   }
 
@@ -124,14 +127,15 @@ abstract class ListCardItemMasterState<
       selected: isListTileSelected(),
       onTap: () {
         if (widget.onTap != null) {
-          widget.onTap.call();
+          widget.onTap?.call(object);
         } else {
           object.onCardClicked(context, secondPaneHelper: widget.state);
         }
+        // setState(() {});
       },
       onLongPress: () {
         if (widget.onLongTap != null) {
-          widget.onLongTap.call();
+          widget.onLongTap?.call();
         } else {
           widget.stateForToggle?.toggleSelectedMood();
         }
