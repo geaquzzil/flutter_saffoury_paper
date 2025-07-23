@@ -66,6 +66,7 @@ const String printRouteName = 'print';
 const String viewRouteName = 'view';
 const String editRouteName = 'edit';
 const String addRouteName = 'add';
+const String blockedRouteName = 'block';
 const String searchRouteName = "search";
 const String dashboardRouteName = "dashboard";
 const String posRouteName = "pos";
@@ -139,19 +140,27 @@ class RouteGenerator {
   }
 
   String? getRouterAuth(GoRouterState state) {
+    final isInitialized = appService.getStatus == Status.Initialization;
+    final isAuthenticated = appService.getStatus == Status.Authenticated;
+    final isAuthenticating = appService.getStatus == Status.Authenticating;
+    final reAuthenticating = appService.getStatus == Status.ReAuthenticating;
+
+    final isBlocked = appService.getStatus == Status.Blocked;
+    final isFaild = appService.getStatus == Status.Faild;
+
     final loginLocation = state.namedLocation(loginRouteName);
     var homeLocation = state.namedLocation(homeRouteName);
     var posLocation = state.namedLocation(posRouteName);
     var reelCutterLocation = state.namedLocation(reelCutterRouteName);
     var goodsInventoryLocation = state.namedLocation(goodsInventoryRouteName);
+
     final splashLocation = state.namedLocation("splash");
 
     // homeLocation=state.namedLocation("listable",pathParameters: {"tableName": "products","iD":"213"});
     // final onboardLocation = state.namedLocation(APP_PAGE.onBoarding.toName);
 
     final isLogedIn = appService.isLoggedInN();
-    final isInitialized = appService.getStatus == Status.Initialization;
-    final isAuthenticated = appService.getStatus == Status.Authenticated;
+
     final isFinishedInitialization = appService.isInitialized;
     // final isOnboarded = appService.onboarding;
 
@@ -163,7 +172,11 @@ class RouteGenerator {
     debugPrint(
       "getRouterAuth: isGoingToLogin: isGoingToInit: isLogedIn: $isLogedIn isInitialized: $isInitialized appService.getStatus :${appService.getStatus} ",
     );
-
+    if (isBlocked) {
+      return blockedRouteName;
+    } else if (isFaild) {
+      return loginRouteName;
+    }
     if (isInitialized) {
       debugPrint("getRouterAuth: isInitialized ");
       return splashLocation;

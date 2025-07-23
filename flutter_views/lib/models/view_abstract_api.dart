@@ -4,7 +4,6 @@ import 'dart:convert' as convert;
 import 'dart:convert';
 import 'dart:isolate';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -18,7 +17,6 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -639,7 +637,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   HttpWithMiddleware getHttp() {
     return HttpWithMiddleware.build(
       requestTimeout: const Duration(seconds: 60),
-      middlewares: [HttpLogger(logLevel: LogLevel.HEADERS)],
+      middlewares: [HttpLogger(logLevel: LogLevel.BODY)],
     );
   }
 

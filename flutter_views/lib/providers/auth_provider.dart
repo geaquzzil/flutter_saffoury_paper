@@ -24,6 +24,7 @@ enum Status {
   Authenticated,
   Authenticating,
   Unauthenticated,
+  ReAuthenticating,
   Faild,
   Blocked,
   Guest,
@@ -96,6 +97,25 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
 
   Future<void> onAppStart(BuildContext context, {T? newUser}) async {
     await init(newUser: newUser);
+    if (newUser == null) {
+      _status = Status.Authenticating;
+      notifyListeners();
+      await _currentUser?.loginCall(
+        context: context,
+        onResponse: OnResponseCallback(
+          onBlocked: () {
+            _status = Status.Blocked;
+            notifyListeners();
+          },
+          onEmailOrPassword: () {
+            _status = Status.Faild;
+            notifyListeners();
+          },
+        ),
+      );
+    } else {
+      notifyListeners();
+    }
     await initDrawerItems(context);
     // This is just to demonstrate the splash screen is working.
     // In real-life applications, it is not recommended to interrupt the user experience by doing such things.
@@ -196,9 +216,10 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   Future init({T? newUser}) async {
     _currentUser =
         newUser ?? (await Configurations.get<T>(_initUser, customKey: "USER"));
+
     debugPrint("Current user $_currentUser");
+
     _status = _currentUser != null ? Status.Authenticated : Status.Guest;
-    notifyListeners();
   }
 
   Future initDrawerItems(BuildContext context) async {
