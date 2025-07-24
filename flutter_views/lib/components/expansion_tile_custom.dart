@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/cards/elevated_card.dart';
 import 'package:flutter_view_controller/new_components/forms/custom_type_ahead.dart';
 
 import '../new_components/cards/clipper_card.dart';

@@ -3,7 +3,6 @@ import 'package:flutter_view_controller/interfaces/printable/printable_bill_inte
 import 'package:flutter_view_controller/interfaces/printable/printable_invoice_interface.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
-import 'package:flutter_view_controller/new_screens/dashboard/main_dashboard2.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -472,29 +471,5 @@ extension NonNullableInt on int? {
     return NumberFormat.currency(locale: "en_US", symbol: symbol)
         .format(toNonNullable())
         .replaceFirst(RegExp(r'\.?0*$'), '');
-  }
-}
-
-extension TaskTypeExtension on TaskType {
-  Color getColor() {
-    switch (this) {
-      case TaskType.done:
-        return Colors.lightBlue;
-      case TaskType.inProgress:
-        return Colors.amber[700]!;
-      default:
-        return Colors.redAccent;
-    }
-  }
-
-  String toStringValue() {
-    switch (this) {
-      case TaskType.done:
-        return "Done";
-      case TaskType.inProgress:
-        return "In Progress";
-      default:
-        return "Todo";
-    }
   }
 }

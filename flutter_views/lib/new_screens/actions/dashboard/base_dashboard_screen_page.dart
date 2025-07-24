@@ -12,7 +12,6 @@ import 'package:flutter_view_controller/new_components/lists/list_card_item.dart
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:get/get.dart';
 import 'package:sliver_tools/sliver_tools.dart';

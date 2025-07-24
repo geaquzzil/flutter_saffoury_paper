@@ -45,7 +45,6 @@ import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_custom_auto_rest_custom_view_horizontal.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dart';
 import 'package:flutter_view_controller/screens/web/components/header_text.dart';
 import 'package:flutter_view_controller/size_config.dart';

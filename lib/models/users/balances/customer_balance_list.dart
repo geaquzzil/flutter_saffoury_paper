@@ -18,8 +18,6 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_searchable_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:pdf/pdf.dart' as d;
 import 'package:pdf/widgets.dart' as pdf;

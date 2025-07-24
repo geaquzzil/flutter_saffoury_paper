@@ -71,8 +71,7 @@ import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
-import 'package:flutter_view_controller/new_screens/lists/pos_list.dart';
+import 'package:flutter_view_controller/new_screens/pos/pos_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
@@ -1115,16 +1114,10 @@ class Product extends ViewAbstract<Product>
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
         mainAxisCellCount: 1,
-        child: ListHorizontalApiAutoRestWidget(
+        child: SliverApiMixinViewAbstractWidget(
           isSliver: true,
-          titleString: "Category",
-
-          // listItembuilder: (v) =>
-          //     ListItemProductTypeCategory(productType: v as ProductType),
-          autoRest: AutoRest<ProductType>(
-            obj: ProductType.init(true),
-            key: "ProductType<Category>",
-          ),
+          header: HeaderDescription(title: "Category", isSliver: true),
+          toListObject: ProductType.init(true),
         ),
       ),
     ];

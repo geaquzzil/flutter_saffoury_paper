@@ -38,7 +38,6 @@ import 'package:flutter_view_controller/new_components/tables_widgets/view_table
 import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_horizontal.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/test_var.dart';

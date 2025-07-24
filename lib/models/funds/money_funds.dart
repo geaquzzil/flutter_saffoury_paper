@@ -144,7 +144,7 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
     required ServerActions action,
     RequestOptions? generatedOptionFromListCall,
   }) {
-    if (action == ServerActions.list) {
+    if (action == ServerActions.list || action == ServerActions.search) {
       return RequestOptions(
         sortBy: SortFieldValue(field: "date", type: SortByType.DESC),
       ).addRequestObjcets(true);

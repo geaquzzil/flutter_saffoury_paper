@@ -42,7 +42,8 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_auto_rest_custom_view_horizontal.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -474,7 +475,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   }
 
   Widget getListTile({required String title, required String description}) {
-    return ListTile(title: Text(title), subtitle: Text(description));
+    return ChartCardItemCustom(title: (title), description: (description));
   }
 
   @override
@@ -950,15 +951,15 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
-        child: ListHorizontalCustomViewApiAutoRestWidget(
-          autoRest: ChangesRecords.init(this, "EmployeeID"),
+        child: SliverApiMixinViewAbstractWidget(
+          toListObject: ChangesRecords.init(this, "EmployeeID"),
         ),
       ),
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
-        child: ListHorizontalCustomViewApiAutoRestWidget(
-          autoRest: ChartRecordAnalysis.init(this),
+        child: SliverApiMixinViewAbstractWidget(
+          toListObject: ChartRecordAnalysis.init(this),
         ),
       ),
     ];

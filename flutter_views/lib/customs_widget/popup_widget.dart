@@ -3,18 +3,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 
-enum PressType {
-  longPress,
-  singleClick,
-}
+enum PressType { longPress, singleClick }
 
-enum PreferredPosition {
-  top,
-  bottom,
-}
+enum PreferredPosition { top, bottom }
 
 class CustomPopupMenuController extends ChangeNotifier {
   bool menuIsShowing = false;
@@ -77,32 +71,34 @@ class _PopupWidget extends State<PopupWidget> {
 
   _showMenu() {
     GlobalKey key = GlobalKey();
-    _overlayEntry = OverlayEntry(builder: (context) {
-      Widget menu = Container(
-        color: Colors.black12,
-        child: Positioned(
-          top: 60.0,
-          left: 60,
-          child: OutlinedCard(
-            key: key,
-            child: Container(
-              color: Colors.black12,
-              constraints: BoxConstraints(
-                minHeight: 10,
-                minWidth: 10,
-                maxWidth: MediaQuery.of(context).size.width / 2,
-                maxHeight: MediaQuery.of(context).size.height * .75,
-              ),
-              child: Material(
-                color: Colors.transparent,
-                child: widget.menuBuilder.call(),
+    _overlayEntry = OverlayEntry(
+      builder: (context) {
+        Widget menu = Container(
+          color: Colors.black12,
+          child: Positioned(
+            top: 60.0,
+            left: 60,
+            child: Cards(
+              key: key,
+              type: CardType.outline,
+              child: (h) => Container(
+                color: Colors.black12,
+                constraints: BoxConstraints(
+                  minHeight: 10,
+                  minWidth: 10,
+                  maxWidth: MediaQuery.of(context).size.width / 2,
+                  maxHeight: MediaQuery.of(context).size.height * .75,
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: widget.menuBuilder.call(),
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      return Listener(
+        return Listener(
           behavior: widget.enablePassEvent
               ? HitTestBehavior.translucent
               : HitTestBehavior.opaque,
@@ -112,7 +108,8 @@ class _PopupWidget extends State<PopupWidget> {
             // If tap position in menu
 
             if (getRect(key).contains(
-                Offset(offset.dx - widget.horizontalMargin, offset.dy))) {
+              Offset(offset.dx - widget.horizontalMargin, offset.dy),
+            )) {
               return;
             }
             _controller?.hideMenu();
@@ -120,16 +117,20 @@ class _PopupWidget extends State<PopupWidget> {
             // but the passed event would trigger [showMenu] again.
             // So, we use time threshold to solve this bug.
             _canResponse = false;
-            Future.delayed(const Duration(milliseconds: 300))
-                .then((_) => _canResponse = true);
+            Future.delayed(
+              const Duration(milliseconds: 300),
+            ).then((_) => _canResponse = true);
           },
           child: Container(
             color: Colors.black38,
             child: Align(
-                alignment: Alignment.topLeft,
-                child: Padding(padding: const EdgeInsets.all(60), child: menu)),
-          ));
-    });
+              alignment: Alignment.topLeft,
+              child: Padding(padding: const EdgeInsets.all(60), child: menu),
+            ),
+          ),
+        );
+      },
+    );
 
     //   Widget menu = Center(
     //     child: Container(
@@ -259,7 +260,7 @@ class _PopupWidget extends State<PopupWidget> {
     } else {
       return PopScope(
         canPop: (true),
-        onPopInvoked : (s) {
+        onPopInvoked: (s) {
           _hideMenu();
         },
         child: child,
@@ -268,11 +269,7 @@ class _PopupWidget extends State<PopupWidget> {
   }
 }
 
-enum _MenuLayoutId {
-  arrow,
-  downArrow,
-  content,
-}
+enum _MenuLayoutId { arrow, downArrow, content }
 
 enum _MenuPosition {
   bottomLeft,
@@ -338,16 +335,20 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
         );
         break;
       case _MenuPosition.bottomLeft:
-        arrowOffset = Offset(anchorCenterX - arrowSize.width / 2,
-            anchorBottomY + verticalMargin);
+        arrowOffset = Offset(
+          anchorCenterX - arrowSize.width / 2,
+          anchorBottomY + verticalMargin,
+        );
         contentOffset = Offset(
           0,
           anchorBottomY + verticalMargin + arrowSize.height,
         );
         break;
       case _MenuPosition.bottomRight:
-        arrowOffset = Offset(anchorCenterX - arrowSize.width / 2,
-            anchorBottomY + verticalMargin);
+        arrowOffset = Offset(
+          anchorCenterX - arrowSize.width / 2,
+          anchorBottomY + verticalMargin,
+        );
         contentOffset = Offset(
           size.width - contentSize.width,
           anchorBottomY + verticalMargin + arrowSize.height,
@@ -365,10 +366,7 @@ class _MenuLayoutDelegate extends MultiChildLayoutDelegate {
         break;
       case _MenuPosition.topLeft:
         arrowOffset = const Offset(0, 0);
-        contentOffset = const Offset(
-          200,
-          200,
-        );
+        contentOffset = const Offset(200, 200);
         break;
       case _MenuPosition.topRight:
         arrowOffset = Offset(

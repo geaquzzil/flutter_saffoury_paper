@@ -25,7 +25,6 @@ import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_
 import 'package:flutter_view_controller/new_screens/base_api_call_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_static_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';

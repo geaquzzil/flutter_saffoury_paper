@@ -19,8 +19,11 @@ class PrinterDefaultSetting extends ViewAbstract<PrinterDefaultSetting>
   String? defaultPrinter;
   List<Printer>? printers;
 
-  PrinterDefaultSetting(
-      {this.defaultLabelPrinter, this.defaultPrinter, this.printers});
+  PrinterDefaultSetting({
+    this.defaultLabelPrinter,
+    this.defaultPrinter,
+    this.printers,
+  });
 
   @override
   PrinterDefaultSetting fromJsonViewAbstract(Map<String, dynamic> json) {
@@ -28,8 +31,12 @@ class PrinterDefaultSetting extends ViewAbstract<PrinterDefaultSetting>
   }
 
   @override
-  void onDropdownChanged(BuildContext context, String field, value,
-      {GlobalKey<FormBuilderState>? formKey}) {
+  void onDropdownChanged(
+    BuildContext context,
+    String field,
+    value, {
+    GlobalKey<FormBuilderState>? formKey,
+  }) {
     // if (value is Printer) {
     //   Printer? p = printers.firstWhereOrNull((p) => p.name == value.toString());
     //   debugPrint("onDropdownChanged $p");
@@ -45,26 +52,30 @@ class PrinterDefaultSetting extends ViewAbstract<PrinterDefaultSetting>
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "defaultLabelPrinter": "",
-        "defaultPrinter": "",
-      };
+    "defaultLabelPrinter": "",
+    "defaultPrinter": "",
+  };
 
   @override
-  Map<String, IconData> getFieldIconDataMap() =>
-      {"defaultLabelPrinter": Icons.qr_code, "defaultPrinter": Icons.print};
+  Map<String, IconData> getFieldIconDataMap() => {
+    "defaultLabelPrinter": Icons.qr_code,
+    "defaultPrinter": Icons.print,
+  };
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "defaultLabelPrinter": AppLocalizations.of(context)!.printerLabelName,
-        "defaultPrinter": AppLocalizations.of(context)!.printerName,
-      };
+    "defaultLabelPrinter": AppLocalizations.of(context)!.printerLabelName,
+    "defaultPrinter": AppLocalizations.of(context)!.printerName,
+  };
 
   @override
   String? getMainDrawerGroupName(BuildContext context) => null;
 
   @override
-  List<String> getMainFields({BuildContext? context}) =>
-      ["defaultLabelPrinter", "defaultPrinter"];
+  List<String> getMainFields({BuildContext? context}) => [
+    "defaultLabelPrinter",
+    "defaultPrinter",
+  ];
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
       //todo translate
@@ -89,20 +100,11 @@ class PrinterDefaultSetting extends ViewAbstract<PrinterDefaultSetting>
 
   @override
   Map<String, List> getTextInputIsAutoCompleteCustomListMap(
-      BuildContext context) {
+    BuildContext context,
+  ) {
     return {
-      "defaultLabelPrinter": printers
-              ?.map(
-                (e) => e.name,
-              )
-              .toList() ??
-          [],
-      "defaultPrinter": printers
-              ?.map(
-                (e) => e.name,
-              )
-              .toList() ??
-          []
+      "defaultLabelPrinter": printers?.map((e) => e.name).toList() ?? [],
+      "defaultPrinter": printers?.map((e) => e.name).toList() ?? [],
     };
   }
 
@@ -165,13 +167,15 @@ class PrinterDefaultSetting extends ViewAbstract<PrinterDefaultSetting>
 
   @override
   Future<PrinterDefaultSetting> getModifibleSettingObject(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
     return PrinterDefaultSetting(printers: await Printing.listPrinters());
   }
 
   @override
   Future<PrinterDefaultSetting> onModifibleSettingLoaded(
-      PrinterDefaultSetting loaded) async {
+    PrinterDefaultSetting loaded,
+  ) async {
     loaded.printers = await Printing.listPrinters();
     return loaded;
   }
@@ -181,9 +185,10 @@ class PrinterDefaultSetting extends ViewAbstract<PrinterDefaultSetting>
       getMainHeaderLabelTextOnly(context);
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return null;
   }
 

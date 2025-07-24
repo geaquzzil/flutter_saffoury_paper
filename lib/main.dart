@@ -52,7 +52,6 @@ import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_n
 import 'package:flutter_view_controller/new_screens/base_material_app.dart';
 import 'package:flutter_view_controller/printing_generator/page/base_pdf_page.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
-import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/actions/list_scroll_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
@@ -252,7 +251,6 @@ void main() async {
       ChangeNotifierProvider(
           create: (context) =>
               DrawerMenuControllerProvider(initViewAbstract: p)),
-      ChangeNotifierProvider(create: (context) => ListActionsProvider()),
       ChangeNotifierProvider(create: (context) => SettingProvider()),
       ChangeNotifierProvider(
           create: (context) => AuthProvider<AuthUser>.initialize(

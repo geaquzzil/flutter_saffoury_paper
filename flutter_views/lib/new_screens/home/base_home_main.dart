@@ -13,9 +13,6 @@ import 'package:flutter_view_controller/new_screens/cart/base_home_cart_screen.d
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
 import 'package:flutter_view_controller/new_screens/home/home_home_widget.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_master.dart';
-import 'package:flutter_view_controller/new_screens/lists/list_api_searchable_widget.dart';
-import 'package:flutter_view_controller/providers/actions/list_actions_provider.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/size_config.dart';

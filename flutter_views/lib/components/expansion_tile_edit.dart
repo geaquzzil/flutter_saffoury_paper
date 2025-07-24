@@ -7,7 +7,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 const Duration _kExpand = Duration(milliseconds: 200);
 
@@ -37,7 +36,7 @@ const Duration _kExpand = Duration(milliseconds: 200);
 /// {@end-tool}
 ///
 /// {@tool dartpad}
-/// This example demonstrates how an [ExpansionTileController] can be used to
+/// This example demonstrates how an [ExpansibleController] can be used to
 /// programmatically expand or collapse an [ExpansionTile].
 ///
 /// ** See code in examples/api/lib/material/expansion_tile/expansion_tile.1.dart **
@@ -84,10 +83,10 @@ class ExpansionTileEdit extends StatefulWidget {
     this.enabled = true,
     this.expansionAnimationStyle,
   }) : assert(
-          expandedCrossAxisAlignment != CrossAxisAlignment.baseline,
-          'CrossAxisAlignment.baseline is not supported since the expanded children '
-          'are aligned in a column, not a row. Try to use another constant.',
-        );
+         expandedCrossAxisAlignment != CrossAxisAlignment.baseline,
+         'CrossAxisAlignment.baseline is not supported since the expanded children '
+         'are aligned in a column, not a row. Try to use another constant.',
+       );
 
   /// A widget to display before the title.
   ///
@@ -321,7 +320,6 @@ class ExpansionTileEdit extends StatefulWidget {
   /// which means that the expansion arrow icon will appear on the tile's trailing edge.
   final ListTileControlAffinity? controlAffinity;
 
-
   /// {@macro flutter.material.ListTile.dense}
   final bool? dense;
 
@@ -342,7 +340,7 @@ class ExpansionTileEdit extends StatefulWidget {
   /// appearance according to the theme and disabling user interaction.
   ///
   /// Even if disabled, the expansion can still be toggled programmatically
-  /// through an [ExpansionTileController].
+  /// through an [ExpansibleController].
   final bool enabled;
 
   /// Used to override the expansion animation curve and duration.
@@ -373,12 +371,16 @@ class ExpansionTileEdit extends StatefulWidget {
 
 class _ExpansionTileState extends State<ExpansionTile>
     with SingleTickerProviderStateMixin {
-  static final Animatable<double> _easeOutTween =
-      CurveTween(curve: Curves.easeOut);
-  static final Animatable<double> _easeInTween =
-      CurveTween(curve: Curves.easeIn);
-  static final Animatable<double> _halfTween =
-      Tween<double>(begin: 0.0, end: 0.5);
+  static final Animatable<double> _easeOutTween = CurveTween(
+    curve: Curves.easeOut,
+  );
+  static final Animatable<double> _easeInTween = CurveTween(
+    curve: Curves.easeIn,
+  );
+  static final Animatable<double> _halfTween = Tween<double>(
+    begin: 0.0,
+    end: 0.5,
+  );
 
   final ShapeBorderTween _borderTween = ShapeBorderTween();
   final ColorTween _headerColorTween = ColorTween();
@@ -404,14 +406,18 @@ class _ExpansionTileState extends State<ExpansionTile>
     _heightFactor = _animationController.drive(_heightFactorTween);
     _iconTurns = _animationController.drive(_halfTween.chain(_easeInTween));
     _border = _animationController.drive(_borderTween.chain(_easeOutTween));
-    _headerColor =
-        _animationController.drive(_headerColorTween.chain(_easeInTween));
-    _iconColor =
-        _animationController.drive(_iconColorTween.chain(_easeInTween));
-    _backgroundColor =
-        _animationController.drive(_backgroundColorTween.chain(_easeOutTween));
+    _headerColor = _animationController.drive(
+      _headerColorTween.chain(_easeInTween),
+    );
+    _iconColor = _animationController.drive(
+      _iconColorTween.chain(_easeInTween),
+    );
+    _backgroundColor = _animationController.drive(
+      _backgroundColorTween.chain(_easeOutTween),
+    );
 
-    _isExpanded = PageStorage.maybeOf(context)?.readState(context) as bool? ??
+    _isExpanded =
+        PageStorage.maybeOf(context)?.readState(context) as bool? ??
         widget.initiallyExpanded;
     if (_isExpanded) {
       _animationController.value = 1.0;
@@ -427,12 +433,15 @@ class _ExpansionTileState extends State<ExpansionTile>
   }
 
   void _toggleExpansion() {
-    final TextDirection textDirection =
-        WidgetsLocalizations.of(context).textDirection;
-    final MaterialLocalizations localizations =
-        MaterialLocalizations.of(context);
-    final String stateHint =
-        _isExpanded ? localizations.expandedHint : localizations.collapsedHint;
+    final TextDirection textDirection = WidgetsLocalizations.of(
+      context,
+    ).textDirection;
+    final MaterialLocalizations localizations = MaterialLocalizations.of(
+      context,
+    );
+    final String stateHint = _isExpanded
+        ? localizations.expandedHint
+        : localizations.collapsedHint;
     setState(() {
       _isExpanded = !_isExpanded;
       if (_isExpanded) {
@@ -470,7 +479,8 @@ class _ExpansionTileState extends State<ExpansionTile>
 
   // Platform or null affinity defaults to trailing.
   ListTileControlAffinity _effectiveAffinity(
-      ListTileControlAffinity? affinity) {
+    ListTileControlAffinity? affinity,
+  ) {
     switch (affinity ?? ListTileControlAffinity.trailing) {
       case ListTileControlAffinity.leading:
         return ListTileControlAffinity.leading;
@@ -505,21 +515,26 @@ class _ExpansionTileState extends State<ExpansionTile>
 
   Widget _buildChildren(BuildContext context, Widget? child) {
     final ThemeData theme = Theme.of(context);
-    final ExpansionTileThemeData expansionTileTheme =
-        ExpansionTileTheme.of(context);
-    final Color backgroundColor = _backgroundColor.value ??
+    final ExpansionTileThemeData expansionTileTheme = ExpansionTileTheme.of(
+      context,
+    );
+    final Color backgroundColor =
+        _backgroundColor.value ??
         expansionTileTheme.backgroundColor ??
         Colors.transparent;
-    final ShapeBorder expansionTileBorder = _border.value ??
+    final ShapeBorder expansionTileBorder =
+        _border.value ??
         const Border(
           top: BorderSide(color: Colors.transparent),
           bottom: BorderSide(color: Colors.transparent),
         );
-    final Clip clipBehavior = widget.clipBehavior ??
+    final Clip clipBehavior =
+        widget.clipBehavior ??
         expansionTileTheme.clipBehavior ??
         Clip.antiAlias;
-    final MaterialLocalizations localizations =
-        MaterialLocalizations.of(context);
+    final MaterialLocalizations localizations = MaterialLocalizations.of(
+      context,
+    );
     final String onTapHint = _isExpanded
         ? localizations.expansionTileExpandedTapHint
         : localizations.expansionTileCollapsedTapHint;
@@ -571,7 +586,8 @@ class _ExpansionTileState extends State<ExpansionTile>
           ),
           ClipRect(
             child: Align(
-              alignment: widget.expandedAlignment ??
+              alignment:
+                  widget.expandedAlignment ??
                   expansionTileTheme.expandedAlignment ??
                   Alignment.center,
               heightFactor: _heightFactor.value,
@@ -582,7 +598,8 @@ class _ExpansionTileState extends State<ExpansionTile>
       ),
     );
 
-    final bool isShapeProvided = widget.shape != null ||
+    final bool isShapeProvided =
+        widget.shape != null ||
         expansionTileTheme.shape != null ||
         widget.collapsedShape != null ||
         expansionTileTheme.collapsedShape != null;
@@ -596,18 +613,16 @@ class _ExpansionTileState extends State<ExpansionTile>
       );
     }
 
-    return DecoratedBox(
-      decoration: decoration,
-      child: tile,
-    );
+    return DecoratedBox(decoration: decoration, child: tile);
   }
 
   @override
   void didUpdateWidget(covariant ExpansionTile oldWidget) {
     super.didUpdateWidget(oldWidget);
     final ThemeData theme = Theme.of(context);
-    final ExpansionTileThemeData expansionTileTheme =
-        ExpansionTileTheme.of(context);
+    final ExpansionTileThemeData expansionTileTheme = ExpansionTileTheme.of(
+      context,
+    );
     final ExpansionTileThemeData defaults = theme.useMaterial3
         ? _ExpansionTileDefaultsM3(context)
         : _ExpansionTileDefaultsM2(context);
@@ -636,8 +651,9 @@ class _ExpansionTileState extends State<ExpansionTile>
   @override
   void didChangeDependencies() {
     final ThemeData theme = Theme.of(context);
-    final ExpansionTileThemeData expansionTileTheme =
-        ExpansionTileTheme.of(context);
+    final ExpansionTileThemeData expansionTileTheme = ExpansionTileTheme.of(
+      context,
+    );
     final ExpansionTileThemeData defaults = theme.useMaterial3
         ? _ExpansionTileDefaultsM3(context)
         : _ExpansionTileDefaultsM2(context);
@@ -651,21 +667,26 @@ class _ExpansionTileState extends State<ExpansionTile>
   }
 
   void _updateAnimationDuration(ExpansionTileThemeData expansionTileTheme) {
-    _animationController.duration = widget.expansionAnimationStyle?.duration ??
+    _animationController.duration =
+        widget.expansionAnimationStyle?.duration ??
         expansionTileTheme.expansionAnimationStyle?.duration ??
         _kExpand;
   }
 
   void _updateShapeBorder(
-      ExpansionTileThemeData expansionTileTheme, ThemeData theme) {
+    ExpansionTileThemeData expansionTileTheme,
+    ThemeData theme,
+  ) {
     _borderTween
-      ..begin = widget.collapsedShape ??
+      ..begin =
+          widget.collapsedShape ??
           expansionTileTheme.collapsedShape ??
           const Border(
             top: BorderSide(color: Colors.transparent),
             bottom: BorderSide(color: Colors.transparent),
           )
-      ..end = widget.shape ??
+      ..end =
+          widget.shape ??
           expansionTileTheme.shape ??
           Border(
             top: BorderSide(color: theme.dividerColor),
@@ -673,45 +694,56 @@ class _ExpansionTileState extends State<ExpansionTile>
           );
   }
 
-  void _updateHeaderColor(ExpansionTileThemeData expansionTileTheme,
-      ExpansionTileThemeData defaults) {
+  void _updateHeaderColor(
+    ExpansionTileThemeData expansionTileTheme,
+    ExpansionTileThemeData defaults,
+  ) {
     _headerColorTween
-      ..begin = widget.collapsedTextColor ??
+      ..begin =
+          widget.collapsedTextColor ??
           expansionTileTheme.collapsedTextColor ??
           defaults.collapsedTextColor
-      ..end = widget.textColor ??
+      ..end =
+          widget.textColor ??
           expansionTileTheme.textColor ??
           defaults.textColor;
   }
 
-  void _updateIconColor(ExpansionTileThemeData expansionTileTheme,
-      ExpansionTileThemeData defaults) {
+  void _updateIconColor(
+    ExpansionTileThemeData expansionTileTheme,
+    ExpansionTileThemeData defaults,
+  ) {
     _iconColorTween
-      ..begin = widget.collapsedIconColor ??
+      ..begin =
+          widget.collapsedIconColor ??
           expansionTileTheme.collapsedIconColor ??
           defaults.collapsedIconColor
-      ..end = widget.iconColor ??
+      ..end =
+          widget.iconColor ??
           expansionTileTheme.iconColor ??
           defaults.iconColor;
   }
 
   void _updateBackgroundColor(ExpansionTileThemeData expansionTileTheme) {
     _backgroundColorTween
-      ..begin = widget.collapsedBackgroundColor ??
+      ..begin =
+          widget.collapsedBackgroundColor ??
           expansionTileTheme.collapsedBackgroundColor
       ..end = widget.backgroundColor ?? expansionTileTheme.backgroundColor;
   }
 
   void _updateHeightFactorCurve(ExpansionTileThemeData expansionTileTheme) {
-    _heightFactorTween.curve = widget.expansionAnimationStyle?.curve ??
+    _heightFactorTween.curve =
+        widget.expansionAnimationStyle?.curve ??
         expansionTileTheme.expansionAnimationStyle?.curve ??
         Curves.easeIn;
   }
 
   @override
   Widget build(BuildContext context) {
-    final ExpansionTileThemeData expansionTileTheme =
-        ExpansionTileTheme.of(context);
+    final ExpansionTileThemeData expansionTileTheme = ExpansionTileTheme.of(
+      context,
+    );
     final bool closed = !_isExpanded && _animationController.isDismissed;
     final bool shouldRemoveChildren = closed && !widget.maintainState;
 
@@ -720,7 +752,8 @@ class _ExpansionTileState extends State<ExpansionTile>
       child: TickerMode(
         enabled: !closed,
         child: Padding(
-          padding: widget.childrenPadding ??
+          padding:
+              widget.childrenPadding ??
               expansionTileTheme.childrenPadding ??
               EdgeInsets.zero,
           child: Column(
