@@ -98,21 +98,26 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
   Future<void> onAppStart(BuildContext context, {T? newUser}) async {
     await init(newUser: newUser);
     if (newUser == null) {
-      _status = Status.Authenticating;
-      notifyListeners();
-      await _currentUser?.loginCall(
-        context: context,
-        onResponse: OnResponseCallback(
-          onBlocked: () {
-            _status = Status.Blocked;
-            notifyListeners();
-          },
-          onEmailOrPassword: () {
-            _status = Status.Faild;
-            notifyListeners();
-          },
-        ),
-      );
+      // _status = Status.Authenticating;
+      // notifyListeners();
+      AuthUser? user = _currentUser == null
+          ? null
+          : AuthUser().fromJsonViewAbstract(_currentUser!.toJson());
+      _currentUser =
+          await user?.loginCall(
+                context: context,
+                onResponse: OnResponseCallback(
+                  onBlocked: () {
+                    _status = Status.Blocked;
+                    notifyListeners();
+                  },
+                  onEmailOrPassword: () {
+                    _status = Status.Faild;
+                    notifyListeners();
+                  },
+                ),
+              )
+              as T?;
     } else {
       notifyListeners();
     }
@@ -218,7 +223,6 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
         newUser ?? (await Configurations.get<T>(_initUser, customKey: "USER"));
 
     debugPrint("Current user $_currentUser");
-
     _status = _currentUser != null ? Status.Authenticated : Status.Guest;
   }
 
@@ -281,6 +285,7 @@ class AuthProvider<T extends AuthUser> with ChangeNotifier {
 
     if (_currentUser != null) {
       currentStatus?.call(Status.Authenticated);
+      _currentUser?.setFieldValue("password", user.password);
       Configurations.saveViewAbstract(_currentUser!, customKey: "USER");
       onAppStart(context, newUser: _currentUser);
       return true;

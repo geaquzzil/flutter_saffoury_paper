@@ -149,6 +149,7 @@ class AuthUserLogin extends AuthUser<AuthUserLogin> {
 // });
 
 @JsonSerializable(explicitToJson: true)
+@reflector
 class AuthUser<T> extends ViewAbstract<AuthUser> {
   int? phone;
   String? password;

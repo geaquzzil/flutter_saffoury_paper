@@ -551,6 +551,16 @@ class RouteGenerator {
         },
       ),
       GoRoute(
+        name: blockedRouteName,
+        path: "/block",
+        pageBuilder: (context, state) {
+          return MaterialPage(
+            key: state.pageKey,
+            child: Text("TODO this is block page"),
+          );
+        },
+      ),
+      GoRoute(
         name: settingsRouteName,
         path: "/settings",
         pageBuilder: (context, state) {
