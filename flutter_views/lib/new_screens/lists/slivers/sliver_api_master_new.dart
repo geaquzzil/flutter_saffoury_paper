@@ -1,5 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/components/scroll_snap_list.dart';
@@ -55,6 +53,7 @@ abstract class SliverApiMixinWithStaticStateful<T extends ViewAbstract>
   Map<String, FilterableProviderHelper>? filterData;
   bool isSliver;
   bool enableSelection;
+  bool enableSelectionInInitialMood;
   bool isCardRequestApi;
   Widget Function(List response)? hasCustomWidgetOnResponseBuilder;
   Widget Function(int idx, T item)? hasCustomCardItemBuilder;
@@ -100,6 +99,7 @@ abstract class SliverApiMixinWithStaticStateful<T extends ViewAbstract>
     this.isCardRequestApi = false,
     this.copyWithRequestOption,
     this.enableSelection = true,
+    this.enableSelectionInInitialMood = false,
     this.isSliver = true,
     this.hasCustomSeperater,
     this.customRequestOption,
@@ -261,7 +261,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     _scrollController.addListener(_onScroll);
 
     _lastKey = getListProviderKey();
-
+    _selectMood = widget.enableSelectionInInitialMood;
     _searchString = widget.searchString;
     _filterData = widget.filterData;
     _customRequestOptions = widget.customRequestOption;

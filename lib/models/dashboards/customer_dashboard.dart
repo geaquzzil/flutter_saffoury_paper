@@ -255,8 +255,9 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
             StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: 1,
-              child: Sliver(
-                onResponse: (g) {
+              child: SliverApiMixinViewAbstractWidget(
+                isSliver: false,
+                hasCustomWidgetOnResponseBuilder: (g) {
                   List<GrowthRate> growthList = List.castFrom(g);
                   return ChartCardItemCustom(
                     // color: Colors.orange,
@@ -271,18 +272,15 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
                     ),
                   );
                 },
-                autoRest: AutoRestCustom<GrowthRate>(
-                  responseType: ResponseType.LIST,
-                  customMap: {
-                    "iD": "${customers!.iD}",
-                    "date": jsonEncode(
-                      dateObject?.toJson() ?? DateObject().toJson(),
+                toListObject:
+                    AutoRestCustom<GrowthRate>(
+                      responseType: ResponseType.LIST,
+                      tableName: "customers",
+                      action: ["profit", "${customers!.iD}"],
+                      responseObjcect: GrowthRate(),
+                    ).setRequestOption(
+                      option: RequestOptions().addDate(dateObject),
                     ),
-                  },
-                  action: "list_customers_profit",
-                  key: "list_customers_profit${customers!.iD}",
-                  responseObjcect: GrowthRate(),
-                ),
               ),
             ),
           ),

@@ -1,5 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
@@ -131,7 +129,8 @@ class ChartRecordAnalysis<T extends ViewAbstract>
     BuildContext context, {
     required SliverApiWithStaticMixin state,
     List<dynamic>? items,
-    required dynamic requestObjcet,  required bool isSliver,
+    required dynamic requestObjcet,
+    required bool isSliver,
   }) {
     debugPrint(
       "getCustomViewSingleResponseWidget ${responseListAnalysis?.length}",
@@ -147,7 +146,6 @@ class ChartRecordAnalysis<T extends ViewAbstract>
 
     if (onResponseAddCustomWidget != null) {
       dynamic w = onResponseAddCustomWidget?.call(requestObjcet, this, items);
-      
     } else {
       return w;
     }

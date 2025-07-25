@@ -351,9 +351,10 @@ class CustomerBalanceList
   }) {
     return [
       SliverFillRemaining(
-        child: ListStaticSearchableWidget<CustomerBalanceSingle>(
+        // /ListStaticSearchableWidget
+        child: SliverApiMixinStaticList<CustomerBalanceSingle>(
           list: customers ?? [],
-          listItembuilder: (item) => ListTile(
+          hasCustomCardItemBuilder: (_, item) => ListTile(
             onTap: () {
               debugPrint("_tabController clicked");
               if (globalKey == null) return;
@@ -385,14 +386,14 @@ class CustomerBalanceList
             title: Text(item.name ?? ""),
             subtitle: Text(item.balance.toCurrencyFormat()),
           ),
-          onSearchTextChanged: (query) =>
-              customers
-                  ?.where(
-                    (element) =>
-                        element.name?.toLowerCase().contains(query) ?? false,
-                  )
-                  .toList() ??
-              [],
+          // onSearchTextChanged: (query) =>
+          //     customers
+          //         ?.where(
+          //           (element) =>
+          //               element.name?.toLowerCase().contains(query) ?? false,
+          //         )
+          //         .toList() ??
+          //     [],
         ),
       ),
     ];

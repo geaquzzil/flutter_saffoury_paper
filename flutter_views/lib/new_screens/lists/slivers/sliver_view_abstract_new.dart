@@ -13,6 +13,8 @@ class SliverApiMixinViewAbstractWidget
     super.isSliver,
     super.requiresFullFetsh,
     super.enableSelection,
+    super.enableSelectionInInitialMood,
+    super.onSeletedListItemsChanged,
     super.onClickForCard,
     super.isSelectForCard,
     super.header,

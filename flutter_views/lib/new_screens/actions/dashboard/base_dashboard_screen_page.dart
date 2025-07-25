@@ -12,6 +12,7 @@ import 'package:flutter_view_controller/new_components/lists/list_card_item.dart
 import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:get/get.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -331,10 +332,11 @@ class _BaseDashboardState extends State<BaseDashboard>
             _tabs.add(
               TabControllerHelper(
                 e[0].getMainHeaderLabelTextOnly(context),
-                widget: ListStaticSearchableWidget<ViewAbstract>(
+                //todo ListApiSelectedSearchableWidget
+                widget: SliverApiMixinStaticList<ViewAbstract>(
                   list: e,
-                  onSearchTextChanged: (query) => e,
-                  listItembuilder: (v) => ListCardItem(object: v),
+                  // onSearchTextChanged: (query) => e,
+                  // listItembuilder: (v) => ListCardItem(object: v),
                 ),
               ),
             );

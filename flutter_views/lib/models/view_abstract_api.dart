@@ -301,8 +301,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       if (response == null) return null;
       if (response.statusCode == 200) {
         // debugPrint("listCall response s ${response.body}");
-        Iterable l = convert.jsonDecode(response.body);
-        List<T> t = List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+        List<T> t = getJsonEncodeListResponse(response);
         if (customAction == ServerActions.search_viewabstract_by_field) {
           setLastSearchViewAbstractByTextInputList(t.cast());
         }
@@ -324,9 +323,16 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
     return null;
   }
-  T getJsonEncodeResponse(){
-    
+
+  T getJsonEncodeResponse(Response response) {
+    return fromJsonViewAbstract(convert.jsonDecode(response.body));
   }
+
+  List<T> getJsonEncodeListResponse<T>(Response response) {
+    Iterable l = convert.jsonDecode(response.body);
+    return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
+  }
+
   Future<T?> viewCall({
     required BuildContext context,
     int? customID,
@@ -352,9 +358,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       if (response == null) return null;
       if (response.statusCode == 200) {
         debugPrint("viewCall 200 ");
-        T o = fromJsonViewAbstract(convert.jsonDecode(response.body));
-        // debugPrint("viewCall 200 $o");
-        return o;
+        return getJsonEncodeResponse(response);
       } else {
         debugPrint("viewCall error");
         onCallCheckError(response: response, context: context);
@@ -376,7 +380,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       var response = await _getAddResponse(context: context);
       if (response == null) return null;
       if (response.statusCode == 200) {
-        return fromJsonViewAbstract(convert.jsonDecode(response.body));
+        return getJsonEncodeResponse(response);
       } else {
         onCallCheckError(
           onResponse: onResponse,
@@ -399,7 +403,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       var response = await _getEditResponse(context: context);
       if (response == null) return null;
       if (response.statusCode == 200) {
-        return fromJsonViewAbstract(convert.jsonDecode(response.body));
+        return getJsonEncodeResponse(response);
       } else {
         onCallCheckError(
           onResponse: onResponse,

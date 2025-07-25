@@ -1,10 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, constant_identifier_names
+import 'dart:convert' as convert;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
-
+import 'package:http/http.dart';
 import 'view_abstract_api.dart';
 
 abstract class JsonHelper<T> {
@@ -12,6 +14,7 @@ abstract class JsonHelper<T> {
 
   Map<String, dynamic> toJson();
 }
+
 @Deprecated("Use ViewAbstract")
 class AutoRest<T extends ViewAbstract> {
   T obj;
@@ -30,81 +33,37 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
   ResponseType responseType;
   AutoRestCustom({
     required this.tableName,
-     this.action,
+    this.action,
     required this.responseObjcect,
     required this.responseType,
   });
 
   @override
   String? getTableNameApi() => tableName;
+  @override
+  String getListableKey({SliverMixinObjectType? type}) {
+    return "${super.getListableKey(type: type)}-$tableName-$action-${responseObjcect.runtimeType}";
+  }
 
-   @override
+  @override
   List<String>? getCustomAction() {
     return action;
   }
+
   ResponseType getCustomViewResponseType() {
     return responseType;
   }
-  
-  // @override
-  // Future<T?> viewCall(
-  //   int iD, {
-  //   required BuildContext context,
-  //   OnResponseCallback? onResponse,
-  // }) async {
-  //   this.iD = iD;
-  //   var response = await getRespones(
-  //       onResponse: onResponse, serverActions: ServerActions.view);
-  //   if (response == null) return null;
-  //   if (response.statusCode == 200) {
-  //     return responseObjcect.fromJson(convert.jsonDecode(response.body));
-  //   } else if (response.statusCode == 401) {
-  //     ServerResponseMaster serverResponse =
-  //         ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-  //     onResponse
-  //         ?.onServerFailureResponse(serverResponse.getFailureMessage(context));
-  //     //throw Exception('Failed to load album');
-  //     return null;
-  //   } else {
-  //     // If the server did not return a 200 OK response,
-  //     // then throw an exception.
-  //     return null;
-  //   }
-  // }
 
-  // @override
-  // Future<List<T>?> listCall(
-  //     {int? count,
-  //     int? page,
-  //     OnResponseCallback? onResponse,
-  //     required BuildContext context,
-  //     Map<String, FilterableProviderHelper>? filter}) async {
-  //   var response = await getRespones(
-  //       map: filter,
-  //       itemCount: count,
-  //       pageIndex: page,
-  //       onResponse: onResponse,
-  //       serverActions: ServerActions.list);
+  @override
+  T getJsonEncodeResponse(Response response) {
+    return responseObjcect.fromJson(convert.jsonDecode(response.body));
+  }
 
-  //   if (response == null) return null;
-  //   if (response.statusCode == 200) {
-  //     Iterable l = convert.jsonDecode(response.body);
-  //     return List<T>.from(l.map((model) => responseObjcect.fromJson(model)));
-  //   } else if (response.statusCode == 401) {
-  //     ServerResponseMaster serverResponse =
-  //         ServerResponseMaster.fromJson(convert.jsonDecode(response.body));
-  //     onResponse
-  //         ?.onServerFailureResponse(serverResponse.getFailureMessage(context));
-  //     return null;
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
- 
-
-  // @override
-  // Map<String, String> get getCustomMap => customMap ?? super.getCustomMap;
+  @override
+  List<T> getJsonEncodeListResponse<T>(Response response) {
+    Iterable l = convert.jsonDecode(response.body);
+    return List<T>.from(l.map((model) => responseObjcect.fromJson(model)));
+  }
 
   @override
   T fromJsonViewAbstract(Map<String, dynamic> json) {
@@ -117,68 +76,39 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
   }
 
   @override
-  Map<String, IconData> getFieldIconDataMap() {
-    // TODO: implement getFieldIconDataMap
-    throw UnimplementedError();
-  }
+  Map<String, IconData> getFieldIconDataMap() => {};
 
   @override
-  Map<String, String> getFieldLabelMap(BuildContext context) {
-    // TODO: implement getFieldLabelMap
-    throw UnimplementedError();
-  }
+  Map<String, String> getFieldLabelMap(BuildContext context) => {};
 
   @override
-  String? getMainDrawerGroupName(BuildContext context) {
-    // TODO: implement getMainDrawerGroupName
-    throw UnimplementedError();
-  }
+  String? getMainDrawerGroupName(BuildContext context) => null;
 
   @override
-  List<String> getMainFields({BuildContext? context}) {
-    // TODO: implement getMainFields
-    throw UnimplementedError();
-  }
+  List<String> getMainFields({BuildContext? context}) => [];
 
   @override
-  String getMainHeaderLabelTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderLabelTextOnly
-    throw UnimplementedError();
-  }
+  String getMainHeaderLabelTextOnly(BuildContext context) => "";
 
   @override
-  String getMainHeaderTextOnly(BuildContext context) {
-    // TODO: implement getMainHeaderTextOnly
-    throw UnimplementedError();
-  }
-
+  String getMainHeaderTextOnly(BuildContext context) => "";
   @override
-  IconData getMainIconData() {
-    // TODO: implement getMainIconData
-    throw UnimplementedError();
-  }
+  IconData getMainIconData() => Icons.abc;
 
   @override
   T getSelfNewInstance() {
     return responseObjcect;
   }
 
-  
-
   @override
   RequestOptions? getRequestOption({
     required ServerActions action,
     RequestOptions? generatedOptionFromListCall,
-  }) {
-    // TODO: implement getRequestOption
-    throw UnimplementedError();
-  }
+  }) => null;
 
   @override
-  List<String>? getRequestedForginListOnCall({required ServerActions action}) {
-    // TODO: implement getRequestedForginListOnCall
-    throw UnimplementedError();
-  }
+  List<String>? getRequestedForginListOnCall({required ServerActions action}) =>
+      null;
 }
 
 abstract class CustomViewHorizontalListResponse<T extends ViewAbstract> {

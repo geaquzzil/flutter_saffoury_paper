@@ -387,21 +387,21 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
 
   List<Widget>? getAppBarActionsView(BuildContext context) => null;
 
-  List<Widget> getTabsViewGenerator(
-    BuildContext context, {
-    List<TabControllerHelper>? tabs,
-  }) {
-    List<TabControllerHelper> tabsList = tabs ?? getTabs(context);
-    return tabsList.map((e) {
-      if (e.autoRest != null) {
-        return ListApiAutoRestWidget(autoRest: e.autoRest!);
-      }
-      if (e.widget != null) {
-        return SingleChildScrollView(child: e.widget!);
-      }
-      return const Text("This is the sec page");
-    }).toList();
-  }
+  // List<Widget> getTabsViewGenerator(
+  //   BuildContext context, {
+  //   List<TabControllerHelper>? tabs,
+  // }) {
+  //   List<TabControllerHelper> tabsList = tabs ?? getTabs(context);
+  //   return tabsList.map((e) {
+  //     if (e.autoRest != null) {
+  //       return ListApiAutoRestWidget(autoRest: e.autoRest!);
+  //     }
+  //     if (e.widget != null) {
+  //       return SingleChildScrollView(child: e.widget!);
+  //     }
+  //     return const Text("This is the sec page");
+  //   }).toList();
+  // }
 
   Widget? getTabControllerFirstHeaderWidget(BuildContext context) {
     return null;
