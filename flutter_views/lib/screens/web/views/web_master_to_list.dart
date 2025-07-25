@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/components/list_web_api.dart';
@@ -23,18 +24,19 @@ class WebMasterToList extends BaseWebPageSliversApi {
   final bool? buildSmallView;
   final bool usePaddingOnBottomWidgets;
 
-  WebMasterToList(
-      {super.key,
-      super.extras,
-      required super.iD,
-      this.buildSmallView,
-      required super.tableName,
-      super.buildFooter,
-      super.buildHeader,
-      this.usePaddingOnBottomWidgets = false,
-      super.pinToolbar = true,
-      super.useSmallFloatingBar,
-      super.customSliverHeader});
+  WebMasterToList({
+    super.key,
+    super.extras,
+    required super.iD,
+    this.buildSmallView,
+    required super.tableName,
+    super.buildFooter,
+    super.buildHeader,
+    this.usePaddingOnBottomWidgets = false,
+    super.pinToolbar = true,
+    super.useSmallFloatingBar,
+    super.customSliverHeader,
+  });
 
   @override
   Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
@@ -44,8 +46,9 @@ class WebMasterToList extends BaseWebPageSliversApi {
   @override
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context) {
     if (getExtras() == null) {
-      ViewAbstract newViewAbstract =
-          context.read<AuthProvider<AuthUser>>().getNewInstance(tableName)!;
+      ViewAbstract newViewAbstract = context
+          .read<AuthProvider<AuthUser>>()
+          .getNewInstance(tableName)!;
       return newViewAbstract.viewCall(customID: iD, context: context)
           as Future<ViewAbstract?>;
     } else {
@@ -65,13 +68,14 @@ class WebMasterToList extends BaseWebPageSliversApi {
       customHeader: Column(
         children: [
           LocationListItem(
-              usePadding: false,
-              useResponsiveLayout: false,
-              useClipRect: false,
-              // soildColor: Colors.black38,
-              imageUrl: extras?.getImageUrlAddHost(context) ?? "",
-              name: extras!.getMainHeaderTextOnly(context),
-              country: ""),
+            usePadding: false,
+            useResponsiveLayout: false,
+            useClipRect: false,
+            // soildColor: Colors.black38,
+            imageUrl: extras?.getImageUrlAddHost(context) ?? "",
+            name: extras!.getMainHeaderTextOnly(context),
+            country: "",
+          ),
         ],
       ),
       viewAbstract: (extras as WebCategoryGridableInterface)
@@ -81,12 +85,12 @@ class WebMasterToList extends BaseWebPageSliversApi {
 
   @override
   List<Widget> getContentWidget(
-      BuildContext context, BoxConstraints constraints) {
+    BuildContext context,
+    BoxConstraints constraints,
+  ) {
     return [
       if (buildSmallView ?? false)
-        SliverToBoxAdapter(
-          child: getDetailsView(context),
-        )
+        SliverToBoxAdapter(child: getDetailsView(context))
       else
         SliverToBoxAdapter(
           child: ScreenHelper(
@@ -96,35 +100,30 @@ class WebMasterToList extends BaseWebPageSliversApi {
           ),
         ),
       ...getBottomWidget(context),
-      const SliverToBoxAdapter(
-        child: SizedBox(height: 80),
-      )
+      const SliverToBoxAdapter(child: SizedBox(height: 80)),
     ];
   }
 
   List<Widget> getTopWidget(BuildContext context) {
-    List<Widget>? topWidget =
-        getExtras()?.getCustomTopWidget(context, action: getServerActions());
+    List<Widget>? topWidget = getExtras()?.getCustomTopWidget(
+      context,
+      action: getServerActions(),
+    );
     if (topWidget == null) return [];
     return topWidget;
   }
 
   List<Widget> getBottomWidget(BuildContext context) {
-    List<Widget>? bottomWidget =
-        getExtras()?.getCustomBottomWidget(context, action: getServerActions());
+    List<Widget>? bottomWidget = getExtras()?.getCustomBottomWidget(
+      context,
+      action: getServerActions(),
+    );
     if (bottomWidget == null) return [];
     return bottomWidget.map((e) {
       if (buildSmallView ?? false) {
         return usePaddingOnBottomWidgets
-            ? getPadding(
-                context,
-                SliverToBoxAdapter(
-                  child: e,
-                ),
-                bottom: 20)
-            : SliverToBoxAdapter(
-                child: e,
-              );
+            ? getPadding(context, SliverToBoxAdapter(child: e), bottom: 20)
+            : SliverToBoxAdapter(child: e);
       } else {
         return usePaddingOnBottomWidgets
             ? getPadding(
@@ -132,7 +131,8 @@ class WebMasterToList extends BaseWebPageSliversApi {
                 SliverToBoxAdapter(
                   child: ResponsiveWebBuilder(builder: (context, width) => e),
                 ),
-                bottom: 20)
+                bottom: 20,
+              )
             : SliverToBoxAdapter(
                 child: ResponsiveWebBuilder(builder: (context, width) => e),
               );
@@ -146,27 +146,33 @@ class WebMasterToList extends BaseWebPageSliversApi {
   }
 
   Widget _buildUi(
-      BuildContext context, double width, BoxConstraints constraints) {
+    BuildContext context,
+    double width,
+    BoxConstraints constraints,
+  ) {
     return Center(
-        child: MaxWidthBox(
-      maxWidth: width,
-      // minWidth: width,
-      // defaultScale: false,
-      child: Flex(
-        direction: constraints.maxWidth > 720 ? Axis.horizontal : Axis.vertical,
-        children: [
-          // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
-          Expanded(
+      child: MaxWidthBox(
+        maxWidth: width,
+        // minWidth: width,
+        // defaultScale: false,
+        child: Flex(
+          direction: constraints.maxWidth > 720
+              ? Axis.horizontal
+              : Axis.vertical,
+          children: [
+            // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
+            Expanded(
               flex: constraints.maxWidth > 720.0 ? 1 : 0,
-              child: WebProductImages(
-                item: extras!,
-              )),
-          Expanded(
+              child: WebProductImages(item: extras!),
+            ),
+            Expanded(
               flex: constraints.maxWidth > 720.0 ? 1 : 0,
-              child: getDetailsView(context)),
-        ],
+              child: getDetailsView(context),
+            ),
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   Column getDetailsView(BuildContext context) {
@@ -176,29 +182,23 @@ class WebMasterToList extends BaseWebPageSliversApi {
       children: [
         if (buildSmallView == false)
           getWebText(title: extras!.getMainHeaderTextOnly(context)),
-        if (buildSmallView == false)
-          const SizedBox(
-            height: 20,
-          ),
+        if (buildSmallView == false) const SizedBox(height: 20),
         ...getTopWidget(context),
-        WebViewDetails(
-          viewAbstract: extras!,
-        ),
+        WebViewDetails(viewAbstract: extras!),
         if (extras is ListableInterface)
-          const ListTile(
-            leading: Icon(Icons.list),
-            title: Text("Details"),
+          const ListTile(leading: Icon(Icons.list), title: Text("Details")),
+        if (extras is ListableInterface)
+          SliverApiMixinStaticList(
+            isSliver: false,
+            list: extras!.getListableInterface().getListableList(),
+
+            hasCustomCardItemBuilder: (_, item) =>
+                ListCardItemWeb(object: item),
           ),
-        if (extras is ListableInterface)
-          ListStaticWidget<ViewAbstract>(
-              list: extras!.getListableInterface().getListableList(),
-              emptyWidget: const Text("null"),
-              listItembuilder: (item) => ListCardItemWeb(
-                    object: item,
-                  )),
         if (extras is CartableProductItemInterface)
           BottomWidgetOnViewIfCartable(
-              viewAbstract: extras as CartableProductItemInterface),
+            viewAbstract: extras as CartableProductItemInterface,
+          ),
 
         // if(extras is SharableInterface)
       ],

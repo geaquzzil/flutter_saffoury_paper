@@ -12,7 +12,7 @@ import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_components/cards/normal_card.dart';
+import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -50,77 +50,86 @@ class SettingAndProfileWeb extends BaseWebPageSlivers {
 
   @override
   List<Widget> getContentWidget(
-      BuildContext context, BoxConstraints constraints) {
+    BuildContext context,
+    BoxConstraints constraints,
+  ) {
     return [
       getSliverPadding(
-          context,
-          constraints,
-          SliverToBoxAdapter(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(50),
-              child: Column(
+        context,
+        constraints,
+        SliverToBoxAdapter(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: SizedBox(
-                              height: 500,
-                              child: ClipRect(
-                                child: Container(
-                                  // height: 200,
-                                  color: Theme.of(context)
-                                      .scaffoldBackgroundColor
-                                      .withOpacity(.5),
-                                  child: ProfileMenuWidget(
-                                      selectedValue: selectedValue),
-                                ),
-                              ),
-                            )),
-                        Expanded(
-                          flex: 4,
+                    Expanded(
+                      flex: 2,
+                      child: SizedBox(
+                        height: 500,
+                        child: ClipRect(
                           child: Container(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            child: SizedBox(
-                              height: 500,
-                              child: Padding(
-                                padding: const EdgeInsets.all(kDefaultPadding),
-                                child: ValueListenableBuilder<
-                                        ActionOnToolbarItem?>(
-                                    valueListenable: selectedValue,
-                                    builder: (context, value, child) {
-                                      return getWidgetFromProfile(
-                                          context: context,
-                                          value: value,
-                                          valueNotifier: ValueNotifier<
-                                              ActionOnToolbarItem?>(null),
-                                          pinToolbar: pinToolbar);
-                                    }),
-                              ),
+                            // height: 200,
+                            color: Theme.of(
+                              context,
+                            ).scaffoldBackgroundColor.withOpacity(.5),
+                            child: ProfileMenuWidget(
+                              selectedValue: selectedValue,
                             ),
                           ),
-                        )
-                      ],
-                    )
-                  ]),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Container(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        child: SizedBox(
+                          height: 500,
+                          child: Padding(
+                            padding: const EdgeInsets.all(kDefaultPadding),
+                            child: ValueListenableBuilder<ActionOnToolbarItem?>(
+                              valueListenable: selectedValue,
+                              builder: (context, value, child) {
+                                return getWidgetFromProfile(
+                                  context: context,
+                                  value: value,
+                                  valueNotifier:
+                                      ValueNotifier<ActionOnToolbarItem?>(null),
+                                  pinToolbar: pinToolbar,
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          padd: 1.2),
+        ),
+        padd: 1.2,
+      ),
     ];
   }
 
   ViewAbstract getListOfOrders(BuildContext context) {
     AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
     ViewAbstract orderSample = authProvider.getOrderSimple;
-    String key =
-        authProvider.isGeneralEmployee(context) ? "EmployeeID" : "CustomerID";
+    String key = authProvider.isGeneralEmployee(context)
+        ? "EmployeeID"
+        : "CustomerID";
     return orderSample.setRequestOption(
-        option: RequestOptions().addSearchByField(key, authProvider.getID()));
+      option: RequestOptions().addSearchByField(key, authProvider.getID()),
+    );
   }
 }
 
@@ -130,10 +139,12 @@ class OrdersWeb extends StatelessWidget {
   ViewAbstract getListOfOrders(BuildContext context) {
     AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
     ViewAbstract orderSample = authProvider.getOrderSimple;
-    String key =
-        authProvider.isGeneralEmployee(context) ? "EmployeeID" : "CustomerID";
+    String key = authProvider.isGeneralEmployee(context)
+        ? "EmployeeID"
+        : "CustomerID";
     return orderSample.setRequestOption(
-        option: RequestOptions().addSearchByField(key, authProvider.getID()));
+      option: RequestOptions().addSearchByField(key, authProvider.getID()),
+    );
   }
 
   @override
@@ -146,9 +157,7 @@ class OrdersWeb extends StatelessWidget {
           //TODO translate
           title: Text("Orders"),
         ),
-        ListTile(
-          subtitle: Text(AppLocalizations.of(context)!.logingoutDesc),
-        ),
+        ListTile(subtitle: Text(AppLocalizations.of(context)!.logingoutDesc)),
         ProductWebPage(),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -186,17 +195,14 @@ class Logout extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ListTile(
-          title: Text(AppLocalizations.of(context)!.logout),
-        ),
-        ListTile(
-          subtitle: Text(AppLocalizations.of(context)!.logingoutDesc),
-        ),
+        ListTile(title: Text(AppLocalizations.of(context)!.logout)),
+        ListTile(subtitle: Text(AppLocalizations.of(context)!.logingoutDesc)),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextButton(
-              onPressed: () {},
-              child: Text(AppLocalizations.of(context)!.logout)),
+            onPressed: () {},
+            child: Text(AppLocalizations.of(context)!.logout),
+          ),
         ),
       ],
     );
@@ -230,10 +236,7 @@ class _PrintSettingState extends BasePageState<PrintSetting>
       width: double.infinity,
       child: Row(
         children: <Widget>[
-          Icon(
-            item.icon,
-            size: 15,
-          ),
+          Icon(item.icon, size: 15),
           Expanded(
             child: Container(
               margin: const EdgeInsets.only(left: 10),
@@ -271,17 +274,17 @@ class _PrintSettingState extends BasePageState<PrintSetting>
         //     ? Theme.of(context).highlightColor
         //     : null,
         // selectedTileColor: Colors.white,
-
         onTap: () {
-          notify(SecondPaneHelper(
-              title: element.getModifibleTitleName(context), value: element));
+          notify(
+            SecondPaneHelper(
+              title: element.getModifibleTitleName(context),
+              value: element,
+            ),
+          );
         },
         // contentPadding:
         //     const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-        leading: Icon(
-          element.getModifibleIconData(),
-          size: 15,
-        ),
+        leading: Icon(element.getModifibleIconData(), size: 15),
         title: Text(
           element.getModifibleTitleName(ctx),
           style: Theme.of(ctx).textTheme.bodySmall,
@@ -293,8 +296,9 @@ class _PrintSettingState extends BasePageState<PrintSetting>
 
   @override
   Widget build(BuildContext context) {
-    List<ModifiableInterface> modifieableList =
-        context.read<SettingProvider>().getModifiableListSetting(context);
+    List<ModifiableInterface> modifieableList = context
+        .read<SettingProvider>()
+        .getModifiableListSetting(context);
     _list = modifieableList.groupBy(
       (element) => element.getModifiableMainGroupName(context),
     );
@@ -307,15 +311,16 @@ class _PrintSettingState extends BasePageState<PrintSetting>
   }
 
   @override
-  Widget? getAppbarTitle(
-      {bool? firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
+  Widget? getAppbarTitle({
+    bool? firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  }) {
     return firstPane == null
         ? Text(AppLocalizations.of(context)!.printerSetting)
         : isFirstPane(firstPane: firstPane)
-            ? Text(AppLocalizations.of(context)!.details)
-            : Text(getSecPaneText() ?? "");
+        ? Text(AppLocalizations.of(context)!.details)
+        : Text(getSecPaneText() ?? "");
   }
 
   String? getSecPaneText() {
@@ -324,18 +329,20 @@ class _PrintSettingState extends BasePageState<PrintSetting>
   }
 
   @override
-  Widget? getFloatingActionButton(
-      {bool? firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
+  Widget? getFloatingActionButton({
+    bool? firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  }) {
     if (isSecPane(firstPane: firstPane)) {
       if (geSelectedValue() is BarcodeSetting ||
           (geSelectedValue() is PrinterDefaultSetting)) {
         return FloatingActionButton.small(
           //todo translate
           child: const Tooltip(
-              message: "AppLocalizations.of(context)!.refresh",
-              child: Icon(Icons.refresh)),
+            message: "AppLocalizations.of(context)!.refresh",
+            child: Icon(Icons.refresh),
+          ),
           onPressed: () {
             setState(() {});
           },
@@ -346,58 +353,64 @@ class _PrintSettingState extends BasePageState<PrintSetting>
   }
 
   @override
-  Widget? getPaneDraggableExpandedHeader(
-      {required bool firstPane, TabControllerHelper? tab}) {
+  Widget? getPaneDraggableExpandedHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) {
     return null;
   }
 
   @override
-  Widget? getPaneDraggableHeader(
-      {required bool firstPane, TabControllerHelper? tab}) {
+  Widget? getPaneDraggableHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) {
     return null;
   }
 
   @override
-  List<Widget>? getPaneNotifier(
-      {required bool firstPane,
-      ScrollController? controler,
-      TabControllerHelper? tab,
-      SecondPaneHelper? valueNotifier}) {
+  List<Widget>? getPaneNotifier({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+    SecondPaneHelper? valueNotifier,
+  }) {
     if (firstPane) {
       return getListStickyWidget(
-          context,
-          _list.entries
-              .map(
-                (e) => StickyItem(
-                    title: e.key,
-                    widgets: e.value.map(
-                      (c) {
-                        bool isLarge =
-                            isLargeScreenFromCurrentScreenSize(context);
-                        return CardNormal(
-                          child: (h) => ListTile(
-                            onTap: () {
-                              notify(SecondPaneHelper(
-                                  title: c.getModifibleTitleName(context),
-                                  value: c));
-                            },
-                            leading: Icon(
-                              c.getModifibleIconData(),
-                            ),
-                            title: Text(
-                              c.getModifibleTitleName(context),
-                              style: isLarge
-                                  ? Theme.of(context).textTheme.bodySmall
-                                  : null,
-                            ),
-                            selected: lastSecondPaneItem?.value.hashCode ==
-                                c.hashCode,
+        context,
+        _list.entries
+            .map(
+              (e) => StickyItem(
+                title: e.key,
+                widgets: e.value.map((c) {
+                  bool isLarge = isLargeScreenFromCurrentScreenSize(context);
+                  return Cards(
+                    type: CardType.normal,
+                    child: (h) => ListTile(
+                      onTap: () {
+                        notify(
+                          SecondPaneHelper(
+                            title: c.getModifibleTitleName(context),
+                            value: c,
                           ),
                         );
                       },
-                    ).toList()),
-              )
-              .toList());
+                      leading: Icon(c.getModifibleIconData()),
+                      title: Text(
+                        c.getModifibleTitleName(context),
+                        style: isLarge
+                            ? Theme.of(context).textTheme.bodySmall
+                            : null,
+                      ),
+                      selected:
+                          lastSecondPaneItem?.value.hashCode == c.hashCode,
+                    ),
+                  );
+                }).toList(),
+              ),
+            )
+            .toList(),
+      );
     } else {
       // return [const SliverToBoxAdapter(child: Text("S"))];
       return [
@@ -412,7 +425,8 @@ class _PrintSettingState extends BasePageState<PrintSetting>
                     if (snapshot.hasData) {
                       if (snapshot.data is BarcodeSetting) {
                         debugPrint(
-                            "validateObj is BarcodeSetting ${(snapshot.data as BarcodeSetting).ports}");
+                          "validateObj is BarcodeSetting ${(snapshot.data as BarcodeSetting).ports}",
+                        );
                       }
                       return BaseEditWidget(
                         viewAbstract: (snapshot.data!),
@@ -428,7 +442,7 @@ class _PrintSettingState extends BasePageState<PrintSetting>
                     return EmptyWidget.emptyList(context);
                   },
                 ),
-        )
+        ),
       ];
     }
   }
@@ -470,15 +484,20 @@ class ProfileEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.small(
-          onPressed: () {}, child: const Icon(Icons.save)),
+        onPressed: () {},
+        child: const Icon(Icons.save),
+      ),
       body: ListView(
         shrinkWrap: true,
         // mainAxisAlignment: MainAxisAlignment.start,
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
-            title: Text(AppLocalizations.of(context)!
-                .editFormat(AppLocalizations.of(context)!.profile)),
+            title: Text(
+              AppLocalizations.of(
+                context,
+              )!.editFormat(AppLocalizations.of(context)!.profile),
+            ),
           ),
           BaseEditWidget(
             viewAbstract: context.read<AuthProvider<AuthUser>>().getUser!,
@@ -501,15 +520,16 @@ class MasterToListFromProfile extends StatefulWidget {
   bool useSmallFloatingBar;
   ViewAbstract? initialValue;
   ValueNotifier<ActionOnToolbarItem?>? valueNotiferActionOnToolbarItem;
-  MasterToListFromProfile(
-      {super.key,
-      required this.pinToolbar,
-      this.buildFooter = false,
-      this.buildSmallView = true,
-      this.useSmallFloatingBar = true,
-      this.valueNotiferActionOnToolbarItem,
-      this.initialValue,
-      this.buildHeader = false});
+  MasterToListFromProfile({
+    super.key,
+    required this.pinToolbar,
+    this.buildFooter = false,
+    this.buildSmallView = true,
+    this.useSmallFloatingBar = true,
+    this.valueNotiferActionOnToolbarItem,
+    this.initialValue,
+    this.buildHeader = false,
+  });
 
   @override
   State<MasterToListFromProfile> createState() =>
@@ -518,8 +538,9 @@ class MasterToListFromProfile extends StatefulWidget {
 
 class _MasterToListFromProfileState extends State<MasterToListFromProfile>
     with ActionOnToolbarSubPaneMixin {
-  ValueNotifier<ViewAbstract?> selectedCardValue =
-      ValueNotifier<ViewAbstract?>(null);
+  ValueNotifier<ViewAbstract?> selectedCardValue = ValueNotifier<ViewAbstract?>(
+    null,
+  );
 
   Widget? customSliverHeader;
   ViewAbstract? _initialValue;
@@ -527,10 +548,12 @@ class _MasterToListFromProfileState extends State<MasterToListFromProfile>
   ViewAbstract getListOfOrders(BuildContext context) {
     AuthProvider authProvider = context.read<AuthProvider<AuthUser>>();
     ViewAbstract orderSample = authProvider.getOrderSimple;
-    String key =
-        authProvider.isGeneralEmployee(context) ? "EmployeeID" : "CustomerID";
+    String key = authProvider.isGeneralEmployee(context)
+        ? "EmployeeID"
+        : "CustomerID";
     orderSample.setRequestOption(
-        option: RequestOptions().addSearchByField(key, authProvider.getID()));
+      option: RequestOptions().addSearchByField(key, authProvider.getID()),
+    );
     return orderSample;
   }
 
@@ -560,21 +583,23 @@ class _MasterToListFromProfileState extends State<MasterToListFromProfile>
               pinned: widget.pinToolbar,
               // floating: true,
               delegate: SliverAppBarDelegatePreferedSize(
-                  child: PreferredSize(
-                      preferredSize: const Size.fromHeight(70.0),
-                      child: Container(
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        child: ListTile(
-                          leading: IconButton(
-                            icon: const Icon(Icons.arrow_back),
-                            onPressed: () {
-                              debugPrint("backbutton pressed");
-                              selectedCardValue.value = null;
-                            },
-                          ),
-                          title: value.getMainHeaderText(context),
-                        ),
-                      ))),
+                child: PreferredSize(
+                  preferredSize: const Size.fromHeight(70.0),
+                  child: Container(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    child: ListTile(
+                      leading: IconButton(
+                        icon: const Icon(Icons.arrow_back),
+                        onPressed: () {
+                          debugPrint("backbutton pressed");
+                          selectedCardValue.value = null;
+                        },
+                      ),
+                      title: value.getMainHeaderText(context),
+                    ),
+                  ),
+                ),
+              ),
             ),
           );
         }
@@ -625,9 +650,7 @@ class Help extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ListTile(
-          title: Text(AppLocalizations.of(context)!.help),
-        ),
+        ListTile(title: Text(AppLocalizations.of(context)!.help)),
         ListTile(
           title: Text(AppLocalizations.of(context)!.saffouryPaperLTD),
           subtitle: Text(Utils.version),
@@ -636,26 +659,30 @@ class Help extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: TextButton(
-              onPressed: () {},
-              child: Text(AppLocalizations.of(context)!.helpCenter)),
+            onPressed: () {},
+            child: Text(AppLocalizations.of(context)!.helpCenter),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: TextButton(
-              onPressed: () {},
-              child: Text(AppLocalizations.of(context)!.contactUs)),
+            onPressed: () {},
+            child: Text(AppLocalizations.of(context)!.contactUs),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: TextButton(
-              onPressed: () {},
-              child: Text(AppLocalizations.of(context)!.license)),
+            onPressed: () {},
+            child: Text(AppLocalizations.of(context)!.license),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: TextButton(
-              onPressed: () {},
-              child: Text(AppLocalizations.of(context)!.termsAndConitions)),
+            onPressed: () {},
+            child: Text(AppLocalizations.of(context)!.termsAndConitions),
+          ),
         ),
         const Divider(),
         ListTile(subtitle: Text(AppLocalizations.of(context)!.copyRight)),
@@ -663,11 +690,12 @@ class Help extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 8.0, top: kDefaultPadding),
           child: TextButton(
-              style: ButtonStyle(
-                  foregroundColor:
-                      WidgetStateProperty.all<Color>(Colors.orange)),
-              onPressed: () {},
-              child: Text(AppLocalizations.of(context)!.developmentBy)),
+            style: ButtonStyle(
+              foregroundColor: WidgetStateProperty.all<Color>(Colors.orange),
+            ),
+            onPressed: () {},
+            child: Text(AppLocalizations.of(context)!.developmentBy),
+          ),
         ),
       ],
     );

@@ -18,6 +18,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:pdf/pdf.dart' as d;
 import 'package:pdf/widgets.dart' as pdf;
@@ -170,26 +171,27 @@ class CustomerBalanceList
 
   @override
   Widget getCustomStandAloneWidget(BuildContext context) {
-    return Expanded(
-      // height: 200,
-      child: ListStaticSearchableWidget<CustomerBalanceSingle>(
-        list: customers ?? [],
-        listItembuilder: (item) => ListTile(
-          onTap: () {},
-          leading: item.getCardLeading(context),
-          title: Text(item.name ?? ""),
-          subtitle: Text(item.balance.toCurrencyFormat()),
-        ),
-        onSearchTextChanged: (query) =>
-            customers
-                ?.where(
-                  (element) =>
-                      element.name?.toLowerCase().contains(query) ?? false,
-                )
-                .toList() ??
-            [],
-      ),
-    );
+    return Text("TODO");
+    // return Expanded(
+    //   // height: 200,
+    //   child: ListStaticSearchableWidget<CustomerBalanceSingle>(
+    //     list: customers ?? [],
+    //     listItembuilder: (item) => ListTile(
+    //       onTap: () {},
+    //       leading: item.getCardLeading(context),
+    //       title: Text(item.name ?? ""),
+    //       subtitle: Text(item.balance.toCurrencyFormat()),
+    //     ),
+    //     onSearchTextChanged: (query) =>
+    //         customers
+    //             ?.where(
+    //               (element) =>
+    //                   element.name?.toLowerCase().contains(query) ?? false,
+    //             )
+    //             .toList() ??
+    //         [],
+    //   ),
+    // );
   }
 
   Widget getHeaderWidget(BuildContext context) {
@@ -284,10 +286,10 @@ class CustomerBalanceList
           fontWeight: FontWeight.bold,
         ),
         children: [
-          ListStaticWidget<CustomerBalanceSingle>(
+          SliverApiMixinStaticList<CustomerBalanceSingle>(
             list: customers?.sublist(0, 10) ?? [],
-            emptyWidget: const Text("null"),
-            listItembuilder: (item) => ListTile(
+
+            hasCustomCardItemBuilder: (i, item) => ListTile(
               leading: item.getCardLeading(context),
               title: Text(item.name ?? ""),
               subtitle: Text(item.balance.toCurrencyFormat()),
@@ -425,10 +427,10 @@ class CustomerBalanceList
             StaggeredGridTile.count(
               crossAxisCellCount: crossAxisCount,
               mainAxisCellCount: 1,
-              child: ListStaticWidget<CustomerBalanceSingle>(
+              child: SliverApiMixinStaticList<CustomerBalanceSingle>(
                 list: customers?.sublist(0, 10) ?? [],
-                emptyWidget: const Text("null"),
-                listItembuilder: (item) => ListTile(
+
+                hasCustomCardItemBuilder: (_, item) => ListTile(
                   leading: item.getCardLeading(context),
                   title: Text(item.name ?? ""),
                   subtitle: Text(item.balance.toCurrencyFormat()),

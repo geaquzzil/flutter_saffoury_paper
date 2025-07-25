@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/components/header_text.dart';
 import 'package:flutter_view_controller/screens/web/components/title_and_image.dart';
@@ -15,13 +15,14 @@ class TermsWebPage extends BaseWebPageSlivers {
   Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
     return null;
   }
+
   @override
   List<Widget> getContentWidget(
-      BuildContext context, BoxConstraints constraints) {
+    BuildContext context,
+    BoxConstraints constraints,
+  ) {
     return [
-      const SliverToBoxAdapter(
-        child: WelcomMessageTermsWhoWeAre(),
-      ),
+      const SliverToBoxAdapter(child: WelcomMessageTermsWhoWeAre()),
       getTermsAndConditionSection(),
       getSliverSizedBox(height: 50),
       getPrivacySection(),
@@ -30,8 +31,9 @@ class TermsWebPage extends BaseWebPageSlivers {
           fontSize: 20,
           text: "Protect your privacy".toUpperCase(),
           description: Html(
-              data:
-                  "You feel comfortable and secure when using our website/application and sharing your information with us, thus we are very proud of our commitment to protecting your privacy. Please continue to read the following policy to understand how your personal information is handled"),
+            data:
+                "You feel comfortable and secure when using our website/application and sharing your information with us, thus we are very proud of our commitment to protecting your privacy. Please continue to read the following policy to understand how your personal information is handled",
+          ),
         ),
       ),
       getSliverSizedBox(),
@@ -40,8 +42,9 @@ class TermsWebPage extends BaseWebPageSlivers {
           fontSize: 20,
           text: "Privacy Guarantee".toUpperCase(),
           description: Html(
-              data:
-                  "Al-Saffoury promises not to sell, rent or share your personal information to any third party (except as provided in this Privacy Policy) without your consent."),
+            data:
+                "Al-Saffoury promises not to sell, rent or share your personal information to any third party (except as provided in this Privacy Policy) without your consent.",
+          ),
         ),
       ),
       getSliverSizedBox(height: 50),
@@ -58,8 +61,9 @@ class TermsWebPage extends BaseWebPageSlivers {
           fontSize: 20,
           text: "".toUpperCase(),
           description: Html(
-              data:
-                  "If you do not agree to this privacy policy, please do not accept the privacy policy during registration, as your personal identity remains anonymous while browsing the site without logging in to the “application” using a username and password. However, “Al-Saffoury’s website” collects and saves the following information, even if you are not logged into the “Site”:<br><br><ul><li>Name</li><li>Email</li><li>Mobile Number</li><li>Device Type</li><li>IP Address</li><li>Country from wich the application is used</li><li>Operating System</li></ul><br>You may terminate your account at any time, however your information may remain archived on the servers of the Website even after the deletion or termination of your account."),
+            data:
+                "If you do not agree to this privacy policy, please do not accept the privacy policy during registration, as your personal identity remains anonymous while browsing the site without logging in to the “application” using a username and password. However, “Al-Saffoury’s website” collects and saves the following information, even if you are not logged into the “Site”:<br><br><ul><li>Name</li><li>Email</li><li>Mobile Number</li><li>Device Type</li><li>IP Address</li><li>Country from wich the application is used</li><li>Operating System</li></ul><br>You may terminate your account at any time, however your information may remain archived on the servers of the Website even after the deletion or termination of your account.",
+          ),
         ),
       ),
       getSliverSizedBox(),
@@ -68,8 +72,9 @@ class TermsWebPage extends BaseWebPageSlivers {
           fontSize: 20,
           text: "Disclosures of your information".toUpperCase(),
           description: Html(
-              data:
-                  "We will not use your personal information for any purpose other than to complete a transaction with you. We do not rent, sell or share your personal information, and we will not disclose any personal information to any third party except in the following circumstances:<br><br><ul><li>Have your permission</li><li>To provide the products and services you requested</li><li>To assist in the investigation or prevention of conduct related to illegal and illegal activities, suspected fraud, or posing a threat to the safety or security of any person or in cases of violation of the User Agreement or to defend against legal claims. Special circumstances such as compliance with subpoenas, court orders, request/order from a statutory authority.</li></ul>"),
+            data:
+                "We will not use your personal information for any purpose other than to complete a transaction with you. We do not rent, sell or share your personal information, and we will not disclose any personal information to any third party except in the following circumstances:<br><br><ul><li>Have your permission</li><li>To provide the products and services you requested</li><li>To assist in the investigation or prevention of conduct related to illegal and illegal activities, suspected fraud, or posing a threat to the safety or security of any person or in cases of violation of the User Agreement or to defend against legal claims. Special circumstances such as compliance with subpoenas, court orders, request/order from a statutory authority.</li></ul>",
+          ),
         ),
       ),
       getSliverSizedBox(),
@@ -77,22 +82,24 @@ class TermsWebPage extends BaseWebPageSlivers {
         context,
         constraints,
         SliverToBoxAdapter(
-          child: OutlinedCard(
+          child: Cards(
+            type: CardType.outline,
             // margin: const EdgeInsets.all(kDefaultPadding),
-            child: Padding(
+            child: (v) => Padding(
               padding: const EdgeInsets.all(kDefaultPadding),
               child: HeaderText(
                 useRespnosiveLayout: false,
                 fontSize: 20,
                 text: "Our Responsibility".toUpperCase(),
                 description: Html(
-                    data:
-                        "Although we will work to maintain the confidentiality of your personal information, transmissions via the Internet cannot be completely secure. By using this Website, you agree that we have no responsibility for disclosing your information due to any party's transmission errors or unauthorized acts of third parties.We reserve the right to change or update our policy at any time, and we will notify you of changes if this occurs. Such changes are effective immediately upon being placed on the Site.<br><br><strong>Copyright</strong><br>The content, organization, graphics, design, compilation, electronic translation, digitization, and other matters relating to the “Site” are the property of “Saffoury” and are all protected by copyright and trade name laws, and other rights including It has intellectual property rights. It is absolutely prohibited to copy, redistribute, use or print any of these materials or any part of them from the “Site” or from any other sites, except to the extent permitted by the laws in force in the Syrian Arab Republic in this regard.<br><br><strong>Brand</strong><br>All words and logos on the “Website or Application” are the property of “Al-Saffoury” whether they are registered trademarks, designs, phrases, logos and/or unregistered words and are protected by intellectual property laws. All other trademarks not owned by “Al-Saffoury” that appear on the Site are the property of their respective owners, who may or may not be affiliated with or associated with “Al-Saffoury”.<br><br>Questions? We are always happy to help with questions you may have! Check our FAQ or contact us sections for any questions."),
+                  data:
+                      "Although we will work to maintain the confidentiality of your personal information, transmissions via the Internet cannot be completely secure. By using this Website, you agree that we have no responsibility for disclosing your information due to any party's transmission errors or unauthorized acts of third parties.We reserve the right to change or update our policy at any time, and we will notify you of changes if this occurs. Such changes are effective immediately upon being placed on the Site.<br><br><strong>Copyright</strong><br>The content, organization, graphics, design, compilation, electronic translation, digitization, and other matters relating to the “Site” are the property of “Saffoury” and are all protected by copyright and trade name laws, and other rights including It has intellectual property rights. It is absolutely prohibited to copy, redistribute, use or print any of these materials or any part of them from the “Site” or from any other sites, except to the extent permitted by the laws in force in the Syrian Arab Republic in this regard.<br><br><strong>Brand</strong><br>All words and logos on the “Website or Application” are the property of “Al-Saffoury” whether they are registered trademarks, designs, phrases, logos and/or unregistered words and are protected by intellectual property laws. All other trademarks not owned by “Al-Saffoury” that appear on the Site are the property of their respective owners, who may or may not be affiliated with or associated with “Al-Saffoury”.<br><br>Questions? We are always happy to help with questions you may have! Check our FAQ or contact us sections for any questions.",
+                ),
               ),
             ),
           ),
         ),
-      )
+      ),
     ];
     SingleChildScrollView(
       child: Column(
@@ -103,9 +110,7 @@ class TermsWebPage extends BaseWebPageSlivers {
             text: "TERMS AND\nCONDITIONS",
             description: getHtmlWidget(),
           ),
-          const SizedBox(
-            height: 50.0,
-          ),
+          const SizedBox(height: 50.0),
           const TitleAndDescriptopnAndImage(
             title: "PRIVACY",
             description:
@@ -116,19 +121,19 @@ class TermsWebPage extends BaseWebPageSlivers {
             fontSize: 20,
             text: "Protect your privacy".toUpperCase(),
             description: Html(
-                data:
-                    "You feel comfortable and secure when using our website/application and sharing your information with us, thus we are very proud of our commitment to protecting your privacy. Please continue to read the following policy to understand how your personal information is handled"),
+              data:
+                  "You feel comfortable and secure when using our website/application and sharing your information with us, thus we are very proud of our commitment to protecting your privacy. Please continue to read the following policy to understand how your personal information is handled",
+            ),
           ),
           HeaderText(
             fontSize: 20,
             text: "Privacy Guarantee".toUpperCase(),
             description: Html(
-                data:
-                    "Al-Saffoury promises not to sell, rent or share your personal information to any third party (except as provided in this Privacy Policy) without your consent."),
+              data:
+                  "Al-Saffoury promises not to sell, rent or share your personal information to any third party (except as provided in this Privacy Policy) without your consent.",
+            ),
           ),
-          const SizedBox(
-            height: 50.0,
-          ),
+          const SizedBox(height: 50.0),
         ],
       ),
     );

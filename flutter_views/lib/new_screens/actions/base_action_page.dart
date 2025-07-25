@@ -26,6 +26,7 @@ import 'package:flutter_view_controller/new_screens/base_api_call_screen.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -48,12 +49,13 @@ abstract class BaseActionScreenPage extends StatefulWidget {
   PaletteGenerator? color;
   CurrentScreenSize? currentScreenSize;
 
-  BaseActionScreenPage(
-      {super.key,
-      required this.viewAbstract,
-      this.color,
-      this.actionOnToolbarItem,
-      this.currentScreenSize});
+  BaseActionScreenPage({
+    super.key,
+    required this.viewAbstract,
+    this.color,
+    this.actionOnToolbarItem,
+    this.currentScreenSize,
+  });
 
   ServerActions getServerAction() {
     if (this is BaseEditNewPage) {
@@ -86,26 +88,29 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   final List<TabControllerHelper> _tabs = <TabControllerHelper>[];
 
   BaseActionProviders baseActionProviders = BaseActionProviders();
-  ValueNotifier<ExpandType> expandType =
-      ValueNotifier<ExpandType>(ExpandType.HALF_EXPANDED);
+  ValueNotifier<ExpandType> expandType = ValueNotifier<ExpandType>(
+    ExpandType.HALF_EXPANDED,
+  );
 
   ValueNotifier<ViewAbstract?> onEditListableItem =
       ValueNotifier<ViewAbstract?>(null);
   ValueNotifier<List<ViewAbstract>?> onListableSelectedItem =
       ValueNotifier<List<ViewAbstract>?>(null);
 
-  ValueNotifier<ApiCallState> apiCallState =
-      ValueNotifier<ApiCallState>(ApiCallState.NONE);
+  ValueNotifier<ApiCallState> apiCallState = ValueNotifier<ApiCallState>(
+    ApiCallState.NONE,
+  );
 
   ValueNotifier<QrCodeNotifierState> valueNotifierQrState =
       ValueNotifier<QrCodeNotifierState>(
-          QrCodeNotifierState(state: QrCodeCurrentState.NONE));
+        QrCodeNotifierState(state: QrCodeCurrentState.NONE),
+      );
 
   GlobalKey<DraggableHomeState> draggableHomeState =
       GlobalKey<DraggableHomeState>();
 
   final Map<int, GlobalKey<ListCardItemEditableState>>
-      _listCardItemEditableState = {};
+  _listCardItemEditableState = {};
 
   final ScrollController _scrollController = ScrollController();
 
@@ -124,8 +129,9 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     iD = widget.viewAbstract.iD;
     tableName = widget.viewAbstract.getTableNameApi();
     _tabs.clear();
-    _tabs
-        .addAll(getExtras().getTabs(context, action: widget.getServerAction()));
+    _tabs.addAll(
+      getExtras().getTabs(context, action: widget.getServerAction()),
+    );
     _listCardItemEditableState.clear();
     _tabController.animateTo(0);
     // if (mounted) {
@@ -140,7 +146,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   }
 
   GlobalKey<ListCardItemEditableState> getListCardItemEditableKey(
-      ViewAbstract view) {
+    ViewAbstract view,
+  ) {
     if (_listCardItemEditableState.containsKey(view.iD)) {
       return _listCardItemEditableState[view.iD]!;
     } else {
@@ -168,8 +175,6 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     );
   }
 
-
-
   @override
   ServerActions getServerActions() {
     return widget.getServerAction();
@@ -177,56 +182,64 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   @override
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context) {
-    return (getExtras()).viewCall(
-        context: context) as Future<ViewAbstract?>;
+    return (getExtras()).viewCall(context: context) as Future<ViewAbstract?>;
   }
 
   SliverOverlapAbsorber getSilverAppBar(
-      BuildContext context, bool innerBoxIsScrolled) {
+    BuildContext context,
+    bool innerBoxIsScrolled,
+  ) {
     return SliverOverlapAbsorber(
-        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-        sliver: SliverAppBar(
-            floating: true,
-            stretch: true,
-            stretchTriggerOffset: 150,
-            automaticallyImplyLeading: true,
-            pinned: false,
-            snap: false,
-            expandedHeight: MediaQuery.of(context).size.height * .25,
-            actions: [
-              ActionsOnHeaderWidget(
-                viewAbstract: getExtras(),
-                serverActions: widget.getServerAction(),
-              ),
-              ActionsOnHeaderPopupWidget(
-                viewAbstract: getExtras(),
-                serverActions: widget.getServerAction(),
-              ),
-            ],
-            elevation: 4,
-            // title: widget.object.getMainHeaderText(context),
-            // centerTitle: true,
-            forceElevated: innerBoxIsScrolled,
-            flexibleSpace: getSilverAppBarBackground(context),
-            bottom: null));
+      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+      sliver: SliverAppBar(
+        floating: true,
+        stretch: true,
+        stretchTriggerOffset: 150,
+        automaticallyImplyLeading: true,
+        pinned: false,
+        snap: false,
+        expandedHeight: MediaQuery.of(context).size.height * .25,
+        actions: [
+          ActionsOnHeaderWidget(
+            viewAbstract: getExtras(),
+            serverActions: widget.getServerAction(),
+          ),
+          ActionsOnHeaderPopupWidget(
+            viewAbstract: getExtras(),
+            serverActions: widget.getServerAction(),
+          ),
+        ],
+        elevation: 4,
+        // title: widget.object.getMainHeaderText(context),
+        // centerTitle: true,
+        forceElevated: innerBoxIsScrolled,
+        flexibleSpace: getSilverAppBarBackground(context),
+        bottom: null,
+      ),
+    );
   }
 
   FlexibleSpaceBar getSilverAppBarBackground(BuildContext context) {
     return FlexibleSpaceBar(
-        stretchModes: const [
-          StretchMode.blurBackground,
-          StretchMode.zoomBackground,
-          StretchMode.fadeTitle
-        ],
-        centerTitle: true,
-        titlePadding: const EdgeInsets.only(bottom: 62),
-        title: Text(
-          widget.viewAbstract.getBaseTitle(context,
-              descriptionIsId: true, serverAction: widget.getServerAction()),
+      stretchModes: const [
+        StretchMode.blurBackground,
+        StretchMode.zoomBackground,
+        StretchMode.fadeTitle,
+      ],
+      centerTitle: true,
+      titlePadding: const EdgeInsets.only(bottom: 62),
+      title: Text(
+        widget.viewAbstract.getBaseTitle(
+          context,
+          descriptionIsId: true,
+          serverAction: widget.getServerAction(),
         ),
-        background: widget.viewAbstract.getHeroTag(
-            context: context,
-            child: getSliverImageBackground(context) ?? getAppBarBackground()));
+      ),
+      background: widget.viewAbstract.getHeroTag(
+        context: context,
+        child: getSliverImageBackground(context) ?? getAppBarBackground(),
+      ),
+    );
   }
 
   Widget getAppBarBackground() {
@@ -238,17 +251,19 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         fit: StackFit.loose,
         children: [
           Container(
-              // width: 150,
-              // height: 100,
-              decoration: BoxDecoration(
-            image: imgUrl == null
-                ? null
-                : DecorationImage(
-                    image: FastCachedImageProvider(imgUrl),
-                    fit: BoxFit.contain),
-            color: imgUrl == null ? null : color?.darkVibrantColor?.color,
-            // borderRadius: const BorderRadius.all(Radius.circular(20))
-          )),
+            // width: 150,
+            // height: 100,
+            decoration: BoxDecoration(
+              image: imgUrl == null
+                  ? null
+                  : DecorationImage(
+                      image: FastCachedImageProvider(imgUrl),
+                      fit: BoxFit.contain,
+                    ),
+              color: imgUrl == null ? null : color?.darkVibrantColor?.color,
+              // borderRadius: const BorderRadius.all(Radius.circular(20))
+            ),
+          ),
           Container(
             // padding: const EdgeInsets.all(5.0),
             alignment: Alignment.bottomCenter,
@@ -261,7 +276,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                       colors: <Color>[
                         Colors.black.withAlpha(0),
                         Colors.black12,
-                        Colors.black87
+                        Colors.black87,
                       ],
                     ),
               color: imgUrl == null
@@ -274,7 +289,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             // height: 50,
             padding: const EdgeInsets.all(kDefaultPadding * .3),
             // width: double.infinity,
-          )
+          ),
         ],
       ),
     );
@@ -283,23 +298,23 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
   Widget getBodyDetermineLayout() {
     _tabs.clear();
     _tabs.addAll(
-        widget.viewAbstract.getTabs(context, action: widget.getServerAction()));
+      widget.viewAbstract.getTabs(context, action: widget.getServerAction()),
+    );
     _tabController = TabController(length: _tabs.length, vsync: this);
     // return TowPaneExt(startPane: startPane, endPane: endPane)
     return getNastedScrollView();
     if (SizeConfig.isDesktopOrWebPlatform(context)) {
       return ListView(
         children: [
-          BaseSharedHeaderViewDetailsActions(
-            viewAbstract: widget.viewAbstract,
-          ),
-          getBody(context)
+          BaseSharedHeaderViewDetailsActions(viewAbstract: widget.viewAbstract),
+          getBody(context),
         ],
       );
     } else {
       _tabs.clear();
-      _tabs.addAll(widget.viewAbstract
-          .getTabs(context, action: widget.getServerAction()));
+      _tabs.addAll(
+        widget.viewAbstract.getTabs(context, action: widget.getServerAction()),
+      );
       _tabController = TabController(length: _tabs.length, vsync: this);
       // return TowPaneExt(startPane: startPane, endPane: endPane)
       return getNastedScrollView();
@@ -308,46 +323,57 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   NestedScrollView getNastedScrollView() {
     return NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) =>
-            [getSilverAppBar(context, innerBoxIsScrolled), getTabbar(context)],
-        body: SafeArea(
-          child: TabBarView(
-              controller: _tabController,
-              children: _tabs
-                  .map((e) => Builder(builder: (BuildContext context) {
-                        return CustomScrollView(
-                            slivers: getTabWidget(context, e));
-                      }))
-                  .toList()),
-        ));
+      headerSliverBuilder: (context, innerBoxIsScrolled) => [
+        getSilverAppBar(context, innerBoxIsScrolled),
+        getTabbar(context),
+      ],
+      body: SafeArea(
+        child: TabBarView(
+          controller: _tabController,
+          children: _tabs
+              .map(
+                (e) => Builder(
+                  builder: (BuildContext context) {
+                    return CustomScrollView(slivers: getTabWidget(context, e));
+                  },
+                ),
+              )
+              .toList(),
+        ),
+      ),
+    );
   }
 
   SliverPadding getTabbar(BuildContext context) {
     return SliverPadding(
-      padding:
-          const EdgeInsets.only(top: kDefaultPadding, left: kDefaultPadding),
+      padding: const EdgeInsets.only(
+        top: kDefaultPadding,
+        left: kDefaultPadding,
+      ),
       sliver: SliverSafeArea(
         sliver: SliverPersistentHeader(
-            pinned: true,
-            floating: false,
-            delegate: SliverAppBarDelegatePreferedSize(
-                child: ColoredTabBar(
+          pinned: true,
+          floating: false,
+          delegate: SliverAppBarDelegatePreferedSize(
+            child: ColoredTabBar(
               useCard: true,
               cornersIfCard: 80.0,
               // color: Theme.of(context).colorScheme.surfaceVariant,
               child: TabBar(
                 // padding: EdgeInsets.all(kDefaultPadding),
-
                 tabs: _tabs,
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.circular(80.0),
-                  color:
-                      Theme.of(context).colorScheme.secondary.withOpacity(.2),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.secondary.withOpacity(.2),
                 ),
                 isScrollable: true,
                 controller: _tabController,
               ),
-            ))),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -368,15 +394,13 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
             title: Text(AppLocalizations.of(context)!.details),
           ),
         if (extras is ListableInterface)
-          ListStaticWidget<ViewAbstract>(
-              list: extras!.getListableInterface().getListableList(),
-              emptyWidget: const Text("null"),
-              listItembuilder: (item) => ListCardItemWeb(
-                    object: item,
-                  )),
-        const SliverToBoxAdapter(
-          child: SizedBox(height: 80),
-        )
+          SliverApiMixinStaticList(
+            list: extras!.getListableInterface().getListableList(),
+
+            hasCustomCardItemBuilder: (_, item) =>
+                ListCardItemWeb(object: item),
+          ),
+        const SliverToBoxAdapter(child: SizedBox(height: 80)),
       ];
     }
     bool hasSlivers = e.slivers != null;
@@ -388,44 +412,51 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         getPadding(
           context,
           SliverFillRemaining(
-              fillOverscroll: false, hasScrollBody: false, child: e.widget),
+            fillOverscroll: false,
+            hasScrollBody: false,
+            child: e.widget,
+          ),
         ),
-      ...?e.slivers?.map((e) => getPadding(context, e))
+      ...?e.slivers?.map((e) => getPadding(context, e)),
     ];
   }
 
-  SliverPadding getPadding(BuildContext context, Widget sliver,
-      {double? bottom}) {
+  SliverPadding getPadding(
+    BuildContext context,
+    Widget sliver, {
+    double? bottom,
+  }) {
     return SliverPadding(
-        padding: EdgeInsets.only(
-            top: kDefaultPadding / 2,
-            right: kDefaultPadding / 2,
-            bottom: bottom ?? 0,
-            left: kDefaultPadding / 2),
-        sliver: sliver);
+      padding: EdgeInsets.only(
+        top: kDefaultPadding / 2,
+        right: kDefaultPadding / 2,
+        bottom: bottom ?? 0,
+        left: kDefaultPadding / 2,
+      ),
+      sliver: sliver,
+    );
   }
 
   List<Widget> getBottomWidget() {
-    List<Widget>? bottomWidget = getExtras()
-        .getCustomBottomWidget(context, action: widget.getServerAction());
+    List<Widget>? bottomWidget = getExtras().getCustomBottomWidget(
+      context,
+      action: widget.getServerAction(),
+    );
     if (getExtras().isImagable()) {}
     if (bottomWidget == null) return [];
     return bottomWidget.map((e) {
       if (bottomWidget.indexOf(e) == bottomWidget.length) {
-        return getPadding(
-            context,
-            SliverToBoxAdapter(
-              child: e,
-            ),
-            bottom: 0);
+        return getPadding(context, SliverToBoxAdapter(child: e), bottom: 0);
       }
       return SliverToBoxAdapter(child: e);
     }).toList();
   }
 
   List<Widget> getTopWidget() {
-    List<Widget>? topWidget = getExtras()
-        .getCustomTopWidget(context, action: widget.getServerAction());
+    List<Widget>? topWidget = getExtras().getCustomTopWidget(
+      context,
+      action: widget.getServerAction(),
+    );
     if (topWidget == null) return [];
     return topWidget
         .map((e) => getPadding(context, SliverToBoxAdapter(child: e)))
@@ -468,9 +499,10 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   EmptyWidget getEmptyWidget(BuildContext context) {
     return EmptyWidget(
-        lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-        title: AppLocalizations.of(context)!.noItems,
-        subtitle: AppLocalizations.of(context)!.no_content);
+      lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+      title: AppLocalizations.of(context)!.noItems,
+      subtitle: AppLocalizations.of(context)!.no_content,
+    );
   }
 
   @override
@@ -489,43 +521,38 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         valueListenable: onEditListableItem,
         builder: (context, value, child) =>
             getListableInterface().getListableCustomHeader(context) ??
-            HeaderListableDraggable(
-              listableInterface: getListableInterface(),
-            ),
+            HeaderListableDraggable(listableInterface: getListableInterface()),
       ),
       slivers: [
         ValueListenableBuilder(
-            valueListenable: onListableSelectedItem,
-            builder: (context, value, child) {
-              if (getListableInterface().getListableList().isEmpty) {
-                return SliverFillRemaining(
-                  child: getEmptyWidget(context),
-                );
-              }
-              if (getListableInterface().isListableIsImagable()) {
-                return ResponsiveSliverGridList(
-                    horizontalGridSpacing:
-                        4, // Horizontal space between grid items
-                    verticalGridSpacing: 4, // Vertical space between grid items
-                    horizontalGridMargin: 4, // Horizontal space around the grid
-                    verticalGridMargin: 4, // Vertical space around the grid
-                    minItemsPerRow:
-                        2, // The minimum items to show in a single row. Takes precedence over minItemWidth
-                    maxItemsPerRow:
-                        4, // The maximum items to show in a single row. Can be useful on large screens
-                    sliverChildBuilderDelegateOptions:
-                        SliverChildBuilderDelegateOptions(),
-                    minItemWidth: 50,
-                    children: [
-                      ...getListableInterface().getListableList().map((i) {
-                        return GridTile(
-                            child: Card.outlined(
-                                child: InkWell(
+          valueListenable: onListableSelectedItem,
+          builder: (context, value, child) {
+            if (getListableInterface().getListableList().isEmpty) {
+              return SliverFillRemaining(child: getEmptyWidget(context));
+            }
+            if (getListableInterface().isListableIsImagable()) {
+              return ResponsiveSliverGridList(
+                horizontalGridSpacing: 4, // Horizontal space between grid items
+                verticalGridSpacing: 4, // Vertical space between grid items
+                horizontalGridMargin: 4, // Horizontal space around the grid
+                verticalGridMargin: 4, // Vertical space around the grid
+                minItemsPerRow:
+                    2, // The minimum items to show in a single row. Takes precedence over minItemWidth
+                maxItemsPerRow:
+                    4, // The maximum items to show in a single row. Can be useful on large screens
+                sliverChildBuilderDelegateOptions:
+                    SliverChildBuilderDelegateOptions(),
+                minItemWidth: 50,
+                children: [
+                  ...getListableInterface().getListableList().map((i) {
+                    return GridTile(
+                      child: Card.outlined(
+                        child: InkWell(
                           onTap: () async {
                             final imageUrl = i.getImageUrlAddHost(context);
                             final url = Uri.parse(imageUrl ?? "");
-                            final response =
-                                await HttpWithMiddleware.build().get(url);
+                            final response = await HttpWithMiddleware.build()
+                                .get(url);
                             final contentType = response.headers['image/jpg'];
                             final image = XFile.fromData(
                               response.bodyBytes,
@@ -539,18 +566,24 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                             }
                           },
                           child: Expanded(
-                              child: FastCachedImage(
-                                  url: i.getImageUrlAddHost(context) ?? "")),
-                        )));
-                      })
-                    ]);
-              }
-              return SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
+                            child: FastCachedImage(
+                              url: i.getImageUrlAddHost(context) ?? "",
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              );
+            }
+            return SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
                 debugPrint(
-                    "getListableInterface SliverList index => $index is added");
-                ViewAbstract item =
-                    getListableInterface().getListableList()[index];
+                  "getListableInterface SliverList index => $index is added",
+                );
+                ViewAbstract item = getListableInterface()
+                    .getListableList()[index];
                 item.parent = getExtras();
                 return ListCardItemEditable<ViewAbstract>(
                   index: index,
@@ -558,7 +591,8 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                   useDialog: true,
                   onDelete: (object) {
                     debugPrint(
-                        "getListableInterface index => $index is removed");
+                      "getListableInterface index => $index is removed",
+                    );
                     (getListableInterface()).onListableDelete(object);
                     onEditListableItem.value = object;
                   },
@@ -567,8 +601,10 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                     onEditListableItem.value = object;
                   },
                 );
-              }, childCount: getListableInterface().getListableList().length));
-            }),
+              }, childCount: getListableInterface().getListableList().length),
+            );
+          },
+        ),
       ],
       AppLocalizations.of(context)!.adsImages,
     );
@@ -582,8 +618,10 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       isImagable = extras!.isImagable();
       debugPrint("list is count=>${list.length}");
     }
-    List<TabControllerHelper> tabs =
-        getExtras().getTabs(context, action: getServerActions());
+    List<TabControllerHelper> tabs = getExtras().getTabs(
+      context,
+      action: getServerActions(),
+    );
     if (getBodyIsSliver()) {
       tabs[0].slivers = [
         ...getTopWidget(),
@@ -591,29 +629,24 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         ...getBottomWidget(),
         if (list != null)
           const SliverToBoxAdapter(
-            child: ListTile(
-              leading: Icon(Icons.list),
-              title: Text("Images"),
-            ),
+            child: ListTile(leading: Icon(Icons.list), title: Text("Images")),
           ),
         if (list != null)
           if (isImagable)
             getSliverImagable(list)
           else
             SliverList.builder(
-                itemCount: list.length,
-                itemBuilder: (c, i) => ListCardItemWeb(
-                      object: list[i] as ViewAbstract,
-                    )),
+              itemCount: list.length,
+              itemBuilder: (c, i) =>
+                  ListCardItemWeb(object: list[i] as ViewAbstract),
+            ),
         // ListStaticWidget<ViewAbstract>(
         //     list: extras!.getListableInterface().getListableList(),
         //     emptyWidget: const Text("null"),
         //     listItembuilder: (item) => ListCardItemWeb(
         //           object: item,
         //         )),
-        const SliverToBoxAdapter(
-          child: SizedBox(height: 80),
-        )
+        const SliverToBoxAdapter(child: SizedBox(height: 80)),
       ];
     } else {
       tabs[0].widget = getBody(context);
@@ -622,142 +655,156 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       tabs.insert(1, getListableTab());
     }
     return DraggableHome(
-        scrollKey: getExtras().getScrollKey(getServerActions()),
-        // backgroundColor: canShowTabBarAsNormal() ? Colors.transparent : null,
-        showNormalToolbar: getTabBarIfDesktop(),
-        showLeadingAsHamborg: false,
-        key: draggableHomeState,
-        valueNotifierExpandType: expandType,
+      scrollKey: getExtras().getScrollKey(getServerActions()),
+      // backgroundColor: canShowTabBarAsNormal() ? Colors.transparent : null,
+      showNormalToolbar: getTabBarIfDesktop(),
+      showLeadingAsHamborg: false,
+      key: draggableHomeState,
+      valueNotifierExpandType: expandType,
 
-        // bottomNavigationBarHeight: 80,
-        bottomNavigationBar: isCartableInterface()
-            ? BottomAppBar(
-                height: 80,
-                // color: Theme.of(context).colorScheme.surface,
-                // elevation: 2,
-                // shape: const AutomaticNotchedShape(RoundedRectangleBorder(
-                //   borderRadius: BorderRadius.only(
-                //       topLeft: Radius.circular(25),
-                //       bottomLeft: Radius.circular(25),
-                //       bottomRight: Radius.circular(25),
-                //       topRight: Radius.circular(25)),
-                // )),
-                child: BottomWidgetOnViewIfCartable(
-                    viewAbstract: getExtras() as CartableProductItemInterface))
-            : null,
-        bottomNavigationBarHeight: 80,
-        // headerBottomBar: Text("sdd"),
-        expandedBody:
-            isListableInterface() ? getListableInterfaceQrCode() : null,
-        headerExpandedHeight: .3,
-        stretchMaxHeight: .31,
-        scrollController: _scrollController,
-        fullyStretchable: isListableInterface(),
-        headerWidget: widget.viewAbstract.getHeroTag(
-            context: context,
-            child: getSliverImageBackground(context) ?? getAppBarBackground()),
-        slivers: const [],
-        tabs: tabs,
-        alwaysShowLeadingAndAction: false,
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        floatingActionButton: BaseFloatingActionButtons(
-          // key: widget.key,
-          viewAbstract: widget.viewAbstract,
-          serverActions: widget.getServerAction(),
-          addOnList: getFloatingActionWidgetAddOns(context),
-        ));
+      // bottomNavigationBarHeight: 80,
+      bottomNavigationBar: isCartableInterface()
+          ? BottomAppBar(
+              height: 80,
+              // color: Theme.of(context).colorScheme.surface,
+              // elevation: 2,
+              // shape: const AutomaticNotchedShape(RoundedRectangleBorder(
+              //   borderRadius: BorderRadius.only(
+              //       topLeft: Radius.circular(25),
+              //       bottomLeft: Radius.circular(25),
+              //       bottomRight: Radius.circular(25),
+              //       topRight: Radius.circular(25)),
+              // )),
+              child: BottomWidgetOnViewIfCartable(
+                viewAbstract: getExtras() as CartableProductItemInterface,
+              ),
+            )
+          : null,
+      bottomNavigationBarHeight: 80,
+      // headerBottomBar: Text("sdd"),
+      expandedBody: isListableInterface() ? getListableInterfaceQrCode() : null,
+      headerExpandedHeight: .3,
+      stretchMaxHeight: .31,
+      scrollController: _scrollController,
+      fullyStretchable: isListableInterface(),
+      headerWidget: widget.viewAbstract.getHeroTag(
+        context: context,
+        child: getSliverImageBackground(context) ?? getAppBarBackground(),
+      ),
+      slivers: const [],
+      tabs: tabs,
+      alwaysShowLeadingAndAction: false,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      floatingActionButton: BaseFloatingActionButtons(
+        // key: widget.key,
+        viewAbstract: widget.viewAbstract,
+        serverActions: widget.getServerAction(),
+        addOnList: getFloatingActionWidgetAddOns(context),
+      ),
+    );
   }
 
   Widget getSliverImagable(list) {
     return SliverToBoxAdapter(
-      child: LayoutBuilder(builder: (context, constraints) {
-        return SizedBox(
-          width: constraints.maxWidth,
-          height: MediaQuery.of(context).size.height * .5,
-          child: PhotoViewGallery.builder(
-            backgroundDecoration:
-                const BoxDecoration(color: Colors.transparent),
-            pageSnapping: true,
-            gaplessPlayback: true,
-            scrollPhysics: const BouncingScrollPhysics(),
-            builder: (BuildContext context, int index) {
-              GlobalKey buttonKey = GlobalKey();
-              return PhotoViewGalleryPageOptions(
-                key: buttonKey,
-                tightMode: false,
-                imageProvider: FastCachedImageProvider(
-                  list[index].getImageUrl(context),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SizedBox(
+            width: constraints.maxWidth,
+            height: MediaQuery.of(context).size.height * .5,
+            child: PhotoViewGallery.builder(
+              backgroundDecoration: const BoxDecoration(
+                color: Colors.transparent,
+              ),
+              pageSnapping: true,
+              gaplessPlayback: true,
+              scrollPhysics: const BouncingScrollPhysics(),
+              builder: (BuildContext context, int index) {
+                GlobalKey buttonKey = GlobalKey();
+                return PhotoViewGalleryPageOptions(
+                  key: buttonKey,
+                  tightMode: false,
+                  imageProvider: FastCachedImageProvider(
+                    list[index].getImageUrl(context),
+                  ),
+                  onTapDown: (context, details, controllerValue) {
+                    ViewAbstract v = list[index];
+                    v.onCardLongClicked(
+                      context,
+                      position: OffsetHelper(
+                        details.globalPosition,
+                        Size(constraints.maxWidth, constraints.maxHeight),
+                      ),
+                    );
+                  },
+                  initialScale: PhotoViewComputedScale.contained * 0.8,
+                  heroAttributes: PhotoViewHeroAttributes(tag: list[index].iD),
+                );
+              },
+              allowImplicitScrolling: false,
+              pageController: PageController(),
+              itemCount: list.length,
+              loadingBuilder: (context, event) => Center(
+                child: SizedBox(
+                  width: 20.0,
+                  height: 20.0,
+                  child: CircularProgressIndicator(
+                    value: event == null
+                        ? 0
+                        : event.cumulativeBytesLoaded /
+                              event.expectedTotalBytes.toNonNullable(),
+                  ),
                 ),
-                onTapDown: (context, details, controllerValue) {
-                  ViewAbstract v = list[index];
-                  v.onCardLongClicked(context,
-                      position: OffsetHelper(details.globalPosition,
-                          Size(constraints.maxWidth, constraints.maxHeight)));
+              ),
+              // backgroundDecoration: widget.backgroundDecoration,
+              // pageController: widget.pageController,
+              // onPageChanged: onPageChanged,
+            ),
+          );
+        },
+      ),
+    );
+    return ResponsiveSliverGridList(
+      horizontalGridSpacing: 50, // Horizontal space between grid items
+      verticalGridSpacing: 50, // Vertical space between grid items
+      horizontalGridMargin: 50, // Horizontal space around the grid
+      verticalGridMargin: 50, // Vertical space around the grid
+      minItemsPerRow:
+          2, // The minimum items to show in a single row. Takes precedence over minItemWidth
+      maxItemsPerRow:
+          4, // The maximum items to show in a single row. Can be useful on large screens
+      sliverChildBuilderDelegateOptions: SliverChildBuilderDelegateOptions(),
+      minItemWidth: 200,
+      children: [
+        ...list.map((i) {
+          return GridTile(
+            child: Card.outlined(
+              child: InkWell(
+                onTap: () async {
+                  final imageUrl = i.getImageUrl(context);
+                  final url = Uri.parse(imageUrl);
+                  final response = await HttpWithMiddleware.build().get(url);
+                  final contentType = response.headers['image/jpg'];
+                  final image = XFile.fromData(
+                    response.bodyBytes,
+                    mimeType: contentType,
+                  );
+                  try {
+                    await Share.shareXFiles([image]);
+                    //  await FlutterShare.share(title: "title");
+                  } catch (e) {
+                    debugPrint("$e");
+                  }
                 },
-                initialScale: PhotoViewComputedScale.contained * 0.8,
-                heroAttributes: PhotoViewHeroAttributes(tag: list[index].iD),
-              );
-            },
-            allowImplicitScrolling: false,
-            pageController: PageController(),
-            itemCount: list.length,
-            loadingBuilder: (context, event) => Center(
-              child: SizedBox(
-                width: 20.0,
-                height: 20.0,
-                child: CircularProgressIndicator(
-                  value: event == null
-                      ? 0
-                      : event.cumulativeBytesLoaded /
-                          event.expectedTotalBytes.toNonNullable(),
+                child: Expanded(
+                  child: FastCachedImage(url: i.getImageUrl(context)),
                 ),
               ),
             ),
-            // backgroundDecoration: widget.backgroundDecoration,
-            // pageController: widget.pageController,
-            // onPageChanged: onPageChanged,
-          ),
-        );
-      }),
+          );
+        }),
+      ],
     );
-    return ResponsiveSliverGridList(
-        horizontalGridSpacing: 50, // Horizontal space between grid items
-        verticalGridSpacing: 50, // Vertical space between grid items
-        horizontalGridMargin: 50, // Horizontal space around the grid
-        verticalGridMargin: 50, // Vertical space around the grid
-        minItemsPerRow:
-            2, // The minimum items to show in a single row. Takes precedence over minItemWidth
-        maxItemsPerRow:
-            4, // The maximum items to show in a single row. Can be useful on large screens
-        sliverChildBuilderDelegateOptions: SliverChildBuilderDelegateOptions(),
-        minItemWidth: 200,
-        children: [
-          ...list.map((i) {
-            return GridTile(
-                child: Card.outlined(
-                    child: InkWell(
-              onTap: () async {
-                final imageUrl = i.getImageUrl(context);
-                final url = Uri.parse(imageUrl);
-                final response = await HttpWithMiddleware.build().get(url);
-                final contentType = response.headers['image/jpg'];
-                final image = XFile.fromData(
-                  response.bodyBytes,
-                  mimeType: contentType,
-                );
-                try {
-                  await Share.shareXFiles([image]);
-                  //  await FlutterShare.share(title: "title");
-                } catch (e) {
-                  debugPrint("$e");
-                }
-              },
-              child:
-                  Expanded(child: FastCachedImage(url: i.getImageUrl(context))),
-            )));
-          })
-        ]);
   }
 
   Widget? getListableInterfaceQrCode() {
@@ -773,19 +820,23 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         Widget loadingWidget = ListTile(
           leading: const SkeletonAvatar(
             style: SkeletonAvatarStyle(
-                shape: BoxShape.circle, width: 50, height: 50),
+              shape: BoxShape.circle,
+              width: 50,
+              height: 50,
+            ),
           ),
           title: SkeletonParagraph(
             style: SkeletonParagraphStyle(
-                lines: 2,
-                spacing: 6,
-                lineStyle: SkeletonLineStyle(
-                  randomLength: true,
-                  height: 10,
-                  borderRadius: BorderRadius.circular(8),
-                  minLength: MediaQuery.of(context).size.width / 6,
-                  maxLength: MediaQuery.of(context).size.width / 3,
-                )),
+              lines: 2,
+              spacing: 6,
+              lineStyle: SkeletonLineStyle(
+                randomLength: true,
+                height: 10,
+                borderRadius: BorderRadius.circular(8),
+                minLength: MediaQuery.of(context).size.width / 6,
+                maxLength: MediaQuery.of(context).size.width / 3,
+              ),
+            ),
           ),
         );
 
@@ -797,8 +848,10 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
           //todo if response qrcode is null then add list tile with retry button
           draggableHomeState.currentState?.removeAnimatedListItem(0);
           ViewAbstract? selectedViewAbstract = codeState.viewAbstract;
-          getListableInterface()
-              .onListableListAddedByQrCode(context, selectedViewAbstract);
+          getListableInterface().onListableListAddedByQrCode(
+            context,
+            selectedViewAbstract,
+          );
           onListableSelectedItem.value = [];
           onEditListableItem.value = null;
         } else {
@@ -832,29 +885,32 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
 
   Future<void> getSelectedItemsDialog(BuildContext context) async {
     await showFullScreenDialogExt<ViewAbstract?>(
-        anchorPoint: const Offset(1000, 1000),
-        context: context,
-        builder: (p0) {
-          return SliverApiMaster(
-            showLeadingAsHamborg: false,
-            setParentForChild: getExtras(),
-            viewAbstract: getListableInterface().getListablePickObject(),
-            buildSearchWidget: true,
-            buildFabIfMobile: false,
-            buildSearchWidgetAsEditText: true,
-            buildFilterableView: false,
-            // initialSelectedList: getListableInterface()
-            //     .getListableInitialSelectedListPassedByPickedObject(
-            //         context), //todo this is a order details to get product from it
-            onSelectedListChange: (selectedList) {
-              getListableInterface()
-                  .onListableSelectedListAdded(context, selectedList);
-              onListableSelectedItem.value = selectedList;
-              onEditListableItem.value = null;
-            },
-            // onSelectedListChangeValueNotifier: {},
-          );
-        }).then((value) {
+      anchorPoint: const Offset(1000, 1000),
+      context: context,
+      builder: (p0) {
+        return SliverApiMaster(
+          showLeadingAsHamborg: false,
+          setParentForChild: getExtras(),
+          viewAbstract: getListableInterface().getListablePickObject(),
+          buildSearchWidget: true,
+          buildFabIfMobile: false,
+          buildSearchWidgetAsEditText: true,
+          buildFilterableView: false,
+          // initialSelectedList: getListableInterface()
+          //     .getListableInitialSelectedListPassedByPickedObject(
+          //         context), //todo this is a order details to get product from it
+          onSelectedListChange: (selectedList) {
+            getListableInterface().onListableSelectedListAdded(
+              context,
+              selectedList,
+            );
+            onListableSelectedItem.value = selectedList;
+            onEditListableItem.value = null;
+          },
+          // onSelectedListChangeValueNotifier: {},
+        );
+      },
+    ).then((value) {
       {
         // if (value != null) {
         //   widget.onUpdate(value as T);
@@ -878,8 +934,10 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Selector<ActionViewAbstractProvider,
-                List<ListToDetailsSecoundPaneHelper?>>(
+            Selector<
+              ActionViewAbstractProvider,
+              List<ListToDetailsSecoundPaneHelper?>
+            >(
               builder: (_, v, __) {
                 debugPrint("SelectorActionViewAbstractProvider ${v.length}");
                 if (v.isEmpty || v.length == 1) {
@@ -891,12 +949,14 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                 //   }
                 // }
                 int i = v.length - 1;
-                return BackButton(onPressed: () {
-                  context.read<ActionViewAbstractProvider>().pop();
-                  // context
-                  //     .read<ActionViewAbstractProvider>()
-                  //     .change(v[i]!.object!, v[i]!.serverActions!,removeLast: true);
-                });
+                return BackButton(
+                  onPressed: () {
+                    context.read<ActionViewAbstractProvider>().pop();
+                    // context
+                    //     .read<ActionViewAbstractProvider>()
+                    //     .change(v[i]!.object!, v[i]!.serverActions!,removeLast: true);
+                  },
+                );
               },
               selector: (p, p0) => p0.getStackedActions,
             ),
@@ -910,7 +970,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         ActionsOnHeaderPopupWidget(
           viewAbstract: getExtras(),
           serverActions: getServerActions(),
-        )
+        ),
       ],
     );
     return PreferredSize(

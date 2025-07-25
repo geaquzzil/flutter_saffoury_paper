@@ -36,8 +36,10 @@ import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -85,17 +87,14 @@ class CutRequest extends ViewAbstract<CutRequest>
   }
 
   Widget getPendingCutRequestWidget() {
-    return ListHorizontalApiAutoRestWidget(
+    return SliverApiMixinViewAbstractWidget(
       isSliver: true,
       //todo translate
-      titleString: "Pending",
+      header: HeaderDescription(title: "Pending", isSliver: true),
       // listItembuilder: (v) =>
       //     ListItemProductTypeCategory(productType: v as ProductType),
-      autoRest: AutoRest<CutRequest>(
-        obj: CutRequest().setRequestOption(
-          option: RequestOptions().addSearchByField("cut_status", "PENDING"),
-        ),
-        key: "CutRequest<Pending>",
+      toListObject: CutRequest().setRequestOption(
+        option: RequestOptions().addSearchByField("cut_status", "PENDING"),
       ),
     );
   }
@@ -122,15 +121,17 @@ class CutRequest extends ViewAbstract<CutRequest>
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
-        child: ListHorizontalCustomViewApiAutoRestWidget(
-          autoRest: ChangesRecords.init(getSelfNewInstance(), "cut_status"),
+        child: SliverApiMixinViewAbstractWidget(
+          isSliver: false,
+          toListObject: ChangesRecords.init(getSelfNewInstance(), "cut_status"),
         ),
       ),
       StaggeredGridTile.count(
         crossAxisCellCount: 2,
         mainAxisCellCount: mainAxisCellCount,
-        child: ListHorizontalCustomViewApiAutoRestWidget(
-          autoRest: ChartRecordAnalysis.init(CutRequest()),
+        child: SliverApiMixinViewAbstractWidget(
+          isSliver: false,
+          toListObject: ChartRecordAnalysis.init(CutRequest()),
         ),
       ),
     ];
@@ -208,7 +209,9 @@ class CutRequest extends ViewAbstract<CutRequest>
     required ServerActions action,
     RequestOptions? generatedOptionFromListCall,
   }) {
-    return RequestOptions().addSortBy("date", SortByType.DESC).addRequestObjcets(true);
+    return RequestOptions()
+        .addSortBy("date", SortByType.DESC)
+        .addRequestObjcets(true);
   }
 
   @override
@@ -402,22 +405,21 @@ class CutRequest extends ViewAbstract<CutRequest>
     ServerActions? action,
     ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
   }) {
-    return null;
     if (action == ServerActions.view) {
       return [
-        ListHorizontalApiAutoRestWidget(
+        SliverApiMixinViewAbstractWidget(
           // customHeight: 250,
-          titleString: (AppLocalizations.of(
-            context,
-          )!.moreFromFormat(customers?.name ?? "")),
-          autoRest: AutoRest<CutRequest>(
-            obj: CutRequest().setRequestOption(
-              option: RequestOptions().addSearchByField(
-                "CustomerID",
-                customers?.iD,
-              ),
+          header: HeaderDescription(
+            isSliver: true,
+            title: AppLocalizations.of(
+              context,
+            )!.moreFromFormat(customers?.name ?? ""),
+          ),
+          toListObject: CutRequest().setRequestOption(
+            option: RequestOptions().addSearchByField(
+              "CustomerID",
+              customers?.iD,
             ),
-            key: "CustomerByCutRequest$iD",
           ),
         ),
       ];

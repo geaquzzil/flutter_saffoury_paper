@@ -1847,32 +1847,32 @@ class Product extends ViewAbstract<Product>
             SizedBox(
               width: double.infinity,
               height: 250,
-              child: ListHorizontalApiAutoRestWidget(
-                titleString: "This week",
-                listItembuilder: (v) => PosCardSquareItem(object: v),
-                autoRest: AutoRest<Product>(
-                  obj: Product().setRequestOption(
-                    option: _getOnlyInventory().addDate(
-                      DateObject.initThisMonth(),
-                    ),
-                  ),
-                  key: "productsByType<dateEnum>thisWeek",
+              child: SliverApiMixinViewAbstractWidget(
+                header: HeaderDescription(
+                  title: AppLocalizations.of(context)!.thisWeek,
                 ),
+                toListObject: Product().setRequestOption(
+                  option: _getOnlyInventory().addDate(
+                    DateObject.initThisMonth(),
+                  ),
+                ),
+                hasCustomCardItemBuilder: (_, v) =>
+                    PosCardSquareItem(object: v),
+                isSliver: false,
               ),
             ),
             SizedBox(
               width: double.infinity,
               height: 250,
-              child: ListHorizontalApiAutoRestWidget(
-                titleString: "Today",
-                // listItembuilder: (v) => SizedBox(
-                //     width: 100, height: 100, child: POSListCardItem(object: v)),
-                autoRest: AutoRest<Product>(
-                  obj: Product().setRequestOption(
-                    option: _getOnlyInventory().addDate(DateObject.today()),
-                  ),
-                  key: "productsByType<dateEnum>thisDay",
+              child: SliverApiMixinViewAbstractWidget(
+                header: HeaderDescription(
+                  title: AppLocalizations.of(context)!.today,
                 ),
+                toListObject: Product().setRequestOption(
+                  option: _getOnlyInventory().addDate(DateObject.today()),
+                ),
+
+                isSliver: false,
               ),
             ),
           ],

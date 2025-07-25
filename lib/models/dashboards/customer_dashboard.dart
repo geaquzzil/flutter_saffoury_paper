@@ -45,6 +45,8 @@ import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_custom_view.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dart';
 import 'package:flutter_view_controller/screens/web/components/header_text.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -253,7 +255,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
             StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: 1,
-              child: ListHorizontalCustomViewCustomApiAutoRestWidget(
+              child: Sliver(
                 onResponse: (g) {
                   List<GrowthRate> growthList = List.castFrom(g);
                   return ChartCardItemCustom(
@@ -284,31 +286,32 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
               ),
             ),
           ),
-          getWidget(
-            StaggeredGridTile.count(
-              crossAxisCellCount: 1,
-              mainAxisCellCount: 1,
-              child: ListHorizontalCustomViewCustomApiAutoRestWidget(
-                onResponse: (g) {
-                  List<CustomerTerms> growthList = List.castFrom(g);
-                  return ChartCardItemCustom(
-                    icon: Icons.broken_image,
-                    title: AppLocalizations.of(context)!.termsAndConitions,
-                    description: AppLocalizations.of(
-                      context,
-                    )!.totalFormat(growthList.length),
-                  );
-                },
-                autoRest: AutoRestCustom<CustomerTerms>(
-                  responseType: ResponseType.LIST,
-                  customMap: {"iD": "${customers!.iD}"},
-                  action: "list_customers_terms",
-                  key: "list_customers_terms${customers!.iD}",
-                  responseObjcect: CustomerTerms(),
-                ),
-              ),
-            ),
-          ),
+          //tODO
+          // getWidget(
+          //   StaggeredGridTile.count(
+          //     crossAxisCellCount: 1,
+          //     mainAxisCellCount: 1,
+          //     child: SliverApiMixinViewAbstractWidget(
+          //       onResponse: (g) {
+          //         List<CustomerTerms> growthList = List.castFrom(g);
+          //         return ChartCardItemCustom(
+          //           icon: Icons.broken_image,
+          //           title: AppLocalizations.of(context)!.termsAndConitions,
+          //           description: AppLocalizations.of(
+          //             context,
+          //           )!.totalFormat(growthList.length),
+          //         );
+          //       },
+          //       autoRest: AutoRestCustom<CustomerTerms>(
+          //         responseType: ResponseType.LIST,
+          //         customMap: {"iD": "${customers!.iD}"},
+          //         action: "list_customers_terms",
+          //         key: "list_customers_terms${customers!.iD}",
+          //         responseObjcect: CustomerTerms(),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           getWidget(
             StaggeredGridTile.count(
               crossAxisCellCount: crossAxisCount,

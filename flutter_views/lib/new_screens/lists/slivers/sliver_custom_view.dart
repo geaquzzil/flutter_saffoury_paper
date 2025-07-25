@@ -4,9 +4,12 @@ import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_mas
 
 class SliverApiMixinCustomWidget extends SliverApiMixinWithStaticStateful {
   CustomViewHorizontalListResponse object;
+ 
   SliverApiMixinCustomWidget({
     super.key,
     required this.object,
+    super.onResponseAddCustomWidget,
+   
     super.scrollController,
   }) : super(toListObject: object);
 
@@ -24,10 +27,8 @@ class _SliverApiMixinAutoRestState extends State<SliverApiMixinCustomWidget>
 
   @override
   Widget? onLoadingHasCustomWidget() => const SliverFillRemaining(
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+    child: Center(child: CircularProgressIndicator()),
+  );
 
   @override
   Widget? onResponseHasCustomWidget() {

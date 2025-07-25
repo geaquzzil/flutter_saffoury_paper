@@ -8,6 +8,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
@@ -22,38 +23,37 @@ class WebProductView extends BaseWebPageSliversApi {
   final bool? buildSmallView;
   final bool usePaddingOnBottomWidgets;
   ValueNotifier<ViewAbstract?>? onHorizontalItemClick;
-  WebProductView(
-      {super.key,
-      super.extras,
-      required super.iD,
-      this.buildSmallView,
-      required super.tableName,
-      super.buildFooter,
-      super.buildHeader,
-      this.usePaddingOnBottomWidgets = false,
-      super.usePagePadding,
-      super.pinToolbar,
-      super.useSmallFloatingBar,
-      this.onHorizontalItemClick,
-      super.customSliverHeader});
+  WebProductView({
+    super.key,
+    super.extras,
+    required super.iD,
+    this.buildSmallView,
+    required super.tableName,
+    super.buildFooter,
+    super.buildHeader,
+    this.usePaddingOnBottomWidgets = false,
+    super.usePagePadding,
+    super.pinToolbar,
+    super.useSmallFloatingBar,
+    this.onHorizontalItemClick,
+    super.customSliverHeader,
+  });
 
   @override
   Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints) {
     if (kIsWeb) {
       return null;
     } else {
-      return const ListTile(
-        leading: BackButton(),
-        title: Text("S"),
-      );
+      return const ListTile(leading: BackButton(), title: Text("S"));
     }
   }
 
   @override
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context) {
     if (getExtras() == null) {
-      ViewAbstract newViewAbstract =
-          context.read<AuthProvider<AuthUser>>().getNewInstance(tableName)!;
+      ViewAbstract newViewAbstract = context
+          .read<AuthProvider<AuthUser>>()
+          .getNewInstance(tableName)!;
       return newViewAbstract.viewCall(customID: iD, context: context)
           as Future<ViewAbstract?>;
     } else {
@@ -64,15 +64,16 @@ class WebProductView extends BaseWebPageSliversApi {
 
   @override
   List<Widget> getContentWidget(
-      BuildContext context, BoxConstraints constraints) {
+    BuildContext context,
+    BoxConstraints constraints,
+  ) {
     return [
       if (buildSmallView ?? false)
         getSliverPadding(
-            context,
-            constraints,
-            SliverToBoxAdapter(
-              child: getDetailsView(context),
-            ))
+          context,
+          constraints,
+          SliverToBoxAdapter(child: getDetailsView(context)),
+        )
       else
         SliverToBoxAdapter(
           child: ScreenHelper(
@@ -82,41 +83,39 @@ class WebProductView extends BaseWebPageSliversApi {
           ),
         ),
       ...getBottomWidget(context, constraints),
-      const SliverToBoxAdapter(
-        child: SizedBox(height: 80),
-      )
+      const SliverToBoxAdapter(child: SizedBox(height: 80)),
     ];
   }
 
   List<Widget> getTopWidget(BuildContext context) {
-    List<Widget>? topWidget = getExtras()?.getCustomTopWidget(context,
-        action: getServerActions(),
-        onHorizontalListItemClicked: onHorizontalItemClick);
+    List<Widget>? topWidget = getExtras()?.getCustomTopWidget(
+      context,
+      action: getServerActions(),
+      onHorizontalListItemClicked: onHorizontalItemClick,
+    );
     if (topWidget == null) return [];
     return topWidget;
   }
 
   List<Widget> getBottomWidget(
-      BuildContext context, BoxConstraints constraint) {
-    List<Widget>? bottomWidget = getExtras()?.getCustomBottomWidget(context,
-        action: getServerActions(),
-        onHorizontalListItemClicked: onHorizontalItemClick);
+    BuildContext context,
+    BoxConstraints constraint,
+  ) {
+    List<Widget>? bottomWidget = getExtras()?.getCustomBottomWidget(
+      context,
+      action: getServerActions(),
+      onHorizontalListItemClicked: onHorizontalItemClick,
+    );
     if (bottomWidget == null) return [];
     return bottomWidget.map((e) {
       if (buildSmallView ?? false) {
         return usePaddingOnBottomWidgets
-            ? getPadding(
-                context,
-                SliverToBoxAdapter(
-                  child: e,
-                ),
-                bottom: 20)
+            ? getPadding(context, SliverToBoxAdapter(child: e), bottom: 20)
             : getSliverPadding(
                 context,
                 constraint,
-                SliverToBoxAdapter(
-                  child: e,
-                ));
+                SliverToBoxAdapter(child: e),
+              );
       } else {
         return usePaddingOnBottomWidgets
             ? getPadding(
@@ -124,13 +123,13 @@ class WebProductView extends BaseWebPageSliversApi {
                 SliverToBoxAdapter(
                   child: ResponsiveWebBuilder(builder: (context, width) => e),
                 ),
-                bottom: 20)
+                bottom: 20,
+              )
             : getSliverPadding(
                 context,
                 constraint,
-                SliverToBoxAdapter(
-                  child: e,
-                ));
+                SliverToBoxAdapter(child: e),
+              );
       }
     }).toList();
   }
@@ -141,32 +140,38 @@ class WebProductView extends BaseWebPageSliversApi {
   }
 
   Widget _buildUi(
-      BuildContext context, double width, BoxConstraints constraints) {
+    BuildContext context,
+    double width,
+    BoxConstraints constraints,
+  ) {
     debugPrint("_buildUi width $width constraints ${constraints.maxWidth}");
     return Center(
-        child: MaxWidthBox(
-      maxWidth: constraints.maxWidth,
+      child: MaxWidthBox(
+        maxWidth: constraints.maxWidth,
 
-      // minWidth: width,
-      // defaultScale: false,
-      child: Flex(
-        direction: constraints.maxWidth > 720 ? Axis.horizontal : Axis.vertical,
-        children: [
-          // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
-          Expanded(
+        // minWidth: width,
+        // defaultScale: false,
+        child: Flex(
+          direction: constraints.maxWidth > 720
+              ? Axis.horizontal
+              : Axis.vertical,
+          children: [
+            // Disable expanded on smaller screen to avoid Render errors by setting flex to 0
+            Expanded(
               flex: constraints.maxWidth > 720.0 ? 1 : 0,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(kBorderRadius),
-                child: WebProductImages(
-                  item: extras!,
-                ),
-              )),
-          Expanded(
+                child: WebProductImages(item: extras!),
+              ),
+            ),
+            Expanded(
               flex: constraints.maxWidth > 720.0 ? 1 : 0,
-              child: getDetailsView(context)),
-        ],
+              child: getDetailsView(context),
+            ),
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   Column getDetailsView(BuildContext context) {
@@ -176,29 +181,24 @@ class WebProductView extends BaseWebPageSliversApi {
       children: [
         if (buildSmallView == false)
           getWebText(title: extras!.getMainHeaderTextOnly(context)),
-        if (buildSmallView == false)
-          const SizedBox(
-            height: 20,
-          ),
+        if (buildSmallView == false) const SizedBox(height: 20),
         ...getTopWidget(context),
-        WebViewDetails(
-          viewAbstract: extras!,
-        ),
+        WebViewDetails(viewAbstract: extras!),
         if (extras is ListableInterface)
-          const ListTile(
-            leading: Icon(Icons.list),
-            title: Text("Details"),
+          const ListTile(leading: Icon(Icons.list), title: Text("Details")),
+        if (extras is ListableInterface)
+          SliverApiMixinStaticList(
+            isSliver: false,
+
+            list: extras!.getListableInterface().getListableList(),
+
+            hasCustomCardItemBuilder: (_, item) =>
+                ListCardItemWeb(object: item),
           ),
-        if (extras is ListableInterface)
-          ListStaticWidget<ViewAbstract>(
-              list: extras!.getListableInterface().getListableList(),
-              emptyWidget: const Text("null"),
-              listItembuilder: (item) => ListCardItemWeb(
-                    object: item,
-                  )),
         if (extras is CartableProductItemInterface)
           BottomWidgetOnViewIfCartable(
-              viewAbstract: extras as CartableProductItemInterface),
+            viewAbstract: extras as CartableProductItemInterface,
+          ),
 
         // if(extras is SharableInterface)
       ],

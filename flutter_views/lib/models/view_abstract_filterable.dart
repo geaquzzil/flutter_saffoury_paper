@@ -106,13 +106,7 @@ abstract class ViewAbstractFilterable<T> extends ViewAbstractLists<T> {
     return true;
   }
 
-  String getListableKeyWithoutCustomMap() {
-    return "${getTableNameApi()}listAPI${getRequestOptionFromParamOrAbstract(action: ServerActions.list)?.filterMap}";
-  }
-
-  String getListableKey({SliverMixinObjectType? type}) {
-    return "${getCustomAction()}-${getTableNameApi()}-$type-${getRequestOptionFromParamOrAbstract(action: ServerActions.list)?.getKey() ?? ""}";
-  }
+ 
 }
 
 // enum SortByType {

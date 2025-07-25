@@ -3,13 +3,16 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
-import 'package:flutter_view_controller/new_components/cards/elevated_card.dart';
+import 'package:flutter_view_controller/new_components/cards/cards.dart';
 
 class GoodsInventoryListCard extends StatelessWidget {
   Product product;
   Warehouse? selectedWarehouse;
-  GoodsInventoryListCard(
-      {super.key, required this.product, this.selectedWarehouse});
+  GoodsInventoryListCard({
+    super.key,
+    required this.product,
+    this.selectedWarehouse,
+  });
 
   String getWareHouseText(BuildContext context) {
     return selectedWarehouse == null
@@ -46,15 +49,9 @@ class GoodsInventoryListCard extends StatelessWidget {
 
   Widget? getTrailing(BuildContext context) {
     if (hasErrors(context)) {
-      return Icon(
-        Icons.close,
-        color: getCardColor(context),
-      );
+      return Icon(Icons.close, color: getCardColor(context));
     } else if (isValidate(context)) {
-      return Icon(
-        Icons.check,
-        color: getCardColor(context),
-      );
+      return Icon(Icons.check, color: getCardColor(context));
     }
     return null;
   }
@@ -63,17 +60,15 @@ class GoodsInventoryListCard extends StatelessWidget {
     return ListTile(
       title: Text(
         title,
-        style: Theme.of(context)
-            .textTheme
-            .bodyMedium!
-            .copyWith(color: Theme.of(context).colorScheme.primary),
+        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
       subtitle: Text(
         subtitle,
-        style: Theme.of(context)
-            .textTheme
-            .bodyLarge!
-            .copyWith(color: Theme.of(context).colorScheme.primary),
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }
@@ -81,9 +76,10 @@ class GoodsInventoryListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ()
-    return ElevatedCard(
+    return Cards(
+      type: CardType.normal,
       // color: getCardColor(context),
-      child: ExpansionTile(
+      child: (v) => ExpansionTile(
         collapsedBackgroundColor: Colors.transparent,
         backgroundColor: Theme.of(context).focusColor,
 
@@ -91,27 +87,35 @@ class GoodsInventoryListCard extends StatelessWidget {
         leading: product.getCardLeading(context),
         title: product.getMainHeaderText(context),
         trailing: getTrailing(context),
-        subtitle: Row(children: [
-          Expanded(
+        subtitle: Row(
+          children: [
+            Expanded(
               child: getText(
-                  context,
-                  AppLocalizations.of(context)!.currentQuantity,
-                  product.qrQuantity.toNonNullable().toCurrencyFormat(
-                      symbol: AppLocalizations.of(context)!.kg))),
-          Expanded(
+                context,
+                AppLocalizations.of(context)!.currentQuantity,
+                product.qrQuantity.toNonNullable().toCurrencyFormat(
+                  symbol: AppLocalizations.of(context)!.kg,
+                ),
+              ),
+            ),
+            Expanded(
               child: getText(
-                  context,
-                  getWareHouseText(context),
-                  product
-                      .getQuantity(warehouse: selectedWarehouse)
-                      .toCurrencyFormat(
-                          symbol: AppLocalizations.of(context)!.kg))),
-          Expanded(
+                context,
+                getWareHouseText(context),
+                product
+                    .getQuantity(warehouse: selectedWarehouse)
+                    .toCurrencyFormat(symbol: AppLocalizations.of(context)!.kg),
+              ),
+            ),
+            Expanded(
               child: getText(
-                  context,
-                  AppLocalizations.of(context)!.remaining_weight_label,
-                  getRemainigWeight(context))),
-        ]),
+                context,
+                AppLocalizations.of(context)!.remaining_weight_label,
+                getRemainigWeight(context),
+              ),
+            ),
+          ],
+        ),
         // trailing: Text(product
         //     .getQuantity(warehouse: selectedWarehouse)
         //     .toCurrencyFormat()),

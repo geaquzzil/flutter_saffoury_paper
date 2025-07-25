@@ -12,7 +12,7 @@ abstract class JsonHelper<T> {
 
   Map<String, dynamic> toJson();
 }
-
+@Deprecated("Use ViewAbstract")
 class AutoRest<T extends ViewAbstract> {
   T obj;
   @Deprecated("Should implement a function instead ")
@@ -23,26 +23,29 @@ class AutoRest<T extends ViewAbstract> {
 }
 
 class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
-  String action;
+  List<String>? action;
+  String tableName;
+
   T responseObjcect;
   ResponseType responseType;
-  Map<String, String>? customMap;
-  String key;
   AutoRestCustom({
-    this.customMap,
-    required this.action,
-    required this.key,
+    required this.tableName,
+     this.action,
     required this.responseObjcect,
     required this.responseType,
   });
+
+  @override
+  String? getTableNameApi() => tableName;
+
+   @override
+  List<String>? getCustomAction() {
+    return action;
+  }
   ResponseType getCustomViewResponseType() {
     return responseType;
   }
-
-  String getCustomViewKey() {
-    return key;
-  }
-
+  
   // @override
   // Future<T?> viewCall(
   //   int iD, {
@@ -98,10 +101,7 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
   //   }
   // }
 
-  @override
-  List<String>? getCustomAction() {
-    return [action];
-  }
+ 
 
   // @override
   // Map<String, String> get getCustomMap => customMap ?? super.getCustomMap;
@@ -163,8 +163,7 @@ class AutoRestCustom<T extends JsonHelper<T>> extends ViewAbstractApi<T> {
     return responseObjcect;
   }
 
-  @override
-  String? getTableNameApi() => action;
+  
 
   @override
   RequestOptions? getRequestOption({
@@ -188,9 +187,11 @@ abstract class CustomViewHorizontalListResponse<T extends ViewAbstract> {
   ///if return is List<Widget> then wrap with SliverList
   dynamic getCustomViewResponseWidget(
     BuildContext context, {
+
     required SliverApiWithStaticMixin state,
     List<dynamic>? items,
     required dynamic requestObjcet,
+    required bool isSliver,
   });
   // Widget? getCustomViewTitleWidget(
   //   BuildContext context,

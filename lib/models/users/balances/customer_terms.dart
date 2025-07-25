@@ -101,6 +101,7 @@ class CustomerTerms extends Customer
     required SliverApiWithStaticMixin state,
     List<dynamic>? items,
     required dynamic requestObjcet,
+    required bool isSliver,
   }) {
     // TODO: implement getCustomViewSingleResponseWidget
     throw UnimplementedError();

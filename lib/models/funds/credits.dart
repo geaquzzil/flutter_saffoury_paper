@@ -78,49 +78,49 @@ class Credits extends MoneyFunds<Credits> {
     return [
       TabControllerHelper(
         AppLocalizations.of(context)!.findSimilar,
-        widget: ListApiAutoRestWidget(
-          autoRest: AutoRest<Credits>(
-            obj: Credits().setRequestOption(
-              option: RequestOptions().addSearchByField(
-                "CustomerID",
-                customers?.iD,
-              ),
-            ),
-            key: "CustomerByCredit$iD",
+        widget: SliverApiMixinViewAbstractWidget(
+          toListObject: Credits().setRequestOption(
+            option: RequestOptions()
+                .addSearchByField("CustomerID", customers?.iD)
+                .addRequestObjcets(true),
           ),
+          isSliver: true,
         ),
       ),
       TabControllerHelper(
         AppLocalizations.of(context)!.size_analyzer,
         widget: StorageDetailsCustom(
-          chart: ListHorizontalCustomViewApiAutoRestWidget(
-            onResponseAddWidget: ((response) {
-              ChartRecordAnalysis i = response as ChartRecordAnalysis;
-              double total = i.getTotalListAnalysis();
-              return Column(
-                children: [
-                  // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
-                  //     titleString: "TEST1 ",
-                  //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
-                  StorageInfoCardCustom(
-                    title: AppLocalizations.of(context)!.total,
-                    description: total.toCurrencyFormat(),
-                    trailing: const Text("SYP"),
-                    svgSrc: Icons.monitor_weight,
-                  ),
-                  StorageInfoCardCustom(
-                    title: AppLocalizations.of(context)!.balance,
-                    description: customers?.balance?.toCurrencyFormat() ?? "0",
-                    trailing: const Text("trailing"),
-                    svgSrc: Icons.balance,
-                  ),
-                ],
-              );
+          chart: SliverApiMixinViewAbstractWidget(
+            onResponseAddCustomWidget: ((isSliver, _, _, response) {
+              return null;
+              // ChartRecordAnalysis i = response as ChartRecordAnalysis;
+              // double total = i.getTotalListAnalysis();
+              // return Column(
+              //   children: [
+              //     // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
+              //     //     titleString: "TEST1 ",
+              //     //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
+              //     StorageInfoCardCustom(
+              //       title: AppLocalizations.of(context)!.total,
+              //       description: total.toCurrencyFormat(),
+              //       trailing: const Text("SYP"),
+              //       svgSrc: Icons.monitor_weight,
+              //     ),
+              //     StorageInfoCardCustom(
+              //       title: AppLocalizations.of(context)!.balance,
+              //       description: customers?.balance?.toCurrencyFormat() ?? "0",
+              //       trailing: const Text("trailing"),
+              //       svgSrc: Icons.balance,
+              //     ),
+              //   ],
+              // );
             }),
-            autoRest: ChartRecordAnalysis.init(
+            toListObject: ChartRecordAnalysis.init(
               Credits(),
               enteryInteval: EnteryInteval.monthy,
-              customAction: {"CustomerID": customers?.iD},
+              customRequestOption: RequestOptions()
+                  .addGroupBy("CustomerID")
+                  .addSearchByField("CustomerID", customers?.iD),
             ),
           ),
         ),

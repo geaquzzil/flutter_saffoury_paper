@@ -3,7 +3,7 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:palette_generator/palette_generator.dart';
 
@@ -29,19 +29,23 @@ class ListCardItemHorizontal<T extends ViewAbstract> extends StatefulWidget {
 }
 
 class _ListCardItemHorizontalState<T extends ViewAbstract>
-    extends State<ListCardItemHorizontal<T>> with TickerProviderStateMixin {
+    extends State<ListCardItemHorizontal<T>>
+    with TickerProviderStateMixin {
   PaletteGenerator? color;
 
   final ColorTween _borderColorTween = ColorTween();
   late Animation<Color?> _borderColor;
   late AnimationController _controller;
-  static final Animatable<double> _easeOutTween =
-      CurveTween(curve: Curves.easeOut);
+  static final Animatable<double> _easeOutTween = CurveTween(
+    curve: Curves.easeOut,
+  );
   String? imgUrl;
   @override
   void initState() {
     _controller = AnimationController(
-        duration: const Duration(milliseconds: 750), vsync: this);
+      duration: const Duration(milliseconds: 750),
+      vsync: this,
+    );
 
     _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
     super.initState();
@@ -59,14 +63,12 @@ class _ListCardItemHorizontalState<T extends ViewAbstract>
           builder: (context, snapshot) {
             color = snapshot.data;
 
-            WidgetsBinding.instance.addPostFrameCallback(
-              (timeStamp) {
-                _borderColorTween
-                  ..begin = Theme.of(context).colorScheme.onPrimaryContainer
-                  ..end = color?.darkMutedColor?.color;
-                _controller.forward();
-              },
-            );
+            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+              _borderColorTween
+                ..begin = Theme.of(context).colorScheme.onPrimaryContainer
+                ..end = color?.darkMutedColor?.color;
+              _controller.forward();
+            });
             return openContainer(context);
           },
         );
@@ -83,10 +85,12 @@ class _ListCardItemHorizontalState<T extends ViewAbstract>
       children: [
         Expanded(
           child: widget.useOutlineCard
-              ? OutlinedCard(
-                  color: color,
-                  reduce: 18,
-                  child: getCardAsBackgroundBody(context))
+              ? Cards(
+                  type: CardType.outline,
+                  colorWithOverlay: color?.paletteColors.first.color,
+
+                  child: (_) => getCardAsBackgroundBody(context),
+                )
               : Card(child: getCardAsBackgroundBody(context)),
         ),
         widget.object.getHorizontalCardMainHeader(context),
@@ -102,58 +106,66 @@ class _ListCardItemHorizontalState<T extends ViewAbstract>
       fit: StackFit.loose,
       children: [
         Container(
-            // width: 150,
-            // height: 100,
-            decoration: BoxDecoration(
-                image: imgUrl == null
-                    ? null
-                    : DecorationImage(
-                        image: FastCachedImageProvider(imgUrl!),
-                        fit: BoxFit.contain),
-                color: imgUrl == null ? null : color?.darkVibrantColor?.color,
-                borderRadius: const BorderRadius.all(Radius.circular(18)))),
+          // width: 150,
+          // height: 100,
+          decoration: BoxDecoration(
+            image: imgUrl == null
+                ? null
+                : DecorationImage(
+                    image: FastCachedImageProvider(imgUrl!),
+                    fit: BoxFit.contain,
+                  ),
+            color: imgUrl == null ? null : color?.darkVibrantColor?.color,
+            borderRadius: const BorderRadius.all(Radius.circular(18)),
+          ),
+        ),
         Container(
           // padding: const EdgeInsets.all(5.0),
           alignment: Alignment.bottomCenter,
           decoration: BoxDecoration(
-              gradient: imgUrl == null
-                  ? null
-                  : LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: <Color>[
-                        Colors.black.withAlpha(0),
-                        Colors.black12,
-                        Colors.black87
-                      ],
-                    ),
-              color: imgUrl == null
-                  ? null
-                  : color?.darkVibrantColor?.titleTextColor,
-              borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(18),
-                  bottomRight: Radius.circular(18))),
+            gradient: imgUrl == null
+                ? null
+                : LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[
+                      Colors.black.withAlpha(0),
+                      Colors.black12,
+                      Colors.black87,
+                    ],
+                  ),
+            color: imgUrl == null
+                ? null
+                : color?.darkVibrantColor?.titleTextColor,
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(18),
+              bottomRight: Radius.circular(18),
+            ),
+          ),
           // height: 50,
           padding: const EdgeInsets.all(kDefaultPadding * .3),
-          // width: double.infinity,
 
-          child: widget.object.getHorizontalCardTitleSameLine(context,
-              isImageAsBackground: true,
-              color: color,
-              animatedColor: _borderColor),
-        )
+          // width: double.infinity,
+          child: widget.object.getHorizontalCardTitleSameLine(
+            context,
+            isImageAsBackground: true,
+            color: color,
+            animatedColor: _borderColor,
+          ),
+        ),
       ],
     );
   }
 
   Widget openContainer(BuildContext context) {
     return OpenContainer(
-        closedColor: Colors.transparent,
-        transitionDuration: const Duration(milliseconds: 500),
-        transitionType: ContainerTransitionType.fade,
-        closedBuilder: (context, action) => getCardAsBackground(context),
-        openBuilder: (context, action) =>
-            BaseViewNewPage(viewAbstract: widget.object));
+      closedColor: Colors.transparent,
+      transitionDuration: const Duration(milliseconds: 500),
+      transitionType: ContainerTransitionType.fade,
+      closedBuilder: (context, action) => getCardAsBackground(context),
+      openBuilder: (context, action) =>
+          BaseViewNewPage(viewAbstract: widget.object),
+    );
   }
 
   Stack getNormalCard(BuildContext context) {
@@ -161,17 +173,18 @@ class _ListCardItemHorizontalState<T extends ViewAbstract>
       alignment: Alignment.topCenter,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(
-            top: 60 / 2.0,
-            bottom: 60 / 2,
-          ),
+          padding: const EdgeInsets.only(top: 60 / 2.0, bottom: 60 / 2),
           child: widget.useOutlineCard
-              ? OutlinedCard(
-                  onPress: widget.onPress ??
+              ? Cards(
+                  type: CardType.outline,
+                  onPress:
+                      widget.onPress ??
                       () => widget.object.onCardClicked(context),
-                  child: getCardBody(context))
+                  child: (v) => getCardBody(context),
+                )
               : CardClicked(
-                  onPress: widget.onPress ??
+                  onPress:
+                      widget.onPress ??
                       () => widget.object.onCardClicked(context),
                   child: getCardBody(context),
                 ),
@@ -179,16 +192,18 @@ class _ListCardItemHorizontalState<T extends ViewAbstract>
         Container(
           width: 60,
           height: 60,
-          decoration:
-              const ShapeDecoration(shape: CircleBorder(), color: Colors.white),
+          decoration: const ShapeDecoration(
+            shape: CircleBorder(),
+            color: Colors.white,
+          ),
           child: Padding(
             padding: const EdgeInsets.all(1),
             child: DecoratedBox(
-              decoration: const ShapeDecoration(
-                shape: CircleBorder(),
+              decoration: const ShapeDecoration(shape: CircleBorder()),
+              child: widget.object.getCardLeading(
+                context,
+                addCustomHeroTag: "horizontal",
               ),
-              child: widget.object
-                  .getCardLeading(context, addCustomHeroTag: "horizontal"),
             ),
           ),
         ),
@@ -207,14 +222,10 @@ class _ListCardItemHorizontalState<T extends ViewAbstract>
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          const SizedBox(
-            height: 60 / 2,
-          ),
+          const SizedBox(height: 60 / 2),
 
           widget.object.getHorizontalCardTitleSameLine(context),
-          const SizedBox(
-            height: kDefaultPadding / 2,
-          ),
+          const SizedBox(height: kDefaultPadding / 2),
           // Spacer(),
           widget.object.getHorizontalCardMainHeader(context),
           // const Spacer(),

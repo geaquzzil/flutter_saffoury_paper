@@ -96,7 +96,7 @@ class UnusedRecords<T extends ViewAbstract> extends VObject<UnusedRecords>
     BuildContext context, {
     required SliverApiWithStaticMixin state,
     List<dynamic>? items,
-    required dynamic requestObjcet,
+    required dynamic requestObjcet,  required bool isSliver,
   }) {
     return SliverToBoxAdapter(
       child: CardBackgroundWithTitle(

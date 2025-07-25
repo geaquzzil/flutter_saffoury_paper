@@ -1,3 +1,5 @@
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/components/scroll_snap_list.dart';
@@ -39,7 +41,8 @@ enum SliverMixinObjectType {
 
 enum CardItemType { list, grid, staggered }
 
-abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
+abstract class SliverApiMixinWithStaticStateful<T extends ViewAbstract>
+    extends StatefulWidget {
   ///could be [AutoRest] or [ViewAbstract] or String of [tableName] or [List<ViewAbstract>] or [CustomViewHorizontalListResponse]
   Object toListObject;
   ViewAbstract? setParentForChildCardItem;
@@ -54,7 +57,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   bool enableSelection;
   bool isCardRequestApi;
   Widget Function(List response)? hasCustomWidgetOnResponseBuilder;
-  Widget Function(int idx, ViewAbstract item)? hasCustomCardItemBuilder;
+  Widget Function(int idx, T item)? hasCustomCardItemBuilder;
   Function(dynamic object)? onClickForCard;
   bool Function(dynamic object)? isSelectForCard;
   Widget? hasCustomSeperater;
@@ -69,7 +72,13 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
   RequestOptions? customRequestOption;
   RequestOptions? copyWithRequestOption;
   bool requiresFullFetsh;
-
+  final List<Widget>? Function(
+    bool isSliver,
+    dynamic requestObjcet,
+    dynamic fromFunctionCalled,
+    dynamic response,
+  )?
+  onResponseAddCustomWidget;
   SliverApiMixinWithStaticStateful({
     super.key,
     required this.toListObject,
@@ -87,6 +96,7 @@ abstract class SliverApiMixinWithStaticStateful extends StatefulWidget {
     this.onClickForCard,
     this.hideOnEmpty = false,
     this.requiresFullFetsh = false,
+    this.onResponseAddCustomWidget,
     this.isCardRequestApi = false,
     this.copyWithRequestOption,
     this.enableSelection = true,
@@ -388,8 +398,14 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
               state: this,
               items: getList(),
               requestObjcet: _toListObject,
+              isSliver: widget.isSliver,
             );
-
+        List<Widget>? addOn = widget.onResponseAddCustomWidget?.call(
+          widget.isSliver,
+          _toListObject,
+          (getList()[0] as CustomViewHorizontalListResponse),
+          getList(),
+        );
         if (w == null) {
           return getEmptyWidget();
         } else if (w is List) {
@@ -398,15 +414,22 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
                   children: [
                     if (widget.header != null) widget.header!,
                     ...w.cast(),
+                    if (addOn != null) ...addOn,
                   ],
                 )
-              : Column(children: w.cast());
+              : Column(children: [...w.cast(), if (addOn != null) ...addOn]);
         } else {
           return widget.isSliver
               ? MultiSliver(
-                  children: [if (widget.header != null) widget.header!, w],
+                  children: [
+                    if (widget.header != null) widget.header!,
+                    w,
+                    if (addOn != null) ...addOn,
+                  ],
                 )
-              : w;
+              : addOn == null
+              ? w
+              : Column(children: [...w.cast(), ...addOn]);
         }
       }
     }

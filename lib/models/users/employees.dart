@@ -25,6 +25,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../funds/credits.dart';
@@ -34,9 +35,7 @@ import '../funds/spendings.dart';
 
 part 'employees.g.dart';
 
-@JsonSerializable(
-  explicitToJson: true,
-)
+@JsonSerializable(explicitToJson: true)
 @reflector
 class Employee extends User<Employee> {
   // int? ParentID;
@@ -93,13 +92,12 @@ class Employee extends User<Employee> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      super.getMirrorFieldsMapNewInstance()
-        ..addAll({
-          "publish": 0,
-          "employee": Employee(),
-          "warehouse": Warehouse(),
-          "warehouse_employees": List<WarehouseEmployee>.empty()
-        });
+      super.getMirrorFieldsMapNewInstance()..addAll({
+        "publish": 0,
+        "employee": Employee(),
+        "warehouse": Warehouse(),
+        "warehouse_employees": List<WarehouseEmployee>.empty(),
+      });
 
   @override
   IconData getMainIconData() {
@@ -133,7 +131,10 @@ class Employee extends User<Employee> {
 
   @override
   void onMultiChipSaved(
-      BuildContext context, String field, List? selectedList) {
+    BuildContext context,
+    String field,
+    List? selectedList,
+  ) {
     debugPrint("onMultiChipSaved warehouse_employees $selectedList");
     warehouse_employees?.forEach((element) {
       element.delete = true;
@@ -144,9 +145,11 @@ class Employee extends User<Employee> {
       List<Warehouse> selectedWarehouse = selectedList!.cast<Warehouse>();
       warehouse_employees ??= [];
       for (var element in selectedWarehouse) {
-        warehouse_employees!.add(WarehouseEmployee()
-          ..employees = copyWithReduceSize() as Employee
-          ..warehouse = element);
+        warehouse_employees!.add(
+          WarehouseEmployee()
+            ..employees = copyWithReduceSize() as Employee
+            ..warehouse = element,
+        );
       }
       debugPrint("onMultiChipSaved warehouse_employees $warehouse_employees");
     }
@@ -167,65 +170,38 @@ class Employee extends User<Employee> {
   }
 
   @override
-  List<TabControllerHelper> getCustomTabList(BuildContext context,
-      {ServerActions? action}) {
+  List<TabControllerHelper> getCustomTabList(
+    BuildContext context, {
+    ServerActions? action,
+  }) {
     return [
       TabControllerHelper(
         AppLocalizations.of(context)!.sales_analysis,
-        slivers: [
-          SliverFillRemaining(
-            child: ListHorizontalCustomViewApiAutoRestWidget(
-                // onResponseAddWidget: ((response) {
-                //   CustomerByEmployeeAnanlysis i = response as ChartRecordAnalysis;
-                //   double total = i.getTotalListAnalysis();
-                //   return Column(
-                //     children: [
-                //       // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
-                //       //     titleString: "TEST1 ",
-                //       //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
-                //       StorageInfoCardCustom(
-                //           title: AppLocalizations.of(context)!.total,
-                //           description: total.toCurrencyFormat(),
-                //           trailing: "kg",
-                //           svgSrc: Icons.monitor_weight),
-                //       StorageInfoCardCustom(
-                //           title: AppLocalizations.of(context)!.balance,
-                //           description:
-                //               customers?.balance?.toCurrencyFormat() ?? "0",
-                //           trailing: "trailing",
-                //           svgSrc: Icons.balance),
-                //     ],
-                //   );
-                // }),
-
-                autoRest: CustomerByEmployeeAnanlysis.init(iD)),
-          )
-        ],
-        widget: ListHorizontalCustomViewApiAutoRestWidget(
-            // onResponseAddWidget: ((response) {
-            //   CustomerByEmployeeAnanlysis i = response as ChartRecordAnalysis;
-            //   double total = i.getTotalListAnalysis();
-            //   return Column(
-            //     children: [
-            //       // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
-            //       //     titleString: "TEST1 ",
-            //       //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
-            //       StorageInfoCardCustom(
-            //           title: AppLocalizations.of(context)!.total,
-            //           description: total.toCurrencyFormat(),
-            //           trailing: "kg",
-            //           svgSrc: Icons.monitor_weight),
-            //       StorageInfoCardCustom(
-            //           title: AppLocalizations.of(context)!.balance,
-            //           description:
-            //               customers?.balance?.toCurrencyFormat() ?? "0",
-            //           trailing: "trailing",
-            //           svgSrc: Icons.balance),
-            //     ],
-            //   );
-            // }),
-
-            autoRest: CustomerByEmployeeAnanlysis.init(iD)),
+        widget: SliverApiMixinViewAbstractWidget(
+          // onResponseAddWidget: ((response) {
+          //   CustomerByEmployeeAnanlysis i = response as ChartRecordAnalysis;
+          //   double total = i.getTotalListAnalysis();
+          //   return Column(
+          //     children: [
+          //       // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
+          //       //     titleString: "TEST1 ",
+          //       //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
+          //       StorageInfoCardCustom(
+          //           title: AppLocalizations.of(context)!.total,
+          //           description: total.toCurrencyFormat(),
+          //           trailing: "kg",
+          //           svgSrc: Icons.monitor_weight),
+          //       StorageInfoCardCustom(
+          //           title: AppLocalizations.of(context)!.balance,
+          //           description:
+          //               customers?.balance?.toCurrencyFormat() ?? "0",
+          //           trailing: "trailing",
+          //           svgSrc: Icons.balance),
+          //     ],
+          //   );
+          // }),
+          toListObject: CustomerByEmployeeAnanlysis.init(iD),
+        ),
       ),
 
       //  ChartItem(

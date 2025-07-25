@@ -16,6 +16,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:http/http.dart';
@@ -150,6 +151,14 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       }
     }
     return defaultHeaders;
+  }
+
+  String getListableKeyWithoutCustomMap() {
+    return "${getTableNameApi()}listAPI${getRequestOptionFromParamOrAbstract(action: ServerActions.list)?.filterMap}";
+  }
+
+  String getListableKey({SliverMixinObjectType? type}) {
+    return "${getCustomAction()}-${getTableNameApi()}-$type-${getRequestOptionFromParamOrAbstract(action: ServerActions.list)?.getKey() ?? ""}";
   }
 
   Future<Map<String, String>> getHeaders(BuildContext context) async {
@@ -315,7 +324,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     }
     return null;
   }
-
+  T getJsonEncodeResponse(){
+    
+  }
   Future<T?> viewCall({
     required BuildContext context,
     int? customID,

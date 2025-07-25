@@ -38,6 +38,8 @@ import 'package:flutter_view_controller/new_components/tables_widgets/view_table
 import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/test_var.dart';
@@ -244,20 +246,17 @@ class Dashboard extends UserLists<Dashboard>
               height:
                   MediaQuery.of(context).size.height -
                   MediaQuery.of(context).size.height * .2,
-              child: ListHorizontalApiAutoRestWidget(
+              child: SliverApiMixinViewAbstractWidget(
                 isSliver: true,
 
                 // titleString: "Today",
                 // listItembuilder: (v) => SizedBox(
                 //     width: 100, height: 100, child: POSListCardItem(object: v)),
-                autoRest: AutoRest<Order>(
-                  obj: Order().setRequestOption(
-                    option: RequestOptions().addSearchByField(
-                      "status",
-                      "PENDING",
-                    ),
+                toListObject: Order().setRequestOption(
+                  option: RequestOptions().addSearchByField(
+                    "status",
+                    "PENDING",
                   ),
-                  key: "Order<status>PENDING",
                 ),
               ),
             ),
@@ -273,10 +272,10 @@ class Dashboard extends UserLists<Dashboard>
             StaggeredGridTile.count(
               crossAxisCellCount: crossAxisCount,
               mainAxisCellCount: 1.2,
-              child: ListHorizontalApiAutoRestWidget(
+              child: SliverApiMixinStaticList<CutRequest>(
                 isSliver: true,
                 // titleString: "Pending",
-                list: pending_cut_requests,
+                list: pending_cut_requests?.cast() ?? [],
                 // listItembuilder: (v) =>
                 //     ListItemProductTypeCategory(productType: v as ProductType),
                 // autoRest: AutoRest<CutRequest>(
@@ -322,9 +321,9 @@ class Dashboard extends UserLists<Dashboard>
             StaggeredGridTile.count(
               crossAxisCellCount: crossAxisCount,
               mainAxisCellCount: 1.2,
-              child: ListHorizontalApiAutoRestWidget(
+              child: SliverApiMixinStaticList<ReservationInvoice>(
                 isSliver: true,
-                list: pending_reservation_invoice,
+                list: pending_reservation_invoice?.cast() ?? [],
               ),
             ),
           ),
@@ -341,10 +340,10 @@ class Dashboard extends UserLists<Dashboard>
             StaggeredGridTile.count(
               crossAxisCellCount: crossAxisCount,
               mainAxisCellCount: 1.2,
-              child: ListHorizontalApiAutoRestWidget(
+              child: SliverApiMixinStaticList<ReservationInvoice>(
                 isSliver: true,
                 // titleString: "Pending",
-                list: overdue_reservation_invoice,
+                list: overdue_reservation_invoice?.cast() ?? [],
                 // listItembuilder: (v) =>
                 //     ListItemProductTypeCategory(productType: v as ProductType),
                 // autoRest: AutoRest<CutRequest>(

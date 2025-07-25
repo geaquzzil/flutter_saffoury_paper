@@ -112,35 +112,41 @@ class Order extends InvoiceMaster<Order>
     return SliverFillRemaining(
       child: ChartDateChooser<EnteryInteval>(
         obj: EnteryInteval.monthy,
-        onSelected: (obj) => ListHorizontalCustomViewApiAutoRestWidget(
-          onResponseAddWidget: ((response) {
-            ChartRecordAnalysis i = response as ChartRecordAnalysis;
-            double total = i.getTotalListAnalysis();
-            return Column(
-              children: [
-                // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
-                //     titleString: "TEST1 ",
-                //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
-                StorageInfoCardCustom(
-                  title: AppLocalizations.of(context)!.total,
-                  description: total.toCurrencyFormat(),
-                  trailing: const Text("kg"),
-                  svgSrc: Icons.monitor_weight,
-                ),
-                StorageInfoCardCustom(
-                  title: AppLocalizations.of(context)!.balance,
-                  description: customers?.balance?.toCurrencyFormat() ?? "0",
-                  trailing: const Text("trailing"),
-                  svgSrc: Icons.balance,
-                ),
-              ],
-            );
-          }),
-          autoRest: ChartRecordAnalysis.init(
+        onSelected: (obj) => SliverApiMixinViewAbstractWidget(
+          toListObject: ChartRecordAnalysis.init(
             Order(),
             enteryInteval: obj ?? EnteryInteval.monthy,
-            customAction: {"CustomerID": customers?.iD},
+            customRequestOption: RequestOptions()
+                .addGroupBy("CustomerID")
+                .addSearchByField("CustomerID", customers?.iD),
           ),
+
+          onResponseAddCustomWidget: (isSliver, _, _, response) {
+            //TODO
+            
+            return null;
+            // ChartRecordAnalysis i = response as ChartRecordAnalysis;
+            // double total = i.getTotalListAnalysis();
+            // return Column(
+            //   children: [
+            //     // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
+            //     //     titleString: "TEST1 ",
+            //     //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
+            //     StorageInfoCardCustom(
+            //       title: AppLocalizations.of(context)!.total,
+            //       description: total.toCurrencyFormat(),
+            //       trailing: const Text("kg"),
+            //       svgSrc: Icons.monitor_weight,
+            //     ),
+            //     StorageInfoCardCustom(
+            //       title: AppLocalizations.of(context)!.balance,
+            //       description: customers?.balance?.toCurrencyFormat() ?? "0",
+            //       trailing: const Text("trailing"),
+            //       svgSrc: Icons.balance,
+            //     ),
+            //   ],
+            // );
+          },
         ),
       ),
     );

@@ -23,6 +23,7 @@ class SliverApiMixinViewAbstractWidget
     super.hasCustomCardItemBuilder,
     super.customRequestOption,
     super.hasCustomSeperater,
+    super.onResponseAddCustomWidget,
     required super.toListObject,
     super.copyWithRequestOption,
     super.filterData,

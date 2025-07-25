@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_determine_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/authentecation/components/network_faild_auth.dart';
-import 'package:flutter_view_controller/new_screens/home/base_home_main.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:lottie/lottie.dart';
@@ -120,6 +119,5 @@ class _BaseAuthenticatingScreenState extends State<BaseAuthenticatingScreen> {
     // return BaseShared();
     // return PdfTestToBasePage();
     // return TestBasePage();
-    return const BaseHomeMainPage();
   }
 }

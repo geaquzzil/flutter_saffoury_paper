@@ -41,7 +41,6 @@ import '../screens/web/terms.dart';
 import 'actions/edit_new/base_edit_main_page.dart';
 import 'actions/view/view_view_main_page.dart';
 import 'authentecation/base_authentication_screen.dart';
-import 'home/base_home_main.dart';
 
 const String rootRouteName = 'root';
 const String cartRouteName = 'cart';
@@ -737,13 +736,7 @@ class RouteGenerator {
       builder: (context) {
         // return BaseHomeMainPage();
         Status authStatus = context.read<AuthProvider<AuthUser>>().getStatus;
-        if (authStatus == Status.Authenticated) {
-          // return POSPage();
-          return const BaseHomeMainPage();
-        } else {
-          // return POSPage();
-          return const BaseAuthenticatingScreen();
-        }
+        return const BaseAuthenticatingScreen();
       },
     );
   }

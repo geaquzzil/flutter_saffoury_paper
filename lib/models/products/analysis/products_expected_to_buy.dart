@@ -77,6 +77,7 @@ class ProductsExcpectedToBuy extends Product
     required SliverApiWithStaticMixin<SliverApiMixinWithStaticStateful> state,
     List? items,
     required dynamic requestObjcet,
+    required bool isSliver,
   }) {
     return Padding(
       padding: state.defaultSliverGridPadding,
@@ -86,7 +87,7 @@ class ProductsExcpectedToBuy extends Product
             crossAxisCellCount: i2,
             mainAxisCellCount: h,
             child: Card(
-              child: SliverApiMixinStaticList(
+              child: SliverApiMixinStaticList<ViewAbstract>(
                 list: items?.cast<ViewAbstract>() ?? [],
                 scrollDirection: Axis.vertical,
                 cardType: CardItemType.list,
@@ -121,43 +122,6 @@ class ProductsExcpectedToBuy extends Product
         childAspectRatio: 1,
 
         // width < 1400 ? 1.1 : 1.4,
-      ),
-    );
-    // StaggerdGridViewWidget()
-    return SliverPadding(
-      padding: state.defaultSliverGridPadding,
-      sliver: SliverGrid(
-        gridDelegate: SliverStairedGridDelegate(
-          crossAxisSpacing: 4,
-          mainAxisSpacing: 4,
-
-          pattern: [StairedGridTile(.5, 3 / 2), StairedGridTile(.5, 3 / 2)],
-        ),
-
-        ///Lazy building of list
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            /// To convert this infinite list to a list with "n" no of items,
-            /// uncomment the following line:
-            /// if (index > n) return null;
-            if (index == 0) {
-              return Card(
-                child: SliverApiMixinStaticList(
-                  list: items?.cast<ViewAbstract>() ?? [],
-                  scrollDirection: Axis.vertical,
-                  cardType: CardItemType.list,
-                  isSliver: false,
-                ),
-              );
-            }
-            return Column(children: []);
-          },
-
-          childCount: 2,
-
-          /// Set childCount to limit no.of items
-          /// childCount: 100,
-        ),
       ),
     );
   }

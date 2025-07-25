@@ -1,3 +1,5 @@
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
@@ -15,9 +17,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 import '../v_non_view_object.dart';
 
-//TODO IN getCustomActiuon
-// theres is api attribute called customAction wich can we pass CustomerID = ''
-//equal to dashit
 class ChartRecordAnalysis<T extends ViewAbstract>
     extends VObject<ChartRecordAnalysis>
     implements CustomViewHorizontalListResponse<ChartRecordAnalysis> {
@@ -28,14 +27,23 @@ class ChartRecordAnalysis<T extends ViewAbstract>
   @JsonKey(includeFromJson: false, includeToJson: false)
   T? viewAbstract;
   @JsonKey(includeFromJson: false, includeToJson: false)
-  Map<String, dynamic>? customAction;
+  RequestOptions? customRequestOption;
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  dynamic Function(
+    ChartRecordAnalysis<T> requestObjcet,
+    dynamic responseObjcet,
+    dynamic responseList,
+  )?
+  onResponseAddCustomWidget;
   ChartRecordAnalysis() : super();
 
   ChartRecordAnalysis.init(
     this.viewAbstract, {
     this.date,
     this.enteryInteval = EnteryInteval.monthy,
-    this.customAction,
+    this.customRequestOption,
+    this.onResponseAddCustomWidget,
   });
   @override
   ChartRecordAnalysis getSelfNewInstance() {
@@ -58,8 +66,9 @@ class ChartRecordAnalysis<T extends ViewAbstract>
     required ServerActions action,
     RequestOptions? generatedOptionFromListCall,
   }) {
-    RequestOptions ro = RequestOptions(date: date);
-    //TODO   if (customAction != null) "customAction": jsonEncode(customAction)
+    RequestOptions ro = RequestOptions(
+      date: date,
+    ).copyWithObjcet(option: customRequestOption);
     return (enteryInteval == EnteryInteval.daily)
         ? ro.addSearchByField("inteval", "true")
         : ro;
@@ -122,12 +131,12 @@ class ChartRecordAnalysis<T extends ViewAbstract>
     BuildContext context, {
     required SliverApiWithStaticMixin state,
     List<dynamic>? items,
-    required dynamic requestObjcet,
+    required dynamic requestObjcet,  required bool isSliver,
   }) {
     debugPrint(
       "getCustomViewSingleResponseWidget ${responseListAnalysis?.length}",
     );
-    return LineChartItem<GrowthRate, DateTime>(
+    Widget w = LineChartItem<GrowthRate, DateTime>(
       title:
           "${AppLocalizations.of(context)!.total}: ${responseListAnalysis?.length} ",
       list: responseListAnalysis ?? [],
@@ -135,6 +144,14 @@ class ChartRecordAnalysis<T extends ViewAbstract>
           DateTime(item.year ?? 0, item.month ?? 0, item.day ?? 0),
       yValueMapper: (item, n) => item.total,
     );
+
+    if (onResponseAddCustomWidget != null) {
+      dynamic w = onResponseAddCustomWidget?.call(requestObjcet, this, items);
+      
+    } else {
+      return w;
+    }
+
     // return Column(
     //   children: [
     //     Row(
@@ -217,20 +234,6 @@ class ChartRecordAnalysis<T extends ViewAbstract>
       title: "Changes records",
       trailing: row,
     );
-  }
-
-  @override
-  Widget? getCustomViewOnResponse(ChartRecordAnalysis<ViewAbstract> response) {
-    // TODO: implement getCustomViewOnResponse
-    throw UnimplementedError();
-  }
-
-  @override
-  Widget? getCustomViewOnResponseAddWidget(
-    ChartRecordAnalysis<ViewAbstract> response,
-  ) {
-    // TODO: implement getCustomViewOnResponseAddWidget
-    throw UnimplementedError();
   }
 
   @override

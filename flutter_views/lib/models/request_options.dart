@@ -111,22 +111,23 @@ class RequestOptions {
   });
 
   RequestOptions copyWithObjcet({RequestOptions? option}) {
+    if (option == null) return this;
     return copyWith(
-      betweenMap: option?.betweenMap,
-      countPerPage: option?.countPerPage,
-      countPerPageWhenSearch: option?.countPerPageWhenSearch,
-      date: option?.date,
-      filterMap: option?.filterMap,
-      groupBy: option?.groupBy,
-      limit: option?.limit,
-      page: option?.page,
-      requestLists: option?.requestLists,
-      requestObjcets: option?.requestObjcets,
-      searchByField: option?.searchByField,
-      searchQuery: option?.searchQuery,
-      sortBy: option?.sortBy,
-      sumBy: option?.sumBy,
-      disablePaging: option?.disablePaging,
+      betweenMap: option.betweenMap,
+      countPerPage: option.countPerPage,
+      countPerPageWhenSearch: option.countPerPageWhenSearch,
+      date: option.date,
+      filterMap: option.filterMap,
+      groupBy: option.groupBy,
+      limit: option.limit,
+      page: option.page,
+      requestLists: option.requestLists,
+      requestObjcets: option.requestObjcets,
+      searchByField: option.searchByField,
+      searchQuery: option.searchQuery,
+      sortBy: option.sortBy,
+      sumBy: option.sumBy,
+      disablePaging: option.disablePaging,
     );
   }
 

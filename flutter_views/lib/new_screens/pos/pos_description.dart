@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/new_components/cards/outline_card.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_cart_list.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import '../../providers/cart/cart_provider.dart';
 import '../cart/cart_description/cart_description.dart';
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 class POSDescription extends StatefulWidget {
   const POSDescription({super.key});
@@ -25,9 +25,13 @@ class _POSDescriptionState extends State<POSDescription>
   @override
   void initState() {
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 300));
-    _colorTween = ColorTween(begin: null, end: Colors.green)
-        .animate(_animationController);
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _colorTween = ColorTween(
+      begin: null,
+      end: Colors.green,
+    ).animate(_animationController);
 
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     //   Provider.of<CartProvider>(context, listen: false).addListener(() {
@@ -54,8 +58,9 @@ class _POSDescriptionState extends State<POSDescription>
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedCard(
-      child: Container(
+    return Cards(
+      type: CardType.normal,
+      child: (v) => Container(
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -71,10 +76,11 @@ class _POSDescriptionState extends State<POSDescription>
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.clear_all))
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.clear_all),
+                  ),
                 ],
               ),
             ),
@@ -82,20 +88,23 @@ class _POSDescriptionState extends State<POSDescription>
             const CartDescriptionTotals(),
             Container(
               padding: const EdgeInsets.symmetric(
-                  horizontal: kDefaultPadding, vertical: kDefaultPadding),
+                horizontal: kDefaultPadding,
+                vertical: kDefaultPadding,
+              ),
               width: double.maxFinite,
               child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _colorTween.value,
-                  ),
-                  onPressed: () {
-                    context.read<CartProvider>().checkout(context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(kDefaultPadding),
-                    child: Text(AppLocalizations.of(context)!.checkout),
-                  )),
-            )
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _colorTween.value,
+                ),
+                onPressed: () {
+                  context.read<CartProvider>().checkout(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(kDefaultPadding),
+                  child: Text(AppLocalizations.of(context)!.checkout),
+                ),
+              ),
+            ),
           ],
         ),
       ),
