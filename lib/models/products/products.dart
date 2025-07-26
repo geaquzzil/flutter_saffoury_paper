@@ -71,11 +71,11 @@ import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
-import 'package:flutter_view_controller/new_screens/pos/pos_list.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/new_screens/pos/pos_card_item_square.dart';
+import 'package:flutter_view_controller/new_screens/pos/pos_list.dart';
 import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
@@ -1174,12 +1174,13 @@ class Product extends ViewAbstract<Product>
     BuildContext context, {
     int? width,
     int? maxWaste,
+    int? length,
   }) {
     ProductSize? customSize = width == null
         ? sizes
         : (ProductSize()
             ..width = width.toNonNullable()
-            ..length = 0);
+            ..length = length ?? 0);
 
     RequestOptions op = _getOnlyInventory().setBetween(
       "SizeID",
@@ -1293,6 +1294,85 @@ class Product extends ViewAbstract<Product>
     return ProductHeaderToggle(product: this);
   }
 
+  RequestOptions? getRequestOptionsPassedOnString(String string) {
+    string = string.toLowerCase();
+    RegExp reg = RegExp(
+      // r"^((?:\w+ )?)([1-9][0-9]{2,3})((?: x [1-9][0-9]{2,3})?)$",
+      r"^((?:\w+ )?)([1-9][0-9]{2,3})((?: x [1-9][0-9]{2,3}((?: x [1-9][0-9]{2})?))?)$",
+      caseSensitive: false,
+    );
+    final matchs = reg.hasMatch(string);
+    if (!matchs) return null;
+
+    final match = reg.firstMatch(string);
+
+    String? type = match?.group(1);
+    String? width = match?.group(2);
+
+    String? gsm = match
+        ?.group(4)
+        ?.replaceAll("x", "")
+        .replaceAll("X", "")
+        .trim();
+
+    String? length;
+    if (gsm?.isEmpty ?? true) {
+      debugPrint("getRequestOptionsPassedOnString f");
+      length = match?.group(3)?.replaceAll("x", "").replaceAll("X", "").trim();
+    } else {
+      debugPrint(
+        "getRequestOptionsPassedOnString split ${match?.group(3)?.split("x")}",
+      );
+      length = match?.group(3)?.split("x")[1].trim();
+    }
+
+    RequestOptions op = RequestOptions();
+    if (type?.isNotEmpty ?? false) {
+      debugPrint("getRequestOptionsPassedOnString type:$type");
+      op = op.addValueBetween(
+        ProductType(),
+        BetweenRequest(
+          field: "name",
+          fromTo: [FromToBetweenRequest(from: type!.trim(), to: type.trim())],
+        ),
+      );
+    }
+    if (gsm?.isNotEmpty ?? false) {
+      debugPrint("getRequestOptionsPassedOnString gsm:$gsm");
+      int gsmI = int.tryParse(gsm!).toNonNullable();
+
+      op = op.addValueBetween(
+        GSM(),
+        BetweenRequest(
+          field: "gsm",
+          fromTo: [
+            FromToBetweenRequest(from: "${gsmI - 25}", to: "${gsmI + 25}"),
+          ],
+        ),
+      );
+    }
+    int? widthI, lengthI;
+
+    if (width?.isNotEmpty ?? false) {
+      debugPrint("getRequestOptionsPassedOnString width:$width");
+      widthI = int.tryParse(width!);
+    }
+    if (length?.isNotEmpty ?? false) {
+      debugPrint("getRequestOptionsPassedOnString length:$length");
+      lengthI = int.tryParse(length!);
+    }
+    if (widthI == null) return null;
+    if (widthI.toNonNullable() < 350 || widthI.toNonNullable() > 1500) {
+      return null;
+    }
+    ProductSize size = ProductSize()
+      ..length = lengthI ?? 0
+      ..width = widthI;
+    op = op.setBetween("SizeID", size.getListOfSizesWithMaxWaste(maxWaste: 20));
+    debugPrint("getRequestOptionsPassedOnString ${op.toString()}");
+    return op;
+  }
+
   @override
   List<Widget>? getCustomTopWidget(
     BuildContext context, {
@@ -1309,10 +1389,8 @@ class Product extends ViewAbstract<Product>
     // return null;
     if (isFromFirstAndSecPane != null) {
       if (isFromFirstAndSecPane == true && action == ServerActions.search) {
-        int? val = int.tryParse(extras);
-        if (val == null) return null;
-        if (val < 350 || val > 1500) return null;
-
+        RequestOptions? op = getRequestOptionsPassedOnString(extras);
+        if (op == null) return null;
         return [
           HeaderDescription(
             isSliver: true,
@@ -1321,11 +1399,7 @@ class Product extends ViewAbstract<Product>
           ),
           SliverApiMixinViewAbstractWidget(
             toListObject: Product().setRequestOption(
-              option: getSimilarWithSameSize(
-                context,
-                width: val + 20,
-                maxWaste: 50,
-              ),
+              option: _getOnlyInventory().copyWithObjcet(option: op),
             ),
             cardType: CardItemType.grid,
             isSliver: true,

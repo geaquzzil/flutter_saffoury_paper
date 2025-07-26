@@ -355,7 +355,7 @@ class RequestOptions {
   }
 
   RequestOptions addValueBetween(ViewAbstract child, BetweenRequest between) {
-    return setBetween(child.getForeignKeyName(), [between]);
+    return setBetween(child.getForeignKeyName(), [[between]]);
   }
 
   Map<String, dynamic> toMap() {

@@ -1,274 +1,114 @@
-{
-    "page": 0,
-    "countPerPage": 20,
-    "DESC": "date",
-    "forginObject": true,
-    // 51 53 and 700 72 or 51 53 and 0
-    ">SizeID<": [
-        [
-            {
-                "field": "width",
-                "fromTo": [
-                    {
-                        "from": "510",
-                        "to": "530"
-                    }
-                ]
-            },
-            {
-                "field": "length",
-                "fromTo": [
-                    {
-                        "from": "700",
-                        "to": "720"
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "field": "width",
-                "fromTo": [
-                    {
-                        "from": "510",
-                        "to": "530"
-                    }
-                ]
-            },
-            {
-                "field": "length",
-                "fromTo": [
-                    {
-                        "from": "0",
-                        "to": "0"
-                    }
-                ]
-            }
-        ]
-    ],
-    //>SizeID<:{width:{from:200,to:300},length:{from:800,to:900}}  Width from 200 to 300 and length from 800 to 900
-    //>SizeID<:[[{width:{from:200,to:300},length:{from:800,to:900}],[],[]}] 
-    "<requiresInventory>": true,
-    "s": [
-        [
-            {
-                "field": "width",
-                "fromTo": [
-                    {
-                        "from": "510",
-                        "to": "530"
-                    }
-                ]
-            },
-            {
-                "field": "length",
-                "fromTo": [
-                    {
-                        "from": "700",
-                        "to": "720"
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "field": "width",
-                "fromTo": [
-                    {
-                        "from": "510",
-                        "to": "530"
-                    }
-                ]
-            },
-            {
-                "field": "length",
-                "fromTo": [
-                    {
-                        "from": "0",
-                        "to": "0"
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "field": "width",
-                "fromTo": [
-                    {
-                        "from": "1020",
-                        "to": "1040"
-                    }
-                ]
-            },
-            {
-                "field": "length",
-                "fromTo": [
-                    {
-                        "from": "1400",
-                        "to": "1420"
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "field": "width",
-                "fromTo": [
-                    {
-                        "from": "1020",
-                        "to": "1040"
-                    }
-                ]
-            },
-            {
-                "field": "length",
-                "fromTo": [
-                    {
-                        "from": "0",
-                        "to": "0"
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "field": "width",
-                "fromTo": [
-                    {
-                        "from": "1530",
-                        "to": "1550"
-                    }
-                ]
-            },
-            {
-                "field": "length",
-                "fromTo": [
-                    {
-                        "from": "2100",
-                        "to": "2120"
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "field": "width",
-                "fromTo": [
-                    {
-                        "from": "1530",
-                        "to": "1550"
-                    }
-                ]
-            },
-            {
-                "field": "length",
-                "fromTo": [
-                    {
-                        "from": "0",
-                        "to": "0"
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "field": "width",
-                "fromTo": [
-                    {
-                        "from": "2040",
-                        "to": "2060"
-                    }
-                ]
-            },
-            {
-                "field": "length",
-                "fromTo": [
-                    {
-                        "from": "2800",
-                        "to": "2820"
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "field": "width",
-                "fromTo": [
-                    {
-                        "from": "2040",
-                        "to": "2060"
-                    }
-                ]
-            },
-            {
-                "field": "length",
-                "fromTo": [
-                    {
-                        "from": "0",
-                        "to": "0"
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "field": "width",
-                "fromTo": [
-                    {
-                        "from": "2550",
-                        "to": "2570"
-                    }
-                ]
-            },
-            {
-                "field": "length",
-                "fromTo": [
-                    {
-                        "from": "3500",
-                        "to": "3520"
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "field": "width",
-                "fromTo": [
-                    {
-                        "from": "2550",
-                        "to": "2570"
-                    }
-                ]
-            },
-            {
-                "field": "length",
-                "fromTo": [
-                    {
-                        "from": "0",
-                        "to": "0"
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "field": "width",
-                "fromTo": [
-                    {
-                        "from": "3060",
-                        "to": "3080"
-                    }
-                ]
-            },
-            {
-                "field": "length",
-                "fromTo": [
-                    {
-                        "from": "0",
-                        "to": "0"
-                    }
-                ]
-            }
-        ]
+>ProductTypeID<=[
+    [
+        {
+            "field": "name",
+            "fromTo": [
+                {
+                    "from": "sp",
+                    "to": "sp"
+                }
+            ]
+        }
     ]
-}
+]&>SizeID<=[
+    [
+        {
+            "field": "width",
+            "fromTo": [
+                {
+                    "from": "700",
+                    "to": "720"
+                }
+            ]
+        },
+        {
+            "field": "length",
+            "fromTo": [
+                {
+                    "from": "0",
+                    "to": "0"
+                }
+            ]
+        }
+    ],
+    [
+        {
+            "field": "width",
+            "fromTo": [
+                {
+                    "from": "1400",
+                    "to": "1420"
+                }
+            ]
+        },
+        {
+            "field": "length",
+            "fromTo": [
+                {
+                    "from": "0",
+                    "to": "0"
+                }
+            ]
+        }
+    ],
+    [
+        {
+            "field": "width",
+            "fromTo": [
+                {
+                    "from": "2100",
+                    "to": "2120"
+                }
+            ]
+        },
+        {
+            "field": "length",
+            "fromTo": [
+                {
+                    "from": "0",
+                    "to": "0"
+                }
+            ]
+        }
+    ],
+    [
+        {
+            "field": "width",
+            "fromTo": [
+                {
+                    "from": "2800",
+                    "to": "2820"
+                }
+            ]
+        },
+        {
+            "field": "length",
+            "fromTo": [
+                {
+                    "from": "0",
+                    "to": "0"
+                }
+            ]
+        }
+    ],
+    [
+        {
+            "field": "width",
+            "fromTo": [
+                {
+                    "from": "3500",
+                    "to": "3520"
+                }
+            ]
+        },
+        {
+            "field": "length",
+            "fromTo": [
+                {
+                    "from": "0",
+                    "to": "0"
+                }
+            ]
+        }
+    ]
+]&<requiresInventory>=true

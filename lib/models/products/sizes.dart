@@ -7,7 +7,6 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/globals.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
-import 'package:flutter_view_controller/models/apis/unused_records.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
@@ -100,8 +99,6 @@ class ProductSize extends ViewAbstract<ProductSize> {
   IconData getMainIconData() {
     return Icons.type_specimen_outlined;
   }
-
-  
 
   @override
   List<Widget>? getCustomBottomWidget(
@@ -465,6 +462,17 @@ class ProductSize extends ViewAbstract<ProductSize> {
           ]),
         );
       }
+    });
+    lengthList.forEach((key, value) {
+      main.add(
+        List.of([
+          BetweenRequest(field: "width", fromTo: [value]),
+          BetweenRequest(
+            field: "length",
+            fromTo: [FromToBetweenRequest(from: "0", to: "0")],
+          ),
+        ]),
+      );
     });
     debugPrint(main.toString());
     return main;
