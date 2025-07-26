@@ -1296,6 +1296,7 @@ class Product extends ViewAbstract<Product>
 
   RequestOptions? getRequestOptionsPassedOnString(String string) {
     string = string.toLowerCase();
+    //refrence https://regex101.com/r/ryZNZe/1
     RegExp reg = RegExp(
       // r"^((?:\w+ )?)([1-9][0-9]{2,3})((?: x [1-9][0-9]{2,3})?)$",
       r"^((?:\w+ )?)([1-9][0-9]{2,3})((?: x [1-9][0-9]{2,3}((?: x [1-9][0-9]{2})?))?)$",
