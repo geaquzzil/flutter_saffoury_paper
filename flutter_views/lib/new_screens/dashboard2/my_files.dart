@@ -157,11 +157,13 @@ class StaggerdGridViewWidget extends StatelessWidget {
   builder;
   bool isSliver;
   bool wrapWithCard;
+  double? hasWidth;
   StaggerdGridViewWidget({
     super.key,
     this.childAspectRatio = 1,
     this.wrapWithCard = false,
     this.builder,
+    this.hasWidth,
     this.isSliver = false,
     this.list,
   }) : assert(list != null || builder != null);
@@ -169,6 +171,9 @@ class StaggerdGridViewWidget extends StatelessWidget {
   final double childAspectRatio;
 
   int getCrossAxisCount(double width) {
+      int val = ((width / 200)).toInt();
+      debugPrint("getCrossAxisCount val   $val");
+      return val;
     if (width < 500 && width > 0) {
       return 1;
     } else if (width < 1000 && width > 500) {
@@ -219,10 +224,8 @@ class StaggerdGridViewWidget extends StatelessWidget {
             getHeightMainAxisCellCount(constraints.maxHeight),
           );
         }
-        if (isSliver) {
-          //  vcbx
-        }
-        return StaggeredGrid.count(
+
+        Widget w = StaggeredGrid.count(
           crossAxisCount: crossAxisCount,
           mainAxisSpacing: 2,
           crossAxisSpacing: 2,
@@ -231,6 +234,11 @@ class StaggerdGridViewWidget extends StatelessWidget {
               ? list!.map((e) => Card(child: e)).toList()
               : list!,
         );
+        // return w;
+        if (isSliver) {
+          return SliverToBoxAdapter(child: w);
+        }
+        return w;
       },
     );
   }

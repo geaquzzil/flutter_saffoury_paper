@@ -45,6 +45,7 @@ abstract class SliverApiMixinWithStaticStateful<T extends ViewAbstract>
   Object toListObject;
   ViewAbstract? setParentForChildCardItem;
   ValueNotifier<List<ViewAbstract>>? onSeletedListItemsChanged;
+  ValueNotifier<bool>? onFinishCalling;
   ScrollController? scrollController;
   final bool hideOnEmpty;
   @Deprecated("use RequestOptions")
@@ -85,6 +86,7 @@ abstract class SliverApiMixinWithStaticStateful<T extends ViewAbstract>
     this.scrollDirection = Axis.vertical,
     this.onSeletedListItemsChanged,
     this.hasCustomCardItemBuilder,
+    this.onFinishCalling,
     this.scrollController,
     this.searchString,
     this.hasCustomWidgetOnResponseBuilder,
@@ -346,6 +348,10 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         bool isLoading = value.item1;
         int count = value.item2;
         bool isError = value.item3;
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          widget.onFinishCalling?.value = !isLoading;
+        });
         String key = getListProviderKey();
         debugPrint(
           "ListToDet=>count $count isLoading $isLoading   isError $isError key $key  ",
@@ -491,7 +497,12 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
               child: Padding(padding: padding, child: child(index)),
             ),
           );
-  Widget getListItem(int index, int count, bool isLoading) {
+  Widget getListItem(
+    int index,
+    int count,
+    bool isLoading, {
+    List<Widget>? addOns,
+  }) {
     if (isLoading && index >= count - 1) {
       return widget.hasCustomLoadingItem ??
           SkeletonListTile(
@@ -502,6 +513,10 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
               vertical: kDefaultPadding / 2,
             ),
           );
+    }
+    if (!isLoading && index >= count - 1 && addOns != null) {
+      debugPrint("tototo ${count - index} t :  ${count - index - 1}");
+      return addOns[count - index-1 ];
     }
     ViewAbstract va = getList()[index];
     va.setParent(_setParentForChildCardItem);
@@ -573,13 +588,25 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   }
 
   Widget getSliverList(int count, bool isLoading, {List? customList}) {
+    List<Widget>? addOns = widget.onResponseAddCustomWidget?.call(
+      widget.isSliver,
+      _toListObject,
+      getList(),
+      getList(),
+    );
     return SliverPadding(
       padding: defaultSliverListPadding,
       sliver: SliverList(
-        delegate: SliverChildBuilderDelegate((context, index) {
-          debugPrint("SliverApi getSliverList count $count index $index");
-          return getListItem(index, count, isLoading);
-        }, childCount: count + (isLoading ? 8 : 0)),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            debugPrint("SliverApi getSliverList count $count index $index");
+            return getListItem(index, count, isLoading, addOns: addOns);
+          },
+          childCount:
+              count +
+              (isLoading ? 8 : 0) +
+              (!isLoading ? (addOns != null ? addOns.length - 1 : 0) : 0),
+        ),
       ),
     );
 

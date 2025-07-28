@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_mas
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class ListToDetailsSecoundPaneNotifier extends BasePageSecoundPaneNotifier {
   ViewAbstract viewAbstract;
@@ -131,7 +132,7 @@ class _ListToDetailsSecoundPaneNotifierState
       action: _lastSearchQuery != null
           ? ServerActions.search
           : ServerActions.view,
-      basePage: this,
+      basePage: getSecoundPaneHelper(),
       isFromFirstAndSecPane: firstPane,
       extras: _lastSearchQuery,
     );
@@ -281,6 +282,8 @@ class _ListToDetailsSecoundPaneNotifierState
     }
 
     return [
+      if(valueNotifier.value is MultiSliver)
+        valueNotifier.value,
       // if (top != null)
       //   ...top.map((p) => SliverToBoxAdapter(
       //         child: p,

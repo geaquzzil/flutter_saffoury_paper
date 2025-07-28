@@ -450,13 +450,16 @@ class SecondPaneHelper {
 
 class SecoundPaneHelperWithParentValueNotifier {
   ValueNotifier<SecondPaneHelper?>? secPaneNotifier;
-  BasePageState? parent;
+  BasePageSecoundPaneNotifierState? parent;
   ValueNotifier? onBuild;
   SecoundPaneHelperWithParentValueNotifier({
     this.secPaneNotifier,
     this.parent,
     this.onBuild,
   });
+  void notify(SecondPaneHelper? s) {
+    secPaneNotifier?.value = s;
+  }
 }
 
 class SecoundPaneHelperWithParent {

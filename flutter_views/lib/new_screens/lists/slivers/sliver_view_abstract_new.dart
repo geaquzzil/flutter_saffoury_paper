@@ -16,6 +16,7 @@ class SliverApiMixinViewAbstractWidget
     super.enableSelectionInInitialMood,
     super.onSeletedListItemsChanged,
     super.onClickForCard,
+    super.onFinishCalling,
     super.isSelectForCard,
     super.header,
     super.state,

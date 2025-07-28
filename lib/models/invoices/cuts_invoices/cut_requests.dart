@@ -305,7 +305,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   List<Widget>? getCustomTopWidget(
     BuildContext context, {
     ServerActions? action,
-    BasePageSecoundPaneNotifierState? basePage,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
     ValueNotifier<SecondPaneHelper?>? onClick,
     bool? isFromFirstAndSecPane,

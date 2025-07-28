@@ -26,6 +26,7 @@ import 'package:flutter_saffoury_paper/models/products/stocks.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/products/widgets/pos/pos_header.dart';
 import 'package:flutter_saffoury_paper/widgets/product_top_widget.dart';
+import 'package:flutter_saffoury_paper/widgets/size_analyzer.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/components/text_image.dart';
 import 'package:flutter_view_controller/constants.dart';
@@ -89,6 +90,7 @@ import 'package:pdf/pdf.dart' as pdf;
 import 'package:pdf/widgets.dart' as pdfWidget;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 import 'package:supercharged/supercharged.dart';
 import 'package:user_avatar_generator/core/export_paths.dart';
 
@@ -991,6 +993,7 @@ class Product extends ViewAbstract<Product>
 
   @override
   List<Widget>? getHomeListHeaderWidgetList(BuildContext context) {
+    return null;
     // TODO: implement getHomeListHeaderWidgetList
     return [
       SliverApiMixinViewAbstractWidget(
@@ -1380,7 +1383,8 @@ class Product extends ViewAbstract<Product>
     ServerActions? action,
     ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
     ValueNotifier<SecondPaneHelper?>? onClick,
-    BasePageSecoundPaneNotifierState? basePage,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
+
     bool? isFromFirstAndSecPane,
     dynamic extras,
   }) {
@@ -1393,21 +1397,44 @@ class Product extends ViewAbstract<Product>
         RequestOptions? op = getRequestOptionsPassedOnString(extras);
         if (op == null) return null;
         return [
-          HeaderDescription(
-            isSliver: true,
-            title: AppLocalizations.of(context)!.simialrProducts,
-            // trailing:
-          ),
           SliverApiMixinViewAbstractWidget(
             toListObject: Product().setRequestOption(
               option: _getOnlyInventory().copyWithObjcet(option: op),
             ),
+            header: HeaderDescription(
+              isSliver: true,
+              title: AppLocalizations.of(context)!.size_analyzer,
+              trailing: OutlinedButton(
+                child: Text(AppLocalizations.of(context)!.seeMore),
+                onPressed: () {
+                  basePage?.notify(
+                    SecondPaneHelper(
+                      title: AppLocalizations.of(context)!.size_analyzer,
+                      object: this,
+                      value: SizeAnalyzerPage(
+                        parent: basePage.parent,
+                        onBuild: basePage.onBuild,
+                        requestOptions: _getOnlyInventory().copyWithObjcet(
+                          option: op,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              // trailing:
+            ),
             cardType: CardItemType.grid,
             isSliver: true,
             isSelectForCard: (object) {
-              bool res =
-                  (basePage?.lastSecondPaneItem?.value?.isEquals(object) ??
-                  false);
+              bool res = false;
+              if (basePage?.parent?.lastSecondPaneItem is ViewAbstract) {
+                res =
+                    (basePage?.parent?.lastSecondPaneItem?.value?.isEquals(
+                      object,
+                    ) ??
+                    false);
+              }
 
               debugPrint(
                 "isSelectForCard  ${object.getMainHeaderTextOnly(context)} $res",

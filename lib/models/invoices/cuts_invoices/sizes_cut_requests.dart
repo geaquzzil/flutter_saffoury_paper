@@ -136,7 +136,7 @@ class SizesCutRequest extends ViewAbstract<SizesCutRequest> {
       {ServerActions? action,
       ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
       ValueNotifier<SecondPaneHelper?>? onClick,
-      BasePageSecoundPaneNotifierState? basePage,
+      SecoundPaneHelperWithParentValueNotifier? basePage,
       bool? isFromFirstAndSecPane,
       dynamic extras}) {
     if (isNew()) {
