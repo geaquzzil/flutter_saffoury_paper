@@ -144,7 +144,7 @@ class _ListToDetailsSecoundPaneNotifierState
         SliverPersistantContainer(
           // floating: true,
           pinned: true,
-          minExtent: 100,
+          minExtent: 110,
           maxExtent: 110,
           child: Container(
             color: Theme.of(context).colorScheme.surface,
@@ -221,12 +221,7 @@ class _ListToDetailsSecoundPaneNotifierState
           valueListProviderNotifier: _listNotifier,
           key: keyList,
           isSelectForCard: (object) {
-            if (lastSecondPaneItem?.object is ViewAbstract) {
-              debugPrint("sdsa");
-              return (lastSecondPaneItem?.object?.isEquals(object) ?? false);
-            } else {
-              return false;
-            }
+            return isSelectForCard(object);
           },
 
           // onClickForCard: (object) {
@@ -263,6 +258,7 @@ class _ListToDetailsSecoundPaneNotifierState
         ),
       ];
     }
+    return [];
     if (valueNotifier == null) {
       return [const SliverFillRemaining(child: Text("valueNotifer==null"))];
     }
@@ -282,8 +278,7 @@ class _ListToDetailsSecoundPaneNotifierState
     }
 
     return [
-      if(valueNotifier.value is MultiSliver)
-        valueNotifier.value,
+      if (valueNotifier.value is MultiSliver) valueNotifier.value,
       // if (top != null)
       //   ...top.map((p) => SliverToBoxAdapter(
       //         child: p,

@@ -17,6 +17,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
+import 'package:flutter_view_controller/new_screens/actions/cruds/view.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
@@ -437,6 +438,12 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
   }
 
   void initSecToThirdPaneNotifier() {}
+  bool isSelectForCard(dynamic value) {
+    if (lastSecondPaneItem?.object is ViewAbstract) {
+      return lastSecondPaneItem?.object.isEquals(value);
+    }
+    return false;
+  }
 
   bool hasNotifierValue() {
     return _lastSecondPaneItem?.value != null;
@@ -751,12 +758,40 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
         tab: tab,
       );
     }
-    return getPaneNotifier(
-      firstPane: firstPane,
-      controler: controler,
-      tab: tab,
-      valueNotifier: _lastSecondPaneItem,
-    );
+    if (_lastSecondPaneItem?.value is List<Widget>) {
+      return _lastSecondPaneItem?.value;
+    } else if (_lastSecondPaneItem?.value is ViewAbstract) {
+      return [
+        SliverFillRemaining(
+          child: ViewNew(
+            extras: _lastSecondPaneItem!.value,
+            iD: _lastSecondPaneItem!.value.iD,
+            tableName: _lastSecondPaneItem!.value.getTableNameApi(),
+            onBuild: onBuild,
+            key: _lastSecondPaneItem!.value.getKeyForWidget(
+              context,
+              ServerActions.view,
+            ),
+            parent: this,
+          ),
+        ),
+      ];
+    } else if (_lastSecondPaneItem?.value is BasePage) {
+      return [
+        SliverFillRemaining(
+          child: (_lastSecondPaneItem!.value as BasePage)
+            ..setParent = this
+            ..setParentOnBuild = onBuild,
+        ),
+      ];
+    } else {
+      return getPaneNotifier(
+        firstPane: firstPane,
+        controler: controler,
+        tab: tab,
+        valueNotifier: _lastSecondPaneItem,
+      );
+    }
   }
 }
 mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>

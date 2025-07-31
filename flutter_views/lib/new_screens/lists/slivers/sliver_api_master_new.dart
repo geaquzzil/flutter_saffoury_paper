@@ -280,9 +280,9 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     if (customList != null) {
       listProvider.initCustomList(_lastKey, customList.cast());
     }
-    debugPrint(
-      "SliverApiWithStaticMixin===> initState=> setParentForChild: ${_setParentForChildCardItem.runtimeType} _toListObject => ${_toListObject.runtimeType} _searchString => $_searchString  _toListObjcetType => $_toListObjectType isGrid=>${valueNotifierGrid.value}",
-    );
+    // debugPrint(
+    //   "SliverApiWithStaticMixin===> initState=> setParentForChild: ${_setParentForChildCardItem.runtimeType} _toListObject => ${_toListObject.runtimeType} _searchString => $_searchString  _toListObjcetType => $_toListObjectType isGrid=>${valueNotifierGrid.value}",
+    // );
     super.initState();
     fetshListWidgetBinding();
   }
@@ -327,9 +327,9 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       fetshListWidgetBinding();
     }
 
-    debugPrint(
-      "SliverApiWithStaticMixin===> didUpdateWidget=> setParentForChild: ${_setParentForChildCardItem.runtimeType} _toListObject => ${_toListObject.runtimeType} _searchString => $_searchString  _toListObjcetType => $_toListObjectType isGrid=>${valueNotifierGrid.value} should fetish $shouldFetsh filter=>$_filterData",
-    );
+    // debugPrint(
+    //   "SliverApiWithStaticMixin===> didUpdateWidget=> setParentForChild: ${_setParentForChildCardItem.runtimeType} _toListObject => ${_toListObject.runtimeType} _searchString => $_searchString  _toListObjcetType => $_toListObjectType isGrid=>${valueNotifierGrid.value} should fetish $shouldFetsh filter=>$_filterData",
+    // );
 
     super.didUpdateWidget(oldWidget);
   }
@@ -348,10 +348,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         bool isLoading = value.item1;
         int count = value.item2;
         bool isError = value.item3;
-
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          widget.onFinishCalling?.value = !isLoading;
-        });
+       
         String key = getListProviderKey();
         debugPrint(
           "ListToDet=>count $count isLoading $isLoading   isError $isError key $key  ",
@@ -361,14 +358,18 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
               widget.valueListProviderNotifier?.value != null
               ? List.from(widget.valueListProviderNotifier!.value!)
               : [getListProvider(), key, count];
+
+           if(!isLoading){
+      widget.onFinishCalling?.value = !isLoading;
+           }   
         });
 
         // .withItem1(getListProvider());
         Widget? customWidget = onResponseHasCustomWidget();
         Widget? customLoading = onLoadingHasCustomWidget();
-        debugPrint(
-          "SliverApiWithStaticMixin===> Selector=>Selector=> key: $key isloading: $isLoading iserror: $isError count: $count",
-        );
+        // debugPrint(
+        //   "SliverApiWithStaticMixin===> Selector=>Selector=> key: $key isloading: $isLoading iserror: $isError count: $count",
+        // );
 
         if (!isLoading && (count == 0 || isError)) {
           return getEmptyWidget(isError: isError);
@@ -516,12 +517,12 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     }
     if (!isLoading && index >= count - 1 && addOns != null) {
       debugPrint("tototo ${count - index} t :  ${count - index - 1}");
-      return addOns[count - index-1 ];
+      return addOns[count - index - 1];
     }
     ViewAbstract va = getList()[index];
     va.setParent(_setParentForChildCardItem);
     if (widget.hasCustomCardItemBuilder != null) {
-      if ((_toListObjectType != SliverMixinObjectType.FROM_CARD_API)) {
+      if ((_toListObjectType == SliverMixinObjectType.FROM_CARD_API)) {
         return ListCardItemApi(
           viewAbstract: va,
           state: this,

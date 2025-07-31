@@ -92,6 +92,8 @@ class RequestOptions {
   dynamic requestObjcets;
   dynamic requestLists;
   bool disablePaging;
+
+  dynamic extras;
   RequestOptions({
     this.betweenMap,
     this.countPerPage = 20,
@@ -100,6 +102,7 @@ class RequestOptions {
     this.filterMap,
     this.groupBy,
     this.limit,
+    this.extras,
     this.page = 0,
     this.disablePaging = false,
     this.requestLists,
@@ -121,6 +124,7 @@ class RequestOptions {
       groupBy: option.groupBy,
       limit: option.limit,
       page: option.page,
+      extras: option.extras,
       requestLists: option.requestLists,
       requestObjcets: option.requestObjcets,
       searchByField: option.searchByField,
@@ -147,6 +151,7 @@ class RequestOptions {
     SortFieldValue? sortBy,
     List<String>? sumBy,
     bool? disablePaging,
+    dynamic extras,
   }) {
     return RequestOptions(
       betweenMap: betweenMap ?? this.betweenMap,
@@ -164,6 +169,7 @@ class RequestOptions {
       searchQuery: searchQuery ?? this.searchQuery,
       sortBy: sortBy ?? this.sortBy,
       sumBy: sumBy ?? this.sumBy,
+      extras: extras ?? this.extras,
       disablePaging: disablePaging ?? this.disablePaging,
     );
   }
@@ -355,7 +361,9 @@ class RequestOptions {
   }
 
   RequestOptions addValueBetween(ViewAbstract child, BetweenRequest between) {
-    return setBetween(child.getForeignKeyName(), [[between]]);
+    return setBetween(child.getForeignKeyName(), [
+      [between],
+    ]);
   }
 
   Map<String, dynamic> toMap() {

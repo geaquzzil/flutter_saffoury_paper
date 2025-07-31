@@ -1000,6 +1000,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
+          //todo translate
           "items: ${getDetailListFromMasterItemsCount()}",
           style: Theme.of(context).textTheme.bodySmall!.copyWith(
             color: Theme.of(context).colorScheme.primary,

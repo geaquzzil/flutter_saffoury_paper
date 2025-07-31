@@ -36,6 +36,9 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
   final SortFieldValue? sortInitial;
   final Function(dynamic value)? onDoneFilter;
   final Function(SortFieldValue?)? onDoneSort;
+  final bool disableFiltering;
+  final List<Widget>? preWidgets;
+  final List<Widget>? postWidgets;
 
   final iconSize = 20;
   final spacing = kDefaultPadding * .25;
@@ -49,7 +52,10 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
     this.sortInitial,
     this.filterInitial,
     this.onDoneSort,
+    this.disableFiltering = false,
     this.width,
+    this.preWidgets,
+    this.postWidgets,
   });
 
   @override
@@ -102,20 +108,24 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
         Row(
           // spacing: spacing,
           children: [
-            FilterIcon(
-              viewAbstract: viewAbstract,
-              onDoneClickedPopResults: onDoneFilter,
-              initialData: filterInitial,
-            ),
+            if (preWidgets != null) ...preWidgets!,
+            if (!disableFiltering)
+              FilterIcon(
+                viewAbstract: viewAbstract,
+                onDoneClickedPopResults: onDoneFilter,
+                initialData: filterInitial,
+              ),
             SortIcon(
               viewAbstract: viewAbstract,
               initialValue: sortInitial,
               onChange: onDoneSort,
             ),
             Spacer(),
-            if (canTakeUpToFour) _getAddButton(context),
-            if (canTakeUpToFour) _getRefreshWidget(context, listProvider, key),
-            if (canTakeUpToFour)
+          
+            if (canTakeUpToFour&&!disableFiltering) _getAddButton(context),
+            
+            if (canTakeUpToFour&&!disableFiltering) _getRefreshWidget(context, listProvider, key),
+            if (canTakeUpToFour|| disableFiltering)
               AnimatedScale(
                 duration: Duration(milliseconds: 200),
                 scale: listLength > 2 ? 1 : 0,
@@ -125,12 +135,13 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
                   state: secPaneNotifer,
                 ),
               ),
-            if (canTakeUpToFour)
+            if (canTakeUpToFour|| disableFiltering)
               AnimatedScale(
                 duration: Duration(milliseconds: 200),
                 scale: listLength > 2 ? 1 : 0,
                 child: _getExportButton(context, listProvider, key),
               ),
+            if (postWidgets!=null) ...postWidgets!,
           ],
         ),
       ],

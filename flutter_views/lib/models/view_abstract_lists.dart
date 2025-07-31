@@ -30,16 +30,24 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return null;
   }
 
-  Widget getCardLeadingSearch(BuildContext context,
-      {bool addBottomWidget = true}) {
-    return getCardLeadingCircleAvatar(context,
-        addBottomWidget: addBottomWidget);
+  Widget getCardLeadingSearch(
+    BuildContext context, {
+    bool addBottomWidget = true,
+  }) {
+    return getCardLeadingCircleAvatar(
+      context,
+      addBottomWidget: addBottomWidget,
+    );
   }
 
-  Widget getCardLeadingDropdown(BuildContext context,
-      {bool addBottomWidget = true}) {
-    return getCardLeadingCircleAvatar(context,
-        addBottomWidget: addBottomWidget);
+  Widget getCardLeadingDropdown(
+    BuildContext context, {
+    bool addBottomWidget = true,
+  }) {
+    return getCardLeadingCircleAvatar(
+      context,
+      addBottomWidget: addBottomWidget,
+    );
   }
 
   String getCardItemDropdownSubtitle(BuildContext context) {
@@ -58,31 +66,43 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return getMainHeaderTextOnly(context);
   }
 
-  Widget getCardLeadingCircleAvatar(BuildContext context,
-      {double width = 60, double height = 60, bool addBottomWidget = true}) {
+  Widget getCardLeadingCircleAvatar(
+    BuildContext context, {
+    double width = 60,
+    double height = 60,
+    bool addBottomWidget = true,
+  }) {
     return CircleAvatar(
-        radius: 24,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        child: getCardLeadingImage(context, addBottomWidget: addBottomWidget));
+      radius: 24,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      child: getCardLeadingImage(context, addBottomWidget: addBottomWidget),
+    );
   }
 
-  Widget getHeroTag(
-      {required BuildContext context,
-      required Widget child,
-      String? addCustomHeroTag}) {
+  Widget getHeroTag({
+    required BuildContext context,
+    required Widget child,
+    String? addCustomHeroTag,
+  }) {
     return child;
     return Hero(
-        tag: getIDFormat(context) +
-            (getTableNameApi() ?? "") +
-            (addCustomHeroTag ?? ""),
-        child: child);
+      tag:
+          getIDFormat(context) +
+          (getTableNameApi() ?? "") +
+          (addCustomHeroTag ?? ""),
+      child: child,
+    );
   }
 
-  Widget getCardLeading(BuildContext context,
-      {String? addCustomHeroTag, bool addBottomWidget = true}) {
+  Widget getCardLeading(
+    BuildContext context, {
+    String? addCustomHeroTag,
+    bool addBottomWidget = true,
+  }) {
     return getHeroTag(
-        context: context,
-        child: getCardLeadingImage(context, addBottomWidget: addBottomWidget));
+      context: context,
+      child: getCardLeadingImage(context, addBottomWidget: addBottomWidget),
+    );
   }
 
   DismissDirection getDismissibleDirection() {
@@ -96,9 +116,10 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   void onCardDismissedView(BuildContext context, DismissDirection direction) {
     debugPrint("onDismissed {$this} => direction: $direction");
     if (direction == DismissDirection.startToEnd) {
-      context
-          .read<ActionViewAbstractProvider>()
-          .change(this as ViewAbstract, ServerActions.edit);
+      context.read<ActionViewAbstractProvider>().change(
+        this as ViewAbstract,
+        ServerActions.edit,
+      );
     }
   }
 
@@ -107,33 +128,36 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       alignment: Alignment.centerRight,
       color: Colors.green,
-      child: const Icon(
-        Icons.add_shopping_cart,
-        color: Colors.white,
-      ),
+      child: const Icon(Icons.add_shopping_cart, color: Colors.white),
     );
   }
 
-  Widget getCachedImage(BuildContext context,
-      {String? url, double? size = 50}) {
+  Widget getCachedImage(
+    BuildContext context, {
+    String? url,
+    double? size = 50,
+  }) {
     return Container(
-        width: size ?? 50,
-        height: size ?? 50,
-        // width: 60,
-        // height: 60,
-        // width: 150,
-        // height: 100,
-        decoration: BoxDecoration(
-          // color: Colors.blueAccent,
-          borderRadius: BorderRadius.circular(kBorderRadius),
+      width: size ?? 50,
+      height: size ?? 50,
+      // width: 60,
+      // height: 60,
+      // width: 150,
+      // height: 100,
+      decoration: BoxDecoration(
+        // color: Colors.blueAccent,
+        borderRadius: BorderRadius.circular(kBorderRadius),
 
-          image: url == null
-              ? null
-              : DecorationImage(
-                  image: FastCachedImageProvider(url), fit: BoxFit.cover),
-          // color: url == null ? null : color?.darkVibrantColor?.color,
-          // borderRadius: const BorderRadius.all(Radius.circular(20))
-        ));
+        image: url == null
+            ? null
+            : DecorationImage(
+                image: FastCachedImageProvider(url),
+                fit: BoxFit.cover,
+              ),
+        // color: url == null ? null : color?.darkVibrantColor?.color,
+        // borderRadius: const BorderRadius.all(Radius.circular(20))
+      ),
+    );
     // return Image.network(url);
     //TODO: this is for leading card
     // return CachedNetworkImage(
@@ -200,8 +224,9 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     if (imageUrl == null) {
       return Icon(getMainIconData());
     }
-    Widget? iconOnButton =
-        addBottomWidget ? generateCardLeadingBottomIcon(context) : null;
+    Widget? iconOnButton = addBottomWidget
+        ? generateCardLeadingBottomIcon(context)
+        : null;
 
     Widget image = getCachedImage(context, url: imageUrl);
 
@@ -220,38 +245,49 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return Icon(getMainIconData());
   }
 
-  Widget getImageWithRoundedCorner(BuildContext context, {double size = 50}) {
-    return Container(
-        width: size,
-        height: size,
-        decoration: getBoxDecoration(context),
-        child: getImageUrlAddHost(context) == null
-            ? getCustomImage(context, size: size) ?? getImageIfNoUrl()
-            : null);
+  Widget getImageWithRoundedCorner(
+    BuildContext context, {
+    double size = 50,
+    double? withAspectRatio,
+  }) {
+    Widget w = Container(
+      width: withAspectRatio != null ? null : size,
+      height: withAspectRatio != null ? null : size,
+      decoration: getBoxDecoration(context),
+      child: getImageUrlAddHost(context) == null
+          ? getCustomImage(context, size: size) ?? getImageIfNoUrl()
+          : null,
+    );
+    if (withAspectRatio != null) {
+      return AspectRatio(aspectRatio: withAspectRatio, child: w);
+    }
+    return w;
   }
 
   BoxDecoration getBoxDecoration(BuildContext context) {
     return BoxDecoration(
-        image: getImageUrlAddHost(context) == null
-            ? null
-            : DecorationImage(
-                image: FastCachedImageProvider(getImageUrlAddHost(context)!),
-                fit: BoxFit.cover),
-        color: null,
-        border: Border.all(width: 2, color: Theme.of(context).highlightColor),
-        borderRadius: getBorderRedius());
+      image: getImageUrlAddHost(context) == null
+          ? null
+          : DecorationImage(
+              image: FastCachedImageProvider(getImageUrlAddHost(context)!),
+              fit: BoxFit.cover,
+            ),
+      color: null,
+      border: Border.all(width: 2, color: Theme.of(context).highlightColor),
+      borderRadius: getBorderRedius(),
+    );
   }
 
-  Widget getCardLeadingImage(BuildContext context,
-      {bool? isSelected, bool addBottomWidget = true, double? size}) {
+  Widget getCardLeadingImage(
+    BuildContext context, {
+    bool? isSelected,
+    bool addBottomWidget = true,
+    double? size,
+  }) {
     String? imageUrl = getImageUrlAddHost(context);
     debugPrint("getCardLeadingImage $imageUrl");
     if (imageUrl == null) {
-      return getCustomImage(context) ??
-          Icon(
-            getMainIconData(),
-            size: 30,
-          );
+      return getCustomImage(context) ?? Icon(getMainIconData(), size: 30);
     }
     debugPrint("getCardLeadingImage $imageUrl");
     // IconData? iconOnButton =
@@ -319,7 +355,9 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   Future<List<MenuItemBuild>> getPopupMenuActions(
-      BuildContext context, ServerActions action) async {
+    BuildContext context,
+    ServerActions action,
+  ) async {
     if (action == ServerActions.edit) {
       return getPopupMenuActionsEdit(context);
     }
@@ -328,12 +366,16 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   List<MenuItemBuildGenirc> getPopupMenuActionsThreeDot(
-      BuildContext context, ServerActions? action) {
+    BuildContext context,
+    ServerActions? action,
+  ) {
     return [];
   }
 
-  List<MenuItemBuild> getPopupMenuActionsEdit(BuildContext context,
-      {SliverApiWithStaticMixin? state}) {
+  List<MenuItemBuild> getPopupMenuActionsEdit(
+    BuildContext context, {
+    SliverApiWithStaticMixin? state,
+  }) {
     return [
       if (state != null) getMenuItemSelect(context),
       if (hasPermissionPrint(context)) getMenuItemPrint(context),
@@ -342,8 +384,10 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     ];
   }
 
-  List<MenuItemBuild> getPopupMenuActionsList(BuildContext context,
-      {SliverApiWithStaticMixin? state}) {
+  List<MenuItemBuild> getPopupMenuActionsList(
+    BuildContext context, {
+    SliverApiWithStaticMixin? state,
+  }) {
     return [
       if (state != null) getMenuItemSelect(context),
       if (hasPermissionShare(context)) getMenuItemShare(context),
@@ -354,18 +398,24 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
   }
 
   @Deprecated("Not future anymore")
-  Widget onFutureAllPopupMenuLoaded(BuildContext context, ServerActions action,
-      {required Widget Function(List<MenuItemBuild>) onPopupMenuListLoaded,
-      SliverApiWithStaticMixin? state}) {
+  Widget onFutureAllPopupMenuLoaded(
+    BuildContext context,
+    ServerActions action, {
+    required Widget Function(List<MenuItemBuild>) onPopupMenuListLoaded,
+    SliverApiWithStaticMixin? state,
+  }) {
     List<MenuItemBuild> list = action == ServerActions.edit
         ? getPopupMenuActionsEdit(context, state: state)
         : getPopupMenuActionsList(context, state: state);
     return onPopupMenuListLoaded(list);
   }
 
-  Widget getPopupMenuActionWidget(BuildContext c, ServerActions action,
-      {SliverApiWithStaticMixin? state,
-      SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) {
+  Widget getPopupMenuActionWidget(
+    BuildContext c,
+    ServerActions action, {
+    SliverApiWithStaticMixin? state,
+    SecoundPaneHelperWithParentValueNotifier? secPaneHelper,
+  }) {
     //TODO for divider use PopupMenuDivider()
     List<MenuItemBuild> items = action == ServerActions.edit
         ? getPopupMenuActionsEdit(c)
@@ -377,13 +427,16 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     );
   }
 
-  Widget getPopupMenuActionListWidget(BuildContext c,
-      {SliverApiWithStaticMixin? state}) {
+  Widget getPopupMenuActionListWidget(
+    BuildContext c, {
+    SliverApiWithStaticMixin? state,
+  }) {
     List<MenuItemBuild> items = getPopupMenuActionsList(c);
     return PopupMenuButton<MenuItemBuild>(
       elevation: 10,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10))),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
       onSelected: (MenuItemBuild result) {
         onPopupMenuActionSelected(c, result, state: state);
       },
@@ -392,39 +445,54 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     );
   }
 
-  ListTile buildMenuItemListTile(BuildContext context, MenuItemBuild e,
-      {SliverApiWithStaticMixin? state,
-      SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) {
+  ListTile buildMenuItemListTile(
+    BuildContext context,
+    MenuItemBuild e, {
+    SliverApiWithStaticMixin? state,
+    SecoundPaneHelperWithParentValueNotifier? secPaneHelper,
+  }) {
     return ListTile(
       leading: Icon(e.icon),
       title: Text(e.title),
       onTap: () {
         Navigator.of(context).pop();
-        onPopupMenuActionSelected(context, e,
-            state: state, secPaneHelper: secPaneHelper);
+        onPopupMenuActionSelected(
+          context,
+          e,
+          state: state,
+          secPaneHelper: secPaneHelper,
+        );
       },
     );
   }
 
   PopupMenuItem<MenuItemBuild> buildMenuItem(
-          BuildContext context, MenuItemBuild e,
-          {SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) =>
-      PopupMenuItem(
-          value: e,
-          child:
-              buildMenuItemListTile(context, e, secPaneHelper: secPaneHelper));
+    BuildContext context,
+    MenuItemBuild e, {
+    SecoundPaneHelperWithParentValueNotifier? secPaneHelper,
+  }) => PopupMenuItem(
+    value: e,
+    child: buildMenuItemListTile(context, e, secPaneHelper: secPaneHelper),
+  );
 
-  void onMenuItemActionClickedView(BuildContext context, MenuItemBuild e,
-      {SliverApiWithStaticMixin? state}) {
+  void onMenuItemActionClickedView(
+    BuildContext context,
+    MenuItemBuild e, {
+    SliverApiWithStaticMixin? state,
+  }) {
     onPopupMenuActionSelected(context, e, state: state);
   }
 
-  void onPopupMenuActionSelected(BuildContext context, MenuItemBuild result,
-      {ServerActions? action,
-      SliverApiWithStaticMixin? state,
-      SecoundPaneHelperWithParentValueNotifier? secPaneHelper}) async {
+  void onPopupMenuActionSelected(
+    BuildContext context,
+    MenuItemBuild result, {
+    ServerActions? action,
+    SliverApiWithStaticMixin? state,
+    SecoundPaneHelperWithParentValueNotifier? secPaneHelper,
+  }) async {
     debugPrint(
-        "onPopupMenuActionSelected $result secPaneHelper is null ? ${secPaneHelper == null}");
+      "onPopupMenuActionSelected $result secPaneHelper is null ? ${secPaneHelper == null}",
+    );
 
     if (result.icon == Icons.share) {
       sharePage(context, action: action, secPaneHelper: secPaneHelper);

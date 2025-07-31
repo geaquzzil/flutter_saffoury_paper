@@ -272,7 +272,8 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
         SliverToBoxAdapter(
           child: getExtrasCast().getImageWithRoundedCorner(
             context,
-            size: getHeight * .25,
+            // size: getHeight * .25,
+            withAspectRatio: 1/1
           ),
         ),
         SliverList(

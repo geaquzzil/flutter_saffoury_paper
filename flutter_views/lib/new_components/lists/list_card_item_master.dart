@@ -18,6 +18,11 @@ class ListCardItemMaster<T extends ViewAbstract> extends StatefulWidget {
   final void Function(T object, bool isSelected)? isSelectForSelection;
   final bool Function(T? object)? isSelectForListTile;
 
+  final Widget? title;
+  final Widget? subtitle;
+  final Widget? leading;
+  final Widget? traling;
+
   const ListCardItemMaster({
     super.key,
     required this.object,
@@ -31,6 +36,10 @@ class ListCardItemMaster<T extends ViewAbstract> extends StatefulWidget {
     this.onLongTap,
     this.onTralingTap,
     this.onPopMenuTap,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.traling
   });
 
   @override
@@ -140,14 +149,14 @@ class ListCardItemMasterState<
           widget.stateForToggle?.toggleSelectedMood();
         }
       },
-      title: (object.getMainHeaderText(context, searchQuery: _searchQuery)),
-      subtitle: (object.getMainSubtitleHeaderText(
+      title: widget.title?? (object.getMainHeaderText(context, searchQuery: _searchQuery)),
+      subtitle:widget.subtitle?? (object.getMainSubtitleHeaderText(
         context,
         searchQuery: _searchQuery,
       )),
       // isThreeLine: hasThreeLine,
-      leading: object.getCardLeading(context),
-      trailing: object.getCardTrailing(context, secPaneHelper: widget.state),
+      leading:widget.leading?? object.getCardLeading(context),
+      trailing: widget.traling?? object.getCardTrailing(context, secPaneHelper: widget.state),
     );
   }
 }

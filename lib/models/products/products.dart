@@ -67,7 +67,6 @@ import 'package:flutter_view_controller/modified_packages/timelines/timelines.da
 import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -90,7 +89,6 @@ import 'package:pdf/pdf.dart' as pdf;
 import 'package:pdf/widgets.dart' as pdfWidget;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 import 'package:supercharged/supercharged.dart';
 import 'package:user_avatar_generator/core/export_paths.dart';
 
@@ -251,13 +249,13 @@ class Product extends ViewAbstract<Product>
   Product.disableCustomFilterable({this.disbleStatusAndSizeOnFilter = true});
 
   Product.requiresInventory() {
-    setRequestOption(option: _getOnlyInventory());
+    setRequestOption(option: getOnlyInventory());
     date = "".toDateTimeNowString();
     status = ProductStatus.NONE;
   }
 
   Product.inventoryWorker() {
-    setRequestOption(option: _getOnlyInventory());
+    setRequestOption(option: getOnlyInventory());
     disbleStatusAndSizeOnFilter = true;
     isInventoryWorker = true;
     date = "".toDateTimeNowString();
@@ -284,7 +282,7 @@ class Product extends ViewAbstract<Product>
 
   Product.initOnlyReelsCustomParams() {
     setRequestOption(
-      option: _getOnlyInventory().addValueBetween(
+      option: getOnlyInventory().addValueBetween(
         ProductSize(),
         BetweenRequest(
           field: "lenght",
@@ -293,7 +291,7 @@ class Product extends ViewAbstract<Product>
       ),
     );
   }
-  RequestOptions _getOnlyInventory() {
+  RequestOptions getOnlyInventory() {
     return RequestOptions()
         .addSearchByField("requiresInventory", "true")
         .addRequestObjcets(true)
@@ -1077,7 +1075,7 @@ class Product extends ViewAbstract<Product>
         scrollDirection: Axis.horizontal,
         hideOnEmpty: true,
         toListObject: Product().setRequestOption(
-          option: _getOnlyInventory().addDate(DateObject.today()),
+          option: getOnlyInventory().addDate(DateObject.today()),
         ),
       ),
       SliverApiMixinViewAbstractWidget(
@@ -1089,7 +1087,7 @@ class Product extends ViewAbstract<Product>
         scrollDirection: Axis.horizontal,
         hideOnEmpty: true,
         toListObject: Product().setRequestOption(
-          option: _getOnlyInventory().addDate(DateObject.initThisWeek()),
+          option: getOnlyInventory().addDate(DateObject.initThisWeek()),
         ),
       ),
       // HeaderDescription(
@@ -1185,7 +1183,7 @@ class Product extends ViewAbstract<Product>
             ..width = width.toNonNullable()
             ..length = length ?? 0);
 
-    RequestOptions op = _getOnlyInventory().setBetween(
+    RequestOptions op = getOnlyInventory().setBetween(
       "SizeID",
       customSize?.getListOfSizesWithMaxWaste(maxWaste: maxWaste ?? 20),
     );
@@ -1196,7 +1194,7 @@ class Product extends ViewAbstract<Product>
   }
 
   RequestOptions getSimilarWithSameAndTypeSize(BuildContext context) {
-    RequestOptions op = _getOnlyInventory()
+    RequestOptions op = getOnlyInventory()
         .addSearchByField("ProductTypeID", products_types?.iD)
         .setBetween("SizeID", sizes?.getListOfSizesWithMaxWaste(maxWaste: 20));
 
@@ -1213,7 +1211,7 @@ class Product extends ViewAbstract<Product>
     BuildContext context,
     ProductType category,
   ) {
-    RequestOptions op = _getOnlyInventory().addSearchByField(
+    RequestOptions op = getOnlyInventory().addSearchByField(
       "ProductTypeID",
       category.iD,
     );
@@ -1225,7 +1223,7 @@ class Product extends ViewAbstract<Product>
 
   @override
   RequestOptions getSimilarCustomParams({required BuildContext context}) {
-    RequestOptions op = _getOnlyInventory()
+    RequestOptions op = getOnlyInventory()
         .addSearchByField("GSMID", gsms?.iD)
         .addSearchByField("ProductTypeID", products_types?.iD);
     // debugPrint("getSimilarCustomParams is In function $op");
@@ -1297,7 +1295,10 @@ class Product extends ViewAbstract<Product>
     return ProductHeaderToggle(product: this);
   }
 
-  RequestOptions? getRequestOptionsPassedOnString(String string) {
+  RequestOptions? getRequestOptionsPassedOnString(
+    String string, {
+    int? maxWaste,
+  }) {
     string = string.toLowerCase();
     //refrence https://regex101.com/r/ryZNZe/1
     RegExp reg = RegExp(
@@ -1372,8 +1373,16 @@ class Product extends ViewAbstract<Product>
     ProductSize size = ProductSize()
       ..length = lengthI ?? 0
       ..width = widthI;
-    op = op.setBetween("SizeID", size.getListOfSizesWithMaxWaste(maxWaste: 20));
+    op = op.setBetween(
+      "SizeID",
+      size.getListOfSizesWithMaxWaste(maxWaste: maxWaste ?? 20),
+    );
     debugPrint("getRequestOptionsPassedOnString ${op.toString()}");
+    op.extras = {
+      'width': widthI,
+      'length': lengthI,
+      'gsm': int.tryParse(gsm ?? "-"),
+    };
     return op;
   }
 
@@ -1399,7 +1408,7 @@ class Product extends ViewAbstract<Product>
         return [
           SliverApiMixinViewAbstractWidget(
             toListObject: Product().setRequestOption(
-              option: _getOnlyInventory().copyWithObjcet(option: op),
+              option: getOnlyInventory().copyWithObjcet(option: op),
             ),
             header: HeaderDescription(
               isSliver: true,
@@ -1412,9 +1421,10 @@ class Product extends ViewAbstract<Product>
                       title: AppLocalizations.of(context)!.size_analyzer,
                       object: this,
                       value: SizeAnalyzerPage(
+                        searchQuery: extras,
                         parent: basePage.parent,
                         onBuild: basePage.onBuild,
-                        requestOptions: _getOnlyInventory().copyWithObjcet(
+                        requestOptions: getOnlyInventory().copyWithObjcet(
                           option: op,
                         ),
                       ),
@@ -1834,6 +1844,47 @@ class Product extends ViewAbstract<Product>
   //   return p;
   // }
 
+  double findWastePercentage({ProductSize? size, int? gsm}) {
+    if (size == null && gsm == null) return 0;
+    if (size?.width != null && size?.length != null) {
+      int width = sizes!.width!;
+      int length = sizes!.length!;
+      if ((length - getWidth()).abs() > (width - getWidth()).abs()) {
+        size?.width = length;
+        size?.length = width;
+      }
+    }
+    double gsmWaste =
+        ((getGSM() - (gsm ?? getGSM())).abs() / (gsm ?? getGSM())) * 100;
+
+    if (gsm != null && gsm < getGSM()) {
+      gsmWaste = -1 * gsmWaste;
+    }
+
+    double widthWaste =
+        ((getWidth() - (size?.width ?? getWidth())).abs() /
+            (size?.width ?? getWidth())) *
+        100;
+
+    double lengthWaste = isRoll()
+        ? 0
+        : (((getLength() - (size?.length ?? getLength())).abs() /
+                  (size?.length ?? getLength()))) *
+              100;
+
+    double totalWaste = gsmWaste + widthWaste + lengthWaste;
+
+    debugPrint(
+      "findWastePercentage gsm:$gsmWaste width:$widthWaste length:$lengthWaste totalWaste:$totalWaste ",
+    );
+    if (totalWaste == 100) return 0;
+    while (totalWaste > 100) {
+      debugPrint("findWastePercentage $totalWaste");
+      totalWaste = totalWaste - 100;
+    }
+    return totalWaste.roundDouble();
+  }
+
   double findRemainingWeightCut(Warehouse warehouse) {
     return getQuantity(warehouse: warehouse) -
         cut_request_quantity.toNonNullable();
@@ -1954,7 +2005,7 @@ class Product extends ViewAbstract<Product>
                   title: AppLocalizations.of(context)!.thisWeek,
                 ),
                 toListObject: Product().setRequestOption(
-                  option: _getOnlyInventory().addDate(
+                  option: getOnlyInventory().addDate(
                     DateObject.initThisMonth(),
                   ),
                 ),
@@ -1971,7 +2022,7 @@ class Product extends ViewAbstract<Product>
                   title: AppLocalizations.of(context)!.today,
                 ),
                 toListObject: Product().setRequestOption(
-                  option: _getOnlyInventory().addDate(DateObject.today()),
+                  option: getOnlyInventory().addDate(DateObject.today()),
                 ),
 
                 isSliver: false,
@@ -2129,9 +2180,9 @@ class Product extends ViewAbstract<Product>
     RequestOptions? generatedOptionFromListCall,
   }) {
     if (action == ServerActions.list) {
-      return _getOnlyInventory();
+      return getOnlyInventory();
     } else if (action == ServerActions.search) {
-      RequestOptions ro = _getOnlyInventory();
+      RequestOptions ro = getOnlyInventory();
       return ro;
     }
     return null;
@@ -2173,7 +2224,7 @@ class Product extends ViewAbstract<Product>
                       widget: POSListWidget(
                         autoRest: AutoRest<Product>(
                           obj: Product().setRequestOption(
-                            option: _getOnlyInventory().addSearchByField(
+                            option: getOnlyInventory().addSearchByField(
                               "ProductTypeID",
                               e.iD,
                             ),
@@ -2639,6 +2690,61 @@ class Product extends ViewAbstract<Product>
 //   @JsonValue("WASTED")
 //   WASTED
 // }
+enum WasteEnum implements ViewAbstractEnum<WasteEnum> {
+  waste1(10),
+  waste2(20),
+  waste3(30),
+  waste4(40),
+  waste5(50),
+  waste6(60),
+  waste7(70),
+  waste8(80),
+  waste9(90),
+  waste10(100);
+
+  const WasteEnum(this.value);
+  final int value;
+  @override
+  IconData getFieldLabelIconData(BuildContext context, WasteEnum field) {
+    return Icons.delete;
+  }
+
+  @override
+  String getFieldLabelString(BuildContext context, WasteEnum field) {
+    switch (field) {
+      case waste1:
+        return AppLocalizations.of(context)!.waste1;
+      case waste2:
+        return AppLocalizations.of(context)!.waste2;
+      case waste3:
+        return AppLocalizations.of(context)!.waste3;
+      case waste4:
+        return AppLocalizations.of(context)!.waste4;
+      case waste5:
+        return AppLocalizations.of(context)!.waste5;
+      case waste6:
+        return AppLocalizations.of(context)!.waste6;
+      case waste7:
+        return AppLocalizations.of(context)!.waste7;
+      case waste8:
+        return AppLocalizations.of(context)!.waste8;
+      case waste9:
+        return AppLocalizations.of(context)!.waste9;
+      case waste10:
+        return AppLocalizations.of(context)!.waste10;
+    }
+  }
+
+  @override
+  IconData getMainIconData() => Icons.track_changes;
+
+  @override //TODO translate
+  String getMainLabelText(BuildContext context) =>
+      AppLocalizations.of(context)!.wasted;
+
+  @override
+  List<WasteEnum> getValues() => WasteEnum.values;
+}
 
 enum ProductStatus implements ViewAbstractEnum<ProductStatus> {
   @JsonValue("NONE")

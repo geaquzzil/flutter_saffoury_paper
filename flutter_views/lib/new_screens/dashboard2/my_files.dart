@@ -171,8 +171,8 @@ class StaggerdGridViewWidget extends StatelessWidget {
   final double childAspectRatio;
 
   int getCrossAxisCount(double width) {
-      int val = ((width / 200)).toInt();
-      debugPrint("getCrossAxisCount val   $val");
+      int val = ((width / 150)).toInt();
+      debugPrint("getCrossAxisCount val width:$width  $val");
       return val;
     if (width < 500 && width > 0) {
       return 1;
