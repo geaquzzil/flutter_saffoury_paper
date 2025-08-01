@@ -334,7 +334,7 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
   }
 
   @override
-  Future getCallApiFunctionIfNull(
+  Future getOverrideCallApiFunction(
     BuildContext context, {
     TabControllerHelper? tab,
   }) {

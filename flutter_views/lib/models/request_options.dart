@@ -69,7 +69,6 @@ class FromToBetweenRequest {
 class RequestOptions {
   int? page;
   int? countPerPage;
-  int? countPerPageWhenSearch;
   int? limit;
 
   String? searchQuery;
@@ -97,7 +96,6 @@ class RequestOptions {
   RequestOptions({
     this.betweenMap,
     this.countPerPage = 20,
-    this.countPerPageWhenSearch = 20,
     this.date,
     this.filterMap,
     this.groupBy,
@@ -118,7 +116,6 @@ class RequestOptions {
     return copyWith(
       betweenMap: option.betweenMap,
       countPerPage: option.countPerPage,
-      countPerPageWhenSearch: option.countPerPageWhenSearch,
       date: option.date,
       filterMap: option.filterMap,
       groupBy: option.groupBy,
@@ -138,7 +135,6 @@ class RequestOptions {
   RequestOptions copyWith({
     Map<String, dynamic>? betweenMap,
     int? countPerPage,
-    int? countPerPageWhenSearch,
     DateObject? date,
     Map<String, FilterableProviderHelper>? filterMap,
     List<String>? groupBy,
@@ -156,8 +152,6 @@ class RequestOptions {
     return RequestOptions(
       betweenMap: betweenMap ?? this.betweenMap,
       countPerPage: countPerPage ?? this.countPerPage,
-      countPerPageWhenSearch:
-          countPerPageWhenSearch ?? this.countPerPageWhenSearch,
       date: date ?? this.date,
       filterMap: filterMap ?? this.filterMap,
       groupBy: groupBy ?? this.groupBy,
@@ -258,11 +252,8 @@ class RequestOptions {
     return {
       if (!disablePaging && page != null) 'page': "$page",
       if (!disablePaging && limit != null) 'limit': "$limit",
-      if (!disablePaging &&
-          (countPerPage != null || countPerPageWhenSearch != null))
-        'countPerPage': countPerPageWhenSearch != null
-            ? "$countPerPageWhenSearch"
-            : "$countPerPage",
+      if (!disablePaging && (countPerPage != null))
+        'countPerPage': "$countPerPage",
       if (date != null) 'date': date!.toJson(),
       if (sortBy != null) ...sortBy!.getMap(),
       if (searchQuery != null) "searchQuery": searchQuery,
@@ -273,10 +264,6 @@ class RequestOptions {
       if (searchByField != null) ...searchByField!,
       ...getFilterableMap(),
     };
-  }
-
-  RequestOptions setPageAndCount(int page, {int? customCountPerPage}) {
-    return copyWith(page: page, countPerPageWhenSearch: customCountPerPage);
   }
 
   RequestOptions addRequestObjcets(dynamic value) {
@@ -375,9 +362,6 @@ class RequestOptions {
     if (countPerPage != null) {
       result.addAll({'countPerPage': countPerPage});
     }
-    if (countPerPageWhenSearch != null) {
-      result.addAll({'countPerPageWhenSearch': countPerPageWhenSearch});
-    }
     if (limit != null) {
       result.addAll({'limit': limit});
     }
@@ -415,7 +399,6 @@ class RequestOptions {
     return RequestOptions(
       page: map['page']?.toInt(),
       countPerPage: map['countPerPage']?.toInt(),
-      countPerPageWhenSearch: map['countPerPageWhenSearch']?.toInt(),
       limit: map['limit']?.toInt(),
       searchQuery: map['searchQuery'],
       date: map['date'] != null ? DateObject.fromMap(map['date']) : null,

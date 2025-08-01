@@ -310,7 +310,7 @@ class _BaseDashboardMainPageState
   bool setHorizontalDividerWhenTowPanes() => false;
 
   @override
-  Future getCallApiFunctionIfNull(
+  Future getOverrideCallApiFunction(
     BuildContext context, {
     TabControllerHelper? tab,
   }) {

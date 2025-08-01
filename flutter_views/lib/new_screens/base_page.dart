@@ -2201,7 +2201,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     super.didUpdateWidget(oldWidget);
   }
 
-  Future<dynamic> getCallApiFunctionIfNull(
+  Future<dynamic>? getOverrideCallApiFunction(
     BuildContext context, {
     TabControllerHelper? tab,
   });
@@ -2386,7 +2386,9 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     //   return super.getMainPanes();
     // }
     return FutureBuilder<dynamic>(
-      future: getExtrasCast().viewCall(context: context, customID: getID),
+      future:
+          getOverrideCallApiFunction(context) ??
+          getExtrasCast().viewCall(context: context, customID: getID),
       builder: (context, snapshot) {
         _connectionState.value =
             overrideConnectionState(BasePageWithApiConnection.future) ??
@@ -2395,7 +2397,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
 
         debugPrint("BasePageApi FutureBuilder started");
         if (snapshot.hasError) {
-          debugPrint("BasePageApi FutureBuilder hasError");
+          debugPrint("BasePageApi FutureBuilder hasError ${snapshot.error}");
           return getErrorWidget();
         } else if (snapshot.connectionState == ConnectionState.done) {
           debugPrint(

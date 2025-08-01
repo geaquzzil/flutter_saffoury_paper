@@ -48,11 +48,7 @@ class _SliverApiMixinAutoRestState
       type: getToListObjectType(),
     );
     key =
-        key +
-        (getSearchString ?? "") +
-        (getFilterData.toString()) +
-        (getCopyWithCustomRequestOptions?.getKey() ?? "");
-    (getCustomRequestOptions?.getKey() ?? "");
+        "$key${widget.requiresFullFetsh}${getSearchString ?? ""}$getFilterData${getCopyWithCustomRequestOptions?.getKey() ?? ""}";
     // debugPrint("SliverApiWithStaticMixin===> getListProviderKey $key");
     return key;
   }

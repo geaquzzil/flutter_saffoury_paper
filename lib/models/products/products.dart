@@ -1843,34 +1843,50 @@ class Product extends ViewAbstract<Product>
   //   p.gsms = GSM()..gsm = 300;
   //   return p;
   // }
+  double? calculatePercentage(num? main, num? part) {
+    if (main == null || main == 0) return null;
+    if (part == 0 || part == null) return 0;
+    debugPrint("calculatePercentage main:$main part:$part");
+    // double multiply = -1;
+    return ((((part - main).abs()) / part) * 100).roundDouble();
+  }
 
-  double findWastePercentage({ProductSize? size, int? gsm}) {
-    if (size == null && gsm == null) return 0;
-    if (size?.width != null && size?.length != null) {
-      int width = sizes!.width!;
-      int length = sizes!.length!;
-      if ((length - getWidth()).abs() > (width - getWidth()).abs()) {
-        size?.width = length;
-        size?.length = width;
-      }
-    }
-    double gsmWaste =
-        ((getGSM() - (gsm ?? getGSM())).abs() / (gsm ?? getGSM())) * 100;
+  double? findWastePercentage({
+    ProductSize? customSize,
+    int? gsm,
+    bool exit = false,
+  }) {
+    if (customSize == null && gsm == null) return 0;
+    double? gsmWaste = gsm == null ? 0 : calculatePercentage(getGSM(), gsm);
+    double? widthWaste;
 
-    if (gsm != null && gsm < getGSM()) {
-      gsmWaste = -1 * gsmWaste;
-    }
+    // if (isRoll()) {
+    //   double? wasteInLength;
+    //   widthWaste = calculatePercentage(getWidth(), customSize?.width);
+    //   if (customSize?.length != null) {
+    //     wasteInLength = calculatePercentage(getWidth(), customSize?.length);
+    //   }
+    //   widthWaste = wasteInLength == null
+    //       ? widthWaste
+    //       : (wasteInLength < widthWaste.toNonNullable())
+    //       ? wasteInLength
+    //       : widthWaste;
+    // }
 
-    double widthWaste =
-        ((getWidth() - (size?.width ?? getWidth())).abs() /
-            (size?.width ?? getWidth())) *
-        100;
-
-    double lengthWaste = isRoll()
+    widthWaste = calculatePercentage(getWidth(), customSize?.width);
+    double? lengthWaste = isRoll()
         ? 0
-        : (((getLength() - (size?.length ?? getLength())).abs() /
-                  (size?.length ?? getLength()))) *
-              100;
+        : calculatePercentage(getLength(), customSize?.length);
+
+    if (lengthWaste == null || widthWaste == null || gsmWaste == null) {
+      return null;
+    }
+
+    // isRoll()
+    //     ? 0
+    //     : (((getLength() - (size?.length ?? getLength())).abs() /
+    //               (size?.length ?? getLength()))) *
+    //           100;
 
     double totalWaste = gsmWaste + widthWaste + lengthWaste;
 
@@ -1878,11 +1894,33 @@ class Product extends ViewAbstract<Product>
       "findWastePercentage gsm:$gsmWaste width:$widthWaste length:$lengthWaste totalWaste:$totalWaste ",
     );
     if (totalWaste == 100) return 0;
-    while (totalWaste > 100) {
-      debugPrint("findWastePercentage $totalWaste");
+    // debugPrint("findWastePercentage $totalWaste");
+    while (totalWaste >= 100) {
+      // debugPrint("findWastePercentage $totalWaste");
       totalWaste = totalWaste - 100;
     }
-    return totalWaste.roundDouble();
+    // return totalWaste;
+    int? width = customSize?.width;
+    int? length = customSize?.length;
+    if (length == null) {
+      return totalWaste.roundDouble();
+    }
+    double? flipedWaste = exit
+        ? null
+        : findWastePercentage(
+            gsm: gsm,
+            exit: true,
+            customSize: ProductSize()
+              ..width = (length)
+              ..length = width,
+          );
+    debugPrint("findWastePercentage flipedWaste $flipedWaste");
+    double waste = totalWaste.roundDouble();
+    if (flipedWaste == null) return waste;
+    if (waste > flipedWaste) {
+      return flipedWaste.roundDouble();
+    }
+    return waste;
   }
 
   double findRemainingWeightCut(Warehouse warehouse) {

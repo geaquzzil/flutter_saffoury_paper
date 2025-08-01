@@ -46,20 +46,21 @@ class PrintNew<T extends PrintLocalSetting> extends BasePageApi {
   PrintPageType? type;
   T? customSetting;
 
-  PrintNew(
-      {super.key,
-      super.iD,
-      super.extras,
-      super.tableName,
-      super.onBuild,
-      super.parent,
-      this.buildBaseHeader = false,
-      this.asList,
-      this.type,
-      this.customSetting,
-      super.buildSecondPane,
-      super.isFirstToSecOrThirdPane,
-      super.buildDrawer = false});
+  PrintNew({
+    super.key,
+    super.iD,
+    super.extras,
+    super.tableName,
+    super.onBuild,
+    super.parent,
+    this.buildBaseHeader = false,
+    this.asList,
+    this.type,
+    this.customSetting,
+    super.buildSecondPane,
+    super.isFirstToSecOrThirdPane,
+    super.buildDrawer = false,
+  });
 
   @override
   State<PrintNew> createState() => _PrintNewState();
@@ -69,10 +70,11 @@ class LoadedPrint {
   String viewAbstract;
   String setting;
   PdfPageFormat format;
-  LoadedPrint(
-      {required this.viewAbstract,
-      required this.setting,
-      required this.format});
+  LoadedPrint({
+    required this.viewAbstract,
+    required this.setting,
+    required this.format,
+  });
   @override
   bool operator ==(Object other) {
     return other is LoadedPrint &&
@@ -103,29 +105,33 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
 
   Widget getPrintShareFloating(BuildContext context) {
     return FloatingActionButton.small(
-        heroTag: UniqueKey(),
-        child: const Icon(Icons.share),
-        onPressed: () async {
-          await Printing.sharePdf(bytes: loadedFileBytes!);
-        });
+      heroTag: UniqueKey(),
+      child: const Icon(Icons.share),
+      onPressed: () async {
+        await Printing.sharePdf(bytes: loadedFileBytes!);
+      },
+    );
   }
 
   Widget getPrintFloating(BuildContext context) {
     return FloatingActionButton(
-        heroTag: UniqueKey(),
-        child: const Icon(Icons.print),
-        onPressed: () async {
-          if (await getExtrasCast().directPrint(
-              format: context
-                  .read<PrintSettingLargeScreenProvider>()
-                  .getSelectedFormat,
-              context: context,
-              printer: _selectedPrinter,
-              onLayout: (PdfPageFormat format) async => loadedFile)) {
-            await Printing.layoutPdf(
-                onLayout: (PdfPageFormat format) async => loadedFile);
-          }
-        });
+      heroTag: UniqueKey(),
+      child: const Icon(Icons.print),
+      onPressed: () async {
+        if (await getExtrasCast().directPrint(
+          format: context
+              .read<PrintSettingLargeScreenProvider>()
+              .getSelectedFormat,
+          context: context,
+          printer: _selectedPrinter,
+          onLayout: (PdfPageFormat format) async => loadedFile,
+        )) {
+          await Printing.layoutPdf(
+            onLayout: (PdfPageFormat format) async => loadedFile,
+          );
+        }
+      },
+    );
   }
 
   @override
@@ -135,35 +141,38 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
 
   Widget getPrintAdvancedFloating() {
     return FloatingActionButton(
-        heroTag: UniqueKey(),
-        child: const Icon(Icons.settings),
-        onPressed: () async {
-          var v = await getSettingFuture();
-          await showFullScreenDialogExt<ViewAbstract?>(
-              barrierDismissible: true,
-              anchorPoint: const Offset(1000, 1000),
-              context: context,
-              builder: (p0) {
-                return BaseEditNewPage(
-                  viewAbstract: v as ViewAbstract,
-                  onFabClickedConfirm: (viewAbstract) {
-                    if (viewAbstract != null) {
-                      debugPrint(
-                          "BasePdfPageConsumer newViewAbstract $viewAbstract");
-                      // notifyNewViewAbstract(viewAbstract.getCopyInstance());
-                      Configurations.saveViewAbstract(viewAbstract);
-                      printSettingListener.setViewAbstract = viewAbstract;
-                      context.pop();
-                    }
-                  },
-                );
-              }).then((value) {
-            {
-              if (value != null) {}
-              debugPrint("getEditDialog result $value");
-            }
-          });
+      heroTag: UniqueKey(),
+      child: const Icon(Icons.settings),
+      onPressed: () async {
+        var v = await getSettingFuture();
+        await showFullScreenDialogExt<ViewAbstract?>(
+          barrierDismissible: true,
+          anchorPoint: const Offset(1000, 1000),
+          context: context,
+          builder: (p0) {
+            return BaseEditNewPage(
+              viewAbstract: v as ViewAbstract,
+              onFabClickedConfirm: (viewAbstract) {
+                if (viewAbstract != null) {
+                  debugPrint(
+                    "BasePdfPageConsumer newViewAbstract $viewAbstract",
+                  );
+                  // notifyNewViewAbstract(viewAbstract.getCopyInstance());
+                  Configurations.saveViewAbstract(viewAbstract);
+                  printSettingListener.setViewAbstract = viewAbstract;
+                  context.pop();
+                }
+              },
+            );
+          },
+        ).then((value) {
+          {
+            if (value != null) {}
+            debugPrint("getEditDialog result $value");
+          }
         });
+      },
+    );
   }
 
   void notifyToggleFloatingButton(BuildContext context, {bool? isExpaned}) {
@@ -174,7 +183,9 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
   }
 
   void notifyNewSelectedFormat(
-      BuildContext context, PdfPageFormat selectedFormat) {
+    BuildContext context,
+    PdfPageFormat selectedFormat,
+  ) {
     printSettingListener.setSelectedFormat = selectedFormat;
   }
 
@@ -184,54 +195,62 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
 
   FloatingActionButtonExtended getPrintPageOptions() {
     return FloatingActionButtonExtended(
-        colapsed: Icons.note_add,
-        onExpandIcon: Icons.arrow_forward_ios_rounded,
-        onPress: () {},
-        onToggle: () {
-          notifyToggleFloatingButton(context);
-        },
-        expandedWidget: Row(
-          children: [
-            IconButton(
-              onPressed: () {
-                notifyNewSelectedFormat(
-                    context, printSettingListener.getSelectedFormat.portrait);
-              },
-              icon: Transform.rotate(
-                angle: -math.pi / 2,
-                child: Icon(
-                  Icons.note_outlined,
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                ),
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                notifyNewSelectedFormat(
-                    context, printSettingListener.getSelectedFormat.landscape);
-              },
-              icon: Icon(
+      colapsed: Icons.note_add,
+      onExpandIcon: Icons.arrow_forward_ios_rounded,
+      onPress: () {},
+      onToggle: () {
+        notifyToggleFloatingButton(context);
+      },
+      expandedWidget: Row(
+        children: [
+          IconButton(
+            onPressed: () {
+              notifyNewSelectedFormat(
+                context,
+                printSettingListener.getSelectedFormat.portrait,
+              );
+            },
+            icon: Transform.rotate(
+              angle: -math.pi / 2,
+              child: Icon(
                 Icons.note_outlined,
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
             ),
-            SizedBox(
-                width: getSizeOfController(),
-                child: PaperListController(
-                  supportsLabelPrinting: supportsLabelPrinting(),
-                  initialValue: _lastLoaded?.format ?? PdfPageFormat.a4,
-                  onValueSelectedFunction: (value) {
-                    notifyNewSelectedFormat(context, value ?? PdfPageFormat.a4);
-                  },
-                )),
-          ],
-        ));
+          ),
+          IconButton(
+            onPressed: () {
+              notifyNewSelectedFormat(
+                context,
+                printSettingListener.getSelectedFormat.landscape,
+              );
+            },
+            icon: Icon(
+              Icons.note_outlined,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
+          ),
+          SizedBox(
+            width: getSizeOfController(),
+            child: PaperListController(
+              supportsLabelPrinting: supportsLabelPrinting(),
+              initialValue: _lastLoaded?.format ?? PdfPageFormat.a4,
+              onValueSelectedFunction: (value) {
+                notifyNewSelectedFormat(context, value ?? PdfPageFormat.a4);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   void initState() {
-    printSettingListener =
-        Provider.of<PrintSettingLargeScreenProvider>(context, listen: false);
+    printSettingListener = Provider.of<PrintSettingLargeScreenProvider>(
+      context,
+      listen: false,
+    );
     if (hasFromTo()) {
       printSettingListener.init(widget.asList!.length);
     }
@@ -256,8 +275,11 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
   }
 
   @override
-  List<Widget>? getAppbarActions(
-      {bool? firstPane, TabControllerHelper? tab, TabControllerHelper? sec}) {
+  List<Widget>? getAppbarActions({
+    bool? firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? sec,
+  }) {
     return null;
   }
 
@@ -273,38 +295,42 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
   //           : Text(lastSecondPaneItem?.title ?? "TO FIX");
   // }
   @override
-  Widget? getAppbarTitle(
-      {bool? firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
+  Widget? getAppbarTitle({
+    bool? firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  }) {
     if (firstPane == true) {
       return Text(
-          "${AppLocalizations.of(context)!.print} ${getExtrasCast().getMainHeaderLabelTextOnly(context)}");
+        "${AppLocalizations.of(context)!.print} ${getExtrasCast().getMainHeaderLabelTextOnly(context)}",
+      );
     }
     return null;
   }
 
   @override
-  Widget? getFloatingActionButton(
-      {bool? firstPane,
-      TabControllerHelper? tab,
-      TabControllerHelper? secoundTab}) {
+  Widget? getFloatingActionButton({
+    bool? firstPane,
+    TabControllerHelper? tab,
+    TabControllerHelper? secoundTab,
+  }) {
     if (getCurrentScreenSize() != CurrentScreenSize.MOBILE) {
       if (firstPane == true) {
         return ValueListenableBuilder(
-            valueListenable: getConnectionState,
-            builder: (context, value, child) {
-              return Row(
-                spacing: kDefaultPadding,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (value == ConnectionStateExtension.done)
-                    getPrintShareFloating(context),
-                  if (value == ConnectionStateExtension.done)
-                    getPrintFloating(context),
-                ],
-              );
-            });
+          valueListenable: getConnectionState,
+          builder: (context, value, child) {
+            return Row(
+              spacing: kDefaultPadding,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (value == ConnectionStateExtension.done)
+                  getPrintShareFloating(context),
+                if (value == ConnectionStateExtension.done)
+                  getPrintFloating(context),
+              ],
+            );
+          },
+        );
 
         // return getFloatingActionButtonConsomer(context,
         //     builder: (_, isExpanded) {
@@ -314,29 +340,23 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
     }
     if (getCurrentScreenSize() == CurrentScreenSize.MOBILE &&
         firstPane == true) {
-      return getFloatingActionButtonConsomer(context, builder: (_, isExpanded) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            if (!isExpanded) getPrintShareFloating(context),
-            if (!isExpanded)
-              const SizedBox(
-                width: kDefaultPadding,
-              ),
-            if (!isExpanded) getPrintFloating(context),
-            if (!isExpanded)
-              const SizedBox(
-                width: kDefaultPadding,
-              ),
-            if (!isExpanded) getPrintAdvancedFloating(),
-            if (!isExpanded)
-              const SizedBox(
-                width: kDefaultPadding,
-              ),
-            getPrintPageOptions()
-          ],
-        );
-      });
+      return getFloatingActionButtonConsomer(
+        context,
+        builder: (_, isExpanded) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (!isExpanded) getPrintShareFloating(context),
+              if (!isExpanded) const SizedBox(width: kDefaultPadding),
+              if (!isExpanded) getPrintFloating(context),
+              if (!isExpanded) const SizedBox(width: kDefaultPadding),
+              if (!isExpanded) getPrintAdvancedFloating(),
+              if (!isExpanded) const SizedBox(width: kDefaultPadding),
+              getPrintPageOptions(),
+            ],
+          );
+        },
+      );
     }
     return null;
   }
@@ -349,16 +369,15 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
   }
 
   Widget getSettingWidget() {
-    Widget setting = const Center(
-      child: Text("getFirstPane"),
-    );
+    Widget setting = const Center(child: Text("getFirstPane"));
 
     return FutureBuilder(
       future: getSettingFuture(),
       builder: (_, snapshot) {
         if (snapshot.hasError) {
           debugPrint(
-              "getSettingLoadDefaultIfNull=>hasError ${snapshot.error.toString()}");
+            "getSettingLoadDefaultIfNull=>hasError ${snapshot.error.toString()}",
+          );
           return setting;
         }
         debugPrint("getSettingLoadDefaultIfNull=>data ${snapshot.data}");
@@ -383,12 +402,15 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
     );
   }
 
-  Widget getFloatingActionButtonConsomer(BuildContext context,
-      {required Widget Function(BuildContext, bool) builder}) {
+  Widget getFloatingActionButtonConsomer(
+    BuildContext context, {
+    required Widget Function(BuildContext, bool) builder,
+  }) {
     return Selector<PrintSettingLargeScreenProvider, bool>(
       builder: (v, isExpanded, __) {
         debugPrint(
-            "BasePdfPageConsumer Selector =>  getFloatingActionButtonConsomer");
+          "BasePdfPageConsumer Selector =>  getFloatingActionButtonConsomer",
+        );
         return builder(v, isExpanded);
       },
       selector: (ctx, provider) => provider.getFloatActionIsExpanded,
@@ -424,12 +446,16 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
     return null;
   }
 
-  LoadedPrint? shouldSkipLoad(
-      {required PdfPageFormat format,
-      required String setting,
-      required String viewAbstract}) {
+  LoadedPrint? shouldSkipLoad({
+    required PdfPageFormat format,
+    required String setting,
+    required String viewAbstract,
+  }) {
     LoadedPrint newPrint = LoadedPrint(
-        format: format, setting: setting, viewAbstract: viewAbstract);
+      format: format,
+      setting: setting,
+      viewAbstract: viewAbstract,
+    );
     if (newPrint == _lastLoaded) {
       return _lastLoaded;
     } else {
@@ -439,86 +465,98 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
 
   Widget getPdfPreview(PdfPageFormat fomat) {
     return PdfPreview(
-        // shouldRepaint: true,
-        key: UniqueKey(),
-        // pages: hasFromTo() ? printSettingListener.generateListOfPage() : null,
-        pdfFileName: getExtras()!.getPrintableQrCodeID(),
-        shareActionExtraEmails: const [
-          "info@saffoury.com"
-        ], //TODO should rename
-        maxPageWidth: getWidth * .5,
-        initialPageFormat: fomat,
-        canChangePageFormat: true,
-        canDebug: false,
-        scrollViewDecoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius:
-                const BorderRadius.all(Radius.circular(kDefaultPadding))),
-        dynamicLayout: true,
-        loadingWidget: SkeletonPage(),
-        useActions: false,
-        shareActionExtraBody: "Share",
-        onError: (context, error) {
-          getConnectionState.value = ConnectionStateExtension.error;
-          return EmptyWidget.error(
-            context,
-            onSubtitleClicked: () => setState(() {}),
-          );
-        },
-        // shouldRepaint: ,
-        build: (format) async {
-          debugPrint("dsada $fomat");
-          dynamic setting = await getSettingFuture();
-          if (widget.type == PrintPageType.list) {
-            if (loadedFileBytes != null) {
-              LoadedPrint? c = shouldSkipLoad(
-                  format: fomat,
-                  setting: setting.toString(),
-                  viewAbstract: widget.asList!.toString());
-              if (c != null) {
-                debugPrint("dsada LoadedPrint isLoadedBefore");
-                getConnectionState.value = ConnectionStateExtension.done;
-                return loadedFileBytes!;
-              }
-              debugPrint("dsada LoadedPrint  is not !!!!!!!isLoadedBefore");
+      // shouldRepaint: true,
+      key: UniqueKey(),
+      // pages: hasFromTo() ? printSettingListener.generateListOfPage() : null,
+      pdfFileName: getExtras()!.getPrintableQrCodeID(),
+      shareActionExtraEmails: const ["info@saffoury.com"], //TODO should rename
+      maxPageWidth: getWidth * .5,
+      initialPageFormat: fomat,
+      canChangePageFormat: true,
+      canDebug: false,
+      scrollViewDecoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: const BorderRadius.all(Radius.circular(kDefaultPadding)),
+      ),
+      dynamicLayout: true,
+      loadingWidget: SkeletonPage(),
+      useActions: false,
+      shareActionExtraBody: "Share",
+      onError: (context, error) {
+        getConnectionState.value = ConnectionStateExtension.error;
+        return EmptyWidget.error(
+          context,
+          onSubtitleClicked: () => setState(() {}),
+        );
+      },
+      // shouldRepaint: ,
+      build: (format) async {
+        debugPrint("dsada $fomat");
+        dynamic setting = await getSettingFuture();
+        if (widget.type == PrintPageType.list) {
+          if (loadedFileBytes != null) {
+            LoadedPrint? c = shouldSkipLoad(
+              format: fomat,
+              setting: setting.toString(),
+              viewAbstract: widget.asList!.toString(),
+            );
+            if (c != null) {
+              debugPrint("dsada LoadedPrint isLoadedBefore");
+              getConnectionState.value = ConnectionStateExtension.done;
+              return loadedFileBytes!;
             }
-
-            loadedFile = PDFListApi<PrintLocalSetting>(
-                    list: widget.asList!.cast(),
-                    context: context,
-                    setting: setting)
-                .generate(fomat, pageRange: getPageRange());
-
-            loadedFileBytes = await loadedFile;
-            getConnectionState.value = ConnectionStateExtension.done;
-            _lastLoaded = LoadedPrint(
-                format: fomat,
-                setting: setting.toString(),
-                viewAbstract: widget.asList!.toString());
-
-            return loadedFileBytes!;
-          } else if (widget.type == PrintPageType.self_list) {
-            // PrintLocalSetting? setting = await getSetting();
-            loadedFile = PdfSelfListApi<PrintLocalSetting>(
-                    widget.asList!.cast(), context, getExtras(),
-                    printCommand: setting)
-                .generate(fomat, pagesAdded: (pagesAddedCount) {
-              printSettingListener.init(pagesAddedCount);
-            }, pageRange: getPageRange());
-
-            loadedFileBytes = await loadedFile;
-
-            getConnectionState.value = ConnectionStateExtension.done;
-            return loadedFileBytes!;
-          } else {
-            loadedFile = getExcelFileUinit(context, getExtras()!, fomat,
-                hasCustomSetting: setting as PrintLocalSetting);
-            loadedFileBytes = await loadedFile;
-
-            getConnectionState.value = ConnectionStateExtension.done;
-            return loadedFileBytes!;
+            debugPrint("dsada LoadedPrint  is not !!!!!!!isLoadedBefore");
           }
-        });
+
+          loadedFile = PDFListApi<PrintLocalSetting>(
+            list: widget.asList!.cast(),
+            context: context,
+            setting: setting,
+          ).generate(fomat, pageRange: getPageRange());
+
+          loadedFileBytes = await loadedFile;
+          getConnectionState.value = ConnectionStateExtension.done;
+          _lastLoaded = LoadedPrint(
+            format: fomat,
+            setting: setting.toString(),
+            viewAbstract: widget.asList!.toString(),
+          );
+
+          return loadedFileBytes!;
+        } else if (widget.type == PrintPageType.self_list) {
+          // PrintLocalSetting? setting = await getSetting();
+          loadedFile =
+              PdfSelfListApi<PrintLocalSetting>(
+                widget.asList!.cast(),
+                context,
+                getExtras(),
+                printCommand: setting,
+              ).generate(
+                fomat,
+                pagesAdded: (pagesAddedCount) {
+                  printSettingListener.init(pagesAddedCount);
+                },
+                pageRange: getPageRange(),
+              );
+
+          loadedFileBytes = await loadedFile;
+
+          getConnectionState.value = ConnectionStateExtension.done;
+          return loadedFileBytes!;
+        } else {
+          loadedFile = getExcelFileUinit(
+            context,
+            getExtras()!,
+            fomat,
+            hasCustomSetting: setting as PrintLocalSetting,
+          );
+          loadedFileBytes = await loadedFile;
+
+          getConnectionState.value = ConnectionStateExtension.done;
+          return loadedFileBytes!;
+        }
+      },
+    );
   }
 
   //    else {
@@ -595,16 +633,23 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
 
   Widget getPdfPreviewWidget() {
     return SliverFillRemaining(
-      child: Selector<PrintSettingLargeScreenProvider,
-          Tuple3<ViewAbstract?, PdfPageFormat, int>>(
-        builder: (_, provider, __) {
-          debugPrint(
-              "BasePdfPageConsumer Selector =>  getPdfPageConsumer format ${provider.item2}");
-          return getPdfPreview(provider.item2);
-        },
-        selector: (ctx, provider) => Tuple3(provider.getViewAbstract,
-            provider.getSelectedFormat, provider.hasho),
-      ),
+      child:
+          Selector<
+            PrintSettingLargeScreenProvider,
+            Tuple3<ViewAbstract?, PdfPageFormat, int>
+          >(
+            builder: (_, provider, __) {
+              debugPrint(
+                "BasePdfPageConsumer Selector =>  getPdfPageConsumer format ${provider.item2}",
+              );
+              return getPdfPreview(provider.item2);
+            },
+            selector: (ctx, provider) => Tuple3(
+              provider.getViewAbstract,
+              provider.getSelectedFormat,
+              provider.hasho,
+            ),
+          ),
     );
   }
 
@@ -626,11 +671,16 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
   bool setClipRect(bool? firstPane) => firstPane == true;
 
   @override
-  Future getCallApiFunctionIfNull(BuildContext context,
-      {TabControllerHelper? tab}) {
+  Future? getOverrideCallApiFunction(
+    BuildContext context, {
+    TabControllerHelper? tab,
+  }) {
     debugPrint("getCallApiFunctionIfNull");
-    return (getExtras() as ViewAbstract).viewCall(context: context)
-        as Future<PrintableMaster?>;
+    if (widget.type == PrintPageType.list ||
+        widget.type == PrintPageType.self_list) {
+      return Future.value(getExtras());
+    }
+    return null;
   }
 
   @override
@@ -639,14 +689,18 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
   }
 
   @override
-  Widget? getPaneDraggableExpandedHeader(
-      {required bool firstPane, TabControllerHelper? tab}) {
+  Widget? getPaneDraggableExpandedHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) {
     return null;
   }
 
   @override
-  Widget? getPaneDraggableHeader(
-      {required bool firstPane, TabControllerHelper? tab}) {
+  Widget? getPaneDraggableHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) {
     return null;
   }
 
@@ -667,7 +721,8 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
 
   @override
   ConnectionStateExtension? overrideConnectionState(
-      BasePageWithApiConnection type) {
+    BasePageWithApiConnection type,
+  ) {
     // if (type == BasePageWithApiConnection.build) {
     if (_lastLoaded != null) {
       return ConnectionStateExtension.done;
@@ -678,11 +733,12 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
   }
 
   @override
-  List<Widget>? getPaneNotifier(
-      {required bool firstPane,
-      ScrollController? controler,
-      TabControllerHelper? tab,
-      SecondPaneHelper? valueNotifier}) {
+  List<Widget>? getPaneNotifier({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+    SecondPaneHelper? valueNotifier,
+  }) {
     // TODO: implement getPaneNotifier
     debugPrint("PrintNew getPaneNiotifer");
     if (isLargeScreenFromScreenSize(getCurrentScreenSize())) {
@@ -699,19 +755,22 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
                     SliverToBoxAdapter(
                       child: SkeletonParagraph(
                         style: SkeletonParagraphStyle(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: kDefaultPadding / 2,
-                                vertical: kDefaultPadding),
-                            lineStyle: SkeletonLineStyle(
-                                randomLength: true,
-                                maxLength: firstPaneWidth,
-                                minLength: firstPaneWidth * .7),
-                            lines: 10,
-                            spacing: kDefaultPadding),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: kDefaultPadding / 2,
+                            vertical: kDefaultPadding,
+                          ),
+                          lineStyle: SkeletonLineStyle(
+                            randomLength: true,
+                            maxLength: firstPaneWidth,
+                            minLength: firstPaneWidth * .7,
+                          ),
+                          lines: 10,
+                          spacing: kDefaultPadding,
+                        ),
                       ),
                     )
                   else
-                    ..._getFirstPaneLargeScreen()
+                    ..._getFirstPaneLargeScreen(),
                 ],
               );
             },
@@ -727,19 +786,21 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
   List<Widget> _getFirstPaneLargeScreen() {
     return [
       SliverToBoxAdapter(
-          child: ListTile(
-              leading: Text(getAppLocal(context)?.copies ?? ""),
-              title: InputQty(
-                qtyFormProps: getQtyFormProps(context),
-                decoration: getQtyPlusDecoration(context),
-                maxVal: 50,
-                initVal: 1,
-                minVal: 1,
-                steps: 1,
-                onQtyChanged: (val) {
-                  // debugPrint(val);
-                },
-              ))),
+        child: ListTile(
+          leading: Text(getAppLocal(context)?.copies ?? ""),
+          title: InputQty(
+            qtyFormProps: getQtyFormProps(context),
+            decoration: getQtyPlusDecoration(context),
+            maxVal: 50,
+            initVal: 1,
+            minVal: 1,
+            steps: 1,
+            onQtyChanged: (val) {
+              // debugPrint(val);
+            },
+          ),
+        ),
+      ),
       SliverToBoxAdapter(
         child: PrinterListControllerDropdown(
           initialValue: _selectedPrinter,
@@ -750,20 +811,23 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
       ),
       SliverToBoxAdapter(
         child: ListTileSameSizeOnTitle(
-            //TODO translate
-            leading: Text("Paper Oriantaion"),
-            title: PaperOriantaionController(
-              initialValue: PaperOriantaionController.findPaperOriantation(
-                  printSettingListener.getSelectedFormat),
-              onValueSelectedFunction: (value) {
-                debugPrint("onValueSelectedFunction $value");
-                notifyNewSelectedFormat(
-                    context,
-                    value == PaperOriantation.portial
-                        ? printSettingListener.getSelectedFormat.portrait
-                        : printSettingListener.getSelectedFormat.landscape);
-              },
-            )),
+          //TODO translate
+          leading: Text("Paper Oriantaion"),
+          title: PaperOriantaionController(
+            initialValue: PaperOriantaionController.findPaperOriantation(
+              printSettingListener.getSelectedFormat,
+            ),
+            onValueSelectedFunction: (value) {
+              debugPrint("onValueSelectedFunction $value");
+              notifyNewSelectedFormat(
+                context,
+                value == PaperOriantation.portial
+                    ? printSettingListener.getSelectedFormat.portrait
+                    : printSettingListener.getSelectedFormat.landscape,
+              );
+            },
+          ),
+        ),
       ),
       if (hasFromTo())
         SliverToBoxAdapter(
@@ -780,7 +844,8 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
 
                       num s = 2;
                       debugPrint(
-                          "compareToValues ${s.compareIsBetweenTowValues(1, 3)}");
+                        "compareToValues ${s.compareIsBetweenTowValues(1, 3)}",
+                      );
 
                       return value.toNonNullable() <=
                               printSettingListener.toPage.toNonNullable()
@@ -834,14 +899,15 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
         ),
       SliverToBoxAdapter(
         child: ListTileSameSizeOnTitle(
-            leading: Text(getAppLocal(context)?.ok ?? ""),
-            title: PaperListController(
-              supportsLabelPrinting: supportsLabelPrinting(),
-              initialValue: _lastLoaded?.format ?? PdfPageFormat.a4,
-              onValueSelectedFunction: (value) {
-                notifyNewSelectedFormat(context, value ?? PdfPageFormat.a4);
-              },
-            )),
+          leading: Text(getAppLocal(context)?.ok ?? ""),
+          title: PaperListController(
+            supportsLabelPrinting: supportsLabelPrinting(),
+            initialValue: _lastLoaded?.format ?? PdfPageFormat.a4,
+            onValueSelectedFunction: (value) {
+              notifyNewSelectedFormat(context, value ?? PdfPageFormat.a4);
+            },
+          ),
+        ),
       ),
       SliverFillRemaining(
         child: FutureBuilder(
@@ -856,9 +922,10 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
               onValidate: (viewAbstract) async {
                 if (viewAbstract != null) {
                   debugPrint(
-                      "BasePdfPageConsumer newViewAbstract  is null ${viewAbstract == null} $viewAbstract\n\n\n");
-                  printSettingListener.setViewAbstract =
-                      viewAbstract.getCopyInstance();
+                    "BasePdfPageConsumer newViewAbstract  is null ${viewAbstract == null} $viewAbstract\n\n\n",
+                  );
+                  printSettingListener.setViewAbstract = viewAbstract
+                      .getCopyInstance();
                   // notifyNewViewAbstract(viewAbstract.getCopyInstance());
                   await Configurations.saveViewAbstract(viewAbstract);
 
@@ -870,7 +937,7 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
             );
           },
         ),
-      )
+      ),
     ];
   }
 

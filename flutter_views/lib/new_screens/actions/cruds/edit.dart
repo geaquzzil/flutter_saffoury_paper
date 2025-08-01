@@ -390,7 +390,7 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
   }
 
   @override
-  Future getCallApiFunctionIfNull(
+  Future getOverrideCallApiFunction(
     BuildContext context, {
     TabControllerHelper? tab,
   }) {

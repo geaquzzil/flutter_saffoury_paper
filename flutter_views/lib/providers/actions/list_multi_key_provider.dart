@@ -34,7 +34,8 @@ class ListMultiKeyProvider with ChangeNotifier {
 
   bool isHasError(String key) {
     debugPrint(
-        "ListMultiKeyProvider isHasError key => $key  , hasError ${_listMap[key]?.hasError} object => ${_listMap[key].toString()} ");
+      "ListMultiKeyProvider isHasError key => $key  , hasError ${_listMap[key]?.hasError} object => ${_listMap[key].toString()} ",
+    );
     return _listMap[key]?.hasError ?? false;
   }
 
@@ -54,8 +55,9 @@ class ListMultiKeyProvider with ChangeNotifier {
       ViewAbstract? o = (element.getObjects.cast<ViewAbstract>())
           .firstWhereOrNull((element) => element.isEquals(obj));
       if (o != null) {
-        int idx =
-            element.getObjects.indexWhere((element) => element.isEquals(obj));
+        int idx = element.getObjects.indexWhere(
+          (element) => element.isEquals(obj),
+        );
         element.getObjects[idx] = obj;
         debugPrint("ListMultiKeyProvider changed element ");
         _listMap[i.key]?.page = getPage(i.key);
@@ -65,7 +67,7 @@ class ListMultiKeyProvider with ChangeNotifier {
         await Future.delayed(const Duration(milliseconds: 500), () {
           _listMap[i.key]?.isLoading = false;
           notifyListeners();
-// Here you can write your code
+          // Here you can write your code
         });
 
         return;
@@ -91,8 +93,12 @@ class ListMultiKeyProvider with ChangeNotifier {
   }
 
   ///clear all the objects list and load the other objects list from viewAbstract if not null
-  Future<void> recall(String key, ViewAbstract t, ResponseType type,
-      {required BuildContext context}) async {
+  Future<void> recall(
+    String key,
+    ViewAbstract t,
+    ResponseType type, {
+    required BuildContext context,
+  }) async {
     MultiListProviderHelper? multiListProviderHelper = _listMap[key];
     multiListProviderHelper?.getObjects.clear();
     multiListProviderHelper?.page = 0;
@@ -111,14 +117,20 @@ class ListMultiKeyProvider with ChangeNotifier {
     }
   }
 
-  void refresh(String key, ViewAbstract viewAbstract,
-      {required BuildContext context}) {
+  void refresh(
+    String key,
+    ViewAbstract viewAbstract, {
+    required BuildContext context,
+  }) {
     clear(key);
     fetchList(key, viewAbstract: viewAbstract, context: context);
   }
 
-  Future<void> refreshIndicater(String key, ViewAbstract v,
-      {required BuildContext context}) {
+  Future<void> refreshIndicater(
+    String key,
+    ViewAbstract v, {
+    required BuildContext context,
+  }) {
     clear(key);
     return fetchList(key, viewAbstract: v, context: context);
   }
@@ -128,7 +140,7 @@ class ListMultiKeyProvider with ChangeNotifier {
     multiListProviderHelper.hasError = false;
     multiListProviderHelper.setObjects = [
       ...multiListProviderHelper.getObjects,
-      (viewAbstract)
+      (viewAbstract),
     ];
     notifyListeners();
   }
@@ -189,57 +201,6 @@ class ListMultiKeyProvider with ChangeNotifier {
     return multiListProviderHelper;
   }
 
-  Future fetchListOfObjectAutoRest(List<AutoRest> list,
-      {required BuildContext context}) async {
-    return fetchListOfObject(list.map((e) => e.obj).toList(),
-        range: 5, context: context);
-  }
-
-  Future fetchListOfObject(List<ViewAbstract> list,
-      {int? range, required BuildContext context}) async {
-    ViewAbstract first = list[0];
-
-    String key = first.getListableKeyWithoutCustomMap();
-
-    MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
-    if (multiListProviderHelper.isLoading) return;
-    int page = getPage(key);
-    multiListProviderHelper.isNoMoreItem = page > list.length - 1;
-    if (multiListProviderHelper.isNoMoreItem) return;
-    multiListProviderHelper.hasError = false;
-    multiListProviderHelper.isLoading = true;
-    ViewAbstract viewAbstract = list[page];
-    notifyListeners();
-    // await Future.delayed(
-    //   const Duration(milliseconds: 200),
-    //   () {
-    //     notifyListeners();
-    //   },
-    // );
-
-    try {
-      List? list = await viewAbstract.listCall(
-          option: RequestOptions(countPerPage: range, page: 0),
-          context: context);
-      multiListProviderHelper.isLoading = false;
-
-      if (list != null) {
-        multiListProviderHelper.getObjects.addAll(list as List<ViewAbstract>);
-        multiListProviderHelper.page = multiListProviderHelper.page + 1;
-        notifyListeners();
-      } else {
-        multiListProviderHelper.isLoading = false;
-        multiListProviderHelper.hasError = true;
-        notifyListeners();
-      }
-    } catch (e) {
-      debugPrint("Exception $e");
-      multiListProviderHelper.isLoading = false;
-      multiListProviderHelper.hasError = true;
-      notifyListeners();
-    }
-  }
-
   ///after clear search we should call this function
   void notifyNotSearchable(String key) {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
@@ -258,23 +219,27 @@ class ListMultiKeyProvider with ChangeNotifier {
 
   /// we request a query of options okey ?
   /// then we put ids in the request
-  Future fetchTicker(String key,
-      {AutoRest? autoRest,
-      ViewAbstract? viewAbstract,
-      AutoRestCustom? customAutoRest,
-      int? customCount,
-      int? customPage}) async {
+  Future fetchTicker(
+    String key, {
+    AutoRest? autoRest,
+    ViewAbstract? viewAbstract,
+    AutoRestCustom? customAutoRest,
+    int? customCount,
+    int? customPage,
+  }) async {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
     await Future.delayed(const Duration(milliseconds: 100));
   }
 
-  Future<void> fetchList(String key,
-      {AutoRest? autoRest,
-      ViewAbstract? viewAbstract,
-      AutoRestCustom? customAutoRest,
-      RequestOptions? options,
-      bool requiresFullFetsh = false,
-      required BuildContext context}) async {
+  Future<void> fetchList(
+    String key, {
+    AutoRest? autoRest,
+    ViewAbstract? viewAbstract,
+    AutoRestCustom? customAutoRest,
+    RequestOptions? options,
+    bool requiresFullFetsh = false,
+    required BuildContext context,
+  }) async {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
     if (multiListProviderHelper.isLoading) return;
     if (multiListProviderHelper.isNoMoreItem) return;
@@ -282,29 +247,17 @@ class ListMultiKeyProvider with ChangeNotifier {
     multiListProviderHelper.isLoading = true;
     notifyListeners();
     try {
-      debugPrint("listCall fetchList");
+      debugPrint("listCall fetchList requiresFullFetsh $requiresFullFetsh ");
 
       ViewAbstractApi ob =
           customAutoRest as ViewAbstractApi? ?? viewAbstract as ViewAbstractApi;
       List? list = await ob.listCall(
-          option: options?.copyWith(page: multiListProviderHelper.page),
-          context: context);
-
-      // if (customAutoRest != null) {
-      //   list = await customAutoRest.listCall(
-      //       option: RequestOptions(
-      //           filterMap: filter ?? {},
-      //           countPerPage: customCount,
-      //           page: customPage ?? multiListProviderHelper.page),
-      //       context: context);
-      // } else {
-      //   list = await viewAbstract!.listCall(
-      //       context: context,
-      //       option: RequestOptions(
-      //           page: customPage ?? multiListProviderHelper.page,
-      //           countPerPage: customCount ?? autoRest?.range,
-      //           filterMap: filter ?? {}));
-      // }
+        option: options?.copyWith(
+          countPerPage: requiresFullFetsh ? 100000000 : null,
+          page: requiresFullFetsh ? 0 : multiListProviderHelper.page,
+        ),
+        context: context,
+      );
 
       multiListProviderHelper.isLoading = false;
       if (requiresFullFetsh) {
@@ -315,8 +268,6 @@ class ListMultiKeyProvider with ChangeNotifier {
 
       if (list != null) {
         multiListProviderHelper.getObjects.addAll(list);
-        // multiListProviderHelper.page =
-        //     customPage ?? multiListProviderHelper.page + 1;
         multiListProviderHelper.page = multiListProviderHelper.page + 1;
         notifyListeners();
       } else {
@@ -333,10 +284,12 @@ class ListMultiKeyProvider with ChangeNotifier {
     }
   }
 
-  Future fetchView(String key,
-      {ViewAbstract? viewAbstract,
-      AutoRestCustom? customAutoRest,
-      required BuildContext context}) async {
+  Future fetchView(
+    String key, {
+    ViewAbstract? viewAbstract,
+    AutoRestCustom? customAutoRest,
+    required BuildContext context,
+  }) async {
     MultiListProviderHelper? multiListProviderHelper = getProviderObjcet(key);
     if (multiListProviderHelper.isLoading) return;
 

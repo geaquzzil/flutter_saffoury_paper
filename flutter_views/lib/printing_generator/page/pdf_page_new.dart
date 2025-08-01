@@ -512,7 +512,7 @@ class _PdfPageNewState extends BasePageStateWithApi<PdfPageNew> {
   bool setClipRect(bool? firstPane) => false;
 
   @override
-  Future getCallApiFunctionIfNull(BuildContext context,
+  Future getOverrideCallApiFunction(BuildContext context,
       {TabControllerHelper? tab}) {
     debugPrint("getCallApiFunctionIfNull");
     return (getExtras() as ViewAbstract).viewCall(

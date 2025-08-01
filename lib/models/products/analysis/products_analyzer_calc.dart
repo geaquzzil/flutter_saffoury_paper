@@ -10,22 +10,24 @@ class ProductSizeAnalyzerCard extends StatelessWidget {
   final Product product;
   final RequestOptions requestOptions;
   final SecoundPaneHelperWithParentValueNotifier? state;
+  final bool Function(dynamic object)? isSelectForCard;
   const ProductSizeAnalyzerCard({
     super.key,
     required this.product,
     required this.requestOptions,
+    this.isSelectForCard,
     this.state,
   });
 
   @override
   Widget build(BuildContext context) {
-
-    double waste = (product).findWastePercentage(
-      size: ProductSize()
-        ..width = (requestOptions.extras['width'] )
+    double? waste = (product).findWastePercentage(
+      customSize: ProductSize()
+        ..width = (requestOptions.extras['width'])
         ..length = requestOptions.extras['length'],
       gsm: requestOptions.extras['gsm'],
     );
+
     Widget? superWidget = product.getCardTrailing(
       context,
       secPaneHelper: state,
@@ -34,12 +36,21 @@ class ProductSizeAnalyzerCard extends StatelessWidget {
     Widget traling = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          "$waste%-${((waste / 100) * product.getQuantity()).toCurrencyFormat(symbol: product.getProductTypeUnit(context))}",
-        ),
+        if (waste != null && waste != 0)
+          TextButton(
+            onPressed: () {},
+            child: Text(
+              "$waste%-${((waste / 100) * product.getQuantity()).toCurrencyFormat(symbol: product.getProductTypeUnit(context))}",
+            ),
+          ),
         if (superWidget != null) superWidget,
       ],
     );
-    return ListCardItemMaster(state: state, object: product, traling: traling);
+    return ListCardItemMaster(
+      state: state,
+      object: product,
+      traling: traling,
+      isSelectForListTile: isSelectForCard,
+    );
   }
 }

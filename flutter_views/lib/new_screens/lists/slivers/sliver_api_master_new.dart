@@ -28,6 +28,14 @@ import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:tuple/tuple.dart';
 
+const EdgeInsets defaultSliverListPadding = EdgeInsets.symmetric(
+  horizontal: kDefaultPadding / 3,
+);
+const EdgeInsets defaultSliverGridPadding = EdgeInsets.symmetric(
+  vertical: 15,
+  horizontal: 15,
+);
+
 enum SliverMixinObjectType {
   AUTO_REST,
   VIEW_ABSTRACT,
@@ -153,13 +161,6 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
 
   Map<String, FilterableProviderHelper>? get getFilterData => this._filterData;
 
-  EdgeInsets defaultSliverListPadding = const EdgeInsets.symmetric(
-    horizontal: kDefaultPadding / 3,
-  );
-  EdgeInsets defaultSliverGridPadding = const EdgeInsets.symmetric(
-    vertical: 15,
-    horizontal: 15,
-  );
   set setSearchString(String? value) => this._searchString = value;
 
   //TODO be carefull the list should be taken from the newObject
@@ -348,7 +349,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
         bool isLoading = value.item1;
         int count = value.item2;
         bool isError = value.item3;
-       
+
         String key = getListProviderKey();
         debugPrint(
           "ListToDet=>count $count isLoading $isLoading   isError $isError key $key  ",
@@ -359,9 +360,9 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
               ? List.from(widget.valueListProviderNotifier!.value!)
               : [getListProvider(), key, count];
 
-           if(!isLoading){
-      widget.onFinishCalling?.value = !isLoading;
-           }   
+          if (!isLoading) {
+            widget.onFinishCalling?.value = !isLoading;
+          }
         });
 
         // .withItem1(getListProvider());

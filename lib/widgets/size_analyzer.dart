@@ -118,50 +118,53 @@ class _SizeAnalyzerPageState extends BasePageState<SizeAnalyzerPage>
                 ValueListenableBuilder(
                   valueListenable: _listNotifier,
                   builder: (context, value, child) {
-                    debugPrint("ListToDet=> fff $value");
-                    return FiltersAndSelectionListHeaderValueNotifier(
-                      width: firstPaneWidth,
-                      preWidgets: [
-                        DropdownEnumControllerListenerByIcon(
-                          initialValue: _wasteEnum,
-                          showSelectedValueBeside: true,
-                          viewAbstractEnum: _wasteEnum,
-                          onSelected: (object) {
-                            RequestOptions? op = Product()
-                                .getOnlyInventory()
-                                .copyWithObjcet(
-                                  option: Product()
-                                      .getRequestOptionsPassedOnString(
-                                        widget.searchQuery,
-                                        maxWaste: object?.value,
-                                      ),
-                                );
-                            if (op == _requestOptions) {
-                              return;
-                            }
-                            if (object == null) return;
-                            setState(() {
-                              _wasteEnum = object;
-                              _requestOptions = op;
-                            });
-                          },
-                        ),
-                      ],
-                      disableFiltering: true,
-                      viewAbstract: Product(),
-                      valueNotifer: _listNotifier,
-                      sortInitial: _sortFieldValue,
+                    debugPrint("ListT oDet=> fff $value");
+                    return Padding(
+                      padding: defaultSliverListPadding,
+                      child: FiltersAndSelectionListHeaderValueNotifier(
+                        width: firstPaneWidth,
+                        preWidgets: [
+                          DropdownEnumControllerListenerByIcon(
+                            initialValue: _wasteEnum,
+                            showSelectedValueBeside: true,
+                            viewAbstractEnum: _wasteEnum,
+                            onSelected: (object) {
+                              RequestOptions? op = Product()
+                                  .getOnlyInventory()
+                                  .copyWithObjcet(
+                                    option: Product()
+                                        .getRequestOptionsPassedOnString(
+                                          widget.searchQuery,
+                                          maxWaste: object?.value,
+                                        ),
+                                  );
+                              if (op == _requestOptions) {
+                                return;
+                              }
+                              if (object == null) return;
+                              setState(() {
+                                _wasteEnum = object;
+                                _requestOptions = op;
+                              });
+                            },
+                          ),
+                        ],
+                        disableFiltering: true,
+                        viewAbstract: Product(),
+                        valueNotifer: _listNotifier,
+                        sortInitial: _sortFieldValue,
 
-                      onDoneSort: (sort) {
-                        setState(() {
-                          _sortFieldValue = sort;
-                          _requestOptions = _requestOptions.copyWith(
-                            sortBy: _sortFieldValue,
-                          );
-                        });
-                      },
-                      // onDoneFilter: ,
-                      secPaneNotifer: getSecoundPaneHelper(),
+                        onDoneSort: (sort) {
+                          setState(() {
+                            _sortFieldValue = sort;
+                            _requestOptions = _requestOptions.copyWith(
+                              sortBy: _sortFieldValue,
+                            );
+                          });
+                        },
+                        // onDoneFilter: ,
+                        secPaneNotifer: getSecoundPaneHelper(),
+                      ),
                     );
                   },
                 ),
@@ -169,28 +172,20 @@ class _SizeAnalyzerPageState extends BasePageState<SizeAnalyzerPage>
             ),
           ),
         ),
+
         SliverApiMixinViewAbstractWidget(
           key: listKey,
           valueListProviderNotifier: _listNotifier,
-
-          // onFinishCalling: _onListBuilded,
           requiresFullFetsh: true,
-          isSelectForCard: (object) {
-            return isSelectForCard(object);
-          },
-          header: HeaderDescription(
-            isSliver: true,
-            title: "",
-            // trailing: SizedBox(
-            //   width: firstPaneWidth * .4,
-            //   child:
-            // ),
-          ),
           toListObject: Product().setRequestOption(option: _requestOptions),
           state: getSecoundPaneHelper(),
           hasCustomCardItemBuilder: (idx, item) {
             return ProductSizeAnalyzerCard(
               state: getSecoundPaneHelper(),
+              isSelectForCard: (object) {
+                debugPrint("isSelectForCard from size Ana");
+                return isSelectForCard(object);
+              },
               product: item as Product,
               requestOptions: _requestOptions,
             );
@@ -205,46 +200,68 @@ class _SizeAnalyzerPageState extends BasePageState<SizeAnalyzerPage>
                 .getTotalQuantityGrouped();
             if (totals == null) return null;
             return [
-              StaggerdGridViewWidget(
-                isSliver: false,
-                childAspectRatio: 1,
-                wrapWithCard: false,
-                builder:
-                    (
-                      fullCrossAxisCount,
-                      crossCountFundCalc,
-                      crossAxisCountMod,
-                      heightMainAxisCellCount,
-                    ) {
-                      return [
-                        ...totals.entries.map(
-                          (e) => StaggeredGridTile.count(
-                            crossAxisCellCount: 1,
-                            mainAxisCellCount: .5,
-                            child: ChartCardItemCustom(
-                              title: e.key.getFieldLabelString(context, e.key),
-                              // color: list[0].getMainColor(),
-                              description: e.value.toCurrencyFormat(symbol: ""),
+              Padding(
+                padding: defaultSliverListPadding,
+                child: StaggerdGridViewWidget(
+                  isSliver: false,
+                  childAspectRatio: 1,
+                  wrapWithCard: false,
+                  builder:
+                      (
+                        fullCrossAxisCount,
+                        crossCountFundCalc,
+                        crossAxisCountMod,
+                        heightMainAxisCellCount,
+                      ) {
+                        return [
+                          ...totals.entries.map(
+                            (e) => StaggeredGridTile.count(
+                              crossAxisCellCount: 1,
+                              mainAxisCellCount: heightMainAxisCellCount,
+                              child: ChartCardItemCustom(
+                                title: e.key.getFieldLabelString(
+                                  context,
+                                  e.key,
+                                ),
+                                // color: list[0].getMainColor(),
+                                description: e.value.toCurrencyFormat(
+                                  symbol: "",
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                        StaggeredGridTile.count(
-                          crossAxisCellCount: 1,
-                          mainAxisCellCount: .5,
-                          child: ChartCardItemCustom(
-                            title: AppLocalizations.of(context)!.total,
-                            // color: list[0].getMainColor(),
-                            description:
-                                listKey.currentState
-                                    ?.getList<Product>()
-                                    .getTotalQuantityGroupedFormattedText(
-                                      context,
-                                    ) ??
-                                "-",
+                          StaggeredGridTile.count(
+                            crossAxisCellCount: 1,
+                            mainAxisCellCount: heightMainAxisCellCount,
+                            child: ChartCardItemCustom(
+                              title: AppLocalizations.of(context)!.total,
+                              // color: list[0].getMainColor(),
+                              description:
+                                  listKey.currentState
+                                      ?.getList<Product>()
+                                      .getTotalQuantityGroupedFormattedText(
+                                        context,
+                                      ) ??
+                                  "-",
+                            ),
                           ),
-                        ),
-                      ];
-                    },
+                          StaggeredGridTile.count(
+                            crossAxisCellCount: 1,
+                            mainAxisCellCount: heightMainAxisCellCount,
+                            child: ChartCardItemCustom(
+                              title: AppLocalizations.of(context)!.total_count,
+                              // color: list[0].getMainColor(),
+                              description:
+                                  listKey.currentState
+                                      ?.getList<Product>()
+                                      .length
+                                      .toString() ??
+                                  "-",
+                            ),
+                          ),
+                        ];
+                      },
+                ),
               ),
             ];
           },
@@ -308,7 +325,7 @@ class _SizeAnalyzerPageState extends BasePageState<SizeAnalyzerPage>
   String onActionInitial() => AppLocalizations.of(context)!.size_analyzer;
 
   @override
-  bool setClipRect(bool? firstPane) => false;
+  bool setClipRect(bool? firstPane) => true;
 
   @override
   bool setHorizontalDividerWhenTowPanes() => false;

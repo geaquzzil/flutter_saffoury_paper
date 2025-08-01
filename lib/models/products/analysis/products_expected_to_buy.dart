@@ -80,7 +80,7 @@ class ProductsExcpectedToBuy extends Product
     required bool isSliver,
   }) {
     return Padding(
-      padding: state.defaultSliverGridPadding,
+      padding: defaultSliverGridPadding,
       child: StaggerdGridViewWidget(
         builder: (i, i2, i3, h) => [
           StaggeredGridTile.count(

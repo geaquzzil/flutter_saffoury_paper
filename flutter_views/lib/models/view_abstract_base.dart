@@ -512,7 +512,9 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     BuildContext context,
   ) {
     return getMainFields(context: context).map((e) {
-      debugPrint("getMainFieldsIconsAndValues for $T field:$e");
+      debugPrint(
+        "getMainFieldsIconsAndValues for $T field:$e fieldLabel : ${getFieldLabel(context, e)}",
+      );
       return DropdownStringListItem(
         icon: getFieldIconData(e),
         label: getFieldLabel(context, e),

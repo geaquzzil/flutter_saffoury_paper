@@ -297,6 +297,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     ServerActions? customAction,
   }) async {
     try {
+      debugPrint("listCall option $option");
       var response = await _getListResponse(context: context, option: option);
       if (response == null) return null;
       if (response.statusCode == 200) {

@@ -171,9 +171,9 @@ class StaggerdGridViewWidget extends StatelessWidget {
   final double childAspectRatio;
 
   int getCrossAxisCount(double width) {
-      int val = ((width / 150)).toInt();
-      debugPrint("getCrossAxisCount val width:$width  $val");
-      return val;
+    int val = ((width / 150)).toInt();
+    debugPrint("getCrossAxisCount val width:$width  $val");
+    return val;
     if (width < 500 && width > 0) {
       return 1;
     } else if (width < 1000 && width > 500) {
@@ -187,9 +187,9 @@ class StaggerdGridViewWidget extends StatelessWidget {
 
   num getHeightMainAxisCellCount(double height) {
     if (height < 500 && height > 0) {
-      return .5;
+      return .7;
     } else if (height < 1000 && height > 500) {
-      return 1;
+      return .8;
     } else {
       return 1;
       int val = ((height / 300)).toInt();
@@ -212,16 +212,16 @@ class StaggerdGridViewWidget extends StatelessWidget {
         int crossCountFund = crossAxisCount ~/ 4;
         int crossAxisCountMod = crossAxisCount % 4;
         int crossCountFundCalc = crossAxisCountMod == 0 ? crossCountFund : 1;
-
+        num height = getHeightMainAxisCellCount(constraints.maxHeight);
         debugPrint(
-          "FileInfoStaggerdGridView====> isMezouj: $isMezouj  crossCountFundCalc $crossCountFundCalc crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc + crossAxisCountMod =${crossCountFundCalc + crossAxisCountMod}",
+          "FileInfoStaggerdGridView====> isMezouj: $isMezouj  crossCountFundCalc $crossCountFundCalc crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc + crossAxisCountMod =${crossCountFundCalc + crossAxisCountMod} height:$height maxHegiht: ${constraints.maxHeight}",
         );
         if (builder != null) {
           list = builder!.call(
             crossAxisCount,
             crossCountFundCalc,
             crossAxisCountMod,
-            getHeightMainAxisCellCount(constraints.maxHeight),
+            getHeightMainAxisCellCount(MediaQuery.of(context).size.height),
           );
         }
 
