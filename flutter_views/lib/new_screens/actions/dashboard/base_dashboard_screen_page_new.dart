@@ -213,7 +213,7 @@ class _BaseDashboardMainPageState
     );
   }
 
-  getDesktopFirstPane({TabControllerHelper? tab}) {
+  List<Widget> getDesktopFirstPane({TabControllerHelper? tab}) {
     debugPrint("getDesktopFirstPane tab is ${tab?.extras.runtimeType}");
     // debugPrint("getDesktopFirstPane tab getExtras ${getExtras().debitsDue}");
     List<Widget> widgets = List.empty(growable: true);
@@ -245,7 +245,7 @@ class _BaseDashboardMainPageState
     return widgets;
   }
 
-  getDesktopSecondPane({
+  List<Widget> getDesktopSecondPane({
     TabControllerHelper? tab,
     TabControllerHelper? secoundTab,
   }) {
@@ -310,13 +310,14 @@ class _BaseDashboardMainPageState
   bool setHorizontalDividerWhenTowPanes() => false;
 
   @override
-  Future getOverrideCallApiFunction(
+  Future? getOverrideCallApiFunction(
     BuildContext context, {
     TabControllerHelper? tab,
   }) {
+    // return null;
     dynamic ex = getExtras(tab: tab);
     debugPrint("getCallApiFunctionIfNull extras=> ${ex?.runtimeType} ");
-    return ex.callApi();
+    return (ex as ViewAbstract).viewCall(context: context,);
   }
 
   @override

@@ -23,7 +23,6 @@ import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceA
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/setting.dart';
@@ -42,7 +41,6 @@ import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:flutter_view_controller/test_var.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pdf/pdf.dart' as d;
 import 'package:pdf/widgets.dart' as pdf;
@@ -112,22 +110,26 @@ class Dashboard extends UserLists<Dashboard>
   }
 
   @override
-  Future<Dashboard?> callApi({required BuildContext context}) async {
-    // debugPrint("DashboardPage callApi  ${jsonEncode(dashboard)}");
-    return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
-  }
-
-  @override
   IconData getMainIconData() {
     return Icons.dashboard_sharp;
   }
 
   @override
-  bool getPrintableSupportsLabelPrinting() => false;
-  @override
-  List<String>? getCustomAction() {
-    return ["list_dashboard"];
+  String? getTableNameApi() {
+    return "dashboard";
   }
+
+  @override
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
+    var op = RequestOptions().addDate(date);
+    return setInterval() ? op.addSearchByField("interval", "daily") : op;
+  }
+
+  @override
+  bool getPrintableSupportsLabelPrinting() => false;
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
@@ -136,12 +138,6 @@ class Dashboard extends UserLists<Dashboard>
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
       AppLocalizations.of(context)!.dashboard_and_rep;
-
-  @override
-  Map<String, String> get getCustomMap => {
-    "date": jsonEncode(date?.toJson() ?? DateObject().toJson()),
-    if (setInterval()) "interval": "daily",
-  };
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>

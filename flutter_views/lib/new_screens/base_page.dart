@@ -2053,16 +2053,16 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     return body;
   }
 
-  // Widget getBodyIfHasTabBarList(bool isLarge) {
-  //   Widget currentWidget;
-  //   currentWidget = TabBarView(
-  //       controller: _tabBaseController,
-  //       children: _getTabBarList()!.map((e) => getTowPanes(tab: e)).toList());
-  //   Widget child = getSelectorBodyIsLarge(isLarge, currentWidget);
-  //   currentWidget = child;
-  //   return currentWidget;
-  // }
-  Widget getMainPanes() {
+  Widget getBodyIfHasTabBarList() {
+    Widget currentWidget;
+    currentWidget = TabBarView(
+        controller: _tabBaseController,
+        children: _getTabBarList()?.map((e) => getMainPanes(tab: e)).toList());
+    Widget child = getSelectorBodyIsLarge(isLarge, currentWidget);
+    currentWidget = child;
+    return currentWidget;
+  }
+  Widget getMainPanes({TabControllerHelper ?baseTap}) {
     _firstWidget = getScaffoldForPane(firstPane: true);
     _secondWidget = getScaffoldForPane(firstPane: false);
     if (_hasHorizontalDividerWhenTowPanes()) {
@@ -2373,7 +2373,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
 
   void initStateAfterApiCalled() {}
   @override
-  Widget getMainPanes() {
+  Widget getMainPanes({TabControllerHelper ? baseTap}) {
     debugPrint("getBody _getTowPanes TabController ");
     dynamic ex = getExtras();
     // _isLoading = !getExtrasCast().shouldGetFromApi(ServerActions.view);

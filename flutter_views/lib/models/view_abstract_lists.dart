@@ -94,6 +94,14 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     );
   }
 
+  Widget? getSearchTraling(
+    BuildContext context, {
+    required SecoundPaneHelperWithParentValueNotifier? state,
+    String? text,
+  }) {
+    return null;
+  }
+
   Widget getCardLeading(
     BuildContext context, {
     String? addCustomHeroTag,

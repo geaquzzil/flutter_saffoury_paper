@@ -616,7 +616,7 @@ class ActionOnToolbarState<T extends BasePageSecoundPaneNotifierState>
           }
           return false;
         })
-        as GlobalKey<BasePageSecoundPaneNotifierState>;
+        as GlobalKey<BasePageSecoundPaneNotifierState>?;
   }
 
   ButtonStyle getStyle() {

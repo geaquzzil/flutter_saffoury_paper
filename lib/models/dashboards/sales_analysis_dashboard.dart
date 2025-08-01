@@ -1,7 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/funds/credits.dart';
 import 'package:flutter_saffoury_paper/models/funds/debits.dart';
@@ -28,6 +26,7 @@ import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/dealers/dealer.dart';
 import 'package:flutter_view_controller/models/permissions/permission_level_abstract.dart';
 import 'package:flutter_view_controller/models/permissions/setting.dart';
+import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
@@ -87,11 +86,11 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   SalesAnalysisDashboard();
 
   @override
-  String? getTableNameApi() => "list_sales";
+  String? getTableNameApi() => "dashboard";
 
   @override
   List<String>? getCustomAction() {
-    return ["list_sales"];
+    return ["sales"];
   }
 
   SalesAnalysisDashboard.init({this.dateObject});
@@ -115,16 +114,13 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
       AppLocalizations.of(context)!.dashboard_and_rep;
 
   @override
-  Map<String, String> get getCustomMap => {
-    "date": jsonEncode(dateObject?.toJson() ?? DateObject().toJson()),
-  };
-
-  // @override
-  // Future<SalesAnalysisDashboard?> callApi() async {
-  //   // debugPrint("DashboardPage callApi  ${jsonEncode(dashboard)}");
-  //   await Future.delayed(Duration(seconds: 2));
-  //   return fromJsonViewAbstract(jsonDecode(jsonEncode(dashboard)));
-  // }
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
+    var op = RequestOptions().addDate(dateObject).setDisablePaging();
+    return op;
+  }
 
   factory SalesAnalysisDashboard.fromJson(Map<String, dynamic> data) =>
       _$SalesAnalysisDashboardFromJson(data);

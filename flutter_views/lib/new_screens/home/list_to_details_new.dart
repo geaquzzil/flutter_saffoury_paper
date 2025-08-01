@@ -152,6 +152,7 @@ class _ListToDetailsSecoundPaneNotifierState
               mainAxisSize: MainAxisSize.min,
               children: [
                 SearchWidgetComponent(
+                  state: getSecoundPaneHelper(),
                   viewAbstract: _viewAbstract,
                   onSearchTextChanged: (p0) {
                     //TODO this is the old way

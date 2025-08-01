@@ -1387,6 +1387,35 @@ class Product extends ViewAbstract<Product>
   }
 
   @override
+  Widget? getSearchTraling(
+    BuildContext context, {
+    required SecoundPaneHelperWithParentValueNotifier? state,
+    String? text,
+  }) {
+    if (text == null) return null;
+    RequestOptions? op = getRequestOptionsPassedOnString(text);
+
+    if (op == null) return null;
+    return IconButton(
+      icon: Icon(Icons.app_registration_rounded),
+      onPressed: () {
+        state?.notify(
+          SecondPaneHelper(
+            title: AppLocalizations.of(context)!.size_analyzer,
+            object: this,
+            value: SizeAnalyzerPage(
+              searchQuery: text,
+              parent: state.parent,
+              onBuild: state.onBuild,
+              requestOptions: getOnlyInventory().copyWithObjcet(option: op),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
   List<Widget>? getCustomTopWidget(
     BuildContext context, {
     ServerActions? action,

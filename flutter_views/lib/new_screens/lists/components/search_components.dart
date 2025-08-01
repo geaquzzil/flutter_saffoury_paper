@@ -11,6 +11,7 @@ import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/our_products.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -129,6 +130,7 @@ class SearchWidgetComponent extends StatefulWidget {
   Function(String?)? onSearchTextChanged;
   ValueNotifier<String?>? onSearchTextChangedValueNotifier;
   ValueNotifier<ExpandType>? appBardExpandType;
+  final SecoundPaneHelperWithParentValueNotifier? state;
   CurrentScreenSize? currentScreenSize;
   SearchWidgetComponent({
     super.key,
@@ -137,6 +139,7 @@ class SearchWidgetComponent extends StatefulWidget {
     this.currentScreenSize,
     required this.viewAbstract,
     this.onSearchTextChangedValueNotifier,
+    this.state,
     this.onSearchTextChanged,
   });
 
@@ -350,10 +353,33 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
     );
   }
 
+  Widget? getTrailinAddOn(String? text) {
+    return _viewAbstract.getSearchTraling(
+      context,
+      state: widget.state,
+      text: text,
+    );
+  }
+
   Widget getTrailingLargeScreen() {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        ValueListenableBuilder(
+          valueListenable: _valueNotifierOnTextChange,
+          builder: (context, value, w) {
+            Widget? w = getTrailinAddOn(value);
+            return AnimatedOpacity(
+              duration: const Duration(milliseconds: 250),
+              opacity: w == null ? 0 : 1,
+              child: AnimatedScale(
+                duration: const Duration(microseconds: 250),
+                scale: w == null ? 0 : 1,
+                child: w,
+              ),
+            );
+          },
+        ),
         ValueListenableBuilder(
           valueListenable: _valueNotifierOnTextChange,
           builder: (context, value, w) {
@@ -374,6 +400,7 @@ class _SearchWidgetComponentState extends State<SearchWidgetComponent>
             );
           },
         ),
+
         // Text("s"),
         CartIconWidget(
           onPressed: () {
