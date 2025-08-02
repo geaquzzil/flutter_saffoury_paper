@@ -15,7 +15,7 @@ CustomsDeclaration _$CustomsDeclarationFromJson(Map<String, dynamic> json) =>
       ..date = json['date'] as String?
       ..fromCountry = json['fromCountry'] as String?
       ..fromName = json['fromName'] as String?
-      ..comments = json['comments'] as String?
+      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
       ..customs_declarations_images =
           (json['customs_declarations_images'] as List<dynamic>?)
               ?.map(

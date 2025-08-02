@@ -35,7 +35,7 @@ BillingCustomer _$BillingCustomerFromJson(Map<String, dynamic> json) =>
       ..city = json['city'] as String?
       ..address = json['address'] as String?
       ..profile = json['profile'] as String?
-      ..comments = json['comments'] as String?
+      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
       ..birthday = json['birthday'] as String?;
 
 Map<String, dynamic> _$BillingCustomerToJson(BillingCustomer instance) =>

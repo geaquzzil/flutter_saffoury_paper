@@ -14,7 +14,7 @@ CustomsDeclarationImages _$CustomsDeclarationImagesFromJson(
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..image = json['image'] as String?
-      ..comments = json['comments'] as String?
+      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
       ..customs_declarations =
           json['customs_declarations'] == null
               ? null

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/v_mirrors.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 
@@ -62,7 +63,7 @@ class CustomerTerms extends Customer
     ..city = json['city'] as String?
     ..address = json['address'] as String?
     ..profile = json['profile'] as String?
-    ..comments = json['comments'] as String?
+    ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
     ..cash = json['cash'] as int?
     ..totalCredits = (json['totalCredits'] as num?)?.toDouble()
     ..totalDebits = (json['totalDebits'] as num?)?.toDouble()

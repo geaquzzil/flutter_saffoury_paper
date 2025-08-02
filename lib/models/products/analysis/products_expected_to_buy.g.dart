@@ -19,7 +19,7 @@ ProductsExcpectedToBuy _$ProductsExcpectedToBuyFromJson(
       ..ParentID = (json['ParentID'] as num?)?.toInt()
       ..barcode = Product.intFromString(json['barcode'])
       ..fiberLines = json['fiberLines'] as String?
-      ..comments = json['comments'] as String?
+      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
       ..parents =
           (json['parents'] as List<dynamic>?)
               ?.map((e) => Product.fromJson(e as Map<String, dynamic>))

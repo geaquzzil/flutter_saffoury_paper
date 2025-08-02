@@ -13,6 +13,8 @@ import 'package:provider/provider.dart';
 
 import 'permissions/user_auth.dart';
 
+String? convertToStringFromString(dynamic d) => d?.toString();
+
 abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
   String? fieldNameFromParent;
@@ -48,6 +50,8 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
 
   static String? convertToString(dynamic number) =>
       number == null ? "-" : number.toString();
+
+  static String? convertToStringFromString(dynamic d) => d?.toString();
   Map<String, String> getPermissionFieldsMap(BuildContext context) {
     return {};
   }

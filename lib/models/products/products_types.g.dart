@@ -16,7 +16,7 @@ ProductType _$ProductTypeFromJson(Map<String, dynamic> json) =>
       ..purchasePrice = (json['purchasePrice'] as num?)?.toDouble()
       ..sellPrice = (json['sellPrice'] as num?)?.toDouble()
       ..image = json['image'] as String?
-      ..comments = json['comments'] as String?
+      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
       ..availability = (json['availability'] as num?)?.toDouble()
       ..grades =
           json['grades'] == null

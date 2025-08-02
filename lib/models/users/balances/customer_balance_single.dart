@@ -4,6 +4,7 @@ import 'package:flutter_view_controller/interfaces/printable/printable_invoice_i
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:pdf/widgets.dart' as pdf;
 
 import '../../prints/print_customer_balances.dart';
@@ -82,7 +83,7 @@ class CustomerBalanceSingle extends Customer
         ..city = json['city'] as String?
         ..address = json['address'] as String?
         ..profile = json['profile'] as String?
-        ..comments = json['comments'] as String?
+        ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
         ..cash = json['cash'] as int?
         ..totalCredits = (json['totalCredits'] as num?)?.toDouble()
         ..totalDebits = (json['totalDebits'] as num?)?.toDouble()

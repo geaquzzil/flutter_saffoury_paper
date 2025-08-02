@@ -43,7 +43,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
 
   String? fromCountry; //59
   String? fromName; //50
-    @JsonKey(fromJson: convertToString)
+  @JsonKey(fromJson: convertToStringFromString)
   String? comments;
 
   List<CustomsDeclarationImages>? customs_declarations_images;

@@ -19,7 +19,7 @@ class User<T> extends UserLists<T> {
   String? city; // varchar 20
   String? address; // text
   String? profile; //text
-  @JsonKey(fromJson: convertToString)
+  @JsonKey(fromJson: convertToStringFromString)
   String? comments; //text
 
   @override

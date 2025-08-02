@@ -201,7 +201,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
 @JsonSerializable()
 class ChangesRecordGroup {
   int? count;
-  @JsonKey(fromJson: convertToString)
+  // @JsonKey(fromJson: convertToStringFromString)
   String? groupBy;
   @JsonKey(fromJson: convertToDouble)
   double? total;

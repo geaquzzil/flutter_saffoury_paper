@@ -175,7 +175,7 @@ Employee _$EmployeeFromJson(Map<String, dynamic> json) =>
       ..city = json['city'] as String?
       ..address = json['address'] as String?
       ..profile = json['profile'] as String?
-      ..comments = json['comments'] as String?
+      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
       ..publish = (json['publish'] as num?)?.toInt()
       ..employee =
           json['employee'] == null

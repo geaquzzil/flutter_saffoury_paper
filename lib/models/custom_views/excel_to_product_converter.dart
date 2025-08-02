@@ -43,9 +43,9 @@ class ExcelToProductConverter
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "product": "",
-        "quantity": 0,
-      };
+    "product": "",
+    "quantity": 0,
+  };
 
   @override
   Map<String, dynamic> toJsonViewAbstract() {
@@ -58,21 +58,25 @@ class ExcelToProductConverter
   }
 
   @override
-  List<String> getMainFields({BuildContext? context}) =>
-      ["product", "quantity"];
+  List<String> getMainFields({BuildContext? context}) => [
+    "product",
+    "quantity",
+  ];
 
   @override
   Map<String, bool> isFieldRequiredMap() => {"product": true, "quantity": true};
 
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "product": AppLocalizations.of(context)!.description,
-        "quantity": AppLocalizations.of(context)!.quantity
-      };
+    "product": AppLocalizations.of(context)!.description,
+    "quantity": AppLocalizations.of(context)!.quantity,
+  };
 
   @override
-  Map<String, IconData> getFieldIconDataMap() =>
-      {"product": Icons.abc, "quantity": Icons.scale};
+  Map<String, IconData> getFieldIconDataMap() => {
+    "product": Icons.abc,
+    "quantity": Icons.scale,
+  };
 
   @override
   Widget? getCustomFloatingActionWidget(BuildContext context) => null;
@@ -85,9 +89,7 @@ class ExcelToProductConverter
     //     child: FileReaderPage(
     //       viewAbstract: this,
     //     ));
-    return FileReaderPage(
-      viewAbstract: this,
-    );
+    return FileReaderPage(viewAbstract: this);
   }
 
   @override
@@ -115,20 +117,27 @@ class ExcelToProductConverter
       number == null ? 0 : int.tryParse(number.toString());
   @override
   List<PageViewModel> getExceableAddOnList(
-      BuildContext context, FileReaderObject? validatedObject) {
+    BuildContext context,
+    FileReaderObject? validatedObject,
+  ) {
     List list = [];
     if (validatedObject != null) {
       list = FileReaderValidationWidget.getDataFromExcelTable(
-          context, validatedObject);
+        context,
+        validatedObject,
+      );
     }
     debugPrint(
-        "getExceableAddOnList validatedObject is null ${validatedObject == null} list is $list");
+      "getExceableAddOnList validatedObject is null ${validatedObject == null} list is $list",
+    );
     List<Product> productList = [];
     for (var element in list) {
       // debugPrint("procces product is $element");
       // var split = element.product.split(RegExp(r'[+-\s]'));
-      element.product =
-          element.product.replaceAll(".", "").toString().toUpperCase();
+      element.product = element.product
+          .replaceAll(".", "")
+          .toString()
+          .toUpperCase();
       element.product = element.product.toUpperCase();
       //get the first is the product type
       List split = element.product.split(RegExp(r'\d+'));
@@ -142,7 +151,7 @@ class ExcelToProductConverter
       //if split is length 2 then the first is the product type and the second is size and width;
       String? productType;
       String? productTypeDesc;
-          @JsonKey(fromJson: convertToString)
+      
       String? comments;
       String? gsm;
       String? length;
@@ -185,7 +194,8 @@ class ExcelToProductConverter
           // continue;
         } else {
           debugPrint(
-              "procces product not completed size $size length ${size.length}");
+            "procces product not completed size $size length ${size.length}",
+          );
           if (size.length == 1) {
             size = size[0].split(RegExp(r'X'));
             debugPrint("procces product not completed size after split $size");
@@ -194,11 +204,13 @@ class ExcelToProductConverter
               length = size[1];
               gsm = size[2];
               debugPrint(
-                  "procces product not completed size try to sucess $size");
+                "procces product not completed size try to sucess $size",
+              );
             }
           } else {
             debugPrint(
-                "procces product not completed size try to split cant space $size");
+              "procces product not completed size try to split cant space $size",
+            );
           }
         }
         ProductType ptype = ProductType();
@@ -221,24 +233,27 @@ class ExcelToProductConverter
         p.addInStock(element.quantity);
         productList.add(p);
         debugPrint(
-            "procces product result final $productType gsm $gsm  length $length width $width comments $comments  productTypeDes  $productTypeDesc  quantity ${element.quantity}");
+          "procces product result final $productType gsm $gsm  length $length width $width comments $comments  productTypeDes  $productTypeDesc  quantity ${element.quantity}",
+        );
       }
     }
 
     return [
       PageViewModel(
-          title: AppLocalizations.of(context)!.validating,
-          bodyWidget: SizedBox(
-            height: 800,
-            child: PdfSelfListPage<PrintProductList>(
-                list: productList,
-                setting: PrintProductList()
-                  ..groupedByField = AppLocalizations.of(context)!.description
-                  ..hideQuantity = false
-                  ..hideUnitPriceAndTotalPrice = true
-                  ..sortByField = AppLocalizations.of(context)!.description
-                  ..skipOutOfStock = false),
-          ))
+        title: AppLocalizations.of(context)!.validating,
+        bodyWidget: SizedBox(
+          height: 800,
+          child: PdfSelfListPage<PrintProductList>(
+            list: productList,
+            setting: PrintProductList()
+              ..groupedByField = AppLocalizations.of(context)!.description
+              ..hideQuantity = false
+              ..hideUnitPriceAndTotalPrice = true
+              ..sortByField = AppLocalizations.of(context)!.description
+              ..skipOutOfStock = false,
+          ),
+        ),
+      ),
     ];
   }
 
@@ -275,9 +290,10 @@ class ExcelToProductConverter
   }
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return null;
   }
 

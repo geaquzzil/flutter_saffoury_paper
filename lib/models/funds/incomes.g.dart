@@ -15,7 +15,7 @@ Incomes _$IncomesFromJson(Map<String, dynamic> json) =>
       ..isDirect = (json['isDirect'] as num?)?.toInt()
       ..date = json['date'] as String?
       ..value = (json['value'] as num?)?.toDouble()
-      ..comments = json['comments'] as String?
+      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
       ..customers =
           json['customers'] == null
               ? null

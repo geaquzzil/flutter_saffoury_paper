@@ -15,7 +15,7 @@ OrderRefund _$OrderRefundFromJson(Map<String, dynamic> json) =>
       ..TermsID = (json['TermsID'] as num?)?.toInt()
       ..date = json['date'] as String?
       ..billNo = InvoiceMaster.intFromString(json['billNo'])
-      ..comments = json['comments'] as String?
+      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
       ..employees =
           json['employees'] == null
               ? null
@@ -124,7 +124,7 @@ OrderRefundDetails _$OrderRefundDetailsFromJson(Map<String, dynamic> json) =>
       ..unitPrice = (json['unitPrice'] as num?)?.toDouble()
       ..discount = (json['discount'] as num?)?.toDouble()
       ..price = (json['price'] as num?)?.toDouble()
-      ..comments = json['comments'] as String?
+      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
       ..orders_refunds =
           json['orders_refunds'] == null
               ? null

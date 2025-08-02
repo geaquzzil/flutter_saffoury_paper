@@ -49,7 +49,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   double? unitPrice;
   double? discount;
   double? price;
-    @JsonKey(fromJson: convertToString)
+  @JsonKey(fromJson: convertToStringFromString)
   String? comments;
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -62,18 +62,21 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "products": Product(),
-        "warehouse": Warehouse(),
-        "quantity": 0.toDouble(),
-        "unitPrice": 0.toDouble(),
-        "discount": 0.toDouble(),
-        "price": 0.toDouble(),
-        "comments": ""
-      };
+    "products": Product(),
+    "warehouse": Warehouse(),
+    "quantity": 0.toDouble(),
+    "unitPrice": 0.toDouble(),
+    "discount": 0.toDouble(),
+    "price": 0.toDouble(),
+    "comments": "",
+  };
 
   InvoiceMasterDetails() : super();
-  InvoiceMasterDetails setProduct(BuildContext context, Product products,
-      {double? quantity}) {
+  InvoiceMasterDetails setProduct(
+    BuildContext context,
+    Product products, {
+    double? quantity,
+  }) {
     this.products = products;
     unitPrice = products.getUnitSellPrice();
     price = products.getTotalSellPrice();
@@ -102,13 +105,18 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   }
 
   @override
-  void onDropdownChanged(BuildContext context, String field, value,
-      {GlobalKey<FormBuilderState>? formKey}) {
+  void onDropdownChanged(
+    BuildContext context,
+    String field,
+    value, {
+    GlobalKey<FormBuilderState>? formKey,
+  }) {
     super.onDropdownChanged(context, field, value);
     if (field == "warehouse") {
       warehouse = value as Warehouse;
       debugPrint(
-          "onDropdownChanged invoiceDetail master ${formKey?.currentState?.fields}");
+        "onDropdownChanged invoiceDetail master ${formKey?.currentState?.fields}",
+      );
       // formKey?.currentState?.fields["quantity"]?.validate();
     }
   }
@@ -130,59 +138,67 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   // }
 
   List<ListableDataRow> getListableDetailsColumns(BuildContext context) => [
-        ListableDataRow("quantity", AppLocalizations.of(context)!.quantity),
-        ListableDataRow("unitPrice", AppLocalizations.of(context)!.unit_price),
-        ListableDataRow("discount", AppLocalizations.of(context)!.discount),
-        ListableDataRow("price", AppLocalizations.of(context)!.total_price),
-        ListableDataRow("comments", AppLocalizations.of(context)!.comments),
-      ];
+    ListableDataRow("quantity", AppLocalizations.of(context)!.quantity),
+    ListableDataRow("unitPrice", AppLocalizations.of(context)!.unit_price),
+    ListableDataRow("discount", AppLocalizations.of(context)!.discount),
+    ListableDataRow("price", AppLocalizations.of(context)!.total_price),
+    ListableDataRow("comments", AppLocalizations.of(context)!.comments),
+  ];
 
   @override
   List<String> getMainFields({BuildContext? context}) => [
-        "products",
-        "warehouse",
-        "quantity",
-        "unitPrice",
-        "discount",
-        "price",
-        "comments"
-      ];
+    "products",
+    "warehouse",
+    "quantity",
+    "unitPrice",
+    "discount",
+    "price",
+    "comments",
+  ];
   @override
   Map<String, String> getFieldLabelMap(BuildContext context) => {
-        "quantity": AppLocalizations.of(context)!.quantity,
-        "unitPrice": AppLocalizations.of(context)!.unit_price,
-        "discount": AppLocalizations.of(context)!.discount,
-        "price": AppLocalizations.of(context)!.total_price,
-        "comments": AppLocalizations.of(context)!.comments
-      };
+    "quantity": AppLocalizations.of(context)!.quantity,
+    "unitPrice": AppLocalizations.of(context)!.unit_price,
+    "discount": AppLocalizations.of(context)!.discount,
+    "price": AppLocalizations.of(context)!.total_price,
+    "comments": AppLocalizations.of(context)!.comments,
+  };
   @override
   Map<String, IconData> getFieldIconDataMap() => {
-        "quantity": Icons.production_quantity_limits,
-        "unitPrice": Icons.price_change,
-        "discount": Icons.discount,
-        "price": Icons.price_check,
-        "comments": Icons.comment
-      };
+    "quantity": Icons.production_quantity_limits,
+    "unitPrice": Icons.price_change,
+    "discount": Icons.discount,
+    "price": Icons.price_check,
+    "comments": Icons.comment,
+  };
   @override
   Map<String, TextInputType?> getTextInputTypeMap() => {
-        "quantity": const TextInputType.numberWithOptions(
-            decimal: false, signed: false),
-        "unitPrice":
-            const TextInputType.numberWithOptions(decimal: true, signed: false),
-        "discount": const TextInputType.numberWithOptions(
-            decimal: false, signed: false),
-        "price": const TextInputType.numberWithOptions(
-            decimal: false, signed: false),
-        "comments": TextInputType.multiline
-      };
+    "quantity": const TextInputType.numberWithOptions(
+      decimal: false,
+      signed: false,
+    ),
+    "unitPrice": const TextInputType.numberWithOptions(
+      decimal: true,
+      signed: false,
+    ),
+    "discount": const TextInputType.numberWithOptions(
+      decimal: false,
+      signed: false,
+    ),
+    "price": const TextInputType.numberWithOptions(
+      decimal: false,
+      signed: false,
+    ),
+    "comments": TextInputType.multiline,
+  };
   @override
   Map<String, bool> isFieldRequiredMap() => {
-        "quantity": true,
-        "unitPrice": true,
-        "discount": true,
-        "price": true,
-        "warehouse": true
-      };
+    "quantity": true,
+    "unitPrice": true,
+    "discount": true,
+    "price": true,
+    "warehouse": true,
+  };
 
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
@@ -194,7 +210,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   }
 
   @override
-  Text? getMainSubtitleHeaderText(BuildContext context,{String? searchQuery}) {
+  Text? getMainSubtitleHeaderText(BuildContext context, {String? searchQuery}) {
     return Text(quantity.toCurrencyFormat(symbol: "KG"));
   }
 
@@ -202,9 +218,10 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   IconData getMainIconData() => Icons.list;
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     return RequestOptions().addSortBy("iD", SortByType.DESC);
   }
 
@@ -220,16 +237,26 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {};
 
   @override
-  Map<String, int> getTextInputMaxLengthMap() =>
-      {"quantity": 10, "unitPrice": 10, "price": 10, "discount": 10};
+  Map<String, int> getTextInputMaxLengthMap() => {
+    "quantity": 10,
+    "unitPrice": 10,
+    "price": 10,
+    "discount": 10,
+  };
 
   @override
-  Map<String, double> getTextInputMaxValidateMap() =>
-      {"quantity": getMaxQuantityValue(), "discount": getMaxDiscountValue()};
+  Map<String, double> getTextInputMaxValidateMap() => {
+    "quantity": getMaxQuantityValue(),
+    "discount": getMaxDiscountValue(),
+  };
 
   @override
-  Map<String, double> getTextInputMinValidateMap() =>
-      {"quantity": 1, "unitPrice": 0.1, "price": 0.1, "discount": 0};
+  Map<String, double> getTextInputMinValidateMap() => {
+    "quantity": 1,
+    "unitPrice": 0.1,
+    "price": 0.1,
+    "discount": 0,
+  };
 
   @override
   String? getImageUrl(BuildContext context) {
@@ -237,23 +264,27 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   }
 
   @override
-  void onTextChangeListener(BuildContext context, String field, String? value,
-      {GlobalKey<FormBuilderState>? formKey}) {
+  void onTextChangeListener(
+    BuildContext context,
+    String field,
+    String? value, {
+    GlobalKey<FormBuilderState>? formKey,
+  }) {
     super.onTextChangeListener(context, field, value);
 
     setFieldValue(field, double.tryParse(value ?? "0") ?? 0);
 
     if (field == "quantity") {
-      price =
-          (quantity.toNonNullable() * unitPrice.toNonNullable()).roundDouble();
+      price = (quantity.toNonNullable() * unitPrice.toNonNullable())
+          .roundDouble();
     }
     if (field == "price") {
-      unitPrice =
-          (price.toNonNullable() / quantity.toNonNullable()).roundDouble();
+      unitPrice = (price.toNonNullable() / quantity.toNonNullable())
+          .roundDouble();
     }
     if (field == "unitPrice") {
-      price =
-          (unitPrice.toNonNullable() * quantity.toNonNullable()).roundDouble();
+      price = (unitPrice.toNonNullable() * quantity.toNonNullable())
+          .roundDouble();
     }
     // notifyOtherControllers(context: context);
     // switch (field) {
@@ -287,7 +318,8 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   }
 
   bool isPricelessInvoice() {
-    bool result = this is CustomerRequestSizeDetails ||
+    bool result =
+        this is CustomerRequestSizeDetails ||
         this is ProductInputDetails ||
         this is ProductOutputDetails ||
         this is ReservationInvoiceDetails ||
@@ -312,45 +344,48 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   }
 
   @override
-  pdf.Widget getPrintableDetailPageIfLabel(BuildContext context,
-      PrintInvoice? pca, PrintableInvoiceInterface<PrintLocalSetting> parent) {
+  pdf.Widget getPrintableDetailPageIfLabel(
+    BuildContext context,
+    PrintInvoice? pca,
+    PrintableInvoiceInterface<PrintLocalSetting> parent,
+  ) {
     return ProductLabelIfInvoiceDetailRoll80(
-            context: context,
-            invoiceMaster: parent as InvoiceMaster,
-            invoiceMasterDetail: this,
-            product: products!,
-            format: roll80,
-            setting: pca)
-        .generate(
-            qrObject: parent,
-            description: pca?.changeProductNameTo,
-            quantity: quantity);
+      context: context,
+      invoiceMaster: parent as InvoiceMaster,
+      invoiceMasterDetail: this,
+      product: products!,
+      format: roll80,
+      setting: pca,
+    ).generate(
+      qrObject: parent,
+      description: pca?.changeProductNameTo,
+      quantity: quantity,
+    );
   }
 
   @override
   Map<String, String> getPrintableInvoiceTableHeaderAndContent(
-          BuildContext context, PrintInvoice? pca) =>
-      {
-        AppLocalizations.of(context)!.iD: getIDFormat(context),
-        AppLocalizations.of(context)!.description:
-            "${products?.getProductTypeNameString()}\n${products?.getSizeString(context)}",
-        AppLocalizations.of(context)!.gsm:
-            products?.gsms?.gsm.toString() ?? "0",
-        AppLocalizations.of(context)!.quantity:
-            quantity?.toCurrencyFormat() ?? "0",
-        if (!isPricelessInvoice())
-          if (((pca?.hideUnitPriceAndTotalPrice == false)))
-            AppLocalizations.of(context)!.unit_price:
-                unitPrice?.toStringAsFixed(2) ?? "0",
-        if (!isPricelessInvoice())
-          if (((pca?.hideUnitPriceAndTotalPrice == false)))
-            AppLocalizations.of(context)!.discount:
-                discount?.toStringAsFixed(2) ?? "0",
-        if (!isPricelessInvoice())
-          if (((pca?.hideUnitPriceAndTotalPrice == false)))
-            AppLocalizations.of(context)!.total_price:
-                price?.toCurrencyFormat() ?? "0",
-      };
+    BuildContext context,
+    PrintInvoice? pca,
+  ) => {
+    AppLocalizations.of(context)!.iD: getIDFormat(context),
+    AppLocalizations.of(context)!.description:
+        "${products?.getProductTypeNameString()}\n${products?.getSizeString(context)}",
+    AppLocalizations.of(context)!.gsm: products?.gsms?.gsm.toString() ?? "0",
+    AppLocalizations.of(context)!.quantity: quantity?.toCurrencyFormat() ?? "0",
+    if (!isPricelessInvoice())
+      if (((pca?.hideUnitPriceAndTotalPrice == false)))
+        AppLocalizations.of(context)!.unit_price:
+            unitPrice?.toStringAsFixed(2) ?? "0",
+    if (!isPricelessInvoice())
+      if (((pca?.hideUnitPriceAndTotalPrice == false)))
+        AppLocalizations.of(context)!.discount:
+            discount?.toStringAsFixed(2) ?? "0",
+    if (!isPricelessInvoice())
+      if (((pca?.hideUnitPriceAndTotalPrice == false)))
+        AppLocalizations.of(context)!.total_price:
+            price?.toCurrencyFormat() ?? "0",
+  };
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {};
 
@@ -359,8 +394,8 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
     return field == "products"
         ? FormFieldControllerType.DROP_DOWN_TEXT_SEARCH_API
         : field == "warehouse"
-            ? FormFieldControllerType.DROP_DOWN_API
-            : super.getInputType(field);
+        ? FormFieldControllerType.DROP_DOWN_API
+        : super.getInputType(field);
   }
 
   @override
@@ -434,8 +469,11 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
             //   style: Theme.of(context).textTheme.bodySmall,
             // ),
             Text(getMainHeaderTextOnly(context)),
-            Text(quantity.toCurrencyFormat(
-                symbol: products?.getProductTypeUnit(context) ?? ""))
+            Text(
+              quantity.toCurrencyFormat(
+                symbol: products?.getProductTypeUnit(context) ?? "",
+              ),
+            ),
           ],
         ),
       ],
@@ -455,36 +493,38 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
         Text(unitPrice.toCurrencyFormatFromSetting(context)),
         Text(
           price.toCurrencyFormatFromSetting(context),
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall
-              ?.copyWith(color: kPrimaryColor),
-        )
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: kPrimaryColor),
+        ),
       ],
     );
   }
 
   @override
   DashboardContentItem? getPrintableInvoiceTableHeaderAndContentWhenDashboard(
-      BuildContext context, PrintLocalSetting? dashboardSetting) {
+    BuildContext context,
+    PrintLocalSetting? dashboardSetting,
+  ) {
     Currency c = Currency.init(context);
     return DashboardContentItem(
-        shouldAddToBalance: false,
-        iD: iD,
-        currency: c.name,
-        currencyId: c.iD,
-        quantity: quantity.toCurrencyFormat(),
-        unit: unitPrice.toCurrencyFormat(),
-        description: getMainHeaderTextOnly(context),
-        credit: isPricelessInvoice()
-            ? 0
-            : isCreditInvoice()
-                ? price
-                : 0,
-        debit: isPricelessInvoice()
-            ? 0
-            : isDebitsInvoice()
-                ? price
-                : 0);
+      shouldAddToBalance: false,
+      iD: iD,
+      currency: c.name,
+      currencyId: c.iD,
+      quantity: quantity.toCurrencyFormat(),
+      unit: unitPrice.toCurrencyFormat(),
+      description: getMainHeaderTextOnly(context),
+      credit: isPricelessInvoice()
+          ? 0
+          : isCreditInvoice()
+          ? price
+          : 0,
+      debit: isPricelessInvoice()
+          ? 0
+          : isDebitsInvoice()
+          ? price
+          : 0,
+    );
   }
 }

@@ -54,7 +54,7 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
 
   String? date;
   double? value;
-  @JsonKey(fromJson: convertToString)
+  @JsonKey(fromJson: convertToStringFromString)
   String? comments;
 
   Customer? customers;
