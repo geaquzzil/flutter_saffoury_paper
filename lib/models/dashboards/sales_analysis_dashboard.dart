@@ -159,7 +159,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
           getWidget(
             StaggeredGridTile.count(
               crossAxisCellCount: 2,
-              mainAxisCellCount: heightSmall,
+              mainAxisCellCount: heightLarge,
               child: ChartCardItemCustom(
                 // list: incomesDue,
                 listGrowthRate: totalSalesPrice,

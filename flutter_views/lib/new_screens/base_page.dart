@@ -2024,11 +2024,11 @@ abstract class BasePageState<T extends BasePage> extends State<T>
           ? Selector<DrawerMenuControllerProvider, DrawerMenuItem?>(
               builder: (__, v, ___) {
                 lastDrawerItemSelected = v;
-                return getMainPanes();
+                return getMainPanIfHasTabBarList();
               },
               selector: (p0, p1) => p1.getLastDrawerMenuItemClicked,
             )
-          : getMainPanes(),
+          : getMainPanIfHasTabBarList(),
     );
 
     if ((isLarge && buildDrawer) || (isLarge && isCustomDrawer)) {
@@ -2053,16 +2053,17 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     return body;
   }
 
-  Widget getBodyIfHasTabBarList() {
-    Widget currentWidget;
-    currentWidget = TabBarView(
-        controller: _tabBaseController,
-        children: _getTabBarList()?.map((e) => getMainPanes(tab: e)).toList());
-    Widget child = getSelectorBodyIsLarge(isLarge, currentWidget);
-    currentWidget = child;
-    return currentWidget;
+  Widget getMainPanIfHasTabBarList() {
+    if (!_hasTabBarList()) {
+      return getMainPanes();
+    }
+    return TabBarView(
+      controller: _tabBaseController,
+      children: _getTabBarList().map((e) => getMainPanes(baseTap: e)).toList(),
+    );
   }
-  Widget getMainPanes({TabControllerHelper ?baseTap}) {
+
+  Widget getMainPanes({TabControllerHelper? baseTap}) {
     _firstWidget = getScaffoldForPane(firstPane: true);
     _secondWidget = getScaffoldForPane(firstPane: false);
     if (_hasHorizontalDividerWhenTowPanes()) {
@@ -2373,9 +2374,9 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
 
   void initStateAfterApiCalled() {}
   @override
-  Widget getMainPanes({TabControllerHelper ? baseTap}) {
+  Widget getMainPanes({TabControllerHelper? baseTap}) {
     debugPrint("getBody _getTowPanes TabController ");
-    dynamic ex = getExtras();
+    dynamic ex = getExtras(tab: baseTap);
     // _isLoading = !getExtrasCast().shouldGetFromApi(ServerActions.view);
     // debugPrint("getBody _isLoading  $_isLoading ");
     // if (ex != null && !_isLoading) {
@@ -2387,8 +2388,10 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     // }
     return FutureBuilder<dynamic>(
       future:
-          getOverrideCallApiFunction(context) ??
-          getExtrasCast().viewCall(context: context, customID: getID),
+          getOverrideCallApiFunction(context, tab: baseTap) ??
+          getExtrasCast(
+            tab: baseTap,
+          ).viewCall(context: context, customID: getID),
       builder: (context, snapshot) {
         _connectionState.value =
             overrideConnectionState(BasePageWithApiConnection.future) ??

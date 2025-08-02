@@ -57,6 +57,7 @@ class LineChartItem<T, E> extends StatelessWidget {
 
         // trackballBehavior: TrackballBehavior(enable: true),
         tooltipBehavior: TooltipBehavior(
+          header: "",
           elevation: 2,
           enable: true,
           duration: 200,

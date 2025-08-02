@@ -474,13 +474,11 @@ class CustomerBalanceList
     required ServerActions action,
     RequestOptions? generatedOptionFromListCall,
   }) {
-    // TODO: implement getRequestOption
-    throw UnimplementedError();
+    return null;
   }
 
   @override
   List<String>? getRequestedForginListOnCall({required ServerActions action}) {
-    // TODO: implement getRequestedForginListOnCall
-    throw UnimplementedError();
+    return null;
   }
 }
