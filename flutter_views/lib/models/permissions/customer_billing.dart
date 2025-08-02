@@ -28,6 +28,7 @@ class BillingCustomer extends AuthUser<BillingCustomer> {
   String? city; // varchar 20
   String? address; // text
   String? profile; //text
+  @JsonKey(fromJson: convertToString)
   String? comments; //text
   String? birthday;
 

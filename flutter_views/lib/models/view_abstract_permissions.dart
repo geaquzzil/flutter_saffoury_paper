@@ -37,9 +37,7 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   bool isNullTriggerd = false;
-  @JsonKey(
-    fromJson: convertToMinusOneIfNotFound,
-  )
+  @JsonKey(fromJson: convertToMinusOneIfNotFound)
   int iD = -1;
 
   ViewAbstract? get getParent => parent;
@@ -47,6 +45,9 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
 
   static int convertToMinusOneIfNotFound(dynamic number) =>
       number == null ? -1 : (int.tryParse(number.toString()) ?? -1);
+
+  static String? convertToString(dynamic number) =>
+      number == null ? "-" : number.toString();
   Map<String, String> getPermissionFieldsMap(BuildContext context) {
     return {};
   }
@@ -56,13 +57,18 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   }
 
   Future<bool> hasPermissionOnField(
-      BuildContext context, String field, ServerActions? actions) async {
+    BuildContext context,
+    String field,
+    ServerActions? actions,
+  ) async {
     debugPrint(
-        "hasPermissionToPreformActionOn:  field $field  action $actions");
+      "hasPermissionToPreformActionOn:  field $field  action $actions",
+    );
     String? permissionField = _getPermissionField(context, field);
     if (permissionField == null) {
       debugPrint(
-          "hasPermissionToPreformActionOn:  PermissionField ==null  $field  action $actions");
+        "hasPermissionToPreformActionOn:  PermissionField ==null  $field  action $actions",
+      );
       return true;
     }
     // debugPrint(
@@ -72,7 +78,10 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   }
 
   bool hasPermission(
-      BuildContext context, dynamic toDo, ServerActions? action) {
+    BuildContext context,
+    dynamic toDo,
+    ServerActions? action,
+  ) {
     return true;
     action ??= ServerActions.view;
 
@@ -82,14 +91,18 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
       return true;
     }
     List<PermissionActionAbstract> PermissionActions = getPermssionActions(
-        context); //  PermissionLevel.GetValue < IList > ("permissions_levels");
+      context,
+    ); //  PermissionLevel.GetValue < IList > ("permissions_levels");
     debugPrint(
-        "hasPermission: Checking Pe|rmission for $toDo to Action $action  Count  ${PermissionActions.length} ");
+      "hasPermission: Checking Pe|rmission for $toDo to Action $action  Count  ${PermissionActions.length} ",
+    );
     if (PermissionActions.isEmpty) {
       return false;
     }
-    PermissionActionAbstract? foundedPermission =
-        findCurrentPermission(context, toDo);
+    PermissionActionAbstract? foundedPermission = findCurrentPermission(
+      context,
+      toDo,
+    );
     if (foundedPermission == null) {
       if (toDo is String) {
         return false;
@@ -102,17 +115,23 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
     }
     if (toDo is String) {
       debugPrint(
-          "hasPermission: " "founded permissio ${foundedPermission.view} ");
+        "hasPermission: "
+        "founded permissio ${foundedPermission.view} ",
+      );
       return foundedPermission.view == 1 || foundedPermission.list == 1;
     } else {
       return getPermissionActionValueFromServerAction(
-              foundedPermission, action) ==
+            foundedPermission,
+            action,
+          ) ==
           1;
     }
   }
 
   int getPermissionActionValueFromServerAction(
-      PermissionActionAbstract action, ServerActions serverActions) {
+    PermissionActionAbstract action,
+    ServerActions serverActions,
+  ) {
     if (serverActions == ServerActions.add) {
       return action.add ?? 0;
     } else if (serverActions == ServerActions.edit) {
@@ -168,7 +187,9 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   }
 
   bool hasPermissionFromParentSelectItem(
-      BuildContext context, ViewAbstract viewAbstract) {
+    BuildContext context,
+    ViewAbstract viewAbstract,
+  ) {
     debugPrint("hasPermissionFromParentSelectItem fromParent=> $parent");
     return true;
   }
@@ -185,9 +206,12 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   }
 
   PermissionActionAbstract? findCurrentPermission(
-      BuildContext context, dynamic toDo) {
-    PermissionLevelAbstract? permissionLevelAbstract =
-        getUserPermissionLevel(context);
+    BuildContext context,
+    dynamic toDo,
+  ) {
+    PermissionLevelAbstract? permissionLevelAbstract = getUserPermissionLevel(
+      context,
+    );
 
     return permissionLevelAbstract?.findPermissionBy(toDo);
   }
@@ -200,9 +224,11 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
     return context.read<AuthProvider<AuthUser>>().getPermissions;
   }
 
-  FutureBuilder<E> onFutureBuilder<E>(BuildContext context,
-      {required Future<E> function,
-      required Widget Function(E data) onHasPermissionWidget}) {
+  FutureBuilder<E> onFutureBuilder<E>(
+    BuildContext context, {
+    required Future<E> function,
+    required Widget Function(E data) onHasPermissionWidget,
+  }) {
     return FutureBuilder<E>(
       future: function,
       builder: (context, AsyncSnapshot<E> snapshot) {

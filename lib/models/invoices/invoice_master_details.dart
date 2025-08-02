@@ -49,7 +49,7 @@ abstract class InvoiceMasterDetails<T> extends ViewAbstract<T>
   double? unitPrice;
   double? discount;
   double? price;
-
+    @JsonKey(fromJson: convertToString)
   String? comments;
 
   @JsonKey(includeFromJson: false, includeToJson: false)

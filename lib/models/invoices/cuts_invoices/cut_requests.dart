@@ -66,6 +66,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   // int? EmployeeID;
 
   String? date;
+  @JsonKey(fromJson: convertToString)
   String? comments;
   double? quantity;
   CutStatus? cut_status;

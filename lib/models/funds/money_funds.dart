@@ -30,6 +30,7 @@ import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart'
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:intl/intl.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:number_to_character/number_to_character.dart';
 import 'package:pdf/pdf.dart' as d;
 import 'package:pdf/widgets.dart' as pdf;
@@ -53,7 +54,7 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
 
   String? date;
   double? value;
-
+  @JsonKey(fromJson: convertToString)
   String? comments;
 
   Customer? customers;

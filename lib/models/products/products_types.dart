@@ -37,6 +37,7 @@ class ProductType extends ViewAbstract<ProductType>
   double? sellPrice;
 
   String? image;
+      @JsonKey(fromJson: convertToString)
   String? comments;
   double? availability;
 

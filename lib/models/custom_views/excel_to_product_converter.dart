@@ -142,6 +142,7 @@ class ExcelToProductConverter
       //if split is length 2 then the first is the product type and the second is size and width;
       String? productType;
       String? productTypeDesc;
+          @JsonKey(fromJson: convertToString)
       String? comments;
       String? gsm;
       String? length;

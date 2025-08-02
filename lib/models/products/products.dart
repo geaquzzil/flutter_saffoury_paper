@@ -133,6 +133,7 @@ class Product extends ViewAbstract<Product>
   @JsonKey(fromJson: intFromString)
   String? barcode;
   String? fiberLines;
+      @JsonKey(fromJson: convertToString)
   String? comments;
 
   List<Product>? parents;
