@@ -8,7 +8,7 @@ part of 'dashboard.dart';
 
 Dashboard _$DashboardFromJson(Map<String, dynamic> json) =>
     Dashboard()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..phone = (json['phone'] as num?)?.toInt()
@@ -224,10 +224,10 @@ Dashboard _$DashboardFromJson(Map<String, dynamic> json) =>
           (json['customerToPayNext'] as List<dynamic>?)
               ?.map((e) => CustomerTerms.fromJson(e as Map<String, dynamic>))
               .toList()
-      ..date =
-          json['date'] == null
+      ..dateObject =
+          json['dateObject'] == null
               ? null
-              : DateObject.fromJson(json['date'] as Map<String, dynamic>)
+              : DateObject.fromJson(json['dateObject'] as Map<String, dynamic>)
       ..modifiedNotPayedCustomers =
           (json['modifiedNotPayedCustomers'] as List<dynamic>?)
               ?.map((e) => CustomerTerms.fromJson(e as Map<String, dynamic>))
@@ -343,7 +343,7 @@ Map<String, dynamic> _$DashboardToJson(Dashboard instance) => <String, dynamic>{
       instance.notPayedCustomers?.map((e) => e.toJson()).toList(),
   'customerToPayNext':
       instance.customerToPayNext?.map((e) => e.toJson()).toList(),
-  'date': instance.date?.toJson(),
+  'dateObject': instance.dateObject?.toJson(),
   'modifiedNotPayedCustomers':
       instance.modifiedNotPayedCustomers?.map((e) => e.toJson()).toList(),
   'modifiedCustomerToPayNext':

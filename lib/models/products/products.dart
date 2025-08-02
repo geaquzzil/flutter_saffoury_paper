@@ -133,7 +133,7 @@ class Product extends ViewAbstract<Product>
   @JsonKey(fromJson: intFromString)
   String? barcode;
   String? fiberLines;
-      @JsonKey(fromJson: convertToStringFromString)
+  @JsonKey(fromJson: convertToStringFromString)
   String? comments;
 
   List<Product>? parents;
@@ -1643,8 +1643,6 @@ class Product extends ViewAbstract<Product>
   //     }
   //     return null;
   //   }
-
-  static String? intFromString(dynamic number) => number?.toString();
 
   String getProductTypeNameString() {
     return products_types?.name ?? "-";

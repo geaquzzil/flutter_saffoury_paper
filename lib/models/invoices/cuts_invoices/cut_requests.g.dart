@@ -8,11 +8,11 @@ part of 'cut_requests.dart';
 
 CutRequest _$CutRequestFromJson(Map<String, dynamic> json) =>
     CutRequest()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..date = json['date'] as String?
-      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
+      ..comments = convertToStringFromString(json['comments'])
       ..quantity = (json['quantity'] as num?)?.toDouble()
       ..cut_status = $enumDecodeNullable(_$CutStatusEnumMap, json['cut_status'])
       ..products =
@@ -67,10 +67,10 @@ const _$CutStatusEnumMap = {
 
 ProfitByCutRequest _$ProfitByCutRequestFromJson(Map<String, dynamic> json) =>
     ProfitByCutRequest()
-      ..cutRequestQuantity = convertToDouble(json['cutRequestQuantity'])
-      ..inputQuantity = convertToDouble(json['inputQuantity'])
-      ..resultQuantity = convertToDouble(json['resultQuantity'])
-      ..totalPrice = convertToDouble(json['totalPrice'])
+      ..cutRequestQuantity = (json['cutRequestQuantity'] as num?)?.toDouble()
+      ..inputQuantity = (json['inputQuantity'] as num?)?.toDouble()
+      ..resultQuantity = (json['resultQuantity'] as num?)?.toDouble()
+      ..totalPrice = (json['totalPrice'] as num?)?.toDouble()
       ..CutRequestID = (json['CutRequestID'] as num?)?.toInt()
       ..date = json['date'] as String?;
 

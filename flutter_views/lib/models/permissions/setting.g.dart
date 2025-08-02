@@ -8,7 +8,7 @@ part of 'setting.dart';
 
 Setting _$SettingFromJson(Map<String, dynamic> json) =>
     Setting()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..ENABLE_APP = (json['ENABLE_APP'] as num?)?.toInt()

@@ -22,8 +22,6 @@ const double kDrawerOpenWidth = 200;
 
 const double kDefaultClosedDrawer = 80;
 
-double? convertToDouble(dynamic number) =>
-    number == null ? 0 : double.tryParse(number.toString());
 
 Size findPopupSizeSquare(BuildContext context,
     {CurrentScreenSize? screenSize}) {

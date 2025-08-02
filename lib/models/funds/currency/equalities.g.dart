@@ -8,7 +8,7 @@ part of 'equalities.dart';
 
 Equalities _$EqualitiesFromJson(Map<String, dynamic> json) =>
     Equalities()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..value = (json['value'] as num?)?.toDouble()

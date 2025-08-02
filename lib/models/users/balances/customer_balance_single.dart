@@ -83,7 +83,7 @@ class CustomerBalanceSingle extends Customer
         ..city = json['city'] as String?
         ..address = json['address'] as String?
         ..profile = json['profile'] as String?
-        ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
+        ..comments = convertToStringFromString(json['comments'])
         ..cash = json['cash'] as int?
         ..totalCredits = (json['totalCredits'] as num?)?.toDouble()
         ..totalDebits = (json['totalDebits'] as num?)?.toDouble()
@@ -129,9 +129,6 @@ class EqualityValue {
     ..CustomerID = data['CustomerID'] as int?
     ..date = data['date'] as String?
     ..value = convertToDouble(data['value']);
-
-  static double? convertToDouble(dynamic number) =>
-      number == null ? 0 : double.tryParse(number.toString());
 
   Map<String, dynamic> toJson() => {};
 }

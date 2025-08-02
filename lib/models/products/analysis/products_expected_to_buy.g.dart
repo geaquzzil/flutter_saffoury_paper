@@ -10,16 +10,16 @@ ProductsExcpectedToBuy _$ProductsExcpectedToBuyFromJson(
   Map<String, dynamic> json,
 ) =>
     ProductsExcpectedToBuy()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..status = $enumDecodeNullable(_$ProductStatusEnumMap, json['status'])
       ..date = json['date'] as String?
       ..sheets = (json['sheets'] as num?)?.toInt()
       ..ParentID = (json['ParentID'] as num?)?.toInt()
-      ..barcode = Product.intFromString(json['barcode'])
+      ..barcode = intFromString(json['barcode'])
       ..fiberLines = json['fiberLines'] as String?
-      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
+      ..comments = convertToStringFromString(json['comments'])
       ..parents =
           (json['parents'] as List<dynamic>?)
               ?.map((e) => Product.fromJson(e as Map<String, dynamic>))

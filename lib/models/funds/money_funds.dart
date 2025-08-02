@@ -25,6 +25,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_receipt_api.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';

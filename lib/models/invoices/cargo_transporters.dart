@@ -139,7 +139,6 @@ class CargoTransporter extends ViewAbstract<CargoTransporter> {
   CargoTransporter fromJsonViewAbstract(Map<String, dynamic> json) =>
       CargoTransporter.fromJson(json);
 
-  static String? intFromString(dynamic number) => number?.toString();
 
   @override
   RequestOptions? getRequestOption(

@@ -8,7 +8,7 @@ part of 'products_color.dart';
 
 ProductsColor _$ProductsColorFromJson(Map<String, dynamic> json) =>
     ProductsColor()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..top = json['top'] as String?

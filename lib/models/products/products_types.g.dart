@@ -8,7 +8,7 @@ part of 'products_types.dart';
 
 ProductType _$ProductTypeFromJson(Map<String, dynamic> json) =>
     ProductType()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..name = json['name'] as String?
@@ -16,7 +16,7 @@ ProductType _$ProductTypeFromJson(Map<String, dynamic> json) =>
       ..purchasePrice = (json['purchasePrice'] as num?)?.toDouble()
       ..sellPrice = (json['sellPrice'] as num?)?.toDouble()
       ..image = json['image'] as String?
-      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
+      ..comments = convertToStringFromString(json['comments'])
       ..availability = (json['availability'] as num?)?.toDouble()
       ..grades =
           json['grades'] == null

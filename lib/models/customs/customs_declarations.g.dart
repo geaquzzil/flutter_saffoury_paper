@@ -8,14 +8,14 @@ part of 'customs_declarations.dart';
 
 CustomsDeclaration _$CustomsDeclarationFromJson(Map<String, dynamic> json) =>
     CustomsDeclaration()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
-      ..number = CustomsDeclaration.intFromString(json['number'])
+      ..number = intFromString(json['number'])
       ..date = json['date'] as String?
       ..fromCountry = json['fromCountry'] as String?
       ..fromName = json['fromName'] as String?
-      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
+      ..comments = convertToStringFromString(json['comments'])
       ..customs_declarations_images =
           (json['customs_declarations_images'] as List<dynamic>?)
               ?.map(

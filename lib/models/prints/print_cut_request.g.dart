@@ -8,7 +8,7 @@ part of 'print_cut_request.dart';
 
 PrintCutRequest _$PrintCutRequestFromJson(Map<String, dynamic> json) =>
     PrintCutRequest()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..printerOptions =

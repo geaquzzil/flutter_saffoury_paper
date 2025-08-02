@@ -10,7 +10,7 @@ SalesAnalysisDashboard _$SalesAnalysisDashboardFromJson(
   Map<String, dynamic> json,
 ) =>
     SalesAnalysisDashboard()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..phone = (json['phone'] as num?)?.toInt()

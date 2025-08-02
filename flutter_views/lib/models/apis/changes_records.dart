@@ -5,6 +5,7 @@ import 'package:flutter_view_controller/models/auto_rest.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/v_non_view_object.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_components/chart/pie_chart.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
@@ -201,7 +202,7 @@ class ChangesRecords<T extends ViewAbstract> extends VObject<ChangesRecords>
 @JsonSerializable()
 class ChangesRecordGroup {
   int? count;
-  // @JsonKey(fromJson: convertToStringFromString)
+  @JsonKey(fromJson: convertToString)
   String? groupBy;
   @JsonKey(fromJson: convertToDouble)
   double? total;
@@ -229,15 +230,11 @@ class ChangesRecordGroup {
     return "count: $count, groupBy: $groupBy, total: $total";
   }
 
-  static String? convertToString(dynamic number) =>
-      number == null ? "-" : number.toString();
   factory ChangesRecordGroup.fromJson(Map<String, dynamic> data) =>
       ChangesRecordGroup()
         ..count = data['count'] as int?
-        ..total = ChangesRecordGroup.convertToDouble(data['total'])
-        ..groupBy = ChangesRecordGroup.convertToString(data['groupBy']);
+        ..total = convertToDouble(data['total'])
+        ..groupBy = convertToString(data['groupBy']);
 
   Map<String, dynamic> toJson() => {};
-  static double? convertToDouble(dynamic number) =>
-      number == null ? 0 : double.tryParse(number.toString());
 }

@@ -470,7 +470,7 @@ class AccountNamesBalance {
   factory AccountNamesBalance.fromJson(Map<String, dynamic> data) =>
       AccountNamesBalance()
         ..name = data['name'] as String?
-        ..sum = InvoiceMaster.convertToDouble(data['sum']);
+        ..sum = convertToDouble(data['sum']);
 
   Map<String, dynamic> toJson() => {};
 }

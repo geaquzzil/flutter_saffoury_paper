@@ -10,7 +10,7 @@ PrintDashboardSetting _$PrintDashboardSettingFromJson(
   Map<String, dynamic> json,
 ) =>
     PrintDashboardSetting()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..printerOptions =

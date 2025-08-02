@@ -10,7 +10,7 @@ PermissionLevelAbstract _$PermissionLevelAbstractFromJson(
   Map<String, dynamic> json,
 ) =>
     PermissionLevelAbstract()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..userlevelname = json['userlevelname'] as String?

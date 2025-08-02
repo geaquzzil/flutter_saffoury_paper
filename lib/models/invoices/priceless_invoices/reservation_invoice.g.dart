@@ -8,14 +8,14 @@ part of 'reservation_invoice.dart';
 
 ReservationInvoice _$ReservationInvoiceFromJson(Map<String, dynamic> json) =>
     ReservationInvoice()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
       ..TermsID = (json['TermsID'] as num?)?.toInt()
       ..date = json['date'] as String?
-      ..billNo = InvoiceMaster.intFromString(json['billNo'])
-      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
+      ..billNo = json['billNo'] as String?
+      ..comments = json['comments'] as String?
       ..employees =
           json['employees'] == null
               ? null
@@ -31,19 +31,19 @@ ReservationInvoice _$ReservationInvoiceFromJson(Map<String, dynamic> json) =>
                 json['cargo_transporters'] as Map<String, dynamic>,
               )
       ..status = $enumDecodeNullable(_$InvoiceStatusEnumMap, json['status'])
-      ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
-      ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
-      ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
-      ..extendedRefundPrice = InvoiceMaster.convertToDouble(
+      ..quantity = convertToDouble(json['quantity'])
+      ..extendedPrice = convertToDouble(json['extendedPrice'])
+      ..refundQuantity = convertToDouble(json['refundQuantity'])
+      ..extendedRefundPrice = convertToDouble(
         json['extendedRefundPrice'],
       )
-      ..extendedDiscount = InvoiceMaster.convertToDouble(
+      ..extendedDiscount = convertToDouble(
         json['extendedDiscount'],
       )
-      ..extendedNetPrice = InvoiceMaster.convertToDouble(
+      ..extendedNetPrice = convertToDouble(
         json['extendedNetPrice'],
       )
-      ..extendedNetQuantity = InvoiceMaster.convertToDouble(
+      ..extendedNetQuantity = convertToDouble(
         json['extendedNetQuantity'],
       )
       ..reservation_invoice_details =
@@ -107,7 +107,7 @@ ReservationInvoiceDetails _$ReservationInvoiceDetailsFromJson(
   Map<String, dynamic> json,
 ) =>
     ReservationInvoiceDetails()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..products =
@@ -122,7 +122,7 @@ ReservationInvoiceDetails _$ReservationInvoiceDetailsFromJson(
       ..unitPrice = (json['unitPrice'] as num?)?.toDouble()
       ..discount = (json['discount'] as num?)?.toDouble()
       ..price = (json['price'] as num?)?.toDouble()
-      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
+      ..comments = json['comments'] as String?
       ..reservation_invoice =
           json['reservation_invoice'] == null
               ? null

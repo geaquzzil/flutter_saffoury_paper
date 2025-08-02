@@ -8,13 +8,13 @@ part of 'cargo_transporters.dart';
 
 CargoTransporter _$CargoTransporterFromJson(Map<String, dynamic> json) =>
     CargoTransporter()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..name = json['name'] as String?
       ..phone = (json['phone'] as num?)?.toInt()
       ..maxWeight = (json['maxWeight'] as num?)?.toDouble()
-      ..carNumber = CargoTransporter.intFromString(json['carNumber'])
+      ..carNumber = intFromString(json['carNumber'])
       ..governorates =
           json['governorates'] == null
               ? null

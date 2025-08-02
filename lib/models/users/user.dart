@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 class User<T> extends UserLists<T> {

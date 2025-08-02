@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/providers/filterables/fliterable_list_provider_api.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
@@ -16,18 +17,21 @@ import 'package:provider/provider.dart';
 @JsonIntToString()
 abstract class BaseWithNameString<T> extends ViewAbstract<T>
     implements WebCategoryGridableInterface<ViewAbstract> {
-  @JsonKey(
-    fromJson: intFromString,
-  )
+  @JsonKey(fromJson: intFromString)
   String? name;
 
   BaseWithNameString() : super();
   @override
-  T? getSelfNewInstanceFileImporter(
-      {required BuildContext context, String? field, value}) {
-    FilterableDataApi? filterData = context
-        .read<FilterableListApiProvider<FilterableData>>()
-        .getLastFilterableData() as FilterableDataApi?;
+  T? getSelfNewInstanceFileImporter({
+    required BuildContext context,
+    String? field,
+    value,
+  }) {
+    FilterableDataApi? filterData =
+        context
+                .read<FilterableListApiProvider<FilterableData>>()
+                .getLastFilterableData()
+            as FilterableDataApi?;
     if (value == null) return null;
     if (filterData != null) {
       BaseWithNameString? getSearchedValue = filterData.searchForValue(
@@ -46,9 +50,7 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
   }
 
   @override
-  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {
-        "name": "",
-      };
+  Map<String, dynamic> getMirrorFieldsMapNewInstance() => {"name": ""};
   @override
   List<String> getMainFields({BuildContext? context}) => ["name"];
 
@@ -77,8 +79,9 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
   Map<String, bool> getTextInputIsAutoCompleteMap() => {};
 
   @override
-  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() =>
-      {"name": true};
+  Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {
+    "name": true,
+  };
 
   @override
   Map<String, double> getTextInputMaxValidateMap() => {};
@@ -87,8 +90,9 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
   Map<String, double> getTextInputMinValidateMap() => {};
 
   @override
-  Map<String, TextInputType?> getTextInputTypeMap() =>
-      {"name": TextInputType.text};
+  Map<String, TextInputType?> getTextInputTypeMap() => {
+    "name": TextInputType.text,
+  };
 
   @override
   Map<String, bool> isFieldCanBeNullableMap() => {};
@@ -100,9 +104,9 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
   Map<String, IconData> getFieldIconDataMap() => {"name": getMainIconData()};
 
   @override
-  Map<String, String> getFieldLabelMap(BuildContext context) =>
-      {"name": getMainHeaderLabelTextOnly(context)};
-  static String? intFromString(dynamic number) => number?.toString();
+  Map<String, String> getFieldLabelMap(BuildContext context) => {
+    "name": getMainHeaderLabelTextOnly(context),
+  };
 
   @override
   String getWebCategoryGridableTitle(BuildContext context) {
@@ -115,16 +119,19 @@ abstract class BaseWithNameString<T> extends ViewAbstract<T>
   @override
   ViewAbstract? getWebCategoryGridableIsMasterToList(BuildContext context) =>
       Product().setRequestOption(
-          action: ServerActions.list,
-          option: getSimilarCustomParams(context: context));
+        action: ServerActions.list,
+        option: getSimilarCustomParams(context: context),
+      );
 
   @override
-  RequestOptions? getRequestOption(
-      {required ServerActions action,
-      RequestOptions? generatedOptionFromListCall}) {
+  RequestOptions? getRequestOption({
+    required ServerActions action,
+    RequestOptions? generatedOptionFromListCall,
+  }) {
     if (action == ServerActions.list) {
       return RequestOptions(
-          sortBy: SortFieldValue(field: "name", type: SortByType.DESC));
+        sortBy: SortFieldValue(field: "name", type: SortByType.DESC),
+      );
     }
     return null;
   }

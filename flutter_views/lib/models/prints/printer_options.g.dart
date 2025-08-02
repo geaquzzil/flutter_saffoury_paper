@@ -19,7 +19,7 @@ PrinterOptions _$PrinterOptionsFromJson(Map<String, dynamic> json) =>
             ) ??
             PrintPaperSize.Default,
       )
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..startEndPage = json['startEndPage'] as String?

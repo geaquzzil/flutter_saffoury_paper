@@ -253,7 +253,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
   CustomsDeclaration fromJsonViewAbstract(Map<String, dynamic> json) =>
       CustomsDeclaration.fromJson(json);
 
-  static String? intFromString(dynamic number) => number?.toString();
+  
 
   @override
   Future<Document> getPrintableCustomFromPDFPage(material.BuildContext context,

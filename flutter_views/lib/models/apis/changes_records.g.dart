@@ -9,8 +9,8 @@ part of 'changes_records.dart';
 ChangesRecordGroup _$ChangesRecordGroupFromJson(Map<String, dynamic> json) =>
     ChangesRecordGroup()
       ..count = (json['count'] as num?)?.toInt()
-      ..groupBy = ChangesRecordGroup.convertToString(json['groupBy'])
-      ..total = ChangesRecordGroup.convertToDouble(json['total']);
+      ..groupBy = json['groupBy'] as String?
+      ..total = convertToDouble(json['total']);
 
 Map<String, dynamic> _$ChangesRecordGroupToJson(ChangesRecordGroup instance) =>
     <String, dynamic>{

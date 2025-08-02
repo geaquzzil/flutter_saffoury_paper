@@ -14,9 +14,7 @@ import 'package:flutter_saffoury_paper/models/cities/manufactures.dart';
 import 'package:flutter_saffoury_paper/models/custom_views/excel_to_product_converter.dart';
 import 'package:flutter_saffoury_paper/models/custom_views/print_product_label_custom_view.dart';
 import 'package:flutter_saffoury_paper/models/customs/customs_declarations.dart';
-import 'package:flutter_saffoury_paper/models/dashboards/customer_dashboard.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/dashboard.dart';
-import 'package:flutter_saffoury_paper/models/dashboards/sales_analysis_dashboard.dart';
 import 'package:flutter_saffoury_paper/models/funds/currency/currency.dart';
 import 'package:flutter_saffoury_paper/models/funds/debits.dart';
 import 'package:flutter_saffoury_paper/models/funds/incomes.dart';
@@ -39,7 +37,6 @@ import 'package:flutter_saffoury_paper/models/products/products.dart';
 import 'package:flutter_saffoury_paper/models/products/sizes.dart';
 import 'package:flutter_saffoury_paper/models/products/warehouse.dart';
 import 'package:flutter_saffoury_paper/models/server/server_data_api.dart';
-import 'package:flutter_saffoury_paper/models/users/balances/customer_balance_list.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_view_controller/helper_model/qr_code.dart';
@@ -194,11 +191,11 @@ void main() async {
 
   // return;
   List<ViewAbstract> views = List<ViewAbstract>.from([
-    CustomerDashboard(),
-    CustomerBalanceList(),
+    // CustomerDashboard(),
+    // CustomerBalanceList(),
     Dashboard.init(-1,
         dateObject: DateObject(from: "2022-10-02", to: "2022-10-03")),
-    SalesAnalysisDashboard(),
+    // SalesAnalysisDashboard(),
     PrintProductLabelCustomView(),
     ExcelToProductConverter(),
     Product(),

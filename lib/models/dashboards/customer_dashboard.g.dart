@@ -8,7 +8,7 @@ part of 'customer_dashboard.dart';
 
 CustomerDashboard _$CustomerDashboardFromJson(Map<String, dynamic> json) =>
     CustomerDashboard()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..phone = (json['phone'] as num?)?.toInt()
@@ -265,7 +265,7 @@ CustomerDashboardSelector _$CustomerDashboardSelectorFromJson(
   Map<String, dynamic> json,
 ) =>
     CustomerDashboardSelector()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..customer =

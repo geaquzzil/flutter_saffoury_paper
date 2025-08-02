@@ -8,7 +8,7 @@ part of 'print_product_list.dart';
 
 PrintProductList _$PrintProductListFromJson(Map<String, dynamic> json) =>
     PrintProductList()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..printerOptions =

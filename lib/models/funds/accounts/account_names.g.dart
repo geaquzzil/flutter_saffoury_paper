@@ -8,10 +8,10 @@ part of 'account_names.dart';
 
 AccountName _$AccountNameFromJson(Map<String, dynamic> json) =>
     AccountName()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
-      ..name = BaseWithNameString.intFromString(json['name'])
+      ..name = intFromString(json['name'])
       ..account_names_types =
           json['account_names_types'] == null
               ? null
@@ -29,7 +29,7 @@ Map<String, dynamic> _$AccountNameToJson(AccountName instance) =>
 
 AccountNameType _$AccountNameTypeFromJson(Map<String, dynamic> json) =>
     AccountNameType()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..type = json['type'] as String?

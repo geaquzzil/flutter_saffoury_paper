@@ -8,7 +8,7 @@ part of 'warehouse_employees.dart';
 
 WarehouseEmployee _$WarehouseEmployeeFromJson(Map<String, dynamic> json) =>
     WarehouseEmployee()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..warehouse =

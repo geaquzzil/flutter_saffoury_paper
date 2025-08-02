@@ -63,7 +63,7 @@ class CustomerTerms extends Customer
     ..city = json['city'] as String?
     ..address = json['address'] as String?
     ..profile = json['profile'] as String?
-    ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
+    ..comments = convertToStringFromString(json['comments'])
     ..cash = json['cash'] as int?
     ..totalCredits = (json['totalCredits'] as num?)?.toDouble()
     ..totalDebits = (json['totalDebits'] as num?)?.toDouble()

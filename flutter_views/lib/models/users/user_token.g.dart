@@ -8,7 +8,7 @@ part of 'user_token.dart';
 
 UserToken _$UserTokenFromJson(Map<String, dynamic> json) =>
     UserToken()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..token = json['token'] as String?;
 
 Map<String, dynamic> _$UserTokenToJson(UserToken instance) => <String, dynamic>{

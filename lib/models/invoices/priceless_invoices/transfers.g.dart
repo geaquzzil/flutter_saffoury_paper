@@ -8,14 +8,14 @@ part of 'transfers.dart';
 
 Transfers _$TransfersFromJson(Map<String, dynamic> json) =>
     Transfers()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
       ..TermsID = (json['TermsID'] as num?)?.toInt()
       ..date = json['date'] as String?
-      ..billNo = InvoiceMaster.intFromString(json['billNo'])
-      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
+      ..billNo = json['billNo'] as String?
+      ..comments = json['comments'] as String?
       ..employees =
           json['employees'] == null
               ? null
@@ -31,19 +31,19 @@ Transfers _$TransfersFromJson(Map<String, dynamic> json) =>
                 json['cargo_transporters'] as Map<String, dynamic>,
               )
       ..status = $enumDecodeNullable(_$InvoiceStatusEnumMap, json['status'])
-      ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
-      ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
-      ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
-      ..extendedRefundPrice = InvoiceMaster.convertToDouble(
+      ..quantity = convertToDouble(json['quantity'])
+      ..extendedPrice = convertToDouble(json['extendedPrice'])
+      ..refundQuantity = convertToDouble(json['refundQuantity'])
+      ..extendedRefundPrice = convertToDouble(
         json['extendedRefundPrice'],
       )
-      ..extendedDiscount = InvoiceMaster.convertToDouble(
+      ..extendedDiscount = convertToDouble(
         json['extendedDiscount'],
       )
-      ..extendedNetPrice = InvoiceMaster.convertToDouble(
+      ..extendedNetPrice = convertToDouble(
         json['extendedNetPrice'],
       )
-      ..extendedNetQuantity = InvoiceMaster.convertToDouble(
+      ..extendedNetQuantity = convertToDouble(
         json['extendedNetQuantity'],
       )
       ..fromWarehouse =
@@ -111,7 +111,7 @@ const _$InvoiceStatusEnumMap = {
 
 TransfersDetails _$TransfersDetailsFromJson(Map<String, dynamic> json) =>
     TransfersDetails()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..products =
@@ -126,7 +126,7 @@ TransfersDetails _$TransfersDetailsFromJson(Map<String, dynamic> json) =>
       ..unitPrice = (json['unitPrice'] as num?)?.toDouble()
       ..discount = (json['discount'] as num?)?.toDouble()
       ..price = (json['price'] as num?)?.toDouble()
-      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
+      ..comments = json['comments'] as String?
       ..transfers =
           json['transfers'] == null
               ? null

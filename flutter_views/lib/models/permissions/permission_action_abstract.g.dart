@@ -10,7 +10,7 @@ PermissionActionAbstract _$PermissionActionAbstractFromJson(
   Map<String, dynamic> json,
 ) =>
     PermissionActionAbstract()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..table_name = json['table_name'] as String?

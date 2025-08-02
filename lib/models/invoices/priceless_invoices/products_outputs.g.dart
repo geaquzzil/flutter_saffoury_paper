@@ -8,14 +8,14 @@ part of 'products_outputs.dart';
 
 ProductOutput _$ProductOutputFromJson(Map<String, dynamic> json) =>
     ProductOutput()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..terms = $enumDecodeNullable(_$TermsEnumMap, json['terms'])
       ..TermsID = (json['TermsID'] as num?)?.toInt()
       ..date = json['date'] as String?
-      ..billNo = InvoiceMaster.intFromString(json['billNo'])
-      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
+      ..billNo = json['billNo'] as String?
+      ..comments = json['comments'] as String?
       ..employees =
           json['employees'] == null
               ? null
@@ -31,19 +31,19 @@ ProductOutput _$ProductOutputFromJson(Map<String, dynamic> json) =>
                 json['cargo_transporters'] as Map<String, dynamic>,
               )
       ..status = $enumDecodeNullable(_$InvoiceStatusEnumMap, json['status'])
-      ..quantity = InvoiceMaster.convertToDouble(json['quantity'])
-      ..extendedPrice = InvoiceMaster.convertToDouble(json['extendedPrice'])
-      ..refundQuantity = InvoiceMaster.convertToDouble(json['refundQuantity'])
-      ..extendedRefundPrice = InvoiceMaster.convertToDouble(
+      ..quantity = convertToDouble(json['quantity'])
+      ..extendedPrice = convertToDouble(json['extendedPrice'])
+      ..refundQuantity = convertToDouble(json['refundQuantity'])
+      ..extendedRefundPrice = convertToDouble(
         json['extendedRefundPrice'],
       )
-      ..extendedDiscount = InvoiceMaster.convertToDouble(
+      ..extendedDiscount = convertToDouble(
         json['extendedDiscount'],
       )
-      ..extendedNetPrice = InvoiceMaster.convertToDouble(
+      ..extendedNetPrice = convertToDouble(
         json['extendedNetPrice'],
       )
-      ..extendedNetQuantity = InvoiceMaster.convertToDouble(
+      ..extendedNetQuantity = convertToDouble(
         json['extendedNetQuantity'],
       )
       ..products_outputs_details =
@@ -109,7 +109,7 @@ ProductOutputDetails _$ProductOutputDetailsFromJson(
   Map<String, dynamic> json,
 ) =>
     ProductOutputDetails()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..products =
@@ -124,7 +124,7 @@ ProductOutputDetails _$ProductOutputDetailsFromJson(
       ..unitPrice = (json['unitPrice'] as num?)?.toDouble()
       ..discount = (json['discount'] as num?)?.toDouble()
       ..price = (json['price'] as num?)?.toDouble()
-      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
+      ..comments = json['comments'] as String?
       ..products_outputs =
           json['products_outputs'] == null
               ? null

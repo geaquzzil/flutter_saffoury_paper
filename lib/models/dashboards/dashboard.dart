@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/utils.dart';
 import 'package:flutter_saffoury_paper/models/funds/money_funds.dart';
@@ -82,7 +80,7 @@ class Dashboard extends UserLists<Dashboard>
   List<CustomerTerms>? notPayedCustomers;
   List<CustomerTerms>? customerToPayNext;
 
-  DateObject? date;
+  DateObject? dateObject;
 
   List<CustomerTerms>? modifiedNotPayedCustomers;
 
@@ -94,13 +92,13 @@ class Dashboard extends UserLists<Dashboard>
   List<CutRequest>? pending_cut_requests;
 
   Dashboard() : super() {
-    date = DateObject();
+    dateObject = DateObject();
     balances = {};
   }
 
   Dashboard.init(int iD, {DateObject? dateObject}) {
     this.iD = iD;
-    date = dateObject;
+    dateObject = dateObject;
     balances = {};
   }
 
@@ -115,16 +113,19 @@ class Dashboard extends UserLists<Dashboard>
   }
 
   @override
-  String? getTableNameApi() {
-    return "dashboard";
-  }
+  String? getTableNameApi() => "dashboard";
 
+  @override
+  List<String>? getCustomAction() {
+    return null;
+  }
   @override
   RequestOptions? getRequestOption({
     required ServerActions action,
     RequestOptions? generatedOptionFromListCall,
   }) {
-    var op = RequestOptions().addDate(date);
+    var op = RequestOptions().addDate(dateObject?? DateObject()).setDisablePaging();
+    return op;
     return setInterval() ? op.addSearchByField("interval", "daily") : op;
   }
 
@@ -133,11 +134,11 @@ class Dashboard extends UserLists<Dashboard>
 
   @override
   String getMainHeaderLabelTextOnly(BuildContext context) =>
-      AppLocalizations.of(context)!.dashboard_and_rep;
+      AppLocalizations.of(context)!.title_dashboard;
 
   @override
   String getMainHeaderTextOnly(BuildContext context) =>
-      AppLocalizations.of(context)!.dashboard_and_rep;
+      AppLocalizations.of(context)!.title_dashboard;
 
   @override
   String? getMainDrawerGroupName(BuildContext context) =>
@@ -594,14 +595,14 @@ class Dashboard extends UserLists<Dashboard>
 
   @override
   void setDate(DateObject? date) {
-    this.date = date;
+    dateObject = date;
     debitsDue = null;
   }
 
   bool setInterval() {
-    if (date != null) {
-      DateTime from = date!.from.toDateTimeOnlyDate();
-      DateTime to = date!.to.toDateTimeOnlyDate();
+    if (dateObject != null) {
+      DateTime from = dateObject!.from.toDateTimeOnlyDate();
+      DateTime to = dateObject!.to.toDateTimeOnlyDate();
       int days = from.difference(to).inDays;
       return days <= 30;
     }
@@ -618,11 +619,11 @@ class Dashboard extends UserLists<Dashboard>
     if (firstPane == false) return null;
     return DashboardHeader(
       object: this,
-      date: date ?? DateObject(),
+      date: dateObject ?? DateObject(),
       current_screen_size: findCurrentScreenSize(context),
       onSelectedDate: (d) {
         if (d == null) return;
-        date = d;
+        dateObject = d;
         debitsDue = null;
         globalKey?.currentState?.refresh(extras: this, tab: tab);
         // getExtras().setDate(d);
@@ -885,7 +886,7 @@ class Dashboard extends UserLists<Dashboard>
       return DashboardContentItem(
         shouldAddToBalance: true,
         showDebitAndCredit: false,
-        date: date?.from,
+        date: dateObject?.from,
         description: AppLocalizations.of(context)!.previousBalance,
       );
     }

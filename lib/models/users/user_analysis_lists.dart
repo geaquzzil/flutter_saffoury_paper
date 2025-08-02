@@ -165,7 +165,7 @@ class UserLists<T> extends AuthUser<T> {
     if (this is CustomerDashboard) {
       return (this as CustomerDashboard).dateObject;
     } else if (this is Dashboard) {
-      return (this as Dashboard).date;
+      return (this as Dashboard).dateObject;
     }
     return null;
   }

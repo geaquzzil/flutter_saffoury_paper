@@ -8,14 +8,14 @@ part of 'incomes.dart';
 
 Incomes _$IncomesFromJson(Map<String, dynamic> json) =>
     Incomes()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..fromBox = (json['fromBox'] as num?)?.toInt()
       ..isDirect = (json['isDirect'] as num?)?.toInt()
       ..date = json['date'] as String?
       ..value = (json['value'] as num?)?.toDouble()
-      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
+      ..comments = convertToStringFromString(json['comments'])
       ..customers =
           json['customers'] == null
               ? null

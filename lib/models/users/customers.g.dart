@@ -8,7 +8,7 @@ part of 'customers.dart';
 
 Customer _$CustomerFromJson(Map<String, dynamic> json) =>
     Customer()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..phone = (json['phone'] as num?)?.toInt()
@@ -175,7 +175,7 @@ Customer _$CustomerFromJson(Map<String, dynamic> json) =>
       ..city = json['city'] as String?
       ..address = json['address'] as String?
       ..profile = json['profile'] as String?
-      ..comments = ViewAbstractPermissions.convertToStringFromString(json['comments'])
+      ..comments = convertToStringFromString(json['comments'])
       ..cash = (json['cash'] as num?)?.toInt()
       ..totalCredits = (json['totalCredits'] as num?)?.toDouble()
       ..totalDebits = (json['totalDebits'] as num?)?.toDouble()

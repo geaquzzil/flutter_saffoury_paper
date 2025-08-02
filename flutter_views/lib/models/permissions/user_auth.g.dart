@@ -8,7 +8,7 @@ part of 'user_auth.dart';
 
 AuthUser<T> _$AuthUserFromJson<T>(Map<String, dynamic> json) =>
     AuthUser<T>()
-      ..iD = ViewAbstractPermissions.convertToMinusOneIfNotFound(json['iD'])
+      ..iD = convertToMinusOneIfNotFound(json['iD'])
       ..serverStatus = json['serverStatus'] as String?
       ..fb_edit = json['fb_edit'] as String?
       ..phone = (json['phone'] as num?)?.toInt()

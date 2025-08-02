@@ -13,7 +13,17 @@ import 'package:provider/provider.dart';
 
 import 'permissions/user_auth.dart';
 
+int convertToMinusOneIfNotFound(dynamic number) =>
+    number == null ? -1 : (int.tryParse(number.toString()) ?? -1);
+
+String? convertToString(dynamic number) =>
+    number == null ? "-" : number.toString();
+
 String? convertToStringFromString(dynamic d) => d?.toString();
+double? convertToDouble(dynamic number) =>
+    number == null ? 0 : double.tryParse(number.toString());
+
+String? intFromString(dynamic number) => number?.toString();
 
 abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,13 +55,6 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
   ViewAbstract? get getParent => parent;
   String? get getFieldNameFromParent => fieldNameFromParent;
 
-  static int convertToMinusOneIfNotFound(dynamic number) =>
-      number == null ? -1 : (int.tryParse(number.toString()) ?? -1);
-
-  static String? convertToString(dynamic number) =>
-      number == null ? "-" : number.toString();
-
-  static String? convertToStringFromString(dynamic d) => d?.toString();
   Map<String, String> getPermissionFieldsMap(BuildContext context) {
     return {};
   }

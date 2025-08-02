@@ -41,6 +41,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
@@ -1078,10 +1079,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     } else {}
   }
 
-  static double? convertToDouble(dynamic number) =>
-      number == null ? 0 : double.tryParse(number.toString());
 
-  static String? intFromString(dynamic number) => number?.toString();
+
 
   @override
   Widget? getWebListTileItemSubtitle(BuildContext context) {
