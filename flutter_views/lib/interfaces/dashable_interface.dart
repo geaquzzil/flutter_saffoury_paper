@@ -5,47 +5,55 @@ import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 
 abstract class DashableItemInterface {}
 
 abstract class DashableInterface<T extends ViewAbstract> {
-  getDashboardSectionsFirstPane(BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageStateWithApi>? globalKey, TabControllerHelper? tab});
-  getDashboardSectionsSecoundPane(BuildContext context, int crossAxisCount,
-      {GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab,
-      TabControllerHelper? tabSecondPane});
+  getDashboardSectionsFirstPane(
+    BuildContext context,
+    int crossAxisCount, {
+    TabControllerHelper? tab,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
+  });
+  getDashboardSectionsSecoundPane(
+    BuildContext context,
+    int crossAxisCount, {
+    SecoundPaneHelperWithParentValueNotifier? basePage,
+    TabControllerHelper? tab,
+    TabControllerHelper? tabSecondPane,
+  });
 
   List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
-      BuildContext context);
+    BuildContext context,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
+  );
 
   void setDate(DateObject? date);
 
   ///this should wait for user input before request api
-  getDashboardShouldWaitBeforeRequest(BuildContext context,
-      {bool? firstPane,
-      GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab});
+  getDashboardShouldWaitBeforeRequest(
+    BuildContext context, {
+    bool? firstPane,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
+    TabControllerHelper? tab,
+  });
 
-  Widget? getDashboardAppbar(BuildContext context,
-      {bool? firstPane,
-      GlobalKey<BasePageStateWithApi>? globalKey,
-      TabControllerHelper? tab});
+  Widget? getDashboardAppbar(
+    BuildContext context, {
+    bool? firstPane,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
+    TabControllerHelper? tab,
+  });
 }
 
-enum WidgetDashboardType {
-  NORMAL,
-  CHART;
-}
+enum WidgetDashboardType { NORMAL, CHART }
 
 class WidgetGridHelper {
   StaggeredGridTile widget;
   WidgetDashboardType widgetDashboardType;
 
-  WidgetGridHelper({
-    required this.widget,
-    required this.widgetDashboardType,
-  });
+  WidgetGridHelper({required this.widget, required this.widgetDashboardType});
 }
 
 class DashableGridHelper {
@@ -55,11 +63,12 @@ class DashableGridHelper {
   List<List<ViewAbstract>>? sectionsListToTabbar;
   List<ViewAbstract>? headerListToAdd;
   bool wrapWithCard;
-  DashableGridHelper(
-      {this.title,
-      required this.widgets,
-      this.onTitleButton,
-      this.headerListToAdd,
-      this.wrapWithCard = false,
-      this.sectionsListToTabbar});
+  DashableGridHelper({
+    this.title,
+    required this.widgets,
+    this.onTitleButton,
+    this.headerListToAdd,
+    this.wrapWithCard = false,
+    this.sectionsListToTabbar,
+  });
 }

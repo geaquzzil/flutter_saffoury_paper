@@ -46,8 +46,6 @@ const animationDuration = 250;
 const double kDefualtAppBar = 70;
 
 const double kDefualtClipRect = 25;
-GlobalKey<BasePageStateWithApi> globalKeyBasePageWithApi =
-    GlobalKey<BasePageStateWithApi>();
 //TODO sliver_tools https://github.com/Kavantix/hn_state_example/blob/master/lib/ui/pages/news/components/news_section.dart
 //TODO
 // Widget build(BuildContext context) {
@@ -793,6 +791,10 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
       );
     }
   }
+
+  TabControllerHelper? findExtrasViaType(Type runtimeType) {
+    return null;
+  }
 }
 mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
     on BasePageSecoundPaneNotifierState {
@@ -1083,6 +1085,8 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   late bool buildDrawer;
   late bool _buildSecoundPane;
   bool isSelectedMode = false;
+
+  bool _isTabInited=false;
 
   DrawerMenuControllerProvider get drawerMenuControllerProvider =>
       _drawerMenuControllerProvider;
@@ -1512,12 +1516,15 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       child: widget,
     );
   }
-
+  
   void _initBaseTab() {
+    if(_isTabInited)return;
+    _isTabInited=true;
     _tabList = initTabBarList();
 
     /// Here you can have your context and do what ever you want
     if (_hasTabBarList()) {
+
       _tabBaseController = TabController(vsync: this, length: _tabList!.length);
       _tabBaseController!.addListener(_tabControllerChangeListener);
     }
@@ -2211,6 +2218,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   dynamic getExtras({TabControllerHelper? tab}) {
     if (_hasTabBarList()) {
       if (tab != null) {
+        debugPrint("getExtras _hasTabBarList");
         dynamic result = _getTabBarList().firstWhere(
           (element) => element.extras.runtimeType == tab.extras.runtimeType,
         );
@@ -2221,6 +2229,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
       }
       return _getTabBarList()[currentBaseTabIndex].extras;
     }
+    debugPrint("getExtras not has ");
     return _extras;
   }
 
@@ -2304,6 +2313,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
       tab.extras = ex;
       tab.iD = iD;
       tab.tableName = tableName;
+      debugPrint("setExtras _hasTabBarList ${tab.extras} ");
       if (tabH != null) {
         _getTabBarList()[_getTabBarList().indexWhere(
               (element) =>
@@ -2314,6 +2324,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
         _getTabBarList()[currentBaseTabIndex] = tab;
       }
     } else {
+      debugPrint("setExtras not has $ex ");
       this._extras = ex;
       this._iD = iD;
       this._tableName = tableName;
@@ -2326,7 +2337,8 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     dynamic extras,
     TabControllerHelper? tab,
   }) {
-    debugPrint("refresh basePage");
+    debugPrint("refresh basePage $extras");
+
     setExtras(iD: iD, tableName: tableName, ex: extras, tabH: tab);
     setState(() {});
   }
@@ -2359,7 +2371,8 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
       shouldWaitWidget = getExtrasCastDashboard(tab: tab)
           .getDashboardShouldWaitBeforeRequest(
             context,
-            globalKey: globalKeyBasePageWithApi,
+            //TODO  i cant pass the secound pane helper here
+            // basePage: getSecoundPaneHelper(),TODO
             firstPane: firstPane,
             tab: tab,
           );

@@ -48,6 +48,7 @@ import 'package:flutter_view_controller/new_screens/home/components/empty_widget
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_custom_view.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/web/components/header_text.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -132,7 +133,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   List<DashableGridHelper> getDashboardSectionsFirstPane(
     BuildContext context,
     int crossAxisCount, {
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
     return [
@@ -167,7 +168,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   getDashboardSectionsSecoundPane(
     BuildContext context,
     int crossAxisCount, {
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
     TabControllerHelper? tabSecondPane,
   }) {
@@ -345,7 +346,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   getDashboardShouldWaitBeforeRequest(
     BuildContext context, {
     bool? firstPane,
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
     debugPrint("getDashboardShouldWaitBefore $iD");
@@ -367,7 +368,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
                 );
                 iD = cds.customer!.iD;
                 dateObject = DateObject(from: cds.date!, to: cds.date!);
-                globalKey?.currentState?.refresh(extras: this, tab: tab);
+                basePage?.refresh(extras: this, tab: tab);
               },
               // onFabClickedConfirm: (v) {},
             ),
@@ -393,7 +394,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   Widget? getDashboardAppbar(
     BuildContext context, {
     bool? firstPane,
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
     if (iD == -1 || firstPane == false) {
@@ -406,7 +407,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
         if (d == null) return;
         dateObject = d;
         balance = null;
-        globalKey?.currentState?.refresh(extras: this, tab: tab);
+       basePage?.refresh(extras: this, tab: tab);
         // getExtras().setDate(d);
         // refresh(extras: extras);
       },
@@ -427,6 +428,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   @override
   List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
     BuildContext context,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
   ) => getTabBarSecondPane(context);
 
   @override

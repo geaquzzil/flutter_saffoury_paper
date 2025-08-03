@@ -283,6 +283,14 @@ class RequestOptions {
     return this;
   }
 
+  @override
+  bool operator ==(Object other) {
+    return other is RequestOptions && (this).toString() == other.toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(toString(), searchByField?.toString());
+
   ///value should bey array or val of int or string
   RequestOptions addSearchByField(String field, dynamic value) {
     debugPrint("addSearchByField $runtimeType field:$field value=> $value");

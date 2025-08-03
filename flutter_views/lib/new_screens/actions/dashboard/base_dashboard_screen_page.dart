@@ -6,6 +6,7 @@ import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/menu_item.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:get/get.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -350,6 +352,8 @@ class _BaseDashboardState extends State<BaseDashboard>
 class SectionItemHeaderI extends MultiSliver {
   bool pinHeader;
   double pinHeaderPrefferedSize;
+  
+
   SectionItemHeaderI({
     super.key,
     required BuildContext context,
@@ -399,6 +403,7 @@ class SectionItemHeader extends MultiSliver {
     required BuildContext context,
     required DashableGridHelper dgh,
     required GlobalKey buttonKey,
+    required       SecoundPaneHelperWithParentValueNotifier  basePage,
     Widget? child,
   }) : super(
          pushPinnedChildren: true,
@@ -435,12 +440,18 @@ class SectionItemHeader extends MultiSliver {
                                        (e) => buildMenuItem(
                                          context,
                                          MenuItemBuild(
+
+
                                            e.getMainHeaderLabelTextOnly(
                                              context,
                                            ),
                                            Icons.add,
+
                                            "",
                                          ),
+                                         onTap: () {
+                                           basePage.notifyViewAbstract(context,e,ServerActions.edit);
+                                         },
                                        ),
                                      )
                                      .toList(),

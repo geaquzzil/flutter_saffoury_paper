@@ -17,6 +17,7 @@ class SliverApiMixinStaticList<T extends ViewAbstract> extends SliverApiMixinWit
     super.hasCustomSeperater,
     super.hasCustomWidgetOnResponseBuilder,
     super.cardType = CardItemType.list,
+    super.state,
     this.listKey,
     super.enableSelection = false,
   }) : super(toListObject: list);

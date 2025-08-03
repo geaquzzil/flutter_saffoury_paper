@@ -17,8 +17,8 @@ import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
-import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/test_var.dart';
 import 'package:pdf/pdf.dart' as d;
 import 'package:pdf/widgets.dart' as pdf;
@@ -83,7 +83,7 @@ class CustomerBalanceList
   Widget? getDashboardAppbar(
     BuildContext context, {
     bool? firstPane,
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
     return null;
@@ -93,7 +93,7 @@ class CustomerBalanceList
   getDashboardShouldWaitBeforeRequest(
     BuildContext context, {
     bool? firstPane,
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
     return null;
@@ -346,7 +346,7 @@ class CustomerBalanceList
   getDashboardSectionsFirstPane(
     BuildContext context,
     int crossAxisCount, {
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
     return [
@@ -357,15 +357,17 @@ class CustomerBalanceList
           hasCustomCardItemBuilder: (_, item) => ListTile(
             onTap: () {
               debugPrint("_tabController clicked");
-              if (globalKey == null) return;
+              if (basePage == null) return;
               debugPrint("_tabController clicked2");
-              TabControllerHelper? value = globalKey.currentState
-                  ?.findExtrasViaType(CustomerDashboard().runtimeType);
-              debugPrint("_tabController value $value");
-              if (value == null) return;
-              int index = globalKey.currentState!.findExtrasIndexFromTab(
+              TabControllerHelper? value = basePage.parent?.findExtrasViaType(
                 CustomerDashboard().runtimeType,
               );
+              debugPrint("_tabController value $value");
+              if (value == null) return;
+              int? index = basePage.findExtrasIndexFromTab(
+                CustomerDashboard().runtimeType,
+              );
+              if (index == null) return;
               if (index == -1) return;
               CustomerDashboard newCustomerDashboard = CustomerDashboard();
               newCustomerDashboard.iD = item.iD;
@@ -375,12 +377,8 @@ class CustomerBalanceList
                 to: "2023-01-01",
               );
               value.extras = newCustomerDashboard;
-              globalKey.currentState?.refresh(
-                extras: newCustomerDashboard,
-                tab: value,
-              );
-
-              globalKey.currentState?.changeTabIndex(index);
+              basePage.refresh(extras: newCustomerDashboard, tab: value);
+              basePage.parent?.changeTabIndex(index);
             },
             leading: item.getCardLeading(context),
             title: Text(item.name ?? ""),
@@ -403,7 +401,7 @@ class CustomerBalanceList
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
     BuildContext context,
     int crossAxisCount, {
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
     TabControllerHelper? tabSecondPane,
   }) {
@@ -448,6 +446,7 @@ class CustomerBalanceList
   @override
   List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
     BuildContext context,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
   ) => null;
 
   @override

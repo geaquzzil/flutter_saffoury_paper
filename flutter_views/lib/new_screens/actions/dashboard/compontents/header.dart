@@ -72,7 +72,7 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                 CustomPopupMenu(
                     menuOnChange: (b) {
                       if (!b) {
-                        debugPrint("Please select Soso ");
+                        // debugPrint("Please select Soso ");
                         widget.onSelectedDate(date);
                       }
                     },

@@ -33,11 +33,11 @@ import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
-import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pdf/pdf.dart' as d;
@@ -119,12 +119,17 @@ class Dashboard extends UserLists<Dashboard>
   List<String>? getCustomAction() {
     return null;
   }
+
   @override
   RequestOptions? getRequestOption({
     required ServerActions action,
     RequestOptions? generatedOptionFromListCall,
   }) {
-    var op = RequestOptions().addDate(dateObject?? DateObject()).setDisablePaging();
+    debugPrint("getRequestOption date: $dateObject");
+    var op = RequestOptions()
+        .addDate(dateObject ?? DateObject())
+        // .addDate(DateObject(from: "2022-10-02", to: "2022-10-03"))
+        .setDisablePaging();
     return op;
     return setInterval() ? op.addSearchByField("interval", "daily") : op;
   }
@@ -199,10 +204,15 @@ class Dashboard extends UserLists<Dashboard>
   }
 
   @override
+  bool shouldGetFromApiViewCall() {
+    return true;
+  }
+
+  @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
     BuildContext context,
     int crossAxisCount, {
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) => [
     DashableGridHelper(
@@ -210,7 +220,7 @@ class Dashboard extends UserLists<Dashboard>
       headerListToAdd: [Credits(), Debits(), Spendings(), Incomes()],
       title: AppLocalizations.of(context)!.overview,
       widgets: [
-        ...getFundWidgets(context, crossAxisCount, globalKey: globalKey),
+        ...getFundWidgets(context, crossAxisCount, basePage: basePage),
         // ...getInvoicesWidgets(context)
       ],
     ),
@@ -226,7 +236,7 @@ class Dashboard extends UserLists<Dashboard>
         ReservationInvoice(),
       ],
       widgets: [
-        ...getInvoicesWidgets(context, crossAxisCount, globalKey: globalKey),
+        ...getInvoicesWidgets(context, crossAxisCount, basePage: basePage),
       ],
     ),
     DashableGridHelper(
@@ -358,7 +368,7 @@ class Dashboard extends UserLists<Dashboard>
   getDashboardSectionsSecoundPane(
     BuildContext context,
     int crossAxisCount, {
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
     TabControllerHelper? tabSecondPane,
   }) {
@@ -591,6 +601,7 @@ class Dashboard extends UserLists<Dashboard>
   @override
   List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
     BuildContext context,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
   ) => getTabBarSecondPane(context);
 
   @override
@@ -613,7 +624,7 @@ class Dashboard extends UserLists<Dashboard>
   Widget? getDashboardAppbar(
     BuildContext context, {
     bool? firstPane,
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
     if (firstPane == false) return null;
@@ -625,7 +636,7 @@ class Dashboard extends UserLists<Dashboard>
         if (d == null) return;
         dateObject = d;
         debitsDue = null;
-        globalKey?.currentState?.refresh(extras: this, tab: tab);
+        basePage?.refresh(extras: this, tab: tab);
         // getExtras().setDate(d);
         // refresh(extras: extras);
       },
@@ -636,7 +647,7 @@ class Dashboard extends UserLists<Dashboard>
   getDashboardShouldWaitBeforeRequest(
     BuildContext context, {
     bool? firstPane,
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
     return null;

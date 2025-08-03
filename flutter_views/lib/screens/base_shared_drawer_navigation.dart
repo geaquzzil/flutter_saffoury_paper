@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
@@ -459,6 +460,41 @@ class SecoundPaneHelperWithParentValueNotifier {
   });
   void notify(SecondPaneHelper? s) {
     secPaneNotifier?.value = s;
+  }
+
+  void notifyListWidget(String title, List<Widget> list) {
+    secPaneNotifier?.value = SecondPaneHelper(
+      title: title,
+      object: list,
+      value: list,
+    );
+  }
+
+  void notifyViewAbstract(
+    BuildContext context,
+    ViewAbstract v,
+    ServerActions a,
+  ) {
+    secPaneNotifier?.value = SecondPaneHelper(
+      title: v.getMainHeaderTextOnly(context),
+      object: v,
+      value: a == ServerActions.edit
+          ? v.getEditPage(context, parent: this)
+          : v.getViewPage(context, parent: this),
+    );
+  }
+
+  void refresh({dynamic extras, TabControllerHelper? tab}) {
+    if (parent is BasePageStateWithApi) {
+      (parent as BasePageStateWithApi).refresh(extras: extras, tab: tab);
+    }
+  }
+
+  int? findExtrasIndexFromTab(Type x) {
+    if (parent is BasePageStateWithApi) {
+      return (parent as BasePageStateWithApi).findExtrasIndexFromTab(x);
+    }
+    return null;
   }
 }
 

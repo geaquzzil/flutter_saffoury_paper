@@ -6,6 +6,8 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/details/list_details.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:intl/intl.dart';
 
 import '../../../constants.dart';
@@ -24,7 +26,7 @@ class ChartCardItemCustom extends StatelessWidget {
   bool isSmall;
   Animation<double>? animation;
   final OverlayPortalController _tooltipController = OverlayPortalController();
-
+  final SecoundPaneHelperWithParentValueNotifier? basePage;
   void Function()? onTap;
   ChartCardItemCustom({
     this.color,
@@ -35,6 +37,7 @@ class ChartCardItemCustom extends StatelessWidget {
     this.animation,
     this.list,
     this.listGrowthRate,
+    this.basePage,
     this.isSmall = true,
     this.footerRight,
     this.footerWidget,
@@ -93,6 +96,16 @@ class ChartCardItemCustom extends StatelessWidget {
     Widget card = getBody(context);
     if (list == null || (list?.isEmpty ?? true)) {
       return card;
+    }
+    if (basePage != null) {
+      return InkWell(
+        onTap: () {
+          basePage?.notifyListWidget(title, [
+            SliverApiMixinStaticList(list: list!, state: basePage),
+          ]);
+        },
+        child: card,
+      );
     }
     if (onTap != null) {
       return InkWell(onTap: onTap, child: card);

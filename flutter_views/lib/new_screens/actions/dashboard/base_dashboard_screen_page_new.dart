@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
@@ -9,8 +8,8 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
-import 'package:flutter_view_controller/new_screens/home/components/profile/profile_pic_popup_menu.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +31,8 @@ class BaseDashboardMainPage extends BasePageApi {
 }
 
 class _BaseDashboardMainPageState
-    extends BasePageStateWithApi<BaseDashboardMainPage> {
+    extends BasePageStateWithApi<BaseDashboardMainPage>
+    with BasePageSecoundPaneNotifierState<BaseDashboardMainPage> {
   //  late DashableInterface dashboard;
   @override
   List<TabControllerHelper>? initTabBarList({
@@ -59,7 +59,10 @@ class _BaseDashboardMainPageState
     if (firstPane != null && !firstPane) {
       return getExtrasCastDashboard(
         tab: tab,
-      ).getDashboardTabbarSectionSecoundPaneList(context);
+      ).getDashboardTabbarSectionSecoundPaneList(
+        context,
+        getSecoundPaneHelper(),
+      );
     }
     return null;
   }
@@ -107,59 +110,67 @@ class _BaseDashboardMainPageState
   }
 
   @override
+  String onActionInitial() {
+    return AppLocalizations.of(context)!.dashboard_and_rep;
+  }
+
+  @override
   Widget? getAppbarTitle({
     bool? firstPane,
     TabControllerHelper? tab,
     TabControllerHelper? secoundTab,
   }) {
     if (firstPane == null) {
-      return ListTile(
-        title: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
-                child: Text(
-                  AppLocalizations.of(context)!.dashboard_and_rep,
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-
-                // SearchWidgetComponent(onSearchTextChanged: (text) {
-                //   debugPrint("search for $text");
-                // }),
-              ),
-            ),
-            if (isPrintable(tab: tab))
-              IconButton(
-                onPressed: () {
-                  getExtrasCast(tab: tab).printPage(context, standAlone: true);
-                },
-                icon: const Icon(Icons.print),
-              ),
-            // IconButton(onPressed: () {}, icon: const Icon(Icons.safety_check)),
-            // IconButton(
-            //     onPressed: () {}, icon: const Icon(Icons.baby_changing_station)),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.notification_add),
-            ),
-            const ProfilePicturePopupMenu(),
-          ],
-        ),
-        // subtitle: Row(
-        //   children: [
-        //     Expanded(child: DashboardHeader()),
-        //     DateSelector(),
-        //     Spacer()
-        //   ],
-        // ),
+      return Text(
+        AppLocalizations.of(context)!.dashboard_and_rep,
+        style: Theme.of(context).textTheme.titleLarge,
       );
+      // return ListTile(
+      //   title: Row(
+      //     children: [
+      //       Expanded(
+      //         child: Padding(
+      //           padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
+      //           child: Text(
+      //             AppLocalizations.of(context)!.dashboard_and_rep,
+      //             style: Theme.of(context).textTheme.headlineMedium,
+      //           ),
+
+      //           // SearchWidgetComponent(onSearchTextChanged: (text) {
+      //           //   debugPrint("search for $text");
+      //           // }),
+      //         ),
+      //       ),
+      //       if (isPrintable(tab: tab))
+      //         IconButton(
+      //           onPressed: () {
+      //             getExtrasCast(tab: tab).printPage(context, standAlone: true);
+      //           },
+      //           icon: const Icon(Icons.print),
+      //         ),
+      //       // IconButton(onPressed: () {}, icon: const Icon(Icons.safety_check)),
+      //       // IconButton(
+      //       //     onPressed: () {}, icon: const Icon(Icons.baby_changing_station)),
+      //       IconButton(
+      //         onPressed: () {},
+      //         icon: const Icon(Icons.notification_add),
+      //       ),
+      //       const ProfilePicturePopupMenu(),
+      //     ],
+      //   ),
+      //   // subtitle: Row(
+      //   //   children: [
+      //   //     Expanded(child: DashboardHeader()),
+      //   //     DateSelector(),
+      //   //     Spacer()
+      //   //   ],
+      //   // ),
     } else {
       return getExtrasCastDashboard(tab: tab ?? secoundTab).getDashboardAppbar(
         context,
         firstPane: firstPane,
         tab: tab ?? secoundTab,
-        globalKey: globalKeyBasePageWithApi,
+        basePage: getSecoundPaneHelper(),
       );
     }
   }
@@ -221,7 +232,7 @@ class _BaseDashboardMainPageState
       context,
       getCrossAxisCount(getWidth),
       tab: tab,
-      globalKey: globalKeyBasePageWithApi,
+      basePage: getSecoundPaneHelper(),
     );
     if (list is List<DashableGridHelper>) {
       for (var element in list) {
@@ -231,6 +242,7 @@ class _BaseDashboardMainPageState
             context: context,
             dgh: element,
             buttonKey: buttonKey,
+            basePage: getSecoundPaneHelper(),
             child: getWidget(element),
           ),
           // SliverToBoxAdapter(child: getWidget(width, element))
@@ -255,7 +267,7 @@ class _BaseDashboardMainPageState
       context,
       getCrossAxisCount(getWidth),
       tab: tab,
-      globalKey: globalKeyBasePageWithApi,
+      basePage: getSecoundPaneHelper(),
       tabSecondPane: secoundTab,
     );
     // if (secoundTab != null) {
@@ -270,6 +282,7 @@ class _BaseDashboardMainPageState
             context: context,
             dgh: element,
             buttonKey: buttonKey,
+            basePage: getSecoundPaneHelper(),
             child: getSecondPaneWidget(element),
           ),
           // SliverToBoxAdapter(child: getWidget(width, element))
@@ -285,10 +298,19 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  List<Widget> getPane({
+  List<Widget>? getCustomViewWhenSecondPaneIsEmpty(
+    ScrollController? controler,
+    TabControllerHelper? tab,
+  ) {
+    return getDesktopSecondPane(tab: tab);
+  }
+
+  @override
+  List<Widget>? getPaneNotifier({
     required bool firstPane,
     ScrollController? controler,
     TabControllerHelper? tab,
+    SecondPaneHelper? valueNotifier,
   }) {
     debugPrint("getPane =>firstPane $firstPane=>tab $tab=> ");
     if (firstPane) {
@@ -300,7 +322,7 @@ class _BaseDashboardMainPageState
 
   @override
   bool setPaneBodyPaddingHorizontal(bool firstPane) {
-    return false;
+    return !firstPane;
   }
 
   @override
@@ -316,8 +338,8 @@ class _BaseDashboardMainPageState
   }) {
     // return null;
     dynamic ex = getExtras(tab: tab);
-    debugPrint("getCallApiFunctionIfNull extras=> ${ex?.runtimeType} ");
-    return (ex as ViewAbstract).viewCall(context: context,);
+    debugPrint("getCallApiFunctionIfNull extras=> $ex ");
+    return (ex as ViewAbstract).viewCall(context: context);
   }
 
   @override

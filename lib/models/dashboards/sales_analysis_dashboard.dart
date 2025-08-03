@@ -35,6 +35,7 @@ import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -135,7 +136,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   getDashboardShouldWaitBeforeRequest(
     BuildContext context, {
     bool? firstPane,
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
     return null;
@@ -149,7 +150,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   List<DashableGridHelper> getDashboardSectionsFirstPane(
     BuildContext context,
     int crossAxisCount, {
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
     return [
@@ -299,7 +300,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
     BuildContext context,
     int crossAxisCount, {
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
     TabControllerHelper? tabSecondPane,
   }) {
@@ -417,6 +418,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   @override
   List<TabControllerHelper>? getDashboardTabbarSectionSecoundPaneList(
     BuildContext context,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
   ) => null;
 
   @override
@@ -442,7 +444,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
   Widget? getDashboardAppbar(
     BuildContext context, {
     bool? firstPane,
-    GlobalKey<BasePageStateWithApi>? globalKey,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
     if (firstPane == false) return null;
@@ -453,7 +455,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
         if (d == null) return;
         dateObject = d;
         wastesByCutRequests = null;
-        globalKey?.currentState?.refresh(extras: this, tab: tab);
+        basePage?.refresh(extras: this, tab: tab);
         // getExtras().setDate(d);
         // refresh(extras: extras);
       },

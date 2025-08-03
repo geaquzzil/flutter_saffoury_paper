@@ -111,6 +111,13 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       // debugPrint(
       //     "_getRequestOptionFromParamOrAbstract is Not empty ${_requestOption.toString()}");
       if (_requestOption.containsKey(action)) {
+        RequestOptions? newReq = getRequestOption(action: action);
+        if (newReq == _requestOption[action]) {
+          if (newReq != null) {
+            setRequestOption(action: action, option: newReq);
+          }
+          return newReq;
+        }
         return _requestOption[action];
       }
     }
@@ -334,6 +341,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
   }
 
+  bool shouldGetFromApiViewCall() {
+    return false;
+  }
+
   Future<T?> viewCall({
     required BuildContext context,
     int? customID,
@@ -347,8 +358,10 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       );
       if (customID == null || customID == iD) {
         if (isRequireList == false && !isNew()) {
-          debugPrint("viewCall $T returning this");
-          return this as T;
+          if (!shouldGetFromApiViewCall()) {
+            debugPrint("viewCall $T returning this");
+            return this as T;
+          }
         }
       }
       var response = await _getViewResponse(

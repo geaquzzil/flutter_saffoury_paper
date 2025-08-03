@@ -35,6 +35,7 @@ import 'package:flutter_view_controller/new_components/lists/list_card_item.dart
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../funds/debits.dart';
@@ -153,8 +154,9 @@ class UserLists<T> extends AuthUser<T> {
 
   String getAPreviousBalance(BuildContext context, PrintDashboardSetting? pca) {
     if (this is Dashboard) {
-      return (this as Dashboard)
-          .getTotalPreviousBalance(cashBoxID: pca?.currency?.iD);
+      return (this as Dashboard).getTotalPreviousBalance(
+        cashBoxID: pca?.currency?.iD,
+      );
     } else {
       //todo previous balance on customer
       return (this as CustomerDashboard).previousBalance.toCurrencyFormat();
@@ -182,7 +184,9 @@ class UserLists<T> extends AuthUser<T> {
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo>? getInvoiceDesSecRow(
-      BuildContext context, PrintLocalSetting? pca) {
+    BuildContext context,
+    PrintLocalSetting? pca,
+  ) {
     DateObject? date = getDate();
     if (date == null) return null;
     return [
@@ -231,7 +235,9 @@ class UserLists<T> extends AuthUser<T> {
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo>? getInvoiceDesTherdRow(
-      BuildContext context, PrintDashboardSetting? pca) {
+    BuildContext context,
+    PrintDashboardSetting? pca,
+  ) {
     return [
       if (hideCurrencySetting(pca))
         InvoiceHeaderTitleAndDescriptionInfo(
@@ -242,11 +248,11 @@ class UserLists<T> extends AuthUser<T> {
         ),
       if (pca?.includePreviousBalance == true)
         InvoiceHeaderTitleAndDescriptionInfo(
-            title: AppLocalizations.of(context)!.previousBalance,
-            description: getAPreviousBalance(context, pca),
-            hexColor: getAbstractColor(pca)
-            // icon: Icons.tag
-            ),
+          title: AppLocalizations.of(context)!.previousBalance,
+          description: getAPreviousBalance(context, pca),
+          hexColor: getAbstractColor(pca),
+          // icon: Icons.tag
+        ),
 
       // InvoiceHeaderTitleAndDescriptionInfo(
       //     title: AppLocalizations.of(context)!.balance,
@@ -266,7 +272,9 @@ class UserLists<T> extends AuthUser<T> {
   }
 
   List<InvoiceHeaderTitleAndDescriptionInfo>? getInvoicDesFirstRow(
-      BuildContext context, PrintLocalSetting? pca) {
+    BuildContext context,
+    PrintLocalSetting? pca,
+  ) {
     if (this is! CustomerDashboard) return null;
     return [
       InvoiceHeaderTitleAndDescriptionInfo(
@@ -291,8 +299,10 @@ class UserLists<T> extends AuthUser<T> {
     ];
   }
 
-  WidgetGridHelper getWidget(StaggeredGridTile gride,
-      {WidgetDashboardType type = WidgetDashboardType.NORMAL}) {
+  WidgetGridHelper getWidget(
+    StaggeredGridTile gride, {
+    WidgetDashboardType type = WidgetDashboardType.NORMAL,
+  }) {
     return WidgetGridHelper(widget: gride, widgetDashboardType: type);
   }
 
@@ -302,54 +312,52 @@ class UserLists<T> extends AuthUser<T> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      super.getMirrorFieldsMapNewInstance()
-        ..addAll({
-          "cut_requests": List<CutRequest>.empty(),
-          "cut_requstesAnalysis": List<GrowthRate>.empty(),
-          "cut_requests_count": 0,
-          "orders": List<Order>.empty(),
-          "ordersAnalysis": List<GrowthRate>.empty(),
-          "orders_count": 0,
-          "purchases": List<Purchases>.empty(),
-          "purchasesAnalysis": List<GrowthRate>.empty(),
-          "purchases_count": 0,
-          "orders_refunds": List<OrderRefund>.empty(),
-          "orders_refundsAnalysis": List<GrowthRate>.empty(),
-          "orders_refunds_count": 0,
-          "purchases_refunds_count": 0,
-          "purchases_refunds": List<PurchasesRefund>.empty(),
-          "purchases_refundsAnalysis": List<GrowthRate>.empty(),
-          "customers_request_sizes": List<CustomerRequestSize>.empty(),
-          "customers_request_sizesAnalysis": List<GrowthRate>.empty(),
-          "customers_request_sizes_count": 0,
-          "reservation_invoice": List<ReservationInvoice>.empty(),
-          "reservation_invoiceAnalysis": List<GrowthRate>.empty(),
-          "reservation_invoice_count": 0,
-          "products_inputs": List<ProductInput>.empty(),
-          "products_inputsAnalysis": List<GrowthRate>.empty(),
-          "products_inputs_count": 0,
-          "products_outputs": List<ProductOutput>.empty(),
-          "products_outputsAnalysis": List<GrowthRate>.empty(),
-          "products_outputs_count": 0,
-          "transfers": List<Transfers>.empty(),
-          "transfersAnalysis": List<GrowthRate>.empty(),
-          "transfers_count": 0,
-          "cargo_transporters": List<CargoTransporter>.empty(),
-          "cargo_transportersAnalysis": List<GrowthRate>.empty(),
-          "cargo_transporters_count": 0
-        });
+      super.getMirrorFieldsMapNewInstance()..addAll({
+        "cut_requests": List<CutRequest>.empty(),
+        "cut_requstesAnalysis": List<GrowthRate>.empty(),
+        "cut_requests_count": 0,
+        "orders": List<Order>.empty(),
+        "ordersAnalysis": List<GrowthRate>.empty(),
+        "orders_count": 0,
+        "purchases": List<Purchases>.empty(),
+        "purchasesAnalysis": List<GrowthRate>.empty(),
+        "purchases_count": 0,
+        "orders_refunds": List<OrderRefund>.empty(),
+        "orders_refundsAnalysis": List<GrowthRate>.empty(),
+        "orders_refunds_count": 0,
+        "purchases_refunds_count": 0,
+        "purchases_refunds": List<PurchasesRefund>.empty(),
+        "purchases_refundsAnalysis": List<GrowthRate>.empty(),
+        "customers_request_sizes": List<CustomerRequestSize>.empty(),
+        "customers_request_sizesAnalysis": List<GrowthRate>.empty(),
+        "customers_request_sizes_count": 0,
+        "reservation_invoice": List<ReservationInvoice>.empty(),
+        "reservation_invoiceAnalysis": List<GrowthRate>.empty(),
+        "reservation_invoice_count": 0,
+        "products_inputs": List<ProductInput>.empty(),
+        "products_inputsAnalysis": List<GrowthRate>.empty(),
+        "products_inputs_count": 0,
+        "products_outputs": List<ProductOutput>.empty(),
+        "products_outputsAnalysis": List<GrowthRate>.empty(),
+        "products_outputs_count": 0,
+        "transfers": List<Transfers>.empty(),
+        "transfersAnalysis": List<GrowthRate>.empty(),
+        "transfers_count": 0,
+        "cargo_transporters": List<CargoTransporter>.empty(),
+        "cargo_transportersAnalysis": List<GrowthRate>.empty(),
+        "cargo_transporters_count": 0,
+      });
 
   int getTabBarIndex(BuildContext context, List list) {
     if (getTabBarSecondPane(context) == null) return -1;
-    return getTabBarSecondPane(context)!.indexWhere(
-        (element) => element.extras.runtimeType == list.runtimeType);
+    return getTabBarSecondPane(
+      context,
+    )!.indexWhere((element) => element.extras.runtimeType == list.runtimeType);
   }
 
   List<TabControllerHelper>? getTabBarSecondPane(BuildContext context) {
     List<TabControllerHelper> l = [
-      TabControllerHelper(
-        AppLocalizations.of(context)!.overview,
-      ),
+      TabControllerHelper(AppLocalizations.of(context)!.overview),
       if (credits?.isNotEmpty ?? false)
         TabControllerHelper(
           AppLocalizations.of(context)!.credits,
@@ -411,17 +419,20 @@ class UserLists<T> extends AuthUser<T> {
   }
 
   SliverList getSliverListFromExtrasTabbar(
-      BuildContext context, TabControllerHelper tabSecondPane) {
+    BuildContext context,
+    TabControllerHelper tabSecondPane,
+  ) {
     return SliverList.builder(
-        itemCount: (tabSecondPane.extras as List).length,
-        itemBuilder: (c, index) {
-          return ListCardItemWeb<ViewAbstract>(
-            onTap: () {
-              tabSecondPane.extras[index].viewPage(context);
-            },
-            object: tabSecondPane.extras[index],
-          );
-        });
+      itemCount: (tabSecondPane.extras as List).length,
+      itemBuilder: (c, index) {
+        return ListCardItemWeb<ViewAbstract>(
+          onTap: () {
+            tabSecondPane.extras[index].viewPage(context);
+          },
+          object: tabSecondPane.extras[index],
+        );
+      },
+    );
   }
 
   List<ViewAbstract> getAnalysisChartFundsTitle(BuildContext context) {
@@ -460,7 +471,7 @@ class UserLists<T> extends AuthUser<T> {
       if (transfersAnalysis != null) transfersAnalysis ?? [],
       if (reservation_invoiceAnalysis != null)
         reservation_invoiceAnalysis ?? [],
-      if (cut_requestsAnalysis != null) cut_requestsAnalysis ?? []
+      if (cut_requestsAnalysis != null) cut_requestsAnalysis ?? [],
     ];
   }
 
@@ -477,7 +488,9 @@ class UserLists<T> extends AuthUser<T> {
   }
 
   Map<String, double> getMapMinus(
-      Map<String, double> first, Map<String, double> second) {
+    Map<String, double> first,
+    Map<String, double> second,
+  ) {
     Map<String, double> map = {};
     Map<String, double> mapPlus1 = {}..addAll(first);
     Map<String, double> mapPlus2 = {}..addAll(second);
@@ -500,8 +513,10 @@ class UserLists<T> extends AuthUser<T> {
   }
 
   Map<String, double> getMapPlus(
-      List<BalanceDue>? first, List<BalanceDue>? second,
-      {int? cashBoxID}) {
+    List<BalanceDue>? first,
+    List<BalanceDue>? second, {
+    int? cashBoxID,
+  }) {
     Map<String, double> map = {};
     Map<String, double> mapPlus1 = {}
       ..addAll(first.getTotalGrouped(CashboxID: cashBoxID));
@@ -530,30 +545,31 @@ class UserLists<T> extends AuthUser<T> {
   }
 
   List<WidgetGridHelper> getFundWidgets(
-      BuildContext context, int crossAxisCount,
-      {bool checkForEmpty = false,
-      GlobalKey<BasePageStateWithApi>? globalKey}) {
+    BuildContext context,
+    int crossAxisCount, {
+    bool checkForEmpty = false,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
+  }) {
     bool isMezouj = crossAxisCount % 2 == 0;
     debugPrint(
-        "isMezouj: $isMezouj   crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4} ");
+      "isMezouj: $isMezouj   crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4} ",
+    );
     int crossCountFund = crossAxisCount ~/ 4;
     int crossAxisCountMod = crossAxisCount % 4;
     int crossCountFundCalc = crossAxisCountMod == 0 ? crossCountFund : 1;
 
     debugPrint(
-        "isMezouj: $isMezouj  crossCountFundCalc $crossCountFundCalc crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc + crossAxisCountMod =${crossCountFundCalc + crossAxisCountMod}");
+      "isMezouj: $isMezouj  crossCountFundCalc $crossCountFundCalc crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc + crossAxisCountMod =${crossCountFundCalc + crossAxisCountMod}",
+    );
     return [
       if (checkForEmptyList(credits, checkForEmpty))
-        getWidget(StaggeredGridTile.count(
+        getWidget(
+          StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-              onTap: () {
-                int idx = getTabBarIndex(context, credits ?? []);
-                if (idx == -1) return;
-                //TODO
-                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
-              },
+                basePage: basePage,
+           
               list: credits,
               listGrowthRate: creditsAnalysis,
               icon: Icons.arrow_back_sharp,
@@ -561,235 +577,259 @@ class UserLists<T> extends AuthUser<T> {
               description: credits.getTotalValueString(context),
               footer: credits?.length.toString(),
               footerRightWidget: creditsAnalysis.getGrowthRateText(context),
-            ))),
+            ),
+          ),
+        ),
       if (checkForEmptyList(debits, checkForEmpty))
-        getWidget(StaggeredGridTile.count(
+        getWidget(
+          StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-              onTap: () {
-                int idx = getTabBarIndex(context, debits ?? []);
-                if (idx == -1) return;
-                //TODO
-                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
-              },
+              basePage: basePage,
+           
               color: Debits().getMainColor(),
               icon: Icons.arrow_forward_rounded,
               title: AppLocalizations.of(context)!.debits,
               listGrowthRate: debitsAnalysis,
               description: debits.getTotalValueString(context),
               footer: debits?.length.toString(),
-              footerRightWidget:
-                  debitsAnalysis.getGrowthRateText(context, reverseTheme: true),
-            ))),
+              footerRightWidget: debitsAnalysis.getGrowthRateText(
+                context,
+                reverseTheme: true,
+              ),
+            ),
+          ),
+        ),
       if (checkForEmptyList(spendings, checkForEmpty) && !isCustomerDashboard())
-        getWidget(StaggeredGridTile.count(
+        getWidget(
+          StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-              onTap: () {
-                int idx = getTabBarIndex(context, spendings ?? []);
-                if (idx == -1) return;
-                //TODO
-                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
-              },
+              basePage: basePage,
+           
               color: Spendings().getMainColor(),
               icon: Icons.arrow_forward_rounded,
               title: AppLocalizations.of(context)!.spendings,
               description: spendings.getTotalValueString(context),
               listGrowthRate: spendingsAnalysis,
               footer: spendings?.length.toString(),
-              footerRightWidget: spendingsAnalysis.getGrowthRateText(context,
-                  reverseTheme: true),
-            ))),
+              footerRightWidget: spendingsAnalysis.getGrowthRateText(
+                context,
+                reverseTheme: true,
+              ),
+            ),
+          ),
+        ),
       if (checkForEmptyList(incomes, checkForEmpty) && !isCustomerDashboard())
-        getWidget(StaggeredGridTile.count(
+        getWidget(
+          StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc + crossAxisCountMod,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-              onTap: () {
-                int idx = getTabBarIndex(context, incomes ?? []);
-                if (idx == -1) return;
-                //TODO
-                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
-              },
+                 basePage: basePage,
+           
               icon: Icons.arrow_back_sharp,
               listGrowthRate: incomesAnalysis,
               title: AppLocalizations.of(context)!.incomes,
               description: incomes.getTotalValueString(context),
               footer: incomes?.length.toString(),
               footerRightWidget: incomesAnalysis.getGrowthRateText(context),
-            ))),
+            ),
+          ),
+        ),
       //todo set this for dashboard only
       if (checkList(credits))
-        getWidget(StaggeredGridTile.count(
+        getWidget(
+          StaggeredGridTile.count(
             crossAxisCellCount: crossAxisCount,
             mainAxisCellCount: 2,
             child: Card(
               child: ViewableTableViewAbstractWidget(
-                  usePag: false,
-                  buildActions: true,
-                  viewAbstract: [
-                    ...credits ?? [],
-                    ...debits ?? [],
-                    ...spendings ?? [],
-                    ...incomes ?? []
-                  ]),
-            ))),
+                usePag: false,
+                buildActions: true,
+                viewAbstract: [
+                  ...credits ?? [],
+                  ...debits ?? [],
+                  ...spendings ?? [],
+                  ...incomes ?? [],
+                ],
+              ),
+            ),
+          ),
+        ),
     ];
   }
 
   List<WidgetGridHelper> getInvoicesWidgets(
-      BuildContext context, int crossAxisCount,
-      {bool checkForEmpty = false,
-      GlobalKey<BasePageStateWithApi>? globalKey}) {
+    BuildContext context,
+    int crossAxisCount, {
+    bool checkForEmpty = false,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
+  }) {
     bool isMezouj = crossAxisCount % 2 == 0;
 
     int crossCountFund = crossAxisCount ~/ 4;
     int crossAxisCountMod = crossAxisCount % 4;
     int crossCountFundCalc = crossAxisCountMod == 0 ? crossCountFund : 1;
     debugPrint(
-        "isMezouj: $isMezouj  crossCountFundCalc $crossCountFundCalc crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc + crossAxisCountMod =${crossCountFundCalc + crossAxisCountMod}");
+      "isMezouj: $isMezouj  crossCountFundCalc $crossCountFundCalc crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc + crossAxisCountMod =${crossCountFundCalc + crossAxisCountMod}",
+    );
     return [
       if (checkForEmptyList(orders, checkForEmpty))
-        getWidget(StaggeredGridTile.count(
+        getWidget(
+          StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc + crossAxisCountMod,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-              onTap: () {
-                int idx = getTabBarIndex(context, orders ?? []);
-                if (idx == -1) return;
-                //TODO
-                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
-              },
+                basePage: basePage,
+           
               // color: Colors.green.withOpacity(0.2),
               icon: Order().getMainIconData(),
               listGrowthRate: ordersAnalysis,
               title: AppLocalizations.of(context)!.orders,
               description: ordersAnalysis.getTotalText(
-                  symple: AppLocalizations.of(context)!.quantity),
+                symple: AppLocalizations.of(context)!.quantity,
+              ),
               footer: orders?.length.toString(),
               footerRightWidget: ordersAnalysis.getGrowthRateText(context),
-            ))),
+            ),
+          ),
+        ),
       if (checkForEmptyList(purchases, checkForEmpty))
-        getWidget(StaggeredGridTile.count(
+        getWidget(
+          StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-              onTap: () {
-                int idx = getTabBarIndex(context, purchases ?? []);
-                if (idx == -1) return;
-                //TODO
-                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
-              },
+                 basePage: basePage,
+           
               listGrowthRate: purchasesAnalysis,
               icon: Purchases().getMainIconData(),
               title: AppLocalizations.of(context)!.purchases,
               description: purchasesAnalysis.getTotalText(
-                  symple: AppLocalizations.of(context)!.quantity),
+                symple: AppLocalizations.of(context)!.quantity,
+              ),
               footer: purchases?.length.toString(),
               footerRightWidget: purchasesAnalysis.getGrowthRateText(context),
-            ))),
+            ),
+          ),
+        ),
       if (checkForEmptyList(cut_requests, checkForEmpty))
-        getWidget(StaggeredGridTile.count(
+        getWidget(
+          StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-              onTap: () {
-                int idx = getTabBarIndex(context, cut_requests ?? []);
-                if (idx == -1) return;
-                //TODO
-                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
-              },
+                basePage: basePage,
+           
               icon: CutRequest().getMainIconData(),
               listGrowthRate: cut_requestsAnalysis,
               title: CutRequest().getMainHeaderLabelTextOnly(context),
               description: "TEST",
               footer: cut_requests?.length.toString(),
-              footerRightWidget:
-                  cut_requestsAnalysis.getGrowthRateText(context),
-            ))),
+              footerRightWidget: cut_requestsAnalysis.getGrowthRateText(
+                context,
+              ),
+            ),
+          ),
+        ),
       if (checkForEmptyList(transfers, checkForEmpty) && !isCustomerDashboard())
-        getWidget(StaggeredGridTile.count(
+        getWidget(
+          StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-              onTap: () {
-                int idx = getTabBarIndex(context, transfers ?? []);
-                if (idx == -1) return;
-                //TODO
-                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
-              },
+                basePage: basePage,
+           
               icon: Transfers().getMainIconData(),
               title: Transfers().getMainHeaderLabelTextOnly(context),
               listGrowthRate: transfersAnalysis,
               description: transfersAnalysis.getTotalText(
-                  symple: AppLocalizations.of(context)!.quantity),
+                symple: AppLocalizations.of(context)!.quantity,
+              ),
               footer: transfers?.length.toString(),
               footerRightWidget: transfersAnalysis.getGrowthRateText(context),
-            ))),
+            ),
+          ),
+        ),
       if (checkForEmptyList(products_inputs, checkForEmpty) &&
           !isCustomerDashboard())
-        getWidget(StaggeredGridTile.count(
+        getWidget(
+          StaggeredGridTile.count(
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-              onTap: () {
-                int idx = getTabBarIndex(context, products_inputs ?? []);
-                if (idx == -1) return;
-                //TODO
-                // globalKey?.currentState?.changeTabIndexSecondPane(idx);
-              },
+              // onTap: () {
+              //   int idx = getTabBarIndex(context, products_inputs ?? []);
+              //   if (idx == -1) return;
+              //   //TODO
+              //   // globalKey?.currentState?.changeTabIndexSecondPane(idx);
+              // },
+                 basePage: basePage,
+           
               icon: ProductInput().getMainIconData(),
               title: ProductInput().getMainHeaderLabelTextOnly(context),
               description: products_inputsAnalysis.getTotalText(
-                  symple: AppLocalizations.of(context)!.quantity),
+                symple: AppLocalizations.of(context)!.quantity,
+              ),
               footer: products_inputs?.length.toString(),
-              footerRightWidget:
-                  products_inputsAnalysis.getGrowthRateText(context),
-            ))),
+              footerRightWidget: products_inputsAnalysis.getGrowthRateText(
+                context,
+              ),
+            ),
+          ),
+        ),
       if (checkForEmptyList(products_outputs, checkForEmpty) &&
           !isCustomerDashboard())
-        getWidget(StaggeredGridTile.count(
+        getWidget(
+          StaggeredGridTile.count(
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-              onTap: () {
-                int idx = getTabBarIndex(context, products_outputs ?? []);
-                if (idx == -1) return;
-                //TODO
-                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
-              },
+                 basePage: basePage,
+           
               icon: ProductOutput().getMainIconData(),
               title: ProductOutput().getMainHeaderLabelTextOnly(context),
               description: products_outputs
                   .getTotalQuantityGroupedFormattedText(context),
               footer: products_outputs?.length.toString(),
-              footerRightWidget:
-                  products_outputsAnalysis.getGrowthRateText(context),
-            ))),
+              footerRightWidget: products_outputsAnalysis.getGrowthRateText(
+                context,
+              ),
+            ),
+          ),
+        ),
       if (checkForEmptyList(reservation_invoice, checkForEmpty))
-        getWidget(StaggeredGridTile.count(
+        getWidget(
+          StaggeredGridTile.count(
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-              onTap: () {
-                int idx = getTabBarIndex(context, reservation_invoice ?? []);
-                if (idx == -1) return;
-                //TODO
-                //globalKey?.currentState?.changeTabIndexSecondPane(idx);
-              },
+              // onTap: () {
+              //   int idx = getTabBarIndex(context, reservation_invoice ?? []);
+              //   if (idx == -1) return;
+              //   //TODO
+              //   //globalKey?.currentState?.changeTabIndexSecondPane(idx);
+              // },
+                 basePage: basePage,
+           
               icon: ReservationInvoice().getMainIconData(),
               title: ReservationInvoice().getMainHeaderLabelTextOnly(context),
               description: reservation_invoice
                   .getTotalQuantityGroupedFormattedText(context),
               footer: reservation_invoice?.length.toString(),
-              footerRightWidget:
-                  reservation_invoiceAnalysis.getGrowthRateText(context),
-            ))),
+              footerRightWidget: reservation_invoiceAnalysis.getGrowthRateText(
+                context,
+              ),
+            ),
+          ),
+        ),
       //todo this only on dashboard
       if (checkList(orders))
-        getWidget(StaggeredGridTile.count(
+        getWidget(
+          StaggeredGridTile.count(
             crossAxisCellCount: crossAxisCount,
             mainAxisCellCount: 2,
             child: Card(
@@ -798,7 +838,9 @@ class UserLists<T> extends AuthUser<T> {
                 usePag: true,
                 buildActions: true,
               ),
-            ))),
+            ),
+          ),
+        ),
     ];
   }
 }
