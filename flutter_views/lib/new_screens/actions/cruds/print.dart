@@ -150,8 +150,25 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
           anchorPoint: const Offset(1000, 1000),
           context: context,
           builder: (p0) {
+            return Material(
+              child: BaseEditWidget(
+                isTheFirst: true,
+                viewAbstract: v as ViewAbstract,
+
+                onValidate: (viewAbstract) {
+                  debugPrint(
+                    "BasePdfPageConsumer new viewAbstract $viewAbstract",
+                  );
+
+                  if (viewAbstract != null) {
+                    // notifyNewViewAbstract(viewAbstract.getCopyInstance());
+                    Configurations.saveViewAbstract(viewAbstract);
+                  }
+                },
+              ),
+            );
             return BaseEditNewPage(
-              viewAbstract: v as ViewAbstract,
+              viewAbstract: v,
               onFabClickedConfirm: (viewAbstract) {
                 if (viewAbstract != null) {
                   debugPrint(

@@ -193,8 +193,8 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return url;
   }
 
-  bool shouldGetFromApi(ServerActions action) {
-    return _checkListToRequest(action) != false;
+  bool shouldGetFromApi(ServerActions action,dynamic lastObject) {
+    return _checkListToRequest(action) != false || shouldGetFromApiViewCall(lastObject);
   }
 
   dynamic _checkListToRequest(ServerActions action) {
@@ -341,7 +341,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return List<T>.from(l.map((model) => fromJsonViewAbstract(model)));
   }
 
-  bool shouldGetFromApiViewCall() {
+  bool shouldGetFromApiViewCall(dynamic lastObject) {
     return false;
   }
 
@@ -350,6 +350,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     int? customID,
     OnResponseCallback? onResponse,
     ServerActions? customAction,
+    dynamic lastObject,
   }) async {
     try {
       debugPrint("viewCall is Called");
@@ -358,7 +359,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
       );
       if (customID == null || customID == iD) {
         if (isRequireList == false && !isNew()) {
-          if (!shouldGetFromApiViewCall()) {
+          if (!shouldGetFromApiViewCall(lastObject)) {
             debugPrint("viewCall $T returning this");
             return this as T;
           }

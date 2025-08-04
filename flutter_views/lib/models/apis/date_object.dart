@@ -98,6 +98,15 @@ class DateObject {
     return date;
   }
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+  
+    return other is DateObject &&
+      other.from == from &&
+      other.to == to;
+  }
+
   bool isEqual(DateObject? object) {
     if (object == null) return false;
     return (from + to) == (object.from + object.to);
@@ -123,4 +132,7 @@ class DateObject {
 
   factory DateObject.fromJson(Map<String, dynamic> map) =>
       DateObject.fromMap(map);
+
+  @override
+  int get hashCode => from.hashCode ^ to.hashCode;
 }

@@ -430,9 +430,28 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
   SecondPaneHelper? _lastSecondPaneItem;
   SecondPaneHelper? get lastSecondPaneItem => this._lastSecondPaneItem;
 
+  String onActionInitial();
+  List<Widget>? getPaneNotifier({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+    SecondPaneHelper? valueNotifier,
+  });
+
   void notify(SecondPaneHelper? item) {
     debugPrint("notify");
     _onSecoundPaneChanged.value = item;
+  }
+
+  List<Widget>? getCustomViewWhenSecondPaneIsEmpty(
+    ScrollController? controler,
+    TabControllerHelper? tab,
+  ) {
+    return null;
+  }
+
+  bool enableAutomaticFirstPaneNullDetector() {
+    return true;
   }
 
   void initSecToThirdPaneNotifier() {}
@@ -463,7 +482,6 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
     );
   }
 
-  String onActionInitial();
   @override
   bool isFirstPane({bool? firstPane}) {
     if (isMobile(context, maxWidth: getWidth)) {
@@ -615,13 +633,6 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
     );
   }
 
-  List<Widget>? getPaneNotifier({
-    required bool firstPane,
-    ScrollController? controler,
-    TabControllerHelper? tab,
-    SecondPaneHelper? valueNotifier,
-  });
-
   @override
   void initState() {
     _onSecoundPaneChanged.addListener(onPaneChanged);
@@ -632,15 +643,8 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
   }
 
   @override
-  void didUpdateWidget(covariant oldWidget) {
-    // _lastItem = widget.selectedItem;
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   void dispose() {
     _onSecoundPaneChanged.removeListener(onPaneChanged);
-
     super.dispose();
   }
 
@@ -686,24 +690,11 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
   void onPaneChanged() {
     setState(() {
       _lastSecondPaneItem = _onSecoundPaneChanged.value;
-      // key.currentState?.add(_lastItem);
-
       if (isMobile(context, maxWidth: getWidth)) {
         forceBuildAppBar = true;
         pinToolbar = false;
       }
     });
-  }
-
-  List<Widget>? getCustomViewWhenSecondPaneIsEmpty(
-    ScrollController? controler,
-    TabControllerHelper? tab,
-  ) {
-    return null;
-  }
-
-  bool enableAutomaticFirstPaneNullDetector() {
-    return true;
   }
 
   @override
@@ -712,10 +703,16 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
     ScrollController? controler,
     TabControllerHelper? tab,
   }) {
+    bool isMobile = isMobileFromWidth(getWidth);
+    debugPrint("getPane getPane isMobile $isMobile forstPane $firstPane");
     if (enableAutomaticFirstPaneNullDetector() &&
         isSecPane(firstPane: firstPane) &&
         !hasNotifierValue() &&
+        !isMobile &&
         tab == null) {
+      debugPrint(
+        "getPane getPane enableAutomaticFirstPaneNullDetector() &&  isSecPane(firstPane: firstPane) & !hasNotifierValue() &&",
+      );
       List<Widget>? widgets = getCustomViewWhenSecondPaneIsEmpty(
         controler,
         tab,
@@ -726,11 +723,14 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
     }
 
     if (isMobileFromWidth(getWidth) && hasNotifierValue()) {
-      return getPaneNotifier(
+      debugPrint(
+        "getPane getPane isMobileFromWidth(getWidth) && hasNotifierValue()",
+      );
+
+      return getAutomaticSecoundPane(
         firstPane: false,
         controler: controler,
         tab: tab,
-        valueNotifier: _lastSecondPaneItem,
       );
     }
     if (firstPane) {
@@ -739,7 +739,6 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
           controler,
           tab,
         );
-
         return [
           ...getPaneNotifier(
                 firstPane: firstPane,
@@ -756,6 +755,18 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
         tab: tab,
       );
     }
+    return getAutomaticSecoundPane(
+      firstPane: firstPane,
+      controler: controler,
+      tab: tab,
+    );
+  }
+
+  List<Widget>? getAutomaticSecoundPane({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+  }) {
     if (_lastSecondPaneItem?.value is List<Widget>) {
       return _lastSecondPaneItem?.value;
     } else if (_lastSecondPaneItem?.value is ViewAbstract) {
@@ -1086,7 +1097,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   late bool _buildSecoundPane;
   bool isSelectedMode = false;
 
-  bool _isTabInited=false;
+  bool _isTabInited = false;
 
   DrawerMenuControllerProvider get drawerMenuControllerProvider =>
       _drawerMenuControllerProvider;
@@ -1516,15 +1527,14 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       child: widget,
     );
   }
-  
+
   void _initBaseTab() {
-    if(_isTabInited)return;
-    _isTabInited=true;
+    if (_isTabInited) return;
+    _isTabInited = true;
     _tabList = initTabBarList();
 
     /// Here you can have your context and do what ever you want
     if (_hasTabBarList()) {
-
       _tabBaseController = TabController(vsync: this, length: _tabList!.length);
       _tabBaseController!.addListener(_tabControllerChangeListener);
     }
@@ -1773,7 +1783,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     TabControllerHelper? tab,
   }) {
     if (!firstPane) {
-      secondPaneWidgets = getPane(firstPane: false, tab: tab);
+      secondPaneWidgets = getPane(firstPane: firstPane, tab: tab);
       setChilds(secondPaneWidgets);
       return secondPaneWidgets;
     }
@@ -2161,9 +2171,11 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   int? _iD;
   String? _tableName;
   dynamic _extras;
+  dynamic _lastExtras;
+
   bool _isLoading = false;
   int? get iD => this._iD;
-
+  dynamic get getLastExtras => this._lastExtras;
   String? get getTableName => this._tableName;
   int? get getID => this._iD;
 
@@ -2390,21 +2402,25 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   Widget getMainPanes({TabControllerHelper? baseTap}) {
     debugPrint("getBody _getTowPanes TabController ");
     dynamic ex = getExtras(tab: baseTap);
-    // _isLoading = !getExtrasCast().shouldGetFromApi(ServerActions.view);
+    _isLoading = !getExtrasCast(
+      tab: baseTap,
+    ).shouldGetFromApi(ServerActions.view, getLastExtras);
     // debugPrint("getBody _isLoading  $_isLoading ");
-    // if (ex != null && !_isLoading) {
-    //   _connectionState.value =
-    //       overrideConnectionState(BasePageWithApiConnection.build) ??
-    //       ConnectionStateExtension.none;
-    //   initStateAfterApiCalled();
-    //   return super.getMainPanes();
-    // }
+    if (ex != null && !_isLoading) {
+      _connectionState.value =
+          overrideConnectionState(BasePageWithApiConnection.build) ??
+          ConnectionStateExtension.none;
+      initStateAfterApiCalled();
+      return super.getMainPanes(baseTap: baseTap);
+    }
     return FutureBuilder<dynamic>(
       future:
           getOverrideCallApiFunction(context, tab: baseTap) ??
-          getExtrasCast(
-            tab: baseTap,
-          ).viewCall(context: context, customID: getID),
+          getExtrasCast(tab: baseTap).viewCall(
+            context: context,
+            customID: getID,
+            lastObject: getLastExtras,
+          ),
       builder: (context, snapshot) {
         _connectionState.value =
             overrideConnectionState(BasePageWithApiConnection.future) ??
@@ -2421,6 +2437,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
           );
           _isLoading = false;
           if (snapshot.data != null) {
+            _lastExtras = ex;
             setExtras(ex: snapshot.data);
             initStateAfterApiCalled();
             if (ex is ViewAbstract) {
@@ -2428,7 +2445,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
               //   context.read<ListMultiKeyProvider>().edit(ex);
               // });
             }
-            return super.getMainPanes();
+            return super.getMainPanes(baseTap: baseTap);
           } else {
             debugPrint("BasePageApi FutureBuilder !done");
             return EmptyWidget.error(
@@ -2441,7 +2458,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           debugPrint("BasePageApi FutureBuilder waiting");
           _isLoading = true;
-          return super.getMainPanes();
+          return super.getMainPanes(baseTap: baseTap);
         } else {
           debugPrint("BasePageApi FutureBuilder !TOTODO");
           return const Text("TOTODO");

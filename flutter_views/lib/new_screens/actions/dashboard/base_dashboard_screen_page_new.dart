@@ -339,7 +339,7 @@ class _BaseDashboardMainPageState
     // return null;
     dynamic ex = getExtras(tab: tab);
     debugPrint("getCallApiFunctionIfNull extras=> $ex ");
-    return (ex as ViewAbstract).viewCall(context: context);
+    return (ex as ViewAbstract).viewCall(context: context,lastObject: getLastExtras);
   }
 
   @override

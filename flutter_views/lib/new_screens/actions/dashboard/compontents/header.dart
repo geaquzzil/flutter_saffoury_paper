@@ -21,11 +21,13 @@ class DashboardHeader extends StatefulWidget {
   // DateTime? focuseDate;
   DateObject date;
   Function(DateObject? date_object) onSelectedDate;
+  final void Function()? onPressePrint;
   DashboardHeader(
       {super.key,
       required this.current_screen_size,
       required this.date,
       this.object,
+      this.onPressePrint,
       required this.onSelectedDate});
 
   @override
@@ -64,9 +66,7 @@ class _DashboardHeaderState extends State<DashboardHeader> {
               const Spacer(),
               if (widget.object?.isPrintableMaster() == true)
                 IconButton(
-                    onPressed: () {
-                      widget.object?.printPage(context);
-                    },
+                    onPressed: widget.onPressePrint,
                     icon: const Icon(Icons.print)),
               if (isLargeScreenFromScreenSize(widget.current_screen_size))
                 CustomPopupMenu(

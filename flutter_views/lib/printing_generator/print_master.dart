@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:pdf/pdf.dart';
@@ -12,15 +12,24 @@ import 'package:printing/printing.dart';
 
 import '../models/prints/print_local_setting.dart';
 
-class PrintMasterPDF<T extends PrintableMasterEmpty,
-    E extends PrintLocalSetting> extends PrintMasterPDFUtils<E> {
+class PrintMasterPDF<
+  T extends PrintableMasterEmpty,
+  E extends PrintLocalSetting
+>
+    extends PrintMasterPDFUtils<E> {
   T printObj;
 
-  PrintMasterPDF(
-      {required super.context, required this.printObj, super.setting});
+  PrintMasterPDF({
+    required super.context,
+    required this.printObj,
+    super.setting,
+  });
 
   @override
   Future<Widget> buildHeader() async {
+    if (setting?.hideHeaderLogo == true) {
+      return Column();
+    }
     String url = setting?.hideHeaderLogo == true
         ? ""
         : 'https://saffoury.com/SaffouryPaper2/print/headers/headerA4IMG.php?color=${getPrimaryColorStringHex()}&darkColor=${getSecondaryColorStringHex()}';
@@ -35,12 +44,13 @@ class PrintMasterPDF<T extends PrintableMasterEmpty,
   Future<Document> getDocument() async {
     await initHeader();
     final pdf = Document(
-        title: (printObj as ViewAbstract).getMainHeaderTextOnly(context),
-        author: AppLocalizations.of(context)!.appTitle,
-        creator: AppLocalizations.of(context)!.appTitle,
-        subject: (printObj as ViewAbstract).getMainHeaderLabelTextOnly(context),
-        pageMode: PdfPageMode.fullscreen,
-        theme: themeData);
+      title: (printObj as ViewAbstract).getMainHeaderTextOnly(context),
+      author: AppLocalizations.of(context)!.appTitle,
+      creator: AppLocalizations.of(context)!.appTitle,
+      subject: (printObj as ViewAbstract).getMainHeaderLabelTextOnly(context),
+      pageMode: PdfPageMode.fullscreen,
+      theme: themeData,
+    );
 
     return pdf;
   }
@@ -51,39 +61,45 @@ class PrintMasterPDF<T extends PrintableMasterEmpty,
         .getPrintableInvoiceTitle(context, setting)
         .toUpperCase();
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 0),
-        child: Text(title,
-            textDirection: getTextDirection(title),
-            style: Theme.of(contextPDF)
-                .header1
-                .copyWith(color: getPrimaryColor())));
+      padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 0),
+      child: Text(
+        title,
+        textDirection: getTextDirection(title),
+        style: Theme.of(contextPDF).header1.copyWith(color: getPrimaryColor()),
+      ),
+    );
   }
 
   Widget buildTitleOnInvoice(String title) {
-    return Text(title,
-        textDirection: getTextDirection(title),
-        style: Theme.of(contextPDF)
-            .tableHeader
-            .copyWith(color: getPrimaryColor()));
+    return Text(
+      title,
+      textDirection: getTextDirection(title),
+      style: Theme.of(
+        contextPDF,
+      ).tableHeader.copyWith(color: getPrimaryColor()),
+    );
   }
 
   Widget buildDescriptionOnInvoice(String title) {
-    return Text(title,
-        textDirection: getTextDirection(title),
-        style:
-            Theme.of(contextPDF).tableCell.copyWith(color: PdfColors.grey700));
+    return Text(
+      title,
+      textDirection: getTextDirection(title),
+      style: Theme.of(contextPDF).tableCell.copyWith(color: PdfColors.grey700),
+    );
   }
 
   PdfColor getSecondaryColor() {
     assert(printObj is PrintableMaster);
     return PdfColor.fromHex(
-        (printObj as PrintableMaster).getPrintableSecondaryColor(setting));
+      (printObj as PrintableMaster).getPrintableSecondaryColor(setting),
+    );
   }
 
   PdfColor getPrimaryColor() {
     assert(printObj is PrintableMaster);
     return PdfColor.fromHex(
-        (printObj as PrintableMaster).getPrintablePrimaryColor(setting));
+      (printObj as PrintableMaster).getPrintablePrimaryColor(setting),
+    );
   }
 
   String getPrimaryColorStringHex() {
@@ -117,7 +133,10 @@ class PrintMasterPDFUtils<T extends PrintLocalSetting> {
   Future<Document> getDocument() async {
     await initHeader();
     final pdf = Document(
-        title: "TEST", pageMode: PdfPageMode.fullscreen, theme: themeData);
+      title: "TEST",
+      pageMode: PdfPageMode.fullscreen,
+      theme: themeData,
+    );
 
     return pdf;
   }
@@ -162,9 +181,10 @@ class PrintMasterPDFUtils<T extends PrintLocalSetting> {
 
   Widget wrapeborderContainer(Widget child, {double padding = 0}) {
     return Container(
-        padding: EdgeInsets.all(padding),
-        decoration: BoxDecoration(border: Border.all()),
-        child: child);
+      padding: EdgeInsets.all(padding),
+      decoration: BoxDecoration(border: Border.all()),
+      child: child,
+    );
   }
 
   int compareDynamic(bool ascending, dynamic value1, dynamic value2) {
@@ -199,12 +219,13 @@ class PrintMasterPDFUtils<T extends PrintLocalSetting> {
 
   Directionality getDirections({required Widget child, String? byValue}) {
     return Directionality(
-        textDirection: byValue == null
-            ? isArabic()
+      textDirection: byValue == null
+          ? isArabic()
                 ? TextDirection.rtl
                 : TextDirection.ltr
-            : getTextDirection(byValue),
-        child: child);
+          : getTextDirection(byValue),
+      child: child,
+    );
   }
 
   double getQrCodeSize(PdfPageFormat? format) {

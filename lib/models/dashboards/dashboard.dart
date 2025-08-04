@@ -204,7 +204,17 @@ class Dashboard extends UserLists<Dashboard>
   }
 
   @override
-  bool shouldGetFromApiViewCall() {
+  bool shouldGetFromApiViewCall(dynamic lastObject) {
+    debugPrint("shouldGetFromApiViewCall $dateObject");
+    debugPrint("shouldGetFromApiViewCall lastObject ${lastObject?.dateObject}");
+    if (lastObject == null) {
+      return true;
+    }
+    if (lastObject is Dashboard) {
+      if (lastObject.dateObject == dateObject) {
+        return false;
+      }
+    }
     return true;
   }
 
@@ -627,11 +637,18 @@ class Dashboard extends UserLists<Dashboard>
     SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
-    if (firstPane == false) return null;
+    if (firstPane == false) {
+      return basePage?.secPaneNotifier?.value?.title == null
+          ? null
+          : Text(basePage?.secPaneNotifier?.value?.title ?? "");
+    }
     return DashboardHeader(
       object: this,
       date: dateObject ?? DateObject(),
       current_screen_size: findCurrentScreenSize(context),
+      onPressePrint: () {
+        printPage(context, secPaneNotifer: basePage);
+      },
       onSelectedDate: (d) {
         if (d == null) return;
         dateObject = d;
