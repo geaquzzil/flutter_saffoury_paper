@@ -10,6 +10,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
+import 'package:flutter_view_controller/interfaces/listable_interface.dart';
 import 'package:flutter_view_controller/interfaces/printable/printable_master.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
@@ -1882,7 +1883,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   //   return getPaneExt();
   // }
-  
+
   Widget getPaneExt() {
     return TowPaneExt(
       startPane: _firstWidget!,
@@ -2237,7 +2238,9 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     TabControllerHelper? tab,
   });
   ServerActions getServerActions();
-
+  ListableInterface getListableInterface(){
+    return getExtras() as ListableInterface;
+  }
   dynamic getExtras({TabControllerHelper? tab}) {
     if (_hasTabBarList()) {
       if (tab != null) {

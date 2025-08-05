@@ -246,6 +246,9 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     BuildContext context, {
     SecoundPaneHelperWithParentValueNotifier? secondPaneHelper,
   }) {
+    if(secondPaneHelper!=null){
+      
+    }
     if (!setPaneToSecondOrThird(
       context,
       ListToDetailsSecoundPaneHelper(
@@ -496,6 +499,23 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     );
   }
 
+  Widget getAddPage(
+    BuildContext context, {
+    ViewAbstract? clickedObject,
+    SecoundPaneHelperWithParentValueNotifier? parent,
+  }) {
+    debugPrint("getAddPage");
+    return EditNew(
+      key: getKeyForWidget(context, ServerActions.edit),
+      extras: clickedObject ?? getSelfNewInstance(),
+      iD: -1,
+      tableName: getTableNameApi(),
+      isFirstToSecOrThirdPane: true,
+      onBuild: parent?.onBuild,
+      parent: parent?.parent,
+    );
+  }
+
   Widget getViewPage(
     BuildContext context, {
     SecoundPaneHelperWithParentValueNotifier? parent,
@@ -626,10 +646,24 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void onDrawerLeadingItemClicked(
     BuildContext context, {
     ViewAbstract? clickedObject,
+
+    SecoundPaneHelperWithParentValueNotifier? secPaneNotifer,
   }) {
     debugPrint(
       'onDrawerLeadingItemClicked=> ${getMainHeaderTextOnly(context)}',
     );
+    if (secPaneNotifer != null) {
+      secPaneNotifer.secPaneNotifier?.value = SecondPaneHelper(
+        object: this,
+        title: getIDWithLabel(context, action: ServerActions.add),
+        value: getAddPage(
+          context,
+          clickedObject: clickedObject,
+          parent: secPaneNotifer,
+        ),
+      );
+      return;
+    }
     if (isLargeScreenFromCurrentScreenSize(context)) {
       Globals.keyForLargeScreenListable.currentState?.setSecoundPane(
         ListToDetailsSecoundPaneHelper(

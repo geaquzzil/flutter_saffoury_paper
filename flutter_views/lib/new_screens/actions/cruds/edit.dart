@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart' as FB;
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/interfaces/listable_interface.dart';
+import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/forms/nullable_icon.dart';
 import 'package:flutter_view_controller/new_components/forms/reactive_consumer_with_listener.dart';
+import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
+import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_dialog.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/theme.dart';
+import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
+import 'package:flutter_view_controller/packages/material_dialogs/shared/types.dart';
+import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
+import 'package:flutter_view_controller/size_config.dart';
+import 'package:flutter_view_controller/utils/dialogs.dart';
+import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
 class EditNew extends BasePageApi {
@@ -33,7 +43,6 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
   GlobalKey<FB.FormBuilderState> formKey = GlobalKey<FB.FormBuilderState>();
   FormGroup? _baseForm;
   FormBuilderOptions? _builderOption;
-  Widget Function(BuildContext, FormGroup, Widget?) formBuilder;
   Map<String, ExpansibleController> expansionController = {};
 
   @override
@@ -64,7 +73,10 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     return getExtrasCast().toJsonViewAbstract();
   }
 
-  Widget getListableFormReactive(FormGroup form) {
+  Widget getListableFormReactive(
+    FormGroup form, {
+    bool wrapeWithExpansionTile = true,
+  }) {
     String listableKey = getExtrasCast()
         .castListableInterface()
         .getListableAddFromManual(context)
@@ -73,40 +85,51 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
         .castListableInterface()
         .getListableList();
     FormArray arr = form.control(listableKey) as FormArray;
-    return ExpansionTile(
-      title: Text("List"),
-      children: [
-        ReactiveFormArray(
-          formArrayName: listableKey,
-          builder: (context, formArray, child) {
-            debugPrint(
-              "ReactiveFormArray control list ${arr.controls.length} ${arr.controls.length} ",
-            );
-            List<Widget> widgets = List.empty(growable: true);
-            for (int i = 0; i < listableObjects.length; i++) {
-              var e = listableObjects[i];
-              debugPrint("ReactiveFormArray e is $e");
-              e.onBeforeGenerateView(context, action: ServerActions.edit);
-              e.setParent(getExtrasCast());
-              e.setFieldNameFromParent(listableKey);
+    Widget t = getReactiveFormArray(listableKey, arr, listableObjects);
+    if (wrapeWithExpansionTile) {
+      return ExpansionTile(
+        //TODO translate
+        title: Text("List"),
+        children: [t],
+      );
+    }
+    return t;
+  }
 
-              widgets.add(
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: e.getReactiveForm2(
-                      childGroup: arr.controls[i] as FormGroup,
-                      context: context,
-                    ),
-                  ),
+  ReactiveFormArray<Object?> getReactiveFormArray(
+    String listableKey,
+    FormArray<dynamic> arr,
+    List<ViewAbstract<dynamic>> listableObjects,
+  ) {
+    return ReactiveFormArray(
+      formArrayName: listableKey,
+      builder: (context, formArray, child) {
+        debugPrint(
+          "ReactiveFormArray control list ${arr.controls.length} ${arr.controls.length} ",
+        );
+        List<Widget> widgets = List.empty(growable: true);
+        for (int i = 0; i < listableObjects.length; i++) {
+          var e = listableObjects[i];
+          debugPrint("ReactiveFormArray e is $e");
+          e.onBeforeGenerateView(context, action: ServerActions.edit);
+          e.setParent(getExtrasCast());
+          e.setFieldNameFromParent(listableKey);
+
+          widgets.add(
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: e.getReactiveForm2(
+                  childGroup: arr.controls[i] as FormGroup,
+                  context: context,
                 ),
-              );
-            }
+              ),
+            ),
+          );
+        }
 
-            return Column(spacing: 20, children: widgets);
-          },
-        ),
-      ],
+        return Column(spacing: 20, children: widgets);
+      },
     );
   }
 
@@ -118,14 +141,56 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
   //   return ReactiveFormBuilder(form: ()=>_baseForm! ,builder: ,);
   // }
   // get
-  
-@override
+
+  @override
   Widget getMainPanes({TabControllerHelper? baseTap}) {
-    // TODO: implement getMainPanes
-    return super.getMainPanes(baseTap: baseTap);
+    initStateAfterApiCalled();
+    if (_baseForm == null) {
+      return Text("_baseForm is null");
+    }
+    return ReactiveFormBuilder(
+      builder: (context, formGroup, child) =>
+          super.getMainPanes(baseTap: baseTap),
+      form: () => _baseForm!,
+    );
   }
 
   Widget getFormReactive() {
+    return Column(
+      spacing: 10,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ...getFormContentReactive(getExtrasCast(), formGroup: _baseForm!),
+
+        if (getExtrasCast().isListable() &&
+            getCurrentScreenSize() == CurrentScreenSize.MOBILE)
+          getListableFormReactive(_baseForm!),
+        TextButton(
+          onPressed: () {
+            _baseForm!.hasErrors;
+            debugPrint("ReactiveFormBuilder error ${_baseForm!.errors}");
+            _baseForm!.markAllAsTouched();
+
+            debugPrint("ReactiveFormBuilder ${getObject(_baseForm!)}");
+          },
+          child: const Text('Sign Up'),
+        ),
+        ReactiveFormConsumer(
+          builder: (context, form, child) => TextButton(
+            onPressed: form.valid
+                ? () {
+                    _baseForm!.markAllAsTouched();
+                    debugPrint("${_baseForm!.value}");
+                    //todo
+                    (getExtrasCast().copyWith(getObject(form)) as ViewAbstract)
+                        .editCall(context: context);
+                  }
+                : null,
+            child: const Text('Sign Up api'),
+          ),
+        ),
+      ],
+    );
     if (_baseForm == null) {
       return Text("_baseForm is null");
     }
@@ -406,15 +471,221 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     BuildContext context, {
     TabControllerHelper? tab,
   }) {
+    if (getExtrasCast(tab: tab).isNew()) {
+      return Future.value(getExtrasCast());
+    }
     return (getExtrasCast()).viewCall(context: context)
         as Future<ViewAbstract?>;
   }
 
   @override
-  Widget? getFloatingActionButton({
-    bool? firstPane,
-    TabControllerHelper? tab,
-  }) => null;
+  Widget? getFloatingActionButton({bool? firstPane, TabControllerHelper? tab}) {
+    if (firstPane == true) {
+      return BaseFloatingActionButtons(
+        base: getSecoundPaneHelper(),
+        // key: widget.key,
+        viewAbstract: getExtrasCast(),
+        serverActions: ServerActions.edit,
+        // addOnList: getFloatingActionWidgetAddOns(context),
+      );
+    }
+    if (firstPane != null && firstPane == false) {
+      Widget? widget = getAddToListManualFloatingButton(context);
+      Widget? listSelect = getAddToListFloatingButton(context);
+      return Row(
+        spacing: kDefaultPadding,
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget != null) widget,
+          if (listSelect != null) listSelect,
+        ],
+      );
+    }
+    return null;
+  }
+  // Widget getAddFloatingButton2(BuildContext context) {
+  //   return ValueListenableBuilder(
+  //     valueListenable: onValidateViewAbstract,
+  //     builder: (context, masterValue, child) {
+  //       return ValueListenableBuilder<ApiCallState>(
+  //         valueListenable: apiCallState,
+  //         builder: (context, value, child) {
+  //           if (value == ApiCallState.LOADING) {
+  //             return FloatingActionButton(
+  //               heroTag: UniqueKey(),
+  //               onPressed: null,
+  //               backgroundColor: Theme.of(context).colorScheme.surface,
+  //               child: const CircularProgressIndicator(),
+  //             );
+  //           } else if (value == ApiCallState.ERROR) {
+  //             return FloatingActionButton.extended(
+  //                 heroTag: UniqueKey(),
+  //                 onPressed: () {},
+  //                 icon: const Icon(Icons.error),
+  //                 label:
+  //                     Text(AppLocalizations.of(context)!.errOperationFailed));
+  //           } else {
+  //             return FloatingActionButtonExtended(
+  //               expandedWidget: Text(AppLocalizations.of(context)!.subment),
+  //               onExpandIcon: getExtras().isEditing() ? Icons.edit : Icons.add,
+  //               colapsed:
+  //                   masterValue == null ? Icons.error : Icons.arrow_forward,
+  //               onPress: masterValue == null
+  //                   ? null
+  //                   : () async {
+  //                       if (widget.onFabClickedConfirm != null) {
+  //                         debugPrint(
+  //                             "onFabClickedConfirm !=null convert destination");
+  //                         widget.onFabClickedConfirm!(currentViewAbstract);
+  //                         return;
+  //                       }
+  //                       currentViewAbstract =
+  //                           currentViewAbstract!.copyToUplode();
+  //                       apiCallState.value = ApiCallState.LOADING;
+  //                       currentViewAbstract = await currentViewAbstract!
+  //                           .addCall(
+  //                               context: context,
+  //                               onResponse: OnResponseCallback(
+  //                                   onServerFailureResponse: (s) {
+  //                                 debugPrint("onServerFailure $s");
+  //                                 apiCallState.value = ApiCallState.ERROR;
+  //                               }));
+  //                       if (currentViewAbstract != null) {
+  //                         apiCallState.value = ApiCallState.DONE;
+  //                         extras = currentViewAbstract;
+  //                         currentViewAbstract!.onCardClicked(context);
+  //                         context.read<ListMultiKeyProvider>().notifyAdd(
+  //                             currentViewAbstract!,
+  //                             context: context);
+  //                       }
+
+  //                       // context.read<ListMultiKeyProvider>().addCustomSingle(viewAbstract);
+  //                     },
+  //             );
+  //           }
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+
+  @override
+  List<Widget>? getFloatingActionWidgetAddOns(BuildContext context) {
+    Widget? widget = getAddToListManualFloatingButton(context);
+    Widget? listSelect = getAddToListFloatingButton(context);
+    return [
+      if (widget != null) widget,
+      if (widget != null) const SizedBox(width: kDefaultPadding),
+      if (listSelect != null) listSelect,
+      if (listSelect != null) const SizedBox(width: kDefaultPadding),
+      // if (getExtras().hasPermissionEdit(context))
+      //   getAddFloatingButton2(context),
+    ];
+  }
+
+  FloatingActionButton getDeleteFloatingButton(BuildContext context) {
+    return FloatingActionButton.small(
+      heroTag: UniqueKey(),
+      onPressed: () {
+        Dialogs.materialDialog(
+          customViewPosition: CustomViewPosition.BEFORE_TITLE,
+          msgAlign: TextAlign.end,
+          // dialogWidth: kIsWeb || isDesktop(context) ? 0.3 : null,
+          color: Theme.of(context).colorScheme.surface,
+          msg: getExtras().getBaseMessage(context),
+          title: getExtras().getBaseTitle(context),
+          context: context,
+          onClose: (value) {
+            if (value != null) {
+              context.read<ListMultiKeyProvider>().delete(getExtras());
+            }
+          },
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(AppLocalizations.of(context)!.cancel),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop("confirm");
+              },
+              child: Text(AppLocalizations.of(context)!.delete),
+            ),
+          ],
+        );
+      },
+      child: const Icon(Icons.delete),
+    );
+  }
+
+  FloatingActionButton? getAddToListManualFloatingButton(BuildContext context) {
+    if (getExtras() is! ListableInterface) return null;
+    ViewAbstract? value = getListableInterface().getListableAddFromManual(
+      context,
+    );
+    return FloatingActionButton.small(
+      heroTag: UniqueKey(),
+      onPressed: () async {
+        value = getListableInterface().getListableAddFromManual(context);
+        value!.setParent(getExtras());
+        await showFullScreenDialogExt<ViewAbstract?>(
+          anchorPoint: const Offset(1000, 1000),
+          context: context,
+          builder: (p0) {
+            return BaseEditDialog(
+              disableCheckEnableFromParent: true,
+              viewAbstract: value!,
+            );
+          },
+        ).then((value) {
+          {
+            if (value != null) {
+              getListableInterface().onListableAddFromManual(context, value);
+              // onListableSelectedItem.value = [];
+              // onEditListableItem.value = value;
+            }
+            debugPrint("getEditDialog result $value");
+          }
+        });
+      },
+      child: const Icon(Icons.post_add_rounded),
+
+      // child: AddFromListPopupIconWidget(
+      //   viewAbstract: getExtras(),
+      //   onSelected: (selectedList) {
+      //     getListableInterface()
+      //         .onListableSelectedListAdded(context, selectedList);
+      //     onListableSelectedItem.value = selectedList;
+      //     onEditListableItem.value = null;
+      //   },
+      // ),
+    );
+  }
+
+  Widget? getAddToListFloatingButton(BuildContext context) {
+    if (getExtras() is! ListableInterface) return null;
+    if (getListableInterface().getListablePickObject() == null) return null;
+    return FloatingActionButton.small(
+      heroTag: UniqueKey(),
+      onPressed: () async {
+        // await getSelectedItemsDialog(context);
+      },
+      child: const Icon(Icons.list),
+
+      // child: AddFromListPopupIconWidget(
+      //   viewAbstract: getExtras(),
+      //   onSelected: (selectedList) {
+      //     getListableInterface()
+      //         .onListableSelectedListAdded(context, selectedList);
+      //     onListableSelectedItem.value = selectedList;
+      //     onEditListableItem.value = null;
+      //   },
+      // ),
+    );
+  }
 
   @override
   Widget? getPaneDraggableExpandedHeader({
@@ -454,7 +725,15 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     } else {
       return [
         // getFormBuilderWidget()
-        SliverToBoxAdapter(child: Text("TODO LISTABLE")),
+        if (getExtrasCast().isListable() &&
+            getCurrentScreenSize() != CurrentScreenSize.MOBILE)
+          SliverToBoxAdapter(
+            child: getListableFormReactive(
+              _baseForm!,
+              wrapeWithExpansionTile: false,
+            ),
+          ),
+        // SliverToBoxAdapter(child: Text("TODO LISTABLE")),
       ];
     }
   }

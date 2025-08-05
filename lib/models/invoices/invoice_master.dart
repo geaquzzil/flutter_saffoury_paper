@@ -32,7 +32,6 @@ import 'package:flutter_view_controller/interfaces/web/category_gridable_interfa
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -45,7 +44,6 @@ import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/cards/card_background_with_title.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
-import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:intl/intl.dart';
@@ -53,7 +51,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:number_to_character/number_to_character.dart';
 import 'package:pdf/pdf.dart' as d;
 import 'package:pdf/widgets.dart' as pdf;
-import 'package:provider/provider.dart';
 
 import 'invoice_master_details.dart';
 import 'orders.dart';
@@ -104,7 +101,8 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
   void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
     super.onBeforeGenerateView(context);
     if (action == ServerActions.edit && isNew()) {
-      employees = context.read<AuthProvider<AuthUser>>().getUser as Employee?;
+      // Configurations.
+      employees = Employee().getSavedUser(context);
       status = InvoiceStatus.APPROVED;
     }
     terms = getTermsFromID(TermsID ?? -1);
@@ -1078,9 +1076,6 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
       );
     } else {}
   }
-
-
-
 
   @override
   Widget? getWebListTileItemSubtitle(BuildContext context) {

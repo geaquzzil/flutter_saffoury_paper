@@ -142,7 +142,7 @@ class CutRequest extends ViewAbstract<CutRequest>
   void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
     super.onBeforeGenerateView(context);
     if (action == ServerActions.edit && isNew()) {
-      employees = context.read<AuthProvider<AuthUser>>().getUser as Employee?;
+      employees = Employee().getSavedUser(context);
     }
   }
 

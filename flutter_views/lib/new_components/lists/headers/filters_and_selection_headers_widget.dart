@@ -121,11 +121,12 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
               onChange: onDoneSort,
             ),
             Spacer(),
-          
-            if (canTakeUpToFour&&!disableFiltering) _getAddButton(context),
-            
-            if (canTakeUpToFour&&!disableFiltering) _getRefreshWidget(context, listProvider, key),
-            if (canTakeUpToFour|| disableFiltering)
+
+            if (canTakeUpToFour && !disableFiltering) _getAddButton(context),
+
+            if (canTakeUpToFour && !disableFiltering)
+              _getRefreshWidget(context, listProvider, key),
+            if (canTakeUpToFour || disableFiltering)
               AnimatedScale(
                 duration: Duration(milliseconds: 200),
                 scale: listLength > 2 ? 1 : 0,
@@ -135,13 +136,13 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
                   state: secPaneNotifer,
                 ),
               ),
-            if (canTakeUpToFour|| disableFiltering)
+            if (canTakeUpToFour || disableFiltering)
               AnimatedScale(
                 duration: Duration(milliseconds: 200),
                 scale: listLength > 2 ? 1 : 0,
                 child: _getExportButton(context, listProvider, key),
               ),
-            if (postWidgets!=null) ...postWidgets!,
+            if (postWidgets != null) ...postWidgets!,
           ],
         ),
       ],
@@ -151,7 +152,10 @@ class FiltersAndSelectionListHeaderValueNotifier extends StatelessWidget {
   Widget _getAddButton(BuildContext context) {
     return IconButton(
       onPressed: () {
-        viewAbstract.onDrawerLeadingItemClicked(context);
+        viewAbstract.onDrawerLeadingItemClicked(
+          context,
+          secPaneNotifer: secPaneNotifer,
+        );
       },
       icon: const Icon(Icons.add),
     );

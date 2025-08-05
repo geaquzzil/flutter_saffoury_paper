@@ -121,7 +121,7 @@ class Configurations {
         "Configrations getting saved value for key =>$key  value $value");
     return value;
   }
-
+  // static Future<T?
   static Future<T?> get<T extends ViewAbstract>(T obj,
       {String? postKey, String? customKey}) async {
     String key = customKey ?? (obj.runtimeType.toString()) + (postKey ?? "");

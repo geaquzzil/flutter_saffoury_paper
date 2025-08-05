@@ -60,7 +60,7 @@ class CustomsDeclaration extends ViewAbstract<CustomsDeclaration>
     super.onBeforeGenerateView(context);
     if (action == ServerActions.edit && isNew()) {
       material.debugPrint("onBeforeGenerateView");
-      employees = context.read<AuthProvider<AuthUser>>().getUser as Employee?;
+      employees = Employee().getSavedUser(context);
     }
   }
 

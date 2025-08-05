@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/size_config.dart';
 
 class Globals {
   static GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  @Deprecated("use state.notify")
   static GlobalKey<ListToDetailsPageNewState> keyForLargeScreenListable =
       GlobalKey<ListToDetailsPageNewState>();
 

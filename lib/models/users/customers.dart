@@ -52,7 +52,7 @@ class Customer extends User<Customer> {
   void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
     super.onBeforeGenerateView(context);
     if (action == ServerActions.edit && isNew()) {
-      employees = context.read<AuthProvider<AuthUser>>().getUser as Employee?;
+      employees = Employee().getSavedUser(context);
     }
   }
 
@@ -68,16 +68,15 @@ class Customer extends User<Customer> {
 
   @override
   Map<String, dynamic> getMirrorFieldsMapNewInstance() =>
-      super.getMirrorFieldsMapNewInstance()
-        ..addAll({
-          "cash": 0,
-          "totalCredits": 0,
-          "totalDebits": 0,
-          "totalOrders": 0,
-          "totalPurchases": 0,
-          "balance": 0,
-          "employees": Employee(),
-        });
+      super.getMirrorFieldsMapNewInstance()..addAll({
+        "cash": 0,
+        "totalCredits": 0,
+        "totalDebits": 0,
+        "totalOrders": 0,
+        "totalPurchases": 0,
+        "balance": 0,
+        "employees": Employee(),
+      });
 
   @override
   IconData getMainIconData() {

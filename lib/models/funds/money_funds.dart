@@ -70,7 +70,7 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
   void onBeforeGenerateView(BuildContext context, {ServerActions? action}) {
     super.onBeforeGenerateView(context);
     if (action == ServerActions.edit && isNew()) {
-      employees = context.read<AuthProvider<AuthUser>>().getUser as Employee?;
+      employees = Employee().getSavedUser(context);
     }
   }
 
