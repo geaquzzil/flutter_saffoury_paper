@@ -205,7 +205,7 @@ class BaseFloatingActionButtons extends StatelessWidget {
       onPressed: () {
         viewAbstract.importPage(context, secondPaneHelper: base);
       },
-      child: const Icon(Icons.file_upload_outlined),
+      child: const Icon(Icons.file_download_outlined),
     );
   }
 
@@ -215,7 +215,7 @@ class BaseFloatingActionButtons extends StatelessWidget {
       onPressed: () {
         viewAbstract.exportPage(context, secondPaneHelper: base);
       },
-      child: const Icon(Icons.file_download_outlined),
+      child: const Icon(Icons.file_upload_outlined),
     );
   }
 }

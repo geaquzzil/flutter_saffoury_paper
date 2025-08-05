@@ -203,10 +203,9 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
   }
 
   @override
-  Widget? getFloatingActionButton({
+  Widget? getFloatingActionButtonPaneNotifier({
     bool? firstPane,
     TabControllerHelper? tab,
-    TabControllerHelper? secoundTab,
   }) {
     return null;
   }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
@@ -68,7 +70,7 @@ class _BaseDashboardMainPageState
   }
 
   @override
-  Widget? getFloatingActionButton({
+  Widget? getFloatingActionButtonPaneNotifier({
     bool? firstPane,
     TabControllerHelper? tab,
     TabControllerHelper? secoundTab,
@@ -332,7 +334,7 @@ class _BaseDashboardMainPageState
   bool setHorizontalDividerWhenTowPanes() => false;
 
   @override
-  Future? getOverrideCallApiFunction(
+  FutureOr? getOverrideCallApiFunction(
     BuildContext context, {
     TabControllerHelper? tab,
   }) {

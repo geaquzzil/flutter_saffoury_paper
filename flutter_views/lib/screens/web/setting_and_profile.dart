@@ -329,10 +329,9 @@ class _PrintSettingState extends BasePageState<PrintSetting>
   }
 
   @override
-  Widget? getFloatingActionButton({
+  Widget? getFloatingActionButtonPaneNotifier({
     bool? firstPane,
     TabControllerHelper? tab,
-    TabControllerHelper? secoundTab,
   }) {
     if (isSecPane(firstPane: firstPane)) {
       if (geSelectedValue() is BarcodeSetting ||
@@ -720,14 +719,14 @@ class FutureOrBuilder<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final futureOrValue = this.futureOrValue;
     if (futureOrValue is T) {
-      debugPrint("FutureBuild futureOrValue T");
+      debugPrint("FutureOrBuilder futureOrValue T");
       return builder(
         context,
         AsyncSnapshot.withData(ConnectionState.done, futureOrValue),
       );
     } else {
-      debugPrint("FutureBuild FutureBuilder");
-      return FutureBuilder(
+      debugPrint("FutureOrBuilder FutureBuilder");
+      return FutureBuilder<T>(
         future: futureOrValue,
         initialData: initialData,
         builder: builder,

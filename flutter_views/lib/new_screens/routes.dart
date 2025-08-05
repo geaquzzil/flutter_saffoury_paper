@@ -445,10 +445,7 @@ class RouteGenerator {
 
               return MaterialPage(
                 key: state.pageKey,
-                child: FileReaderPage(
-                  buildToolbar: true,
-                  viewAbstract: ex as ViewAbstract,
-                ),
+                child: FileReaderPage(extras: ex as ViewAbstract),
               );
             },
           ),
@@ -465,14 +462,14 @@ class RouteGenerator {
               if (type == FileExporterPageType.LIST.toString()) {
                 var ex = getRouterStateList(state, context);
                 w = FileExporterPage(
-                  viewAbstract: context
-                      .read<AuthProvider<AuthUser>>()
-                      .getNewInstance(state.pathParameters["tableName"]!)!,
+                  extras: context.read<AuthProvider<AuthUser>>().getNewInstance(
+                    state.pathParameters["tableName"]!,
+                  )!,
                   list: (ex as List).cast(),
                 );
               } else {
                 //todo get from api
-                w = FileExporterPage(viewAbstract: state.extra as ViewAbstract);
+                w = FileExporterPage(extras: state.extra as ViewAbstract);
               }
               return MaterialPage(key: state.pageKey, child: w);
             },
@@ -698,7 +695,7 @@ class RouteGenerator {
                 "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json",
               );
             } else if (args is ViewAbstract) {
-              return FileReaderPage(viewAbstract: args);
+              return FileReaderPage(extras: args);
             } else {
               return Lottie.network(
                 "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json",
@@ -714,7 +711,7 @@ class RouteGenerator {
                 "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json",
               );
             } else if (args is ViewAbstract) {
-              return FileExporterPage(viewAbstract: args);
+              return FileExporterPage(extras: args);
             } else {
               return Lottie.network(
                 "https://assets10.lottiefiles.com/packages/lf20_9sglud8f.json",

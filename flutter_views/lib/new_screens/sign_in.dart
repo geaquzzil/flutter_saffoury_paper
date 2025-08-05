@@ -49,7 +49,7 @@ class _SignInPageState extends BasePageState<SignInPage>
   }
 
   @override
-  Widget? getFloatingActionButton({bool? firstPane, TabControllerHelper? tab}) {
+  Widget? getFloatingActionButtonPaneNotifier({bool? firstPane, TabControllerHelper? tab}) {
     return null;
   }
 

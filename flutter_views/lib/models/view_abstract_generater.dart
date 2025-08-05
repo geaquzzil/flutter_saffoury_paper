@@ -211,6 +211,13 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     List<ViewAbstract>? asList,
     SecoundPaneHelperWithParentValueNotifier? secondPaneHelper,
   }) {
+    if (secondPaneHelper != null) {
+      secondPaneHelper.secPaneNotifier?.value = SecondPaneHelper(
+        object: this,
+        title: getIDWithLabel(context, action: ServerActions.file_export),
+        value: getExportPage(context, parent: secondPaneHelper, asList: asList),
+      );
+    }
     if (!setPaneToSecondOrThird(
       context,
       ListToDetailsSecoundPaneHelper(
@@ -220,7 +227,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
         ),
         action: ServerActions.custom_widget,
         customWidget: FileExporterPage(
-          viewAbstract: this as ViewAbstract,
+          extras: this as ViewAbstract,
           list: asList,
         ),
       ),
@@ -246,8 +253,12 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     BuildContext context, {
     SecoundPaneHelperWithParentValueNotifier? secondPaneHelper,
   }) {
-    if(secondPaneHelper!=null){
-      
+    if (secondPaneHelper != null) {
+      secondPaneHelper.secPaneNotifier?.value = SecondPaneHelper(
+        object: this,
+        title: getIDWithLabel(context, action: ServerActions.view),
+        value: getImportPage(context, parent: secondPaneHelper),
+      );
     }
     if (!setPaneToSecondOrThird(
       context,
@@ -257,7 +268,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
           action: ServerActions.custom_widget,
         ),
         action: ServerActions.custom_widget,
-        customWidget: FileReaderPage(viewAbstract: this as ViewAbstract),
+        customWidget: FileReaderPage(extras: this as ViewAbstract),
       ),
       tryToSetToSecoundPane: false,
     )) {
@@ -511,6 +522,38 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
       iD: -1,
       tableName: getTableNameApi(),
       isFirstToSecOrThirdPane: true,
+      onBuild: parent?.onBuild,
+      parent: parent?.parent,
+    );
+  }
+
+  Widget getExportPage(
+    BuildContext context, {
+    SecoundPaneHelperWithParentValueNotifier? parent,
+    List<ViewAbstract>? asList,
+  }) {
+    return FileExporterPage(
+      key: getKeyForWidget(context, ServerActions.file_import),
+      extras: this,
+      iD: iD,
+      list: asList,
+      // isFirstToSecOrThirdPane: tdrue,
+      tableName: getTableNameApi(),
+      onBuild: parent?.onBuild,
+      parent: parent?.parent,
+    );
+  }
+
+  Widget getImportPage(
+    BuildContext context, {
+    SecoundPaneHelperWithParentValueNotifier? parent,
+  }) {
+    return FileReaderPage(
+      key: getKeyForWidget(context, ServerActions.file_import),
+      extras: this,
+      iD: iD,
+      // isFirstToSecOrThirdPane: tdrue,
+      tableName: getTableNameApi(),
       onBuild: parent?.onBuild,
       parent: parent?.parent,
     );

@@ -66,7 +66,10 @@ class _SizeAnalyzerPageState extends BasePageState<SizeAnalyzerPage>
   }
 
   @override
-  Widget? getFloatingActionButton({bool? firstPane, TabControllerHelper? tab}) {
+  Widget? getFloatingActionButtonPaneNotifier({
+    bool? firstPane,
+    TabControllerHelper? tab,
+  }) {
     return null;
   }
 

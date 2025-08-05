@@ -15,6 +15,7 @@ import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
+import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:get/get.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -106,7 +107,7 @@ class _BaseDashboardState extends State<BaseDashboard>
       builder: (context, value, child) {
         widget.dashboard.setDate(value);
         init(context);
-        return FutureBuilder(
+        return FutureOrBuilder(
           future: viewAbstract.viewCall(context: context),
           builder: (context, snapshot) {
             try {

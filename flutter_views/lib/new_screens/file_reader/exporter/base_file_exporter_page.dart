@@ -1,9 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/file_rader_object_exporter_view_abstract.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 import 'file_raderl_list_object_exporter_view_abstract.dart';
@@ -13,17 +17,28 @@ enum PrintPageType { single, list, self_list }
 enum FileExporterPageType { LIST, SINGLE }
 
 ///TODO api if viewAbstract is null
-class FileExporterPage extends StatefulWidget {
-  ViewAbstract viewAbstract;
+class FileExporterPage extends BasePageApi {
   List<ViewAbstract>? list;
+  FileExporterPage({
+    super.key,
+    super.iD = -1,
+    super.extras,
+    super.tableName,
+    super.buildDrawer = false,
+    super.buildSecondPane = false,
+    super.isFirstToSecOrThirdPane,
+    super.parent,
 
-  FileExporterPage({super.key, required this.viewAbstract, this.list});
+    super.onBuild,
+    this.list,
+  });
 
   @override
   State<StatefulWidget> createState() => _FileExporterPage();
 }
 
-class _FileExporterPage extends State<FileExporterPage> {
+class _FileExporterPage extends BasePageStateWithApi<FileExporterPage>
+    with BasePageSecoundPaneNotifierState<FileExporterPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
   late FileExporterObject fileReaderObject;
   FileExporterObject? validatefileReaderObject;
@@ -33,9 +48,11 @@ class _FileExporterPage extends State<FileExporterPage> {
     super.initState();
     if (widget.list != null) {
       fileReaderObject = FileExporterListObject(
-          viewAbstract: widget.viewAbstract, list: widget.list!);
+        viewAbstract: getExtrasCast(),
+        list: widget.list!,
+      );
     } else {
-      fileReaderObject = FileExporterObject(viewAbstract: widget.viewAbstract);
+      fileReaderObject = FileExporterObject(viewAbstract: getExtrasCast());
     }
   }
 
@@ -146,7 +163,7 @@ class _FileExporterPage extends State<FileExporterPage> {
                   // }
                 },
                 viewAbstract: fileReaderObject,
-              )
+              ),
             ],
           ),
           // body:
@@ -165,8 +182,9 @@ class _FileExporterPage extends State<FileExporterPage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 return OutlinedButton(
-                    onPressed: () {},
-                    child: Text(AppLocalizations.of(context)!.ok));
+                  onPressed: () {},
+                  child: Text(AppLocalizations.of(context)!.ok),
+                );
               }
               return const Text("ERRRo");
             },
@@ -187,11 +205,15 @@ class _FileExporterPage extends State<FileExporterPage> {
       showBackButton: true,
       //rtl: true, // Display as right-to-left
       back: const Icon(Icons.arrow_back),
-      skip: Text(AppLocalizations.of(context)!.skip,
-          style: const TextStyle(fontWeight: FontWeight.w600)),
+      skip: Text(
+        AppLocalizations.of(context)!.skip,
+        style: const TextStyle(fontWeight: FontWeight.w600),
+      ),
       next: const Icon(Icons.arrow_forward),
-      done: Text(AppLocalizations.of(context)!.done,
-          style: const TextStyle(fontWeight: FontWeight.w600)),
+      done: Text(
+        AppLocalizations.of(context)!.done,
+        style: const TextStyle(fontWeight: FontWeight.w600),
+      ),
       curve: Curves.fastLinearToSlowEaseIn,
       controlsMargin: const EdgeInsets.all(16),
       controlsPadding: kIsWeb
@@ -203,9 +225,7 @@ class _FileExporterPage extends State<FileExporterPage> {
         activeColor: Theme.of(context).colorScheme.primary,
         activeSize: const Size(22.0, 10.0),
         activeShape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(25.0),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(25.0)),
         ),
       ),
       dotsContainerDecorator: const ShapeDecoration(
@@ -216,4 +236,66 @@ class _FileExporterPage extends State<FileExporterPage> {
       ),
     );
   }
+
+  @override
+  Widget? getAppbarTitle({bool? firstPane, TabControllerHelper? tab}) => null;
+  @override
+  Widget? getFloatingActionButtonPaneNotifier({
+    bool? firstPane,
+    TabControllerHelper? tab,
+  }) => null;
+
+  @override
+  Future? getOverrideCallApiFunction(
+    BuildContext context, {
+    TabControllerHelper? tab,
+  }) => Future.value(getExtras());
+
+  @override
+  Widget? getPaneDraggableExpandedHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) => null;
+
+  @override
+  Widget? getPaneDraggableHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) => null;
+
+  @override
+  Future<void>? getPaneIsRefreshIndicator({required bool firstPane}) => null;
+
+  @override
+  List<Widget>? getPaneNotifier({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+    SecondPaneHelper? valueNotifier,
+  }) {
+    // TODO: implement getPaneNotifier
+    throw UnimplementedError();
+  }
+
+  @override
+  ServerActions getServerActions() => ServerActions.file_import;
+
+  @override
+  bool isPaneScaffoldOverlayColord(bool firstPane) => false;
+
+  @override
+  //TODO translate
+  String onActionInitial() => "IMPORT";
+
+  @override
+  bool setClipRect(bool? firstPane) => false;
+
+  @override
+  bool setHorizontalDividerWhenTowPanes() => false;
+
+  @override
+  bool setMainPageSuggestionPadding() => true;
+
+  @override
+  bool setPaneBodyPaddingHorizontal(bool firstPane) => true;
 }

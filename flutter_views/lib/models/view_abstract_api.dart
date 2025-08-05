@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
 import 'dart:collection';
 import 'dart:convert' as convert;
 import 'dart:convert';
@@ -193,8 +194,9 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return url;
   }
 
-  bool shouldGetFromApi(ServerActions action,dynamic lastObject) {
-    return _checkListToRequest(action) != false || shouldGetFromApiViewCall(lastObject);
+  bool shouldGetFromApi(ServerActions action, dynamic lastObject) {
+    return _checkListToRequest(action) != false ||
+        shouldGetFromApiViewCall(lastObject);
   }
 
   dynamic _checkListToRequest(ServerActions action) {
@@ -345,7 +347,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
     return false;
   }
 
-  Future<T?> viewCall({
+  FutureOr<T?> viewCall({
     required BuildContext context,
     int? customID,
     OnResponseCallback? onResponse,
@@ -361,7 +363,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
         if (isRequireList == false && !isNew()) {
           if (!shouldGetFromApiViewCall(lastObject)) {
             debugPrint("viewCall $T returning this");
-            return this as T;
+            return this as T?;
           }
         }
       }

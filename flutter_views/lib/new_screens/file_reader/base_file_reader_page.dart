@@ -3,31 +3,41 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/interfaces/excelable_reader_interface.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
+import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/file_rader_object_view_abstract.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 import '../../models/view_abstract.dart';
 import 'file_reader_validation.dart';
 
-class FileReaderPage extends StatefulWidget {
-  ViewAbstract viewAbstract;
+class FileReaderPage extends BasePageApi {
   Function(List<ViewAbstract>?)? onValidatedList;
   Function(List<ViewAbstract>?)? onDone;
-  bool buildToolbar;
-  FileReaderPage(
-      {super.key,
-      required this.viewAbstract,
-      this.onValidatedList,
-      this.buildToolbar = false,
-      this.onDone});
+  FileReaderPage({
+    super.key,
+    super.iD = -1,
+    super.extras,
+    super.tableName,
+    super.buildDrawer = false,
+    super.buildSecondPane = false,
+    super.isFirstToSecOrThirdPane,
+    super.parent,
+    super.onBuild,
+    this.onValidatedList,
+    this.onDone,
+  });
 
   @override
   State<StatefulWidget> createState() => _FileReaderPageState();
 }
 
-class _FileReaderPageState extends State<FileReaderPage> {
+class _FileReaderPageState extends BasePageStateWithApi<FileReaderPage>
+    with BasePageSecoundPaneNotifierState<FileReaderPage> {
   // final introKey = GlobalKey<IntroductionScreenState>();
   String? _filePath;
   late FileReaderObject fileReaderObject;
@@ -38,19 +48,21 @@ class _FileReaderPageState extends State<FileReaderPage> {
   GlobalKey<FileReaderValidationWidgetState> validateFileReaderState =
       GlobalKey<FileReaderValidationWidgetState>();
 
-  ValueNotifier<FileReaderObject?> valueNotifier =
+  ValueNotifier<FileReaderObject?> valueNotifierFileReader =
       ValueNotifier<FileReaderObject?>(null);
 
   bool isCustom() {
-    return widget.viewAbstract is ExcelableReaderInteraceCustom;
+    return getExtras() is ExcelableReaderInteraceCustom;
   }
 
   @override
   void initState() {
     super.initState();
-    _addOnPageViewModel = widget.viewAbstract is ExcelableReaderInteraceCustom
-        ? (widget.viewAbstract as ExcelableReaderInteraceCustom)
-            .getExceableAddOnList(context, fileReaderObject)
+    _addOnPageViewModel = getExtras() is ExcelableReaderInteraceCustom
+        ? (getExtras() as ExcelableReaderInteraceCustom).getExceableAddOnList(
+            context,
+            fileReaderObject,
+          )
         : [];
   }
 
@@ -62,11 +74,14 @@ class _FileReaderPageState extends State<FileReaderPage> {
 
   void _onIntroEnd(context) {
     if (widget.onDone != null) {
-      widget.onDone
-          ?.call(validateFileReaderState.currentState?.getListGeneratedList());
+      widget.onDone?.call(
+        validateFileReaderState.currentState?.getListGeneratedList(),
+      );
     } else {
-      Navigator.pop(context,
-          validateFileReaderState.currentState?.getListGeneratedList());
+      Navigator.pop(
+        context,
+        validateFileReaderState.currentState?.getListGeneratedList(),
+      );
     }
   }
 
@@ -87,10 +102,7 @@ class _FileReaderPageState extends State<FileReaderPage> {
   void pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: [
-        'xls',
-        'xlsx',
-      ],
+      allowedExtensions: ['xls', 'xlsx'],
     );
 
     if (result != null) {
@@ -99,7 +111,9 @@ class _FileReaderPageState extends State<FileReaderPage> {
       setState(() {
         _filePath = path;
         fileReaderObject = FileReaderObject(
-            viewAbstract: widget.viewAbstract, filePath: _filePath!);
+          viewAbstract: getExtrasCast(),
+          filePath: _filePath!,
+        );
         fileReaderObject.init(context);
       });
 
@@ -111,9 +125,47 @@ class _FileReaderPageState extends State<FileReaderPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    const bodyStyle = TextStyle(fontSize: 19.0);
+  Widget? getAppbarTitle({bool? firstPane, TabControllerHelper? tab}) {
+    return null;
+  }
 
+  @override
+  Widget? getFloatingActionButtonPaneNotifier({
+    bool? firstPane,
+    TabControllerHelper? tab,
+  }) => null;
+
+  @override
+  Future? getOverrideCallApiFunction(
+    BuildContext context, {
+    TabControllerHelper? tab,
+  }) {
+    return Future.value(getExtras());
+  }
+
+  @override
+  Widget? getPaneDraggableExpandedHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) => null;
+
+  @override
+  Widget? getPaneDraggableHeader({
+    required bool firstPane,
+    TabControllerHelper? tab,
+  }) => null;
+
+  @override
+  Future<void>? getPaneIsRefreshIndicator({required bool firstPane}) => null;
+
+  @override
+  List<Widget>? getPaneNotifier({
+    required bool firstPane,
+    ScrollController? controler,
+    TabControllerHelper? tab,
+    SecondPaneHelper? valueNotifier,
+  }) {
+    const bodyStyle = TextStyle(fontSize: 19.0);
     var pageDecoration = PageDecoration(
       titleTextStyle: Theme.of(context).textTheme.titleLarge!,
       bodyTextStyle: Theme.of(context).textTheme.bodyLarge!,
@@ -121,72 +173,69 @@ class _FileReaderPageState extends State<FileReaderPage> {
       // pageColor: Colors.white,
       imagePadding: EdgeInsets.zero,
     );
-    return Scaffold(
-      appBar: widget.buildToolbar
-          ? AppBar(
-              title: Text(AppLocalizations.of(context)!.improterInfo),
-            )
-          : null,
-      body: IntroductionScreen(
-        // key: introKey,
+    return [
+      SliverFillRemaining(
+        child: IntroductionScreen(
+          // key: introKey,
+          canProgress: (page) {
+            debugPrint("canProgress page=>$page ");
+            int currentPage = page.round();
+            if (currentPage == 0) {
+              return _filePath != null;
+            } else if (currentPage == 1) {
+              var ob =
+                  baseEditKey?.currentState?.validateFormGetViewAbstract()
+                      as FileReaderObject?;
+              valueNotifierFileReader.value = ob;
+              // if (validatefileReaderObject != null) {
+              //   setState(() {
+              //     _addOnPageViewModel =
+              //         widget.viewAbstract is ExcelableReaderInteraceCustom
+              //             ? (widget.viewAbstract as ExcelableReaderInteraceCustom)
+              //                 .getExceableAddOnList(context, fileReaderObject)
+              //             : [];
+              //   });
+              // }
+              // return validatefileReaderObject != null;
+              return ob != null;
+            }
+            return true;
+          },
+          onSkip: () {},
+          onChange: (value) {
+            debugPrint("onChange $value");
+          },
 
-        canProgress: (page) {
-          debugPrint("canProgress page=>$page ");
-          int currentPage = page.round();
-          if (currentPage == 0) {
-            return _filePath != null;
-          } else if (currentPage == 1) {
-            var ob = baseEditKey?.currentState?.validateFormGetViewAbstract()
-                as FileReaderObject?;
-            valueNotifier.value = ob;
-            // if (validatefileReaderObject != null) {
-            //   setState(() {
-            //     _addOnPageViewModel =
-            //         widget.viewAbstract is ExcelableReaderInteraceCustom
-            //             ? (widget.viewAbstract as ExcelableReaderInteraceCustom)
-            //                 .getExceableAddOnList(context, fileReaderObject)
-            //             : [];
-            //   });
-            // }
-            // return validatefileReaderObject != null;
-            return ob != null;
-          }
-          return true;
-        },
-        onSkip: () {},
-        onChange: (value) {
-          debugPrint("onChange $value");
-        },
-
-        // globalBackgroundColor: Colors.white,
-        // autoScrollDuration: 3000,
-        globalHeader: Align(
-          alignment: Alignment.topRight,
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 16, right: 16),
-              child: _buildImage(Icons.flutter_dash, 40),
+          // globalBackgroundColor: Colors.white,
+          // autoScrollDuration: 3000,
+          globalHeader: Align(
+            alignment: Alignment.topRight,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16, right: 16),
+                child: _buildImage(Icons.flutter_dash, 40),
+              ),
             ),
           ),
-        ),
-        // globalFooter: SizedBox(
-        //   width: double.infinity,
-        //   height: 60,
-        //   child: ElevatedButton(
-        //     child: const Text(
-        //       'Let\'s go right away!',
-        //       style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-        //     ),
-        //     onPressed: () => _onIntroEnd(context),
-        //   ),
-        // ),
-        pages: [
-          PageViewModel(
+          // globalFooter: SizedBox(
+          //   width: double.infinity,
+          //   height: 60,
+          //   child: ElevatedButton(
+          //     child: const Text(
+          //       'Let\'s go right away!',
+          //       style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          //     ),
+          //     onPressed: () => _onIntroEnd(context),
+          //   ),
+          // ),
+          pages: [
+            PageViewModel(
               // useRowInLandscape: true,
               // useScrollView: true,
               titleWidget: const Center(child: Text("Import file")),
               bodyWidget: const Center(
-                  child: Text("Let's go right away! and import the file\n")),
+                child: Text("Let's go right away! and import the file\n"),
+              ),
               image: Center(child: _buildImage(Icons.file_copy, 200)),
               decoration: pageDecoration,
               footer: Column(
@@ -205,140 +254,169 @@ class _FileReaderPageState extends State<FileReaderPage> {
                     Text(
                       _filePath!,
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Theme.of(context).colorScheme.tertiary),
-                    )
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                    ),
                 ],
-              )),
-          PageViewModel(
-            //TODO Translate
-
-            title: AppLocalizations.of(context)!
-                .selectFormat(AppLocalizations.of(context)!.companyLogo),
-
-            bodyWidget: Column(
-              children: [
-                const Text("SOSO"),
-                if (_filePath != null)
-                  BaseEditWidget(
-                    key: baseEditKey,
-                    isTheFirst: true,
-                    viewAbstract: fileReaderObject,
-                  )
-              ],
-            ),
-            // body:
-            //     "Download the Stockpile app and master the market with our mini-lesson.",
-            // image: _buildImage(Icons.abc_sharp, 50),
-            decoration: pageDecoration,
-          ),
-
-          // if (isCustom()) ..._addOnPageViewModel,
-
-          if (!isCustom())
-            PageViewModel(
-              title: AppLocalizations.of(context)!.validating,
-              bodyWidget: ValueListenableBuilder(
-                valueListenable: valueNotifier,
-                builder: (context, value, child) {
-                  return value == null
-                      ? Text(AppLocalizations.of(context)!.errorUnknown)
-                      : FileReaderValidationWidget(
-                          useTableView: false,
-                          key: validateFileReaderState,
-                          fileReaderObject: value);
-                },
               ),
-            )
+            ),
+            PageViewModel(
+              //TODO Translate
+              title: AppLocalizations.of(
+                context,
+              )!.selectFormat(AppLocalizations.of(context)!.companyLogo),
 
-          //     // image: _buildImage(Icons.access_time),
-          //     decoration: pageDecoration,
-          //   ),
-          // if (!isCustom())
-          //   PageViewModel(
-          //     title: "Full Screen Page",
-          //     body:
-          //         "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
-          //     // image: _buildFullscreenImage(),
-          //     decoration: pageDecoration.copyWith(
-          //       contentMargin: const EdgeInsets.symmetric(horizontal: 16),
-          //       fullScreen: true,
-          //       bodyFlex: 2,
-          //       imageFlex: 3,
-          //     ),
-          //   ),
-          // if (!isCustom())
-          //   PageViewModel(
-          //     title: "Another title page",
-          //     body: "Another beautiful body text for this example onboarding",
-          //     image: _buildImage(Icons.sos),
-          //     footer: ElevatedButton(
-          //       onPressed: () {
-          //         introKey.currentState?.animateScroll(0);
-          //       },
-          //       child: const Text(
-          //         'FooButton',
-          //         // style: TextStyle(color: Colors.white),
-          //       ),
-          //     ),
-          //     decoration: pageDecoration,
-          //   ),
-          // if (!isCustom())
-          //   PageViewModel(
-          //     title: "Title of last page - reversed",
-          //     bodyWidget: const Row(
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       children: [
-          //         Text("Click on ", style: bodyStyle),
-          //         Icon(Icons.edit),
-          //         Text(" to edit a post", style: bodyStyle),
-          //       ],
-          //     ),
-          //     decoration: pageDecoration.copyWith(
-          //       bodyFlex: 2,
-          //       imageFlex: 4,
-          //       bodyAlignment: Alignment.bottomCenter,
-          //       imageAlignment: Alignment.topCenter,
-          //     ),
-          //     image: _buildImage(Icons.face),
-          //     reverse: true,
-          //   ),
-        ],
-        onDone: () => _onIntroEnd(context),
-        //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
-        showSkipButton: false,
+              bodyWidget: Column(
+                children: [
+                  const Text("SOSO"),
+                  if (_filePath != null)
+                    BaseEditWidget(
+                      key: baseEditKey,
+                      isTheFirst: true,
+                      viewAbstract: fileReaderObject,
+                    ),
+                ],
+              ),
+              // body:
+              //     "Download the Stockpile app and master the market with our mini-lesson.",
+              // image: _buildImage(Icons.abc_sharp, 50),
+              decoration: pageDecoration,
+            ),
 
-        skipOrBackFlex: 0,
-        nextFlex: 0,
-        showBackButton: true,
+            // if (isCustom()) ..._addOnPageViewModel,
+            if (!isCustom())
+              PageViewModel(
+                title: AppLocalizations.of(context)!.validating,
+                bodyWidget: ValueListenableBuilder(
+                  valueListenable: valueNotifierFileReader,
+                  builder: (context, value, child) {
+                    return value == null
+                        ? Text(AppLocalizations.of(context)!.errorUnknown)
+                        : FileReaderValidationWidget(
+                            useTableView: false,
+                            key: validateFileReaderState,
+                            fileReaderObject: value,
+                          );
+                  },
+                ),
+              ),
 
-        //rtl: true, // Display as right-to-left
-        back: const Icon(Icons.arrow_back),
-        skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
-        next: const Icon(Icons.arrow_forward),
-        done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
-        curve: Curves.fastLinearToSlowEaseIn,
-        controlsMargin: const EdgeInsets.all(16),
-        controlsPadding: kIsWeb
-            ? const EdgeInsets.all(12.0)
-            : const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-        dotsDecorator: DotsDecorator(
-          size: const Size(10.0, 10.0),
-          color: Theme.of(context).colorScheme.onSurface,
-          activeColor: Theme.of(context).colorScheme.primary,
-          activeSize: const Size(22.0, 10.0),
-          activeShape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(25.0),
+            //     // image: _buildImage(Icons.access_time),
+            //     decoration: pageDecoration,
+            //   ),
+            // if (!isCustom())
+            //   PageViewModel(
+            //     title: "Full Screen Page",
+            //     body:
+            //         "Pages can be full screen as well.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id euismod lectus, non tempor felis. Nam rutrum rhoncus est ac venenatis.",
+            //     // image: _buildFullscreenImage(),
+            //     decoration: pageDecoration.copyWith(
+            //       contentMargin: const EdgeInsets.symmetric(horizontal: 16),
+            //       fullScreen: true,
+            //       bodyFlex: 2,
+            //       imageFlex: 3,
+            //     ),
+            //   ),
+            // if (!isCustom())
+            //   PageViewModel(
+            //     title: "Another title page",
+            //     body: "Another beautiful body text for this example onboarding",
+            //     image: _buildImage(Icons.sos),
+            //     footer: ElevatedButton(
+            //       onPressed: () {
+            //         introKey.currentState?.animateScroll(0);
+            //       },
+            //       child: const Text(
+            //         'FooButton',
+            //         // style: TextStyle(color: Colors.white),
+            //       ),
+            //     ),
+            //     decoration: pageDecoration,
+            //   ),
+            // if (!isCustom())
+            //   PageViewModel(
+            //     title: "Title of last page - reversed",
+            //     bodyWidget: const Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         Text("Click on ", style: bodyStyle),
+            //         Icon(Icons.edit),
+            //         Text(" to edit a post", style: bodyStyle),
+            //       ],
+            //     ),
+            //     decoration: pageDecoration.copyWith(
+            //       bodyFlex: 2,
+            //       imageFlex: 4,
+            //       bodyAlignment: Alignment.bottomCenter,
+            //       imageAlignment: Alignment.topCenter,
+            //     ),
+            //     image: _buildImage(Icons.face),
+            //     reverse: true,
+            //   ),
+          ],
+          onDone: () => _onIntroEnd(context),
+          //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
+          showSkipButton: false,
+
+          skipOrBackFlex: 0,
+          nextFlex: 0,
+          showBackButton: true,
+
+          //rtl: true, // Display as right-to-left
+          back: const Icon(Icons.arrow_back),
+          skip: const Text(
+            'Skip',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          next: const Icon(Icons.arrow_forward),
+          done: const Text(
+            'Done',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          curve: Curves.fastLinearToSlowEaseIn,
+          controlsMargin: const EdgeInsets.all(16),
+          controlsPadding: kIsWeb
+              ? const EdgeInsets.all(12.0)
+              : const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+          dotsDecorator: DotsDecorator(
+            size: const Size(10.0, 10.0),
+            color: Theme.of(context).colorScheme.onSurface,
+            activeColor: Theme.of(context).colorScheme.primary,
+            activeSize: const Size(22.0, 10.0),
+            activeShape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(25.0)),
             ),
           ),
-        ),
-        dotsContainerDecorator: const ShapeDecoration(
-          // color: Colors.black87,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          dotsContainerDecorator: const ShapeDecoration(
+            // color: Colors.black87,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            ),
           ),
         ),
       ),
-    );
+    ];
   }
+
+  @override
+  ServerActions getServerActions() => ServerActions.file_import;
+
+  @override
+  bool isPaneScaffoldOverlayColord(bool firstPane) => false;
+
+  @override
+  //TODO translate
+  String onActionInitial() => "IMPORT";
+
+  @override
+  bool setClipRect(bool? firstPane) => false;
+
+  @override
+  bool setHorizontalDividerWhenTowPanes() => false;
+
+  @override
+  bool setMainPageSuggestionPadding() => true;
+
+  @override
+  bool setPaneBodyPaddingHorizontal(bool firstPane) => true;
 }

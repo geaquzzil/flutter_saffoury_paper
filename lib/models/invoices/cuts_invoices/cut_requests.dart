@@ -25,8 +25,6 @@ import 'package:flutter_view_controller/interfaces/web/category_gridable_interfa
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/apis/changes_records.dart';
 import 'package:flutter_view_controller/models/apis/chart_records.dart';
-import 'package:flutter_view_controller/models/auto_rest.dart';
-import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
@@ -37,17 +35,14 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
-import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/controllers/ext.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
-import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pdf/pdf.dart' as pdf2;
 import 'package:pdf/widgets.dart' as pdf;
-import 'package:provider/provider.dart';
 
 part 'cut_requests.g.dart';
 
@@ -217,6 +212,9 @@ class CutRequest extends ViewAbstract<CutRequest>
 
   @override
   List<String>? getRequestedForginListOnCall({required ServerActions action}) {
+    if (action == ServerActions.list) {
+      return null;
+    }
     return ["cut_request_results", "sizes_cut_requests"];
   }
 

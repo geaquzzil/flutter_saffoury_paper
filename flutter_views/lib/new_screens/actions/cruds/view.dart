@@ -6,12 +6,10 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_popup_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_card_item.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
-import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -132,7 +130,7 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
   }
 
   @override
-  List<TabControllerHelper>? getPaneTabControllerHelper({
+  List<TabControllerHelper>? getPaneTabControllerHelperPaneNotifier({
     required bool firstPane,
   }) {
     // return null;
@@ -145,7 +143,7 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
       }
       return null;
     }
-    return super.getPaneTabControllerHelper(firstPane: firstPane);
+    return super.getPaneTabControllerHelperPaneNotifier(firstPane: firstPane);
   }
 
   @override
@@ -153,13 +151,16 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
     if (firstPane == true) {
       return [
         ActionsOnHeaderWidget(
+          base: getSecoundPaneHelper(),
           viewAbstract: getExtras(),
           serverActions: getServerActions(),
         ),
-        ActionsOnHeaderPopupWidget(
-          viewAbstract: getExtras(),
-          serverActions: getServerActions(),
-        ),
+        //TODO
+        // ActionsOnHeaderPopupWidget(
+
+        //   viewAbstract: getExtras(),
+        //   serverActions: getServerActions(),
+        // ),
       ];
     }
     return null;
@@ -181,16 +182,15 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
       );
     }
     if (firstPane == false) {
-      return Text(getAppLocal(context)!.details);
+      return Text(getSecPaneTitle());
     }
     return Text("dsadas");
   }
 
   @override
-  Widget? getFloatingActionButton({
+  Widget? getFloatingActionButtonPaneNotifier({
     bool? firstPane,
     TabControllerHelper? tab,
-    TabControllerHelper? secoundTab,
   }) {
     // if (isSecPane(firstPane: firstPane)) {
     //   if (geSelectedValue() is BarcodeSetting ||
@@ -273,7 +273,7 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
           child: getExtrasCast().getImageWithRoundedCorner(
             context,
             // size: getHeight * .25,
-            withAspectRatio: 1/1
+            withAspectRatio: 1 / 1,
           ),
         ),
         SliverList(
@@ -334,16 +334,8 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
   }
 
   @override
-  Future getOverrideCallApiFunction(
-    BuildContext context, {
-    TabControllerHelper? tab,
-  }) {
-    return (getExtrasCast()).viewCall(customID: getID, context: context)
-        as Future<ViewAbstract?>;
-  }
-
-  @override
   ServerActions getServerActions() {
     return ServerActions.view;
   }
+  
 }

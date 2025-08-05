@@ -31,6 +31,7 @@ import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dar
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
+import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile_new.dart';
 import 'package:flutter_view_controller/screens/web/web_shoping_cart.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -439,6 +440,62 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
     SecondPaneHelper? valueNotifier,
   });
 
+  String getSecPaneTitle() {
+    return _lastSecondPaneItem?.title ??
+        AppLocalizations.of(context)?.details ??
+        "";
+  }
+
+  Widget? getFloatingActionButtonPaneNotifier({
+    bool? firstPane,
+    TabControllerHelper? tab,
+  });
+  List<TabControllerHelper>? getPaneTabControllerHelperPaneNotifier({
+    required bool firstPane,
+  }) {
+    return null;
+  }
+
+  @override
+  List<TabControllerHelper>? getPaneTabControllerHelper({
+    required bool firstPane,
+  }) {
+    if (!firstPane) {
+      debugPrint(
+        " getPaneTabControllerHelper  _lastSecondPaneItem ==null: $T ${_lastSecondPaneItem == null}",
+      );
+      if (_lastSecondPaneItem == null) {
+        return getPaneTabControllerHelperPaneNotifier(firstPane: firstPane);
+      }
+      return null;
+    }
+    return getPaneTabControllerHelperPaneNotifier(firstPane: firstPane);
+  }
+
+  // @override
+  // PreferredSizeWidget? getTabBarWidget() {
+  //   debugPrint(
+  //     " getTabBarWidget  _lastSecondPaneItem ==null: ${_lastSecondPaneItem == null}",
+  //   );
+  //   if (_lastSecondPaneItem == null) {
+  //     return super.getTabBarWidget();
+  //   } else {
+  //     return null;
+  //   }
+  // }
+
+  // @override
+  // Widget getMainPanIfHasTabBarList() {
+  //   debugPrint(
+  //     " getMainPanIfHasTabBarList  _lastSecondPaneItem ==null: ${_lastSecondPaneItem == null}",
+  //   );
+  //   if (_lastSecondPaneItem == null) {
+  //     return super.getMainPanIfHasTabBarList();
+  //   } else {
+  //     return getMainPanes();
+  //   }
+  // }
+
   void notify(SecondPaneHelper? item) {
     debugPrint("notify");
     _onSecoundPaneChanged.value = item;
@@ -481,6 +538,31 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
       parent: this,
       secPaneNotifier: getSecondPaneNotifier,
     );
+  }
+
+  @override
+  Widget? getFloatingActionButton({bool? firstPane, TabControllerHelper? tab}) {
+    Widget? floating = getFloatingActionButtonPaneNotifier(
+      firstPane: firstPane,
+      tab: tab,
+    );
+    if (floating == null) return null;
+    if (firstPane == false) {
+      return ValueListenableBuilder(
+        valueListenable: _onSecoundPaneChanged,
+        builder: (context, value, child) {
+          bool hide = value?.value == null
+              ? false
+              : value?.value is BasePage || value?.value is ViewAbstract;
+          return AnimatedScale(
+            duration: Durations.medium1,
+            scale: hide ? 0 : 1,
+            child: floating,
+          );
+        },
+      );
+    }
+    return floating;
   }
 
   @override
@@ -1314,6 +1396,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     bool isEmpty = forceDisabledActions() || actions?.isEmpty == true;
     if (actions == null && title == null) return null;
     return AppBar(
+      // bottomOpacity: 0,
       surfaceTintColor: Colors.transparent,
       // elevation: 10,
       // toolbarHeight: 100,
@@ -2233,14 +2316,18 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     super.didUpdateWidget(oldWidget);
   }
 
-  Future<dynamic>? getOverrideCallApiFunction(
+  FutureOr<dynamic>? getOverrideCallApiFunction(
+
     BuildContext context, {
     TabControllerHelper? tab,
-  });
+  }){
+    return null;
+  }
   ServerActions getServerActions();
-  ListableInterface getListableInterface(){
+  ListableInterface getListableInterface() {
     return getExtras() as ListableInterface;
   }
+
   dynamic getExtras({TabControllerHelper? tab}) {
     if (_hasTabBarList()) {
       if (tab != null) {
@@ -2427,14 +2514,14 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
       initStateAfterApiCalled();
       return super.getMainPanes(baseTap: baseTap);
     }
-    return FutureBuilder<dynamic>(
-      future:
-          getOverrideCallApiFunction(context, tab: baseTap) ??
+    return FutureBuilder(
+      future: Future.value(
+          // getOverrideCallApiFunction(context, tab: baseTap) ??
           getExtrasCast(tab: baseTap).viewCall(
             context: context,
             customID: getID,
             lastObject: getLastExtras,
-          ),
+          )),
       builder: (context, snapshot) {
         _connectionState.value =
             overrideConnectionState(BasePageWithApiConnection.future) ??

@@ -77,7 +77,7 @@ class _ListToDetailsSecoundPaneNotifierState
   Widget? getAppbarTitle({bool? firstPane, TabControllerHelper? tab}) => null;
 
   @override
-  Widget? getFloatingActionButton({
+  Widget? getFloatingActionButtonPaneNotifier({
     bool? firstPane,
     TabControllerHelper? tab,
   }) => null;

@@ -35,7 +35,7 @@ class FileReaderPopupIconWidget extends StatelessWidget {
         child: SizedBox(
           width: MediaQuery.of(context).size.width * .3,
           height: MediaQuery.of(context).size.height * .85,
-          child: FileReaderPage(viewAbstract: viewAbstract),
+          child: FileReaderPage(extras: viewAbstract),
         ),
       ),
     ),

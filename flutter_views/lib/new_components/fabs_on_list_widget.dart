@@ -30,8 +30,11 @@ class FabsOnListWidget extends StatefulWidget {
   String customKey;
   ListMultiKeyProvider listProvider;
 
-  FabsOnListWidget(
-      {super.key, required this.listProvider, required this.customKey});
+  FabsOnListWidget({
+    super.key,
+    required this.listProvider,
+    required this.customKey,
+  });
 
   @override
   State<FabsOnListWidget> createState() => FabsOnListWidgetState();
@@ -50,25 +53,27 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    drawerViewAbstractObsever =
-        Provider.of<DrawerMenuControllerProvider>(context, listen: false);
+    drawerViewAbstractObsever = Provider.of<DrawerMenuControllerProvider>(
+      context,
+      listen: false,
+    );
     Widget? printButton =
         (context.watch<ListMultiKeyProvider>().getList(findCustomKey()).length >
-                2)
-            ? getPrintWidget(context)
-            : null;
+            2)
+        ? getPrintWidget(context)
+        : null;
 
     Widget? filterButton =
         (context.watch<ListMultiKeyProvider>().getList(findCustomKey()).length >
-                2)
-            ? getFilterWidget(context)
-            : null;
+            2)
+        ? getFilterWidget(context)
+        : null;
 
     Widget? exportButton =
         (context.watch<ListMultiKeyProvider>().getList(findCustomKey()).length >
-                2)
-            ? getExportButton(context)
-            : null;
+            2)
+        ? getExportButton(context)
+        : null;
 
     return SpeedDial(
       icon: Icons.add,
@@ -80,10 +85,13 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
       spaceBetweenChildren: 4,
 
       buttonSize: const Size(
-          56.0, 56.0), // it's the SpeedDial size which defaults to 56 itself
+        56.0,
+        56.0,
+      ), // it's the SpeedDial size which defaults to 56 itself
       // iconTheme: IconThemeData(size: 22),
-      label:
-          extend ? const Text("Open") : null, // The label of the main button.
+      label: extend
+          ? const Text("Open")
+          : null, // The label of the main button.
       /// The active label of the main button, Defaults to label if not specified.
       activeLabel: extend ? const Text("Close") : null,
       tooltip: 'Open Speed Dial',
@@ -109,7 +117,8 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
           label: 'Show Snackbar',
           visible: true,
           onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text(("Third Child Pressed")))),
+            const SnackBar(content: Text(("Third Child Pressed"))),
+          ),
           onLongPress: () => debugPrint('THIRD CHILD LONG PRESS'),
         ),
       ],
@@ -197,24 +206,29 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
 
   void _refresh() {
     widget.listProvider.refresh(
-        findCustomKey(), drawerViewAbstractObsever.getObjectCastViewAbstract,
-        context: context);
+      findCustomKey(),
+      drawerViewAbstractObsever.getObjectCastViewAbstract,
+      context: context,
+    );
   }
 
   Widget getRefreshWidget() => IconButton(
-      onPressed: () {
-        _refresh();
-      },
-      icon: const Icon(Icons.refresh));
+    onPressed: () {
+      _refresh();
+    },
+    icon: const Icon(Icons.refresh),
+  );
 
   SpeedDialChild getAddBotton(BuildContext context) {
     return SpeedDialChild(
       child: const Icon(Icons.add),
-      backgroundColor:
-          drawerViewAbstractObsever.getObjectCastViewAbstract.getMainColor(),
+      backgroundColor: drawerViewAbstractObsever.getObjectCastViewAbstract
+          .getMainColor(),
       foregroundColor: Colors.white,
-      label: drawerViewAbstractObsever.getObjectCastViewAbstract
-          .getBaseTitle(context, serverAction: ServerActions.add),
+      label: drawerViewAbstractObsever.getObjectCastViewAbstract.getBaseTitle(
+        context,
+        serverAction: ServerActions.add,
+      ),
       onTap: () {
         drawerViewAbstractObsever.getObjectCastViewAbstract
             .onDrawerLeadingItemClicked(context);
@@ -237,40 +251,46 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
       hint: AppLocalizations.of(context)!.exportAll,
       list: [
         DropdownStringListItem(
-            icon: Icons.picture_as_pdf,
-            label: AppLocalizations.of(context)!
-                .exportAllAs(AppLocalizations.of(context)!.pdf)),
+          icon: Icons.picture_as_pdf,
+          label: AppLocalizations.of(
+            context,
+          )!.exportAllAs(AppLocalizations.of(context)!.pdf),
+        ),
         DropdownStringListItem(
-            icon: Icons.source,
-            label: AppLocalizations.of(context)!
-                .exportAllAs(AppLocalizations.of(context)!.excel)),
+          icon: Icons.source,
+          label: AppLocalizations.of(
+            context,
+          )!.exportAllAs(AppLocalizations.of(context)!.excel),
+        ),
       ],
       onSelected: (object) async {
         if (object?.label ==
-            AppLocalizations.of(context)!
-                .exportAllAs(AppLocalizations.of(context)!.excel)) {
-          context
-              .read<ActionViewAbstractProvider>()
-              .changeCustomWidget(FileExporterPage(
-                viewAbstract:
-                    drawerViewAbstractObsever.getObjectCastViewAbstract,
-                list: widget.listProvider.getList(findCustomKey()).cast(),
-              ));
+            AppLocalizations.of(
+              context,
+            )!.exportAllAs(AppLocalizations.of(context)!.excel)) {
+          context.read<ActionViewAbstractProvider>().changeCustomWidget(
+            FileExporterPage(
+              extras: drawerViewAbstractObsever.getObjectCastViewAbstract,
+              list: widget.listProvider.getList(findCustomKey()).cast(),
+            ),
+          );
         } else {
           ViewAbstract first = getFirstObject();
 
           var pdfList = PDFListApi(
-              list: widget.listProvider
-                  .getList(findCustomKey())
-                  .whereType<PrintableMaster>()
-                  .toList(),
-              context: context,
-              setting: await getSetting(context, getFirstObject()));
+            list: widget.listProvider
+                .getList(findCustomKey())
+                .whereType<PrintableMaster>()
+                .toList(),
+            context: context,
+            setting: await getSetting(context, getFirstObject()),
+          );
           Printing.sharePdf(
-              emails: ["paper@saffoury.com"],
-              filename: first.getMainHeaderLabelTextOnly(context),
-              subject: first.getMainHeaderLabelTextOnly(context),
-              bytes: await pdfList.generate(PdfPageFormat.a4));
+            emails: ["paper@saffoury.com"],
+            filename: first.getMainHeaderLabelTextOnly(context),
+            subject: first.getMainHeaderLabelTextOnly(context),
+            bytes: await pdfList.generate(PdfPageFormat.a4),
+          );
         }
         // if (object?.label ==
         //     AppLocalizations.of(context)!
@@ -311,44 +331,52 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
         hint: AppLocalizations.of(context)!.printType,
         list: [
           DropdownStringListItem(
-              icon: Icons.print,
-              label: AppLocalizations.of(context)!
-                  .printAllAs(AppLocalizations.of(context)!.list)),
+            icon: Icons.print,
+            label: AppLocalizations.of(
+              context,
+            )!.printAllAs(AppLocalizations.of(context)!.list),
+          ),
           DropdownStringListItem(
-              icon: Icons.print,
-              label: AppLocalizations.of(context)!.printAllAs(
-                  drawerViewAbstractObsever.getObjectCastViewAbstract
-                      .getMainHeaderLabelTextOnly(context))),
+            icon: Icons.print,
+            label: AppLocalizations.of(context)!.printAllAs(
+              drawerViewAbstractObsever.getObjectCastViewAbstract
+                  .getMainHeaderLabelTextOnly(context),
+            ),
+          ),
           DropdownStringListItem(
-              icon: Icons.settings,
-              enabled: false,
-              label: AppLocalizations.of(context)!.printerSetting),
+            icon: Icons.settings,
+            enabled: false,
+            label: AppLocalizations.of(context)!.printerSetting,
+          ),
           DropdownStringListItem(icon: Icons.settings, label: printListSetting),
           DropdownStringListItem(
-              icon: Icons.settings, label: printSelfListSetting),
+            icon: Icons.settings,
+            label: printSelfListSetting,
+          ),
         ],
         onSelected: (object) {
           if (object?.label ==
-              AppLocalizations.of(context)!
-                  .printAllAs(AppLocalizations.of(context)!.list)) {
+              AppLocalizations.of(
+                context,
+              )!.printAllAs(AppLocalizations.of(context)!.list)) {
             changeToPrintPdfSelfList(context);
           } else if (object?.label == printListSetting) {
-            context
-                .read<ActionViewAbstractProvider>()
-                .changeCustomWidget(BaseEditNewPage(
-                  onFabClickedConfirm: (obj) {
-                    context
-                        .read<ActionViewAbstractProvider>()
-                        .changeCustomWidget(PdfSelfListPage(
-                            setting: obj as PrintLocalSetting,
-                            list:
-                                getList().cast<PrintableSelfListInterface>()));
-                  },
-                  viewAbstract:
-                      (drawerViewAbstractObsever.getObjectCastViewAbstract
-                              as PrintableSelfListInterface)
-                          .getModifiablePrintableSelfPdfSetting(context),
-                ));
+            context.read<ActionViewAbstractProvider>().changeCustomWidget(
+              BaseEditNewPage(
+                onFabClickedConfirm: (obj) {
+                  context.read<ActionViewAbstractProvider>().changeCustomWidget(
+                    PdfSelfListPage(
+                      setting: obj as PrintLocalSetting,
+                      list: getList().cast<PrintableSelfListInterface>(),
+                    ),
+                  );
+                },
+                viewAbstract:
+                    (drawerViewAbstractObsever.getObjectCastViewAbstract
+                            as PrintableSelfListInterface)
+                        .getModifiablePrintableSelfPdfSetting(context),
+              ),
+            );
           } else if (object?.label == printSelfListSetting) {
           } else {
             changeToPrintPdfList(context);
@@ -358,37 +386,42 @@ class FabsOnListWidgetState extends State<FabsOnListWidget> {
     }
     if (first is PrintableMaster) {
       return IconButton(
-          onPressed: () {
-            changeToPrintPdfList(context);
-          },
-          icon: const Icon(Icons.print));
+        onPressed: () {
+          changeToPrintPdfList(context);
+        },
+        icon: const Icon(Icons.print),
+      );
     } else if (first is PrintableSelfListInterface) {
       return IconButton(
-          onPressed: () {
-            changeToPrintPdfSelfList(context);
-          },
-          icon: const Icon(Icons.print));
+        onPressed: () {
+          changeToPrintPdfSelfList(context);
+        },
+        icon: const Icon(Icons.print),
+      );
     } else {
       return null;
     }
   }
 
   void changeToPrintPdfList(BuildContext context) {
-    context.read<ActionViewAbstractProvider>().changeCustomWidget(PdfListPage(
+    context.read<ActionViewAbstractProvider>().changeCustomWidget(
+      PdfListPage(
         list: widget.listProvider
             .getList(findCustomKey())
             .whereType<PrintableMaster>()
-            .toList()));
+            .toList(),
+      ),
+    );
   }
 
   void changeToPrintPdfSelfList(BuildContext context) {
-    context
-        .read<ActionViewAbstractProvider>()
-        .changeCustomWidget(PdfSelfListPage(
-          list: widget.listProvider
-              .getList(findCustomKey())
-              .whereType<PrintableSelfListInterface>()
-              .toList(),
-        ));
+    context.read<ActionViewAbstractProvider>().changeCustomWidget(
+      PdfSelfListPage(
+        list: widget.listProvider
+            .getList(findCustomKey())
+            .whereType<PrintableSelfListInterface>()
+            .toList(),
+      ),
+    );
   }
 }

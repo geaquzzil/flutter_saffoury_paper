@@ -326,7 +326,7 @@ class _PrintNewState extends BasePageStateWithApi<PrintNew>
   }
 
   @override
-  Widget? getFloatingActionButton({
+  Widget? getFloatingActionButtonPaneNotifier({
     bool? firstPane,
     TabControllerHelper? tab,
     TabControllerHelper? secoundTab,

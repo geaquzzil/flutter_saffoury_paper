@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart' as FB;
 import 'package:flutter_view_controller/constants.dart';
@@ -461,25 +463,28 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
       );
     }
     if (firstPane == false) {
-      return Text(getAppLocal(context)!.details);
+      return Text(getSecPaneTitle());
     }
     return null;
   }
 
   @override
-  Future getOverrideCallApiFunction(
+  FutureOr getOverrideCallApiFunction(
     BuildContext context, {
     TabControllerHelper? tab,
   }) {
     if (getExtrasCast(tab: tab).isNew()) {
-      return Future.value(getExtrasCast());
+      return getExtrasCast();
     }
     return (getExtrasCast()).viewCall(context: context)
         as Future<ViewAbstract?>;
   }
 
   @override
-  Widget? getFloatingActionButton({bool? firstPane, TabControllerHelper? tab}) {
+  Widget? getFloatingActionButtonPaneNotifier({
+    bool? firstPane,
+    TabControllerHelper? tab,
+  }) {
     if (firstPane == true) {
       return BaseFloatingActionButtons(
         base: getSecoundPaneHelper(),

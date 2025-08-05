@@ -89,7 +89,7 @@ class ExcelToProductConverter
     //     child: FileReaderPage(
     //       viewAbstract: this,
     //     ));
-    return FileReaderPage(viewAbstract: this);
+    return FileReaderPage(extras: this);
   }
 
   @override
@@ -151,7 +151,7 @@ class ExcelToProductConverter
       //if split is length 2 then the first is the product type and the second is size and width;
       String? productType;
       String? productTypeDesc;
-      
+
       String? comments;
       String? gsm;
       String? length;

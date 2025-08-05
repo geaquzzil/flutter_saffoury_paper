@@ -565,7 +565,7 @@ class _GoodsInventoryPageState extends BasePageState<GoodsInventoryPage> {
                 debugPrint("onDone FileReaderPage=> $p0");
                 _notifier.value = p0;
               },
-              viewAbstract: Product(),
+              extras: Product(),
             ),
           )
         else
