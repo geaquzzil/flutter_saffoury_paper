@@ -34,6 +34,7 @@ import 'package:flutter_view_controller/new_components/chart/multi_line_chart.da
 import 'package:flutter_view_controller/new_components/tables_widgets/view_table_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/header.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/printing_generator/pdf_dashboard_api.dart';
@@ -259,22 +260,13 @@ class Dashboard extends UserLists<Dashboard>
           StaggeredGridTile.count(
             crossAxisCellCount: crossAxisCount,
             mainAxisCellCount: 1.2,
-            child: SizedBox(
-              height:
-                  MediaQuery.of(context).size.height -
-                  MediaQuery.of(context).size.height * .2,
-              child: SliverApiMixinViewAbstractWidget(
-                isSliver: true,
+            child: SliverApiMixinViewAbstractWidget(
+              isSliver: false,
+              cardType: CardItemType.grid,
+              scrollDirection: Axis.horizontal,
 
-                // titleString: "Today",
-                // listItembuilder: (v) => SizedBox(
-                //     width: 100, height: 100, child: POSListCardItem(object: v)),
-                toListObject: Order().setRequestOption(
-                  option: RequestOptions().addSearchByField(
-                    "status",
-                    "PENDING",
-                  ),
-                ),
+              toListObject: Order().setRequestOption(
+                option: RequestOptions().addSearchByField("status", "PENDING"),
               ),
             ),
           ),

@@ -525,6 +525,10 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
     return isLargeScreenFromCurrentScreenSize(context, width: getWidth);
   }
 
+  bool isLargeScoso() {
+    return isLargeScreenFromCurrentScreenSize(context, width: getWidth);
+  }
+
   // Widget? _getSecondPaneWidgetMixin() {
   //   if (!isLargeScreenFromScreenSize(getCurrentScreenSize())) {
   //     return _secondWidget;
@@ -739,6 +743,7 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
           controler,
           tab,
         );
+
         return [
           ...getPaneNotifier(
                 firstPane: firstPane,
@@ -1577,49 +1582,55 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     _height = 0;
   }
 
+  Widget wrapBuildWidget(Widget buildWidget) {
+    return buildWidget;
+  }
+
   @override
   Widget build(BuildContext context) {
     _initBaseTab();
 
-    return ScreenHelperSliver(
-      forceSmallView:
-          !_buildSecoundPane || widget.fillFirstPaneToAnimateTheThirdPane,
-      requireAutoPadding: setMainPageSuggestionPadding(),
-      onChangeLayout: (w, h, c) {
-        debugPrint("ScreenHelperSliver build width:$w");
-        reset();
-        _width = w;
-        _height = h;
-        _currentScreenSize = c;
-        if (canBuildDrawer()) {
-          _drawerWidget =
-              _generateCustomDrawer() ??
-              DrawerLargeScreens(size: _currentScreenSize);
-        }
-        _firstPaneWidth =
-            (reverseCustomPane()
-                ? 1 - getCustomPaneProportion()
-                : getCustomPaneProportion()) *
-            _width;
+    return wrapBuildWidget(
+      ScreenHelperSliver(
+        forceSmallView:
+            !_buildSecoundPane || widget.fillFirstPaneToAnimateTheThirdPane,
+        requireAutoPadding: setMainPageSuggestionPadding(),
+        onChangeLayout: (w, h, c) {
+          debugPrint("ScreenHelperSliver build width:$w");
+          reset();
+          _width = w;
+          _height = h;
+          _currentScreenSize = c;
+          if (canBuildDrawer()) {
+            _drawerWidget =
+                _generateCustomDrawer() ??
+                DrawerLargeScreens(size: _currentScreenSize);
+          }
+          _firstPaneWidth =
+              (reverseCustomPane()
+                  ? 1 - getCustomPaneProportion()
+                  : getCustomPaneProportion()) *
+              _width;
 
-        _secPaneWidth = _width - _firstPaneWidth;
+          _secPaneWidth = _width - _firstPaneWidth;
 
-        debugPrint(
-          "BasePage firstPane is w=>$_firstPaneWidth  h=> $_secPaneWidth",
-        );
-      },
-      mobile: (w, h) {
-        return getOnlyFirstPage();
-      },
-      smallTablet: (w, h) {
-        return _getMainWidget();
-      },
-      largeTablet: (w, h) {
-        return _getMainWidget();
-      },
-      desktop: (w, h) {
-        return _getMainWidget();
-      },
+          debugPrint(
+            "BasePage firstPane is w=>$_firstPaneWidth  h=> $_secPaneWidth",
+          );
+        },
+        mobile: (w, h) {
+          return getOnlyFirstPage();
+        },
+        smallTablet: (w, h) {
+          return _getMainWidget();
+        },
+        largeTablet: (w, h) {
+          return _getMainWidget();
+        },
+        desktop: (w, h) {
+          return _getMainWidget();
+        },
+      ),
     );
   }
 
@@ -1871,7 +1882,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   //   return getPaneExt();
   // }
-
+  
   Widget getPaneExt() {
     return TowPaneExt(
       startPane: _firstWidget!,

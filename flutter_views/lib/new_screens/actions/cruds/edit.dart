@@ -33,6 +33,7 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
   GlobalKey<FB.FormBuilderState> formKey = GlobalKey<FB.FormBuilderState>();
   FormGroup? _baseForm;
   FormBuilderOptions? _builderOption;
+  Widget Function(BuildContext, FormGroup, Widget?) formBuilder;
   Map<String, ExpansibleController> expansionController = {};
 
   @override
@@ -111,6 +112,17 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
 
   Map<String, dynamic> getObject(FormGroup form) {
     return getExtrasCast().getObjectFromForm(context, form);
+  }
+  // @override
+  // Widget wrapBuildWidget(Widget buildWidget) {
+  //   return ReactiveFormBuilder(form: ()=>_baseForm! ,builder: ,);
+  // }
+  // get
+  
+@override
+  Widget getMainPanes({TabControllerHelper? baseTap}) {
+    // TODO: implement getMainPanes
+    return super.getMainPanes(baseTap: baseTap);
   }
 
   Widget getFormReactive() {
@@ -394,10 +406,7 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     BuildContext context, {
     TabControllerHelper? tab,
   }) {
-    return (getExtras()).viewCallGetFirstFromList(
-          (getExtras()).iD,
-          context: context,
-        )
+    return (getExtrasCast()).viewCall(context: context)
         as Future<ViewAbstract?>;
   }
 
@@ -423,6 +432,11 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
   Future<void>? getPaneIsRefreshIndicator({required bool firstPane}) => null;
 
   @override
+  bool enableAutomaticFirstPaneNullDetector() {
+    return false;
+  }
+
+  @override
   List<Widget>? getPaneNotifier({
     required bool firstPane,
     ScrollController? controler,
@@ -430,11 +444,19 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
     SecondPaneHelper? valueNotifier,
   }) {
     // debugPrint("dasdasas dassa");
-    // return [];
-    return [
-      // getFormBuilderWidget()
-      SliverToBoxAdapter(child: getFormReactive()),
-    ];
+    // return [];'
+
+    if (firstPane) {
+      return [
+        // getFormBuilderWidget()
+        SliverToBoxAdapter(child: getFormReactive()),
+      ];
+    } else {
+      return [
+        // getFormBuilderWidget()
+        SliverToBoxAdapter(child: Text("TODO LISTABLE")),
+      ];
+    }
   }
 
   // FB.FormBuilder getFormBuilderWidget() {
