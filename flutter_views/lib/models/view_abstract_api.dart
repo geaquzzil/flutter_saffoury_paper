@@ -195,8 +195,14 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   }
 
   bool shouldGetFromApi(ServerActions action, dynamic lastObject) {
-    return _checkListToRequest(action) != false ||
+    bool res =
+        _checkListToRequest(action) != false ||
         shouldGetFromApiViewCall(lastObject);
+    int lastID = (lastObject is ViewAbstract) ? lastObject.iD : -230;
+    debugPrint(
+      "shouldGetFromApi==>$res action:$action iD:$iD lastID:$lastID   lastObject:${lastObject?.runtimeType}",
+    );
+    return res;
   }
 
   dynamic _checkListToRequest(ServerActions action) {

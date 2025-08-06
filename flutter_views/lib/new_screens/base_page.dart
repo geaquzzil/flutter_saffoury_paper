@@ -31,7 +31,6 @@ import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dar
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/drawer/drawer_controler.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
-import 'package:flutter_view_controller/screens/web/setting_and_profile.dart';
 import 'package:flutter_view_controller/screens/web/setting_and_profile_new.dart';
 import 'package:flutter_view_controller/screens/web/web_shoping_cart.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -2317,12 +2316,12 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   }
 
   FutureOr<dynamic>? getOverrideCallApiFunction(
-
     BuildContext context, {
     TabControllerHelper? tab,
-  }){
+  }) {
     return null;
   }
+
   ServerActions getServerActions();
   ListableInterface getListableInterface() {
     return getExtras() as ListableInterface;
@@ -2471,6 +2470,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
 
     return [SliverFillRemaining(child: loading)];
   }
+  
 
   @override
   beforeGetPaneWidget({
@@ -2503,10 +2503,10 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   Widget getMainPanes({TabControllerHelper? baseTap}) {
     debugPrint("getBody _getTowPanes TabController ");
     dynamic ex = getExtras(tab: baseTap);
-    _isLoading = !getExtrasCast(
+    _isLoading = getExtrasCast(
       tab: baseTap,
     ).shouldGetFromApi(ServerActions.view, getLastExtras);
-    // debugPrint("getBody _isLoading  $_isLoading ");
+    debugPrint("getBody  _isLoading  $_isLoading ");
     if (ex != null && !_isLoading) {
       _connectionState.value =
           overrideConnectionState(BasePageWithApiConnection.build) ??
@@ -2516,12 +2516,13 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     }
     return FutureBuilder(
       future: Future.value(
-          // getOverrideCallApiFunction(context, tab: baseTap) ??
-          getExtrasCast(tab: baseTap).viewCall(
-            context: context,
-            customID: getID,
-            lastObject: getLastExtras,
-          )),
+        // getOverrideCallApiFunction(context, tab: baseTap) ??
+        getExtrasCast(tab: baseTap).viewCall(
+          context: context,
+          customID: getID,
+          lastObject: getLastExtras,
+        ),
+      ),
       builder: (context, snapshot) {
         _connectionState.value =
             overrideConnectionState(BasePageWithApiConnection.future) ??
