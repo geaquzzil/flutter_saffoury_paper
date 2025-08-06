@@ -18,6 +18,7 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/new_components/tow_pane_ext.dart';
+import 'package:flutter_view_controller/new_screens/actions/cruds/components/skeleton_paragraph.dart';
 import 'package:flutter_view_controller/new_screens/actions/cruds/view.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
@@ -593,14 +594,23 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
   }
 
   @override
-  Widget getOnlyFirstPage() {
-    _firstWidget = FadeInUp(
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.fastOutSlowIn,
-      key: Key(_lastSecondPaneItem.hashCode.toString()),
-      child: super.getOnlyFirstPage(),
+  Widget getMainWidget({bool onlyFirstPane = false, bool isLoading = false}) {
+    if (onlyFirstPane) {
+      _firstWidget = FadeInUp(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.fastOutSlowIn,
+        key: Key(_lastSecondPaneItem.hashCode.toString()),
+        child: super.getMainWidget(
+          onlyFirstPane: onlyFirstPane,
+          isLoading: isLoading,
+        ),
+      );
+      return _firstWidget;
+    }
+    return super.getMainWidget(
+      onlyFirstPane: onlyFirstPane,
+      isLoading: isLoading,
     );
-    return _firstWidget;
   }
 
   bool canDoThirdPane() {
@@ -1624,7 +1634,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     /// Here you can have your context and do what ever you want
     if (_hasTabBarList()) {
       _tabBaseController = TabController(vsync: this, length: _tabList!.length);
-      _tabBaseController!.addListener(_tabControllerChangeListener);
+      _tabBaseController!.addListener(onTabControllerChangeListener);
     }
   }
 
@@ -1632,7 +1642,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   void dispose() {
     // _connectionListener.dispose();
     if (_hasTabBarList()) {
-      _tabBaseController!.removeListener(_tabControllerChangeListener);
+      _tabBaseController!.removeListener(onTabControllerChangeListener);
       _tabBaseController!.dispose();
     }
     super.dispose();
@@ -1702,24 +1712,19 @@ abstract class BasePageState<T extends BasePage> extends State<T>
           );
         },
         mobile: (w, h) {
-          return getOnlyFirstPage();
+          return getMainWidget(onlyFirstPane: true);
         },
         smallTablet: (w, h) {
-          return _getMainWidget();
+          return getMainWidget();
         },
         largeTablet: (w, h) {
-          return _getMainWidget();
+          return getMainWidget();
         },
         desktop: (w, h) {
-          return _getMainWidget();
+          return getMainWidget();
         },
       ),
     );
-  }
-
-  Widget getOnlyFirstPage() {
-    _firstWidget = getScaffoldForPane(firstPane: true);
-    return _firstWidget;
   }
 
   Widget getWidgetFromListToDetailsSecoundPaneHelper({
@@ -2113,7 +2118,28 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     return scaffold;
   }
 
-  Widget _getMainWidget() {
+  Widget getMainWidget({bool onlyFirstPane = false, bool isLoading = false}) {
+    if (isLoading) {
+      return TowPaneExt(
+        startPane: LoadingScreen(
+          isPage: true,
+          isSliver: false,
+          width: firstPaneWidth,
+        ),
+        endPane: LoadingScreen(
+          isPage: false,
+          isSliver: false,
+          width: secPaneWidth,
+        ),
+        customPaneProportion: reverseCustomPane()
+            ? 1 - getCustomPaneProportion()
+            : getCustomPaneProportion(),
+      );
+    }
+    if (onlyFirstPane) {
+      _firstWidget = getScaffoldForPane(firstPane: true);
+      return _firstWidget;
+    }
     bool isLarge =
         isDesktop(context, maxWidth: getWidth) ||
         isTablet(context, maxWidth: getWidth);
@@ -2207,7 +2233,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     );
   }
 
-  void _tabControllerChangeListener() {
+  void onTabControllerChangeListener() {
     currentBaseTabIndex = _tabBaseController!.index;
     debugPrint("_tabController $currentBaseTabIndex");
   }
@@ -2296,15 +2322,27 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
       overrideConnectionState(BasePageWithApiConnection.init) ??
           ConnectionStateExtension.none,
     );
+    _isLoading = getExtrasCast().shouldGetFromApi(ServerActions.view, null);
     super.initState();
   }
 
   @override
   void didUpdateWidget(covariant T oldWidget) {
-    _iD = widget.iD;
-    _tableName = widget.tableName;
-    _extras = widget.extras;
+    if (_iD != widget.iD) {
+      _iD = widget.iD;
+    }
+    if (_tableName != widget.tableName) {
+      _tableName = widget.tableName;
+    }
 
+    if (_extras != widget.extras) {
+      _extras = widget.extras;
+       _isLoading = getExtrasCast().shouldGetFromApi(
+      ServerActions.view,
+      getLastExtras,
+    );
+    }
+   
     _extras ??= context.read<AuthProvider<AuthUser>>().getNewInstance(
       _tableName ?? "",
     );
@@ -2312,6 +2350,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
       overrideConnectionState(BasePageWithApiConnection.didUpdate) ??
           ConnectionStateExtension.none,
     );
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -2470,7 +2509,14 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
 
     return [SliverFillRemaining(child: loading)];
   }
-  
+
+  Widget getLoadingPage(bool firstPane, {TabControllerHelper? tab}) {
+    return LoadingScreen(
+      isPage: true,
+      isSliver: false,
+      width: firstPane ? firstPaneWidth : secPaneWidth,
+    );
+  }
 
   @override
   beforeGetPaneWidget({
@@ -2499,15 +2545,76 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   }
 
   void initStateAfterApiCalled() {}
+  // @override
+  // Widget getMainWidget({bool onlyFirstPane = false, bool isLoading = false}) {
+  //    debugPrint("getBody _getTowPanes TabController ");
+  //   dynamic ex = getExtras(tab: baseTap);
+  //   _isLoading = getExtrasCast(
+  //     tab: baseTap,
+  //   ).shouldGetFromApi(ServerActions.view, getLastExtras);
+  //   debugPrint("getBody  _isLoading  $_isLoading ");
+  //   if (ex != null && !_isLoading) {
+  //     _connectionState.value =
+  //         overrideConnectionState(BasePageWithApiConnection.build) ??
+  //         ConnectionStateExtension.none;
+  //     initStateAfterApiCalled();
+  //     return super.getMainPanes(baseTap: baseTap);
+  //   }
+  //   return super.getMainWidget(onlyFirstPane: onlyFirstPane, isLoading: isLoading);
+  // }
+
+  // @override
+  // Widget getMainPanIfHasTabBarList() {
+  //   return _isLoading ? null :  super.getMainPanIfHasTabBarList();
+  // }
+
+  @override
+  Widget? getBottomNavigationBar({bool? firstPane, TabControllerHelper? tab}) {
+    return _isLoading
+        ? null
+        : getBottomNavigationBar(firstPane: firstPane, tab: tab);
+  }
+
+  @override
+  AppBar? generateBaseAppbar() {
+    return _isLoading ? null : super.generateBaseAppbar();
+  }
+
+  @override
+  Widget? getFloatingActionButton({bool? firstPane, TabControllerHelper? tab}) {
+    return _isLoading
+        ? null
+        : getFloatingActionButton(firstPane: firstPane, tab: tab);
+  }
+  @override
+  void onTabControllerChangeListener() {
+
+  dynamic extras= _tabList[_tabBaseController!.index].extras;
+  if(extras!=null && extras is ViewAbstract){
+    bool shouldLoad=extras.shouldGetFromApi(
+      ServerActions.view,
+      getLastExtras,
+    );
+    if(shouldLoad){
+      setState(() {
+        _isLoading=true;
+      });
+    }
+  }
+
+  }
+
+
   @override
   Widget getMainPanes({TabControllerHelper? baseTap}) {
     debugPrint("getBody _getTowPanes TabController ");
-    dynamic ex = getExtras(tab: baseTap);
-    _isLoading = getExtrasCast(
-      tab: baseTap,
-    ).shouldGetFromApi(ServerActions.view, getLastExtras);
-    debugPrint("getBody  _isLoading  $_isLoading ");
-    if (ex != null && !_isLoading) {
+
+    // dynamic ex = getExtras(tab: baseTap);
+    // _isLoading = getExtrasCast(
+    //   tab: baseTap,
+    // ).shouldGetFromApi(ServerActions.view, getLastExtras);
+    // debugPrint("getBody  _isLoading  $_isLoading ");
+    if (_isLoading) {
       _connectionState.value =
           overrideConnectionState(BasePageWithApiConnection.build) ??
           ConnectionStateExtension.none;
