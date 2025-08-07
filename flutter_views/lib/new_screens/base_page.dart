@@ -2337,12 +2337,12 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
 
     if (_extras != widget.extras) {
       _extras = widget.extras;
-       _isLoading = getExtrasCast().shouldGetFromApi(
-      ServerActions.view,
-      getLastExtras,
-    );
+      _isLoading = getExtrasCast().shouldGetFromApi(
+        ServerActions.view,
+        getLastExtras,
+      );
     }
-   
+
     _extras ??= context.read<AuthProvider<AuthUser>>().getNewInstance(
       _tableName ?? "",
     );
@@ -2586,24 +2586,22 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
         ? null
         : getFloatingActionButton(firstPane: firstPane, tab: tab);
   }
+
   @override
   void onTabControllerChangeListener() {
-
-  dynamic extras= _tabList[_tabBaseController!.index].extras;
-  if(extras!=null && extras is ViewAbstract){
-    bool shouldLoad=extras.shouldGetFromApi(
-      ServerActions.view,
-      getLastExtras,
-    );
-    if(shouldLoad){
-      setState(() {
-        _isLoading=true;
-      });
+    dynamic extras = _tabList?[_tabBaseController!.index].extras;
+    if (extras != null && extras is ViewAbstract) {
+      bool shouldLoad = extras.shouldGetFromApi(
+        ServerActions.view,
+        getLastExtras,
+      );
+      if (shouldLoad) {
+        setState(() {
+          _isLoading = true;
+        });
+      }
     }
   }
-
-  }
-
 
   @override
   Widget getMainPanes({TabControllerHelper? baseTap}) {
@@ -2614,7 +2612,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     //   tab: baseTap,
     // ).shouldGetFromApi(ServerActions.view, getLastExtras);
     // debugPrint("getBody  _isLoading  $_isLoading ");
-    if (_isLoading) {
+    if (!_isLoading) {
       _connectionState.value =
           overrideConnectionState(BasePageWithApiConnection.build) ??
           ConnectionStateExtension.none;
@@ -2646,10 +2644,10 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
           );
           _isLoading = false;
           if (snapshot.data != null) {
-            _lastExtras = ex;
+            _lastExtras = snapshot.data;
             setExtras(ex: snapshot.data);
             initStateAfterApiCalled();
-            if (ex is ViewAbstract) {
+            if (snapshot.data is ViewAbstract) {
               // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
               //   context.read<ListMultiKeyProvider>().edit(ex);
               // });
