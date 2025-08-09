@@ -15,6 +15,7 @@ import 'package:flutter_view_controller/new_screens/actions/cruds/components/ske
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_enum_icon.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/components/staggerd_grid_view_widget.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';

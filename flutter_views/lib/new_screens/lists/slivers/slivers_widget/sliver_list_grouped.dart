@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/interfaces/dashable_interface.dart';
-import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/section_item_headerI.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/slivers_widget/sliver_custom_scroll_widget.dart';
 
 class StickyItem {

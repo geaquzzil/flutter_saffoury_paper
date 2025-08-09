@@ -19,7 +19,7 @@ import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_m
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/controllers/controller_dropbox_api_list.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/components/staggerd_grid_view_widget.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/drawer_large_screen.dart';

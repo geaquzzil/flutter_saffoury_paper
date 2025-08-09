@@ -7,9 +7,9 @@ import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
-import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/section_item_header.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/components/staggerd_grid_view_widget.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -47,11 +47,14 @@ class _BaseDashboardMainPageState
           .getListableOfDashablesInterface()
           .map((e) {
             debugPrint(
-              "getTabBarList ${(e as ViewAbstract).getCustomAction()}",
+              "getTabBarList getCustomAction:${(e as ViewAbstract).getCustomAction()}",
             );
             ViewAbstract v = e as ViewAbstract;
             return TabControllerHelper(
-              v.getMainHeaderLabelTextOnly(context) ?? "sda",
+              titleFunction: (context) {
+                debugPrint("getTabBarList called");
+                return v.getMainHeaderLabelTextOnly(context) ?? "sda";
+              },
               extras: v,
               // icon: Icon(v.getMainIconData()),
             );
@@ -177,36 +180,24 @@ class _BaseDashboardMainPageState
     }
   }
 
-  ///cross axis count is from width how many items
-  int getCrossAxisCount(double width) {
-    ///1000/6
-    ///
-    ///
-    ///
-    if (width < 1000) {
-      return 2;
-    } else {
-      int val = ((width / 300)).toInt();
-      debugPrint("getCrossAxisCount val   $val");
-      return val;
-    }
-
-    if (width < 1000) {
-      return 2;
-    } else if (width >= 1000 && width < 1200) {
-      return 3;
-    } else if (width >= 1200 && width < 1400) {
-      return 4;
-    } else if (width >= 1400 && width < 1600) {
-      return 5;
-    } else {
-      return 6;
-    }
-  }
-
   Widget getWidget(DashableGridHelper element) {
     return StaggerdGridViewWidget(
-      list: element.widgets.map((e) => e.widget).toList(),
+      builder:
+          (
+            fullCrossAxisCount,
+            crossCountFundCalc,
+            crossAxisCountMod,
+            heightMainAxisCellCount,
+          ) => element.widgets
+              .map(
+                (e) => e.widget.call(
+                  fullCrossAxisCount,
+                  crossCountFundCalc,
+                  crossAxisCountMod,
+                  heightMainAxisCellCount,
+                ),
+              )
+              .toList(),
       wrapWithCard: element.wrapWithCard,
       // crossAxisCount: getCrossAxisCount(getWidth),
       childAspectRatio: 1,
@@ -217,7 +208,22 @@ class _BaseDashboardMainPageState
 
   Widget getSecondPaneWidget(DashableGridHelper element) {
     return StaggerdGridViewWidget(
-      list: element.widgets.map((e) => e.widget).toList(),
+      builder:
+          (
+            fullCrossAxisCount,
+            crossCountFundCalc,
+            crossAxisCountMod,
+            heightMainAxisCellCount,
+          ) => element.widgets
+              .map(
+                (e) => e.widget.call(
+                  fullCrossAxisCount,
+                  crossCountFundCalc,
+                  crossAxisCountMod,
+                  heightMainAxisCellCount,
+                ),
+              )
+              .toList(),
       wrapWithCard: element.wrapWithCard,
       // crossAxisCount: 2,
       childAspectRatio: 1.4,
@@ -232,7 +238,6 @@ class _BaseDashboardMainPageState
     List<Widget> widgets = List.empty(growable: true);
     var list = getExtrasCastDashboard(tab: tab).getDashboardSectionsFirstPane(
       context,
-      getCrossAxisCount(getWidth),
       tab: tab,
       basePage: getSecoundPaneHelper(),
     );
@@ -267,7 +272,6 @@ class _BaseDashboardMainPageState
 
     var list = getExtrasCastDashboard(tab: tab).getDashboardSectionsSecoundPane(
       context,
-      getCrossAxisCount(getWidth),
       tab: tab,
       basePage: getSecoundPaneHelper(),
       tabSecondPane: secoundTab,
@@ -341,7 +345,10 @@ class _BaseDashboardMainPageState
     // return null;
     dynamic ex = getExtras(tab: tab);
     debugPrint("getCallApiFunctionIfNull extras=> $ex ");
-    return (ex as ViewAbstract).viewCall(context: context,lastObject: getLastExtras);
+    return (ex as ViewAbstract).viewCall(
+      context: context,
+      lastObject: getLastExtras,
+    );
   }
 
   @override

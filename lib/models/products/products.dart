@@ -68,6 +68,7 @@ import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/components/staggerd_grid_view_widget.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
@@ -1559,7 +1560,7 @@ class Product extends ViewAbstract<Product>
     return [
       if (isEditing())
         TabControllerHelper(
-          AppLocalizations.of(context)!.movments,
+          titleFunction: (context) => AppLocalizations.of(context)!.movments,
           draggableHeaderWidget: Text(
             AppLocalizations.of(context)!.movments,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -2059,7 +2060,7 @@ class Product extends ViewAbstract<Product>
 
   TabControllerHelper getPosableFirstWidget(BuildContext context) {
     return TabControllerHelper(
-      "All",
+      titleFunction: (context) => "All",
       widget: SingleChildScrollView(
         child: Column(
           children: [
@@ -2281,7 +2282,7 @@ class Product extends ViewAbstract<Product>
                     }
 
                     return TabControllerHelper(
-                      e.name ?? "dsa",
+                      titleFunction: (context) => e.name ?? "dsa",
                       icon: e.getCardLeadingCircleAvatar(
                         context,
                         height: 20,

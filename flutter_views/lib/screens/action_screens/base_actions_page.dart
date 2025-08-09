@@ -22,7 +22,8 @@ abstract class BaseActionPage<T extends ViewAbstract> extends StatefulWidget {
 }
 
 class _BaseActionPageState<T extends ViewAbstract>
-    extends State<BaseActionPage<T>> with TickerProviderStateMixin {
+    extends State<BaseActionPage<T>>
+    with TickerProviderStateMixin {
   late TabController _tabController;
   List<Tab> tabs = <Tab>[];
   @override
@@ -34,74 +35,76 @@ class _BaseActionPageState<T extends ViewAbstract>
   @override
   void initState() {
     super.initState();
-    tabs.addAll([TabControllerHelper("TITLE"), TabControllerHelper("LIST")]);
+    tabs.addAll([
+      TabControllerHelper(titleFunction: (context) => "TITLE"),
+      TabControllerHelper(titleFunction: (context) => "LIST"),
+    ]);
     _tabController = TabController(vsync: this, length: tabs.length);
   }
 
   SliverAppBar getSilverAppBar(BuildContext context, bool innerBoxIsScrolled) {
     return SliverAppBar(
-        floating: true,
-        expandedHeight: 200.0,
-        snap: true,
-        stretchTriggerOffset: 150,
-        // title: widget.object.getMainHeaderText(context),
-        // centerTitle: true,
-        forceElevated: innerBoxIsScrolled,
-        flexibleSpace: getSilverAppBarBackground(context),
-        // actions: widget.getAppBarActionsView(context),
-        bottom: TabBar(
-          tabs: tabs,
-          controller: _tabController,
-        ));
+      floating: true,
+      expandedHeight: 200.0,
+      snap: true,
+      stretchTriggerOffset: 150,
+      // title: widget.object.getMainHeaderText(context),
+      // centerTitle: true,
+      forceElevated: innerBoxIsScrolled,
+      flexibleSpace: getSilverAppBarBackground(context),
+      // actions: widget.getAppBarActionsView(context),
+      bottom: TabBar(tabs: tabs, controller: _tabController),
+    );
   }
 
   FlexibleSpaceBar getSilverAppBarBackground(BuildContext context) {
     return FlexibleSpaceBar(
-        stretchModes: const [
-          StretchMode.blurBackground,
-          StretchMode.zoomBackground,
-          StretchMode.fadeTitle
-        ],
-        title: Text(widget.object.getMainHeaderTextOnly(context)),
-        background: Hero(
-            tag: widget.object,
-            child: widget.object.getCardLeadingImage(context)));
+      stretchModes: const [
+        StretchMode.blurBackground,
+        StretchMode.zoomBackground,
+        StretchMode.fadeTitle,
+      ],
+      title: Text(widget.object.getMainHeaderTextOnly(context)),
+      background: Hero(
+        tag: widget.object,
+        child: widget.object.getCardLeadingImage(context),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: widget.getBottomNavigationBar(context),
-        body: NestedScrollView(
-          floatHeaderSlivers: false,
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            getSilverAppBar(context, innerBoxIsScrolled),
-          ],
-          body: // widget.getBodyActionView(context) ??
-              TabBarView(
-            controller: _tabController,
-            children: tabs.map((Tab tab) {
-              final String label = tab.text!.toLowerCase();
-              return MainBody(child: Text(label));
-              // final String label = tab.text!.toLowerCase();
-              // return Center(
-              //   child: Text(
-              //     'This is the $label tab',
-              //     style: const TextStyle(fontSize: 36),
-              //   ),
-              // );
-            }).toList(),
-          ),
-        ));
+      bottomNavigationBar: widget.getBottomNavigationBar(context),
+      body: NestedScrollView(
+        floatHeaderSlivers: false,
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          getSilverAppBar(context, innerBoxIsScrolled),
+        ],
+        body: // widget.getBodyActionView(context) ??
+        TabBarView(
+          controller: _tabController,
+          children: tabs.map((Tab tab) {
+            final String label = tab.text!.toLowerCase();
+            return MainBody(child: Text(label));
+            // final String label = tab.text!.toLowerCase();
+            // return Center(
+            //   child: Text(
+            //     'This is the $label tab',
+            //     style: const TextStyle(fontSize: 36),
+            //   ),
+            // );
+          }).toList(),
+        ),
+      ),
+    );
   }
 
   Row getTitle(BuildContext context) {
     return Row(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: kDefaultPadding,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
           child: RoundedIconButton(
             onTap: () {
               Navigator.pop(context);

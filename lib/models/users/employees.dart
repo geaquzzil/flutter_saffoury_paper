@@ -176,7 +176,8 @@ class Employee extends User<Employee> {
   }) {
     return [
       TabControllerHelper(
-        AppLocalizations.of(context)!.sales_analysis,
+        titleFunction: (context) =>
+            AppLocalizations.of(context)!.sales_analysis,
         widget: SliverApiMixinViewAbstractWidget(
           // onResponseAddWidget: ((response) {
           //   CustomerByEmployeeAnanlysis i = response as ChartRecordAnalysis;

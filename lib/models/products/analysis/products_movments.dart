@@ -18,6 +18,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_stand_alone.dart';
 import 'package:flutter_view_controller/new_components/chart/multi_line_chart.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/components/staggerd_grid_view_widget.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 

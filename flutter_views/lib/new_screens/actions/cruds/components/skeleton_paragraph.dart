@@ -37,7 +37,7 @@ class LoadingScreen extends StatelessWidget {
       );
     }
     if (isSliver) {
-      return SliverToBoxAdapter(child: w);
+      return SliverFillRemaining(child: w);
     }
     return w;
   }

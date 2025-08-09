@@ -142,8 +142,11 @@ class _SliverCustomScrollViewDraggableState
               child: Container(
                 color: Theme.of(context).colorScheme.surface,
                 child: TabBar(
-                  tabs: _tabs!,
-
+                  tabs: _tabs!
+                      .map(
+                        (e) => e.getTitled((context)),
+                      )
+                      .toList(),
                   isScrollable: true,
                   controller: _tabController,
                 ),

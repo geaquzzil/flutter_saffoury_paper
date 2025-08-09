@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/apis/date_object.dart';
-import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 
 class DateSelector extends StatefulWidget {
@@ -66,9 +65,9 @@ class _DateSelectorState extends State<DateSelector> with RestorationMixin {
       setState(() {
         _startDate.value = newSelectedDate.start;
         _endDate.value = newSelectedDate.end;
-        selectDateChanged.value = DateObject(
-            from: newSelectedDate.start.toDateTimeStringOnlyDate(),
-            to: newSelectedDate.end.toDateTimeStringOnlyDate());
+        // selectDateChanged.value = DateObject(
+        //     from: newSelectedDate.start.toDateTimeStringOnlyDate(),
+        //     to: newSelectedDate.end.toDateTimeStringOnlyDate());
       });
     }
   }

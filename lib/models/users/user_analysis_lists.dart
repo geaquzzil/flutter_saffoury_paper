@@ -300,7 +300,13 @@ class UserLists<T> extends AuthUser<T> {
   }
 
   WidgetGridHelper getWidget(
-    StaggeredGridTile gride, {
+    StaggeredGridTile Function(
+      int fullCrossAxisCount,
+      int crossCountFundCalc,
+      int crossAxisCountMod,
+      num heightMainAxisCellCount,
+    )
+    gride, {
     WidgetDashboardType type = WidgetDashboardType.NORMAL,
   }) {
     return WidgetGridHelper(widget: gride, widgetDashboardType: type);
@@ -357,60 +363,65 @@ class UserLists<T> extends AuthUser<T> {
 
   List<TabControllerHelper>? getTabBarSecondPane(BuildContext context) {
     List<TabControllerHelper> l = [
-      TabControllerHelper(AppLocalizations.of(context)!.overview),
+      TabControllerHelper(
+        titleFunction: (context) => AppLocalizations.of(context)!.overview,
+      ),
       if (credits?.isNotEmpty ?? false)
         TabControllerHelper(
-          AppLocalizations.of(context)!.credits,
+          titleFunction: (context) => AppLocalizations.of(context)!.credits,
           extras: credits,
         ),
       if (debits?.isNotEmpty ?? false)
         TabControllerHelper(
-          AppLocalizations.of(context)!.debits,
+          titleFunction: (context) => AppLocalizations.of(context)!.debits,
           extras: debits,
         ),
       if (spendings?.isNotEmpty ?? false)
         TabControllerHelper(
-          AppLocalizations.of(context)!.spendings,
+          titleFunction: (context) => AppLocalizations.of(context)!.spendings,
           extras: spendings,
         ),
       if (incomes?.isNotEmpty ?? false)
         TabControllerHelper(
-          AppLocalizations.of(context)!.incomes,
+          titleFunction: (context) => AppLocalizations.of(context)!.incomes,
           extras: incomes,
         ),
       if (orders?.isNotEmpty ?? false)
         TabControllerHelper(
-          AppLocalizations.of(context)!.orders,
+          titleFunction: (context) => AppLocalizations.of(context)!.orders,
           extras: orders,
         ),
       if (purchases?.isNotEmpty ?? false)
         TabControllerHelper(
-          AppLocalizations.of(context)!.purchases,
+          titleFunction: (context) => AppLocalizations.of(context)!.purchases,
           extras: purchases,
         ),
       if (products_inputs?.isNotEmpty ?? false)
         TabControllerHelper(
-          AppLocalizations.of(context)!.productsInput,
+          titleFunction: (context) =>
+              AppLocalizations.of(context)!.productsInput,
           extras: products_inputs,
         ),
       if (products_outputs?.isNotEmpty ?? false)
         TabControllerHelper(
-          AppLocalizations.of(context)!.productsOutput,
+          titleFunction: (context) =>
+              AppLocalizations.of(context)!.productsOutput,
           extras: products_outputs,
         ),
       if (transfers?.isNotEmpty ?? false)
         TabControllerHelper(
-          AppLocalizations.of(context)!.transfers,
+          titleFunction: (context) => AppLocalizations.of(context)!.transfers,
           extras: transfers,
         ),
       if (reservation_invoice?.isNotEmpty ?? false)
         TabControllerHelper(
-          AppLocalizations.of(context)!.reservationInvoice,
+          titleFunction: (context) =>
+              AppLocalizations.of(context)!.reservationInvoice,
           extras: reservation_invoice,
         ),
       if (cut_requests?.isNotEmpty ?? false)
         TabControllerHelper(
-          AppLocalizations.of(context)!.cutRequest,
+          titleFunction: (context) => AppLocalizations.of(context)!.cutRequest,
           extras: cut_requests,
         ),
     ];
@@ -545,31 +556,24 @@ class UserLists<T> extends AuthUser<T> {
   }
 
   List<WidgetGridHelper> getFundWidgets(
-    BuildContext context,
-    int crossAxisCount, {
+    BuildContext context, {
     bool checkForEmpty = false,
     SecoundPaneHelperWithParentValueNotifier? basePage,
   }) {
-    bool isMezouj = crossAxisCount % 2 == 0;
-    debugPrint(
-      "isMezouj: $isMezouj   crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4} ",
-    );
-    int crossCountFund = crossAxisCount ~/ 4;
-    int crossAxisCountMod = crossAxisCount % 4;
-    int crossCountFundCalc = crossAxisCountMod == 0 ? crossCountFund : 1;
-
-    debugPrint(
-      "isMezouj: $isMezouj  crossCountFundCalc $crossCountFundCalc crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc + crossAxisCountMod =${crossCountFundCalc + crossAxisCountMod}",
-    );
     return [
       if (checkForEmptyList(credits, checkForEmpty))
         getWidget(
-          StaggeredGridTile.count(
+          (
+            fullCrossAxisCount,
+            crossCountFundCalc,
+            crossAxisCountMod,
+            heightMainAxisCellCount,
+          ) => StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-                basePage: basePage,
-           
+              basePage: basePage,
+
               list: credits,
               listGrowthRate: creditsAnalysis,
               icon: Icons.arrow_back_sharp,
@@ -582,12 +586,17 @@ class UserLists<T> extends AuthUser<T> {
         ),
       if (checkForEmptyList(debits, checkForEmpty))
         getWidget(
-          StaggeredGridTile.count(
+          (
+            fullCrossAxisCount,
+            crossCountFundCalc,
+            crossAxisCountMod,
+            heightMainAxisCellCount,
+          ) => StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
               basePage: basePage,
-           
+
               color: Debits().getMainColor(),
               icon: Icons.arrow_forward_rounded,
               title: AppLocalizations.of(context)!.debits,
@@ -603,12 +612,17 @@ class UserLists<T> extends AuthUser<T> {
         ),
       if (checkForEmptyList(spendings, checkForEmpty) && !isCustomerDashboard())
         getWidget(
-          StaggeredGridTile.count(
+          (
+            fullCrossAxisCount,
+            crossCountFundCalc,
+            crossAxisCountMod,
+            heightMainAxisCellCount,
+          ) => StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
               basePage: basePage,
-           
+
               color: Spendings().getMainColor(),
               icon: Icons.arrow_forward_rounded,
               title: AppLocalizations.of(context)!.spendings,
@@ -624,12 +638,17 @@ class UserLists<T> extends AuthUser<T> {
         ),
       if (checkForEmptyList(incomes, checkForEmpty) && !isCustomerDashboard())
         getWidget(
-          StaggeredGridTile.count(
+          (
+            fullCrossAxisCount,
+            crossCountFundCalc,
+            crossAxisCountMod,
+            heightMainAxisCellCount,
+          ) => StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc + crossAxisCountMod,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-                 basePage: basePage,
-           
+              basePage: basePage,
+
               icon: Icons.arrow_back_sharp,
               listGrowthRate: incomesAnalysis,
               title: AppLocalizations.of(context)!.incomes,
@@ -642,8 +661,8 @@ class UserLists<T> extends AuthUser<T> {
       //todo set this for dashboard only
       if (checkList(credits))
         getWidget(
-          StaggeredGridTile.count(
-            crossAxisCellCount: crossAxisCount,
+              (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>  StaggeredGridTile.count(
+            crossAxisCellCount: fullCrossAxisCount,
             mainAxisCellCount: 2,
             child: Card(
               child: ViewableTableViewAbstractWidget(
@@ -663,28 +682,19 @@ class UserLists<T> extends AuthUser<T> {
   }
 
   List<WidgetGridHelper> getInvoicesWidgets(
-    BuildContext context,
-    int crossAxisCount, {
+    BuildContext context,{
     bool checkForEmpty = false,
     SecoundPaneHelperWithParentValueNotifier? basePage,
   }) {
-    bool isMezouj = crossAxisCount % 2 == 0;
-
-    int crossCountFund = crossAxisCount ~/ 4;
-    int crossAxisCountMod = crossAxisCount % 4;
-    int crossCountFundCalc = crossAxisCountMod == 0 ? crossCountFund : 1;
-    debugPrint(
-      "isMezouj: $isMezouj  crossCountFundCalc $crossCountFundCalc crossAxisCount $crossAxisCount crossAxisCount % 2= ${crossAxisCount % 2} crossAxisCount % 4 ${crossAxisCount % 4}  crossCountFundCalc + crossAxisCountMod =${crossCountFundCalc + crossAxisCountMod}",
-    );
     return [
       if (checkForEmptyList(orders, checkForEmpty))
         getWidget(
-          StaggeredGridTile.count(
+              (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>  StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc + crossAxisCountMod,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-                basePage: basePage,
-           
+              basePage: basePage,
+
               // color: Colors.green.withOpacity(0.2),
               icon: Order().getMainIconData(),
               listGrowthRate: ordersAnalysis,
@@ -699,12 +709,12 @@ class UserLists<T> extends AuthUser<T> {
         ),
       if (checkForEmptyList(purchases, checkForEmpty))
         getWidget(
-          StaggeredGridTile.count(
+              (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>  StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-                 basePage: basePage,
-           
+              basePage: basePage,
+
               listGrowthRate: purchasesAnalysis,
               icon: Purchases().getMainIconData(),
               title: AppLocalizations.of(context)!.purchases,
@@ -718,12 +728,12 @@ class UserLists<T> extends AuthUser<T> {
         ),
       if (checkForEmptyList(cut_requests, checkForEmpty))
         getWidget(
-          StaggeredGridTile.count(
+              (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>  StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-                basePage: basePage,
-           
+              basePage: basePage,
+
               icon: CutRequest().getMainIconData(),
               listGrowthRate: cut_requestsAnalysis,
               title: CutRequest().getMainHeaderLabelTextOnly(context),
@@ -737,12 +747,12 @@ class UserLists<T> extends AuthUser<T> {
         ),
       if (checkForEmptyList(transfers, checkForEmpty) && !isCustomerDashboard())
         getWidget(
-          StaggeredGridTile.count(
+              (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>  StaggeredGridTile.count(
             crossAxisCellCount: crossCountFundCalc,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-                basePage: basePage,
-           
+              basePage: basePage,
+
               icon: Transfers().getMainIconData(),
               title: Transfers().getMainHeaderLabelTextOnly(context),
               listGrowthRate: transfersAnalysis,
@@ -757,7 +767,7 @@ class UserLists<T> extends AuthUser<T> {
       if (checkForEmptyList(products_inputs, checkForEmpty) &&
           !isCustomerDashboard())
         getWidget(
-          StaggeredGridTile.count(
+              (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>  StaggeredGridTile.count(
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
@@ -767,8 +777,8 @@ class UserLists<T> extends AuthUser<T> {
               //   //TODO
               //   // globalKey?.currentState?.changeTabIndexSecondPane(idx);
               // },
-                 basePage: basePage,
-           
+              basePage: basePage,
+
               icon: ProductInput().getMainIconData(),
               title: ProductInput().getMainHeaderLabelTextOnly(context),
               description: products_inputsAnalysis.getTotalText(
@@ -784,12 +794,12 @@ class UserLists<T> extends AuthUser<T> {
       if (checkForEmptyList(products_outputs, checkForEmpty) &&
           !isCustomerDashboard())
         getWidget(
-          StaggeredGridTile.count(
+                (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>StaggeredGridTile.count(
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
-                 basePage: basePage,
-           
+              basePage: basePage,
+
               icon: ProductOutput().getMainIconData(),
               title: ProductOutput().getMainHeaderLabelTextOnly(context),
               description: products_outputs
@@ -803,7 +813,7 @@ class UserLists<T> extends AuthUser<T> {
         ),
       if (checkForEmptyList(reservation_invoice, checkForEmpty))
         getWidget(
-          StaggeredGridTile.count(
+                (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>StaggeredGridTile.count(
             crossAxisCellCount: 1,
             mainAxisCellCount: 1,
             child: ChartCardItemCustom(
@@ -813,8 +823,8 @@ class UserLists<T> extends AuthUser<T> {
               //   //TODO
               //   //globalKey?.currentState?.changeTabIndexSecondPane(idx);
               // },
-                 basePage: basePage,
-           
+              basePage: basePage,
+
               icon: ReservationInvoice().getMainIconData(),
               title: ReservationInvoice().getMainHeaderLabelTextOnly(context),
               description: reservation_invoice
@@ -829,8 +839,8 @@ class UserLists<T> extends AuthUser<T> {
       //todo this only on dashboard
       if (checkList(orders))
         getWidget(
-          StaggeredGridTile.count(
-            crossAxisCellCount: crossAxisCount,
+               (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) => StaggeredGridTile.count(
+            crossAxisCellCount: fullCrossAxisCount,
             mainAxisCellCount: 2,
             child: Card(
               child: ViewableTableViewAbstractWidget(

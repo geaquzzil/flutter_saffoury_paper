@@ -606,7 +606,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
           },
         ),
       ],
-      AppLocalizations.of(context)!.adsImages,
+      titleFunction: (context) => AppLocalizations.of(context)!.adsImages,
     );
   }
 

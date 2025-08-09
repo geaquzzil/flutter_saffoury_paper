@@ -7,7 +7,7 @@ import 'package:flutter_view_controller/new_components/cards/card_corner.dart';
 import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/new_components/cart/cart_icon.dart';
 import 'package:flutter_view_controller/new_components/company_logo.dart';
-import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/compontents/section_item_headerI.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/language_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/drawers/components/setting_button.dart';
 import 'package:flutter_view_controller/new_screens/home/components/profile/profile_on_open_drawer.dart';

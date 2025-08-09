@@ -77,7 +77,8 @@ class Credits extends MoneyFunds<Credits> {
   }) {
     return [
       TabControllerHelper(
-        AppLocalizations.of(context)!.findSimilar,
+              titleFunction:(context) =>AppLocalizations.of(context)!.findSimilar,
+        // titleFunction: (context) => AppLocalizations.of(context)!.findSimilar,
         widget: SliverApiMixinViewAbstractWidget(
           toListObject: Credits().setRequestOption(
             option: RequestOptions()
@@ -88,7 +89,8 @@ class Credits extends MoneyFunds<Credits> {
         ),
       ),
       TabControllerHelper(
-        AppLocalizations.of(context)!.size_analyzer,
+             titleFunction:(context) => AppLocalizations.of(context)!.size_analyzer,
+        // titleFunction: (context) => AppLocalizations.of(context)!.size_analyzer,
         widget: StorageDetailsCustom(
           chart: SliverApiMixinViewAbstractWidget(
             onResponseAddCustomWidget: ((isSliver, _, _, response) {

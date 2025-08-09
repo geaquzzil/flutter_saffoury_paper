@@ -221,8 +221,7 @@ class Dashboard extends UserLists<Dashboard>
 
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
-    BuildContext context,
-    int crossAxisCount, {
+    BuildContext context, {
     SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) => [
@@ -231,7 +230,7 @@ class Dashboard extends UserLists<Dashboard>
       headerListToAdd: [Credits(), Debits(), Spendings(), Incomes()],
       title: AppLocalizations.of(context)!.overview,
       widgets: [
-        ...getFundWidgets(context, crossAxisCount, basePage: basePage),
+        ...getFundWidgets(context, basePage: basePage),
         // ...getInvoicesWidgets(context)
       ],
     ),
@@ -246,9 +245,7 @@ class Dashboard extends UserLists<Dashboard>
         ProductOutput(),
         ReservationInvoice(),
       ],
-      widgets: [
-        ...getInvoicesWidgets(context, crossAxisCount, basePage: basePage),
-      ],
+      widgets: [...getInvoicesWidgets(context, basePage: basePage)],
     ),
     DashableGridHelper(
       title: AppLocalizations.of(
@@ -257,8 +254,13 @@ class Dashboard extends UserLists<Dashboard>
       headerListToAdd: [Order()],
       widgets: [
         getWidget(
-          StaggeredGridTile.count(
-            crossAxisCellCount: crossAxisCount,
+          (
+            fullCrossAxisCount,
+            crossCountFundCalc,
+            crossAxisCountMod,
+            heightMainAxisCellCount,
+          ) => StaggeredGridTile.count(
+            crossAxisCellCount: fullCrossAxisCount,
             mainAxisCellCount: 1.2,
             child: SliverApiMixinViewAbstractWidget(
               isSliver: false,
@@ -278,8 +280,13 @@ class Dashboard extends UserLists<Dashboard>
         title: AppLocalizations.of(context)!.pendingCutRequest,
         widgets: [
           getWidget(
-            StaggeredGridTile.count(
-              crossAxisCellCount: crossAxisCount,
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
+              crossAxisCellCount: fullCrossAxisCount,
               mainAxisCellCount: 1.2,
               child: SliverApiMixinStaticList<CutRequest>(
                 isSliver: true,
@@ -327,8 +334,13 @@ class Dashboard extends UserLists<Dashboard>
         title: AppLocalizations.of(context)!.pendingReservationInvoices,
         widgets: [
           getWidget(
-            StaggeredGridTile.count(
-              crossAxisCellCount: crossAxisCount,
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
+              crossAxisCellCount: fullCrossAxisCount,
               mainAxisCellCount: 1.2,
               child: SliverApiMixinStaticList<ReservationInvoice>(
                 isSliver: true,
@@ -346,8 +358,13 @@ class Dashboard extends UserLists<Dashboard>
         ),
         widgets: [
           getWidget(
-            StaggeredGridTile.count(
-              crossAxisCellCount: crossAxisCount,
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
+              crossAxisCellCount: crossCountFundCalc,
               mainAxisCellCount: 1.2,
               child: SliverApiMixinStaticList<ReservationInvoice>(
                 isSliver: true,
@@ -368,8 +385,7 @@ class Dashboard extends UserLists<Dashboard>
 
   @override
   getDashboardSectionsSecoundPane(
-    BuildContext context,
-    int crossAxisCount, {
+    BuildContext context, {
     SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
     TabControllerHelper? tabSecondPane,
@@ -387,7 +403,12 @@ class Dashboard extends UserLists<Dashboard>
         wrapWithCard: false,
         widgets: [
           getWidget(
-            StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: 1.5,
               child: MultiLineChartItem<GrowthRate, DateTime>(
@@ -406,7 +427,12 @@ class Dashboard extends UserLists<Dashboard>
             type: WidgetDashboardType.CHART,
           ),
           getWidget(
-            StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: .75,
               child: ChartCardItemCustom(
@@ -420,7 +446,12 @@ class Dashboard extends UserLists<Dashboard>
             ),
           ),
           getWidget(
-            StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 1,
               mainAxisCellCount: .75,
               child: ChartCardItemCustom(
@@ -434,7 +465,12 @@ class Dashboard extends UserLists<Dashboard>
             ),
           ),
           getWidget(
-            StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 1,
               mainAxisCellCount: .75,
               child: ChartCardItemCustom(
@@ -565,8 +601,13 @@ class Dashboard extends UserLists<Dashboard>
           title: AppLocalizations.of(context)!.customer,
           widgets: [
             getWidget(
-              StaggeredGridTile.count(
-                crossAxisCellCount: crossAxisCount,
+              (
+                fullCrossAxisCount,
+                crossCountFundCalc,
+                crossAxisCountMod,
+                heightMainAxisCellCount,
+              ) => StaggeredGridTile.count(
+                crossAxisCellCount: fullCrossAxisCount,
                 mainAxisCellCount: 2,
                 child: Card(
                   child: ViewableTableViewAbstractWidget(
@@ -584,8 +625,13 @@ class Dashboard extends UserLists<Dashboard>
           title: AppLocalizations.of(context)!.customer,
           widgets: [
             getWidget(
-              StaggeredGridTile.count(
-                crossAxisCellCount: crossAxisCount,
+              (
+                fullCrossAxisCount,
+                crossCountFundCalc,
+                crossAxisCountMod,
+                heightMainAxisCellCount,
+              ) => StaggeredGridTile.count(
+                crossAxisCellCount: fullCrossAxisCount,
                 mainAxisCellCount: 2,
                 child: Card(
                   child: ViewableTableViewAbstractWidget(

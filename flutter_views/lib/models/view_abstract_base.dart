@@ -413,7 +413,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   }) {
     return [
       TabControllerHelper(
-        getMainHeaderTextOnly(context),
+        titleFunction: (context) => getMainHeaderTextOnly(context),
         // draggableSwithHeaderFromAppbarToScroll:
         //     getTabControllerFirstHeaderWidget(context),
         // getMainIconData(),
@@ -623,6 +623,7 @@ class TabControllerHelper extends Tab {
   Widget? draggableSwithHeaderFromAppbarToScroll;
   AlignmentDirectional? draggableSwithHeaderFromAppbarToScrollAlignment;
   Widget? draggableExtendedWidget;
+  String? Function(BuildContext context) titleFunction;
 
   ///could return List<Widget> if sliver or Widget if not sliver
   Function? autoRestWidgetBuilder;
@@ -637,9 +638,9 @@ class TabControllerHelper extends Tab {
   final ScrollController scrollFirstPaneController = ScrollController();
   final ScrollController scrollSecoundPaneController = ScrollController();
 
-  TabControllerHelper(
-    String title, {
+  TabControllerHelper({
     super.key,
+    required this.titleFunction,
     this.viewAbstractGeneratedKey,
     super.icon,
     this.fieldThatHasList,
@@ -657,5 +658,71 @@ class TabControllerHelper extends Tab {
     this.draggableSwithHeaderFromAppbarToScroll,
     this.isResponsiveIsSliver = false,
     this.widget,
-  }) : super(text: title);
+    this.autoRestWidgetBuilderViewAbstract,
+    String? title,
+    // super.text,
+  }) : super(text: title ?? "-");
+
+  // void setTitle(BuildContext context){
+  //   this.text=titleFunction.call(context);
+  // }
+
+  TabControllerHelper copyWith({
+    String? title,
+    bool? isMain,
+    String? fieldThatHasList,
+    String? viewAbstractGeneratedKey,
+    AutoRest? autoRest,
+    Widget? widget,
+    List<Widget>? slivers,
+    bool? isResponsiveIsSliver,
+    Widget? draggableHeaderWidget,
+    Widget? draggableSwithHeaderFromAppbarToScroll,
+    AlignmentDirectional? draggableSwithHeaderFromAppbarToScrollAlignment,
+    Widget? draggableExtendedWidget,
+    String? Function(BuildContext context)? titleFunction,
+    Function? autoRestWidgetBuilder,
+    ViewAbstract? autoRestWidgetBuilderViewAbstract,
+    int? iD,
+    String? tableName,
+    dynamic extras,
+  }) {
+    return TabControllerHelper(
+      isMain: isMain ?? this.isMain,
+      fieldThatHasList: fieldThatHasList ?? this.fieldThatHasList,
+      viewAbstractGeneratedKey:
+          viewAbstractGeneratedKey ?? this.viewAbstractGeneratedKey,
+      autoRest: autoRest ?? this.autoRest,
+      widget: widget ?? this.widget,
+      slivers: slivers ?? this.slivers,
+      isResponsiveIsSliver: isResponsiveIsSliver ?? this.isResponsiveIsSliver,
+      draggableHeaderWidget:
+          draggableHeaderWidget ?? this.draggableHeaderWidget,
+      draggableSwithHeaderFromAppbarToScroll:
+          draggableSwithHeaderFromAppbarToScroll ??
+          this.draggableSwithHeaderFromAppbarToScroll,
+      draggableSwithHeaderFromAppbarToScrollAlignment:
+          draggableSwithHeaderFromAppbarToScrollAlignment ??
+          this.draggableSwithHeaderFromAppbarToScrollAlignment,
+      draggableExtendedWidget:
+          draggableExtendedWidget ?? this.draggableExtendedWidget,
+      titleFunction: titleFunction ?? this.titleFunction,
+      autoRestWidgetBuilder:
+          autoRestWidgetBuilder ?? this.autoRestWidgetBuilder,
+      autoRestWidgetBuilderViewAbstract:
+          autoRestWidgetBuilderViewAbstract ??
+          this.autoRestWidgetBuilderViewAbstract,
+      iD: iD ?? this.iD,
+      tableName: tableName ?? this.tableName,
+      extras: extras ?? this.extras,
+      title: title,
+    );
+  }
+
+  TabControllerHelper getTitled(BuildContext context) {
+    debugPrint(
+      "TabControllerHelper getTitled title:${titleFunction.call(context)}",
+    );
+    return copyWith(title: titleFunction.call(context));
+  }
 }

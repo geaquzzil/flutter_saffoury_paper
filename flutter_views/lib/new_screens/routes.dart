@@ -8,7 +8,6 @@ import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/print_local_setting.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_determine_screen_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/details/list_details.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/base_file_reader_page.dart';
 import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_file_exporter_page.dart';
 import 'package:flutter_view_controller/new_screens/home/home_notification_widget.dart';
@@ -31,7 +30,6 @@ import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../interfaces/dashable_interface.dart';
 import '../models/view_abstract.dart';
 import '../providers/auth_provider.dart';
 import '../screens/web/contact-us.dart';
@@ -627,12 +625,12 @@ class RouteGenerator {
             return const SettingPage();
           },
         );
-      case "/dashboard":
-        return MaterialPageRoute(
-          builder: (context) {
-            return DashboardPage(dashboard: args as DashableInterface);
-          },
-        );
+      // case "/dashboard":
+      //   return MaterialPageRoute(
+      //     builder: (context) {
+      //       return DashboardPage(dashboard: args as DashableInterface);
+      //     },
+      //   );
       case "/print":
         return MaterialPageRoute(
           builder: (context) {

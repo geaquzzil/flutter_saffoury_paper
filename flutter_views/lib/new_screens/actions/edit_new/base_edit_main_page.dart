@@ -9,9 +9,9 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_action_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_dialog.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_new.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/dashboard.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/packages/material_dialogs/shared/types.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:provider/provider.dart';
 
@@ -22,11 +22,12 @@ import '../../../providers/actions/list_multi_key_provider.dart';
 class BaseEditNewPage extends BaseActionScreenPage {
   void Function(ViewAbstract? ViewAbstract)? onFabClickedConfirm;
 
-  BaseEditNewPage(
-      {super.key,
-      required super.viewAbstract,
-      this.onFabClickedConfirm,
-      super.currentScreenSize});
+  BaseEditNewPage({
+    super.key,
+    required super.viewAbstract,
+    this.onFabClickedConfirm,
+    super.currentScreenSize,
+  });
 
   @override
   State<BaseEditNewPage> createState() => _BaseEditNewPageState();
@@ -66,7 +67,8 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
 
           if (currentViewAbstract != null) {
             debugPrint(
-                "BaseEdit main form onValidate on main page ${currentViewAbstract?.toJsonString()}");
+              "BaseEdit main form onValidate on main page ${currentViewAbstract?.toJsonString()}",
+            );
           }
         },
         viewAbstract: getExtras(),
@@ -97,7 +99,8 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
 
         if (currentViewAbstract != null) {
           debugPrint(
-              "BaseEdit main form onValidate on main page ${currentViewAbstract?.toJsonString()}");
+            "BaseEdit main form onValidate on main page ${currentViewAbstract?.toJsonString()}",
+          );
         }
       },
       viewAbstract: getExtras(),
@@ -111,15 +114,9 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
     Widget? listSelect = getAddToListFloatingButton(context);
     return [
       if (widget != null) widget,
-      if (widget != null)
-        const SizedBox(
-          width: kDefaultPadding,
-        ),
+      if (widget != null) const SizedBox(width: kDefaultPadding),
       if (listSelect != null) listSelect,
-      if (listSelect != null)
-        const SizedBox(
-          width: kDefaultPadding,
-        ),
+      if (listSelect != null) const SizedBox(width: kDefaultPadding),
       if (getExtras().hasPermissionEdit(context))
         getAddFloatingButton2(context),
     ];
@@ -166,44 +163,49 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
               );
             } else if (value == ApiCallState.ERROR) {
               return FloatingActionButton.extended(
-                  heroTag: UniqueKey(),
-                  onPressed: () {},
-                  icon: const Icon(Icons.error),
-                  label:
-                      Text(AppLocalizations.of(context)!.errOperationFailed));
+                heroTag: UniqueKey(),
+                onPressed: () {},
+                icon: const Icon(Icons.error),
+                label: Text(AppLocalizations.of(context)!.errOperationFailed),
+              );
             } else {
               return FloatingActionButtonExtended(
                 expandedWidget: Text(AppLocalizations.of(context)!.subment),
                 onExpandIcon: getExtras().isEditing() ? Icons.edit : Icons.add,
-                colapsed:
-                    masterValue == null ? Icons.error : Icons.arrow_forward,
+                colapsed: masterValue == null
+                    ? Icons.error
+                    : Icons.arrow_forward,
                 onPress: masterValue == null
                     ? null
                     : () async {
                         if (widget.onFabClickedConfirm != null) {
                           debugPrint(
-                              "onFabClickedConfirm !=null convert destination");
+                            "onFabClickedConfirm !=null convert destination",
+                          );
                           widget.onFabClickedConfirm!(currentViewAbstract);
                           return;
                         }
-                        currentViewAbstract =
-                            currentViewAbstract!.copyToUplode();
+                        currentViewAbstract = currentViewAbstract!
+                            .copyToUplode();
                         apiCallState.value = ApiCallState.LOADING;
                         currentViewAbstract = await currentViewAbstract!
                             .addCall(
-                                context: context,
-                                onResponse: OnResponseCallback(
-                                    onServerFailureResponse: (s) {
+                              context: context,
+                              onResponse: OnResponseCallback(
+                                onServerFailureResponse: (s) {
                                   debugPrint("onServerFailure $s");
                                   apiCallState.value = ApiCallState.ERROR;
-                                }));
+                                },
+                              ),
+                            );
                         if (currentViewAbstract != null) {
                           apiCallState.value = ApiCallState.DONE;
                           extras = currentViewAbstract;
                           currentViewAbstract!.onCardClicked(context);
                           context.read<ListMultiKeyProvider>().notifyAdd(
-                              currentViewAbstract!,
-                              context: context);
+                            currentViewAbstract!,
+                            context: context,
+                          );
                         }
 
                         // context.read<ListMultiKeyProvider>().addCustomSingle(viewAbstract);
@@ -222,31 +224,33 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
       heroTag: UniqueKey(),
       onPressed: () {
         Dialogs.materialDialog(
-            customViewPosition: CustomViewPosition.BEFORE_TITLE,
-            msgAlign: TextAlign.end,
-            dialogWidth: kIsWeb || Responsive.isDesktop(context) ? 0.3 : null,
-            color: Theme.of(context).colorScheme.surface,
-            msg: getExtras().getBaseMessage(context),
-            title: getExtras().getBaseTitle(context),
-            context: context,
-            onClose: (value) {
-              if (value != null) {
-                context.read<ListMultiKeyProvider>().delete(getExtras());
-              }
-            },
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(AppLocalizations.of(context)!.cancel),
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop("confirm");
-                  },
-                  child: Text(AppLocalizations.of(context)!.delete)),
-            ]);
+          customViewPosition: CustomViewPosition.BEFORE_TITLE,
+          msgAlign: TextAlign.end,
+          dialogWidth: kIsWeb || isDesktop(context) ? 0.3 : null,
+          color: Theme.of(context).colorScheme.surface,
+          msg: getExtras().getBaseMessage(context),
+          title: getExtras().getBaseTitle(context),
+          context: context,
+          onClose: (value) {
+            if (value != null) {
+              context.read<ListMultiKeyProvider>().delete(getExtras());
+            }
+          },
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(AppLocalizations.of(context)!.cancel),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop("confirm");
+              },
+              child: Text(AppLocalizations.of(context)!.delete),
+            ),
+          ],
+        );
       },
       child: const Icon(Icons.delete),
     );
@@ -254,22 +258,24 @@ class _BaseEditNewPageState extends BaseActionScreenPageState<BaseEditNewPage> {
 
   FloatingActionButton? getAddToListManualFloatingButton(BuildContext context) {
     if (getExtras() is! ListableInterface) return null;
-    ViewAbstract? value =
-        getListableInterface().getListableAddFromManual(context);
+    ViewAbstract? value = getListableInterface().getListableAddFromManual(
+      context,
+    );
     return FloatingActionButton.small(
       heroTag: UniqueKey(),
       onPressed: () async {
         value = getListableInterface().getListableAddFromManual(context);
         value!.setParent(getExtras());
         await showFullScreenDialogExt<ViewAbstract?>(
-            anchorPoint: const Offset(1000, 1000),
-            context: context,
-            builder: (p0) {
-              return BaseEditDialog(
-                disableCheckEnableFromParent: true,
-                viewAbstract: value!,
-              );
-            }).then((value) {
+          anchorPoint: const Offset(1000, 1000),
+          context: context,
+          builder: (p0) {
+            return BaseEditDialog(
+              disableCheckEnableFromParent: true,
+              viewAbstract: value!,
+            );
+          },
+        ).then((value) {
           {
             if (value != null) {
               getListableInterface().onListableAddFromManual(context, value);

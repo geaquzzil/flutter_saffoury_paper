@@ -29,6 +29,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/new_components/chart/line_chart.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/components/staggerd_grid_view_widget.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';

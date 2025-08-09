@@ -12,13 +12,13 @@ abstract class DashableItemInterface {}
 abstract class DashableInterface<T extends ViewAbstract> {
   getDashboardSectionsFirstPane(
     BuildContext context,
-    int crossAxisCount, {
+ {
     TabControllerHelper? tab,
     SecoundPaneHelperWithParentValueNotifier? basePage,
   });
   getDashboardSectionsSecoundPane(
     BuildContext context,
-    int crossAxisCount, {
+    {
     SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
     TabControllerHelper? tabSecondPane,
@@ -50,7 +50,13 @@ abstract class DashableInterface<T extends ViewAbstract> {
 enum WidgetDashboardType { NORMAL, CHART }
 
 class WidgetGridHelper {
-  StaggeredGridTile widget;
+  StaggeredGridTile Function(
+    int fullCrossAxisCount,
+    int crossCountFundCalc,
+    int crossAxisCountMod,
+    num heightMainAxisCellCount,
+  )
+  widget;
   WidgetDashboardType widgetDashboardType;
 
   WidgetGridHelper({required this.widget, required this.widgetDashboardType});
@@ -59,7 +65,8 @@ class WidgetGridHelper {
 class DashableGridHelper {
   String? title;
   Widget? onTitleButton;
-  List<WidgetGridHelper> widgets;
+  List<WidgetGridHelper> 
+  widgets;
   List<List<ViewAbstract>>? sectionsListToTabbar;
   List<ViewAbstract>? headerListToAdd;
   bool wrapWithCard;

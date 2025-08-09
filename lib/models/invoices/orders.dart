@@ -85,7 +85,7 @@ class Order extends InvoiceMaster<Order>
   }) {
     return [
       TabControllerHelper(
-        AppLocalizations.of(context)!.findSimilar,
+             titleFunction:(context) => AppLocalizations.of(context)!.findSimilar,
         widget: SliverApiMixinViewAbstractWidget(
           toListObject: Order().setRequestOption(
             option: RequestOptions().addSearchByField(
@@ -96,7 +96,7 @@ class Order extends InvoiceMaster<Order>
         ),
       ),
       TabControllerHelper(
-        AppLocalizations.of(context)!.overview,
+             titleFunction:(context) => AppLocalizations.of(context)!.overview,
         widget: getTabControllerChartWidget(context),
       ),
 

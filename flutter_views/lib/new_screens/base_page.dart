@@ -1193,8 +1193,9 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   late bool buildDrawer;
   late bool _buildSecoundPane;
   bool isSelectedMode = false;
+  int lastTabIndex = -1;
 
-  bool _isTabInited = false;
+  // bool _isTabInited = false;
 
   DrawerMenuControllerProvider get drawerMenuControllerProvider =>
       _drawerMenuControllerProvider;
@@ -1224,6 +1225,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       debugPrint("onBuildCalled $runtimeType");
       widget.onBuild?.value = Random()..nextInt(10000);
     });
+    _initBaseTab();
     super.initState();
   }
 
@@ -1241,7 +1243,6 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   TabController? _tabBaseController;
   int currentBaseTabIndex = 0;
   List<TabControllerHelper>? _tabList;
-  ValueNotifier<int> onTabSelectedSecondPane = ValueNotifier<int>(0);
 
   List<Widget>? getPane({
     required bool firstPane,
@@ -1297,8 +1298,11 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     return null;
   }
 
-  List<TabControllerHelper> _getTabBarList() {
-    return _tabList!;
+  List<TabControllerHelper> _getTabBarList({bool mapped = false}) {
+    if (!mapped) {
+      return _tabList!;
+    }
+    return _tabList!.map((e) => e.getTitled(context)).toList();
   }
 
   bool _hasTabBarList() {
@@ -1322,7 +1326,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       // labelPadding: EdgeInsets.symmetric(horizontal: 5.0),
       isScrollable: true,
       //  firstPane != null,
-      tabs: _getTabBarList(),
+      tabs: _getTabBarList(mapped: true),
     );
   }
 
@@ -1627,8 +1631,6 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   }
 
   void _initBaseTab() {
-    if (_isTabInited) return;
-    _isTabInited = true;
     _tabList = initTabBarList();
 
     /// Here you can have your context and do what ever you want
@@ -1640,11 +1642,8 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   @override
   void dispose() {
-    // _connectionListener.dispose();
-    if (_hasTabBarList()) {
-      _tabBaseController!.removeListener(onTabControllerChangeListener);
-      _tabBaseController!.dispose();
-    }
+    _tabBaseController?.removeListener(onTabControllerChangeListener);
+    _tabBaseController?.dispose();
     super.dispose();
   }
 
@@ -1681,8 +1680,6 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   @override
   Widget build(BuildContext context) {
-    _initBaseTab();
-
     return wrapBuildWidget(
       ScreenHelperSliver(
         forceSmallView:
@@ -2033,7 +2030,10 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     );
     if (tabs != null) {
       tabs = [
-        TabControllerHelper(AppLocalizations.of(context)!.home, isMain: true),
+        TabControllerHelper(
+          titleFunction: (context) => AppLocalizations.of(context)!.home,
+          isMain: true,
+        ),
 
         ...tabs,
       ];
@@ -2196,7 +2196,9 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     }
     return TabBarView(
       controller: _tabBaseController,
-      children: _getTabBarList().map((e) => getMainPanes(baseTap: e)).toList(),
+      children: _getTabBarList(
+        mapped: true,
+      ).map((e) => getMainPanes(baseTap: e)).toList(),
     );
   }
 
@@ -2235,6 +2237,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   void onTabControllerChangeListener() {
     currentBaseTabIndex = _tabBaseController!.index;
+    // lastTabIndex=
     debugPrint("_tabController $currentBaseTabIndex");
   }
 
@@ -2312,6 +2315,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
 
   @override
   void initState() {
+    super.initState();
     _iD = widget.iD;
     _tableName = widget.tableName;
     _extras = widget.extras;
@@ -2323,11 +2327,11 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
           ConnectionStateExtension.none,
     );
     _isLoading = getExtrasCast().shouldGetFromApi(ServerActions.view, null);
-    super.initState();
   }
 
   @override
   void didUpdateWidget(covariant T oldWidget) {
+    super.didUpdateWidget(oldWidget);
     if (_iD != widget.iD) {
       _iD = widget.iD;
     }
@@ -2350,8 +2354,6 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
       overrideConnectionState(BasePageWithApiConnection.didUpdate) ??
           ConnectionStateExtension.none,
     );
-
-    super.didUpdateWidget(oldWidget);
   }
 
   FutureOr<dynamic>? getOverrideCallApiFunction(
@@ -2510,12 +2512,14 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     return [SliverFillRemaining(child: loading)];
   }
 
-  Widget getLoadingPage(bool firstPane, {TabControllerHelper? tab}) {
-    return LoadingScreen(
-      isPage: true,
-      isSliver: false,
-      width: firstPane ? firstPaneWidth : secPaneWidth,
-    );
+  List<Widget> getLoadingPage(bool firstPane, {TabControllerHelper? tab}) {
+    return [
+      LoadingScreen(
+        isPage: firstPane,
+        isSliver: true,
+        width: firstPane ? firstPaneWidth : secPaneWidth,
+      ),
+    ];
   }
 
   @override
@@ -2524,7 +2528,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     ScrollController? controler,
     TabControllerHelper? tab,
   }) {
-    if (_isLoading) return getLoadingWidget(true, tab: tab);
+    if (_isLoading) return getLoadingPage(firstPane, tab: tab);
     var shouldWaitWidget;
     if (isExtrasIsDashboard()) {
       shouldWaitWidget = getExtrasCastDashboard(tab: tab)
@@ -2572,23 +2576,24 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   Widget? getBottomNavigationBar({bool? firstPane, TabControllerHelper? tab}) {
     return _isLoading
         ? null
-        : getBottomNavigationBar(firstPane: firstPane, tab: tab);
+        : super.getBottomNavigationBar(firstPane: firstPane, tab: tab);
   }
 
-  @override
-  AppBar? generateBaseAppbar() {
-    return _isLoading ? null : super.generateBaseAppbar();
-  }
+  // @override
+  // AppBar? generateBaseAppbar() {
+  //   return _isLoading ? null : super.generateBaseAppbar();
+  // }
 
-  @override
-  Widget? getFloatingActionButton({bool? firstPane, TabControllerHelper? tab}) {
-    return _isLoading
-        ? null
-        : getFloatingActionButton(firstPane: firstPane, tab: tab);
-  }
+  // @override
+  // Widget? getFloatingActionButton({bool? firstPane, TabControllerHelper? tab}) {
+  //   return _isLoading
+  //       ? null
+  //       : super.getFloatingActionButton(firstPane: firstPane, tab: tab);
+  // }
 
   @override
   void onTabControllerChangeListener() {
+    super.onTabControllerChangeListener();
     dynamic extras = _tabList?[_tabBaseController!.index].extras;
     if (extras != null && extras is ViewAbstract) {
       bool shouldLoad = extras.shouldGetFromApi(

@@ -131,8 +131,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
 
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
-    BuildContext context,
-    int crossAxisCount, {
+    BuildContext context, {
     SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
@@ -142,7 +141,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
         headerListToAdd: [Credits(), Debits(), Spendings(), Incomes()],
         title: AppLocalizations.of(context)!.overview,
         widgets: [
-          ...getFundWidgets(context, crossAxisCount, checkForEmpty: false),
+          ...getFundWidgets(context, checkForEmpty: false),
           // ...getInvoicesWidgets(context)
         ],
       ),
@@ -157,7 +156,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
           ProductOutput(),
           ReservationInvoice(),
         ],
-        widgets: [...getInvoicesWidgets(context, crossAxisCount)],
+        widgets: [...getInvoicesWidgets(context)],
       ),
     ];
   }
@@ -166,8 +165,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
   bool getPrintableSupportsLabelPrinting() => false;
   @override
   getDashboardSectionsSecoundPane(
-    BuildContext context,
-    int crossAxisCount, {
+    BuildContext context, {
     SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
     TabControllerHelper? tabSecondPane,
@@ -184,7 +182,12 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
         title: AppLocalizations.of(context)!.total,
         widgets: [
           getWidget(
-            StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: 1.5,
               child: MultiLineChartItem<GrowthRate, DateTime>(
@@ -206,7 +209,12 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
             type: WidgetDashboardType.CHART,
           ),
           getWidget(
-            StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 1,
               mainAxisCellCount: .75,
               child: ChartCardItemCustom(
@@ -222,7 +230,12 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
             ),
           ),
           getWidget(
-            StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 1,
               mainAxisCellCount: .75,
               child: ChartCardItemCustom(
@@ -239,7 +252,12 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
           ),
 
           getWidget(
-            StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: .75,
               child: ChartCardItemCustom(
@@ -253,7 +271,12 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
             ),
           ),
           getWidget(
-            StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: 1,
               child: SliverApiMixinViewAbstractWidget(
@@ -312,8 +335,13 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
           //   ),
           // ),
           getWidget(
-            StaggeredGridTile.count(
-              crossAxisCellCount: crossAxisCount,
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
+              crossAxisCellCount: fullCrossAxisCount,
               mainAxisCellCount: 3,
               child: BaseViewNewPage(viewAbstract: customers!),
             ),
@@ -407,7 +435,7 @@ class CustomerDashboard extends UserLists<CustomerDashboard>
         if (d == null) return;
         dateObject = d;
         balance = null;
-       basePage?.refresh(extras: this, tab: tab);
+        basePage?.refresh(extras: this, tab: tab);
         // getExtras().setDate(d);
         // refresh(extras: extras);
       },

@@ -336,7 +336,13 @@ class CustomerBalanceList
   }
 
   WidgetGridHelper getWidget(
-    StaggeredGridTile gride, {
+    StaggeredGridTile Function(
+      int fullCrossAxisCount,
+      int crossCountFundCalc,
+      int crossAxisCountMod,
+      num heightMainAxisCellCount,
+    )
+    gride, {
     WidgetDashboardType type = WidgetDashboardType.NORMAL,
   }) {
     return WidgetGridHelper(widget: gride, widgetDashboardType: type);
@@ -344,8 +350,7 @@ class CustomerBalanceList
 
   @override
   getDashboardSectionsFirstPane(
-    BuildContext context,
-    int crossAxisCount, {
+    BuildContext context, {
     SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
@@ -399,8 +404,7 @@ class CustomerBalanceList
 
   @override
   List<DashableGridHelper> getDashboardSectionsSecoundPane(
-    BuildContext context,
-    int crossAxisCount, {
+    BuildContext context, {
     SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
     TabControllerHelper? tabSecondPane,
@@ -410,8 +414,13 @@ class CustomerBalanceList
         title: AppLocalizations.of(context)!.overview,
         widgets: [
           getWidget(
-            StaggeredGridTile.count(
-              crossAxisCellCount: crossAxisCount,
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
+              crossAxisCellCount: fullCrossAxisCount,
               mainAxisCellCount: 2,
               child: getHeaderWidget(context),
             ),
@@ -423,8 +432,13 @@ class CustomerBalanceList
         title: AppLocalizations.of(context)!.overview,
         widgets: [
           getWidget(
-            StaggeredGridTile.count(
-              crossAxisCellCount: crossAxisCount,
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
+              crossAxisCellCount: fullCrossAxisCount,
               mainAxisCellCount: 1,
               child: SliverApiMixinStaticList<CustomerBalanceSingle>(
                 list: customers?.sublist(0, 10) ?? [],
