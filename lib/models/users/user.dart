@@ -1,15 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_saffoury_paper/models/dashboards/customer_dashboard_new.dart';
+import 'package:flutter_saffoury_paper/models/users/customers.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
+import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/apis/growth_rate.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
+import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
+import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page_new.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 class User<T> extends UserLists<T> {
@@ -159,6 +164,45 @@ class User<T> extends UserLists<T> {
   Map<String, bool> getTextInputIsAutoCompleteViewAbstractMap() => {
     "name": true,
   };
+  @override
+  List<TabControllerHelper> getCustomTabList(
+    BuildContext context, {
+    ServerActions? action,
+  }) {
+    if (action == ServerActions.list) return [];
+
+    return [
+      if (isEditing() && this is Customer)
+        TabControllerHelper(
+          titleFunction: (context) =>
+              AppLocalizations.of(context)!.accountStatement,
+          draggableHeaderWidget: Text(
+            AppLocalizations.of(context)!.accountStatement,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          // extras: CustomerDashboardNew.init(iD),
+          // extras: ,
+          widget: SliverFillRemaining(
+            child: BaseDashboardMainPage(
+              // parent: ,
+              // buildSecondPane: false,
+              key: getKeyForWidget(context,ServerActions.call),
+              extras: CustomerDashboardNew.init(iD,dateObject: DateObject()),
+              // isSliver: true,
+            ),
+          ),
+        ),
+      // TabControllerHelper(
+      //   AppLocalizations.of(context)!.movments,
+      //   widget: ListHorizontalCustomViewApiAutoRestWidget(
+      //     titleString: "TEST1 ",
+      //     autoRest: ProductMovments.init(iD),
+      //   ),
+      // ),
+    ];
+  }
 
   @override
   Map<String, double> getTextInputMaxValidateMap() => {};

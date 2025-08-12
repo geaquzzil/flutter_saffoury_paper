@@ -73,8 +73,7 @@ class CustomerByEmployeeAnanlysis
     required ServerActions action,
     RequestOptions? generatedOptionFromListCall,
   }) {
-    // TODO: implement getRequestOption
-    throw UnimplementedError();
+  return null;
   }
 
   @override

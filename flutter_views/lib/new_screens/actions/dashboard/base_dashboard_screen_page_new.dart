@@ -25,7 +25,10 @@ class BaseDashboardMainPage extends BasePageApi {
     super.buildSecondPane,
     super.iD,
     super.tableName,
+    super.isFirstToSecOrThirdPane = true,
     super.extras,
+    super.onBuild,
+    super.parent,
   });
 
   @override
