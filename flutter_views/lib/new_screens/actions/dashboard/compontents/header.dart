@@ -68,7 +68,7 @@ class _DashboardHeaderState extends State<DashboardHeader> {
                 IconButton(
                     onPressed: widget.onPressePrint,
                     icon: const Icon(Icons.print)),
-            if (!isLargeScreenFromScreenSize(widget.current_screen_size))
+            if (isLargeScreenFromScreenSize(widget.current_screen_size))
                 CustomPopupMenu(
                     menuOnChange: (b) {
                       if (!b) {

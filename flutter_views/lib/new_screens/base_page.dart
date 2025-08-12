@@ -2493,7 +2493,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     debugPrint("refresh basePage $extras");
 
     setExtras(iD: iD, tableName: tableName, ex: extras, tabH: tab);
-    setState(() {});
+    setLoadingState(extras);
   }
 
   // @override
@@ -2590,11 +2590,8 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   //       ? null
   //       : super.getFloatingActionButton(firstPane: firstPane, tab: tab);
   // }
-
-  @override
-  void onTabControllerChangeListener() {
-    super.onTabControllerChangeListener();
-    dynamic extras = _tabList?[_tabBaseController!.index].extras;
+  void setLoadingState(dynamic extras) {
+   
     if (extras != null && extras is ViewAbstract) {
       bool shouldLoad = extras.shouldGetFromApi(
         ServerActions.view,
@@ -2606,6 +2603,13 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
         });
       }
     }
+  }
+
+  @override
+  void onTabControllerChangeListener() {
+    super.onTabControllerChangeListener();
+     dynamic extras =  _tabList?[_tabBaseController!.index].extras ;
+    setLoadingState(extras);
   }
 
   @override
@@ -2649,7 +2653,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
           );
           _isLoading = false;
           if (snapshot.data != null) {
-            _lastExtras = snapshot.data;
+            _lastExtras = (snapshot.data is ViewAbstract) ? (snapshot.data as ViewAbstract).getCopyInstance(): snapshot.data;
             setExtras(ex: snapshot.data);
             initStateAfterApiCalled();
             if (snapshot.data is ViewAbstract) {

@@ -345,7 +345,7 @@ Map<String, dynamic> _$MoneyFundDashbaordToJson(
       instance.notPayedCustomers?.map((e) => e.toJson()).toList(),
   'customerToPayNext':
       instance.customerToPayNext?.map((e) => e.toJson()).toList(),
-  'dateObject': instance.dateObject?.toJson(),
+  'dateObject': instance.dateObject?.toMap(),
   'modifiedNotPayedCustomers':
       instance.modifiedNotPayedCustomers?.map((e) => e.toJson()).toList(),
   'modifiedCustomerToPayNext':

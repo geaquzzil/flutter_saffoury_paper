@@ -311,7 +311,7 @@ Map<String, dynamic> _$SalesAnalysisDashboardToJson(
   'cargo_transportersAnalysis':
       instance.cargo_transportersAnalysis?.map((e) => e.toJson()).toList(),
   'cargo_transporters_count': instance.cargo_transporters_count,
-  'dateObject': instance.dateObject?.toJson(),
+  'dateObject': instance.dateObject?.toMap(),
   'orders_offline_count':
       instance.orders_offline_count?.map((e) => e.toJson()).toList(),
   'orders_online_count':

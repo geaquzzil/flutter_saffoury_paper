@@ -258,7 +258,7 @@ Map<String, dynamic> _$CustomerDashboardToJson(
   'totalDebits': instance.totalDebits,
   'totalOrders': instance.totalOrders,
   'totalPurchases': instance.totalPurchases,
-  'dateObject': instance.dateObject?.toJson(),
+  'dateObject': instance.dateObject?.toMap(),
 };
 
 CustomerDashboardSelector _$CustomerDashboardSelectorFromJson(

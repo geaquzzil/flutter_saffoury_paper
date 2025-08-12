@@ -212,7 +212,9 @@ class Dashboard extends UserLists<Dashboard>
       return true;
     }
     if (lastObject is Dashboard) {
+       debugPrint("shouldGetFromApiViewCall is dashboard");
       if (lastObject.dateObject == dateObject) {
+          debugPrint("shouldGetFromApiViewCall is lastObject.dateObject == dateObject");
         return false;
       }
     }
