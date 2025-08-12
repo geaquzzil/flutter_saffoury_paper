@@ -212,9 +212,11 @@ class Dashboard extends UserLists<Dashboard>
       return true;
     }
     if (lastObject is Dashboard) {
-       debugPrint("shouldGetFromApiViewCall is dashboard");
+      debugPrint("shouldGetFromApiViewCall is dashboard");
       if (lastObject.dateObject == dateObject) {
-          debugPrint("shouldGetFromApiViewCall is lastObject.dateObject == dateObject");
+        debugPrint(
+          "shouldGetFromApiViewCall is lastObject.dateObject == dateObject",
+        );
         return false;
       }
     }
@@ -232,7 +234,7 @@ class Dashboard extends UserLists<Dashboard>
       headerListToAdd: [Credits(), Debits(), Spendings(), Incomes()],
       title: AppLocalizations.of(context)!.overview,
       widgets: [
-        ...getFundWidgets(context, basePage: basePage),
+        ...getFundWidgets(context, checkForEmpty: true, basePage: basePage),
         // ...getInvoicesWidgets(context)
       ],
     ),
@@ -247,7 +249,9 @@ class Dashboard extends UserLists<Dashboard>
         ProductOutput(),
         ReservationInvoice(),
       ],
-      widgets: [...getInvoicesWidgets(context, basePage: basePage)],
+      widgets: [
+        ...getInvoicesWidgets(context, checkForEmpty: true, basePage: basePage),
+      ],
     ),
     DashableGridHelper(
       title: AppLocalizations.of(

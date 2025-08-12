@@ -186,10 +186,13 @@ class User<T> extends UserLists<T> {
           // extras: ,
           widget: SliverFillRemaining(
             child: BaseDashboardMainPage(
+              buildTabs: false,
+              buildDrawer: false,
+              buildTitle: false,
               // parent: ,
               // buildSecondPane: false,
-              key: getKeyForWidget(context,ServerActions.call),
-              extras: CustomerDashboardNew.init(iD,dateObject: DateObject()),
+              key: getKeyForWidget(context, ServerActions.call),
+              extras: CustomerDashboardNew.init(iD),
               // isSliver: true,
             ),
           ),

@@ -19,6 +19,8 @@ const mediumPane = 0.62;
 const largePane = 0.7;
 
 class BaseDashboardMainPage extends BasePageApi {
+  final bool buildTitle;
+  final bool buildTabs;
   BaseDashboardMainPage({
     super.key,
     super.buildDrawer,
@@ -29,6 +31,8 @@ class BaseDashboardMainPage extends BasePageApi {
     super.extras,
     super.onBuild,
     super.parent,
+    this.buildTabs = true,
+    this.buildTitle = true,
   });
 
   @override
@@ -44,6 +48,7 @@ class _BaseDashboardMainPageState
     bool? firstPane,
     TabControllerHelper? tab,
   }) {
+    if (!widget.buildTabs) return null;
     if (firstPane == null && tab == null) {
       return context
           .read<AuthProvider<AuthUser>>()
@@ -119,6 +124,7 @@ class _BaseDashboardMainPageState
 
   @override
   String onActionInitial() {
+    if (!widget.buildTitle) return "";
     return AppLocalizations.of(context)!.dashboard_and_rep;
   }
 
@@ -128,7 +134,12 @@ class _BaseDashboardMainPageState
     TabControllerHelper? tab,
     TabControllerHelper? secoundTab,
   }) {
+    // if (!widget.buildTitle) {}
     if (firstPane == null) {
+      if (!widget.buildTitle) {
+        return null;
+      }
+
       return Text(
         AppLocalizations.of(context)!.dashboard_and_rep,
         style: Theme.of(context).textTheme.titleLarge,
@@ -173,6 +184,7 @@ class _BaseDashboardMainPageState
       //   //     Spacer()
       //   //   ],
       //   // ),
+      // ignore: curly_braces_in_flow_control_structures
     } else {
       return getExtrasCastDashboard(tab: tab ?? secoundTab).getDashboardAppbar(
         context,
