@@ -261,6 +261,7 @@ class _BaseDashboardMainPageState
         GlobalKey buttonKey = GlobalKey();
         var group = [
           SectionItemHeader(
+            list: list,
             context: context,
             dgh: element,
             buttonKey: buttonKey,
@@ -300,6 +301,7 @@ class _BaseDashboardMainPageState
         GlobalKey buttonKey = GlobalKey();
         var group = [
           SectionItemHeader(
+            list: list,
             context: context,
             dgh: element,
             buttonKey: buttonKey,

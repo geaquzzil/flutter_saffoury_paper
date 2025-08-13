@@ -11,15 +11,19 @@ import 'package:sliver_tools/sliver_tools.dart';
 class SectionItemHeader extends MultiSliver {
   SectionItemHeader({
     super.key,
+    required List list,
     required BuildContext context,
     required DashableGridHelper dgh,
     required GlobalKey buttonKey,
-    required       SecoundPaneHelperWithParentValueNotifier  basePage,
+
+    required SecoundPaneHelperWithParentValueNotifier basePage,
     Widget? child,
   }) : super(
          pushPinnedChildren: true,
          children: [
-           if (dgh.title != null)
+           if (list.isEmpty)
+             SliverToBoxAdapter(child: SizedBox())
+           else if (dgh.title != null)
              SliverPadding(
                padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
                sliver: SliverPinnedHeader(
@@ -51,8 +55,6 @@ class SectionItemHeader extends MultiSliver {
                                        (e) => buildMenuItem(
                                          context,
                                          MenuItemBuild(
-
-
                                            e.getMainHeaderLabelTextOnly(
                                              context,
                                            ),
@@ -61,7 +63,11 @@ class SectionItemHeader extends MultiSliver {
                                            "",
                                          ),
                                          onTap: () {
-                                           basePage.notifyViewAbstract(context,e,ServerActions.edit);
+                                           basePage.notifyViewAbstract(
+                                             context,
+                                             e,
+                                             ServerActions.edit,
+                                           );
                                          },
                                        ),
                                      )
