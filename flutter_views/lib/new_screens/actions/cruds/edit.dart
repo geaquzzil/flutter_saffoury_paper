@@ -145,14 +145,15 @@ class _BaseNewState extends BasePageStateWithApi<EditNew>
   // get
 
   @override
-  Widget getMainPanes({TabControllerHelper? baseTap}) {
+  Widget getMainPanes({TabControllerHelper? baseTap,
+    bool forceOnlyFirstPage = false}) {
     initStateAfterApiCalled();
     if (_baseForm == null) {
       return Text("_baseForm is null");
     }
     return ReactiveFormBuilder(
       builder: (context, formGroup, child) =>
-          super.getMainPanes(baseTap: baseTap),
+          super.getMainPanes(baseTap: baseTap,forceOnlyFirstPage: forceOnlyFirstPage),
       form: () => _baseForm!,
     );
   }

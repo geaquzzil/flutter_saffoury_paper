@@ -2025,9 +2025,15 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   }
 
   Widget getScaffoldBodyForPane({required bool firstPane}) {
+    bool isMob=isMobileFromWidth(getWidth);
     List<TabControllerHelper>? tabs = getPaneTabControllerHelper(
       firstPane: firstPane,
     );
+    List<TabControllerHelper>? secTabs;
+    if (isMob) {
+      secTabs = getPaneTabControllerHelper(firstPane: false);
+    }
+
     if (tabs != null) {
       tabs = [
         TabControllerHelper(
@@ -2036,6 +2042,16 @@ abstract class BasePageState<T extends BasePage> extends State<T>
         ),
 
         ...tabs,
+        if (secTabs != null) ...secTabs,
+      ];
+    }
+    if (secTabs != null && tabs == null) {
+      tabs = [
+        TabControllerHelper(
+          titleFunction: (context) => AppLocalizations.of(context)!.home,
+          isMain: true,
+        ),
+        ...secTabs,
       ];
     }
     return SliverCustomScrollViewDraggable(
@@ -2137,8 +2153,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       );
     }
     if (onlyFirstPane) {
-      _firstWidget = getScaffoldForPane(firstPane: true);
-      return _firstWidget;
+      return getMainPanIfHasTabBarList(forceOnlyFirstPage: true);
     }
     bool isLarge =
         isDesktop(context, maxWidth: getWidth) ||
@@ -2161,11 +2176,11 @@ abstract class BasePageState<T extends BasePage> extends State<T>
           ? Selector<DrawerMenuControllerProvider, DrawerMenuItem?>(
               builder: (__, v, ___) {
                 lastDrawerItemSelected = v;
-                return getMainPanIfHasTabBarList();
+                return getMainPanIfHasTabBarList(forceOnlyFirstPage: false);
               },
               selector: (p0, p1) => p1.getLastDrawerMenuItemClicked,
             )
-          : getMainPanIfHasTabBarList(),
+          : getMainPanIfHasTabBarList(forceOnlyFirstPage: false),
     );
 
     if ((isLarge && buildDrawer) || (isLarge && isCustomDrawer)) {
@@ -2190,20 +2205,31 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     return body;
   }
 
-  Widget getMainPanIfHasTabBarList() {
+  Widget getMainPanIfHasTabBarList({bool forceOnlyFirstPage = false}) {
     if (!_hasTabBarList()) {
-      return getMainPanes();
+      return getMainPanes(forceOnlyFirstPage: forceOnlyFirstPage);
     }
     return TabBarView(
       controller: _tabBaseController,
-      children: _getTabBarList(
-        mapped: true,
-      ).map((e) => getMainPanes(baseTap: e)).toList(),
+      children: _getTabBarList(mapped: true)
+          .map(
+            (e) => getMainPanes(
+              baseTap: e,
+              forceOnlyFirstPage: forceOnlyFirstPage,
+            ),
+          )
+          .toList(),
     );
   }
 
-  Widget getMainPanes({TabControllerHelper? baseTap}) {
+  Widget getMainPanes({
+    TabControllerHelper? baseTap,
+    bool forceOnlyFirstPage = false,
+  }) {
     _firstWidget = getScaffoldForPane(firstPane: true);
+    if (forceOnlyFirstPage) {
+      return _firstWidget;
+    }
     _secondWidget = getScaffoldForPane(firstPane: false);
     if (_hasHorizontalDividerWhenTowPanes()) {
       _firstWidget = _getBorderDecoration(_firstWidget!);
@@ -2316,6 +2342,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   @override
   void initState() {
     super.initState();
+    debugPrint("BasePageApi initState");
     _iD = widget.iD;
     _tableName = widget.tableName;
     _extras = widget.extras;
@@ -2332,6 +2359,8 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   @override
   void didUpdateWidget(covariant T oldWidget) {
     super.didUpdateWidget(oldWidget);
+
+    debugPrint("BasePageApi didUpdate");
     if (_iD != widget.iD) {
       _iD = widget.iD;
     }
@@ -2350,6 +2379,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     _extras ??= context.read<AuthProvider<AuthUser>>().getNewInstance(
       _tableName ?? "",
     );
+
     _connectionState = ValueNotifier(
       overrideConnectionState(BasePageWithApiConnection.didUpdate) ??
           ConnectionStateExtension.none,
@@ -2371,18 +2401,18 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   dynamic getExtras({TabControllerHelper? tab}) {
     if (_hasTabBarList()) {
       if (tab != null) {
-        debugPrint("getExtras _hasTabBarList");
+        debugPrint("BasePageApi getExtras _hasTabBarList");
         dynamic result = _getTabBarList().firstWhere(
           (element) => element.extras.runtimeType == tab.extras.runtimeType,
         );
         if (result == null) {
-          throw Exception("Could not find tab");
+          throw Exception("BasePageApi Could not find tab");
         }
         return result.extras;
       }
       return _getTabBarList()[currentBaseTabIndex].extras;
     }
-    debugPrint("getExtras not has ");
+    debugPrint("BasePageApi getExtras not has ");
     return _extras;
   }
 
@@ -2466,7 +2496,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
       tab.extras = ex;
       tab.iD = iD;
       tab.tableName = tableName;
-      debugPrint("setExtras _hasTabBarList ${tab.extras} ");
+      debugPrint("BasePageApi setExtras _hasTabBarList ${tab.extras} ");
       if (tabH != null) {
         _getTabBarList()[_getTabBarList().indexWhere(
               (element) =>
@@ -2477,7 +2507,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
         _getTabBarList()[currentBaseTabIndex] = tab;
       }
     } else {
-      debugPrint("setExtras not has $ex ");
+      debugPrint("BasePageApi setExtras not has $ex ");
       this._extras = ex;
       this._iD = iD;
       this._tableName = tableName;
@@ -2490,8 +2520,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
     dynamic extras,
     TabControllerHelper? tab,
   }) {
-    debugPrint("refresh basePage $extras");
-
+    debugPrint("BasePageApi refresh basePage $extras");
     setExtras(iD: iD, tableName: tableName, ex: extras, tabH: tab);
     setLoadingState(extras);
   }
@@ -2591,7 +2620,7 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   //       : super.getFloatingActionButton(firstPane: firstPane, tab: tab);
   // }
   void setLoadingState(dynamic extras) {
-   
+    debugPrint("BasePageApi setLoadingState");
     if (extras != null && extras is ViewAbstract) {
       bool shouldLoad = extras.shouldGetFromApi(
         ServerActions.view,
@@ -2608,13 +2637,24 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   @override
   void onTabControllerChangeListener() {
     super.onTabControllerChangeListener();
-     dynamic extras =  _tabList?[_tabBaseController!.index].extras ;
+    dynamic extras = _tabList?[_tabBaseController!.index].extras;
     setLoadingState(extras);
   }
 
   @override
-  Widget getMainPanes({TabControllerHelper? baseTap}) {
-    debugPrint("getBody _getTowPanes TabController ");
+  Widget? getScaffoldForPane({required bool firstPane}) {
+    // TODO: implement getScaffoldForPane
+    return super.getScaffoldForPane(firstPane: firstPane);
+  }
+
+  @override
+  Widget getMainPanes({
+    TabControllerHelper? baseTap,
+    bool forceOnlyFirstPage = false,
+  }) {
+    debugPrint(
+      "BasePageApi getBody _getTowPanes TabController isLoading:$_isLoading ",
+    );
 
     // dynamic ex = getExtras(tab: baseTap);
     // _isLoading = getExtrasCast(
@@ -2626,7 +2666,10 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
           overrideConnectionState(BasePageWithApiConnection.build) ??
           ConnectionStateExtension.none;
       initStateAfterApiCalled();
-      return super.getMainPanes(baseTap: baseTap);
+      return super.getMainPanes(
+        baseTap: baseTap,
+        forceOnlyFirstPage: forceOnlyFirstPage,
+      );
     }
     return FutureBuilder(
       future: Future.value(
@@ -2653,7 +2696,9 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
           );
           _isLoading = false;
           if (snapshot.data != null) {
-            _lastExtras = (snapshot.data is ViewAbstract) ? (snapshot.data as ViewAbstract).getCopyInstance(): snapshot.data;
+            _lastExtras = (snapshot.data is ViewAbstract)
+                ? (snapshot.data as ViewAbstract).getCopyInstance()
+                : snapshot.data;
             setExtras(ex: snapshot.data);
             initStateAfterApiCalled();
             if (snapshot.data is ViewAbstract) {
@@ -2661,7 +2706,10 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
               //   context.read<ListMultiKeyProvider>().edit(ex);
               // });
             }
-            return super.getMainPanes(baseTap: baseTap);
+            return super.getMainPanes(
+              baseTap: baseTap,
+              forceOnlyFirstPage: forceOnlyFirstPage,
+            );
           } else {
             debugPrint("BasePageApi FutureBuilder !done");
             return EmptyWidget.error(
@@ -2674,7 +2722,10 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           debugPrint("BasePageApi FutureBuilder waiting");
           _isLoading = true;
-          return super.getMainPanes(baseTap: baseTap);
+          return super.getMainPanes(
+            baseTap: baseTap,
+            forceOnlyFirstPage: forceOnlyFirstPage,
+          );
         } else {
           debugPrint("BasePageApi FutureBuilder !TOTODO");
           return const Text("TOTODO");
@@ -2685,13 +2736,11 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
 
   Widget getErrorWidget() {
     _isLoading = false;
-    return EmptyWidget(
-      lottiUrl: "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+    return EmptyWidget.error(
+      context,
       onSubtitleClicked: () {
         setState(() {});
       },
-      title: AppLocalizations.of(context)!.cantConnect,
-      subtitle: AppLocalizations.of(context)!.cantConnectRetry,
     );
   }
 }

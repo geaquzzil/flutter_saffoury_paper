@@ -169,47 +169,47 @@ class Employee extends User<Employee> {
     return super.getInputType(field);
   }
 
-  @override
-  List<TabControllerHelper> getCustomTabList(
-    BuildContext context, {
-    ServerActions? action,
-  }) {
-    return [
-      TabControllerHelper(
-        titleFunction: (context) =>
-            AppLocalizations.of(context)!.sales_analysis,
-        widget: SliverApiMixinViewAbstractWidget(
-          // onResponseAddWidget: ((response) {
-          //   CustomerByEmployeeAnanlysis i = response as ChartRecordAnalysis;
-          //   double total = i.getTotalListAnalysis();
-          //   return Column(
-          //     children: [
-          //       // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
-          //       //     titleString: "TEST1 ",
-          //       //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
-          //       StorageInfoCardCustom(
-          //           title: AppLocalizations.of(context)!.total,
-          //           description: total.toCurrencyFormat(),
-          //           trailing: "kg",
-          //           svgSrc: Icons.monitor_weight),
-          //       StorageInfoCardCustom(
-          //           title: AppLocalizations.of(context)!.balance,
-          //           description:
-          //               customers?.balance?.toCurrencyFormat() ?? "0",
-          //           trailing: "trailing",
-          //           svgSrc: Icons.balance),
-          //     ],
-          //   );
-          // }),
-          toListObject: CustomerByEmployeeAnanlysis.init(iD),
-        ),
-      ),
+  // @override
+  // List<TabControllerHelper> getCustomTabList(
+  //   BuildContext context, {
+  //   ServerActions? action,
+  // }) {
+  //   return [
+  //     TabControllerHelper(
+  //       titleFunction: (context) =>
+  //           AppLocalizations.of(context)!.sales_analysis,
+  //       widget: SliverApiMixinViewAbstractWidget(
+  //         // onResponseAddWidget: ((response) {
+  //         //   CustomerByEmployeeAnanlysis i = response as ChartRecordAnalysis;
+  //         //   double total = i.getTotalListAnalysis();
+  //         //   return Column(
+  //         //     children: [
+  //         //       // ListHorizontalCustomViewApiAutoRestWidget<CustomerTerms>(
+  //         //       //     titleString: "TEST1 ",
+  //         //       //     autoRest: CustomerTerms.init(customers?.iD ?? 1)),
+  //         //       StorageInfoCardCustom(
+  //         //           title: AppLocalizations.of(context)!.total,
+  //         //           description: total.toCurrencyFormat(),
+  //         //           trailing: "kg",
+  //         //           svgSrc: Icons.monitor_weight),
+  //         //       StorageInfoCardCustom(
+  //         //           title: AppLocalizations.of(context)!.balance,
+  //         //           description:
+  //         //               customers?.balance?.toCurrencyFormat() ?? "0",
+  //         //           trailing: "trailing",
+  //         //           svgSrc: Icons.balance),
+  //         //     ],
+  //         //   );
+  //         // }),
+  //         toListObject: CustomerByEmployeeAnanlysis.init(iD),
+  //       ),
+  //     ),
 
-      //  ChartItem(
-      //   autoRest: AutoRest<Order>(
-      //     obj: Order()..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
-      //     key: "CustomerByOrder$iD"),
-      // ),
-    ];
-  }
+  //     //  ChartItem(
+  //     //   autoRest: AutoRest<Order>(
+  //     //     obj: Order()..setCustomMap({"<CustomerID>": "${customers?.iD}"}),
+  //     //     key: "CustomerByOrder$iD"),
+  //     // ),
+  //   ];
+  // }
 }

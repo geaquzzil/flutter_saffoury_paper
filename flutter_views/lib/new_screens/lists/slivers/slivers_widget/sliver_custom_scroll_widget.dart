@@ -140,8 +140,9 @@ class _SliverCustomScrollViewDraggableState
             child: PreferredSize(
               preferredSize: Size.fromHeight(kDefaultAppbarHieght),
               child: Container(
-                color: Theme.of(context).colorScheme.surface,
+                // color: Theme.of(context).colorScheme.surface,
                 child: TabBar(
+
                   tabs: _tabs!
                       .map(
                         (e) => e.getTitled((context)),

@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_saffoury_paper/models/dashboards/customer_dashboard_new.dart';
+import 'package:flutter_saffoury_paper/models/dashboards/employee_dashboard_by_id.dart';
 import 'package:flutter_saffoury_paper/models/users/customers.dart';
+import 'package:flutter_saffoury_paper/models/users/employees.dart';
 import 'package:flutter_saffoury_paper/models/users/user_analysis_lists.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
@@ -193,6 +195,31 @@ class User<T> extends UserLists<T> {
               // buildSecondPane: false,
               key: getKeyForWidget(context, ServerActions.call),
               extras: CustomerDashboardNew.init(iD),
+              // isSliver: true,
+            ),
+          ),
+        ),
+        if (isEditing() && this is Employee)
+        TabControllerHelper(
+          titleFunction: (context) =>
+              AppLocalizations.of(context)!.sales_analysis,
+          draggableHeaderWidget: Text(
+            AppLocalizations.of(context)!.sales_analysis,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          // extras: CustomerDashboardNew.init(iD),
+          // extras: ,
+          widget: SliverFillRemaining(
+            child: BaseDashboardMainPage(
+              buildTabs: false,
+              buildDrawer: false,
+              buildTitle: false,
+              // parent: ,
+              // buildSecondPane: false,
+              key: getKeyForWidget(context, ServerActions.call),
+              extras: EmployeeDashboardByID.init(iD),
               // isSliver: true,
             ),
           ),

@@ -148,7 +148,7 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
 
   @override
   List<DashableGridHelper> getDashboardSectionsFirstPane(
-    BuildContext context,{
+    BuildContext context, {
     SecoundPaneHelperWithParentValueNotifier? basePage,
     TabControllerHelper? tab,
   }) {
@@ -157,7 +157,12 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
         title: AppLocalizations.of(context)!.profit_analysis,
         widgets: [
           getWidget(
-                 (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) => StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: heightLarge,
               child: ChartCardItemCustom(
@@ -174,7 +179,12 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             ),
           ),
           getWidget(
-                (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>  StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 1,
               mainAxisCellCount: heightLarge,
               child: ChartCardItemCustom(
@@ -191,7 +201,12 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             ),
           ),
           getWidget(
-                (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>  StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 1,
               mainAxisCellCount: heightLarge,
               child: ChartCardItemCustom(
@@ -213,7 +228,12 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             ),
           ),
           getWidget(
-                (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>  StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: 3.5,
               child: ChartCardItemCustom(
@@ -230,7 +250,12 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             ),
           ),
           getWidget(
-              (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>    StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: heightSmall,
               child: ChartCardItemCustom(
@@ -247,7 +272,12 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             ),
           ),
           getWidget(
-              (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>    StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: heightLarge,
               child: ChartCardItemCustom(
@@ -268,7 +298,12 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             ),
           ),
           getWidget(
-                (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>  StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: heightLarge,
               child: ChartCardItemCustom(
@@ -309,7 +344,12 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
         title: AppLocalizations.of(context)!.sales_analysis,
         widgets: [
           getWidget(
-                 (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) => StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 2,
               mainAxisCellCount: heightLarge,
               child: LineChartItem<GrowthRate, String>(
@@ -331,7 +371,12 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             type: WidgetDashboardType.CHART,
           ),
           getWidget(
-                (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>  StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 1,
               mainAxisCellCount: heightSmall,
               child: ChartCardItemCustom(
@@ -350,7 +395,12 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             ),
           ),
           getWidget(
-                (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>  StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 1,
               mainAxisCellCount: heightSmall,
               child: ChartCardItemCustom(
@@ -370,7 +420,12 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             ),
           ),
           getWidget(
-                (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) =>  StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 1,
               mainAxisCellCount: heightSmall,
               child: ChartCardItemCustom(
@@ -390,7 +445,12 @@ class SalesAnalysisDashboard extends UserLists<SalesAnalysisDashboard>
             ),
           ),
           getWidget(
-                 (fullCrossAxisCount, crossCountFundCalc, crossAxisCountMod, heightMainAxisCellCount) => StaggeredGridTile.count(
+            (
+              fullCrossAxisCount,
+              crossCountFundCalc,
+              crossAxisCountMod,
+              heightMainAxisCellCount,
+            ) => StaggeredGridTile.count(
               crossAxisCellCount: 1,
               mainAxisCellCount: heightSmall,
               child: ChartCardItemCustom(

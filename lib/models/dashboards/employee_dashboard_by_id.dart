@@ -3,17 +3,17 @@ import 'package:flutter_view_controller/models/apis/date_object.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 
-class CustomerDashboardNew extends Dashboard {
-  CustomerDashboardNew() : super();
+class EmployeeDashboardByID extends Dashboard {
+  EmployeeDashboardByID() : super();
 
-  CustomerDashboardNew.init(int iD, {DateObject? dateObject}) {
+  EmployeeDashboardByID.init(int iD, {DateObject? dateObject}) {
     this.iD = iD;
     this.dateObject = dateObject;
   }
 
   @override
   String? getTableNameApi() {
-    return "customers";
+    return "employees";
   }
 
   @override

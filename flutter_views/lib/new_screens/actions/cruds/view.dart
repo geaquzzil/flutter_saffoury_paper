@@ -102,6 +102,9 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
     ScrollController? controler,
     TabControllerHelper? tab,
   ) {
+    if(tab?.isMain==false){
+      return null;
+    }
     return [
       if (getExtrasCast().getCustomTopWidget(
             context,
