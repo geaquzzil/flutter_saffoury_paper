@@ -84,7 +84,7 @@ class _Button extends StatelessWidget {
     return Material(
       color: (!selected)
           ? Theme.of(context).cardColor
-          : Theme.of(context).primaryColor.withOpacity(.1),
+          : Theme.of(context).primaryColor.withValues(alpha:.1),
       borderRadius: BorderRadius.circular(10),
       child: InkWell(
         onTap: onPressed,

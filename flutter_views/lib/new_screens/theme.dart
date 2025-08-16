@@ -69,7 +69,7 @@ ThemeData getThemeData(
       color: colorScheme.outlineVariant,
     ),
     // scaffoldBackgroundColor: colorScheme.,
-    highlightColor: colorScheme.onSurface.withOpacity(.2),
+    highlightColor: colorScheme.onSurface.withValues(alpha:.2),
     focusColor: colorScheme.secondaryContainer,
     canvasColor: colorScheme.surfaceContainer,
     cardColor: colorScheme.surfaceContainerHighest,

@@ -408,6 +408,7 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     BuildContext context, {
     ServerActions? action,
     ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
   }) {
     double? totalPrice = getTotalPriceFromList();
     double? totalDiscount = getTotalDiscountFromList();

@@ -251,7 +251,7 @@ class Header extends StatelessWidget {
                             color: context.isDarkMode
                                 ? Theme.of(context)
                                     .scaffoldBackgroundColor
-                                    .withOpacity(.5)
+                                    .withValues(alpha:.5)
                                 : Colors.black54,
                             offset: const Offset(0, 2.0),
                             blurRadius: 5)
@@ -263,13 +263,13 @@ class Header extends StatelessWidget {
                             width: 1,
                             color: Theme.of(context)
                                 .scaffoldBackgroundColor
-                                .withOpacity(.7))),
+                                .withValues(alpha:.7))),
                 color: value == 0
                     ? null
                     : context.isDarkMode
                         ? Theme.of(context)
                             .scaffoldBackgroundColor
-                            .withOpacity(.7)
+                            .withValues(alpha:.7)
                         : Colors.white),
             child: ClipRect(
               child: context.isDarkMode

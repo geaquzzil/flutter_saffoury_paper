@@ -90,7 +90,7 @@ class TitleAndDescriptopnAndImage extends StatelessWidget {
     return Container(
       height: carouselContainerHeight,
       decoration: BoxDecoration(
-        color: kPrimaryColor.withOpacity(0.9),
+        color: kPrimaryColor.withValues(alpha:0.9),
         borderRadius: const BorderRadius.all(Radius.circular(25.0)),
       ),
       child: getUiBody(context, constraints),

@@ -315,11 +315,11 @@ class DrawerHeaderLogo extends StatelessWidget {
       );
     }
     return Card(
-      color: Theme.of(context).colorScheme.outline.withOpacity(.1),
+      color: Theme.of(context).colorScheme.outline.withValues(alpha:.1),
       elevation: 0,
       child: SafeArea(
         child: Container(
-          // color: Theme.of(context).colorScheme.outline.withOpacity(.1),
+          // color: Theme.of(context).colorScheme.outline.withValues(alpha:.1),
           padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
           // .add(safeArea),
           width: double.infinity,

@@ -70,7 +70,7 @@ class Sidebar extends StatelessWidget {
             const Divider(thickness: 1),
             const SizedBox(height: kSpacing * 2),
             UpgradePremiumCard(
-              backgroundColor: Theme.of(context).canvasColor.withOpacity(.4),
+              backgroundColor: Theme.of(context).canvasColor.withValues(alpha:.4),
               onPressed: () {},
             ),
             const SizedBox(height: kSpacing),

@@ -22,7 +22,7 @@ class _OnHoverDecoratedBoxState extends State<OnHoverDecoratedBox>
           borderRadius: BorderRadius.circular(kBorderRadius),
           // boxShadow: <BoxShadow>[
           //   BoxShadow(
-          //     color: Theme.of(context).colorScheme.shadow.withOpacity(.9),
+          //     color: Theme.of(context).colorScheme.shadow.withValues(alpha:.9),
           //     blurRadius: 3.0,
           //     spreadRadius: 4.0,
           //     offset: const Offset(0, 2.0),

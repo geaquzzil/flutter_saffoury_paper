@@ -17,6 +17,7 @@ import 'package:flutter_view_controller/models/view_abstract_filterable.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
 import 'package:flutter_view_controller/models/view_abstract_permissions.dart';
 import 'package:flutter_view_controller/new_screens/actions/dashboard/base_dashboard_screen_page_new.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 class User<T> extends UserLists<T> {
@@ -170,6 +171,7 @@ class User<T> extends UserLists<T> {
   List<TabControllerHelper> getCustomTabList(
     BuildContext context, {
     ServerActions? action,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
   }) {
     if (action == ServerActions.list) return [];
 

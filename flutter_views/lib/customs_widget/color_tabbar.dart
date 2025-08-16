@@ -28,8 +28,8 @@ class ColoredTabBar extends Container implements PreferredSizeWidget {
                 // side: BorderSide(
                 //   color: color != null
                 //       ? color!.darkMutedColor?.color ??
-                //           Theme.of(context).colorScheme.outline.withOpacity(.8)
-                //       : Theme.of(context).colorScheme.outline.withOpacity(.8),
+                //           Theme.of(context).colorScheme.outline.withValues(alpha:.8)
+                //       : Theme.of(context).colorScheme.outline.withValues(alpha:.8),
                 // ),
                 borderRadius: BorderRadius.all(Radius.circular(cornersIfCard!)),
               ),

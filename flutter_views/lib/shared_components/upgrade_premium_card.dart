@@ -87,7 +87,7 @@ class _Info extends StatelessWidget {
   Widget _price() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(.1),
+        color: Colors.white.withValues(alpha:.1),
         borderRadius: BorderRadius.circular(5),
       ),
       padding: const EdgeInsets.all(10),

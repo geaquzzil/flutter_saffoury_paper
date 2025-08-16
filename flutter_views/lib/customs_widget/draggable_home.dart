@@ -305,7 +305,7 @@ class DraggableHomeState extends State<DraggableHome>
                 wrapWithSafeArea: true,
                 child: ColoredTabBar(
                   useCard: false,
-                  color: Theme.of(context).colorScheme.surface.withOpacity(.9),
+                  color: Theme.of(context).colorScheme.surface.withValues(alpha:.9),
                   cornersIfCard: 80.0,
                   // color: Theme.of(context).colorScheme.surfaceVariant,
                   child: TabBar(
@@ -314,7 +314,7 @@ class DraggableHomeState extends State<DraggableHome>
                     // padding: EdgeInsets.all(kDefaultPadding),
                     // labelStyle: Theme.of(context).textTheme.titleLarge,
                     // indicatorColor:
-                    //     Theme.of(context).colorScheme.primary.withOpacity(.2),
+                    //     Theme.of(context).colorScheme.primary.withValues(alpha:.2),
                     // labelColor: Theme.of(context).colorScheme.primary,
                     tabs: _tabs!,
                     // indicator: BoxDecoration(
@@ -322,7 +322,7 @@ class DraggableHomeState extends State<DraggableHome>
                     //   color: Theme.of(context)
                     //       .colorScheme
                     //       .secondary
-                    //       .withOpacity(.2),
+                    //       .withValues(alpha:.2),
                     // ),
                     isScrollable: true,
                     controller: _tabController,

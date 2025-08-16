@@ -329,6 +329,7 @@ abstract class ViewAbstract<T> extends ViewAbstractFilterable<T> {
     BuildContext context, {
     ServerActions? action,
     ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
   }) {
     return null;
   }

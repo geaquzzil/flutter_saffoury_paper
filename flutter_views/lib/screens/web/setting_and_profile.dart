@@ -78,7 +78,7 @@ class SettingAndProfileWeb extends BaseWebPageSlivers {
                             // height: 200,
                             color: Theme.of(
                               context,
-                            ).scaffoldBackgroundColor.withOpacity(.5),
+                            ).scaffoldBackgroundColor.withValues(alpha:.5),
                             child: ProfileMenuWidget(
                               selectedValue: selectedValue,
                             ),

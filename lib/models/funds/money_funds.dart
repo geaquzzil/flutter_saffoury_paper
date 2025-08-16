@@ -473,6 +473,7 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
     BuildContext context, {
     ServerActions? action,
     ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
   }) {
     if (action == ServerActions.add ||
         action == ServerActions.edit ||
@@ -484,7 +485,7 @@ abstract class MoneyFunds<T extends ViewAbstract> extends ViewAbstract<T>
         toListObject: getSelfNewInstance().getSelfInstanceWithSimilarOption(
           context: context,
           obj: this,
-          copyWith: RequestOptions(countPerPage: 5),
+          copyWith: RequestOptions(countPerPage: 5).addRequestObjcets(true),
         ),
       ),
     ];

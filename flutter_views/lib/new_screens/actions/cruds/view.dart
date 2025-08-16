@@ -102,33 +102,29 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
     ScrollController? controler,
     TabControllerHelper? tab,
   ) {
-    if(tab?.isMain==false){
+    if (tab?.isMain == false) {
       return null;
     }
+    List<Widget>? customTopWidgets = getExtrasCast().getCustomTopWidget(
+      context,
+      action: ServerActions.view,
+      onClick: getSecondPaneNotifier,
+      basePage: getSecoundPaneHelper(),
+    );
+    List<Widget>? customBottomWidgets = getExtrasCast().getCustomBottomWidget(
+      context,
+      action: ServerActions.view,
+      basePage: getSecoundPaneHelper(),
+    );
     return [
-      if (getExtrasCast().getCustomTopWidget(
-            context,
-            action: ServerActions.view,
-            onClick: getSecondPaneNotifier,
-          ) !=
-          null)
+      if (customTopWidgets != null)
         MultiSliver(
           children: [
-            ...getExtrasCast()
-                .getCustomTopWidget(
-                  context,
-                  action: ServerActions.view,
-                  onClick: getSecondPaneNotifier,
-                )!
-                .map((e) => SliverToBoxAdapter(child: e)),
+            ...customTopWidgets.map((e) => SliverToBoxAdapter(child: e)),
           ],
         ),
       SliverToBoxAdapter(child: SizedBox(height: kDefaultPadding)),
-      ...getExtrasCast().getCustomBottomWidget(
-            context,
-            action: ServerActions.view,
-          ) ??
-          [],
+      if (customBottomWidgets != null) ...customBottomWidgets,
     ];
   }
 
@@ -142,7 +138,11 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
       debugPrint("getPaneTabControllerHelper firstPane=false");
       if (val is ViewAbstract) {
         debugPrint("getPaneTabControllerHelper");
-        return val.getCustomTabList(context, action: ServerActions.view);
+        return val.getCustomTabList(
+          context,
+          action: ServerActions.view,
+          basePage: getSecoundPaneHelper(),
+        );
       }
       return null;
     }
@@ -340,5 +340,4 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
   ServerActions getServerActions() {
     return ServerActions.view;
   }
-  
 }

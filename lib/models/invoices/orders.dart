@@ -25,6 +25,7 @@ import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_m
 import 'package:flutter_view_controller/new_screens/dashboard2/custom_storage_details.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_view_abstract_new.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
+import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
 
@@ -82,6 +83,7 @@ class Order extends InvoiceMaster<Order>
   List<TabControllerHelper> getCustomTabList(
     BuildContext context, {
     ServerActions? action,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
   }) {
     return [
       TabControllerHelper(

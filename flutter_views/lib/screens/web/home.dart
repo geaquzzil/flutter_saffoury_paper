@@ -128,7 +128,7 @@ class HomeWebPage extends BaseWebPageSlivers {
                     context.goNamed(indexWebContactUs);
                   },
                   child: const LottieColorFilter(
-                    // color: Colors.black.withOpacity(.4),
+                    // color: Colors.black.withValues(alpha:.4),
                     lottiUrl:
                         "https://assets10.lottiefiles.com/packages/lf20_RBUCBDMwqd.json",
                   ),
@@ -192,7 +192,7 @@ class HomeWebPage extends BaseWebPageSlivers {
                         "https://play.google.com/store/apps/details?id=com.saffoury.saffourypaper&hl=en&gl=US");
                   },
                   child: const LottieColorFilter(
-                    // color: Colors.black.withOpacity(.4),
+                    // color: Colors.black.withValues(alpha:.4),
                     lottiUrl:
                         "https://assets7.lottiefiles.com/packages/lf20_bsPjV4.json",
                   ),

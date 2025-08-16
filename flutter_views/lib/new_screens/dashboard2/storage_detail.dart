@@ -71,7 +71,7 @@ class StorageInfoCard extends StatelessWidget {
       margin: const EdgeInsets.only(top: defaultPadding),
       padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
-        border: Border.all(width: 2, color: primaryColor.withOpacity(0.15)),
+        border: Border.all(width: 2, color: primaryColor.withValues(alpha:0.15)),
         borderRadius: const BorderRadius.all(
           Radius.circular(defaultPadding),
         ),
@@ -167,7 +167,7 @@ class Chart extends StatelessWidget {
 //     radius: 16,
 //   ),
 //   PieChartSectionData(
-//     color: primaryColor.withOpacity(0.1),
+//     color: primaryColor.withValues(alpha:0.1),
 //     value: 25,
 //     showTitle: false,
 //     radius: 13,
