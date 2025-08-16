@@ -21,6 +21,7 @@ class SliverApiMixinViewAbstractWidget
     super.header,
     super.state,
     super.hideOnEmpty,
+    super.overrideHorizontalItemDescriptionOnBottom,
     // super.
     super.cardType = CardItemType.list,
     super.hasCustomCardItemBuilder,

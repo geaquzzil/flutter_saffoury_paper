@@ -135,7 +135,7 @@ class _ListToDetailsSecoundPaneNotifierState
       context,
       action: _lastSearchQuery != null
           ? ServerActions.search
-          : ServerActions.view,
+          : ServerActions.list,
       basePage: getSecoundPaneHelper(),
       isFromFirstAndSecPane: firstPane,
       extras: _lastSearchQuery,

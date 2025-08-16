@@ -13,11 +13,9 @@ import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/new_screens/theme.dart';
 import 'package:flutter_view_controller/providers/auth_provider.dart';
 import 'package:flutter_view_controller/providers/settings/language_provider.dart';
-import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/util.dart';
 import 'package:form_builder_validators/localization/l10n.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -37,8 +35,9 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
   // Fictitious brand color.
   final _brandBlue = const Color.fromARGB(0, 0, 204, 255);
 
-  CustomColors lightCustomColors =
-      const CustomColors(danger: Color(0xFFE53935));
+  CustomColors lightCustomColors = const CustomColors(
+    danger: Color(0xFFE53935),
+  );
   CustomColors darkCustomColors = const CustomColors(danger: Color(0xFFEF9A9A));
 
   @override
@@ -47,9 +46,10 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
     langaugeProvider = Provider.of<LangaugeProvider>(context, listen: false);
     authProvider = Provider.of<AuthProvider>(context, listen: false);
     routeGenerator = RouteGenerator(
-        appService: authProvider,
-        context: context,
-        addonRoutes: authProvider.getGoRoutesAddOns(context));
+      appService: authProvider,
+      context: context,
+      addonRoutes: authProvider.getGoRoutesAddOns(context),
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       String? savedLang = await Configurations.getValueString("ln");
@@ -58,7 +58,8 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
       }
       langaugeProvider.addListener(() {
         debugPrint(
-            "langaugeProvider changed  langaugeProvider= ${langaugeProvider.getLocale}");
+          "langaugeProvider changed  langaugeProvider= ${langaugeProvider.getLocale}",
+        );
         setState(() {});
       });
     });
@@ -75,7 +76,7 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
     super.dispose();
   }
 
-// Fictitious brand color.
+  // Fictitious brand color.
   @override
   Widget build(BuildContext context) {
     debugPrint("build_MaterialAppPage");
@@ -121,118 +122,135 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
     // }
 
     Widget widget = ChangeNotifierProvider.value(
-        value: langaugeProvider,
-        child:
-            Consumer<LangaugeProvider>(builder: (context, provider, listTile) {
+      value: langaugeProvider,
+      child: Consumer<LangaugeProvider>(
+        builder: (context, provider, listTile) {
           final screenWidth = MediaQuery.of(context).size.width;
           final scaleFactor =
               screenWidth / 360; // Adjust as needed based on your design
 
           final fontSize =
               14 * scaleFactor; // Base font size multiplied by scaling factor
-          return DynamicColorBuilder(
-            builder: (lightDynamic, darkDynamic) {
-              ColorScheme lightColorScheme;
-              ColorScheme darkColorScheme;
-
-              if (lightDynamic != null && darkDynamic != null) {
-                // On Android S+ devices, use the provided dynamic color scheme.
-                // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
-                lightColorScheme = lightDynamic.harmonized();
-                // (Optional) Customize the scheme as desired. For example, one might
-                // want to use a brand color to override the dynamic [ColorScheme.secondary].
-                lightColorScheme = lightColorScheme;
-                // (Optional) If applicable, harmonize custom colors.
-                lightCustomColors =
-                    lightCustomColors.harmonized(lightColorScheme);
-
-                // Repeat for the dark color scheme.
-                darkColorScheme = darkDynamic.harmonized();
-                darkColorScheme = darkColorScheme;
-                darkCustomColors = darkCustomColors.harmonized(darkColorScheme);
-              } else {
-                // Otherwise, use fallback schemes.
-                lightColorScheme = ColorScheme.fromSeed(
-                  seedColor: _brandBlue,
-                );
-                darkColorScheme = ColorScheme.fromSeed(
-                  seedColor: _brandBlue,
-                  brightness: Brightness.dark,
-                );
-              }
-
-              notifyLogoColor(context, lightDynamic, darkDynamic);
-              return MaterialApp.router(
-                // scrollBehavior: SizeConfig.isDesktop(context)
-                //     ? const MaterialScrollBehavior().copyWith(
-                //         dragDevices: {
-                //           PointerDeviceKind.mouse,
-                //           PointerDeviceKind.touch,
-                //           PointerDeviceKind.stylus,
-                //           PointerDeviceKind.unknown
-                //         },rod
-                //       )
-                //     : null,
-                supportedLocales: AppLocalizations.supportedLocales,
-                locale: langaugeProvider.getLocale,
-                localizationsDelegates: const [
-                  AppLocalizations.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  FormBuilderLocalizations.delegate,
-                ],
-                builder: (context, widget) => ResponsiveBreakpoints.builder(
-                  child: ClampingScrollWrapper.builder(
-                    context,
-                    MediaQuery(
-                      data: MediaQuery.of(context).copyWith(
-                        // boldText: true,
-                        textScaler: MediaQuery.of(context)
-                            .textScaler
-                            .clamp(minScaleFactor: .5, maxScaleFactor: .9),
-                      ),
-                      child: widget!,
-                    ),
-                  ),
-
-                  // defaultScale: true,
-                  breakpoints: [
-                    const Breakpoint(start: 0, end: 450, name: MOBILE),
-                    const Breakpoint(start: 451, end: 800, name: TABLET),
-                    const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-                    const Breakpoint(
-                        start: 1921, end: double.infinity, name: '4K'),
-                  ],
-                  //TODO background: Container(
-                  //   color: kBackgroundColor,
-                  // ),
-                ),
-                // title: AppLocalizations.of(context)!.appTitle,
-                title: "SaffouryPaper",
-                debugShowCheckedModeBanner: false,
-                restorationScopeId: 'root',
-                routeInformationParser:
-                    routeGenerator.router.routeInformationParser,
-                routerDelegate: routeGenerator.router.routerDelegate,
-                routeInformationProvider:
-                    routeGenerator.router.routeInformationProvider,
-
-                theme: getThemeData(
-                    context, false, lightColorScheme, lightCustomColors),
-                darkTheme: getThemeData(
-                    context, true, darkColorScheme, darkCustomColors),
-                themeMode: ThemeMode.system,
-              );
-            },
-          );
-        }));
+          // if (kIsWeb) {
+          //   // notifyLogoColor(context, lightDynamic, darkDynamic);
+          //   return getMaterialApp(
+          //     context,
+          //     ColorScheme.fromSeed(seedColor: Colors.blueGrey),
+          //     ColorScheme.fromSeed(seedColor: Colors.blueGrey),
+          //   );
+          // }
+          return getDynamicColorBuilder(context);
+        },
+      ),
+    );
 
     return widget;
   }
 
+  DynamicColorBuilder getDynamicColorBuilder(BuildContext context) {
+    return DynamicColorBuilder(
+      builder: (lightDynamic, darkDynamic) {
+        ColorScheme lightColorScheme;
+        ColorScheme darkColorScheme;
+
+        if (lightDynamic != null && darkDynamic != null) {
+          // On Android S+ devices, use the provided dynamic color scheme.
+          // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
+          lightColorScheme = lightDynamic.harmonized();
+          // (Optional) Customize the scheme as desired. For example, one might
+          // want to use a brand color to override the dynamic [ColorScheme.secondary].
+          lightColorScheme = lightColorScheme;
+          // (Optional) If applicable, harmonize custom colors.
+          lightCustomColors = lightCustomColors.harmonized(lightColorScheme);
+
+          // Repeat for the dark color scheme.
+          darkColorScheme = darkDynamic.harmonized();
+          darkColorScheme = darkColorScheme;
+          darkCustomColors = darkCustomColors.harmonized(darkColorScheme);
+        } else {
+          // Otherwise, use fallback schemes.
+          lightColorScheme = ColorScheme.fromSeed(seedColor: _brandBlue);
+          darkColorScheme = ColorScheme.fromSeed(
+            seedColor: _brandBlue,
+            brightness: Brightness.dark,
+          );
+        }
+
+        notifyLogoColor(context, lightDynamic, darkDynamic);
+        return getMaterialApp(context, lightColorScheme, darkColorScheme);
+      },
+    );
+  }
+
+  MaterialApp getMaterialApp(
+    BuildContext context,
+    ColorScheme lightColorScheme,
+    ColorScheme darkColorScheme,
+  ) {
+    return MaterialApp.router(
+      // scrollBehavior: SizeConfig.isDesktop(context)
+      //     ? const MaterialScrollBehavior().copyWith(
+      //         dragDevices: {
+      //           PointerDeviceKind.mouse,
+      //           PointerDeviceKind.touch,
+      //           PointerDeviceKind.stylus,
+      //           PointerDeviceKind.unknown
+      //         },rod
+      //       )
+      //     : null,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: langaugeProvider.getLocale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        FormBuilderLocalizations.delegate,
+      ],
+      builder: (context, widget) => ResponsiveBreakpoints.builder(
+        child: ClampingScrollWrapper.builder(
+          context,
+          MediaQuery(
+            data: MediaQuery.of(context).copyWith(
+              // boldText: true,
+              textScaler: MediaQuery.of(
+                context,
+              ).textScaler.clamp(minScaleFactor: .5, maxScaleFactor: .9),
+            ),
+            child: widget!,
+          ),
+        ),
+
+        // defaultScale: true,
+        breakpoints: [
+          const Breakpoint(start: 0, end: 450, name: MOBILE),
+          const Breakpoint(start: 451, end: 800, name: TABLET),
+          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+        ],
+        //TODO background: Container(
+        //   color: kBackgroundColor,
+        // ),
+      ),
+      // title: AppLocalizations.of(context)!.appTitle,
+      title: "SaffouryPaper",
+      debugShowCheckedModeBanner: false,
+      restorationScopeId: 'root',
+      routeInformationParser: routeGenerator.router.routeInformationParser,
+      routerDelegate: routeGenerator.router.routerDelegate,
+      routeInformationProvider: routeGenerator.router.routeInformationProvider,
+
+      theme: getThemeData(context, false, lightColorScheme, lightCustomColors),
+      darkTheme: getThemeData(context, true, darkColorScheme, darkCustomColors),
+      themeMode: ThemeMode.system,
+    );
+  }
+
   void notifyLogoColor(
-      BuildContext context, ColorScheme? lightScheme, ColorScheme? darkScheme) {
+    BuildContext context,
+    ColorScheme? lightScheme,
+    ColorScheme? darkScheme,
+  ) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (kIsWeb) {
         CompanyLogo.updateLogoColor(context, kPrimaryColor);
@@ -241,7 +259,9 @@ class _BaseMaterialAppPageState extends State<BaseMaterialAppPage> {
       var brightness = SchedulerBinding.instance.window.platformBrightness;
       bool isDarkMode = brightness == Brightness.dark;
       CompanyLogo.updateLogoColor(
-          context, isDarkMode ? darkScheme?.secondary : lightScheme?.secondary);
+        context,
+        isDarkMode ? darkScheme?.secondary : lightScheme?.secondary,
+      );
     });
   }
 }
@@ -250,16 +270,20 @@ class CustomTransitionBuilder extends PageTransitionsBuilder {
   const CustomTransitionBuilder();
   @override
   Widget buildTransitions<T>(
-      PageRoute<T> route,
-      BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child) {
-    final tween =
-        Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: Curves.ease));
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    final tween = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).chain(CurveTween(curve: Curves.ease));
     return ScaleTransition(
-        scale: animation.drive(tween),
-        child: FadeTransition(opacity: animation, child: child));
+      scale: animation.drive(tween),
+      child: FadeTransition(opacity: animation, child: child),
+    );
   }
 }
 
@@ -277,17 +301,13 @@ class HexColor extends Color {
 
 @immutable
 class CustomColors extends ThemeExtension<CustomColors> {
-  const CustomColors({
-    required this.danger,
-  });
+  const CustomColors({required this.danger});
 
   final Color? danger;
 
   @override
   CustomColors copyWith({Color? danger}) {
-    return CustomColors(
-      danger: danger ?? this.danger,
-    );
+    return CustomColors(danger: danger ?? this.danger);
   }
 
   @override
@@ -295,9 +315,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
     if (other is! CustomColors) {
       return this;
     }
-    return CustomColors(
-      danger: Color.lerp(danger, other.danger, t),
-    );
+    return CustomColors(danger: Color.lerp(danger, other.danger, t));
   }
 
   CustomColors harmonized(ColorScheme dynamic) {

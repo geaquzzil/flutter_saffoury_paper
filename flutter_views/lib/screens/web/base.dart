@@ -69,16 +69,12 @@ abstract class BaseWebPageState<T extends StatefulWidget> extends State<T> {
                     : ListTile(
                         title: Text(
                           headerItems[index].title,
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       );
               },
               separatorBuilder: (BuildContext context, int index) {
-                return const SizedBox(
-                  height: 10.0,
-                );
+                return const SizedBox(height: 10.0);
               },
               itemCount: headerItems.length,
             ),
@@ -114,9 +110,7 @@ abstract class BaseWebPageState<T extends StatefulWidget> extends State<T> {
 
   Widget getHeader(BuildContext context) {
     if (kIsWeb) {
-      return Header(
-        selectedHeader: getSelectedHeader(context),
-      );
+      return Header(selectedHeader: getSelectedHeader(context));
     } else {
       return const Padding(
         padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 10),
@@ -147,9 +141,7 @@ abstract class BaseWebPage extends StatelessWidget {
 
   Widget getHeader(BuildContext context) {
     if (kIsWeb) {
-      return Header(
-        selectedHeader: getSelectedHeader(context),
-      );
+      return Header(selectedHeader: getSelectedHeader(context));
     } else {
       return const Padding(
         padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 10),
@@ -176,10 +168,11 @@ abstract class BaseWebPage extends StatelessWidget {
       floatingActionButton: ScrollToHideWidget(
         controller: _scrollController,
         child: FloatingActionButton(
-            onPressed: () {
-              _scrollTop();
-            },
-            child: const Icon(Icons.arrow_upward_sharp)),
+          onPressed: () {
+            _scrollTop();
+          },
+          child: const Icon(Icons.arrow_upward_sharp),
+        ),
       ),
       endDrawer: Drawer(
         child: SafeArea(
@@ -215,16 +208,12 @@ abstract class BaseWebPage extends StatelessWidget {
                     : ListTile(
                         title: Text(
                           headerItems[index].title,
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       );
               },
               separatorBuilder: (BuildContext context, int index) {
-                return const SizedBox(
-                  height: 10.0,
-                );
+                return const SizedBox(height: 10.0);
               },
               itemCount: headerItems.length,
             ),
@@ -233,8 +222,8 @@ abstract class BaseWebPage extends StatelessWidget {
       ),
       body: ResponsiveScroll(
         controller: _scrollController,
-        scrollOffset: 250, // additional offset to users scroll input
-        animationDuration: 600,
+        // scrollOffset: 250, // additional offset to users scroll input
+        // animationDuration: 600,
         //     500, // duration of animation of scroll in milliseconds
         // curve: Curves.easeIn, // curve of the animation
         child: SingleChildScrollView(
@@ -257,7 +246,9 @@ abstract class BaseWebPage extends StatelessWidget {
 abstract class BaseWebPageSlivers extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
   List<Widget> getContentWidget(
-      BuildContext context, BoxConstraints constraints);
+    BuildContext context,
+    BoxConstraints constraints,
+  );
 
   Widget? getCustomAppBar(BuildContext context, BoxConstraints? constraints);
 
@@ -267,46 +258,53 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
   final bool useSmallFloatingBar;
   final Widget? customSliverHeader;
   final bool usePagePadding;
-  BaseWebPageSlivers(
-      {super.key,
-      this.buildHeader = true,
-      this.useSmallFloatingBar = false,
-      this.buildFooter = true,
-      this.customSliverHeader,
-      this.usePagePadding = true,
-      this.pinToolbar = true});
+  BaseWebPageSlivers({
+    super.key,
+    this.buildHeader = true,
+    this.useSmallFloatingBar = false,
+    this.buildFooter = true,
+    this.customSliverHeader,
+    this.usePagePadding = true,
+    this.pinToolbar = true,
+  });
 
   Widget getDescription(
-      BuildContext context, BoxConstraints constraints, String description) {
+    BuildContext context,
+    BoxConstraints constraints,
+    String description,
+  ) {
     return getSliverPadding(
-        context,
-        constraints,
-        SliverToBoxAdapter(
-            child: Align(
-                alignment: Alignment.center,
-                child:
-                    Text(description, style: getSubtitleTextStyle(context)))));
+      context,
+      constraints,
+      SliverToBoxAdapter(
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(description, style: getSubtitleTextStyle(context)),
+        ),
+      ),
+    );
   }
 
   Widget getTitle(
-      BuildContext context, BoxConstraints constraints, String title,
-      {String? description}) {
+    BuildContext context,
+    BoxConstraints constraints,
+    String title, {
+    String? description,
+  }) {
     return getSliverPadding(
-        context,
-        constraints,
-        SliverToBoxAdapter(
-            child: Align(
+      context,
+      constraints,
+      SliverToBoxAdapter(
+        child: Align(
           alignment: Alignment.center,
           child: HeaderText(
             useRespnosiveLayout: false,
-            description: description == null
-                ? null
-                : Html(
-                    data: description,
-                  ),
+            description: description == null ? null : Html(data: description),
             text: title,
           ),
-        )));
+        ),
+      ),
+    );
   }
 
   String getSelectedHeader(BuildContext context) {
@@ -335,10 +333,7 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
 
   Widget getSliverSizedBox({double height = kDefaultPadding, double? width}) {
     return SliverToBoxAdapter(
-      child: SizedBox(
-        height: height,
-        width: width,
-      ),
+      child: SizedBox(height: height, width: width),
     );
   }
 
@@ -356,37 +351,49 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
     }
   }
 
-  SliverPadding getPadding(BuildContext context, Widget sliver,
-      {double? bottom}) {
+  SliverPadding getPadding(
+    BuildContext context,
+    Widget sliver, {
+    double? bottom,
+  }) {
     return SliverPadding(
-        padding: EdgeInsets.only(
-            top: kDefaultPadding / 2,
-            right: kDefaultPadding,
-            bottom: bottom ?? 0,
-            left: kDefaultPadding),
-        sliver: sliver);
+      padding: EdgeInsets.only(
+        top: kDefaultPadding / 2,
+        right: kDefaultPadding,
+        bottom: bottom ?? 0,
+        left: kDefaultPadding,
+      ),
+      sliver: sliver,
+    );
   }
 
   Widget getSliverPadding(
-      BuildContext context, BoxConstraints constraints, Widget child,
-      {double padd = 2}) {
+    BuildContext context,
+    BoxConstraints constraints,
+    Widget child, {
+    double padd = 2,
+  }) {
     if (usePagePadding == false) {
       return child;
     }
-    double defualPadding =
-        isMobile(context) ? kDefaultPadding * 2 : kDefaultPadding;
+    double defualPadding = isMobile(context)
+        ? kDefaultPadding * 2
+        : kDefaultPadding;
     double horizontalPadding = max(
-        (constraints.maxWidth -
-                (isTablet(context) ? kTabletMaxWidth : kDesktopMaxWidth)) /
-            padd,
-        0);
+      (constraints.maxWidth -
+              (isTablet(context) ? kTabletMaxWidth : kDesktopMaxWidth)) /
+          padd,
+      0,
+    );
     return SliverPadding(
-        padding: EdgeInsets.symmetric(
-            vertical: defualPadding,
-            horizontal: horizontalPadding > defualPadding
-                ? horizontalPadding
-                : defualPadding),
-        sliver: child);
+      padding: EdgeInsets.symmetric(
+        vertical: defualPadding,
+        horizontal: horizontalPadding > defualPadding
+            ? horizontalPadding
+            : defualPadding,
+      ),
+      sliver: child,
+    );
   }
 
   void init(BuildContext context) {
@@ -403,14 +410,15 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
 
   Widget getScaffold(BuildContext context) {
     return Scaffold(
-        backgroundColor: !buildHeader ? Colors.transparent : null,
-        floatingActionButton: getFloatingActionButton(),
-        key: context
-            .read<DrawerMenuControllerProvider>()
-            .getStartDrawableKeyWeb(runtimeType.toString()),
-        endDrawer: getEndDrawer(),
-        drawer: WebMobileDrawer(selectedHeader: getSelectedHeader(context)),
-        body: getBody(context));
+      backgroundColor: !buildHeader ? Colors.transparent : null,
+      floatingActionButton: getFloatingActionButton(),
+      key: context.read<DrawerMenuControllerProvider>().getStartDrawableKeyWeb(
+        runtimeType.toString(),
+      ),
+      endDrawer: getEndDrawer(),
+      drawer: WebMobileDrawer(selectedHeader: getSelectedHeader(context)),
+      body: getBody(context),
+    );
   }
 
   LayoutBuilder getBody(BuildContext context) {
@@ -419,35 +427,37 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
         Widget? customAppBar = getCustomAppBar(context, constraints);
         return ResponsiveScroll(
           controller: _scrollController,
-          scrollOffset: 250, // additional offset to users scroll input
-          animationDuration: 600,
+          // scrollOffset: 250, // additional offset to users scroll input
+          // animationDuration: 600,
           child: NotificationListener<ScrollNotification>(
             onNotification: (notification) {
               debugPrint(
-                  "onNotification  ${notification.metrics.extentBefore}");
+                "onNotification  ${notification.metrics.extentBefore}",
+              );
               onScroll.value = notification.metrics.extentBefore;
 
               return false;
             },
             child: CustomScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _scrollController,
-                slivers: [
-                  if (buildHeader || customAppBar != null)
-                    SliverPersistentHeader(
-                        pinned: pinToolbar,
-                        floating: true,
-                        delegate: SliverAppBarDelegatePreferedSize(
-                            child: PreferredSize(
-                                preferredSize: const Size.fromHeight(70.0),
-                                child: customAppBar ?? getHeader(context)))),
-                  if (customSliverHeader != null) customSliverHeader!,
-                  ...getContentWidget(context, constraints),
-                  if (buildFooter)
-                    const SliverToBoxAdapter(
-                      child: Footer(),
-                    )
-                ]),
+              physics: const NeverScrollableScrollPhysics(),
+              controller: _scrollController,
+              slivers: [
+                if (buildHeader || customAppBar != null)
+                  SliverPersistentHeader(
+                    pinned: pinToolbar,
+                    floating: true,
+                    delegate: SliverAppBarDelegatePreferedSize(
+                      child: PreferredSize(
+                        preferredSize: const Size.fromHeight(70.0),
+                        child: customAppBar ?? getHeader(context),
+                      ),
+                    ),
+                  ),
+                if (customSliverHeader != null) customSliverHeader!,
+                ...getContentWidget(context, constraints),
+                if (buildFooter) const SliverToBoxAdapter(child: Footer()),
+              ],
+            ),
           ),
         );
       },
@@ -456,7 +466,9 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
 
   SizedBox getEndDrawer() {
     return const SizedBox(
-        width: 500, child: Card(child: WebShoppingCartDrawer()));
+      width: 500,
+      child: Card(child: WebShoppingCartDrawer()),
+    );
   }
 
   Widget getDrawer(List<HeaderItem> headerItems) {
@@ -495,16 +507,12 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
                     : ListTile(
                         title: Text(
                           headerItems[index].title,
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       );
               },
               separatorBuilder: (BuildContext context, int index) {
-                return const SizedBox(
-                  height: 10.0,
-                );
+                return const SizedBox(height: 10.0);
               },
               itemCount: headerItems.length,
             ),
@@ -526,12 +534,14 @@ abstract class BaseWebPageSlivers extends StatelessWidget {
               onPressed: () {
                 _scrollTop();
               },
-              child: const Icon(Icons.arrow_upward_sharp))
+              child: const Icon(Icons.arrow_upward_sharp),
+            )
           : FloatingActionButton(
               onPressed: () {
                 _scrollTop();
               },
-              child: const Icon(Icons.arrow_upward_sharp)),
+              child: const Icon(Icons.arrow_upward_sharp),
+            ),
     );
   }
 
@@ -555,17 +565,18 @@ abstract class BaseWebPageSliversApi extends BaseWebPageSlivers {
   int iD;
   String tableName;
   ViewAbstract? extras;
-  BaseWebPageSliversApi(
-      {super.key,
-      required this.iD,
-      required this.tableName,
-      this.extras,
-      super.buildFooter,
-      super.buildHeader,
-      super.pinToolbar,
-      super.usePagePadding,
-      super.customSliverHeader,
-      super.useSmallFloatingBar});
+  BaseWebPageSliversApi({
+    super.key,
+    required this.iD,
+    required this.tableName,
+    this.extras,
+    super.buildFooter,
+    super.buildHeader,
+    super.pinToolbar,
+    super.usePagePadding,
+    super.customSliverHeader,
+    super.useSmallFloatingBar,
+  });
   Future<ViewAbstract?> getCallApiFunctionIfNull(BuildContext context);
   ServerActions getServerActions();
   ViewAbstract? getExtras() {
@@ -579,13 +590,14 @@ abstract class BaseWebPageSliversApi extends BaseWebPageSlivers {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return EmptyWidget(
-              lottiUrl:
-                  "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-              onSubtitleClicked: () {
-                // setState(() {});
-              },
-              title: AppLocalizations.of(context)!.cantConnect,
-              subtitle: AppLocalizations.of(context)!.cantConnectRetry);
+            lottiUrl:
+                "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+            onSubtitleClicked: () {
+              // setState(() {});
+            },
+            title: AppLocalizations.of(context)!.cantConnect,
+            subtitle: AppLocalizations.of(context)!.cantConnectRetry,
+          );
         } else if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data != null) {
             extras = snapshot.data;
@@ -593,17 +605,19 @@ abstract class BaseWebPageSliversApi extends BaseWebPageSlivers {
             return getScaffold(context);
           } else {
             return EmptyWidget(
-                lottiUrl:
-                    "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
-                onSubtitleClicked: () {
-                  // setState(() {});
-                },
-                title: AppLocalizations.of(context)!.cantConnect,
-                subtitle: AppLocalizations.of(context)!.cantConnectRetry);
+              lottiUrl:
+                  "https://assets7.lottiefiles.com/packages/lf20_0s6tfbuc.json",
+              onSubtitleClicked: () {
+                // setState(() {});
+              },
+              title: AppLocalizations.of(context)!.cantConnect,
+              subtitle: AppLocalizations.of(context)!.cantConnectRetry,
+            );
           }
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-              body: Center(child: CircularProgressIndicator()));
+            body: Center(child: CircularProgressIndicator()),
+          );
         } else {
           return const Text("TOTODO");
         }

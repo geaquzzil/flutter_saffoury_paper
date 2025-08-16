@@ -3,8 +3,10 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert' as convert;
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
@@ -675,7 +677,7 @@ abstract class ViewAbstractApi<T> extends ViewAbstractBase<T> {
   HttpWithMiddleware getHttp() {
     return HttpWithMiddleware.build(
       requestTimeout: const Duration(seconds: 60),
-      middlewares: [HttpLogger(logLevel: LogLevel.HEADERS)],
+      middlewares: [LoggerHTTP()],
     );
   }
 
@@ -803,5 +805,29 @@ class SearchCache {
     return list.firstWhereOrNull((s) {
       return query == s.query || query.contains(s.query);
     });
+  }
+}
+
+class LoggerHTTP extends MiddlewareContract {
+  @override
+  void interceptRequest(RequestData data) {
+    // debugPrint("LoggerHTTP Method: ${data.method}");
+    // debugPrint("LoggerHTTP Url: ${data.url}");
+    // debugPrint("Body: ${data.body}");
+  }
+
+  @override
+  void interceptResponse(ResponseData data) {
+    debugPrint("LoggerHTTP Status Code: ${data.statusCode}");
+    debugPrint("LoggerHTTP Method: ${data.method}");
+    debugPrint("LoggerHTTP Url: ${data.url}");
+    // debugPrint("LoggerHTTP Body: ${data.body}");
+    debugPrint("LoggerHTTP Headers: ${data.headers}");
+  }
+
+  @override
+  void interceptError(err) {
+    debugPrint("LoggerHTTP Error: $err");
+    debugPrint("LoggerHTTP Error: ${err.toString()}");
   }
 }

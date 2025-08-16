@@ -81,6 +81,7 @@ abstract class SliverApiMixinWithStaticStateful<T extends ViewAbstract>
   RequestOptions? customRequestOption;
   RequestOptions? copyWithRequestOption;
   bool requiresFullFetsh;
+  final bool? overrideHorizontalItemDescriptionOnBottom;
   final List<Widget>? Function(
     bool isSliver,
     dynamic requestObjcet,
@@ -94,6 +95,7 @@ abstract class SliverApiMixinWithStaticStateful<T extends ViewAbstract>
     this.cardType = CardItemType.list,
     this.scrollDirection = Axis.vertical,
     this.onSeletedListItemsChanged,
+    this.overrideHorizontalItemDescriptionOnBottom,
     this.hasCustomCardItemBuilder,
     this.onFinishCalling,
     this.scrollController,
@@ -135,15 +137,15 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
   late ListMultiKeyProvider listProvider;
   late ValueNotifier<CardItemType> valueNotifierGrid;
   late ValueNotifier<List<ViewAbstract>>? _onSeletedListItemsChanged;
-  final double horizontalGridSpacing = 10;
-  final double verticalGridSpacing = 10;
-  final double horizontalGridMargin = 10;
-  final double verticalGridMargin = 10;
-  final int minItemsPerRow = 3;
-  final int maxItemsPerRow = 8;
+  final double horizontalGridSpacing = 50;
+  final double verticalGridSpacing = 50;
+  final double horizontalGridMargin = 50;
+  final double verticalGridMargin = 50;
+  final int minItemsPerRow = 2;
+  final int maxItemsPerRow = 5;
   bool _selectMood = false;
   late bool _isScrollable;
-  final double minGridItemSize = 100;
+  final double minGridItemSize = 200;
 
   final GlobalKey<SliverAnimatedListState> _listKey =
       GlobalKey<SliverAnimatedListState>();
@@ -655,7 +657,7 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     List list = getList();
     return [
       ...list.map(getGridItem),
-      if (getToListObjectCastList() == null)
+      // if (getToListObjectCastList() == null)
         if (isLoading)
           ...List.generate(
             5,
@@ -669,13 +671,15 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       return widget.hasCustomCardItemBuilder!.call(-1, e);
     }
     return ListCardItemMasterHorizontal(
-      setDescriptionAtBottom: false,
+      setDescriptionAtBottom:
+          widget.overrideHorizontalItemDescriptionOnBottom ?? false,
       object: e,
       isSelectForListTile: widget.isSelectForCard,
       isSelectMoodEnabled: _selectMood,
       onTap: widget.onClickForCard,
       searchQuery: _searchString,
       state: widget.state,
+
       stateForToggle: this,
       isSelectForSelection: _onSelectedItem,
     );
@@ -748,7 +752,9 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
                 }
                 Widget currentTile = ListCardItemMasterHorizontal(
                   currentSize: size,
-                  setDescriptionAtBottom: !SizeConfig.hasPointer(context),
+                  setDescriptionAtBottom:
+                      widget.overrideHorizontalItemDescriptionOnBottom ??
+                      !SizeConfig.hasPointer(context),
                   object: list[index],
                   isSelectForListTile: widget.isSelectForCard,
                   isSelectMoodEnabled: _selectMood,
@@ -803,9 +809,9 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
       ),
     );
   }
-
   Widget getGridViewWhenAxisIsVertical(int count, bool isLoading) {
     return ResponsiveSliverGridList(
+
       horizontalGridSpacing:
           horizontalGridSpacing, // Horizontal space between grid items
       verticalGridSpacing:

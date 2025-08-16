@@ -38,7 +38,7 @@ class ProductType extends ViewAbstract<ProductType>
   double? sellPrice;
 
   String? image;
-      @JsonKey(fromJson: convertToStringFromString)
+  @JsonKey(fromJson: convertToStringFromString)
   String? comments;
   double? availability;
 
@@ -90,6 +90,35 @@ class ProductType extends ViewAbstract<ProductType>
     );
   }
 
+  // @override
+  // List<Widget>? getCustomTopWidget(
+  //   BuildContext context, {
+  //   ServerActions? action,
+  //   ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+  //   ValueNotifier<SecondPaneHelper?>? onClick,
+  //   SecoundPaneHelperWithParentValueNotifier? basePage,
+  //   bool? isFromFirstAndSecPane,
+  //   extras,
+  // }) {
+  //   debugPrint("product_types $action");
+  //   if (action == ServerActions.view) {
+  //     return [
+  //       Text("DSds")
+  //       // SliverApiMixinViewAbstractWidget(
+  //       //   isSliver: true,
+  //       //   cardType: CardItemType.grid,
+  //       //   scrollDirection: Axis.vertical,
+  //       //   toListObject: Product().getSelfInstanceWithSimilarOption(
+  //       //     context: context,
+  //       //     obj: this,
+  //       //     copyWith: RequestOptions(countPerPage: 5),
+  //       //   ),
+  //       // ),
+  //     ];
+  //   }
+  //   return null;
+  // }
+
   @override
   List<Widget>? getCustomBottomWidget(
     BuildContext context, {
@@ -105,11 +134,12 @@ class ProductType extends ViewAbstract<ProductType>
     return [
       SliverApiMixinViewAbstractWidget(
         cardType: CardItemType.grid,
-        scrollDirection: Axis.horizontal,
-        toListObject: Product().getSelfInstanceWithSimilarOption(
-          context: context,
-          obj: this,
-          copyWith: RequestOptions(countPerPage: 5),
+        scrollDirection: Axis.vertical,
+        overrideHorizontalItemDescriptionOnBottom: true,
+        toListObject: Product().setRequestOption(
+          option: RequestOptions()
+              .addRequestObjcets(true)
+              .addSearchByField(getForeignKeyName(), iD),
         ),
       ),
     ];

@@ -37,3 +37,6 @@ for github
 
                 ReactiveForm when resetState it remove all values 
                 Use PatchValue to modifiy only the map given
+
+
+                flutter run -d chrome --web-browser-flag "--disable-web-security"

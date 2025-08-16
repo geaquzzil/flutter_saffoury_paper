@@ -251,19 +251,25 @@ class _SliverCustomScrollViewDraggableState
       );
     }
     return SafeArea(
-      child: ResponsiveScroll(controller: _scrollController, child: scrollView),
+      child: ResponsiveScroll(
+        controller: _scrollController,
+        // scrollOffset: 250, // additional offset to users scroll input
+        // animationDuration: 600,
+        child: scrollView,
+      ),
     );
   }
 
   CustomScrollView _getCustomScrollView(TabControllerHelper? tab) {
     return CustomScrollView(
       controller: _scrollController,
-      physics:
-          widget.physics ??
-          const BouncingScrollPhysics(
-            // decelerationRate:ScrollDecelerationRate.fast ,
-            parent: AlwaysScrollableScrollPhysics(),
-          ),
+      physics: isDesktopPlatform()
+          ? NeverScrollableScrollPhysics()
+          : widget.physics ??
+                const BouncingScrollPhysics(
+                  // decelerationRate:ScrollDecelerationRate.fast ,
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
       slivers: [
         if (widget.builderAppbar != null)
           StreamBuilder<List<bool>>(

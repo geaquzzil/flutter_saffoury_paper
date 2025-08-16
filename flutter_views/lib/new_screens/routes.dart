@@ -131,7 +131,7 @@ class RouteGenerator {
         return null;
       } else {
         debugPrint("GoRouter Error");
-        return "Error";
+        return homeLocation;
       }
     }
   }

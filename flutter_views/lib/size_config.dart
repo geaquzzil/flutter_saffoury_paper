@@ -22,9 +22,10 @@ const double kDrawerOpenWidth = 200;
 
 const double kDefaultClosedDrawer = 80;
 
-
-Size findPopupSizeSquare(BuildContext context,
-    {CurrentScreenSize? screenSize}) {
+Size findPopupSizeSquare(
+  BuildContext context, {
+  CurrentScreenSize? screenSize,
+}) {
   screenSize ??= findCurrentScreenSize(context);
   Size s = MediaQuery.of(context).size;
   return const Size(400, 400);
@@ -47,8 +48,10 @@ bool showHamburger(CurrentScreenSize? screenSize) {
 }
 
 bool isLargeScreenFromCurrentScreenSize(BuildContext context, {double? width}) {
-  CurrentScreenSize currentScreenSize =
-      findCurrentScreenSize(context, width: width);
+  CurrentScreenSize currentScreenSize = findCurrentScreenSize(
+    context,
+    width: width,
+  );
   return currentScreenSize == CurrentScreenSize.DESKTOP ||
       currentScreenSize == CurrentScreenSize.LARGE_TABLET;
 }
@@ -78,10 +81,12 @@ bool isTabletFromWidth(double maxWidth) {
 }
 
 bool isMobilePlatform() {
+  if (kIsWeb) return false;
   return Platform.isAndroid || Platform.isIOS;
 }
 
 bool supportsSerialPort() {
+  if (kIsWeb) return false;
   return Platform.isAndroid ||
       Platform.isLinux ||
       Platform.isMacOS ||
@@ -89,6 +94,7 @@ bool supportsSerialPort() {
 }
 
 bool supportsFirebaseNotification() {
+  if (kIsWeb) return true;
   return Platform.isAndroid || Platform.isMacOS || Platform.isIOS || kIsWeb;
 }
 
@@ -117,26 +123,26 @@ bool isDesktop(BuildContext context, {double? maxWidth}) {
 }
 
 EdgeInsets getSuggestionPadding(double width) {
-  double defualPadding =
-      isMobileFromWidth(width) ? kDefaultPadding * 2 : kDefaultPadding;
-//1920 -900
+  double defualPadding = isMobileFromWidth(width)
+      ? kDefaultPadding * 2
+      : kDefaultPadding;
+  //1920 -900
   double horizontalPadding = max(
-      (width - (isTabletFromWidth(width) ? kLargeTablet : kDesktopWidth)) / 4,
-      0);
+    (width - (isTabletFromWidth(width) ? kLargeTablet : kDesktopWidth)) / 4,
+    0,
+  );
 
   debugPrint("getSuggetionPadding horizontalPadding : $horizontalPadding");
 
   return EdgeInsets.symmetric(
-      vertical: defualPadding,
-      horizontal: horizontalPadding > defualPadding
-          ? horizontalPadding
-          : defualPadding);
+    vertical: defualPadding,
+    horizontal: horizontalPadding > defualPadding
+        ? horizontalPadding
+        : defualPadding,
+  );
 }
 
-enum MainAxisType {
-  ListHorizontal,
-  Chart,
-}
+enum MainAxisType { ListHorizontal, Chart }
 
 @Deprecated("Move to Current Screen Size")
 class SizeConfig {
@@ -160,8 +166,10 @@ class SizeConfig {
     return (actualWidth / 375.0) * screenWidth;
   }
 
-  static double getPaneProportion(BuildContext context,
-      {Orientation? orientation}) {
+  static double getPaneProportion(
+    BuildContext context, {
+    Orientation? orientation,
+  }) {
     if (MediaQuery.of(context).hinge != null) return 0.5;
     if (SizeConfig.isMediumFromScreenSize(context)) {
       return 0.5;
@@ -181,7 +189,8 @@ class SizeConfig {
   static bool isSoLargeScreen(BuildContext context) {
     debugSize(context);
     if (MediaQuery.of(context).size.width >= kLargeTablet) return true;
-    bool isSupported = isDesktopOrWebPlatform(context) ||
+    bool isSupported =
+        isDesktopOrWebPlatform(context) ||
         isFoldableWithOpenDualScreen(context);
     if (!isSupported) return false;
     return MediaQuery.of(context).size.width >= kLargeTablet;
@@ -190,7 +199,8 @@ class SizeConfig {
   static bool isLargeScreen(BuildContext context) {
     debugSize(context);
     if (MediaQuery.of(context).size.width >= 500) return true;
-    bool isSupported = isDesktopOrWebPlatform(context) ||
+    bool isSupported =
+        isDesktopOrWebPlatform(context) ||
         isFoldableWithOpenDualScreen(context);
     if (!isSupported) return false;
     bool hasSpace = MediaQuery.of(context).size.width >= 500;
@@ -205,8 +215,10 @@ class SizeConfig {
     return isFoldable(context) && !isSingleScreen(context);
   }
 
-  static num getMainAxisCellCount(BuildContext context,
-      {MainAxisType? mainAxisType}) {
+  static num getMainAxisCellCount(
+    BuildContext context, {
+    MainAxisType? mainAxisType,
+  }) {
     bool isLargeScreenAS = isLargeScreen(context) || isSoLargeScreen(context);
     if (isLargeScreenAS) {
       return mainAxisType == null
@@ -219,7 +231,9 @@ class SizeConfig {
   }
 
   static num getMainAxisCellPassedOnType(
-      bool isLargeScreen, MainAxisType mainAxisType) {
+    bool isLargeScreen,
+    MainAxisType mainAxisType,
+  ) {
     switch (mainAxisType) {
       case MainAxisType.ListHorizontal:
         return isLargeScreen ? 0.9 : 1.4;
@@ -243,8 +257,10 @@ class SizeConfig {
   }
 
   static bool isFoldable(BuildContext context) {
-    bool isFold = MediaQuery.of(context).displayFeatures.firstWhereOrNull(
-            (element) => element.type == DisplayFeatureType.fold) !=
+    bool isFold =
+        MediaQuery.of(context).displayFeatures.firstWhereOrNull(
+          (element) => element.type == DisplayFeatureType.fold,
+        ) !=
         null;
 
     return MediaQuery.of(context).hinge != null || isFold;
@@ -319,13 +335,14 @@ class Device {
   static Device? _device;
   static Function? onMetricsChange;
 
-  Device(
-      {required this.isTablet,
-      required this.isPhone,
-      required this.isIos,
-      required this.isAndroid,
-      required this.isIphoneX,
-      required this.hasNotch});
+  Device({
+    required this.isTablet,
+    required this.isPhone,
+    required this.isIos,
+    required this.isAndroid,
+    required this.isIphoneX,
+    required this.hasNotch,
+  });
 
   factory Device.get() {
     if (_device != null) return _device!;
@@ -368,8 +385,10 @@ class Device {
     if (isAndroid) {
       final adjustedWidth = _calWidth() / devicePixelRatio;
       final adjustedHeight = _calHeight() / devicePixelRatio;
-      final diagonalSizeInches = (Math.sqrt(
-              Math.pow(adjustedWidth, 2) + Math.pow(adjustedHeight, 2))) /
+      final diagonalSizeInches =
+          (Math.sqrt(
+            Math.pow(adjustedWidth, 2) + Math.pow(adjustedHeight, 2),
+          )) /
           _ppi;
       //print("Dialog size inches is $diagonalSizeInches");
       if (diagonalSizeInches >= 7) {
@@ -400,12 +419,13 @@ class Device {
     if (_hasTopOrBottomPadding()) hasNotch = true;
 
     return _device = Device(
-        isTablet: isTablet,
-        isPhone: isPhone,
-        isAndroid: isAndroid,
-        isIos: isIos,
-        isIphoneX: isIphoneX,
-        hasNotch: hasNotch);
+      isTablet: isTablet,
+      isPhone: isPhone,
+      isAndroid: isAndroid,
+      isIos: isIos,
+      isIphoneX: isIphoneX,
+      hasNotch: hasNotch,
+    );
   }
 
   static double _calWidth() {
@@ -426,8 +446,8 @@ class Device {
   static int get _ppi => Platform.isAndroid
       ? 160
       : Platform.isIOS
-          ? 150
-          : 96;
+      ? 150
+      : 96;
 
   static bool _hasTopOrBottomPadding() {
     final padding = ui.window.viewPadding;
@@ -452,10 +472,11 @@ class ResponsiveWebBuilderSliver extends StatelessWidget {
 
   Widget _buildUi(BuildContext context, double width) {
     return MaxWidthBox(
-        maxWidth: width,
-        // minWidth: width,
-        // defaultScale: false,
-        child: builder.call(context, width));
+      maxWidth: width,
+      // minWidth: width,
+      // defaultScale: false,
+      child: builder.call(context, width),
+    );
   }
 }
 
@@ -475,13 +496,16 @@ class ResponsiveWebBuilder extends StatelessWidget {
 
   Widget _buildUi(BuildContext context, double width) {
     return Center(
-      child: LayoutBuilder(builder: (context, constraints) {
-        return MaxWidthBox(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return MaxWidthBox(
             maxWidth: width,
             // minWidth: width,
             // defaultScale: false,
-            child: builder.call(context, width));
-      }),
+            child: builder.call(context, width),
+          );
+        },
+      ),
     );
   }
 }
@@ -493,19 +517,20 @@ class ScreenHelperSliver extends StatelessWidget {
   final Widget Function(double width, double height) desktop;
   final bool forceSmallView;
   final Function(double width, double height, CurrentScreenSize c)?
-      onChangeLayout;
+  onChangeLayout;
 
   final bool? requireAutoPadding;
 
-  const ScreenHelperSliver(
-      {super.key,
-      this.requireAutoPadding,
-      required this.largeTablet,
-      required this.mobile,
-      required this.smallTablet,
-      required this.desktop,
-      this.forceSmallView = false,
-      this.onChangeLayout});
+  const ScreenHelperSliver({
+    super.key,
+    this.requireAutoPadding,
+    required this.largeTablet,
+    required this.mobile,
+    required this.smallTablet,
+    required this.desktop,
+    this.forceSmallView = false,
+    this.onChangeLayout,
+  });
 
   Widget getPadding(BuildContext context, double width, Widget widget) {
     double defualPadding = isMobile(context, maxWidth: width)
@@ -513,22 +538,26 @@ class ScreenHelperSliver extends StatelessWidget {
         : kDefaultPadding;
 
     double horizontalPadding = max(
-        (width -
-                (isDesktop(context, maxWidth: width)
-                    ? kFoldableSmallTablet
-                    : kDesktopWidth)) /
-            2,
-        0);
+      (width -
+              (isDesktop(context, maxWidth: width)
+                  ? kFoldableSmallTablet
+                  : kDesktopWidth)) /
+          2,
+      0,
+    );
     debugPrint(
-        "ScreenHelperSliver getPadding vertical: $defualPadding horizontal: $horizontalPadding");
+      "ScreenHelperSliver getPadding vertical: $defualPadding horizontal: $horizontalPadding",
+    );
     int padd = 2;
     return Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: 15,
-            horizontal: max((width - 1200) / padd, 0) > kDefaultPadding
-                ? max((width - 1200) / padd, 0)
-                : kDefaultPadding),
-        child: widget);
+      padding: EdgeInsets.symmetric(
+        vertical: 15,
+        horizontal: max((width - 1200) / padd, 0) > kDefaultPadding
+            ? max((width - 1200) / padd, 0)
+            : kDefaultPadding,
+      ),
+      child: widget,
+    );
   }
 
   void addFramPost(void Function(Duration) callback) {
@@ -544,14 +573,16 @@ class ScreenHelperSliver extends StatelessWidget {
         double maxLength = constraints.maxHeight;
         // if (maxWidth == null || maxLength == null) return SizedBox();
         debugPrint(
-            "layoutBuilder width $maxWidth height $maxLength currentScreenSize ${findCurrentScreenSize(context, width: maxWidth)}");
+          "layoutBuilder width $maxWidth height $maxLength currentScreenSize ${findCurrentScreenSize(context, width: maxWidth)}",
+        );
 
         onChangeLayout?.call(
-            maxWidth,
-            maxLength,
-            forceSmallView
-                ? CurrentScreenSize.MOBILE
-                : findCurrentScreenSize(context, width: maxWidth));
+          maxWidth,
+          maxLength,
+          forceSmallView
+              ? CurrentScreenSize.MOBILE
+              : findCurrentScreenSize(context, width: maxWidth),
+        );
 
         if (forceSmallView) {
           currentWidget = mobile.call(maxWidth, maxLength);
@@ -586,11 +617,12 @@ class ScreenHelper extends StatelessWidget {
   final Widget smallTablet;
   final Widget largeTablet;
 
-  const ScreenHelper(
-      {super.key,
-      required this.largeTablet,
-      required this.mobile,
-      required this.smallTablet});
+  const ScreenHelper({
+    super.key,
+    required this.largeTablet,
+    required this.mobile,
+    required this.smallTablet,
+  });
 
   @override
   Widget build(BuildContext context) {
