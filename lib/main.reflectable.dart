@@ -102,7 +102,8 @@ import 'package:flutter_saffoury_paper/models/users/warehouse_employees.dart'
     as prefix57;
 import 'package:flutter_view_controller/interfaces/dashable_interface.dart'
     as prefix70;
-import 'package:flutter_view_controller/models/barcode_setting.dart'
+import 'package:flutter_view_controller/models/barcode_setting_web.dart' 
+    if (dart.library.io) 'package:flutter_view_controller/models/barcode_setting_web.dart'
     as prefix59;
 import 'package:flutter_view_controller/models/permissions/customer_billing.dart'
     as prefix67;

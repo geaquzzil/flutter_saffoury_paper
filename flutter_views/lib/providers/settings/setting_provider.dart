@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_view_controller/models/barcode_setting.dart';
+import 'package:flutter_view_controller/models/barcode_setting_web.dart'
+    if (dart.library.io) 'package:flutter_view_controller/models/barcode_setting_web.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/printer_default_setting.dart';
 import 'package:flutter_view_controller/size_config.dart';

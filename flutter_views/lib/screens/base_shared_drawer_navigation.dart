@@ -444,9 +444,16 @@ class SecondPaneHelper {
   ///Value could be A dynamic object or [List<Widget>] or [BasePage] please make sure to pass the currect values
   dynamic value;
   dynamic object;
+  bool? notifyFirstParent;
 
   GlobalKey<BasePageSecoundPaneNotifierState>? state;
-  SecondPaneHelper({required this.title, this.value, this.state, this.object});
+  SecondPaneHelper({
+    required this.title,
+    this.value,
+    this.state,
+    this.object,
+    this.notifyFirstParent = false,
+  });
 }
 
 class SecoundPaneHelperWithParentValueNotifier {
@@ -459,6 +466,10 @@ class SecoundPaneHelperWithParentValueNotifier {
     this.onBuild,
   });
   void notify(SecondPaneHelper? s) {
+    if (s?.notifyFirstParent == true) {
+      parent?.getParent().notify(s);
+      return;
+    }
     secPaneNotifier?.value = s;
   }
 

@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/customs_widget/sliver_delegates.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/responsive_scroll.dart';
@@ -15,10 +18,12 @@ class SliverCustomScrollView extends StatefulWidget {
   String? scrollKey;
   ScrollPhysics? physics;
   final RefreshCallback? onRefresh;
+  final ValueNotifier<double>? onScroll;
 
   //this works with one object only todo cant retrun full List
   Widget Function(bool fullyCol, bool fullyExp, TabControllerHelper? tab)?
   builderAppbar;
+  final bool animateTabbar;
   SliverCustomScrollView({
     super.key,
     required this.slivers,
@@ -27,6 +32,8 @@ class SliverCustomScrollView extends StatefulWidget {
     this.builderAppbar,
     this.onRefresh,
     this.physics,
+    this.onScroll,
+    this.animateTabbar = true,
     this.tabs,
     this.scrollKey,
   });
@@ -44,6 +51,8 @@ class _SliverCustomScrollViewDraggableState
   late ScrollController _scrollController;
   late String bucketOffsetKey;
   String? _lastTabsKey;
+
+  ValueNotifier<double>? _onScroll;
 
   final BehaviorSubject<bool> isFullyExpanded = BehaviorSubject<bool>.seeded(
     false,
@@ -70,6 +79,7 @@ class _SliverCustomScrollViewDraggableState
     _scrollController = widget.scrollController ?? ScrollController();
     bucketOffsetKey = widget.scrollKey ?? "scrollKey";
     _lastTabsKey = getTabKey();
+    _onScroll = widget.onScroll ?? ValueNotifier<double>(0);
     if (widget.tabs != null) {
       onTabSelectedValueNotifier = ValueNotifier<int>(0);
       _tabs = <TabControllerHelper>[];
@@ -137,26 +147,78 @@ class _SliverCustomScrollViewDraggableState
           pinned: true,
           delegate: SliverAppBarDelegatePreferedSize(
             wrapWithSafeArea: true,
+            shouldRebuildWidget: true,
             child: PreferredSize(
               preferredSize: Size.fromHeight(kDefaultAppbarHieght),
-              child: Container(
-                // color: Theme.of(context).colorScheme.surface,
-                child: TabBar(
-
-                  tabs: _tabs!
-                      .map(
-                        (e) => e.getTitled((context)),
-                      )
-                      .toList(),
-                  isScrollable: true,
-                  controller: _tabController,
-                ),
-              ),
+              child: getTabbarWidget(),
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget getTabbarWidget() {
+    Widget tabbar = TabBar(
+      tabs: _tabs!.map((e) => e.getTitled((context))).toList(),
+      isScrollable: true,
+      controller: _tabController,
+    );
+    if (widget.animateTabbar) {
+      return ValueListenableBuilder<double>(
+        valueListenable: _onScroll!,
+        builder: (context, value, child) {
+          return AnimatedContainer(
+            duration: Durations.short2,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(
+                Radius.circular(kBorderRadius),
+              ),
+              boxShadow: value == 0
+                  ? null
+                  : [
+                      BoxShadow(
+                        spreadRadius: 3,
+                        color: Theme.of(
+                          context,
+                        ).shadowColor.withValues(alpha: .2),
+
+                        offset: const Offset(0, 2.0),
+                        blurRadius: 5,
+                      ),
+                    ],
+              // border: value == 0
+              //     ? null
+              //     : Border(
+              //         bottom: BorderSide(
+              //           width: 1,
+              //           color: Theme.of(context).highlightColor,
+              //         ),
+              //       ),
+              color: value == 0
+                  ? null
+                  : Theme.of(
+                      context,
+                    ).scaffoldBackgroundColor.withValues(alpha: .7),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadiusGeometry.only(
+                bottomRight: Radius.circular(kBorderRadius),
+                bottomLeft: Radius.circular(kBorderRadius),
+              ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: value == 0 ? 3 : 10,
+                  sigmaY: value == 0 ? 3 : 10,
+                ),
+                child: tabbar,
+              ),
+            ),
+          );
+        },
+      );
+    }
+    return tabbar;
   }
 
   @override
@@ -239,6 +301,7 @@ class _SliverCustomScrollViewDraggableState
   }) {
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
+        _onScroll?.value = notification.metrics.extentBefore;
         if (notification is ScrollEndNotification &&
             notification.metrics.axis == Axis.vertical) {
           Configurations.saveScrollOffset(

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -219,15 +218,17 @@ class BarcodeSetting extends ViewAbstract<BarcodeSetting>
 
   @override
   BarcodeSetting getModifibleSettingObject(BuildContext context) {
-    BarcodeSetting bs = BarcodeSetting(ports: SerialPort.availablePorts);
+    BarcodeSetting bs = BarcodeSetting(ports: []);
     debugPrint("getModifibleSettingObject ports ${bs.ports}");
     return bs;
   }
 
   @override
-  Future<BarcodeSetting> onModifibleSettingLoaded(BarcodeSetting loaded) async {
+  Future<BarcodeSetting> onModifibleSettingLoaded(
+    BarcodeSetting loaded,
+  ) async {
     await Future.delayed(Duration.zero);
-    loaded.ports = SerialPort.availablePorts;
+    loaded.ports = [];
     return loaded;
   }
 

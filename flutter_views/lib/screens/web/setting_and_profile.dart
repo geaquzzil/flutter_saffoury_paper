@@ -5,7 +5,7 @@ import 'package:flutter_view_controller/configrations.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/interfaces/settings/ModifiableInterfaceAndPrintingSetting.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
-import 'package:flutter_view_controller/models/barcode_setting.dart';
+import 'package:flutter_view_controller/models/barcode_setting_web.dart' if(dart.library.io)'package:flutter_view_controller/models/barcode_setting.dart';
 import 'package:flutter_view_controller/models/permissions/user_auth.dart';
 import 'package:flutter_view_controller/models/prints/printer_default_setting.dart';
 import 'package:flutter_view_controller/models/request_options.dart';

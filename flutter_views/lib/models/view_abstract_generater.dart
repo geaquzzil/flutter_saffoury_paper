@@ -129,7 +129,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     onCardClicked(
       context,
       isMain: false,
-      isSecoundSubPaneView: isSecoundSubPaneView,
+      notifyFirstParent: isSecoundSubPaneView,
     );
   }
 
@@ -140,12 +140,12 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
   void onCardClicked(
     BuildContext context, {
     bool isMain = true,
-    bool? isSecoundSubPaneView,
+    bool? notifyFirstParent,
     SecoundPaneHelperWithParentValueNotifier? secondPaneHelper,
   }) {
     viewPage(
       context,
-      isSecoundSubPaneView: isSecoundSubPaneView,
+      isSecoundSubPaneView: notifyFirstParent,
       secondPaneHelper: secondPaneHelper,
     );
   }
@@ -333,10 +333,13 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     isMasterToList = disableMasterToListOverride ? null : isMasterToList;
     //TODO what if master to list  fix this
     if (secondPaneHelper != null) {
-      secondPaneHelper.secPaneNotifier?.value = SecondPaneHelper(
-        object: this,
-        title: getIDWithLabel(context, action: ServerActions.view),
-        value: getViewPage(context, parent: secondPaneHelper),
+      secondPaneHelper.notify(
+        SecondPaneHelper(
+          notifyFirstParent: isSecoundSubPaneView,
+          object: this,
+          title: getIDWithLabel(context, action: ServerActions.view),
+          value: getViewPage(context, parent: secondPaneHelper),
+        ),
       );
       return;
     }

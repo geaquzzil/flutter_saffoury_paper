@@ -77,6 +77,19 @@ class _ListCardItemMasterHorizontalState<
     );
   }
 
+  @override
+  void onTap() {
+    if (widget.onTap != null) {
+      widget.onTap?.call(object);
+    } else {
+      object.onCardClicked(
+        context,
+        secondPaneHelper: widget.state,
+        notifyFirstParent: true,
+      );
+    }
+  }
+
   Widget _getStack(BuildContext context, bool isHovered) {
     return Stack(
       children: [
@@ -232,9 +245,9 @@ class _ListCardItemMasterHorizontalState<
     List<Color> colors = [];
     List<double> stops = [];
     if (isListTileSelected()) {
-      Color color=Theme.of(
-                context,
-              ).colorScheme.secondaryContainer.withValues(alpha: .7);
+      Color color = Theme.of(
+        context,
+      ).colorScheme.secondaryContainer.withValues(alpha: .7);
       colors = [
         isHoverd
             ? Theme.of(

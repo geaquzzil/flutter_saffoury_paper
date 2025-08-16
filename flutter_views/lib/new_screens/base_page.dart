@@ -431,6 +431,9 @@ mixin BasePageSecoundPaneNotifierState<T extends BasePage> on BasePageState<T> {
   // GlobalKey<ActionOnToolbarState> key = GlobalKey<ActionOnToolbarState>();
   SecondPaneHelper? _lastSecondPaneItem;
   SecondPaneHelper? get lastSecondPaneItem => this._lastSecondPaneItem;
+  BasePageSecoundPaneNotifierState getParent() {
+    return widget.parent as BasePageSecoundPaneNotifierState;
+  }
 
   String onActionInitial();
   List<Widget>? getPaneNotifier({
@@ -2025,7 +2028,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
   }
 
   Widget getScaffoldBodyForPane({required bool firstPane}) {
-    bool isMob=isMobileFromWidth(getWidth);
+    bool isMob = isMobileFromWidth(getWidth);
     List<TabControllerHelper>? tabs = getPaneTabControllerHelper(
       firstPane: firstPane,
     );
