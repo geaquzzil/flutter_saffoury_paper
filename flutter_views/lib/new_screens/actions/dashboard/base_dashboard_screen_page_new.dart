@@ -257,11 +257,12 @@ class _BaseDashboardMainPageState
       basePage: getSecoundPaneHelper(),
     );
     if (list is List<DashableGridHelper>) {
+      debugPrint("getDesktopFirstPane DashableGridHelper  is ${list.length}");
       for (var element in list) {
         GlobalKey buttonKey = GlobalKey();
         var group = [
           SectionItemHeader(
-            list: list,
+            list: element.widgets,
             context: context,
             dgh: element,
             buttonKey: buttonKey,
@@ -297,6 +298,10 @@ class _BaseDashboardMainPageState
     // }
     List<Widget> widgets = List.empty(growable: true);
     if (list is List<DashableGridHelper>) {
+      debugPrint(
+        "getDesktopFirstPane DashableGridHelper getDesktopSecondPane  is ${list.length}",
+      );
+      // if (list.length == 1) return [];
       for (var element in list) {
         GlobalKey buttonKey = GlobalKey();
         var group = [

@@ -128,7 +128,7 @@ class Dashboard extends UserLists<Dashboard>
   }) {
     debugPrint("getRequestOption date: $dateObject");
     var op = RequestOptions()
-        .addDate(dateObject ?? DateObject())
+        .addDate(dateObject ?? DateObject()).addRequestObjcets(true)
         // .addDate(DateObject(from: "2022-10-02", to: "2022-10-03"))
         .setDisablePaging();
     return op;
