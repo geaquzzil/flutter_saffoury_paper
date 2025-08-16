@@ -266,7 +266,7 @@ extension DarkMode on BuildContext {
   Color get getDarkingColorForFroeground {
     return isDarkMode == false
         ? Colors.transparent
-        : Theme.of(this).scaffoldBackgroundColor.lighten().withOpacity(.8);
+        : Theme.of(this).scaffoldBackgroundColor.lighten().withValues(alpha:.8);
   }
 }
 

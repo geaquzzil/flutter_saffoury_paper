@@ -128,7 +128,7 @@ class _Indicator extends StatelessWidget {
         ],
       ),
       progressColor: Colors.white,
-      backgroundColor: Colors.white.withOpacity(.3),
+      backgroundColor: Colors.white.withValues(alpha:.3),
     );
   }
 }

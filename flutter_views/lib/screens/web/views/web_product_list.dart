@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/request_options.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item_master_horizontal.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/ext.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-
-import '../components/grid_view_api_category.dart';
 
 class WebProductList extends StatelessWidget {
   final ViewAbstract viewAbstract;
@@ -171,8 +170,8 @@ class WebProductList extends StatelessWidget {
                       ),
                       itemBuilder: (BuildContext context, int index) {
                         var designProcesse = list[index];
-                        return WebGridViewItem(
-                          item: designProcesse,
+                        return ListCardItemMasterHorizontal(
+                          object: designProcesse,
                         );
                       },
                       itemCount: list.length,

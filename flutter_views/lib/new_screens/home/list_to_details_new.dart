@@ -50,7 +50,11 @@ class _ListToDetailsSecoundPaneNotifierState
     if (firstPane == false) {
       dynamic val = getSecondPaneNotifier.value;
       if (val is ViewAbstract) {
-        return val.getCustomTabList(context, action: ServerActions.view);
+        return val.getCustomTabList(
+          context,
+          action: ServerActions.view,
+          basePage: getSecoundPaneHelper(),
+        );
       }
       return null;
     }

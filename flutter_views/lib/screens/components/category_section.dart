@@ -73,7 +73,7 @@ class CategoryPhill extends StatelessWidget {
           color: isActive ? kPrimaryColor : kWhite,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.16),
+              color: Colors.black.withValues(alpha:0.16),
               offset: const Offset(0, 1),
               blurRadius: 10,
             )

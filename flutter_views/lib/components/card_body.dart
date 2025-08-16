@@ -36,7 +36,7 @@ class CardBody extends StatelessWidget {
           borderRadius: BorderRadius.circular(25.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.16),
+              color: Colors.black.withValues(alpha:0.16),
               offset: const Offset(0, 3),
               blurRadius: 12,
             ),

@@ -13,6 +13,7 @@ import 'package:flutter_view_controller/new_components/lists/horizontal_list_car
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/theme.dart';
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item_master_horizontal.dart';
 import 'package:flutter_view_controller/new_screens/filterables/base_filterable_main.dart';
 import 'package:flutter_view_controller/new_screens/filterables/horizontal_selected_filterable.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -21,7 +22,6 @@ import 'package:flutter_view_controller/new_screens/routes.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
 import 'package:flutter_view_controller/providers/filterables/filterable_provider.dart';
 import 'package:flutter_view_controller/screens/web/base.dart';
-import 'package:flutter_view_controller/screens/web/components/grid_view_api_category.dart';
 import 'package:flutter_view_controller/screens/web/components/header_text.dart';
 import 'package:flutter_view_controller/size_config.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
@@ -427,8 +427,8 @@ class ListWebApiPage extends BaseWebPageSlivers {
               SliverChildBuilderDelegateOptions(),
           minItemWidth: 200,
           children: [
-            ...list.map((e) => WebGridViewItem(
-                  item: e,
+            ...list.map((e) => ListCardItemMasterHorizontal(
+                  object: e,
                   setDescriptionAtBottom: true,
                 )),
             if (isLoading)

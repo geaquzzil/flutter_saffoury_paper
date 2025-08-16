@@ -65,7 +65,7 @@ class SettingAndProfileWebPage extends BaseWebPageSlivers {
                 child: Container(
                   // height: 200,
                   color:
-                      Theme.of(context).scaffoldBackgroundColor.withOpacity(.5),
+                      Theme.of(context).scaffoldBackgroundColor.withValues(alpha:.5),
                   child: ProfileMenuWidget(
                       //todo set anew value notifier and set listener for it
                       // selectedValueVoid: (value) {

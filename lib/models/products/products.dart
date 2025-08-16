@@ -69,7 +69,6 @@ import 'package:flutter_view_controller/new_components/tab_bar/tab_bar_by_list.d
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/staggerd_grid_view_widget.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/my_files.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
 import 'package:flutter_view_controller/new_screens/home/components/ext_provider.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
@@ -1256,6 +1255,7 @@ class Product extends ViewAbstract<Product>
     BuildContext context, {
     ServerActions? action,
     ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
   }) {
     if (action == ServerActions.add ||
         action == ServerActions.edit ||
@@ -1263,30 +1263,34 @@ class Product extends ViewAbstract<Product>
       return null;
     }
     return [
-      HeaderDescription(
-        isSliver: true,
-        title: //TODO translate
-        AppLocalizations.of(
-          context,
-        )!.simialrProducts,
-      ),
       SliverApiMixinViewAbstractWidget(
         cardType: CardItemType.grid,
         scrollDirection: Axis.horizontal,
+        hideOnEmpty: true,
+        state: basePage,
+        header: HeaderDescription(
+          isSliver: true,
+          title: //TODO translate
+          AppLocalizations.of(
+            context,
+          )!.simialrProducts,
+        ),
         toListObject: Product().setRequestOption(
           option: getSimilarWithSameAndTypeSize(context),
         ),
       ),
-      HeaderDescription(
-        isSliver: true,
-        title: AppLocalizations.of(context)!.productsWithSimilarSize,
-      ),
       SliverApiMixinViewAbstractWidget(
         cardType: CardItemType.grid,
         scrollDirection: Axis.horizontal,
+        hideOnEmpty: true,
+        header: HeaderDescription(
+          isSliver: true,
+          title: AppLocalizations.of(context)!.productsWithSimilarSize,
+        ),
         toListObject: Product().setRequestOption(
           option: getSimilarWithSameSize(context),
         ),
+        state: basePage,
       ),
     ];
   }
@@ -1554,6 +1558,7 @@ class Product extends ViewAbstract<Product>
   List<TabControllerHelper> getCustomTabList(
     BuildContext context, {
     ServerActions? action,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
   }) {
     if (action == ServerActions.list) return [];
     final mov = ProductMovments.init(iD);

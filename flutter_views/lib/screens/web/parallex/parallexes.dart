@@ -188,7 +188,7 @@ class LocationListItem extends StatelessWidget {
           gradient: LinearGradient(
             colors: [
               Colors.transparent,
-              //  Colors.black.withOpacity(0.7),
+              //  Colors.black.withValues(alpha:0.7),
               Theme.of(context).scaffoldBackgroundColor
             ],
             begin: Alignment.topCenter,

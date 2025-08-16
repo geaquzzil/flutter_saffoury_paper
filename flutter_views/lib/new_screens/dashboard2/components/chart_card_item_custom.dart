@@ -244,7 +244,7 @@ class ChartCardItemCustom extends StatelessWidget {
       //         3,
       //       ),
 
-      // color?.withOpacity(0.2),
+      // color?.withValues(alpha:0.2),
       child: (b) => Container(
         padding: const EdgeInsets.all(defaultPadding),
         child: Column(
@@ -366,7 +366,7 @@ class ChartCardItemCustom extends StatelessWidget {
 //             child: Container(
 //               width: MediaQuery.of(context).size.width,
 //               height: MediaQuery.of(context).size.height,
-//               color: Colors.blueGrey.withOpacity(0.1),
+//               color: Colors.blueGrey.withValues(alpha:0.1),
 //             ),
 //           ),
 //           Positioned(

@@ -695,7 +695,7 @@ class UserLists<T> extends AuthUser<T> {
             child: ChartCardItemCustom(
               basePage: basePage,
 
-              // color: Colors.green.withOpacity(0.2),
+              // color: Colors.green.withValues(alpha:0.2),
               icon: Order().getMainIconData(),
               listGrowthRate: ordersAnalysis,
               title: AppLocalizations.of(context)!.orders,

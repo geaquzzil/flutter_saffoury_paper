@@ -35,8 +35,8 @@ class ChartCardItem extends StatelessWidget {
                     height: 10,
                     width: 10,
                     decoration: const BoxDecoration(
-                      // color: Colors.orange.withOpacity(0.1),
-                      // color: info.color!.withOpacity(0.1),
+                      // color: Colors.orange.withValues(alpha:0.1),
+                      // color: info.color!.withValues(alpha:0.1),
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     child: const Icon(Icons.file_copy)),

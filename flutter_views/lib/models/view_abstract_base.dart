@@ -47,6 +47,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   List<TabControllerHelper> getCustomTabList(
     BuildContext context, {
     ServerActions? action,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
   }) => List<TabControllerHelper>.empty();
 
   IconData getFieldIconData(String field) {
@@ -410,6 +411,7 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
   List<TabControllerHelper> getTabs(
     BuildContext context, {
     ServerActions? action,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
   }) {
     return [
       TabControllerHelper(

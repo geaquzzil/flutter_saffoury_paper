@@ -1,16 +1,12 @@
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
-import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item_master_horizontal.dart';
 import 'package:flutter_view_controller/new_components/rounded_icon_button.dart';
-import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
-import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/on_hover_button.dart';
 import 'package:flutter_view_controller/screens/web/components/list_web_api_master.dart';
 import 'package:flutter_view_controller/size_config.dart';
-import 'package:flutter_view_controller/utils/dialogs.dart';
-import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class GridViewApi extends StatelessWidget {
@@ -145,7 +141,7 @@ class GridViewApi extends StatelessWidget {
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   var designProcesse = list[index];
-                  return WebGridViewItem(item: designProcesse);
+                  return ListCardItemMasterHorizontal(object: designProcesse);
                 },
                 itemCount: list.length,
               );
@@ -254,310 +250,6 @@ class HoverButtons extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class WebGridViewItem extends StatelessWidget {
-  final ViewAbstract item;
-  final bool isSelectMood;
-  final bool isSelected;
-  void Function(ViewAbstract item, bool isSelectd)? onSelected;
-
-  final bool? isSelectedForCard;
-  final double? currentSize;
-  SliverApiWithStaticMixin? state;
-  final bool hightLightonSelect;
-  final Function()? onPress;
-  final bool setDescriptionAtBottom;
-
-  WebGridViewItem({
-    required this.item,
-    this.setDescriptionAtBottom = false,
-    this.isSelectMood = false,
-    this.hightLightonSelect = false,
-    this.isSelected = false,
-    this.currentSize,
-    this.isSelectedForCard,
-    this.onSelected,
-    this.state,
-    this.onPress,
-  }) : super(key: GlobalKey());
-
-  @override
-  Widget build(BuildContext context) {
-    return HoverImage(
-      bottomWidget: setDescriptionAtBottom
-          ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  item.getHorizontalCardMainHeader(context),
-                  item.getHorizontalCardSubtitle(context),
-                ],
-              ),
-            )
-          : null,
-      image: item.getImageUrlAddHost(context) ?? "",
-
-      // scale: false,
-      builder: (isHovered) {
-        Widget child = GestureDetector(
-          onLongPress: () {
-            item.onCardLongClicked(
-              context,
-              state: state,
-              clickedWidget: key as GlobalKey,
-            );
-          },
-          onTap:
-              onPress ??
-              () {
-                item.onCardClicked(context, isSecoundSubPaneView: false);
-              },
-          child: _getStack(context, isHovered),
-        );
-        return child;
-      },
-    );
-  }
-
-  Widget _getStack(BuildContext context, bool isHovered) {
-    return Stack(
-      children: [
-        _buildBackground(context, isHovered),
-        _buildGradient(context, isHovered),
-        _buildTitleAndSubtitle(
-          context,
-          (isSelectedForCard ?? false) || isHovered,
-        ),
-        if (item is CartableProductItemInterface)
-          if (item
-                  .getCartableProductItemInterface()
-                  .getCartableProductQuantity() !=
-              0)
-            if (_buildCartIcon(isHovered, context) != null)
-              _buildCartIcon(isHovered, context)!,
-        if (hightLightonSelect)
-          Selector<ActionViewAbstractProvider, ViewAbstract?>(
-            builder: (context, value, child) {
-              bool isLargeScreen = SizeConfig.isLargeScreen(context);
-              bool isSelected =
-                  (value?.isEquals(item) ?? false) && isLargeScreen;
-
-              debugPrint("WebGride is selected $isSelected");
-              return !isSelected
-                  ? const Positioned.fill(child: SizedBox())
-                  : Positioned.fill(
-                      // top: ,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 275),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Theme.of(
-                                context,
-                              ).colorScheme.surfaceTint.withOpacity(.2),
-                              // .withOpacity(.9),
-                              Theme.of(
-                                context,
-                              ).colorScheme.surfaceTint.withOpacity(.9),
-                              // .withOpacity(.9),
-                              // Colors.black.withOpacity(0.7),
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            stops: const [0.6, 0.95],
-                          ),
-                        ),
-                      ),
-                    );
-            },
-            selector: (p0, p1) => p1.getObject,
-          ),
-      ],
-    );
-  }
-
-  Positioned? _buildCartIcon(bool isHovered, BuildContext context) {
-    debugPrint("buildCart $currentSize");
-    if (currentSize != null) {
-      if (currentSize! < 150) {
-        return null;
-      }
-    }
-    return Positioned.fill(
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 275),
-        opacity: isHovered ? 1 : 0,
-        child: AnimatedScale(
-          duration: const Duration(milliseconds: 275),
-          scale: isHovered ? 1 : 0,
-          child: Center(
-            child: IconButton(
-              icon: const Icon(Icons.add_shopping_cart),
-              onPressed: () {
-                showCartDialog(context, item as CartableProductItemInterface);
-              },
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHoverBackground(BuildContext context) {
-    return Positioned.fill(
-      child: item.getImageUrlAddHost(context) == null
-          ? Container()
-          : HoverImage(image: item.getImageUrlAddHost(context)!),
-    );
-  }
-
-  Widget _buildBackground(BuildContext context, bool isHoverd) {
-    return Positioned.fill(
-      child: item.getHeroTag(
-        context: context,
-        child: Container(
-          decoration: getBoxDecoration(context, isHoverd),
-          child: item.getImageUrlAddHost(context) == null
-              ? item.getCustomImage(context, isGrid: true) ??
-                    item.getImageIfNoUrl()
-              : null,
-        ),
-      ),
-    );
-  }
-
-  BoxDecoration getBoxDecoration(BuildContext context, bool isHoverd) {
-    return BoxDecoration(
-      image: item.getImageUrlAddHost(context) == null
-          ? null
-          : DecorationImage(
-              image: FastCachedImageProvider(item.getImageUrlAddHost(context)!),
-              fit: BoxFit.cover,
-            ),
-      color: null,
-      border: isHoverd || (isSelected && isSelectMood)
-          ? Border.all(
-              width: 2,
-              color: isSelectedForCard == true
-                  ? Theme.of(context).colorScheme.onSecondaryContainer
-                  : Theme.of(context).highlightColor,
-            )
-          : null,
-      borderRadius: getBorderRedius(),
-    );
-  }
-
-  BorderRadius getBorderRedius() =>
-      const BorderRadius.all(Radius.circular(kBorderRadius));
-
-  Widget _buildGradient(BuildContext context, bool isHoverd) {
-    return Positioned.fill(
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 275),
-        decoration: BoxDecoration(
-          border:
-              isHoverd ||
-                  (isSelected && isSelectMood) ||
-                  (isSelectedForCard ?? false)
-              ? Border.all(
-                  width: 1,
-                  color: Theme.of(context).colorScheme.secondary,
-                )
-              : null,
-          borderRadius: getBorderRedius(),
-          gradient: getLinearGradient(
-            context,
-            (isSelectedForCard ?? false) || isHoverd,
-          ),
-        ),
-      ),
-    );
-  }
-
-  LinearGradient getLinearGradient(BuildContext context, bool isHoverd) {
-    List<Color> colors = [];
-    List<double> stops = [];
-    if (isSelectedForCard == true) {
-      colors = [
-        isHoverd
-            ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(.7)
-            : Theme.of(context).colorScheme.secondaryContainer.withOpacity(.7),
-        isHoverd
-            ? Theme.of(context).colorScheme.secondaryContainer.withOpacity(.7)
-            : Theme.of(context).colorScheme.secondaryContainer.withOpacity(.7),
-      ];
-      stops = [0, 0.99];
-    } else if (isSelectMood) {
-      if (isSelected) {
-        colors = [
-          isHoverd
-              ? Colors.black.withOpacity(0.7)
-              : Theme.of(context).highlightColor.withOpacity(.7),
-          isHoverd
-              ? Colors.black.withOpacity(0.7)
-              : Theme.of(context).highlightColor.withOpacity(.7),
-        ];
-        stops = [0, 0.99];
-      } else {
-        colors = [
-          isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
-          isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
-        ];
-      }
-    } else {
-      if (setDescriptionAtBottom) {
-        colors = [
-          isHoverd
-              ? Colors.black.withOpacity(0.7)
-              : Colors.black.withOpacity(0.3),
-          !isHoverd
-              ? Theme.of(context).scaffoldBackgroundColor
-              : Theme.of(context).scaffoldBackgroundColor,
-        ];
-        stops = [0, 0.99];
-      } else {
-        colors = [
-          isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
-          isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
-        ];
-
-        stops = [6, 0.95];
-      }
-    }
-    return LinearGradient(
-      colors: colors,
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      stops: stops,
-    );
-  }
-
-  Widget _buildTitleAndSubtitle(BuildContext context, bool isHoverd) {
-    return Positioned(
-      left: 20,
-      bottom: 20,
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 275),
-        opacity: isHoverd
-            ? 1
-            : setDescriptionAtBottom
-            ? 1
-            : 0,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            item.getHorizontalCardMainHeader(context),
-            item.getHorizontalCardSubtitle(context),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -692,8 +384,8 @@ class WebGridViewItemCustom extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
-              isHoverd ? Colors.black.withOpacity(0.7) : Colors.transparent,
+              isHoverd ? Colors.black.withValues(alpha:0.7) : Colors.transparent,
+              isHoverd ? Colors.black.withValues(alpha:0.7) : Colors.transparent,
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,

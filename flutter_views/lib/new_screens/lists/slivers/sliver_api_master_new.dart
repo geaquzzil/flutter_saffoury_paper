@@ -12,6 +12,7 @@ import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/lists/horizontal_list_card_item_shimmer.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item_api_request.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item_master.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item_master_horizontal.dart';
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_components/lists/slivers/sliver_animated_card.dart';
 import 'package:flutter_view_controller/new_screens/home/components/empty_widget.dart';
@@ -667,17 +668,16 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
     if (widget.hasCustomCardItemBuilder != null) {
       return widget.hasCustomCardItemBuilder!.call(-1, e);
     }
-    return WebGridViewItem(
-      isSelectMood: _selectMood,
-      isSelectedForCard: widget.isSelectForCard?.call(e),
-      isSelected: _isSelectedItem(e),
-      onSelected: _onSelectedItem,
-      onPress: widget.onClickForCard == null
-          ? null
-          : () => widget.onClickForCard?.call(e),
-      item: e,
-      state: this,
+    return ListCardItemMasterHorizontal(
       setDescriptionAtBottom: false,
+      object: e,
+      isSelectForListTile: widget.isSelectForCard,
+      isSelectMoodEnabled: _selectMood,
+      onTap: widget.onClickForCard,
+      searchQuery: _searchString,
+      state: widget.state,
+      stateForToggle: this,
+      isSelectForSelection: _onSelectedItem,
     );
   }
 
@@ -746,16 +746,17 @@ mixin SliverApiWithStaticMixin<T extends SliverApiMixinWithStaticStateful>
                     ),
                   );
                 }
-                Widget currentTile = WebGridViewItem(
+                Widget currentTile = ListCardItemMasterHorizontal(
                   currentSize: size,
-                  isSelected:
-                      widget.isSelectForCard?.call(list[index]) ?? false,
-                  onPress: widget.onClickForCard == null
-                      ? null
-                      : () => widget.onClickForCard?.call(list[index]),
-                  isSelectedForCard: widget.isSelectForCard?.call(list[index]),
                   setDescriptionAtBottom: !SizeConfig.hasPointer(context),
-                  item: list[index],
+                  object: list[index],
+                  isSelectForListTile: widget.isSelectForCard,
+                  isSelectMoodEnabled: _selectMood,
+                  onTap: widget.onClickForCard,
+                  searchQuery: _searchString,
+                  state: widget.state,
+                  stateForToggle: this,
+                  isSelectForSelection: _onSelectedItem,
                 );
                 return Padding(
                   padding: const EdgeInsets.symmetric(

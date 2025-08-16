@@ -39,7 +39,7 @@ class ListCardItemMaster<T extends ViewAbstract> extends StatefulWidget {
     this.title,
     this.subtitle,
     this.leading,
-    this.traling
+    this.traling,
   });
 
   @override
@@ -53,9 +53,13 @@ class ListCardItemMasterState<
 >
     extends State<E> {
   late T object;
+
   String? _searchQuery;
 
   bool? _isSelectedForListTile;
+
+  String? get searchQuery => this._searchQuery;
+  bool? get isSelectedForListTile => this._isSelectedForListTile;
 
   @override
   void initState() {
@@ -130,33 +134,56 @@ class ListCardItemMasterState<
     );
   }
 
+  void onTap() {
+    if (widget.onTap != null) {
+      widget.onTap?.call(object);
+    } else {
+      object.onCardClicked(context, secondPaneHelper: widget.state);
+    }
+  }
+
+  void onLongPress() {
+    if (widget.onLongTap != null) {
+      widget.onLongTap?.call();
+    } else {
+      widget.stateForToggle?.toggleSelectedMood();
+    }
+  }
+
+  Widget getTitle() {
+    return widget.title ??
+        (object.getMainHeaderText(context, searchQuery: _searchQuery));
+  }
+
+  Widget? getSubtitle() {
+    return widget.subtitle ??
+        (object.getMainSubtitleHeaderText(context, searchQuery: _searchQuery));
+  }
+
+  Widget getLeading() {
+    return widget.leading ?? object.getCardLeading(context);
+  }
+
+  Widget? getTrailing() {
+    return widget.traling ??
+        object.getCardTrailing(context, secPaneHelper: widget.state);
+  }
+
   Widget getListTile() {
     bool hasThreeLine = object.getMainSubtitleHeaderText(context) is Column;
     return ListTile(
+      // isThreeLine: hasThreeLine,
       selected: isListTileSelected(),
       onTap: () {
-        if (widget.onTap != null) {
-          widget.onTap?.call(object);
-        } else {
-          object.onCardClicked(context, secondPaneHelper: widget.state);
-        }
-        // setState(() {});
+        onTap();
       },
       onLongPress: () {
-        if (widget.onLongTap != null) {
-          widget.onLongTap?.call();
-        } else {
-          widget.stateForToggle?.toggleSelectedMood();
-        }
+        onLongPress();
       },
-      title: widget.title?? (object.getMainHeaderText(context, searchQuery: _searchQuery)),
-      subtitle:widget.subtitle?? (object.getMainSubtitleHeaderText(
-        context,
-        searchQuery: _searchQuery,
-      )),
-      // isThreeLine: hasThreeLine,
-      leading:widget.leading?? object.getCardLeading(context),
-      trailing: widget.traling?? object.getCardTrailing(context, secPaneHelper: widget.state),
+      title: getTitle(),
+      subtitle: getSubtitle(),
+      leading: getLeading(),
+      trailing: getTrailing(),
     );
   }
 }

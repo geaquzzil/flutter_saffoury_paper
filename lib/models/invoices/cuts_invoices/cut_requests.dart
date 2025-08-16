@@ -403,6 +403,7 @@ class CutRequest extends ViewAbstract<CutRequest>
     BuildContext context, {
     ServerActions? action,
     ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
+    SecoundPaneHelperWithParentValueNotifier? basePage,
   }) {
     if (action == ServerActions.view) {
       return [

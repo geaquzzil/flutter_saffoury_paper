@@ -366,7 +366,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
                   borderRadius: BorderRadius.circular(80.0),
                   color: Theme.of(
                     context,
-                  ).colorScheme.secondary.withOpacity(.2),
+                  ).colorScheme.secondary.withValues(alpha:.2),
                 ),
                 isScrollable: true,
                 controller: _tabController,
@@ -441,6 +441,7 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
     List<Widget>? bottomWidget = getExtras().getCustomBottomWidget(
       context,
       action: widget.getServerAction(),
+      // basePage: getSecoundPaneHelper(),
     );
     if (getExtras().isImagable()) {}
     if (bottomWidget == null) return [];
