@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 
-import 'view_card_item.dart';
+import '../../../new_components/lists/view_card_item.dart';
 
 class ViewDetailsListWidget extends StatelessWidget {
   final ViewAbstract viewAbstract;

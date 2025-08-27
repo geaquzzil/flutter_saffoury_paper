@@ -14,6 +14,9 @@ class SliverApiMixinStaticList<T extends ViewAbstract> extends SliverApiMixinWit
     super.isSliver,
     super.scrollDirection,
     super.hasCustomCardItemBuilder,
+    super.isSelectForCard,
+super.header,
+
     super.hasCustomSeperater,
     super.hasCustomWidgetOnResponseBuilder,
     super.cardType = CardItemType.list,

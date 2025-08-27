@@ -4,7 +4,7 @@ import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
-import 'package:flutter_view_controller/new_screens/actions/view/view_card_item.dart';
+import 'package:flutter_view_controller/new_components/lists/view_card_item.dart';
 import 'package:flutter_view_controller/providers/cart/cart_provider.dart';
 import 'package:flutter_view_controller/utils/dialogs.dart';
 import 'package:provider/provider.dart';

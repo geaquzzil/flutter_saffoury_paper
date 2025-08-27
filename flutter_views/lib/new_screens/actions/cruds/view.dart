@@ -6,11 +6,15 @@ import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_components/header_description.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
-import 'package:flutter_view_controller/new_screens/actions/view/view_card_item.dart';
+import 'package:flutter_view_controller/new_components/lists/view_card_item.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
+import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
+import 'package:flutter_view_controller/size_config.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class ViewNew extends BasePageApi {
@@ -53,6 +57,10 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
     } else if (fieldValue is ViewAbstract) {
       return ViewCardItem(
         secNotifier: getSecondPaneNotifier,
+        state: getSecoundPaneHelper(),
+        isSelectForListTile: (object) {
+          return isSelectForCard(object);
+        },
         title: "",
         description: "",
         icon: Icons.abc,
@@ -288,6 +296,20 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
             childCount: fields.length,
           ),
         ),
+        if (isExtrasIsListable())
+          SliverApiMixinStaticList(
+            header: HeaderDescription(
+              title: AppLocalizations.of(context)!.list,
+              isSliver: true,
+            ),
+            list: getExtrasCastListable().getListableList(),
+            isSelectForCard: (object) {
+              return isSelectForCard(object);
+            },
+            state: getSecoundPaneHelper(),
+            enableSelection: false,
+          ),
+
         // SliverToBoxAdapter(child: SizedBox(height: 80)),
       ];
     } else {

@@ -2478,9 +2478,16 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   bool isExtrasIsDashboard({TabControllerHelper? tab}) {
     return getExtras(tab: tab) is DashableInterface;
   }
+  bool isExtrasIsListable({TabControllerHelper? tab}){
+    return getExtras(tab:tab) is ListableInterface;
+  }
 
   DashableInterface getExtrasCastDashboard({TabControllerHelper? tab}) {
     return getExtras(tab: tab) as DashableInterface;
+  }
+
+  ListableInterface getExtrasCastListable({TabControllerHelper? tab}) {
+    return getExtras(tab: tab) as ListableInterface;
   }
 
   ViewAbstract getExtrasCast({TabControllerHelper? tab}) {
