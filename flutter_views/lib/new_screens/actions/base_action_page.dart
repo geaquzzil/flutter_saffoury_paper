@@ -19,7 +19,7 @@ import 'package:flutter_view_controller/new_components/lists/skeletonizer/stylin
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_components/qr_code_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
-import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
+import 'package:flutter_view_controller/new_screens/actions/components/actions_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_main_page.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_main_page.dart';
 import 'package:flutter_view_controller/new_screens/base_api_call_screen.dart';
@@ -40,7 +40,6 @@ import 'package:responsive_grid_list/responsive_grid_list.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../screens/base_shared_actions_header.dart';
-import 'components/action_on_header_popup_widget.dart';
 import 'view/view_view_abstract.dart';
 
 abstract class BaseActionScreenPage extends StatefulWidget {
@@ -200,14 +199,15 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
         snap: false,
         expandedHeight: MediaQuery.of(context).size.height * .25,
         actions: [
-          ActionsOnHeaderWidget(
+          ActionsWidget(
+
             viewAbstract: getExtras(),
             serverActions: widget.getServerAction(),
           ),
-          ActionsOnHeaderPopupWidget(
-            viewAbstract: getExtras(),
-            serverActions: widget.getServerAction(),
-          ),
+          // ActionsOnHeaderPopupWidget(
+          //   viewAbstract: getExtras(),
+          //   serverActions: widget.getServerAction(),
+          // ),
         ],
         elevation: 4,
         // title: widget.object.getMainHeaderText(context),
@@ -968,10 +968,10 @@ abstract class BaseActionScreenPageState<T extends BaseActionScreenPage>
       leadingWidth: 120,
       title: Text(getExtras().getMainHeaderTextOnly(context)),
       actions: [
-        ActionsOnHeaderPopupWidget(
-          viewAbstract: getExtras(),
-          serverActions: getServerActions(),
-        ),
+        // ActionsOnHeaderPopupWidget(
+        //   viewAbstract: getExtras(),
+        //   serverActions: getServerActions(),
+        // ),
       ],
     );
     return PreferredSize(

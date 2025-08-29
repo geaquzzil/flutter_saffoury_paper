@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_popup_widget.dart';
-import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
+import 'package:flutter_view_controller/new_screens/actions/components/actions_widget.dart';
 import 'package:flutter_view_controller/providers/actions/action_viewabstract_provider.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_description.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -60,8 +59,8 @@ class BaseSharedHeaderViewDetailsActions extends StatelessWidget {
                 Expanded(
                     child: BaseSharedHeaderDescription(
                         viewAbstract: viewAbstract)),
-                ActionsOnHeaderWidget(viewAbstract: viewAbstract),
-                ActionsOnHeaderPopupWidget(viewAbstract: viewAbstract),
+                // ActionsWidget(viewAbstract: viewAbstract,),
+                // ActionsOnHeaderPopupWidget(viewAbstract: viewAbstract),
               ],
             ),
           ),

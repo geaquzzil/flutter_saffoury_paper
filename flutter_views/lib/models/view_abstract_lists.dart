@@ -9,6 +9,7 @@ import 'package:flutter_view_controller/models/menu_item.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_inputs_validaters.dart';
+import 'package:flutter_view_controller/new_components/lists/list_card_item_master.dart';
 import 'package:flutter_view_controller/new_components/lists/skeletonizer/widgets.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
@@ -320,10 +321,38 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     );
   }
 
+  MenuItemBuild getMenuItemImport(BuildContext context) {
+    return MenuItemBuild(
+      AppLocalizations.of(context)!.importFile,
+      Icons.download_rounded,
+      action: ServerActions.file_import,
+      '/import',
+    );
+  }
+
+  MenuItemBuild getMenuItemExport(BuildContext context) {
+    return MenuItemBuild(
+      AppLocalizations.of(context)!.exportFile,
+      Icons.upload_rounded,
+      action: ServerActions.file_export,
+      '/export',
+    );
+  }
+
+  MenuItemBuild getMenuItemDelete(BuildContext context) {
+    return MenuItemBuild(
+      AppLocalizations.of(context)!.delete,
+      Icons.delete,
+      action: ServerActions.delete_action,
+      '/delete',
+    );
+  }
+
   MenuItemBuild getMenuItemPrint(BuildContext context) {
     return MenuItemBuild(
       AppLocalizations.of(context)!.print,
       Icons.print,
+      action: ServerActions.print,
       '/print',
     );
   }
@@ -332,6 +361,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return MenuItemBuild(
       AppLocalizations.of(context)!.edit,
       Icons.edit,
+      action: ServerActions.edit,
       '/edit',
     );
   }
@@ -340,6 +370,7 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     return MenuItemBuild(
       AppLocalizations.of(context)!.view,
       Icons.view_agenda,
+      action: ServerActions.view,
       '/view',
     );
   }
@@ -352,104 +383,130 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     );
   }
 
-  List<Widget>? getPopupActionsList(BuildContext context) => null;
-
-  List<MenuItemBuild> getPopupMenuActionsView(BuildContext context) {
+  List<MenuItemBuild> getActions({
+    required BuildContext context,
+    required ServerActions action,
+  }) {
     return [
-      if (hasPermissionPrint(context)) getMenuItemPrint(context),
+      if (hasPermissionView(context) && action != ServerActions.view)
+        getMenuItemView(context),
+      if (hasPermissionEdit(context) && action != ServerActions.edit)
+        getMenuItemEdit(context),
+      if (isPrintableMaster())
+        if (hasPermissionPrint(context) && action != ServerActions.print)
+          getMenuItemPrint(context),
       if (hasPermissionShare(context)) getMenuItemShare(context),
-      if (hasPermissionEdit(context)) getMenuItemEdit(context),
+      if (action != ServerActions.list)
+        if (hasPermissionImport(context) && action != ServerActions.file_import)
+          getMenuItemImport(context),
+      if (action != ServerActions.list)
+        if (hasPermissionExport(context) && action != ServerActions.file_export)
+          getMenuItemExport(context),
+      if (hasPermissionDelete(context) && action != ServerActions.delete_action)
+        getMenuItemDelete(context),
     ];
   }
 
-  Future<List<MenuItemBuild>> getPopupMenuActions(
+  Widget buildFloatItem(
     BuildContext context,
-    ServerActions action,
-  ) async {
-    if (action == ServerActions.edit) {
-      return getPopupMenuActionsEdit(context);
-    }
-
-    return [];
-  }
-
-  List<MenuItemBuildGenirc> getPopupMenuActionsThreeDot(
+    MenuItemBuild menuItemBuild, {
+    SecoundPaneHelperWithParentValueNotifier? secPaneHelper,
+  }) => FloatingActionButton.small(
+    heroTag: UniqueKey(),
+    child: Icon(menuItemBuild.icon),
+    onPressed: () {
+      onPopupMenuActionSelected(
+        context,
+        menuItemBuild,
+        action: menuItemBuild.action,
+        secPaneHelper: secPaneHelper,
+      );
+    },
+  );
+  Widget buildIconItem(
     BuildContext context,
-    ServerActions? action,
-  ) {
-    return [];
-  }
-
-  List<MenuItemBuild> getPopupMenuActionsEdit(
-    BuildContext context, {
-    SliverApiWithStaticMixin? state,
-  }) {
-    return [
-      if (state != null) getMenuItemSelect(context),
-      if (hasPermissionPrint(context)) getMenuItemPrint(context),
-      if (hasPermissionShare(context)) getMenuItemShare(context),
-      if (hasPermissionEdit(context)) getMenuItemEdit(context),
-    ];
-  }
-
-  List<MenuItemBuild> getPopupMenuActionsList(
-    BuildContext context, {
-    SliverApiWithStaticMixin? state,
-  }) {
-    return [
-      if (state != null) getMenuItemSelect(context),
-      if (hasPermissionShare(context)) getMenuItemShare(context),
-      if (hasPermissionPrint(context)) getMenuItemPrint(context),
-      if (hasPermissionEdit(context)) getMenuItemEdit(context),
-      if (hasPermissionView(context)) getMenuItemView(context),
-    ];
-  }
-
-  @Deprecated("Not future anymore")
-  Widget onFutureAllPopupMenuLoaded(
+    MenuItemBuild menuItemBuild, {
+    SecoundPaneHelperWithParentValueNotifier? secPaneHelper,
+  }) => IconButton(
+    mouseCursor: SystemMouseCursors.click,
+    tooltip: menuItemBuild.title,
+    icon: Icon(menuItemBuild.icon),
+    onPressed: () => onPopupMenuActionSelected(
+      context,
+      menuItemBuild,
+      action: menuItemBuild.action,
+      secPaneHelper: secPaneHelper,
+    ),
+  );
+  Widget buildListActionItem(
     BuildContext context,
-    ServerActions action, {
-    required Widget Function(List<MenuItemBuild>) onPopupMenuListLoaded,
-    SliverApiWithStaticMixin? state,
-  }) {
-    List<MenuItemBuild> list = action == ServerActions.edit
-        ? getPopupMenuActionsEdit(context, state: state)
-        : getPopupMenuActionsList(context, state: state);
-    return onPopupMenuListLoaded(list);
-  }
+    MenuItemBuild menuItemBuild, {
+    SecoundPaneHelperWithParentValueNotifier? secPaneHelper,
+    SecondPaneHelper? lastSecondPaneItem,
+  }) => ListCardItemMaster(
+    object: this as ViewAbstract,
+    isSelectForListTile: (object) {
+      debugPrint(
+        "ActionsOnHeaderWidget ${lastSecondPaneItem?.action} ${menuItemBuild.action}",
+      );
+      if (lastSecondPaneItem?.action == null) return false;
+      if (menuItemBuild.action == null) return false;
+      return lastSecondPaneItem?.object == this &&
+          lastSecondPaneItem?.action == menuItemBuild.action;
+    },
+    onTap: (object) => onPopupMenuActionSelected(
+      context,
+      menuItemBuild,
+      action: menuItemBuild.action,
+      secPaneHelper: secPaneHelper,
+    ),
+    title: Text(menuItemBuild.title),
+    leading: Icon(menuItemBuild.icon),
+    traling: Icon(Icons.arrow_right),
+    subtitle: Text(getBaseTitle(context,descriptionIsId: false,serverAction: menuItemBuild.action)),
+  );
+  // List<MenuItemBuildGenirc> getPopupMenuActionsThreeDot(
+  //   BuildContext context,
+  //   ServerActions? action,
+  // ) {
+  //   return [];
+  // }
+
+  // List<MenuItemBuild> getPopupMenuActionsEdit(
+  //   BuildContext context, {
+  //   SliverApiWithStaticMixin? state,
+  // }) {
+  //   return [
+  //     if (state != null) getMenuItemSelect(context),
+  //     if (hasPermissionPrint(context)) getMenuItemPrint(context),
+  //     if (hasPermissionShare(context)) getMenuItemShare(context),
+  //     if (hasPermissionEdit(context)) getMenuItemEdit(context),
+  //   ];
+  // }
+
+  // List<MenuItemBuild> getPopupMenuActionsList(
+  //   BuildContext context, {
+  //   SliverApiWithStaticMixin? state,
+  // }) {
+  //   return [
+  //     if (state != null) getMenuItemSelect(context),
+  //     if (hasPermissionShare(context)) getMenuItemShare(context),
+  //     if (hasPermissionPrint(context)) getMenuItemPrint(context),
+  //     if (hasPermissionEdit(context)) getMenuItemEdit(context),
+  //     if (hasPermissionView(context)) getMenuItemView(context),
+  //   ];
+  // }
 
   Widget getPopupMenuActionWidget(
     BuildContext c,
     ServerActions action, {
-    SliverApiWithStaticMixin? state,
     SecoundPaneHelperWithParentValueNotifier? secPaneHelper,
   }) {
-    //TODO for divider use PopupMenuDivider()
-    List<MenuItemBuild> items = action == ServerActions.edit
-        ? getPopupMenuActionsEdit(c)
-        : getPopupMenuActionsList(c);
+    List<MenuItemBuild> items = getActions(action: action, context: c);
     return PopupMenuButton<MenuItemBuild>(
       itemBuilder: (BuildContext context) => items
           .map((r) => buildMenuItem(c, r, secPaneHelper: secPaneHelper))
           .toList(),
-    );
-  }
-
-  Widget getPopupMenuActionListWidget(
-    BuildContext c, {
-    SliverApiWithStaticMixin? state,
-  }) {
-    List<MenuItemBuild> items = getPopupMenuActionsList(c);
-    return PopupMenuButton<MenuItemBuild>(
-      elevation: 10,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      onSelected: (MenuItemBuild result) {
-        onPopupMenuActionSelected(c, result, state: state);
-      },
-      itemBuilder: (BuildContext context) =>
-          items.map((r) => buildMenuItem(c, r)).toList(),
     );
   }
 
@@ -498,21 +555,18 @@ abstract class ViewAbstractLists<T> extends ViewAbstractInputAndValidater<T> {
     SliverApiWithStaticMixin? state,
     SecoundPaneHelperWithParentValueNotifier? secPaneHelper,
   }) async {
-    debugPrint(
-      "onPopupMenuActionSelected $result secPaneHelper is null ? ${secPaneHelper == null}",
-    );
-
-    if (result.icon == Icons.share) {
+    if (result.action == ServerActions.share) {
       sharePage(context, action: action, secPaneHelper: secPaneHelper);
-    } else if (result.icon == Icons.print) {
+    } else if (result.action == ServerActions.print) {
       printPage(context, secPaneNotifer: secPaneHelper);
-    } else if (result.icon == Icons.edit) {
-      debugPrint("Dsadasdasdas");
+    } else if (result.action == ServerActions.edit) {
       editPage(context, secondPaneHelper: secPaneHelper);
-    } else if (result.icon == Icons.view_agenda) {
+    } else if (result.action == ServerActions.view) {
       viewPage(context, secondPaneHelper: secPaneHelper);
-    } else if (result.icon == Icons.list) {
-      state?.toggleSelectedMood();
+    } else if (result.action == ServerActions.file_import) {
+      importPage(context, secondPaneHelper: secPaneHelper);
+    } else if (result.action == ServerActions.file_export) {
+      exportPage(context, secondPaneHelper: secPaneHelper);
     }
   }
 }

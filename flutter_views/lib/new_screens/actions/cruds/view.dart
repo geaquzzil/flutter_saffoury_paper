@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
@@ -10,13 +9,12 @@ import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
 import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
-import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
-import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/view_card_item.dart';
+import 'package:flutter_view_controller/new_screens/actions/base_floating_actions.dart';
+import 'package:flutter_view_controller/new_screens/actions/components/actions_widget.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
 import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
-import 'package:flutter_view_controller/new_screens/dashboard2/components/staggerd_grid_view_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -166,10 +164,12 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
   List<Widget>? getAppbarActions({bool? firstPane}) {
     if (firstPane == true) {
       return [
-        ActionsOnHeaderWidget(
+        ActionsWidget(
+          lastSecondPaneItem: lastSecondPaneItem,
           base: getSecoundPaneHelper(),
           viewAbstract: getExtras(),
           serverActions: getServerActions(),
+          type: ActionType.THREE_DOT,
         ),
         //TODO
         // ActionsOnHeaderPopupWidget(
@@ -208,6 +208,18 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
     bool? firstPane,
     TabControllerHelper? tab,
   }) {
+    if (getCurrentScreenSize() != CurrentScreenSize.MOBILE) {
+      return null;
+    }
+    if (firstPane == true) {
+      return BaseFloatingActionButtons(
+        base: getSecoundPaneHelper(),
+        // key: widget.key,
+        viewAbstract: getExtrasCast(),
+        serverActions: ServerActions.view,
+        // addOnList: getFloatingActionWidgetAddOns(context),
+      );
+    }
     // if (isSecPane(firstPane: firstPane)) {
     //   if (geSelectedValue() is BarcodeSetting ||
     //       (geSelectedValue() is PrinterDefaultSetting)) {
@@ -382,7 +394,18 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
             },
           ),
         ],
-
+        HeaderDescription(
+          title: AppLocalizations.of(context)!.chooseAction,
+          isSliver: true,
+          setDivider: true,
+        ),
+        ActionsWidget(
+          viewAbstract: getExtrasCast(tab: tab),
+          serverActions: getServerActions(),
+          lastSecondPaneItem: lastSecondPaneItem,
+          base: getSecoundPaneHelper(),
+          type: ActionType.LIST,
+        ),
         // SliverToBoxAdapter(child: SizedBox(height: 80)),
       ];
     } else {

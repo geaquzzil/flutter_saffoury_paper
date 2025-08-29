@@ -445,11 +445,12 @@ class SecondPaneHelper {
   dynamic value;
   dynamic object;
   bool? notifyFirstParent;
-
+  ServerActions ? action;
   GlobalKey<BasePageSecoundPaneNotifierState>? state;
   SecondPaneHelper({
     required this.title,
     this.value,
+    this.action,
     this.state,
     this.object,
     this.notifyFirstParent = false,

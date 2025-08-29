@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_view_controller/components/expansion_tile_custom.dart';
+import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/new_components/cards/clipper_card.dart';
 import 'package:flutter_view_controller/new_screens/actions/edit_new/base_edit_dialog.dart';
@@ -14,14 +15,15 @@ class ListCardItemEditable<T extends ViewAbstract> extends StatefulWidget {
   void Function(T object) onUpdate;
   bool useDialog;
   GlobalKey<FormBuilderState>? formKey;
-  ListCardItemEditable(
-      {super.key,
-      required this.index,
-      required this.object,
-      required this.onDelete,
-      this.formKey,
-      required this.onUpdate,
-      this.useDialog = true});
+  ListCardItemEditable({
+    super.key,
+    required this.index,
+    required this.object,
+    required this.onDelete,
+    this.formKey,
+    required this.onUpdate,
+    this.useDialog = true,
+  });
 
   @override
   State<ListCardItemEditable> createState() => ListCardItemEditableState();
@@ -57,29 +59,35 @@ class ListCardItemEditableState<T extends ViewAbstract>
       secondaryBackground: dismissBackground(context),
       onDismissed: (direction) {
         debugPrint(
-            "getListableInterface  from card index => ${widget.index} is Removed");
+          "getListableInterface  from card index => ${widget.index} is Removed",
+        );
         widget.onDelete(widget.object);
       },
-      child:
-          widget.useDialog ? getListTile(context) : getExpansionTile(context),
+      child: widget.useDialog
+          ? getListTile(context)
+          : getExpansionTile(context),
     );
   }
 
   Widget getListTile(BuildContext context) {
     return ClippedCard(
-        borderSide: BorderSideColor.START,
-        color: isValidated()
-            ? Colors.transparent
-            : Theme.of(context).colorScheme.error,
-        child: ListTile(
-          title: (validated.getMainHeaderText(context)),
-          subtitle: (validated.getMainSubtitleHeaderText(context)),
-          leading: validated.getCardLeading(context),
-          trailing: validated.getPopupMenuActionListWidget(context),
-          onTap: () {
-            getEditDialog(context);
-          },
-        ));
+      borderSide: BorderSideColor.START,
+      color: isValidated()
+          ? Colors.transparent
+          : Theme.of(context).colorScheme.error,
+      child: ListTile(
+        title: (validated.getMainHeaderText(context)),
+        subtitle: (validated.getMainSubtitleHeaderText(context)),
+        leading: validated.getCardLeading(context),
+        trailing: validated.getPopupMenuActionWidget(
+          context,
+          ServerActions.list,
+        ),
+        onTap: () {
+          getEditDialog(context);
+        },
+      ),
+    );
   }
 
   bool isValidated() {
@@ -88,14 +96,15 @@ class ListCardItemEditableState<T extends ViewAbstract>
 
   Future<void> getEditDialog(BuildContext context) async {
     await showFullScreenDialogExt<ViewAbstract?>(
-        anchorPoint: const Offset(1000, 1000),
-        context: context,
-        builder: (p0) {
-          return BaseEditDialog(
-            disableCheckEnableFromParent: true,
-            viewAbstract: validated,
-          );
-        }).then((value) {
+      anchorPoint: const Offset(1000, 1000),
+      context: context,
+      builder: (p0) {
+        return BaseEditDialog(
+          disableCheckEnableFromParent: true,
+          viewAbstract: validated,
+        );
+      },
+    ).then((value) {
       {
         if (value != null) {
           widget.onUpdate(value as T);
@@ -113,23 +122,24 @@ class ListCardItemEditableState<T extends ViewAbstract>
       title: (validated.getMainHeaderText(context)),
       subtitle: (validated.getMainSubtitleHeaderText(context)),
       leading: validated.getCardLeading(context),
-      trailing: validated.getPopupMenuActionListWidget(context),
+      trailing: validated.getPopupMenuActionWidget(context, ServerActions.list),
       hasError: validated == null,
       canExpand: () => true,
       children: [
         BaseEditWidget(
-            disableCheckEnableFromParent: true,
-            viewAbstract: validated,
-            isTheFirst: true,
-            isRequiredSubViewAbstract: false,
-            onValidate: (viewAbstract) {
-              if (viewAbstract != null) {
-                widget.onUpdate(validated as T);
-                setState(() {
-                  validated = viewAbstract;
-                });
-              }
-            })
+          disableCheckEnableFromParent: true,
+          viewAbstract: validated,
+          isTheFirst: true,
+          isRequiredSubViewAbstract: false,
+          onValidate: (viewAbstract) {
+            if (viewAbstract != null) {
+              widget.onUpdate(validated as T);
+              setState(() {
+                validated = viewAbstract;
+              });
+            }
+          },
+        ),
       ],
     );
   }

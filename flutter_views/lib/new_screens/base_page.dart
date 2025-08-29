@@ -1500,6 +1500,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
       case ServerActions.file_export:
       case ServerActions.file_import:
       case ServerActions.list:
+      case ServerActions.share:
         currentWidget = Container();
     }
     ViewAbstract? secoundPaneViewAbstract = selectedItem.viewAbstract;
@@ -1777,7 +1778,9 @@ abstract class BasePageState<T extends BasePage> extends State<T>
 
   Widget? getScaffoldForPane({required bool firstPane}) {
     Widget scaffold = Scaffold(
-      backgroundColor: isPaneScaffoldOverlayColord(firstPane)
+      backgroundColor: 
+      // widget.parent==null?null:
+      isPaneScaffoldOverlayColord(firstPane)
           ? ElevationOverlay.overlayColor(context, 4)
           : firstPane
           ? Theme.of(context).colorScheme.surface

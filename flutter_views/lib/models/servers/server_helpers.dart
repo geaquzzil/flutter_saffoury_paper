@@ -18,7 +18,8 @@ enum ServerActions {
   list_reduce_size,
   custom_widget,
   file_import,
-  file_export
+  file_export,
+  share
 }
 
 class URLS {

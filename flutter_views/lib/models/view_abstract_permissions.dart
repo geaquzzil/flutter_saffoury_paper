@@ -164,6 +164,12 @@ abstract class ViewAbstractPermissions<T> extends VMirrors<T> {
         : hasPermission(context, viewAbstract, ServerActions.list);
   }
 
+  bool hasPermissionExport(BuildContext context, {ViewAbstract? viewAbstract}) {
+    return viewAbstract == null
+        ? hasPermission(context, this, ServerActions.list)
+        : hasPermission(context, viewAbstract, ServerActions.list);
+  }
+
   bool hasPermissionImport(BuildContext context, {ViewAbstract? viewAbstract}) {
     return viewAbstract == null
         ? hasPermission(context, this, ServerActions.add)

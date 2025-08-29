@@ -6,7 +6,7 @@ import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
-import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
+import 'package:flutter_view_controller/new_screens/actions/components/actions_widget.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/screens/base_shared_header_rating.dart';
 
@@ -170,7 +170,7 @@ class ProductHeaderToggle extends StatelessWidget {
                       BaseSharedDetailsRating(
                         viewAbstract: product,
                       ),
-                      ActionsOnHeaderWidget(
+                      ActionsWidget(
                         viewAbstract: product,
                         serverActions: ServerActions.view,
                       ),

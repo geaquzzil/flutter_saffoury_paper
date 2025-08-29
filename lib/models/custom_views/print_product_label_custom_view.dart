@@ -39,20 +39,6 @@ class PrintProductLabelCustomView
 
   @override
   IconData getMainIconData() => Icons.print;
-
-  @override
-  List<Widget>? getPopupActionsList(BuildContext context) {
-    // TODO: implement getPopupActionsList
-    return null;
-  }
-
-  @override
-  List<MenuItemBuildGenirc> getPopupMenuActionsThreeDot(
-      BuildContext context, ServerActions? action) {
-    // TODO: implement getPopupMenuActionsThreeDot
-    return super.getPopupMenuActionsThreeDot(context, action);
-  }
-
   @override
   Widget getCustomStandAloneWidget(BuildContext context) {
     return BaseEditWidget(

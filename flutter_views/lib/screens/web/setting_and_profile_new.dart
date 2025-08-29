@@ -30,12 +30,6 @@ class SettingPageNew extends BasePageSecoundPaneNotifier {
 class _SettingPageNewState extends BasePageState<SettingPageNew>
     with BasePageSecoundPaneNotifierState {
   List<ActionOnToolbarItem>? menuItems;
-  String? _currentSettingPageMobile;
-  @override
-  void initState() {
-    _currentSettingPageMobile = widget.currentSettingPage;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +128,7 @@ class _SettingPageNewState extends BasePageState<SettingPageNew>
             onBuild: onBuild,
             key: kk,
             parent: this,
-            buildSecondPane: true,
+            // buildSecondPane:false,
             // valueNotifierIfThirdPane: ValueNotifier(null),
           ),
         )

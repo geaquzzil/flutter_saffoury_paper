@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_view_controller/constants.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
-import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
+import 'package:flutter_view_controller/new_screens/actions/components/actions_widget.dart';
 
 class WebProductImages extends StatelessWidget {
   final ViewAbstract item;
@@ -33,9 +33,8 @@ class WebProductImages extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            ActionsOnHeaderWidget(
+            ActionsWidget(
               viewAbstract: item,
-              useRoundedIcon: true,
               serverActions: ServerActions.view,
             ),
           ]),

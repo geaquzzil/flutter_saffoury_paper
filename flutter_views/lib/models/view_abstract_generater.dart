@@ -23,6 +23,7 @@ import 'package:flutter_view_controller/new_screens/file_reader/exporter/base_fi
 import 'package:flutter_view_controller/new_screens/home/list_to_details_widget_new.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_api_master_new.dart';
 import 'package:flutter_view_controller/new_screens/routes.dart';
+import 'package:flutter_view_controller/packages/material_dialogs/material_dialogs.dart';
 import 'package:flutter_view_controller/printing_generator/ext.dart';
 import 'package:flutter_view_controller/printing_generator/page/pdf_page_new.dart';
 import 'package:flutter_view_controller/providers/actions/list_multi_key_provider.dart';
@@ -78,7 +79,10 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     debugPrint(
       'onCardLongClicked Position: ${(offset.dx + size.width) / 2}, ${(offset.dy + size.height) / 2}',
     );
-    var list = (this as ViewAbstract).getPopupMenuActionsList(context);
+    var list = (this as ViewAbstract).getActions(
+      context: context,
+      action: ServerActions.list,
+    );
     await showMenu<MenuItemBuild>(
       context: context,
 
@@ -316,6 +320,117 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     "tableName": getTableNameApi() ?? "",
     "id": getIDString(),
   };
+  void deletePage(BuildContext context) {
+    Dialogs.materialDialog(
+      msgAlign: TextAlign.end,
+      dialogWidth: isDesktopPlatform() ? 0.3 : null,
+      color: Theme.of(context).colorScheme.surface,
+      msg: getBaseMessage(context, serverAction: ServerActions.delete_action),
+      title: getBaseTitle(
+        context,
+        serverAction: ServerActions.delete_action,
+      ).toUpperCase(),
+      context: context,
+      onClose: (value) {
+        debugPrint("onClose: $value");
+        // on close is can be confirm or null
+        if (value != null) {
+          deleteCall(
+            context,
+            onResponse: OnResponseCallback(
+              onServerNoMoreItems: () {},
+              onFlutterClientFailure: (s) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    // backgroundColor: color,
+                    duration: const Duration(seconds: 2),
+                    content: Text(
+                      AppLocalizations.of(context)!.error_server_not_connected,
+                    ),
+                  ),
+                );
+
+                // Scaffold.of(context).
+              },
+              onServerResponse: (s) {
+                if (isLargeScreenFromCurrentScreenSize(context)) {
+                  Globals.keyForLargeScreenListable.currentState
+                      ?.setSecoundPane(null);
+                  // context.read<
+                } else {
+                  Navigator.of(context).pop();
+                }
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    duration: const Duration(seconds: 2),
+                    content: Text(s),
+                  ),
+                );
+                context.read<ListMultiKeyProvider>().delete(
+                  this as ViewAbstract,
+                );
+              },
+              onServerFailureResponse: (s) {
+                ///TODO when tow pane change secound pane
+                ///if mobile pop navigation
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    duration: const Duration(seconds: 2),
+                    content: Text(s),
+                  ),
+                );
+              },
+            ),
+          );
+        } else {
+          //todo remove this is for testing only
+          // if (isLargeScreenFromCurrentScreenSize(context)) {
+          //   keyForLargeScreenListable.currentState?.dsada.value = null;
+          //   // context.read<
+          // } else {
+          //   Navigator.of(context).pop();
+          // }
+
+          // // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          // //   duration: const Duration(seconds: 2),
+          // //   content: Text("Dfsfsd"),
+          // // ));
+
+          // ScaffoldMessenger.maybeOf(context)?.showMaterialBanner(
+          //   const MaterialBanner(
+          //     padding: EdgeInsets.all(20),
+          //     content: Text('Hello, I am a Material Banner'),
+          //     leading: Icon(Icons.error),
+          //     // backgroundColor: Colors.green,
+          //     actions: <Widget>[
+          //       TextButton(
+          //         onPressed: null,
+          //         child: Text('DISMISS'),
+          //       ),
+          //     ],
+          //   ),
+          // );
+          // context.read<ListMultiKeyProvider>().delete(viewAbstract);
+        }
+      },
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(AppLocalizations.of(context)!.cancel),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            //todo check for pop result
+            Navigator.of(context).pop(AppLocalizations.of(context)!.subment);
+          },
+          child: Text(AppLocalizations.of(context)!.delete),
+        ),
+      ],
+    );
+  }
 
   //TODO isSecoundSubPaneView should i deprecate it ?
   void viewPage(
@@ -335,6 +450,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     if (secondPaneHelper != null) {
       secondPaneHelper.notify(
         SecondPaneHelper(
+          action: ServerActions.print,
           notifyFirstParent: isSecoundSubPaneView,
           object: this,
           title: getIDWithLabel(context, action: ServerActions.view),
@@ -410,6 +526,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     if (secondPaneHelper != null) {
       secondPaneHelper.secPaneNotifier?.value = SecondPaneHelper(
         object: this,
+        action: ServerActions.edit,
         title: getIDWithLabel(context, action: ServerActions.edit),
         value: getEditPage(context, parent: secondPaneHelper),
       );
@@ -627,6 +744,7 @@ abstract class ViewAbstractController<T> extends ViewAbstractApi<T> {
     final typeString = type.toString();
     if (secPaneNotifer != null) {
       secPaneNotifer.secPaneNotifier?.value = SecondPaneHelper(
+        action: ServerActions.print,
         title: getIDWithLabel(context, action: ServerActions.print),
         object: this,
         value: getPrintPage(

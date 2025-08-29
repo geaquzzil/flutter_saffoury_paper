@@ -543,26 +543,32 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
     if (serverAction != null) {
       switch (serverAction) {
         case ServerActions.add:
-          return AppLocalizations.of(context)!.add.toLowerCase();
+          return AppLocalizations.of(context)!.add;
         case ServerActions.edit:
-          return AppLocalizations.of(context)!.edit.toLowerCase();
+          return AppLocalizations.of(context)!.edit;
         case ServerActions.view:
-          return AppLocalizations.of(context)!.view.toLowerCase();
+          return AppLocalizations.of(context)!.view;
         case ServerActions.delete_action:
-          return AppLocalizations.of(context)!.delete.toLowerCase();
+          return AppLocalizations.of(context)!.delete;
         case ServerActions.list:
-          return AppLocalizations.of(context)!.list.toLowerCase();
+          return AppLocalizations.of(context)!.list;
 
         case ServerActions.print:
-          return AppLocalizations.of(context)!.print.toLowerCase();
+          return AppLocalizations.of(context)!.print;
+        case ServerActions.share:
+          return AppLocalizations.of(context)!.share;
+        case ServerActions.file_import:
+          return AppLocalizations.of(context)!.importFile;
+        case ServerActions.file_export:
+          return AppLocalizations.of(context)!.exportFile;
         default:
           return "";
       }
     } else {
       if (isNew()) {
-        return AppLocalizations.of(context)!.add.toLowerCase();
+        return AppLocalizations.of(context)!.add;
       } else {
-        return AppLocalizations.of(context)!.edit.toLowerCase();
+        return AppLocalizations.of(context)!.edit;
       }
     }
     return "";
@@ -578,12 +584,20 @@ abstract class ViewAbstractBase<T> extends ViewAbstractPermissions<T> {
       descripon = getIDFormat(context);
     } else {
       if (isEditing()) {
-        descripon = getMainHeaderTextOnly(context).toLowerCase();
+        descripon =
+            serverAction == ServerActions.file_export ||
+                serverAction == ServerActions.file_import
+            ? ""
+            : getMainHeaderTextOnly(context).toLowerCase();
       } else {
-        descripon = getMainHeaderLabelTextOnly(context).toLowerCase();
+        descripon =
+            serverAction == ServerActions.file_export ||
+                serverAction == ServerActions.file_import
+            ? ""
+            : getMainHeaderLabelTextOnly(context).toLowerCase();
       }
     }
-    return "${getBaseActionText(context, serverAction: serverAction).toUpperCase()} $descripon ";
+    return "${getBaseActionText(context, serverAction: serverAction)} $descripon ";
   }
 
   String getBaseLabelViewAbstract(BuildContext context) {

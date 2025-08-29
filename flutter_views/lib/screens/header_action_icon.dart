@@ -17,6 +17,7 @@ class HeaderIconBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      
       mouseCursor: SystemMouseCursors.click,
       tooltip: menuItemBuild.title,
       icon: Icon(menuItemBuild.icon),
