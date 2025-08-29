@@ -24,6 +24,7 @@ class ChartCardItemCustom extends StatelessWidget {
   Widget? footerRightWidget;
   Color? color;
   bool isSmall;
+  final CardType cardType;
   Animation<double>? animation;
   final OverlayPortalController _tooltipController = OverlayPortalController();
   final SecoundPaneHelperWithParentValueNotifier? basePage;
@@ -34,6 +35,7 @@ class ChartCardItemCustom extends StatelessWidget {
     required this.description,
     this.icon,
     this.footer,
+    this.cardType = CardType.normal,
     this.animation,
     this.list,
     this.listGrowthRate,
@@ -232,7 +234,7 @@ class ChartCardItemCustom extends StatelessWidget {
 
   Widget getBody(BuildContext context) {
     return Cards(
-      type: CardType.normal,
+      type: cardType,
       enableScaling: true,
       toScaleDown: true,
       colorWithOverlay: color,
@@ -246,7 +248,7 @@ class ChartCardItemCustom extends StatelessWidget {
 
       // color?.withValues(alpha:0.2),
       child: (b) => Container(
-        padding: const EdgeInsets.all(defaultPadding),
+        padding: const EdgeInsets.all(defaultPadding/2),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -267,7 +269,7 @@ class ChartCardItemCustom extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               // overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodyLarge!,
+              style: Theme.of(context).textTheme.bodyMedium!,
             ),
             if (listGrowthRate != null)
               LineChartItem<GrowthRate, String>(

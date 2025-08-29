@@ -826,6 +826,14 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     with TickerProviderStateMixin {
   dynamic _firstWidget;
   dynamic _secondWidget;
+
+  dynamic get firstWidget => this._firstWidget;
+
+  set firstWidget(dynamic value) => this._firstWidget = value;
+
+  get secondWidget => this._secondWidget;
+
+  set secondWidget(value) => this._secondWidget = value;
   late double _width;
   late double _height;
 
@@ -1304,6 +1312,22 @@ abstract class BasePageState<T extends BasePage> extends State<T>
     return _currentScreenSize;
   }
 
+  bool isMobileBase() {
+    return _currentScreenSize == CurrentScreenSize.MOBILE;
+  }
+
+  bool isSmallTabletBase() {
+    return _currentScreenSize == CurrentScreenSize.SMALL_TABLET;
+  }
+
+  bool isDesktopBase() {
+    return _currentScreenSize == CurrentScreenSize.DESKTOP;
+  }
+
+  bool isLargeTabletBase() {
+    return _currentScreenSize == CurrentScreenSize.LARGE_TABLET;
+  }
+
   void addFramPost(void Function(Duration) callback) {
     WidgetsBinding.instance.addPostFrameCallback(callback);
   }
@@ -1358,7 +1382,7 @@ abstract class BasePageState<T extends BasePage> extends State<T>
           _secPaneWidth = _width - _firstPaneWidth;
 
           debugPrint(
-            "BasePage firstPane is w=>$_firstPaneWidth  h=> $_secPaneWidth",
+            "BasePage firstPane is firstPane=>$_firstPaneWidth  secPane=> $_secPaneWidth",
           );
         },
         mobile: (w, h) {
@@ -2128,8 +2152,9 @@ abstract class BasePageStateWithApi<T extends BasePageApi>
   bool isExtrasIsDashboard({TabControllerHelper? tab}) {
     return getExtras(tab: tab) is DashableInterface;
   }
-  bool isExtrasIsListable({TabControllerHelper? tab}){
-    return getExtras(tab:tab) is ListableInterface;
+
+  bool isExtrasIsListable({TabControllerHelper? tab}) {
+    return getExtras(tab: tab) is ListableInterface;
   }
 
   DashableInterface getExtrasCastDashboard({TabControllerHelper? tab}) {

@@ -25,7 +25,7 @@ mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
   @override
   TowPaneExt getPaneExt() {
     return TowPaneExt(
-      startPane: _firstWidget!,
+      startPane: firstWidget!,
       endPane: _getSecondPaneWidgetMixin(),
       customPaneProportion: getCustomPaneProportion(),
     );
@@ -110,7 +110,7 @@ mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
 
   Widget? _getSecondPaneWidgetMixin() {
     if (!isLargeScreenFromScreenSize(getCurrentScreenSize())) {
-      return _secondWidget;
+      return secondWidget;
     }
     // return _secondWidget;
     return LayoutBuilder(
@@ -140,7 +140,7 @@ mixin BasePageThirdPaneNotifierState<T extends BasePageSecoundPaneNotifier>
                     curve: Curves.linear,
                     height: constraints.maxHeight,
                     width: width,
-                    child: _secondWidget,
+                    child: secondWidget,
                   ),
                   !showThirdPane
                       ? const SizedBox.shrink()

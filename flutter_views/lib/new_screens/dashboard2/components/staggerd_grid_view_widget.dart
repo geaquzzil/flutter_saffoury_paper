@@ -85,6 +85,7 @@ class StaggerdGridViewWidget extends StatelessWidget {
         }
 
         Widget w = StaggeredGrid.count(
+
           crossAxisCount: crossAxisCount,
           mainAxisSpacing: 2,
           crossAxisSpacing: 2,
@@ -93,6 +94,7 @@ class StaggerdGridViewWidget extends StatelessWidget {
               ? list!.map((e) => Card(child: e)).toList()
               : list!,
         );
+        
         // return w;
         if (isSliver) {
           return SliverToBoxAdapter(child: w);
@@ -102,3 +104,4 @@ class StaggerdGridViewWidget extends StatelessWidget {
     );
   }
 }
+

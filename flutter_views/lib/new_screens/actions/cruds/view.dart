@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_view_controller/constants.dart';
+import 'package:flutter_view_controller/ext_utils.dart';
 import 'package:flutter_view_controller/interfaces/cartable_interface.dart';
 import 'package:flutter_view_controller/l10n/app_localization.dart';
 import 'package:flutter_view_controller/models/servers/server_helpers.dart';
 import 'package:flutter_view_controller/models/view_abstract.dart';
 import 'package:flutter_view_controller/models/view_abstract_base.dart';
 import 'package:flutter_view_controller/models/view_abstract_enum.dart';
+import 'package:flutter_view_controller/new_components/cards/cards.dart';
 import 'package:flutter_view_controller/new_components/header_description.dart';
 import 'package:flutter_view_controller/new_components/lists/list_card_item.dart';
 import 'package:flutter_view_controller/new_screens/actions/components/action_on_header_widget.dart';
 import 'package:flutter_view_controller/new_components/lists/view_card_item.dart';
 import 'package:flutter_view_controller/new_screens/actions/view/view_view_abstract.dart';
 import 'package:flutter_view_controller/new_screens/base_page.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/components/chart_card_item_custom.dart';
+import 'package:flutter_view_controller/new_screens/dashboard2/components/staggerd_grid_view_widget.dart';
 import 'package:flutter_view_controller/new_screens/lists/slivers/sliver_static_list_new.dart';
 import 'package:flutter_view_controller/screens/base_shared_drawer_navigation.dart';
 import 'package:flutter_view_controller/size_config.dart';
@@ -271,6 +276,14 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
     TabControllerHelper? tab,
     SecondPaneHelper? valueNotifier,
   }) {
+    double _crossAxisSpacing = 8, _mainAxisSpacing = 12, _aspectRatio = 2;
+    int _crossAxisCount = getCrossAxisCount(firstPaneWidth);
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    var width =
+        (screenWidth - ((_crossAxisCount - 1) * _crossAxisSpacing)) /
+        _crossAxisCount;
+    var height = width / _aspectRatio;
     if (tab != null) {
       return [if (tab.widget != null) tab.widget!];
     }
@@ -287,6 +300,12 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
             withAspectRatio: 1 / 1,
           ),
         ),
+        HeaderDescription(
+          //todo translate
+          title: "Info",
+          isSliver: true,
+          setDivider: true,
+        ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
@@ -299,6 +318,7 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
         if (isExtrasIsListable())
           SliverApiMixinStaticList(
             header: HeaderDescription(
+              setDivider: true,
               title: AppLocalizations.of(context)!.list,
               isSliver: true,
             ),
@@ -309,6 +329,59 @@ class _ViewNewState extends BasePageStateWithApi<ViewNew>
             state: getSecoundPaneHelper(),
             enableSelection: false,
           ),
+        if (isExtrasIsListable()) ...[
+          HeaderDescription(
+            title: AppLocalizations.of(context)!.total,
+            isSliver: true,
+            setDivider: true,
+          ),
+          SliverGrid.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: getCrossAxisCount(
+                isMobileBase() ? secPaneWidth : firstPaneWidth,
+              ),
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 4,
+              mainAxisExtent: 110, // here set custom Height You Want
+            ),
+            itemCount: 3,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return ChartCardItemCustom(
+                  cardType: CardType.filled,
+                  title: AppLocalizations.of(context)!.quantity,
+                  // color: list[0].getMainColor(),
+                  description:
+                      getExtrasCastListable().getListableTotalQuantity(
+                        context,
+                      ) ??
+                      "",
+                );
+              }
+              if (index == 1) {
+                return ChartCardItemCustom(
+                  cardType: CardType.filled,
+                  title: AppLocalizations.of(context)!.discount,
+                  // color: list[0].getMainColor(),
+                  description: getExtrasCastListable()
+                      .getListableTotalDiscount(context)
+                      .toCurrencyFormatFromSetting(context),
+                );
+              }
+              if (index == 2) {
+                return ChartCardItemCustom(
+                  cardType: CardType.filled,
+                  title: AppLocalizations.of(context)!.total_price,
+                  // color: list[0].getMainColor(),
+                  description: getExtrasCastListable()
+                      .getListableTotalPrice(context)
+                      .toCurrencyFormatFromSetting(context),
+                );
+              }
+              return null;
+            },
+          ),
+        ],
 
         // SliverToBoxAdapter(child: SizedBox(height: 80)),
       ];

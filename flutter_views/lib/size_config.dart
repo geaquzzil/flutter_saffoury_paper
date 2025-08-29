@@ -117,6 +117,12 @@ bool isTablet(BuildContext context, {double? maxWidth}) {
   return isTabletFromWidth(value);
 }
 
+int getCrossAxisCount(double width) {
+  int val = ((width / 110)).toInt();
+  debugPrint("getCrossAxisCount val width:$width  $val");
+  return val;
+}
+
 bool isDesktop(BuildContext context, {double? maxWidth}) {
   double value = maxWidth ?? MediaQuery.of(context).size.width;
   return value >= kDesktopWidth;

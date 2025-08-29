@@ -410,68 +410,69 @@ abstract class InvoiceMaster<T> extends ViewAbstract<T>
     ValueNotifier<ViewAbstract?>? onHorizontalListItemClicked,
     SecoundPaneHelperWithParentValueNotifier? basePage,
   }) {
-    double? totalPrice = getTotalPriceFromList();
-    double? totalDiscount = getTotalDiscountFromList();
-    double? totalQuantity = getTotalQuantityFromList();
-    double? totalNetPrice = (totalPrice ?? 0) - (totalDiscount ?? 0);
-    Widget child = Column(
-      children: [
-        getListTile(
-          title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
-          description: totalPrice?.toCurrencyFormatFromSetting(context) ?? "0",
-        ),
-        const Divider(),
-        getListTile(
-          title: AppLocalizations.of(context)!.discount.toUpperCase(),
-          description:
-              totalDiscount?.toCurrencyFormatFromSetting(context) ?? "0",
-        ),
-        const Divider(),
-        getListTile(
-          title: AppLocalizations.of(context)!.quantity.toUpperCase(),
-          description: getDetailListFromMaster()
-              .cast<InvoiceMasterDetails>()
-              .getTotalQuantityGroupedFormattedText(context),
-        ),
-        const Divider(),
-        getListTile(
-          title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
-          description: totalNetPrice.toCurrencyFormatFromSetting(context),
-        ),
-      ],
-    );
-    return [
-      SliverToBoxAdapter(
-        child: CardBackgroundWithTitle(
-          leading: Icons.summarize,
-          useHorizontalPadding: true,
-          useVerticalPadding: false,
-          title: AppLocalizations.of(context)!.no_summary,
-          child: child,
-        ),
-      ),
-    ];
-    return [
-      if (kIsWeb)
-        SliverToBoxAdapter(
-          child: CardBackgroundWithTitle(
-            leading: Icons.summarize,
-            useHorizontalPadding: true,
-            useVerticalPadding: false,
-            title: AppLocalizations.of(context)!.no_summary,
-            child: child,
-          ),
-        )
-      else
-        SliverToBoxAdapter(
-          child: ExpansionTile(
-            initiallyExpanded: true,
-            leading: const Icon(Icons.summarize),
-            title: Text(AppLocalizations.of(context)!.no_summary),
-            children: [child],
-          ),
-        ),
-    ];
+    return null;
+    // double? totalPrice = getTotalPriceFromList();
+    // double? totalDiscount = getTotalDiscountFromList();
+    // double? totalQuantity = getTotalQuantityFromList();
+    // double? totalNetPrice = (totalPrice ?? 0) - (totalDiscount ?? 0);
+    // Widget child = Column(
+    //   children: [
+    //     getListTile(
+    //       title: AppLocalizations.of(context)!.subTotal.toUpperCase(),
+    //       description: totalPrice?.toCurrencyFormatFromSetting(context) ?? "0",
+    //     ),
+    //     const Divider(),
+    //     getListTile(
+    //       title: AppLocalizations.of(context)!.discount.toUpperCase(),
+    //       description:
+    //           totalDiscount?.toCurrencyFormatFromSetting(context) ?? "0",
+    //     ),
+    //     const Divider(),
+    //     getListTile(
+    //       title: AppLocalizations.of(context)!.quantity.toUpperCase(),
+    //       description: getDetailListFromMaster()
+    //           .cast<InvoiceMasterDetails>()
+    //           .getTotalQuantityGroupedFormattedText(context),
+    //     ),
+    //     const Divider(),
+    //     getListTile(
+    //       title: AppLocalizations.of(context)!.grandTotal.toUpperCase(),
+    //       description: totalNetPrice.toCurrencyFormatFromSetting(context),
+    //     ),
+    //   ],
+    // );
+    // return [
+    //   SliverToBoxAdapter(
+    //     child: CardBackgroundWithTitle(
+    //       leading: Icons.summarize,
+    //       useHorizontalPadding: true,
+    //       useVerticalPadding: false,
+    //       title: AppLocalizations.of(context)!.no_summary,
+    //       child: child,
+    //     ),
+    //   ),
+    // ];
+    // return [
+    //   if (kIsWeb)
+    //     SliverToBoxAdapter(
+    //       child: CardBackgroundWithTitle(
+    //         leading: Icons.summarize,
+    //         useHorizontalPadding: true,
+    //         useVerticalPadding: false,
+    //         title: AppLocalizations.of(context)!.no_summary,
+    //         child: child,
+    //       ),
+    //     )
+    //   else
+    //     SliverToBoxAdapter(
+    //       child: ExpansionTile(
+    //         initiallyExpanded: true,
+    //         leading: const Icon(Icons.summarize),
+    //         title: Text(AppLocalizations.of(context)!.no_summary),
+    //         children: [child],
+    //       ),
+    //     ),
+    // ];
   }
 
   Widget getListTile({required String title, required String description}) {
